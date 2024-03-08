@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
+
 //// [file.tsx]
 import * as React from "react";
 interface BaseProps<T> {
@@ -15,7 +17,7 @@ let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; /
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var a = <GenericComponent initialValues={{ x: "y" }} nextValues={function (a) { return a; }}/>; // No error
 var b = <GenericComponent initialValues={12} nextValues={function (a) { return a; }}/>; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)

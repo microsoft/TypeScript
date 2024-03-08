@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/tsxTypeErrors.tsx ===
+//// [tests/cases/conformance/jsx/tsxTypeErrors.tsx] ////
+
+=== tsxTypeErrors.tsx ===
 // A built-in element (OK)
 var a1 = <div id="foo" />;
 >a1 : Symbol(a1, Decl(tsxTypeErrors.tsx, 1, 3))

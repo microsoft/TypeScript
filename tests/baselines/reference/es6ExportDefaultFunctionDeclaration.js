@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportDefaultFunctionDeclaration.ts] ////
+
 //// [es6ExportDefaultFunctionDeclaration.ts]
 export default function f() { }
 

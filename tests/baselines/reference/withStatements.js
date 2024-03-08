@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/withStatements/withStatements.ts] ////
+
 //// [withStatements.ts]
 var x = 12;
 with (x) {

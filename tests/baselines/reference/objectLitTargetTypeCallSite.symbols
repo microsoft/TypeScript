@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLitTargetTypeCallSite.ts ===
+//// [tests/cases/compiler/objectLitTargetTypeCallSite.ts] ////
+
+=== objectLitTargetTypeCallSite.ts ===
 function process( x: {a:number; b:string;}) {
 >process : Symbol(process, Decl(objectLitTargetTypeCallSite.ts, 0, 0))
 >x : Symbol(x, Decl(objectLitTargetTypeCallSite.ts, 0, 17))

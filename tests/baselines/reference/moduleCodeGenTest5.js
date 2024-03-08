@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleCodeGenTest5.ts] ////
+
 //// [moduleCodeGenTest5.ts]
 export var x = 0;
 var y = 0;
@@ -23,12 +25,12 @@ var v = E2.B;
 
 //// [moduleCodeGenTest5.js]
 "use strict";
-exports.__esModule = true;
-exports.E1 = exports.C1 = exports.f1 = exports.x = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.E1 = exports.C1 = exports.x = void 0;
+exports.f1 = f1;
 exports.x = 0;
 var y = 0;
 function f1() { }
-exports.f1 = f1;
 function f2() { }
 var C1 = /** @class */ (function () {
     function C1() {
@@ -48,7 +50,7 @@ var C2 = /** @class */ (function () {
 var E1;
 (function (E1) {
     E1[E1["A"] = 0] = "A";
-})(E1 = exports.E1 || (exports.E1 = {}));
+})(E1 || (exports.E1 = E1 = {}));
 var u = E1.A;
 var E2;
 (function (E2) {

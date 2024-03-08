@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/contextualTypedSpecialAssignment.ts] ////
+
+=== test.js ===
 /** @typedef {{
     status: 'done'
     m(n: number): void
@@ -95,7 +97,7 @@ exports.x = {
 }
 exports.x
 >exports.x : Symbol(x, Decl(test.js, 36, 1))
->exports : Symbol("tests/cases/conformance/salsa/test", Decl(test.js, 0, 0))
+>exports : Symbol("test", Decl(test.js, 0, 0))
 >x : Symbol(x, Decl(test.js, 36, 1))
 
 /** @type {DoneStatus} */
@@ -161,7 +163,7 @@ F.prototype = {
 >n : Symbol(n, Decl(test.js, 68, 6))
 }
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 // module.exports assignment
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts] ////
+
 //// [privateNamesAndStaticMethods.ts]
 class A {
     static #foo(a: number) {}
@@ -33,13 +35,6 @@ class B extends A {
 //// [privateNamesAndStaticMethods.js]
 "use strict";
 class A {
-    constructor() {
-        A.#foo(30);
-        A.#bar(30);
-        A.#bar(30);
-        A.#quux = A.#quux + 1;
-        A.#quux++;
-    }
     static #foo(a) { }
     static async #bar(a) { }
     static async *#baz(a) {
@@ -51,6 +46,13 @@ class A {
     }
     static set #quux(val) {
         this.#_quux = val;
+    }
+    constructor() {
+        A.#foo(30);
+        A.#bar(30);
+        A.#bar(30);
+        A.#quux = A.#quux + 1;
+        A.#quux++;
     }
 }
 class B extends A {

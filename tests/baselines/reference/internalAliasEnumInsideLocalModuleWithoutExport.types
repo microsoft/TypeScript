@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.ts ===
+//// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.ts] ////
+
+=== internalAliasEnumInsideLocalModuleWithoutExport.ts ===
 export module a {
 >a : typeof a
 

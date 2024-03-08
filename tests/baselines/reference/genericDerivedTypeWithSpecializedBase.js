@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericDerivedTypeWithSpecializedBase.ts] ////
+
 //// [genericDerivedTypeWithSpecializedBase.ts]
 class A<T> {
     x: T;

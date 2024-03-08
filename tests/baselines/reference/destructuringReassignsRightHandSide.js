@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts] ////
+
 //// [destructuringReassignsRightHandSide.ts]
 var foo: any = { foo: 1, bar: 2 };
 var bar: any;

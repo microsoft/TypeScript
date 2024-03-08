@@ -1,3 +1,4 @@
+// === Smart Selection ===
 class Foo {
   bar(a, b) {
       if (/**/a === b) {
@@ -25,6 +26,14 @@ class Foo {
       }
       return false;↲
 •• 
+
+
+            {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
 
 
   bar(a, b) {
@@ -87,6 +96,14 @@ class Foo {
       }
       return false;↲
 •• 
+
+
+            {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
 
 
   bar(a, b) {

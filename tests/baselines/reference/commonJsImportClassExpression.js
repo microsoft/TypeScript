@@ -21,5 +21,5 @@ module.exports = /** @class */ (function () {
 }());
 //// [use.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 c.chunk;

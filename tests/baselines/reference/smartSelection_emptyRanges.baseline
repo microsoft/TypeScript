@@ -1,3 +1,4 @@
+// === Smart Selection ===
 class HomePage {
   componentDidMount(/**/) {
     if (this.props.username) {
@@ -62,6 +63,13 @@ class HomePage {
 •• 
 
 
+                      {
+    if (this.props.username) {
+      return '';
+    }
+  }
+
+
   componentDidMount() {
     if (this.props.username) {
       return '';
@@ -117,6 +125,13 @@ class HomePage {
       return '';
     }↲
 •• 
+
+
+                      {
+    if (this.props.username) {
+      return '';
+    }
+  }
 
 
   componentDidMount() {

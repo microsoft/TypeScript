@@ -1,11 +1,13 @@
-=== tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_restArgs.ts] ////
+
+=== emitDecoratorMetadata_restArgs.ts ===
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 0, 13))
->ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
 declare const MyMethodDecorator: MethodDecorator;
 >MyMethodDecorator : Symbol(MyMethodDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 1, 13))
->MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
 @MyClassDecorator
 >MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_restArgs.ts, 0, 13))

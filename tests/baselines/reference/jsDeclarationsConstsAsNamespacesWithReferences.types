@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsConstsAsNamespacesWithReferences.ts] ////
+
+=== index.js ===
 export const colors = {
 >colors : { royalBlue: string; }
 >{    royalBlue: "#6400e4",} : { royalBlue: string; }

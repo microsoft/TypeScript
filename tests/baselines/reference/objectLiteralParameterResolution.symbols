@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralParameterResolution.ts ===
+//// [tests/cases/compiler/objectLiteralParameterResolution.ts] ////
+
+=== objectLiteralParameterResolution.ts ===
 interface Foo{
 >Foo : Symbol(Foo, Decl(objectLiteralParameterResolution.ts, 0, 0))
 

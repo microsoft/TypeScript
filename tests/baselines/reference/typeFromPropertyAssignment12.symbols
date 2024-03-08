@@ -1,10 +1,12 @@
-=== tests/cases/conformance/salsa/module.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment12.ts] ////
+
+=== module.js ===
 var Outer = function(element, config) {};
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(usage.js, 0, 0))
 >element : Symbol(element, Decl(module.js, 0, 21))
 >config : Symbol(config, Decl(module.js, 0, 29))
 
-=== tests/cases/conformance/salsa/usage.js ===
+=== usage.js ===
 /** @constructor */
 Outer.Pos = function (line, ch) {};
 >Outer.Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))

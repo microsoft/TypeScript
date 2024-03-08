@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuring5.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuring5.ts] ////
+
+=== declarationEmitDestructuring5.ts ===
 function baz([, z, , ]) { }
 >baz : Symbol(baz, Decl(declarationEmitDestructuring5.ts, 0, 0))
 >z : Symbol(z, Decl(declarationEmitDestructuring5.ts, 0, 15))

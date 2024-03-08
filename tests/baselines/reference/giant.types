@@ -1,4 +1,6 @@
-=== tests/cases/compiler/giant.ts ===
+//// [tests/cases/compiler/giant.ts] ////
+
+=== giant.ts ===
 /*
     Prefixes
     p -> public
@@ -837,7 +839,7 @@ export interface eI {
 >pa2 : any
 }
 export module eM {
->eM : typeof import("tests/cases/compiler/giant").eM
+>eM : typeof import("giant").eM
 
     var V;
 >V : any

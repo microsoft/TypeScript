@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts] ////
+
 //// [arithmeticOperatorWithInvalidOperands.ts]
 // these operators require their operands to be of type Any, the Number primitive type, or
 // an enum type

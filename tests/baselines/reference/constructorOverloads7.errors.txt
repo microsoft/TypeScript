@@ -1,7 +1,7 @@
-tests/cases/compiler/constructorOverloads7.ts(22,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+constructorOverloads7.ts(22,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 
-==== tests/cases/compiler/constructorOverloads7.ts (1 errors) ====
+==== constructorOverloads7.ts (1 errors) ====
     declare class Point
     {
         x: number;

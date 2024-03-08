@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferConditionalConstraintMappedMember.ts ===
+//// [tests/cases/compiler/inferConditionalConstraintMappedMember.ts] ////
+
+=== inferConditionalConstraintMappedMember.ts ===
 // Return keyof type without string index signature
 type KeysWithoutStringIndex<T> =
 >KeysWithoutStringIndex : Symbol(KeysWithoutStringIndex, Decl(inferConditionalConstraintMappedMember.ts, 0, 0))

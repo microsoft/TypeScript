@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedCheck.ts] ////
+
 //// [deeplyNestedCheck.ts]
 // Repro from #14794
 
@@ -71,17 +73,17 @@ var x = {
                                                 {
                                                 // i: '',
                                                 },
-                                            ]
-                                        }
+                                            ],
+                                        },
                                     },
-                                ]
+                                ],
                             },
-                        ]
+                        ],
                     },
-                ]
-            }
+                ],
+            },
         },
-    ]
+    ],
 };
 // Repro from 34619
 var a1 = [[[[[42]]]]];

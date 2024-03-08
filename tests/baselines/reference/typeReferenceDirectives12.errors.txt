@@ -1,4 +1,4 @@
-/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+/main.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
 ==== /mod2.ts (0 errors) ====
@@ -8,13 +8,14 @@
     export const cls = Cls;
     export const foo = new Cls().foo();
     export const bar = Cls.bar();
+    
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     
 ==== /main.ts (1 errors) ====
     export class Cls {
                  ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
         x
     }
     

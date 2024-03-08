@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigIntWithTargetLessThanES2016.ts] ////
+
 //// [bigIntWithTargetLessThanES2016.ts]
 BigInt(1) ** BigInt(1); // should error
 

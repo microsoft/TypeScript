@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classInConvertedLoopES5.ts ===
+//// [tests/cases/compiler/classInConvertedLoopES5.ts] ////
+
+=== classInConvertedLoopES5.ts ===
 const classesByRow: Record<string, object> = {};
 >classesByRow : Record<string, object>
 >{} : {}

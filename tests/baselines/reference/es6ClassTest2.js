@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest2.ts] ////
+
 //// [es6ClassTest2.ts]
 class BasicMonster {
     constructor(public name: string, public health: number) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignToExistingClass.ts] ////
+
 //// [assignToExistingClass.ts]
 module Test {
     class Mocked {

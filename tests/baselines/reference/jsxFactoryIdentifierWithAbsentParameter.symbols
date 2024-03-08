@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.tsx ===
+//// [tests/cases/compiler/jsxFactoryIdentifierWithAbsentParameter.ts] ////
+
+=== test.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
 

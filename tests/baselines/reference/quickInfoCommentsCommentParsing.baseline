@@ -1,3 +1,540 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoCommentsCommentParsing.ts ===
+// /// This is simple /// comments
+// function simple() {
+// }
+// 
+// simple( );
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | function simple(): void
+// | ----------------------------------------------------------------------
+// 
+// /// multiLine /// Comments
+// /// This is example of multiline /// comments
+// /// Another multiLine
+// function multiLine() {
+// }
+// multiLine( );
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function multiLine(): void
+// | ----------------------------------------------------------------------
+// 
+// /** this is eg of single line jsdoc style comment */
+// function jsDocSingleLine() {
+// }
+// jsDocSingleLine();
+// ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocSingleLine(): void
+// | this is eg of single line jsdoc style comment
+// | ----------------------------------------------------------------------
+// 
+// 
+// /** this is multiple line jsdoc stule comment
+// *New line1
+// *New Line2*/
+// function jsDocMultiLine() {
+// }
+// jsDocMultiLine();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMultiLine(): void
+// | this is multiple line jsdoc stule comment
+// | New line1
+// | New Line2
+// | ----------------------------------------------------------------------
+// 
+// /** multiple line jsdoc comments no longer merge
+// *New line1
+// *New Line2*/
+// /** Shoul mege this line as well
+// * and this too*/ /** Another this one too*/
+// function jsDocMultiLineMerge() {
+// }
+// jsDocMultiLineMerge();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMultiLineMerge(): void
+// | Another this one too
+// | ----------------------------------------------------------------------
+// 
+// 
+// /// Triple slash comment
+// /** jsdoc comment */
+// function jsDocMixedComments1() {
+// }
+// jsDocMixedComments1();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMixedComments1(): void
+// | jsdoc comment
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment
+// /** jsdoc comment */ /** another jsDocComment*/
+// function jsDocMixedComments2() {
+// }
+// jsDocMixedComments2();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMixedComments2(): void
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /*** triplestar jsDocComment*/
+// /// Triple slash comment
+// function jsDocMixedComments3() {
+// }
+// jsDocMixedComments3();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMixedComments3(): void
+// | * triplestar jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments4() {
+// }
+// jsDocMixedComments4();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMixedComments4(): void
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /// Triple slash comment 1
+// /** jsdoc comment */ /** another jsDocComment*/
+// /// Triple slash comment
+// /// Triple slash comment 2
+// function jsDocMixedComments5() {
+// }
+// jsDocMixedComments5();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMixedComments5(): void
+// | another jsDocComment
+// | ----------------------------------------------------------------------
+// 
+// /** another jsDocComment*/
+// /// Triple slash comment 1
+// /// Triple slash comment
+// /// Triple slash comment 2
+// /** jsdoc comment */
+// function jsDocMixedComments6() {
+// }
+// jsDocMixedComments6();
+// ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocMixedComments6(): void
+// | jsdoc comment
+// | ----------------------------------------------------------------------
+// 
+// // This shoulnot be help comment
+// function noHelpComment1() {
+// }
+// noHelpComment1();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function noHelpComment1(): void
+// | ----------------------------------------------------------------------
+// 
+// /* This shoulnot be help comment */
+// function noHelpComment2() {
+// }
+// noHelpComment2();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function noHelpComment2(): void
+// | ----------------------------------------------------------------------
+// 
+// function noHelpComment3() {
+// }
+// noHelpComment3();
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function noHelpComment3(): void
+// | ----------------------------------------------------------------------
+// /** Adds two integers and returns the result
+//   * @param {number} a first number
+//   * @param b second number
+//   */
+// function sum(a: number, b: number) {
+//              ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | first number
+// | @param a first number
+// | ----------------------------------------------------------------------
+//                         ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: number
+// | second number
+// | @param b second number
+// | ----------------------------------------------------------------------
+//     return a + b;
+// }
+// sum(10, 20);
+// ^^^
+// | ----------------------------------------------------------------------
+// | function sum(a: number, b: number): number
+// | Adds two integers and returns the result
+// | @param a first number
+// | @param b second number
+// | ----------------------------------------------------------------------
+// /** This is multiplication function
+//  * @param 
+//  * @param a first number
+//  * @param b
+//  * @param c {
+//  @param d @anotherTag
+//  * @param e LastParam @anotherTag*/
+// function multiply(a: number, b: number, c?: number, d?, e?) {
+//                   ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | first number
+// | @param a first number
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: number
+// | @param b
+// | ----------------------------------------------------------------------
+//                                         ^
+// | ----------------------------------------------------------------------
+// | (parameter) c: number
+// | @param c
+// | ----------------------------------------------------------------------
+//                                                     ^
+// | ----------------------------------------------------------------------
+// | (parameter) d: any
+// | @param d
+// | ----------------------------------------------------------------------
+//                                                         ^
+// | ----------------------------------------------------------------------
+// | (parameter) e: any
+// | LastParam
+// | @param e LastParam
+// | ----------------------------------------------------------------------
+// }
+// multiply(10, 20, 30, 40, 50);
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function multiply(a: number, b: number, c?: number, d?: any, e?: any): void
+// | This is multiplication function
+// | @param 
+// | @param a first number
+// | @param b
+// | @param c
+// | @param d
+// | @anotherTag 
+// | @param e LastParam
+// | @anotherTag 
+// | ----------------------------------------------------------------------
+// /** fn f1 with number
+// * @param { string} b about b
+// */
+// function f1(a: number);
+//             ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | ----------------------------------------------------------------------
+// function f1(b: string);
+//             ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: string
+// | ----------------------------------------------------------------------
+// /**@param opt optional parameter*/
+// function f1(aOrb, opt?) {
+//     return aOrb;
+// }
+// f1(10);
+// ^^
+// | ----------------------------------------------------------------------
+// | function f1(a: number): any (+1 overload)
+// | fn f1 with number
+// | @param b about b
+// | ----------------------------------------------------------------------
+// f1("hello");
+// ^^
+// | ----------------------------------------------------------------------
+// | function f1(b: string): any (+1 overload)
+// | fn f1 with number
+// | @param b about b
+// | ----------------------------------------------------------------------
+// 
+// /** This is subtract function
+// @param { a
+// *@param { number | } b this is about b
+// @param { { () => string; } } c this is optional param c
+// @param { { () => string; } d this is optional param d
+// @param { { () => string; } } e this is optional param e
+// @param { { { () => string; } } f this is optional param f
+// */
+// function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
+//                   ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | ----------------------------------------------------------------------
+//                              ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: number
+// | this is about b
+// | @param b this is about b
+// | ----------------------------------------------------------------------
+//                                         ^
+// | ----------------------------------------------------------------------
+// | (parameter) c: () => string
+// | this is optional param c
+// | @param c this is optional param c
+// | ----------------------------------------------------------------------
+//                                                           ^
+// | ----------------------------------------------------------------------
+// | (parameter) d: () => string
+// | this is optional param d
+// | @param d this is optional param d
+// | ----------------------------------------------------------------------
+//                                                                             ^
+// | ----------------------------------------------------------------------
+// | (parameter) e: () => string
+// | this is optional param e
+// | @param e this is optional param e
+// | ----------------------------------------------------------------------
+//                                                                                               ^
+// | ----------------------------------------------------------------------
+// | (parameter) f: () => string
+// | ----------------------------------------------------------------------
+// }
+// subtract(10,  20,  null,  null,  null, null);
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | This is subtract function
+// | @param 
+// | @param b this is about b
+// | @param c this is optional param c
+// | @param d this is optional param d
+// | @param e this is optional param e
+// | @param  { () => string; } } f this is optional param f
+// | ----------------------------------------------------------------------
+// /** this is square function
+// @paramTag { number } a this is input number of paramTag
+// @param { number } a this is input number
+// @returnType { number } it is return type
+// */
+// function square(a: number) {
+//                 ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | this is input number
+// | @param a this is input number
+// | ----------------------------------------------------------------------
+//     return a * a;
+// }
+// square(10);
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | function square(a: number): number
+// | this is square function
+// | @paramTag { number } a this is input number of paramTag
+// | @param a this is input number
+// | @returnType { number } it is return type
+// | ----------------------------------------------------------------------
+// /** this is divide function
+// @param { number} a this is a
+// @paramTag { number } g this is optional param g
+// @param { number} b this is b
+// */
+// function divide(a: number, b: number) {
+//                 ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | this is a
+// | @param a this is a
+// | ----------------------------------------------------------------------
+//                            ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: number
+// | this is b
+// | @param b this is b
+// | ----------------------------------------------------------------------
+// }
+// divide(10, 20);
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | function divide(a: number, b: number): void
+// | this is divide function
+// | @param a this is a
+// | @paramTag { number } g this is optional param g
+// | @param b this is b
+// | ----------------------------------------------------------------------
+// /**
+// Function returns string concat of foo and bar
+// @param			{string}		foo		is string
+// @param		    {string}		bar		is second string
+// */
+// function fooBar(foo: string, bar: string) {
+//                 ^^^
+// | ----------------------------------------------------------------------
+// | (parameter) foo: string
+// | is string
+// | @param foo is string
+// | ----------------------------------------------------------------------
+//                              ^^^
+// | ----------------------------------------------------------------------
+// | (parameter) bar: string
+// | is second string
+// | @param bar is second string
+// | ----------------------------------------------------------------------
+//     return foo + bar;
+// }
+// fooBar("foo","bar");
+// ^^^^^^
+// | ----------------------------------------------------------------------
+// | function fooBar(foo: string, bar: string): string
+// | Function returns string concat of foo and bar
+// | @param foo is string
+// | @param bar is second string
+// | ----------------------------------------------------------------------
+// /** This is a comment */
+// var x;
+// /**
+//   * This is a comment
+//   */
+// var y;
+// /** this is jsdoc style function with param tag as well as inline parameter help
+// *@param a it is first parameter
+// *@param c it is third parameter
+// */
+// function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
+//                                                            ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: number
+// | this is inline comment for a
+// | it is first parameter
+// | @param a it is first parameter
+// | ----------------------------------------------------------------------
+//                                                                                                          ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: number
+// | this is inline comment for b
+// | ----------------------------------------------------------------------
+//                                                                                                                     ^
+// | ----------------------------------------------------------------------
+// | (parameter) c: number
+// | it is third parameter
+// | @param c it is third parameter
+// | ----------------------------------------------------------------------
+//                                                                                                                                ^
+// | ----------------------------------------------------------------------
+// | (parameter) d: number
+// | ----------------------------------------------------------------------
+//     return a + b + c + d;
+// }
+// jsDocParamTest(30, 40, 50, 60);
+// ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocParamTest(a: number, b: number, c: number, d: number): number
+// | this is jsdoc style function with param tag as well as inline parameter help
+// | @param a it is first parameter
+// | @param c it is third parameter
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   * And properly aligned comment
+//   */
+// function jsDocCommentAlignmentTest1() {
+// }
+// jsDocCommentAlignmentTest1();
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocCommentAlignmentTest1(): void
+// | This is function comment
+// | And properly aligned comment
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   */
+// function jsDocCommentAlignmentTest2() {
+// }
+// jsDocCommentAlignmentTest2();
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocCommentAlignmentTest2(): void
+// | This is function comment
+// |     And aligned with 4 space char margin
+// | ----------------------------------------------------------------------
+// /** This is function comment
+//   *     And aligned with 4 space char margin
+//   * @param {string} a this is info about a
+//   *                   spanning on two lines and aligned perfectly
+//   * @param b          this is info about b
+//   *                   spanning on two lines and aligned perfectly
+//   *                   spanning one more line alined perfectly
+//   *                       spanning another line with more margin
+//   * @param c          this is info about b
+//   *  not aligned text about parameter will eat only one space
+//   */
+// function jsDocCommentAlignmentTest3(a: string, b, c) {
+//                                     ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: string
+// | this is info about a
+// | spanning on two lines and aligned perfectly
+// | @param a this is info about a
+// | spanning on two lines and aligned perfectly
+// | ----------------------------------------------------------------------
+//                                                ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: any
+// | this is info about b
+// | spanning on two lines and aligned perfectly
+// | spanning one more line alined perfectly
+// |     spanning another line with more margin
+// | @param b this is info about b
+// | spanning on two lines and aligned perfectly
+// | spanning one more line alined perfectly
+// |     spanning another line with more margin
+// | ----------------------------------------------------------------------
+//                                                   ^
+// | ----------------------------------------------------------------------
+// | (parameter) c: any
+// | this is info about b
+// | not aligned text about parameter will eat only one space
+// | @param c this is info about b
+// | not aligned text about parameter will eat only one space
+// | ----------------------------------------------------------------------
+// }
+// jsDocCommentAlignmentTest3("hello",1, 2);
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function jsDocCommentAlignmentTest3(a: string, b: any, c: any): void
+// | This is function comment
+// |     And aligned with 4 space char margin
+// | @param a this is info about a
+// | spanning on two lines and aligned perfectly
+// | @param b this is info about b
+// | spanning on two lines and aligned perfectly
+// | spanning one more line alined perfectly
+// |     spanning another line with more margin
+// | @param c this is info about b
+// | not aligned text about parameter will eat only one space
+// | ----------------------------------------------------------------------
+// 
+// ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /**/.
+// | ----------------------------------------------------------------------
+// class NoQuickInfoClass {
+//       ^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | class NoQuickInfoClass
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +542,7 @@
       "position": 58,
       "name": "1q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -55,7 +592,7 @@
       "position": 190,
       "name": "2q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -105,7 +642,7 @@
       "position": 291,
       "name": "3q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -160,7 +697,7 @@
       "position": 413,
       "name": "4q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -215,7 +752,7 @@
       "position": 618,
       "name": "5q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -270,7 +807,7 @@
       "position": 725,
       "name": "6q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -325,7 +862,7 @@
       "position": 856,
       "name": "7q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -380,7 +917,7 @@
       "position": 994,
       "name": "8q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -435,7 +972,7 @@
       "position": 1154,
       "name": "9q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -490,7 +1027,7 @@
       "position": 1336,
       "name": "10q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -545,7 +1082,7 @@
       "position": 1524,
       "name": "11q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -600,7 +1137,7 @@
       "position": 1608,
       "name": "12q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -650,7 +1187,7 @@
       "position": 1695,
       "name": "13q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -700,7 +1237,7 @@
       "position": 1744,
       "name": "14q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -750,7 +1287,7 @@
       "position": 1880,
       "name": "16aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -824,7 +1361,7 @@
       "position": 1891,
       "name": "17aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -898,7 +1435,7 @@
       "position": 1925,
       "name": "16q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1029,7 +1566,7 @@
       "position": 2111,
       "name": "19aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1103,7 +1640,7 @@
       "position": 2122,
       "name": "20aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1164,7 +1701,7 @@
       "position": 2133,
       "name": "21aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1225,7 +1762,7 @@
       "position": 2145,
       "name": "22aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1286,7 +1823,7 @@
       "position": 2149,
       "name": "23aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1360,7 +1897,7 @@
       "position": 2161,
       "name": "19q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1617,7 +2154,7 @@
       "position": 2253,
       "name": "25aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1667,7 +2204,7 @@
       "position": 2277,
       "name": "26aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -1717,7 +2254,7 @@
       "position": 2370,
       "name": "25q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1835,7 +2372,7 @@
       "position": 2378,
       "name": "26q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -1953,7 +2490,7 @@
       "position": 2716,
       "name": "28aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2003,7 +2540,7 @@
       "position": 2727,
       "name": "29aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2077,7 +2614,7 @@
       "position": 2738,
       "name": "30aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2171,7 +2708,7 @@
       "position": 2756,
       "name": "31aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2265,7 +2802,7 @@
       "position": 2774,
       "name": "32aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2359,7 +2896,7 @@
       "position": 2792,
       "name": "33aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2429,7 +2966,7 @@
       "position": 2818,
       "name": "28q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -2812,7 +3349,7 @@
       "position": 3045,
       "name": "34aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -2886,7 +3423,7 @@
       "position": 3081,
       "name": "34q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -2994,7 +3531,7 @@
       "position": 3243,
       "name": "35aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3068,7 +3605,7 @@
       "position": 3254,
       "name": "36aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3142,7 +3679,7 @@
       "position": 3272,
       "name": "35q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -3282,7 +3819,7 @@
       "position": 3432,
       "name": "37aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3356,7 +3893,7 @@
       "position": 3445,
       "name": "38aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3430,7 +3967,7 @@
       "position": 3486,
       "name": "37q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -3561,7 +4098,7 @@
       "position": 3782,
       "name": "40aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3643,7 +4180,7 @@
       "position": 3828,
       "name": "41aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3698,7 +4235,7 @@
       "position": 3839,
       "name": "42aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3772,7 +4309,7 @@
       "position": 3850,
       "name": "43aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -3822,7 +4359,7 @@
       "position": 3894,
       "name": "40q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4001,7 +4538,7 @@
       "position": 4040,
       "name": "45q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4056,7 +4593,7 @@
       "position": 4193,
       "name": "46q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4111,7 +4648,7 @@
       "position": 4778,
       "name": "47aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4185,7 +4722,7 @@
       "position": 4789,
       "name": "48aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4259,7 +4796,7 @@
       "position": 4792,
       "name": "49aq"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -4333,7 +4870,7 @@
       "position": 4809,
       "name": "47q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -4512,7 +5049,7 @@
       "position": 4854,
       "name": "50q"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {

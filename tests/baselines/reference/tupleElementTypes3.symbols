@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/tupleElementTypes3.ts ===
+//// [tests/cases/conformance/types/tuple/tupleElementTypes3.ts] ////
+
+=== tupleElementTypes3.ts ===
 var [a, b] = [0, undefined];
 >a : Symbol(a, Decl(tupleElementTypes3.ts, 0, 5))
 >b : Symbol(b, Decl(tupleElementTypes3.ts, 0, 7))

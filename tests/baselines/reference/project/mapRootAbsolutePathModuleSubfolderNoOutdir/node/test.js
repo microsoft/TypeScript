@@ -1,6 +1,7 @@
 "use strict";
-exports.__esModule = true;
-exports.a2 = exports.f1 = exports.instance1 = exports.c1 = exports.a1 = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a2 = exports.instance1 = exports.c1 = exports.a1 = void 0;
+exports.f1 = f1;
 var m1 = require("ref/m1");
 exports.a1 = 10;
 var c1 = /** @class */ (function () {
@@ -13,6 +14,5 @@ exports.instance1 = new c1();
 function f1() {
     return exports.instance1;
 }
-exports.f1 = f1;
 exports.a2 = m1.m1_c1;
 //# sourceMappingURL=/tests/cases/projects/outputdir_module_subfolder/mapFiles/test.js.map

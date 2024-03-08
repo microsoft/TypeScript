@@ -1,10 +1,10 @@
-tests/cases/compiler/cloduleSplitAcrossFiles_module.ts(1,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+cloduleSplitAcrossFiles_module.ts(1,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
 
-==== tests/cases/compiler/cloduleSplitAcrossFiles_class.ts (0 errors) ====
+==== cloduleSplitAcrossFiles_class.ts (0 errors) ====
     class D { }
     
-==== tests/cases/compiler/cloduleSplitAcrossFiles_module.ts (1 errors) ====
+==== cloduleSplitAcrossFiles_module.ts (1 errors) ====
     module D {
            ~
 !!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.

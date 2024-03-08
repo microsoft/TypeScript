@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringBinaryOperationsInvalid.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringBinaryOperationsInvalid.ts] ////
+
+=== templateStringBinaryOperationsInvalid.ts ===
 var a = 1 - `${ 3 }`;
 >a : Symbol(a, Decl(templateStringBinaryOperationsInvalid.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads44.ts ===
+//// [tests/cases/compiler/functionOverloads44.ts] ////
+
+=== functionOverloads44.ts ===
 interface Animal { animal }
 >animal : any
 

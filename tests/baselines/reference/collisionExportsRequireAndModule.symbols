@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndModule.ts] ////
+
+=== collisionExportsRequireAndModule_externalmodule.ts ===
 export module require {
 >require : Symbol(require, Decl(collisionExportsRequireAndModule_externalmodule.ts, 0, 0))
 
@@ -82,7 +84,7 @@ module m2 {
     }
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndModule_globalFile.ts ===
+=== collisionExportsRequireAndModule_globalFile.ts ===
 module require {
 >require : Symbol(require, Decl(collisionExportsRequireAndModule_globalFile.ts, 0, 0))
 

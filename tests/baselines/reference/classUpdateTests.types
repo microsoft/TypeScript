@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classUpdateTests.ts ===
+//// [tests/cases/compiler/classUpdateTests.ts] ////
+
+=== classUpdateTests.ts ===
 //
 // test codegen for instance properties
 //

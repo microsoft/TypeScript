@@ -1,6 +1,13 @@
-//// [parserArrowFunctionExpression13.ts]
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression13.ts] ////
+
+//// [fileJs.js]
+a ? () => a() : (): any => null; // Not legal JS; "Unexpected token ')'" at last paren
+
+//// [fileTs.ts]
 a ? () => a() : (): any => null;
 
 
-//// [parserArrowFunctionExpression13.js]
-a ? function () { return a(); } : function () { return null; };
+//// [fileJs.js]
+a ? () => a() : () => null; // Not legal JS; "Unexpected token ')'" at last paren
+//// [fileTs.js]
+a ? () => a() : () => null;

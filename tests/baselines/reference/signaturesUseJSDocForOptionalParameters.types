@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsDocOptionality.js ===
+//// [tests/cases/compiler/signaturesUseJSDocForOptionalParameters.ts] ////
+
+=== jsDocOptionality.js ===
 function MyClass() {
 >MyClass : typeof MyClass
 
@@ -7,7 +9,6 @@ function MyClass() {
 >this.prop : any
 >this : this
 >prop : any
->null : null
 }
 /**
  * @param  {string} required
@@ -49,5 +50,4 @@ let c2 = pInst.optionalParam('hello', null)
 >pInst : MyClass
 >optionalParam : (required: string, notRequired?: string) => MyClass
 >'hello' : "hello"
->null : null
 

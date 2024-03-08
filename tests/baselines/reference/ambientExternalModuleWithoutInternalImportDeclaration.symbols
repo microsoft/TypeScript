@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration_1.ts ===
+//// [tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration.ts] ////
+
+=== ambientExternalModuleWithoutInternalImportDeclaration_1.ts ===
 ///<reference path='ambientExternalModuleWithoutInternalImportDeclaration_0.ts'/>
 import A = require('M');
 >A : Symbol(A, Decl(ambientExternalModuleWithoutInternalImportDeclaration_1.ts, 0, 0))
@@ -7,7 +9,7 @@ var c = new A();
 >c : Symbol(c, Decl(ambientExternalModuleWithoutInternalImportDeclaration_1.ts, 2, 3))
 >A : Symbol(A, Decl(ambientExternalModuleWithoutInternalImportDeclaration_1.ts, 0, 0))
 
-=== tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration_0.ts ===
+=== ambientExternalModuleWithoutInternalImportDeclaration_0.ts ===
 declare module 'M' {
 >'M' : Symbol("M", Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 0, 0))
 

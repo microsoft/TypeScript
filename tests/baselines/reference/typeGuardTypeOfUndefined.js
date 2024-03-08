@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardTypeOfUndefined.ts] ////
+
 //// [typeGuardTypeOfUndefined.ts]
 // undefined type guard adds no new type information
 function test1(a: any) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts] ////
+
 //// [typeAssertionsWithIntersectionTypes01.ts]
 interface I1 {
     p1: number

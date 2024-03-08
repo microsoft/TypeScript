@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts(8,9): error TS2304: Cannot find name 'MUnit'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts(8,20): error TS2304: Cannot find name 'a'.
+parserVariableDeclaration2.ts(8,9): error TS2304: Cannot find name 'MUnit'.
+parserVariableDeclaration2.ts(8,20): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts (2 errors) ====
+==== parserVariableDeclaration2.ts (2 errors) ====
     (function() {
             var check = function () {
             }

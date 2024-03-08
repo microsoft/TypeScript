@@ -1,10 +1,12 @@
-=== tests/cases/compiler/usage.js ===
+//// [tests/cases/compiler/jsEnumTagOnObjectFrozen.ts] ////
+
+=== usage.js ===
 const { Thing, useThing, cbThing } = require("./index");
 >Thing : Symbol(Thing, Decl(usage.js, 0, 7))
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
 >cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
 >require : Symbol(require)
->"./index" : Symbol("tests/cases/compiler/index", Decl(index.js, 0, 0))
+>"./index" : Symbol("index", Decl(index.js, 0, 0))
 
 useThing(Thing.a);
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
@@ -38,13 +40,13 @@ cbThing(type => {
     };
 });
 
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 /** @enum {string} */
 const Thing = Object.freeze({
 >Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     a: "thing",
 >a : Symbol(a, Decl(index.js, 1, 29))

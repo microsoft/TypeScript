@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externalModuleAssignToVar_core.ts ===
+//// [tests/cases/compiler/externalModuleAssignToVar.ts] ////
+
+=== externalModuleAssignToVar_core.ts ===
 ///<reference path='externalModuleAssignToVar_core_require.ts'/>
 import ext = require('externalModuleAssignToVar_core_require');
 >ext : Symbol(ext, Decl(externalModuleAssignToVar_core.ts, 0, 0))
@@ -38,7 +40,7 @@ y3 = ext3; // ok
 >y3 : Symbol(y3, Decl(externalModuleAssignToVar_core.ts, 10, 3))
 >ext3 : Symbol(ext3, Decl(externalModuleAssignToVar_core.ts, 7, 10))
 
-=== tests/cases/compiler/externalModuleAssignToVar_ext.ts ===
+=== externalModuleAssignToVar_ext.ts ===
 class D { foo: string; }
 >D : Symbol(D, Decl(externalModuleAssignToVar_ext.ts, 0, 0))
 >foo : Symbol(D.foo, Decl(externalModuleAssignToVar_ext.ts, 0, 9))
@@ -46,12 +48,12 @@ class D { foo: string; }
 export = D;
 >D : Symbol(D, Decl(externalModuleAssignToVar_ext.ts, 0, 0))
 
-=== tests/cases/compiler/externalModuleAssignToVar_core_require.ts ===
+=== externalModuleAssignToVar_core_require.ts ===
 export class C { bar: string; }
 >C : Symbol(C, Decl(externalModuleAssignToVar_core_require.ts, 0, 0))
 >bar : Symbol(C.bar, Decl(externalModuleAssignToVar_core_require.ts, 0, 16))
 
-=== tests/cases/compiler/externalModuleAssignToVar_core_require2.ts ===
+=== externalModuleAssignToVar_core_require2.ts ===
 class C { baz: string; }
 >C : Symbol(C, Decl(externalModuleAssignToVar_core_require2.ts, 0, 0))
 >baz : Symbol(C.baz, Decl(externalModuleAssignToVar_core_require2.ts, 0, 9))

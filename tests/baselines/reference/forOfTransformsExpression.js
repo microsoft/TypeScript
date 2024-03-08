@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forOfTransformsExpression.ts] ////
+
 //// [forOfTransformsExpression.ts]
 // https://github.com/Microsoft/TypeScript/issues/11024
 let items = [{ name: "A" }, { name: "C" }, { name: "B" }];

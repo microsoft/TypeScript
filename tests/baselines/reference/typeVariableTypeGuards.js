@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeVariableTypeGuards.ts] ////
+
 //// [typeVariableTypeGuards.ts]
 // Repro from #14091
 
@@ -81,6 +83,14 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/57381
+
+function f6<T extends string | (new () => {})>(a: T) {
+  if (typeof a !== "string") {
+    new a();
+  }
+}
+
 
 //// [typeVariableTypeGuards.js]
 "use strict";
@@ -161,5 +171,11 @@ function f4(obj, x) {
 function f5(obj, key) {
     if (obj) {
         obj[key];
+    }
+}
+// https://github.com/microsoft/TypeScript/issues/57381
+function f6(a) {
+    if (typeof a !== "string") {
+        new a();
     }
 }

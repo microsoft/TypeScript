@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commonjsAccessExports.ts] ////
+
 === /a.js ===
 exports.x = 0;
 >exports.x = 0 : 0

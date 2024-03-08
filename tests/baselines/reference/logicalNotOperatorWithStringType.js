@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts] ////
+
 //// [logicalNotOperatorWithStringType.ts]
 // ! operator on string type
 var STRING: string;

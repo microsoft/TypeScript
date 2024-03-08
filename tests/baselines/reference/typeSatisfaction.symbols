@@ -1,0 +1,70 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts] ////
+
+=== typeSatisfaction.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(typeSatisfaction.ts, 0, 0))
+
+    a: number;
+>a : Symbol(I1.a, Decl(typeSatisfaction.ts, 0, 14))
+}
+
+type T1 = {
+>T1 : Symbol(T1, Decl(typeSatisfaction.ts, 2, 1))
+
+    a: "a" | "b";
+>a : Symbol(a, Decl(typeSatisfaction.ts, 4, 11))
+}
+
+type T2 = (x: string) => void;
+>T2 : Symbol(T2, Decl(typeSatisfaction.ts, 6, 1))
+>x : Symbol(x, Decl(typeSatisfaction.ts, 8, 11))
+
+const t1 = { a: 1 } satisfies I1; // Ok
+>t1 : Symbol(t1, Decl(typeSatisfaction.ts, 10, 5))
+>a : Symbol(a, Decl(typeSatisfaction.ts, 10, 12))
+>I1 : Symbol(I1, Decl(typeSatisfaction.ts, 0, 0))
+
+const t2 = { a: 1, b: 1 } satisfies I1; // Error
+>t2 : Symbol(t2, Decl(typeSatisfaction.ts, 11, 5))
+>a : Symbol(a, Decl(typeSatisfaction.ts, 11, 12))
+>b : Symbol(b, Decl(typeSatisfaction.ts, 11, 18))
+>I1 : Symbol(I1, Decl(typeSatisfaction.ts, 0, 0))
+
+const t3 = { } satisfies I1; // Error
+>t3 : Symbol(t3, Decl(typeSatisfaction.ts, 12, 5))
+>I1 : Symbol(I1, Decl(typeSatisfaction.ts, 0, 0))
+
+const t4: T1 = { a: "a" } satisfies T1; // Ok
+>t4 : Symbol(t4, Decl(typeSatisfaction.ts, 14, 5))
+>T1 : Symbol(T1, Decl(typeSatisfaction.ts, 2, 1))
+>a : Symbol(a, Decl(typeSatisfaction.ts, 14, 16))
+>T1 : Symbol(T1, Decl(typeSatisfaction.ts, 2, 1))
+
+const t5 = (m => m.substring(0)) satisfies T2; // Ok
+>t5 : Symbol(t5, Decl(typeSatisfaction.ts, 15, 5))
+>m : Symbol(m, Decl(typeSatisfaction.ts, 15, 12))
+>m.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(typeSatisfaction.ts, 15, 12))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>T2 : Symbol(T2, Decl(typeSatisfaction.ts, 6, 1))
+
+const t6 = [1, 2] satisfies [number, number];
+>t6 : Symbol(t6, Decl(typeSatisfaction.ts, 17, 5))
+
+interface A {
+>A : Symbol(A, Decl(typeSatisfaction.ts, 17, 45))
+
+    a: string
+>a : Symbol(A.a, Decl(typeSatisfaction.ts, 19, 13))
+}
+let t7 = { a: 'test' } satisfies A;
+>t7 : Symbol(t7, Decl(typeSatisfaction.ts, 22, 3))
+>a : Symbol(a, Decl(typeSatisfaction.ts, 22, 10))
+>A : Symbol(A, Decl(typeSatisfaction.ts, 17, 45))
+
+let t8 = { a: 'test', b: 'test' } satisfies A;
+>t8 : Symbol(t8, Decl(typeSatisfaction.ts, 23, 3))
+>a : Symbol(a, Decl(typeSatisfaction.ts, 23, 10))
+>b : Symbol(b, Decl(typeSatisfaction.ts, 23, 21))
+>A : Symbol(A, Decl(typeSatisfaction.ts, 17, 45))
+

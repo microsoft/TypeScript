@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts ===
+//// [tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts] ////
+
+=== emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts ===
 // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
 // Begin types from Lodash.
 interface Dictionary<T> {
@@ -34,7 +36,6 @@ function mapValues<T, TResult>(
 
   obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
 >obj : Dictionary<T> | NumericDictionary<T>
->null : null
 
   callback: DictionaryIterator<T, TResult>
 >callback : DictionaryIterator<T, TResult>
@@ -42,7 +43,6 @@ function mapValues<T, TResult>(
 ): Dictionary<TResult> {
   return null as any;
 >null as any : any
->null : null
 }
 // End types from Lodash.
 
@@ -63,14 +63,11 @@ export function fooToBar(
 >foos : Record<string, Foo>
 
 ): Record<string, Bar | null> {
->null : null
-
   const result = foos == null ? {} : mapValues(foos, f => f.foo);
 >result : Dictionary<string>
 >foos == null ? {} : mapValues(foos, f => f.foo) : Dictionary<string>
 >foos == null : boolean
 >foos : Record<string, Foo>
->null : null
 >{} : {}
 >mapValues(foos, f => f.foo) : Dictionary<string>
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>

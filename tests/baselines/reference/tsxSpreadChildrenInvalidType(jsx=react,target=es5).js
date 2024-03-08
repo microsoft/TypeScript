@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx] ////
+
 //// [tsxSpreadChildrenInvalidType.tsx]
 declare module JSX {
 	interface Element { }

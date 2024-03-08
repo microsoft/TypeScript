@@ -1,42 +1,42 @@
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(8,5): error TS2322: Type 'B' is not assignable to type '1'.
+numericLiteralTypes3.ts(8,5): error TS2322: Type 'B' is not assignable to type '1'.
   Type '2' is not assignable to type '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(9,5): error TS2322: Type 'C' is not assignable to type '1'.
+numericLiteralTypes3.ts(9,5): error TS2322: Type 'C' is not assignable to type '1'.
   Type '2' is not assignable to type '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(10,5): error TS2322: Type 'D' is not assignable to type '1'.
+numericLiteralTypes3.ts(10,5): error TS2322: Type 'D' is not assignable to type '1'.
   Type '0' is not assignable to type '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(14,5): error TS2322: Type '1' is not assignable to type 'B'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(16,5): error TS2322: Type 'C' is not assignable to type 'B'.
+numericLiteralTypes3.ts(14,5): error TS2322: Type '1' is not assignable to type 'B'.
+numericLiteralTypes3.ts(16,5): error TS2322: Type 'C' is not assignable to type 'B'.
   Type '1' is not assignable to type 'B'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(17,5): error TS2322: Type 'D' is not assignable to type 'B'.
+numericLiteralTypes3.ts(17,5): error TS2322: Type 'D' is not assignable to type 'B'.
   Type '0' is not assignable to type 'B'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(24,5): error TS2322: Type 'D' is not assignable to type 'C'.
+numericLiteralTypes3.ts(24,5): error TS2322: Type 'D' is not assignable to type 'C'.
   Type '0' is not assignable to type 'C'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(29,5): error TS2322: Type 'B' is not assignable to type 'D'.
+numericLiteralTypes3.ts(29,5): error TS2322: Type 'B' is not assignable to type 'D'.
   Type '3' is not assignable to type 'D'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(30,5): error TS2322: Type 'C' is not assignable to type 'D'.
+numericLiteralTypes3.ts(30,5): error TS2322: Type 'C' is not assignable to type 'D'.
   Type '3' is not assignable to type 'D'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(35,5): error TS2322: Type '0' is not assignable to type '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(37,5): error TS2322: Type '2' is not assignable to type '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(38,5): error TS2322: Type '3' is not assignable to type '1'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(39,5): error TS2322: Type '0' is not assignable to type 'B'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(40,5): error TS2322: Type '1' is not assignable to type 'B'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(43,5): error TS2322: Type '0' is not assignable to type 'C'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(50,5): error TS2322: Type '3' is not assignable to type 'D'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(54,5): error TS2367: This condition will always return 'false' since the types '1' and '0' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(56,5): error TS2367: This condition will always return 'false' since the types '1' and '2' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(57,5): error TS2367: This condition will always return 'false' since the types '1' and '3' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(58,5): error TS2367: This condition will always return 'false' since the types 'B' and '0' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(59,5): error TS2367: This condition will always return 'false' since the types 'B' and '1' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(62,5): error TS2367: This condition will always return 'false' since the types 'C' and '0' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(69,5): error TS2367: This condition will always return 'false' since the types 'D' and '3' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(74,5): error TS2367: This condition will always return 'false' since the types '1' and 'B' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(77,5): error TS2367: This condition will always return 'false' since the types 'B' and '1' have no overlap.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(94,14): error TS2678: Type '1' is not comparable to type '0 | 2 | 4'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(96,14): error TS2678: Type '3' is not comparable to type '0 | 2 | 4'.
-tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS2678: Type '5' is not comparable to type '0 | 2 | 4'.
+numericLiteralTypes3.ts(35,5): error TS2322: Type '0' is not assignable to type '1'.
+numericLiteralTypes3.ts(37,5): error TS2322: Type '2' is not assignable to type '1'.
+numericLiteralTypes3.ts(38,5): error TS2322: Type '3' is not assignable to type '1'.
+numericLiteralTypes3.ts(39,5): error TS2322: Type '0' is not assignable to type 'B'.
+numericLiteralTypes3.ts(40,5): error TS2322: Type '1' is not assignable to type 'B'.
+numericLiteralTypes3.ts(43,5): error TS2322: Type '0' is not assignable to type 'C'.
+numericLiteralTypes3.ts(50,5): error TS2322: Type '3' is not assignable to type 'D'.
+numericLiteralTypes3.ts(54,5): error TS2367: This comparison appears to be unintentional because the types '1' and '0' have no overlap.
+numericLiteralTypes3.ts(56,5): error TS2367: This comparison appears to be unintentional because the types '1' and '2' have no overlap.
+numericLiteralTypes3.ts(57,5): error TS2367: This comparison appears to be unintentional because the types '1' and '3' have no overlap.
+numericLiteralTypes3.ts(58,5): error TS2367: This comparison appears to be unintentional because the types 'B' and '0' have no overlap.
+numericLiteralTypes3.ts(59,5): error TS2367: This comparison appears to be unintentional because the types 'B' and '1' have no overlap.
+numericLiteralTypes3.ts(62,5): error TS2367: This comparison appears to be unintentional because the types 'C' and '0' have no overlap.
+numericLiteralTypes3.ts(69,5): error TS2367: This comparison appears to be unintentional because the types 'D' and '3' have no overlap.
+numericLiteralTypes3.ts(74,5): error TS2367: This comparison appears to be unintentional because the types '1' and 'B' have no overlap.
+numericLiteralTypes3.ts(77,5): error TS2367: This comparison appears to be unintentional because the types 'B' and '1' have no overlap.
+numericLiteralTypes3.ts(94,14): error TS2678: Type '1' is not comparable to type '0 | 2 | 4'.
+numericLiteralTypes3.ts(96,14): error TS2678: Type '3' is not comparable to type '0 | 2 | 4'.
+numericLiteralTypes3.ts(98,14): error TS2678: Type '5' is not comparable to type '0 | 2 | 4'.
 
 
-==== tests/cases/conformance/types/literal/numericLiteralTypes3.ts (28 errors) ====
+==== numericLiteralTypes3.ts (28 errors) ====
     type A = 1;
     type B = 2 | 3;
     type C = 1 | 2 | 3;
@@ -132,25 +132,25 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
     function f6(a: A, b: B, c: C, d: D) {
         a === 0;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '1' and '0' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '1' and '0' have no overlap.
         a === 1;
         a === 2;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '1' and '2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '1' and '2' have no overlap.
         a === 3;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '1' and '3' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '1' and '3' have no overlap.
         b === 0;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B' and '0' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B' and '0' have no overlap.
         b === 1;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B' and '1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B' and '1' have no overlap.
         b === 2;
         b === 3;
         c === 0;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'C' and '0' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'C' and '0' have no overlap.
         c === 1;
         c === 2;
         c === 3;
@@ -159,19 +159,19 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
         d === 2;
         d === 3;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'D' and '3' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'D' and '3' have no overlap.
     }
     
     function f7(a: A, b: B, c: C, d: D) {
         a === a;
         a === b;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '1' and 'B' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '1' and 'B' have no overlap.
         a === c;
         a === d;
         b === a;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B' and '1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B' and '1' have no overlap.
         b === b;
         b === c;
         b === d;

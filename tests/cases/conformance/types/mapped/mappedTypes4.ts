@@ -65,7 +65,7 @@ var x1: DeepReadonlyFoo;
 
 type Z = { a: number };
 type Clone<T> = {
-  [P in keyof (T & {})]: T[P];
+  [P in keyof (T & {})]: (T & {})[P];
 };
 type M = Clone<Z>; // M should be { a: number }
 

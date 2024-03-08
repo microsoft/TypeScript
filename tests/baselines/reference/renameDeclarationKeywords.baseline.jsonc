@@ -1,0 +1,201 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// /*RENAME*/<|class [|C1RENAME|] extends Base implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }|>
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// --- (line: 10) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// <|class [|BaseRENAME|] {}|>
+// interface Implemented1 {}
+// class C1 /*RENAME*/extends [|BaseRENAME|] implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 extends [|BaseRENAME|] { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// --- (line: 11) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// <|interface [|Implemented1RENAME|] {}|>
+// class C1 extends Base /*RENAME*/implements [|Implemented1RENAME|] {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// --- (line: 7) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     /*RENAME*/<|get [|eRENAME|]() { return 1; }|>
+//     <|set [|eRENAME|](v) {}|>
+// }
+// interface I1 extends Base { }
+// type T = { }
+// --- (line: 9) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// class Base {}
+// interface Implemented1 {}
+// class C1 extends Base implements Implemented1 {
+//     <|get [|eRENAME|]() { return 1; }|>
+//     /*RENAME*/<|set [|eRENAME|](v) {}|>
+// }
+// interface I1 extends Base { }
+// type T = { }
+// --- (line: 9) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 3) skipped ---
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// /*RENAME*/<|interface [|I1RENAME|] extends Base { }|>
+// type T = { }
+// enum E { }
+// namespace N { }
+// --- (line: 11) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// <|class [|BaseRENAME|] {}|>
+// interface Implemented1 {}
+// class C1 extends [|BaseRENAME|] implements Implemented1 {
+//     get e() { return 1; }
+//     set e(v) {}
+// }
+// interface I1 /*RENAME*/extends [|BaseRENAME|] { }
+// type T = { }
+// enum E { }
+// namespace N { }
+// --- (line: 11) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 4) skipped ---
+//     set e(v) {}
+// }
+// interface I1 extends Base { }
+// /*RENAME*/<|type [|TRENAME|] = { }|>
+// enum E { }
+// namespace N { }
+// module M { }
+// --- (line: 12) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 5) skipped ---
+// }
+// interface I1 extends Base { }
+// type T = { }
+// /*RENAME*/<|enum [|ERENAME|] { }|>
+// namespace N { }
+// module M { }
+// function fn() {}
+// --- (line: 13) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 6) skipped ---
+// interface I1 extends Base { }
+// type T = { }
+// enum E { }
+// /*RENAME*/<|namespace [|NRENAME|] { }|>
+// module M { }
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 7) skipped ---
+// type T = { }
+// enum E { }
+// namespace N { }
+// /*RENAME*/<|module [|MRENAME|] { }|>
+// function fn() {}
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 8) skipped ---
+// enum E { }
+// namespace N { }
+// module M { }
+// /*RENAME*/<|function [|fnRENAME|]() {}|>
+// var x;
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 9) skipped ---
+// namespace N { }
+// module M { }
+// function fn() {}
+// /*RENAME*/<|var [|xRENAME|];|>
+// let y;
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 10) skipped ---
+// module M { }
+// function fn() {}
+// var x;
+// /*RENAME*/<|let [|yRENAME|];|>
+// const z = 1;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDeclarationKeywords.ts ===
+// --- (line: 11) skipped ---
+// function fn() {}
+// var x;
+// let y;
+// /*RENAME*/<|const [|zRENAME|] = 1;|>

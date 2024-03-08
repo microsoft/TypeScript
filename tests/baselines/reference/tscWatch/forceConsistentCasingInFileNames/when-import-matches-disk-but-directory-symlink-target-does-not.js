@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/XY/a.ts]
 
@@ -28,7 +29,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true,"outFile":"out.js","module":"system"}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "outFile": "out.js",
+    "module": "system"
+  }
+}
 
 
 /a/lib/tsc.js --w --p . --explainFiles
@@ -45,7 +52,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -56,41 +63,6 @@ b.ts
 [[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/Xy/a.ts
-/user/username/projects/myproject/link/a.ts
-/user/username/projects/myproject/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/Xy/a.ts","pollingInterval":250}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/out.js]
 System.register("Xy/a", [], function (exports_1, context_1) {
@@ -139,6 +111,54 @@ System.register("b", ["Xy/a", "link/a"], function (exports_3, context_3) {
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/Xy/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/link/a.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/XY/a.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "outFile": "/user/username/projects/myproject/out.js",
+  "module": 4,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/Xy/a.ts
+/user/username/projects/myproject/link/a.ts
+/user/username/projects/myproject/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: Prepend a line to moduleA
 
 Input::
@@ -150,6 +170,13 @@ export const b = 2;
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
@@ -163,7 +190,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -174,41 +201,6 @@ b.ts
 [[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/Xy/a.ts
-/user/username/projects/myproject/link/a.ts
-/user/username/projects/myproject/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/Xy/a.ts","pollingInterval":250}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/out.js]
 // some comment
@@ -257,3 +249,30 @@ System.register("b", ["Xy/a", "link/a"], function (exports_3, context_3) {
 });
 
 
+
+
+Program root files: [
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/XY/a.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "outFile": "/user/username/projects/myproject/out.js",
+  "module": 4,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/Xy/a.ts
+/user/username/projects/myproject/link/a.ts
+/user/username/projects/myproject/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

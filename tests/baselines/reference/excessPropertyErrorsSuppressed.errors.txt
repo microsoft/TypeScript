@@ -1,0 +1,10 @@
+error TS5102: Option 'suppressExcessPropertyErrors' has been removed. Please remove it from your configuration.
+excessPropertyErrorsSuppressed.ts(1,38): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+
+
+!!! error TS5102: Option 'suppressExcessPropertyErrors' has been removed. Please remove it from your configuration.
+==== excessPropertyErrorsSuppressed.ts (1 errors) ====
+    var x: { a: string } = { a: "hello", b: 42 };  // No error
+                                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+    

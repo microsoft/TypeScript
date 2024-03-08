@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5iterable.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5iterable.ts] ////
+
+=== destructuringParameterDeclaration7ES5iterable.ts ===
 interface ISomething {
 >ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5iterable.ts, 0, 0))
 

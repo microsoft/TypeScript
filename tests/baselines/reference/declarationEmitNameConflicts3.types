@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNameConflicts3.ts ===
+//// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
+
+=== declarationEmitNameConflicts3.ts ===
 module M {
 >M : typeof M
 

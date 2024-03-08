@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping1.ts] ////
+
+=== typeSatisfaction_contextualTyping1.ts ===
+type Predicates = { [s: string]: (n: number) => boolean };
+>Predicates : Symbol(Predicates, Decl(typeSatisfaction_contextualTyping1.ts, 0, 0))
+>s : Symbol(s, Decl(typeSatisfaction_contextualTyping1.ts, 0, 21))
+>n : Symbol(n, Decl(typeSatisfaction_contextualTyping1.ts, 0, 34))
+
+const p = {
+>p : Symbol(p, Decl(typeSatisfaction_contextualTyping1.ts, 2, 5))
+
+    isEven: n => n % 2 === 0,
+>isEven : Symbol(isEven, Decl(typeSatisfaction_contextualTyping1.ts, 2, 11))
+>n : Symbol(n, Decl(typeSatisfaction_contextualTyping1.ts, 3, 11))
+>n : Symbol(n, Decl(typeSatisfaction_contextualTyping1.ts, 3, 11))
+
+    isOdd: n => n % 2 === 1
+>isOdd : Symbol(isOdd, Decl(typeSatisfaction_contextualTyping1.ts, 3, 29))
+>n : Symbol(n, Decl(typeSatisfaction_contextualTyping1.ts, 4, 10))
+>n : Symbol(n, Decl(typeSatisfaction_contextualTyping1.ts, 4, 10))
+
+} satisfies Predicates;
+>Predicates : Symbol(Predicates, Decl(typeSatisfaction_contextualTyping1.ts, 0, 0))
+

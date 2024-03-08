@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypesPatternsPrefixSuffixAssignability.ts] ////
+
 //// [templateLiteralTypesPatternsPrefixSuffixAssignability.ts]
 const s1: `:${string}:` = ":"; // should error
 const s2: `:${string}:` = "::"; // ok

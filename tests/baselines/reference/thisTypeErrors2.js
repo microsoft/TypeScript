@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeErrors2.ts] ////
+
 //// [thisTypeErrors2.ts]
 class Base {
     constructor(a: this) {

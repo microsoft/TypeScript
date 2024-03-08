@@ -1,9 +1,9 @@
-tests/cases/compiler/exportDefaultInterfaceClassAndValue.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultInterfaceClassAndValue.ts(3,22): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultInterfaceClassAndValue.ts(4,26): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultInterfaceClassAndValue.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultInterfaceClassAndValue.ts(3,22): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultInterfaceClassAndValue.ts(4,26): error TS2323: Cannot redeclare exported variable 'default'.
 
 
-==== tests/cases/compiler/exportDefaultInterfaceClassAndValue.ts (3 errors) ====
+==== exportDefaultInterfaceClassAndValue.ts (3 errors) ====
     const foo = 1
     export default foo
     ~~~~~~~~~~~~~~~~~~

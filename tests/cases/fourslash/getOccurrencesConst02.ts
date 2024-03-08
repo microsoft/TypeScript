@@ -10,5 +10,5 @@
 ////declare [|const|] enum E {
 ////}
 
-goTo.eachRange(() => verify.occurrencesAtPositionCount(1)); // They are in different scopes, so not counted together.
-goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));
+verify.baselineDocumentHighlights(); // They are in different scopes, so not counted together.
+verify.baselineDocumentHighlights(test.markers());

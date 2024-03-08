@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit3_ES5.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+computedPropertyNamesDeclarationEmit3_ES5.ts(2,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit3_ES5.ts (1 errors) ====
+==== computedPropertyNamesDeclarationEmit3_ES5.ts (1 errors) ====
     interface I {
         ["" + ""](): void;
         ~~~~~~~~~

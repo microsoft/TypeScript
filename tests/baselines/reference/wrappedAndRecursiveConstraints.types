@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints.ts] ////
+
+=== wrappedAndRecursiveConstraints.ts ===
 // no errors expected
 
 class C<T extends Date> {
@@ -23,7 +25,6 @@ interface Foo extends Date {
 
 var y: Foo = null;
 >y : Foo
->null : null
 
 var c = new C(y);
 >c : C<Foo>

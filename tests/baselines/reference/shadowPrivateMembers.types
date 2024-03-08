@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shadowPrivateMembers.ts ===
+//// [tests/cases/compiler/shadowPrivateMembers.ts] ////
+
+=== shadowPrivateMembers.ts ===
 class base { private n() {} }
 >base : base
 >n : () => void

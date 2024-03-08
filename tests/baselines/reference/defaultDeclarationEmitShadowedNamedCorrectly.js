@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultDeclarationEmitShadowedNamedCorrectly.ts] ////
+
 //// [this.ts]
 import * as me from "./this";
 export interface Things<P, T> {
@@ -21,24 +23,24 @@ export namespace Something {
 
 //// [this.js]
 "use strict";
-exports.__esModule = true;
-exports.Something = exports.make = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Something = void 0;
+exports.make = make;
 var me = require("./this");
 function make(x) {
     return null;
 }
-exports.make = make;
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }
     return MyComponent;
 }());
-exports["default"] = MyComponent;
+exports.default = MyComponent;
 var Something;
 (function (Something) {
     var MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
-    Something.create = make(me["default"]);
-})(Something = exports.Something || (exports.Something = {}));
+    Something.create = make(me.default);
+})(Something || (exports.Something = Something = {}));
 
 
 //// [this.d.ts]

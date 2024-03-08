@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment9.ts] ////
+
+=== a.js ===
 var my = my || {};
 >my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 4, 1), Decl(a.js, 5, 14), Decl(a.js, 6, 15) ... and 5 more)
 >my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 4, 1), Decl(a.js, 5, 14), Decl(a.js, 6, 15) ... and 5 more)
@@ -44,7 +46,7 @@ my.predicate.query = function () {
 
     me.property = false;
 >me.property : Symbol(query.property, Decl(a.js, 9, 18))
->me : Symbol(query.property, Decl(a.js, 9, 18))
+>me : Symbol(me, Decl(a.js, 9, 7))
 >property : Symbol(query.property, Decl(a.js, 9, 18))
 
 };

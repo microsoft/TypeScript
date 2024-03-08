@@ -1,4 +1,6 @@
-=== tests/cases/compiler/useBeforeDeclaration_jsx.tsx ===
+//// [tests/cases/compiler/useBeforeDeclaration_jsx.tsx] ////
+
+=== useBeforeDeclaration_jsx.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(useBeforeDeclaration_jsx.tsx, 0, 0))
 

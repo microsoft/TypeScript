@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/awaitClassExpression_es2017.ts] ////
+
 //// [awaitClassExpression_es2017.ts]
 declare class C { }
 declare var p: Promise<typeof C>;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypes1.ts] ////
+
 //// [inferTypes1.ts]
 type Unpacked<T> =
     T extends (infer U)[] ? U :

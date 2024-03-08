@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericArrayExtenstions.ts ===
+//// [tests/cases/compiler/genericArrayExtenstions.ts] ////
+
+=== genericArrayExtenstions.ts ===
 export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
 >ObservableArray : Symbol(ObservableArray, Decl(genericArrayExtenstions.ts, 0, 0))
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))

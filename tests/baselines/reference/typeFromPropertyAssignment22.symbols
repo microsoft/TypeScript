@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/npm-install.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment22.ts] ////
+
+=== npm-install.js ===
 function Installer () {
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
 

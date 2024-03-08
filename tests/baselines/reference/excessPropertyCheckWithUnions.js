@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithUnions.ts] ////
+
 //// [excessPropertyCheckWithUnions.ts]
 type ADT = {
     tag: "A",
@@ -34,9 +36,7 @@ amb = { tag: "A", x: "hi", y: 12 }
 amb = { tag: "A", x: "hi", extra: 12 }
 amb = { tag: "A", y: 12, extra: 12 }
 
-// assignability errors still work.
-// But note that the error for `z: true` is the fallback one of reporting on
-// the last constituent since assignability error reporting can't find a single best discriminant either.
+// assignability errors still work
 amb = { tag: "A" }
 amb = { tag: "A", z: true }
 
@@ -94,7 +94,7 @@ interface IValue {
   value: string
 }
 
-interface StringKeys { 
+interface StringKeys {
     [propertyName: string]: IValue;
 };
 
@@ -178,9 +178,7 @@ amb = { tag: "A", x: "hi", y: 12 };
 // correctly error on excess property 'extra', even when ambiguous
 amb = { tag: "A", x: "hi", extra: 12 };
 amb = { tag: "A", y: 12, extra: 12 };
-// assignability errors still work.
-// But note that the error for `z: true` is the fallback one of reporting on
-// the last constituent since assignability error reporting can't find a single best discriminant either.
+// assignability errors still work
 amb = { tag: "A" };
 amb = { tag: "A", z: true };
 var over;
@@ -193,21 +191,21 @@ var abab = {
     kind: "A",
     n: {
         a: "a",
-        b: "b"
+        b: "b", // excess -- kind: "A"
     }
 };
 var abac = {
     kind: "A",
     n: {
         a: "a",
-        c: "c"
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
     }
 };
 var obj = {
     tag: 'button',
     type: 'submit',
     // should have error here
-    href: 'foo'
+    href: 'foo',
 };
 ;
 var dataSpecification = {
@@ -220,11 +218,11 @@ function F1(_arg) { }
 F1({
     props: {
         prop1: prop1,
-        prop2: prop2
-    }
+        prop2: prop2,
+    },
 });
 function F2(_props) { }
 F2({
     prop1: prop1,
-    prop2: prop2
+    prop2: prop2,
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts] ////
+
 //// [objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts]
 // errors
 var y = {
@@ -28,11 +30,11 @@ var y = {
     42: ,
     get e() { },
     set f() { },
-    "this": ,
-    "super": ,
-    "var": ,
-    "class": ,
-    "typeof": 
+    this: ,
+    super: ,
+    var: ,
+    class: ,
+    typeof: 
 };
 var x = (_a = {
         a: a,
@@ -43,4 +45,4 @@ var x = (_a = {
     _a.a = a,
     _a[1] = ,
     _a);
-var v = { "class":  }; // error
+var v = { class:  }; // error

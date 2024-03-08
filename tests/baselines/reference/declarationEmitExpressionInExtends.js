@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends.ts] ////
+
 //// [declarationEmitExpressionInExtends.ts]
 var x: {
     new<T>(s: any): Q;

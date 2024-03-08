@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts] ////
+
 //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.ts]
 class TestWithStatics {
     #prop = 0
@@ -54,16 +56,10 @@ class TestNonStatics {
 //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
 "use strict";
 class TestWithStatics {
-    constructor() {
-        this.#prop = 0;
-    }
-    #prop;
+    #prop = 0;
     static { this.dd = new TestWithStatics().#prop; } // OK
     static { this["X_ z_ zz"] = class Inner {
-        constructor() {
-            this.#foo = 10;
-        }
-        #foo;
+        #foo = 10;
         m() {
             new TestWithStatics().#prop; // OK
         }

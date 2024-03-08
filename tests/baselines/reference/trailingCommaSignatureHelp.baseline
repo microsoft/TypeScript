@@ -1,3 +1,28 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/trailingCommaSignatureHelp.ts ===
+// function str(n: number): string;
+// /**
+//  * Stringifies a number with radix
+//  * @param radix The radix
+//  */
+// function str(n: number, radix: number): string;
+// function str(n: number, radix?: number): string { return ""; }
+// 
+// str(1, )
+//        ^
+// | ----------------------------------------------------------------------
+// | str(n: number, **radix: number**): string
+// | Stringifies a number with radix
+// | @param radix The radix
+// | ----------------------------------------------------------------------
+// 
+// declare function f<T>(a: T): T;
+// f(2, );
+//      ^
+// | ----------------------------------------------------------------------
+// | f(a: 2): 2
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +30,7 @@
       "position": 221,
       "name": "a"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -213,7 +238,7 @@
       "position": 261,
       "name": "b"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

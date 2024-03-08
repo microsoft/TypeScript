@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduledecl.ts ===
+//// [tests/cases/compiler/moduledecl.ts] ////
+
+=== moduledecl.ts ===
 module a {
 }
 
@@ -397,13 +399,13 @@ declare module mAmbient {
 >e : e
 
         x,
->x : e
+>x : e.x
 
         y,
->y : e
+>y : e.y
 
         z
->z : e
+>z : e.z
     }
 
     module m3 {
@@ -433,13 +435,13 @@ declare module mAmbient {
 >e : e
 
             x,
->x : e
+>x : e.x
 
             y,
->y : e
+>y : e.y
 
             z
->z : e
+>z : e.z
         }
     }
 }

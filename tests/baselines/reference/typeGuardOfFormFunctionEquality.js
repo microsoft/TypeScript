@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormFunctionEquality.ts] ////
+
 //// [typeGuardOfFormFunctionEquality.ts]
 declare function isString1(a: number, b: Object): b is string;
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmitNesting.tsx] ////
+
+=== file.tsx ===
 declare var vdom: any;
 >vdom : any
 
@@ -143,7 +145,6 @@ let render = (ctrl, model) =>
 >input : any
 
                                 : null
->null : null
                             }
                             <label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label>
 ><label onDoubleClick={()=>{ctrl.editTodo(todo)}}>{todo.title}</label> : error

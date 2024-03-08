@@ -1,4 +1,6 @@
-=== tests/cases/compiler/returnTypeInferenceNotTooBroad.ts ===
+//// [tests/cases/compiler/returnTypeInferenceNotTooBroad.ts] ////
+
+=== returnTypeInferenceNotTooBroad.ts ===
 type Signs = { kind: 'a'; a: 3; } | { kind: 'b'; b: 2; } | { kind: 'c'; c: 1; };
 >Signs : Symbol(Signs, Decl(returnTypeInferenceNotTooBroad.ts, 0, 0))
 >kind : Symbol(kind, Decl(returnTypeInferenceNotTooBroad.ts, 0, 14))

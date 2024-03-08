@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts] ////
+
 //// [useBeforeDeclaration_propertyAssignment.ts]
 export class C {
     public a =  { b: this.b, ...this.c, [this.b]: `${this.c}`};

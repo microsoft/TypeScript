@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeEnumMemberNameReserved.ts] ////
+
 //// [strictModeEnumMemberNameReserved.ts]
 "use strict";
 enum E {

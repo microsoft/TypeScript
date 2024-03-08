@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures.ts ===
+//// [tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures.ts] ////
+
+=== contextualTypingOfLambdaWithMultipleSignatures.ts ===
 interface Foo {
     getFoo(n: number): void;
 >getFoo : { (n: number): void; (s: string): void; }

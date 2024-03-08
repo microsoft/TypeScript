@@ -1,8 +1,10 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal2.ts] ////
+
+=== f1.ts ===
 export class A {};
 >A : A
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 // change the shape of Array<T>
 import {A} from "./f1";
 >A : typeof A

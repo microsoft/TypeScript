@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateWithSpecificTemplateStrings.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateWithSpecificTemplateStrings.ts] ////
+
+=== taggedTemplateWithSpecificTemplateStrings.ts ===
 // overload resolution
 declare function f1(array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A";
 >f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-system.ts ===
+//// [tests/cases/compiler/es5-system.ts] ////
+
+=== es5-system.ts ===
 export default class A
 >A : Symbol(A, Decl(es5-system.ts, 0, 0))
 {

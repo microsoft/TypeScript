@@ -1,8 +1,10 @@
-=== tests/cases/compiler/client.ts ===
+//// [tests/cases/compiler/es6ImportEqualsDeclaration.ts] ////
+
+=== client.ts ===
 import a = require("server");
 >a : Symbol(a, Decl(client.ts, 0, 0))
 
-=== tests/cases/compiler/server.ts ===
+=== server.ts ===
 var a = 10;
 >a : Symbol(a, Decl(server.ts, 0, 3))
 

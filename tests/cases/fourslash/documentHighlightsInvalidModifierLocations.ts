@@ -10,6 +10,4 @@
 ////}
 ////function g([|public|] p) {}
 
-for (const r of test.ranges()) {
-    verify.documentHighlightsOf(r, [r]);
-}
+verify.baselineDocumentHighlights();

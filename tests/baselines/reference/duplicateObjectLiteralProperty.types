@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateObjectLiteralProperty.ts ===
+//// [tests/cases/compiler/duplicateObjectLiteralProperty.ts] ////
+
+=== duplicateObjectLiteralProperty.ts ===
 var x = {
 >x : { a: { c: number; }; b: boolean; }
 >{    a: 1,    b: true, // OK    a: 56,   // Duplicate    \u0061: "ss", // Duplicate    a: {        c: 1,        "c": 56, // Duplicate    }} : { a: { c: number; }; b: boolean; }

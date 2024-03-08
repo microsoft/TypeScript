@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfOnTypeArg.ts] ////
+
 //// [typeOfOnTypeArg.ts]
 var A = { '': 3 };
 

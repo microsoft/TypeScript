@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerAliases2.ts ===
+//// [tests/cases/compiler/innerAliases2.ts] ////
+
+=== innerAliases2.ts ===
 module _provider {
 >_provider : typeof _provider
 
@@ -21,7 +23,6 @@ module consumer {
                 var g:provider.UsefulClass= null;
 >g : provider.UsefulClass
 >provider : any
->null : null
                 
                 function use():provider.UsefulClass { 
 >use : () => provider.UsefulClass

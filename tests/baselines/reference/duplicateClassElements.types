@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateClassElements.ts ===
+//// [tests/cases/compiler/duplicateClassElements.ts] ////
+
+=== duplicateClassElements.ts ===
 class a {
 >a : a
 

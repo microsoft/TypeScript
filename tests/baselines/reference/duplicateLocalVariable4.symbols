@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateLocalVariable4.ts ===
+//// [tests/cases/compiler/duplicateLocalVariable4.ts] ////
+
+=== duplicateLocalVariable4.ts ===
 enum E{
 >E : Symbol(E, Decl(duplicateLocalVariable4.ts, 0, 0))
 

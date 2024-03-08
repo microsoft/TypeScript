@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericsManyTypeParameters.ts] ////
+
 //// [genericsManyTypeParameters.ts]
 function Foo<
     a1, a21, a31, a41, a51, a61,

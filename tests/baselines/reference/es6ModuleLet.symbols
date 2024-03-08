@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleLet.ts ===
+//// [tests/cases/compiler/es6ModuleLet.ts] ////
+
+=== es6ModuleLet.ts ===
 export let a = "hello";
 >a : Symbol(a, Decl(es6ModuleLet.ts, 0, 10))
 

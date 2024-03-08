@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts] ////
+
 //// [interfaceThatIndirectlyInheritsFromItself.ts]
 interface Base extends Derived2 { // error
     x: string;

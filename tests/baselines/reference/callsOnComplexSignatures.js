@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callsOnComplexSignatures.tsx] ////
+
 //// [callsOnComplexSignatures.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import React from "react";
@@ -109,7 +111,7 @@ function test5() {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var react_1 = __importDefault(require("react"));
 // Simple calls from real usecases
@@ -121,7 +123,7 @@ function test1() {
 function test2() {
     var messages = {
         foo: function (options) { return "Foo"; },
-        bar: function (options) { return "Bar"; }
+        bar: function (options) { return "Bar"; },
     };
     var test1 = function (type) {
         return messages[type]({ a: "A", b: 0 });
@@ -154,16 +156,16 @@ function test5() {
     // Pair of non-like intrinsics
     function render(url) {
         var Tag = url ? 'a' : 'button';
-        return react_1["default"].createElement(Tag, null, "test");
+        return react_1.default.createElement(Tag, null, "test");
     }
     // Union of all intrinsics and components of `any`
     function App(props) {
         var Comp = props.component;
-        return (react_1["default"].createElement(Comp, null));
+        return (react_1.default.createElement(Comp, null));
     }
     // custom components with non-subset props
     function render2() {
         var C = null;
-        var a = react_1["default"].createElement(C, { p: true });
+        var a = react_1.default.createElement(C, { p: true });
     }
 }

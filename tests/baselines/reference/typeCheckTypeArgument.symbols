@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeCheckTypeArgument.ts ===
+//// [tests/cases/compiler/typeCheckTypeArgument.ts] ////
+
+=== typeCheckTypeArgument.ts ===
 var f: <T extends UNKNOWN>() => void;
 >f : Symbol(f, Decl(typeCheckTypeArgument.ts, 0, 3))
 >T : Symbol(T, Decl(typeCheckTypeArgument.ts, 0, 8))

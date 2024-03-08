@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadingOnConstants2.ts ===
+//// [tests/cases/compiler/overloadingOnConstants2.ts] ////
+
+=== overloadingOnConstants2.ts ===
 class C {
 >C : Symbol(C, Decl(overloadingOnConstants2.ts, 0, 0))
 

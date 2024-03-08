@@ -1,4 +1,6 @@
-=== tests/cases/compiler/graphql-compose.d.ts ===
+//// [tests/cases/compiler/inferrenceInfiniteLoopWithSubtyping.ts] ////
+
+=== graphql-compose.d.ts ===
 export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
 >ObjMapReadOnly : Readonly<{ [key: string]: Readonly<T>; }>
 >key : string
@@ -52,7 +54,7 @@ export class Resolver {
 }
 
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import { ObjectTypeComposer } from './graphql-compose';
 >ObjectTypeComposer : typeof ObjectTypeComposer
 
@@ -61,9 +63,9 @@ declare const User: ObjectTypeComposer<any, any>;
 
 User.addResolver({
 >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
->User.addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<import("tests/cases/compiler/graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>User.addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 >User : ObjectTypeComposer<any, any>
->addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<import("tests/cases/compiler/graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
 
   type: User, // `User as any` fix the problem

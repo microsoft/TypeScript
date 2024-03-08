@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesReExportType.ts] ////
+
 === /user.ts ===
 // Error, can't re-export something that's only a type.
 export { T } from "./exportT";

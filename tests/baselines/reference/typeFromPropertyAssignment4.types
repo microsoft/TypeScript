@@ -1,9 +1,11 @@
-=== tests/cases/conformance/salsa/def.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment4.ts] ////
+
+=== def.js ===
 var Outer = {};
 >Outer : typeof Outer
 >{} : {}
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 Outer.Inner = class {
 >Outer.Inner = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
 >Outer.Inner : typeof Inner
@@ -43,7 +45,7 @@ inner.y
 >inner : Inner
 >y : number
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 /** @type {Outer.Inner} */
 var x
 >x : Inner

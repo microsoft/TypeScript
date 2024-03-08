@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload5.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 
@@ -59,8 +61,8 @@ const b8 = <MainButton data-format />;  // incorrect type for specified hyphanat
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
-    exports.MainButton = void 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MainButton = MainButton;
     var obj0 = {
         to: "world"
     };
@@ -79,7 +81,6 @@ define(["require", "exports", "react"], function (require, exports, React) {
         }
         return this._buildMainButton(props);
     }
-    exports.MainButton = MainButton;
     // Error
     var b0 = <MainButton to='/some/path' onClick={function (e) { }}>GO</MainButton>; // extra property;
     var b1 = <MainButton onClick={function (e) { }} {...obj0}>Hello world</MainButton>; // extra property;

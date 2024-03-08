@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleVisibilityTest3.ts] ////
+
 //// [moduleVisibilityTest3.ts]
 module _modes {
  export interface IMode {

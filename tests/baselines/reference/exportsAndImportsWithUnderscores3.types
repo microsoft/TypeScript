@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores3.ts] ////
+
+=== m1.ts ===
 var R: any
 >R : any
 
@@ -20,7 +22,7 @@ export default R = {
 >40 : 40
 }
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import R from "./m1";
 >R : { ___: number; ___hello: number; _hi: number; }
 

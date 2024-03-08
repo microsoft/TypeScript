@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsExternalModules_1.ts ===
+//// [tests/cases/compiler/commentsExternalModules.ts] ////
+
+=== commentsExternalModules_1.ts ===
 /**This is on import declaration*/
 import extMod = require("commentsExternalModules_0"); // trailing comment1
 >extMod : typeof extMod
@@ -41,7 +43,7 @@ var newVar2 = new extMod.m4.m2.c();
 >m2 : typeof extMod.m4.m2
 >c : typeof extMod.m4.m2.c
 
-=== tests/cases/compiler/commentsExternalModules_0.ts ===
+=== commentsExternalModules_0.ts ===
 /** Module comment*/
 export module m1 {
 >m1 : typeof m1

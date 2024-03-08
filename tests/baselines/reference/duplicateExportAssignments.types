@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo1.ts ===
+//// [tests/cases/conformance/externalModules/duplicateExportAssignments.ts] ////
+
+=== foo1.ts ===
 var x = 10;
 >x : number
 >10 : 10
@@ -13,7 +15,7 @@ export = x;
 export = y;
 >y : number
 
-=== tests/cases/conformance/externalModules/foo2.ts ===
+=== foo2.ts ===
 var x = 10;
 >x : number
 >10 : 10
@@ -27,9 +29,9 @@ export = x;
 export = y;
 >y : y
 
-=== tests/cases/conformance/externalModules/foo3.ts ===
+=== foo3.ts ===
 module x {
->x : typeof import("tests/cases/conformance/externalModules/foo3")
+>x : typeof import("foo3")
 
 	export var x = 10;
 >x : number
@@ -47,7 +49,7 @@ export = x;
 export = y;
 >y : y
 
-=== tests/cases/conformance/externalModules/foo4.ts ===
+=== foo4.ts ===
 export = x;
 >x : () => number
 
@@ -66,7 +68,7 @@ function y(){
 export = y;
 >y : () => number
 
-=== tests/cases/conformance/externalModules/foo5.ts ===
+=== foo5.ts ===
 var x = 5;
 >x : number
 >5 : 5

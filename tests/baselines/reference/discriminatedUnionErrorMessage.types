@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminatedUnionErrorMessage.ts ===
+//// [tests/cases/compiler/discriminatedUnionErrorMessage.ts] ////
+
+=== discriminatedUnionErrorMessage.ts ===
 type Square = { kind: "sq", size: number }
 >Square : { kind: "sq"; size: number; }
 >kind : "sq"

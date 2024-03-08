@@ -1,4 +1,6 @@
-=== tests/cases/conformance/directives/a.ts ===
+//// [tests/cases/conformance/directives/multiline.tsx] ////
+
+=== a.ts ===
 export const texts: string[] = [];
 >texts : Symbol(texts, Decl(a.ts, 0, 12))
 
@@ -23,7 +25,7 @@ texts.push("100");
 >texts : Symbol(texts, Decl(a.ts, 0, 12))
 >push : Symbol(Array.push, Decl(lib.d.ts, --, --))
 
-=== tests/cases/conformance/directives/b.tsx ===
+=== b.tsx ===
 import * as React from "react";
 >React : Symbol(React, Decl(b.tsx, 0, 6))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts ===
+//// [tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts] ////
+
+=== declFileGenericClassWithGenericExtendedClass.ts ===
 interface IFoo {
     baz: Baz;
 >baz : Baz

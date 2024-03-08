@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.ts] ////
+
+=== uniqueSymbolsDeclarationsInJsErrors.js ===
 class C {
 >C : C
 
@@ -13,7 +15,7 @@ class C {
      * @readonly
      */
     static readonlyType;
->readonlyType : symbol
+>readonlyType : unique symbol
 
     /**
      * @type {unique symbol}
@@ -21,3 +23,4 @@ class C {
     static readwriteType;
 >readwriteType : symbol
 }
+

@@ -1,0 +1,16 @@
+/a.js(9,12): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef Foo
+     * @property {string} a
+     */
+    
+    /**
+     * @param {Foo} [options]
+     */
+    function f({ a = "a" }) {}
+               ~~~~~~~~~~~
+!!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+    

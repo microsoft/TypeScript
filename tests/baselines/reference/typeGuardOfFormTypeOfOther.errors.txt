@@ -1,18 +1,18 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(21,5): error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(27,5): error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(33,5): error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(40,5): error TS2322: Type 'string | C' is not assignable to type 'C'.
+typeGuardOfFormTypeOfOther.ts(21,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(27,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(33,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(40,5): error TS2322: Type 'string | C' is not assignable to type 'C'.
   Type 'string' is not assignable to type 'C'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(43,9): error TS2322: Type 'string | C' is not assignable to type 'string'.
+typeGuardOfFormTypeOfOther.ts(43,9): error TS2322: Type 'string | C' is not assignable to type 'string'.
   Type 'C' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(46,5): error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(56,5): error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(62,5): error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(68,5): error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(46,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(56,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(62,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(68,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts (10 errors) ====
+==== typeGuardOfFormTypeOfOther.ts (10 errors) ====
     class C { private p: string };
     
     var str: string;
@@ -35,7 +35,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     
     if (typeof strOrC === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         c = strOrC; // C
     }
     else {
@@ -43,7 +43,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof numOrC === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         c = numOrC; // C
     }
     else {
@@ -51,7 +51,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof boolOrC === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         c = boolOrC; // C
     }
     else {
@@ -72,7 +72,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     
     if (typeof strOrNumOrBool === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         let q1: {} = strOrNumOrBool; // {}
     }
     else {
@@ -84,7 +84,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     //  - when false, narrows the type of x by typeof x === s when true.
     if (typeof strOrC !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         var r2: string = strOrC; // string
     }
     else {
@@ -92,7 +92,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof numOrC !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         var r3: number = numOrC; // number
     }
     else {
@@ -100,7 +100,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     }
     if (typeof boolOrC !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         var r4: boolean = boolOrC; // boolean
     }
     else {
@@ -109,7 +109,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     
     if (typeof strOrNumOrBool !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
     }
     else {

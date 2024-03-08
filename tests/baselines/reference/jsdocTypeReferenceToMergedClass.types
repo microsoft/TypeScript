@@ -1,6 +1,6 @@
-=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.js ===
-// https://github.com/microsoft/TypeScript/issues/34685
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.ts] ////
 
+=== jsdocTypeReferenceToMergedClass.js ===
 var Workspace = {}
 >Workspace : typeof Workspace
 >{} : {}

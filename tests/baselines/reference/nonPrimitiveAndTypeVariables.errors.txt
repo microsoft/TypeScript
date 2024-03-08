@@ -1,8 +1,8 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(10,9): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9): error TS2322: Type 'T' is not assignable to type 'object | U'.
+nonPrimitiveAndTypeVariables.ts(10,9): error TS2322: Type 'T' is not assignable to type 'object'.
+nonPrimitiveAndTypeVariables.ts(11,9): error TS2322: Type 'T' is not assignable to type 'object | U'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts (2 errors) ====
+==== nonPrimitiveAndTypeVariables.ts (2 errors) ====
     // Repros from #23800
     
     type A<T, V> = { [P in keyof T]: T[P] extends V ? 1 : 0; };
@@ -15,10 +15,10 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9)
         let a: object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object` constraint.
+!!! related TS2208 nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object` constraint.
         let b: U | object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object | U'.
-!!! related TS2208 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object | U` constraint.
+!!! related TS2208 nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object | U` constraint.
     }
     

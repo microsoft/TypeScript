@@ -1,8 +1,10 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithoutEsModuleInterop.ts] ////
+
+=== file1.ts ===
 import * as test from "./test.json"
 >test : { a: boolean; b: string; }
 
-=== tests/cases/compiler/test.json ===
+=== test.json ===
 {
 >{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
 

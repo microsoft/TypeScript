@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/readonlyArraysAndTuples2.ts] ////
+
 //// [readonlyArraysAndTuples2.ts]
 type T10 = string[];
 type T11 = Array<string>;
@@ -38,22 +40,22 @@ var A = /** @class */ (function () {
     __decorate([
         someDec,
         __metadata("design:type", Array)
-    ], A.prototype, "j");
+    ], A.prototype, "j", void 0);
     __decorate([
         someDec,
         __metadata("design:type", Array)
-    ], A.prototype, "k");
+    ], A.prototype, "k", void 0);
     return A;
 }());
 
 
 //// [readonlyArraysAndTuples2.d.ts]
-declare type T10 = string[];
-declare type T11 = Array<string>;
-declare type T12 = readonly string[];
-declare type T13 = ReadonlyArray<string>;
-declare type T20 = [number, number];
-declare type T21 = readonly [number, number];
+type T10 = string[];
+type T11 = Array<string>;
+type T12 = readonly string[];
+type T13 = ReadonlyArray<string>;
+type T20 = [number, number];
+type T21 = readonly [number, number];
 declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
 declare const someDec: any;
 declare class A {

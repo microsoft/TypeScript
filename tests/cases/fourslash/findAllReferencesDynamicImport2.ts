@@ -9,4 +9,4 @@
 //// })
 
 verify.baselineFindAllReferences('1', '2');
-verify.rangesWithSameTextAreRenameLocations("bar");
+verify.baselineRenameAtRangesWithText("bar");

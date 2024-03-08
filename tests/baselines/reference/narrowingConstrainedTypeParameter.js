@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingConstrainedTypeParameter.ts] ////
+
 //// [narrowingConstrainedTypeParameter.ts]
 // Repro from #10811
 
@@ -19,8 +21,8 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 //// [narrowingConstrainedTypeParameter.js]
 "use strict";
 // Repro from #10811
-exports.__esModule = true;
-exports.speak = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.speak = speak;
 function isPet(pet) {
     return typeof pet.name === "string";
 }
@@ -30,4 +32,3 @@ function speak(pet, voice) {
     }
     return voice(pet);
 }
-exports.speak = speak;

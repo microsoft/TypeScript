@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleAliasAsFunctionArgument_1.ts ===
+//// [tests/cases/compiler/moduleAliasAsFunctionArgument.ts] ////
+
+=== moduleAliasAsFunctionArgument_1.ts ===
 ///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
 import a = require('moduleAliasAsFunctionArgument_0');
 >a : typeof a
@@ -19,7 +21,7 @@ fn(a); // Error: property 'x' is missing from 'a'
 >fn : (arg: { x: number; }) => void
 >a : typeof a
 
-=== tests/cases/compiler/moduleAliasAsFunctionArgument_0.ts ===
+=== moduleAliasAsFunctionArgument_0.ts ===
 export var x: number;
 >x : number
 

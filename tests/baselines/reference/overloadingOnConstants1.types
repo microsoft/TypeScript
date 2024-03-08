@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadingOnConstants1.ts ===
+//// [tests/cases/compiler/overloadingOnConstants1.ts] ////
+
+=== overloadingOnConstants1.ts ===
 class Base { foo() { } }
 >Base : Base
 >foo : () => void

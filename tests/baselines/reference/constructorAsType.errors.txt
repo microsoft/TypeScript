@@ -1,8 +1,8 @@
-tests/cases/compiler/constructorAsType.ts(1,5): error TS2322: Type '() => { name: string; }' is not assignable to type 'new () => { name: string; }'.
+constructorAsType.ts(1,5): error TS2322: Type '() => { name: string; }' is not assignable to type 'new () => { name: string; }'.
   Type '() => { name: string; }' provides no match for the signature 'new (): { name: string; }'.
 
 
-==== tests/cases/compiler/constructorAsType.ts (1 errors) ====
+==== constructorAsType.ts (1 errors) ====
     var Person:new () => {name: string;} = function () {return {name:"joe"};};
         ~~~~~~
 !!! error TS2322: Type '() => { name: string; }' is not assignable to type 'new () => { name: string; }'.

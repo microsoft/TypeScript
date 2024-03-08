@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/library_RegExpExecArraySlice.ts] ////
+
 //// [library_RegExpExecArraySlice.ts]
 // RegExpExecArray.slice can have zero, one, or two arguments
 var regExpExecArrayValue: RegExpExecArray;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts] ////
+
 //// [quickinfoTypeAtReturnPositionsInaccurate.ts]
 class NumClass<T extends number> {
     private value!: T;
@@ -104,8 +106,8 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 
 //// [quickinfoTypeAtReturnPositionsInaccurate.js]
 "use strict";
-exports.__esModule = true;
-exports.listFiles = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listFiles = listFiles;
 var NumClass = /** @class */ (function () {
     function NumClass() {
     }
@@ -182,4 +184,3 @@ var ComplexStore = /** @class */ (function () {
 function listFiles(program) {
     var x = isBuilderProgram(program) ? program.getProgram() : program;
 }
-exports.listFiles = listFiles;

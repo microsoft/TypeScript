@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callSignaturesShouldBeResolvedBeforeSpecialization.ts] ////
+
 //// [callSignaturesShouldBeResolvedBeforeSpecialization.ts]
 interface I1<T> {
     (value: T): void;

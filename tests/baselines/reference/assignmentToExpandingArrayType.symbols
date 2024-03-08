@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentToExpandingArrayType.ts ===
+//// [tests/cases/compiler/assignmentToExpandingArrayType.ts] ////
+
+=== assignmentToExpandingArrayType.ts ===
 // Fixes exponential time/space in #14628
 let x = []
 >x : Symbol(x, Decl(assignmentToExpandingArrayType.ts, 1, 3))

@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator";
+
 describe("unittests:: evaluation:: asyncArrowEvaluation", () => {
     // https://github.com/Microsoft/TypeScript/issues/24722
     it("this capture (es5)", async () => {

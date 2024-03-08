@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts(1,1): error TS2304: Cannot find name 'retValue'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts(1,12): error TS2304: Cannot find name 'bfs'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts(1,29): error TS1109: Expression expected.
+parserErrorRecovery_LeftShift1.ts(1,1): error TS2304: Cannot find name 'retValue'.
+parserErrorRecovery_LeftShift1.ts(1,12): error TS2304: Cannot find name 'bfs'.
+parserErrorRecovery_LeftShift1.ts(1,29): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts (3 errors) ====
+==== parserErrorRecovery_LeftShift1.ts (3 errors) ====
     retValue = bfs.VARIABLES >> );
     ~~~~~~~~
 !!! error TS2304: Cannot find name 'retValue'.

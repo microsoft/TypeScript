@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts] ////
+
+=== derivedClassWithPrivateInstanceShadowingPublicInstance.ts ===
 class Base {
 >Base : Base
 

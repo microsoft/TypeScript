@@ -1,0 +1,1558 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts ===
+// class c {
+//     public accessor publicProperty: string;
+//                     ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (accessor) c.publicProperty: string
+// | ----------------------------------------------------------------------
+//     private accessor privateProperty: string;
+//                      ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (accessor) c.privateProperty: string
+// | ----------------------------------------------------------------------
+//     protected accessor protectedProperty: string;
+//                        ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (accessor) c.protectedProperty: string
+// | ----------------------------------------------------------------------
+//     static accessor staticProperty: string;
+//                     ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (accessor) c.staticProperty: string
+// | ----------------------------------------------------------------------
+//     private static accessor privateStaticProperty: string;
+//                             ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (accessor) c.privateStaticProperty: string
+// | ----------------------------------------------------------------------
+//     protected static accessor protectedStaticProperty: string;
+//                               ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (accessor) c.protectedStaticProperty: string
+// | ----------------------------------------------------------------------
+//     method() {
+//         var x: string;
+//         x = this.publicProperty;
+//                  ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.publicProperty: string
+// | ----------------------------------------------------------------------
+//         x = this.privateProperty;
+//                  ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.privateProperty: string
+// | ----------------------------------------------------------------------
+//         x = this.protectedProperty;
+//                  ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.protectedProperty: string
+// | ----------------------------------------------------------------------
+//         x = c.staticProperty;
+//               ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.staticProperty: string
+// | ----------------------------------------------------------------------
+//         x = c.privateStaticProperty;
+//               ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.privateStaticProperty: string
+// | ----------------------------------------------------------------------
+//         x = c.protectedStaticProperty;
+//               ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.protectedStaticProperty: string
+// | ----------------------------------------------------------------------
+//         this.publicProperty = "";
+//              ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.publicProperty: string
+// | ----------------------------------------------------------------------
+//         this.privateProperty = "";
+//              ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.privateProperty: string
+// | ----------------------------------------------------------------------
+//         this.protectedProperty = "";
+//              ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.protectedProperty: string
+// | ----------------------------------------------------------------------
+//         c.staticProperty = "";
+//           ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.staticProperty: string
+// | ----------------------------------------------------------------------
+//         c.privateStaticProperty = "";
+//           ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.privateStaticProperty: string
+// | ----------------------------------------------------------------------
+//         c.protectedStaticProperty = "";
+//           ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.protectedStaticProperty: string
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c();
+// var y: string;
+// y = cInstance.publicProperty;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cInstance: c
+// | ----------------------------------------------------------------------
+//               ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.publicProperty: string
+// | ----------------------------------------------------------------------
+// y = c.staticProperty;
+//     ^
+// | ----------------------------------------------------------------------
+// | class c
+// | ----------------------------------------------------------------------
+//       ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.staticProperty: string
+// | ----------------------------------------------------------------------
+// cInstance.publicProperty = y;
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cInstance: c
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.publicProperty: string
+// | ----------------------------------------------------------------------
+// c.staticProperty = y;
+// ^
+// | ----------------------------------------------------------------------
+// | class c
+// | ----------------------------------------------------------------------
+//   ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) c.staticProperty: string
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 30,
+      "name": "1a"
+    },
+    "item": {
+      "kind": "accessor",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 30,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "accessor",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "publicProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 75,
+      "name": "2a"
+    },
+    "item": {
+      "kind": "accessor",
+      "kindModifiers": "private",
+      "textSpan": {
+        "start": 75,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "accessor",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "privateProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 123,
+      "name": "3a"
+    },
+    "item": {
+      "kind": "accessor",
+      "kindModifiers": "protected",
+      "textSpan": {
+        "start": 123,
+        "length": 17
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "accessor",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 170,
+      "name": "4a"
+    },
+    "item": {
+      "kind": "accessor",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 170,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "accessor",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "staticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 222,
+      "name": "5a"
+    },
+    "item": {
+      "kind": "accessor",
+      "kindModifiers": "private,static",
+      "textSpan": {
+        "start": 222,
+        "length": 21
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "accessor",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "privateStaticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 283,
+      "name": "6a"
+    },
+    "item": {
+      "kind": "accessor",
+      "kindModifiers": "protected,static",
+      "textSpan": {
+        "start": 283,
+        "length": 23
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "accessor",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedStaticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 371,
+      "name": "1g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 371,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "publicProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 404,
+      "name": "2g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "private",
+      "textSpan": {
+        "start": 404,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "privateProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 438,
+      "name": "3g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "protected",
+      "textSpan": {
+        "start": 438,
+        "length": 17
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 471,
+      "name": "4g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 471,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "staticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 501,
+      "name": "5g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "private,static",
+      "textSpan": {
+        "start": 501,
+        "length": 21
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "privateStaticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 538,
+      "name": "6g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "protected,static",
+      "textSpan": {
+        "start": 538,
+        "length": 23
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedStaticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 576,
+      "name": "1s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 576,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "publicProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 610,
+      "name": "2s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "private",
+      "textSpan": {
+        "start": 610,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "privateProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 645,
+      "name": "3s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "protected",
+      "textSpan": {
+        "start": 645,
+        "length": 17
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 679,
+      "name": "4s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 679,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "staticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 710,
+      "name": "5s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "private,static",
+      "textSpan": {
+        "start": 710,
+        "length": 21
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "privateStaticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 748,
+      "name": "6s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "protected,static",
+      "textSpan": {
+        "start": 748,
+        "length": 23
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedStaticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 830,
+      "name": "7g"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 830,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 840,
+      "name": "8g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 840,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "publicProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 860,
+      "name": "9g"
+    },
+    "item": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 860,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 862,
+      "name": "10g"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 862,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "staticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 878,
+      "name": "7s"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 878,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 888,
+      "name": "8s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "public",
+      "textSpan": {
+        "start": 888,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "publicProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 908,
+      "name": "9s"
+    },
+    "item": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 908,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassAutoAccessors.ts",
+      "position": 910,
+      "name": "10s"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 910,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "staticProperty",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

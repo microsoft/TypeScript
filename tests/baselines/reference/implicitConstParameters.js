@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitConstParameters.ts] ////
+
 //// [implicitConstParameters.ts]
 function doSomething(cb: () => void) {
     cb();
@@ -34,7 +36,7 @@ function f3(x: string | undefined) {
 }
 
 function f4(x: string | undefined) {
-    x = "abc";  // causes x to be considered non-const
+    x = "abc";
     if (x) {
         doSomething(() => x.length);
     }
@@ -86,7 +88,7 @@ function f3(x) {
     }
 }
 function f4(x) {
-    x = "abc"; // causes x to be considered non-const
+    x = "abc";
     if (x) {
         doSomething(function () { return x.length; });
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution5_classic.ts] ////
+
 === c:/root/folder1/file1.ts ===
 import {x} from "folder2/file1"
 >x : Symbol(x, Decl(file1.ts, 0, 8))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause1.ts] ////
+
+=== parserErrorRecovery_ExtendsOrImplementsClause1.ts ===
 class C extends {
 >C : Symbol(C, Decl(parserErrorRecovery_ExtendsOrImplementsClause1.ts, 0, 0))
 }

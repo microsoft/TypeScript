@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitThisFunctions.ts] ////
+
 //// [noImplicitThisFunctions.ts]
 function f1(x) {
     // implicit any is still allowed

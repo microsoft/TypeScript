@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop10_ES6.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop10_ES6.ts] ////
+
+=== capturedLetConstInLoop10_ES6.ts ===
 class A {
 >A : Symbol(A, Decl(capturedLetConstInLoop10_ES6.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayDestructuringInSwitch2.ts ===
+//// [tests/cases/compiler/arrayDestructuringInSwitch2.ts] ////
+
+=== arrayDestructuringInSwitch2.ts ===
 type X = { kind: "a", a: [1] } | { kind: "b", a: [] }
 >X : Symbol(X, Decl(arrayDestructuringInSwitch2.ts, 0, 0))
 >kind : Symbol(kind, Decl(arrayDestructuringInSwitch2.ts, 0, 10))

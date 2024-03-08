@@ -58,8 +58,11 @@ export { fs2 };
 
 
 //// [index.d.ts]
+/// <reference path="../types.d.ts" />
 export import fs2 = require("fs");
 //// [index.d.ts]
+/// <reference path="types.d.ts" />
 export import fs2 = require("fs");
 //// [file.d.ts]
+/// <reference path="types.d.ts" />
 export import fs2 = require("fs");

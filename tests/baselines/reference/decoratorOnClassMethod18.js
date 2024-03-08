@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod18.ts] ////
+
 //// [decoratorOnClassMethod18.ts]
 declare var decorator: any;
 

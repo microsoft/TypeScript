@@ -1,4 +1,6 @@
-=== tests/cases/conformance/fixSignatureCaching.ts ===
+//// [tests/cases/conformance/fixSignatureCaching.ts] ////
+
+=== fixSignatureCaching.ts ===
 // Repro from #10697
 
 (function (define, undefined) {
@@ -825,9 +827,7 @@ define(function () {
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 299, 20))
 
         : Array.isArray;
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 
     function equalIC(a, b) {
 >equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))

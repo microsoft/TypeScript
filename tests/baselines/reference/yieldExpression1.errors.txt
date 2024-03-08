@@ -1,7 +1,7 @@
-tests/cases/compiler/yieldExpression1.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
+yieldExpression1.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/yieldExpression1.ts (1 errors) ====
+==== yieldExpression1.ts (1 errors) ====
     function* a() {
         yield;
         yield 0;

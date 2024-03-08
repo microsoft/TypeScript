@@ -1,0 +1,60 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionNewExpressionTargetNotClass.ts ===
+// class C2 {
+// }
+// <|let [|{| defId: 0 |}I|]: {
+//     [|{| defId: 1 |}new(): C2;|]
+// };|>
+// new /*GOTO DEF*/I();
+// let I2: {
+// };
+// new I2();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "let",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "index",
+    "name": "__new",
+    "containerName": "I",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionNewExpressionTargetNotClass.ts ===
+// --- (line: 3) skipped ---
+//     new(): C2;
+// };
+// new I();
+// <|let [|I2|]: {
+// };|>
+// new /*GOTO DEF*/I2();
+
+  // === Details ===
+  [
+   {
+    "kind": "let",
+    "name": "I2",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

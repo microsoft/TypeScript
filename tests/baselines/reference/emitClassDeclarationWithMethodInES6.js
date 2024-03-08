@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts] ////
+
 //// [emitClassDeclarationWithMethodInES6.ts]
 class D {
     _bar: string;

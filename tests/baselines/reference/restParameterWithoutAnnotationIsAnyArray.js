@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParameterWithoutAnnotationIsAnyArray.ts] ////
+
 //// [restParameterWithoutAnnotationIsAnyArray.ts]
 // Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
 

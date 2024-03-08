@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inOperatorWithGeneric.ts ===
+//// [tests/cases/compiler/inOperatorWithGeneric.ts] ////
+
+=== inOperatorWithGeneric.ts ===
 class C<T> {
 >C : Symbol(C, Decl(inOperatorWithGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(inOperatorWithGeneric.ts, 0, 8))

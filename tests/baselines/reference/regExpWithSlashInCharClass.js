@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regExpWithSlashInCharClass.ts] ////
+
 //// [regExpWithSlashInCharClass.ts]
 var foo1 = "a/".replace(/.[/]/, "");
 var foo2 = "a//".replace(/.[//]/g, "");

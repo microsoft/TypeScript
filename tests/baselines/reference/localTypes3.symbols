@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/localTypes/localTypes3.ts ===
+//// [tests/cases/conformance/types/localTypes/localTypes3.ts] ////
+
+=== localTypes3.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(localTypes3.ts, 0, 0))
 

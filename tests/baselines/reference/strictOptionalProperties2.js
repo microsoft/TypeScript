@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictOptionalProperties2.ts] ////
+
 //// [strictOptionalProperties2.ts]
 // Repro from #44567
 
@@ -11,9 +13,9 @@ type T2 = [(string | undefined)?] extends [string?] ? true : false;  // false
 
 
 //// [strictOptionalProperties2.d.ts]
-declare type T1 = {
+type T1 = {
     0?: string | undefined;
 } extends {
     0?: string;
 } ? true : false;
-declare type T2 = [(string | undefined)?] extends [string?] ? true : false;
+type T2 = [(string | undefined)?] extends [string?] ? true : false;

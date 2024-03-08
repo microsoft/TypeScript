@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions2.ts] ////
+
 //// [genericTypeAssertions2.ts]
 class A<T> { foo(x: T) { } }
 class B<T> extends A<T> {

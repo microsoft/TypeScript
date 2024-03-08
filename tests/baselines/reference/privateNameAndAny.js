@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts] ////
+
 //// [privateNameAndAny.ts]
 class A {
     #foo = true;

@@ -1,8 +1,8 @@
-tests/cases/compiler/classSideInheritance1.ts(12,3): error TS2576: Property 'bar' does not exist on type 'A'. Did you mean to access the static member 'A.bar' instead?
-tests/cases/compiler/classSideInheritance1.ts(13,3): error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?
+classSideInheritance1.ts(12,3): error TS2576: Property 'bar' does not exist on type 'A'. Did you mean to access the static member 'A.bar' instead?
+classSideInheritance1.ts(13,3): error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?
 
 
-==== tests/cases/compiler/classSideInheritance1.ts (2 errors) ====
+==== classSideInheritance1.ts (2 errors) ====
     class A {
       static bar(): string {
          return "";

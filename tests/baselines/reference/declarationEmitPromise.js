@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPromise.ts] ////
+
 //// [declarationEmitPromise.ts]
 export class bluebird<T> {
     static all: Array<bluebird<any>>;
@@ -33,7 +35,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runSampleBreaks = exports.runSampleWorks = exports.bluebird = void 0;
+exports.bluebird = void 0;
+exports.runSampleWorks = runSampleWorks;
+exports.runSampleBreaks = runSampleBreaks;
 class bluebird {
 }
 exports.bluebird = bluebird;
@@ -45,7 +49,6 @@ function runSampleWorks(a, b, c, d, e) {
         return rfunc;
     });
 }
-exports.runSampleWorks = runSampleWorks;
 function runSampleBreaks(a, b, c, d, e) {
     return __awaiter(this, void 0, void 0, function* () {
         let result = yield bluebird.all([a, b, c, d, e].filter(el => !!el));
@@ -54,7 +57,6 @@ function runSampleBreaks(a, b, c, d, e) {
         return rfunc;
     });
 }
-exports.runSampleBreaks = runSampleBreaks;
 
 
 //// [declarationEmitPromise.d.ts]

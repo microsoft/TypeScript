@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitToDeclarationDirWithoutCompositeAndDeclarationOptions.ts] ////
+
 //// [test.ts]
 interface Foo {
     x: number;
@@ -7,4 +9,4 @@ export default Foo;
 
 //// [test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

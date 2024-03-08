@@ -1,7 +1,7 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts(5,15): error TS2302: Static members cannot reference class type parameters.
+typeofClassWithPrivates.ts(5,15): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts (1 errors) ====
+==== typeofClassWithPrivates.ts (1 errors) ====
     class C<T> {
         private a: number;
         private static b: number;

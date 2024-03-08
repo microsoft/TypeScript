@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/multipleExportDefault6.ts ===
+//// [tests/cases/conformance/externalModules/multipleExportDefault6.ts] ////
+
+=== multipleExportDefault6.ts ===
 export default {
     lol: 1
 >lol : Symbol(lol, Decl(multipleExportDefault6.ts, 0, 16))

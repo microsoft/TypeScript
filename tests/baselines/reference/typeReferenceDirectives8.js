@@ -12,13 +12,12 @@ export const bar = foo();
 
 //// [mod1.js]
 "use strict";
-exports.__esModule = true;
-exports.foo = void 0;
-function foo() { return { x: 1 }; }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
+function foo() { return { x: 1 }; }
 //// [mod2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 var mod1_1 = require("./mod1");
 exports.bar = (0, mod1_1.foo)();

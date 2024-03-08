@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of16.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of16.ts] ////
+
+=== for-of16.ts ===
 class StringIterator {
 >StringIterator : StringIterator
 
@@ -17,6 +19,11 @@ var v: string;
 >v : string
 
 for (v of new StringIterator) { } // Should fail
+>v : string
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+
+for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
 >v : string
 >new StringIterator : StringIterator
 >StringIterator : typeof StringIterator

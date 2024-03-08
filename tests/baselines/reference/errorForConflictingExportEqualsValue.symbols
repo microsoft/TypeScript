@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForConflictingExportEqualsValue.ts] ////
+
 === /a.ts ===
 export var x;
 >x : Symbol(x, Decl(a.ts, 0, 10))

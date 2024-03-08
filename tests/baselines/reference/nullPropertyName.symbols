@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/nullPropertyName.ts ===
+//// [tests/cases/conformance/declarationEmit/nullPropertyName.ts] ////
+
+=== nullPropertyName.ts ===
 function foo() {}
 >foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
 

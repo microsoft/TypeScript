@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts] ////
+
+=== disallowLineTerminatorBeforeArrow.ts ===
 var f1 = ()
 >f1 : Symbol(f1, Decl(disallowLineTerminatorBeforeArrow.ts, 0, 3))
 

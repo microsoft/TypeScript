@@ -1,10 +1,10 @@
-tests/cases/compiler/capturedLetConstInLoop6.ts(147,9): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop6.ts(150,9): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop6.ts(194,9): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop6.ts(197,9): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+capturedLetConstInLoop6.ts(147,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop6.ts(150,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop6.ts(194,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
 
 
-==== tests/cases/compiler/capturedLetConstInLoop6.ts (4 errors) ====
+==== capturedLetConstInLoop6.ts (4 errors) ====
     // ====let
     for (let x of []) {
         (function() { return x});
@@ -153,12 +153,12 @@ tests/cases/compiler/capturedLetConstInLoop6.ts(197,9): error TS2367: This condi
         (() => x);
         if (x == 1) {
             ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
             break;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
             continue;
         }
     }
@@ -204,12 +204,12 @@ tests/cases/compiler/capturedLetConstInLoop6.ts(197,9): error TS2367: This condi
         (() => x + y);
         if (x == 1) {
             ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
             break;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
             continue;
         }
     }

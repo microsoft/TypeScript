@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts] ////
+
+=== typeGuardNarrowsPrimitiveIntersection.ts ===
 type Tag = {__tag: any};
 >Tag : { __tag: any; }
 >__tag : any

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/jsFileMethodOverloads5.ts] ////
+
+=== /a.js ===
+/**
+ * @overload
+ * @param {string} a
+ * @return {void}
+ */
+
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} [b]
+ * @return {void}
+ */
+
+/**
+ * @param {string | number} a
+ * @param {number} [b]
+ */
+export const foo = function (a, b) { }
+>foo : { (a: string): void; (a: number, b?: number): void; }
+>function (a, b) { } : { (a: string): void; (a: number, b?: number): void; }
+>a : string | number
+>b : number
+

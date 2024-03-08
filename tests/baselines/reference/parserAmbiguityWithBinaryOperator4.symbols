@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguityWithBinaryOperator4.ts] ////
+
+=== parserAmbiguityWithBinaryOperator4.ts ===
 function g() {
 >g : Symbol(g, Decl(parserAmbiguityWithBinaryOperator4.ts, 0, 0))
 

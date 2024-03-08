@@ -1,9 +1,20 @@
-namespace ts {
-    describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
-        verifyTsc({
-            scenario: "javascriptProjectEmit",
-            subScenario: `loads js-based projects and emits them correctly`,
-            fs: () => loadProjectFromFiles({
+import * as Utils from "../../_namespaces/Utils";
+import {
+    symbolLibContent,
+} from "../helpers/contents";
+import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
+
+describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
+    verifyTsc({
+        scenario: "javascriptProjectEmit",
+        subScenario: `loads js-based projects and emits them correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -85,107 +96,14 @@ namespace ts {
                         }
                     }`,
             }, symbolLibContent),
-            commandLineArgs: ["-b", "/src"]
-        });
+        commandLineArgs: ["-b", "/src"],
+    });
 
-        verifyTscWithEdits({
-            scenario: "javascriptProjectEmit",
-            subScenario: `modifies outfile js projects and concatenates them correctly`,
-            fs: () => loadProjectFromFiles({
-                "/src/common/nominal.js": Utils.dedent`
-                    /**
-                     * @template T, Name
-                     * @typedef {T & {[Symbol.species]: Name}} Nominal
-                     */
-                    `,
-                "/src/common/tsconfig.json": Utils.dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true,
-                            "outFile": "common.js",
-                            
-                        },
-                        "include": ["nominal.js"]
-                    }`,
-                "/src/sub-project/index.js": Utils.dedent`
-                    /**
-                     * @typedef {Nominal<string, 'MyNominal'>} MyNominal
-                     */
-                    const c = /** @type {*} */(null);
-                    `,
-                "/src/sub-project/tsconfig.json": Utils.dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true,
-                            "outFile": "sub-project.js",
-                            
-                        },
-                        "references": [
-                            { "path": "../common", "prepend": true }
-                        ],
-                        "include": ["./index.js"]
-                    }`,
-                "/src/sub-project-2/index.js": Utils.dedent`
-                    const variable = {
-                        key: /** @type {MyNominal} */('value'),
-                    };
-
-                    /**
-                     * @return {keyof typeof variable}
-                     */
-                    function getVar() {
-                        return 'key';
-                    }
-                    `,
-                "/src/sub-project-2/tsconfig.json": Utils.dedent`
-                    {
-                        "extends": "../tsconfig.base.json",
-                        "compilerOptions": {
-                            "composite": true,
-                            "outFile": "sub-project-2.js",
-                            
-                        },
-                        "references": [
-                            { "path": "../sub-project", "prepend": true }
-                        ],
-                        "include": ["./index.js"]
-                    }`,
-                "/src/tsconfig.json": Utils.dedent`
-                    {
-                        "compilerOptions": {
-                            "composite": true,
-                            "outFile": "src.js"
-                        },
-                        "references": [
-                            { "path": "./sub-project", "prepend": true },
-                            { "path": "./sub-project-2", "prepend": true }
-                        ],
-                        "include": []
-                    }`,
-                "/src/tsconfig.base.json": Utils.dedent`
-                    {
-                        "compilerOptions": {
-                            "skipLibCheck": true,
-                            "rootDir": "./",
-                            "allowJs": true,
-                            "checkJs": true,
-                            "declaration": true
-                        }
-                    }`,
-            }, symbolLibContent),
-            commandLineArgs: ["-b", "/src"],
-            edits: [{
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
-            }]
-        });
-
-        verifyTsc({
-            scenario: "javascriptProjectEmit",
-            subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
-            fs: () => loadProjectFromFiles({
+    verifyTsc({
+        scenario: "javascriptProjectEmit",
+        subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/common/obj.json": Utils.dedent`
                     {
                         "val": 42
@@ -266,7 +184,6 @@ namespace ts {
                         }
                     }`,
             }, symbolLibContent),
-            commandLineArgs: ["-b", "/src"]
-        });
+        commandLineArgs: ["-b", "/src"],
     });
-}
+});

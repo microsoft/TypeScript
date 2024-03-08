@@ -1,11 +1,11 @@
-tests/cases/compiler/abstractClassUnionInstantiation.ts(14,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/compiler/abstractClassUnionInstantiation.ts(15,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/compiler/abstractClassUnionInstantiation.ts(18,46): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/compiler/abstractClassUnionInstantiation.ts(19,46): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/compiler/abstractClassUnionInstantiation.ts(21,35): error TS2511: Cannot create an instance of an abstract class.
+abstractClassUnionInstantiation.ts(14,1): error TS2511: Cannot create an instance of an abstract class.
+abstractClassUnionInstantiation.ts(15,1): error TS2511: Cannot create an instance of an abstract class.
+abstractClassUnionInstantiation.ts(18,46): error TS2511: Cannot create an instance of an abstract class.
+abstractClassUnionInstantiation.ts(19,46): error TS2511: Cannot create an instance of an abstract class.
+abstractClassUnionInstantiation.ts(21,35): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== tests/cases/compiler/abstractClassUnionInstantiation.ts (5 errors) ====
+==== abstractClassUnionInstantiation.ts (5 errors) ====
     class ConcreteA {}
     class ConcreteB {}
     abstract class AbstractA { a: string; }

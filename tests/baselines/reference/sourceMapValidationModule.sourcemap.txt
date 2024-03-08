@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationModule.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationModule.js
+emittedFile:sourceMapValidationModule.js
 sourceFile:sourceMapValidationModule.ts
 -------------------------------------------------------------------
 >>>var m2;

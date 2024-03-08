@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts] ////
+
 //// [scanner10.1.1-8gs.ts]
 /// Copyright (c) 2012 Ecma International.  All rights reserved. 
 /// Ecma International makes this code available under the terms and conditions set

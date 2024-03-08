@@ -1,9 +1,9 @@
-tests/cases/compiler/errorMessagesIntersectionTypes04.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'number'.
-tests/cases/compiler/errorMessagesIntersectionTypes04.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'boolean'.
-tests/cases/compiler/errorMessagesIntersectionTypes04.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'string'.
+errorMessagesIntersectionTypes04.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'number'.
+errorMessagesIntersectionTypes04.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'boolean'.
+errorMessagesIntersectionTypes04.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/errorMessagesIntersectionTypes04.ts (3 errors) ====
+==== errorMessagesIntersectionTypes04.ts (3 errors) ====
     interface A {
         a;
     }

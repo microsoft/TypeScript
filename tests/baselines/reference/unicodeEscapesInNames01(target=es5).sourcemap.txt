@@ -1,0 +1,1485 @@
+===================================================================
+JsFile: identifierVariableWithEscape1.js
+mapUrl: identifierVariableWithEscape1.js.map
+sourceRoot: 
+sources: identifierVariableWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithEscape1.js
+sourceFile:identifierVariableWithEscape1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.x = void 0;
+>>>exports.\u0078 = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^
+4 >              ^^^
+5 >                 ^^
+6 >                   ^
+1 >export let 
+2 >
+3 >        \u0078
+4 >               = 
+5 >                 10
+6 >                   ;
+1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 15) Source(1, 18) + SourceIndex(0)
+4 >Emitted(4, 18) Source(1, 21) + SourceIndex(0)
+5 >Emitted(4, 20) Source(1, 23) + SourceIndex(0)
+6 >Emitted(4, 21) Source(1, 24) + SourceIndex(0)
+---
+>>>exports.x++;
+1 >
+2 >^^^^^^^^^
+3 >         ^^
+4 >           ^
+5 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >x
+3 >         ++
+4 >           ;
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 10) Source(2, 2) + SourceIndex(0)
+3 >Emitted(5, 12) Source(2, 4) + SourceIndex(0)
+4 >Emitted(5, 13) Source(2, 5) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithEscape1.js.map===================================================================
+JsFile: identifierVariableWithEscape2.js
+mapUrl: identifierVariableWithEscape2.js.map
+sourceRoot: 
+sources: identifierVariableWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithEscape2.js
+sourceFile:identifierVariableWithEscape2.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.xx = void 0;
+>>>exports.x\u0078 = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^^^^^^^
+4 >               ^^^
+5 >                  ^^
+6 >                    ^
+1 >export let 
+2 >
+3 >        x\u0078
+4 >                = 
+5 >                  10
+6 >                    ;
+1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 16) Source(1, 19) + SourceIndex(0)
+4 >Emitted(4, 19) Source(1, 22) + SourceIndex(0)
+5 >Emitted(4, 21) Source(1, 24) + SourceIndex(0)
+6 >Emitted(4, 22) Source(1, 25) + SourceIndex(0)
+---
+>>>exports.xx++;
+1 >
+2 >^^^^^^^^^^
+3 >          ^^
+4 >            ^
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >xx
+3 >          ++
+4 >            ;
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 11) Source(2, 3) + SourceIndex(0)
+3 >Emitted(5, 13) Source(2, 5) + SourceIndex(0)
+4 >Emitted(5, 14) Source(2, 6) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithEscape2.js.map===================================================================
+JsFile: identifierVariableWithExtendedEscape1.js
+mapUrl: identifierVariableWithExtendedEscape1.js.map
+sourceRoot: 
+sources: identifierVariableWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithExtendedEscape1.js
+sourceFile:identifierVariableWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.x = void 0;
+>>>exports.x = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^
+6 >              ^
+1 >export let 
+2 >
+3 >        \u{78}
+4 >          = 
+5 >            10
+6 >              ;
+1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 10) Source(1, 18) + SourceIndex(0)
+4 >Emitted(4, 13) Source(1, 21) + SourceIndex(0)
+5 >Emitted(4, 15) Source(1, 23) + SourceIndex(0)
+6 >Emitted(4, 16) Source(1, 24) + SourceIndex(0)
+---
+>>>exports.x++;
+1 >
+2 >^^^^^^^^^
+3 >         ^^
+4 >           ^
+5 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >x
+3 >         ++
+4 >           ;
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 10) Source(2, 2) + SourceIndex(0)
+3 >Emitted(5, 12) Source(2, 4) + SourceIndex(0)
+4 >Emitted(5, 13) Source(2, 5) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map===================================================================
+JsFile: identifierVariableWithExtendedEscape2.js
+mapUrl: identifierVariableWithExtendedEscape2.js.map
+sourceRoot: 
+sources: identifierVariableWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithExtendedEscape2.js
+sourceFile:identifierVariableWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.xx = void 0;
+>>>exports.xx = 10;
+1 >
+2 >^^^^^^^^
+3 >        ^^
+4 >          ^^^
+5 >             ^^
+6 >               ^
+1 >export let 
+2 >
+3 >        x\u{78}
+4 >           = 
+5 >             10
+6 >               ;
+1 >Emitted(4, 1) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 11) Source(1, 19) + SourceIndex(0)
+4 >Emitted(4, 14) Source(1, 22) + SourceIndex(0)
+5 >Emitted(4, 16) Source(1, 24) + SourceIndex(0)
+6 >Emitted(4, 17) Source(1, 25) + SourceIndex(0)
+---
+>>>exports.xx++;
+1 >
+2 >^^^^^^^^^^
+3 >          ^^
+4 >            ^
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >xx
+3 >          ++
+4 >            ;
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 11) Source(2, 3) + SourceIndex(0)
+3 >Emitted(5, 13) Source(2, 5) + SourceIndex(0)
+4 >Emitted(5, 14) Source(2, 6) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map===================================================================
+JsFile: IdentifierNameWithEscape1.js
+mapUrl: IdentifierNameWithEscape1.js.map
+sourceRoot: 
+sources: IdentifierNameWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithEscape1.js
+sourceFile:IdentifierNameWithEscape1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.IdentifierNameWithEscape1 = void 0;
+>>>var IdentifierNameWithEscape1 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function IdentifierNameWithEscape1() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
+1->export class IdentifierNameWithEscape1 {
+  >    \u0078: number;
+  >
+  >    
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.\u0078 = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^
+5 >                   ^^^
+6 >                      ^
+7 >                       ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             \u0078
+5 >                    = 
+6 >                      0
+7 >                       ;
+1->Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(6, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(6, 20) Source(5, 20) + SourceIndex(0)
+5 >Emitted(6, 23) Source(5, 23) + SourceIndex(0)
+6 >Emitted(6, 24) Source(5, 24) + SourceIndex(0)
+7 >Emitted(6, 25) Source(5, 25) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    IdentifierNameWithEscape1.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                               ^^^
+1->
+  >
+  >    
+2 >    doThing
+3 >                                               
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 48) Source(8, 12) + SourceIndex(0)
+3 >Emitted(8, 51) Source(8, 5) + SourceIndex(0)
+---
+>>>        this.x = 42;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^
+1 >doThing() {
+  >        
+2 >        this
+3 >            .
+4 >             x
+5 >               = 
+6 >                 42
+7 >                   ;
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 15) Source(9, 15) + SourceIndex(0)
+5 >Emitted(9, 18) Source(9, 18) + SourceIndex(0)
+6 >Emitted(9, 20) Source(9, 20) + SourceIndex(0)
+7 >Emitted(9, 21) Source(9, 21) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return IdentifierNameWithEscape1;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(11, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 37) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class IdentifierNameWithEscape1 {
+  >     \u0078: number;
+  > 
+  >     constructor() {
+  >         this.\u0078 = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.x = 42;
+  >     }
+  > }
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.IdentifierNameWithEscape1 = IdentifierNameWithEscape1;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >IdentifierNameWithEscape1
+1->Emitted(13, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(13, 63) Source(1, 39) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithEscape1.js.map===================================================================
+JsFile: IdentifierNameWithEscape2.js
+mapUrl: IdentifierNameWithEscape2.js.map
+sourceRoot: 
+sources: IdentifierNameWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithEscape2.js
+sourceFile:IdentifierNameWithEscape2.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.IdentifierNameWithEscape2 = void 0;
+>>>var IdentifierNameWithEscape2 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function IdentifierNameWithEscape2() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
+1->export class IdentifierNameWithEscape2 {
+  >    x\u0078: number;
+  >
+  >    
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.x\u0078 = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^
+5 >                    ^^^
+6 >                       ^
+7 >                        ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             x\u0078
+5 >                     = 
+6 >                       0
+7 >                        ;
+1->Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(6, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(6, 21) Source(5, 21) + SourceIndex(0)
+5 >Emitted(6, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(6, 25) Source(5, 25) + SourceIndex(0)
+7 >Emitted(6, 26) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    IdentifierNameWithEscape2.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                               ^^^
+1->
+  >
+  >    
+2 >    doThing
+3 >                                               
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 48) Source(8, 12) + SourceIndex(0)
+3 >Emitted(8, 51) Source(8, 5) + SourceIndex(0)
+---
+>>>        this.xx = 42;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^^
+7 >                    ^
+1 >doThing() {
+  >        
+2 >        this
+3 >            .
+4 >             xx
+5 >                = 
+6 >                  42
+7 >                    ;
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 16) Source(9, 16) + SourceIndex(0)
+5 >Emitted(9, 19) Source(9, 19) + SourceIndex(0)
+6 >Emitted(9, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(9, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return IdentifierNameWithEscape2;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(11, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 37) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class IdentifierNameWithEscape2 {
+  >     x\u0078: number;
+  > 
+  >     constructor() {
+  >         this.x\u0078 = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.xx = 42;
+  >     }
+  > }
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.IdentifierNameWithEscape2 = IdentifierNameWithEscape2;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >IdentifierNameWithEscape2
+1->Emitted(13, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(13, 63) Source(1, 39) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithEscape2.js.map===================================================================
+JsFile: IdentifierNameWithExtendedEscape1.js
+mapUrl: IdentifierNameWithExtendedEscape1.js.map
+sourceRoot: 
+sources: IdentifierNameWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithExtendedEscape1.js
+sourceFile:IdentifierNameWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.IdentifierNameWithExtendedEscape1 = void 0;
+>>>var IdentifierNameWithExtendedEscape1 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function IdentifierNameWithExtendedEscape1() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^->
+1->export class IdentifierNameWithExtendedEscape1 {
+  >    \u{78}: number;
+  >
+  >    
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.x = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^
+6 >                 ^
+7 >                  ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             \u{78}
+5 >               = 
+6 >                 0
+7 >                  ;
+1->Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(6, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(5, 20) + SourceIndex(0)
+5 >Emitted(6, 18) Source(5, 23) + SourceIndex(0)
+6 >Emitted(6, 19) Source(5, 24) + SourceIndex(0)
+7 >Emitted(6, 20) Source(5, 25) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    IdentifierNameWithExtendedEscape1.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                       ^^^
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                       
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 56) Source(8, 12) + SourceIndex(0)
+3 >Emitted(8, 59) Source(8, 5) + SourceIndex(0)
+---
+>>>        this.x = 42;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^
+1 >doThing() {
+  >        
+2 >        this
+3 >            .
+4 >             x
+5 >               = 
+6 >                 42
+7 >                   ;
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 15) Source(9, 15) + SourceIndex(0)
+5 >Emitted(9, 18) Source(9, 18) + SourceIndex(0)
+6 >Emitted(9, 20) Source(9, 20) + SourceIndex(0)
+7 >Emitted(9, 21) Source(9, 21) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return IdentifierNameWithExtendedEscape1;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(11, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 45) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class IdentifierNameWithExtendedEscape1 {
+  >     \u{78}: number;
+  > 
+  >     constructor() {
+  >         this.\u{78} = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.x = 42;
+  >     }
+  > }
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.IdentifierNameWithExtendedEscape1 = IdentifierNameWithExtendedEscape1;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >IdentifierNameWithExtendedEscape1
+1->Emitted(13, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(13, 79) Source(1, 47) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithExtendedEscape1.js.map===================================================================
+JsFile: IdentifierNameWithExtendedEscape2.js
+mapUrl: IdentifierNameWithExtendedEscape2.js.map
+sourceRoot: 
+sources: IdentifierNameWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithExtendedEscape2.js
+sourceFile:IdentifierNameWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.IdentifierNameWithExtendedEscape2 = void 0;
+>>>var IdentifierNameWithExtendedEscape2 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function IdentifierNameWithExtendedEscape2() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^->
+1->export class IdentifierNameWithExtendedEscape2 {
+  >    x\u{78}: number;
+  >
+  >    
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.xx = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^
+7 >                   ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             x\u{78}
+5 >                = 
+6 >                  0
+7 >                   ;
+1->Emitted(6, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(6, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(6, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(6, 16) Source(5, 21) + SourceIndex(0)
+5 >Emitted(6, 19) Source(5, 24) + SourceIndex(0)
+6 >Emitted(6, 20) Source(5, 25) + SourceIndex(0)
+7 >Emitted(6, 21) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    IdentifierNameWithExtendedEscape2.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                       ^^^
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                       
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 56) Source(8, 12) + SourceIndex(0)
+3 >Emitted(8, 59) Source(8, 5) + SourceIndex(0)
+---
+>>>        this.xx = 42;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^^
+7 >                    ^
+1 >doThing() {
+  >        
+2 >        this
+3 >            .
+4 >             xx
+5 >                = 
+6 >                  42
+7 >                    ;
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 16) Source(9, 16) + SourceIndex(0)
+5 >Emitted(9, 19) Source(9, 19) + SourceIndex(0)
+6 >Emitted(9, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(9, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return IdentifierNameWithExtendedEscape2;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(11, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 45) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class IdentifierNameWithExtendedEscape2 {
+  >     x\u{78}: number;
+  > 
+  >     constructor() {
+  >         this.x\u{78} = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.xx = 42;
+  >     }
+  > }
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.IdentifierNameWithExtendedEscape2 = IdentifierNameWithExtendedEscape2;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >IdentifierNameWithExtendedEscape2
+1->Emitted(13, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(13, 79) Source(1, 47) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map===================================================================
+JsFile: PrivateIdentifierNameWithEscape1.js
+mapUrl: PrivateIdentifierNameWithEscape1.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithEscape1.js
+sourceFile:PrivateIdentifierNameWithEscape1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+>>>    if (kind === "m") throw new TypeError("Private method is not writable");
+>>>    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+>>>    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+>>>    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+>>>};
+>>>var _PrivateIdentifierWithEscape1_x;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.PrivateIdentifierWithEscape1 = void 0;
+>>>var PrivateIdentifierWithEscape1 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function PrivateIdentifierWithEscape1() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class PrivateIdentifierWithEscape1 {
+  >    #\u0078: number;
+  >
+  >    
+1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        _PrivateIdentifierWithEscape1_x.set(this, void 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                          ^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        #\u0078: number;
+1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(13, 59) Source(2, 21) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 0, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                      ^
+6 >                                                                       ^^^^^^
+7 >                                                                             ^
+1->
+  >
+  >    constructor() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#\u0078 = 
+5 >                                                                      0
+6 >                                                                       
+7 >                                                                             ;
+1->Emitted(14, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(14, 32) Source(5, 9) + SourceIndex(0)
+3 >Emitted(14, 36) Source(5, 13) + SourceIndex(0)
+4 >Emitted(14, 71) Source(5, 24) + SourceIndex(0)
+5 >Emitted(14, 72) Source(5, 25) + SourceIndex(0)
+6 >Emitted(14, 78) Source(5, 25) + SourceIndex(0)
+7 >Emitted(14, 79) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    PrivateIdentifierWithEscape1.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                  ^^^
+4 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                  
+1->Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(16, 51) Source(8, 12) + SourceIndex(0)
+3 >Emitted(16, 54) Source(8, 5) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 42, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                      ^^
+6 >                                                                        ^^^^^^
+7 >                                                                              ^
+1->doThing() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#x = 
+5 >                                                                      42
+6 >                                                                        
+7 >                                                                              ;
+1->Emitted(17, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(17, 32) Source(9, 9) + SourceIndex(0)
+3 >Emitted(17, 36) Source(9, 13) + SourceIndex(0)
+4 >Emitted(17, 71) Source(9, 19) + SourceIndex(0)
+5 >Emitted(17, 73) Source(9, 21) + SourceIndex(0)
+6 >Emitted(17, 79) Source(9, 21) + SourceIndex(0)
+7 >Emitted(17, 80) Source(9, 22) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return PrivateIdentifierWithEscape1;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(19, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(19, 40) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class PrivateIdentifierWithEscape1 {
+  >     #\u0078: number;
+  > 
+  >     constructor() {
+  >         this.#\u0078 = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.#x = 42;
+  >     }
+  > }
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.PrivateIdentifierWithEscape1 = PrivateIdentifierWithEscape1;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >PrivateIdentifierWithEscape1
+1->Emitted(21, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(21, 69) Source(1, 42) + SourceIndex(0)
+---
+>>>_PrivateIdentifierWithEscape1_x = new WeakMap();
+>>>//# sourceMappingURL=PrivateIdentifierNameWithEscape1.js.map===================================================================
+JsFile: PrivateIdentifierNameWithEscape2.js
+mapUrl: PrivateIdentifierNameWithEscape2.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithEscape2.js
+sourceFile:PrivateIdentifierNameWithEscape2.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+>>>    if (kind === "m") throw new TypeError("Private method is not writable");
+>>>    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+>>>    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+>>>    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+>>>};
+>>>var _PrivateIdentifierWithEscape2_xx;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.PrivateIdentifierWithEscape2 = void 0;
+>>>var PrivateIdentifierWithEscape2 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function PrivateIdentifierWithEscape2() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class PrivateIdentifierWithEscape2 {
+  >    #x\u0078: number;
+  >
+  >    
+1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        _PrivateIdentifierWithEscape2_xx.set(this, void 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                           ^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        #x\u0078: number;
+1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(13, 60) Source(2, 22) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 0, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                       ^
+6 >                                                                        ^^^^^^
+7 >                                                                              ^
+1->
+  >
+  >    constructor() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#x\u0078 = 
+5 >                                                                       0
+6 >                                                                        
+7 >                                                                              ;
+1->Emitted(14, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(14, 32) Source(5, 9) + SourceIndex(0)
+3 >Emitted(14, 36) Source(5, 13) + SourceIndex(0)
+4 >Emitted(14, 72) Source(5, 25) + SourceIndex(0)
+5 >Emitted(14, 73) Source(5, 26) + SourceIndex(0)
+6 >Emitted(14, 79) Source(5, 26) + SourceIndex(0)
+7 >Emitted(14, 80) Source(5, 27) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    PrivateIdentifierWithEscape2.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                  ^^^
+4 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                  
+1->Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(16, 51) Source(8, 12) + SourceIndex(0)
+3 >Emitted(16, 54) Source(8, 5) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 42, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                       ^^
+6 >                                                                         ^^^^^^
+7 >                                                                               ^
+1->doThing() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#xx = 
+5 >                                                                       42
+6 >                                                                         
+7 >                                                                               ;
+1->Emitted(17, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(17, 32) Source(9, 9) + SourceIndex(0)
+3 >Emitted(17, 36) Source(9, 13) + SourceIndex(0)
+4 >Emitted(17, 72) Source(9, 20) + SourceIndex(0)
+5 >Emitted(17, 74) Source(9, 22) + SourceIndex(0)
+6 >Emitted(17, 80) Source(9, 22) + SourceIndex(0)
+7 >Emitted(17, 81) Source(9, 23) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return PrivateIdentifierWithEscape2;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(19, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(19, 40) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class PrivateIdentifierWithEscape2 {
+  >     #x\u0078: number;
+  > 
+  >     constructor() {
+  >         this.#x\u0078 = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.#xx = 42;
+  >     }
+  > }
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.PrivateIdentifierWithEscape2 = PrivateIdentifierWithEscape2;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >PrivateIdentifierWithEscape2
+1->Emitted(21, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(21, 69) Source(1, 42) + SourceIndex(0)
+---
+>>>_PrivateIdentifierWithEscape2_xx = new WeakMap();
+>>>//# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map===================================================================
+JsFile: PrivateIdentifierNameWithExtendedEscape1.js
+mapUrl: PrivateIdentifierNameWithExtendedEscape1.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithExtendedEscape1.js
+sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+>>>    if (kind === "m") throw new TypeError("Private method is not writable");
+>>>    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+>>>    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+>>>    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+>>>};
+>>>var _PrivateIdentifierWithExtendedEscape1_x;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.PrivateIdentifierWithExtendedEscape1 = void 0;
+>>>var PrivateIdentifierWithExtendedEscape1 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function PrivateIdentifierWithExtendedEscape1() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class PrivateIdentifierWithExtendedEscape1 {
+  >    #\u{78}: number;
+  >
+  >    
+1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        _PrivateIdentifierWithExtendedEscape1_x.set(this, void 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                  ^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        #\u{78}: number;
+1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(13, 67) Source(2, 21) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 0, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                              ^
+6 >                                                                               ^^^^^^
+7 >                                                                                     ^
+1->
+  >
+  >    constructor() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#\u{78} = 
+5 >                                                                              0
+6 >                                                                               
+7 >                                                                                     ;
+1->Emitted(14, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(14, 32) Source(5, 9) + SourceIndex(0)
+3 >Emitted(14, 36) Source(5, 13) + SourceIndex(0)
+4 >Emitted(14, 79) Source(5, 24) + SourceIndex(0)
+5 >Emitted(14, 80) Source(5, 25) + SourceIndex(0)
+6 >Emitted(14, 86) Source(5, 25) + SourceIndex(0)
+7 >Emitted(14, 87) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    PrivateIdentifierWithExtendedEscape1.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                          ^^^
+4 >                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                          
+1->Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(16, 59) Source(8, 12) + SourceIndex(0)
+3 >Emitted(16, 62) Source(8, 5) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 42, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                              ^^
+6 >                                                                                ^^^^^^
+7 >                                                                                      ^
+1->doThing() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#x = 
+5 >                                                                              42
+6 >                                                                                
+7 >                                                                                      ;
+1->Emitted(17, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(17, 32) Source(9, 9) + SourceIndex(0)
+3 >Emitted(17, 36) Source(9, 13) + SourceIndex(0)
+4 >Emitted(17, 79) Source(9, 19) + SourceIndex(0)
+5 >Emitted(17, 81) Source(9, 21) + SourceIndex(0)
+6 >Emitted(17, 87) Source(9, 21) + SourceIndex(0)
+7 >Emitted(17, 88) Source(9, 22) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return PrivateIdentifierWithExtendedEscape1;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(19, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(19, 48) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class PrivateIdentifierWithExtendedEscape1 {
+  >     #\u{78}: number;
+  > 
+  >     constructor() {
+  >         this.#\u{78} = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.#x = 42;
+  >     }
+  > }
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.PrivateIdentifierWithExtendedEscape1 = PrivateIdentifierWithExtendedEscape1;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >PrivateIdentifierWithExtendedEscape1
+1->Emitted(21, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(21, 85) Source(1, 50) + SourceIndex(0)
+---
+>>>_PrivateIdentifierWithExtendedEscape1_x = new WeakMap();
+>>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape1.js.map===================================================================
+JsFile: PrivateIdentifierNameWithExtendedEscape2.js
+mapUrl: PrivateIdentifierNameWithExtendedEscape2.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithExtendedEscape2.js
+sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+>>>    if (kind === "m") throw new TypeError("Private method is not writable");
+>>>    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+>>>    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+>>>    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+>>>};
+>>>var _PrivateIdentifierWithExtendedEscape2_xx;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
+>>>exports.PrivateIdentifierWithExtendedEscape2 = void 0;
+>>>var PrivateIdentifierWithExtendedEscape2 = /** @class */ (function () {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    function PrivateIdentifierWithExtendedEscape2() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class PrivateIdentifierWithExtendedEscape2 {
+  >    #x\u{78}: number;
+  >
+  >    
+1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                   ^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >        #x\u{78}: number;
+1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(13, 68) Source(2, 22) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                               ^
+6 >                                                                                ^^^^^^
+7 >                                                                                      ^
+1->
+  >
+  >    constructor() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#x\u{78} = 
+5 >                                                                               0
+6 >                                                                                
+7 >                                                                                      ;
+1->Emitted(14, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(14, 32) Source(5, 9) + SourceIndex(0)
+3 >Emitted(14, 36) Source(5, 13) + SourceIndex(0)
+4 >Emitted(14, 80) Source(5, 25) + SourceIndex(0)
+5 >Emitted(14, 81) Source(5, 26) + SourceIndex(0)
+6 >Emitted(14, 87) Source(5, 26) + SourceIndex(0)
+7 >Emitted(14, 88) Source(5, 27) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(15, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    PrivateIdentifierWithExtendedEscape2.prototype.doThing = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                          ^^^
+4 >                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+3 >                                                          
+1->Emitted(16, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(16, 59) Source(8, 12) + SourceIndex(0)
+3 >Emitted(16, 62) Source(8, 5) + SourceIndex(0)
+---
+>>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 42, "f");
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                               ^^^^
+4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                                               ^^
+6 >                                                                                 ^^^^^^
+7 >                                                                                       ^
+1->doThing() {
+  >        
+2 >        
+3 >                               this
+4 >                                   .#xx = 
+5 >                                                                               42
+6 >                                                                                 
+7 >                                                                                       ;
+1->Emitted(17, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(17, 32) Source(9, 9) + SourceIndex(0)
+3 >Emitted(17, 36) Source(9, 13) + SourceIndex(0)
+4 >Emitted(17, 80) Source(9, 20) + SourceIndex(0)
+5 >Emitted(17, 82) Source(9, 22) + SourceIndex(0)
+6 >Emitted(17, 88) Source(9, 22) + SourceIndex(0)
+7 >Emitted(17, 89) Source(9, 23) + SourceIndex(0)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>    return PrivateIdentifierWithExtendedEscape2;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(19, 5) Source(11, 1) + SourceIndex(0)
+2 >Emitted(19, 48) Source(11, 2) + SourceIndex(0)
+---
+>>>}());
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > export class PrivateIdentifierWithExtendedEscape2 {
+  >     #x\u{78}: number;
+  > 
+  >     constructor() {
+  >         this.#x\u{78} = 0;
+  >     }
+  > 
+  >     doThing() {
+  >         this.#xx = 42;
+  >     }
+  > }
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
+---
+>>>exports.PrivateIdentifierWithExtendedEscape2 = PrivateIdentifierWithExtendedEscape2;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >PrivateIdentifierWithExtendedEscape2
+1->Emitted(21, 1) Source(1, 14) + SourceIndex(0)
+2 >Emitted(21, 85) Source(1, 50) + SourceIndex(0)
+---
+>>>_PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();
+>>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map

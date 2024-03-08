@@ -1,19 +1,10 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
+// --- (line: 11) skipped ---
 //     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
 // }
 // interface LinkProps extends ClickableProps {
-//     /*FIND ALL REFS*/[|goTo|]: string;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}goTo|]: string;|>
 // }
 // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 // declare function MainButton(linkProps: LinkProps): JSX.Element;
@@ -22,105 +13,70 @@
 // let opt = <MainButton children="chidlren" />;
 // let opt = <MainButton onClick={()=>{}} />;
 // let opt = <MainButton onClick={()=>{}} ignore-prop />;
-// let opt = <MainButton [|goTo|]="goTo" />;
-// let opt = <MainButton [|goTo|] />;
+// let opt = <MainButton <|[|{| isWriteAccess: true |}goTo|]="goTo"|> />;
+// let opt = <MainButton [|{| isWriteAccess: true |}goTo|] />;
 // let opt = <MainButton wrong />;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "property",
-      "name": "(property) LinkProps.goTo: string",
-      "textSpan": {
-        "start": 378,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "LinkProps",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "goTo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 378,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 378,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 378,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 792,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 792,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 830,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 11) skipped ---
+  //     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+  // }
+  // interface LinkProps extends ClickableProps {
+  //     /*FIND ALL REFS*/<|[|goTo|]: string;|>
+  // }
+  // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
+  // declare function MainButton(linkProps: LinkProps): JSX.Element;
+  // --- (line: 19) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) LinkProps.goTo: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "LinkProps",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "goTo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

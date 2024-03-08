@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest5.ts] ////
+
 //// [es6ClassTest5.ts]
 class C1T5 {
     foo: (i: number, s: string) => number = 
@@ -23,7 +25,7 @@ var C1T5 = /** @class */ (function () {
 }());
 var bigClass = /** @class */ (function () {
     function bigClass() {
-        this["break"] = 1;
+        this.break = 1;
     }
     return bigClass;
 }());

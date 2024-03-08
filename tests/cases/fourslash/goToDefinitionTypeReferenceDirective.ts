@@ -8,4 +8,4 @@
 //// /// <reference types="[|lib/*1*/|]"/>
 //// $.x;
 
-verify.goToDefinition("1", "0");
+verify.baselineGoToDefinition("1");

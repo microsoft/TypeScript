@@ -1,17 +1,41 @@
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(11,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(14,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(41,18): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(44,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(48,11): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(65,46): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(76,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(79,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(99,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(109,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(11,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(14,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(41,18): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(44,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(48,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(52,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(52,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(56,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(60,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(60,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(64,11): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(93,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(97,15): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(97,28): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(101,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(101,23): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(105,15): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(105,28): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(109,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(109,23): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(116,46): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(127,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(130,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(150,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(153,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(157,15): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(157,27): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(161,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(161,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(165,15): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(165,27): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(169,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(169,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(180,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion2.ts(183,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== tests/cases/compiler/truthinessCallExpressionCoercion2.ts (11 errors) ====
+==== truthinessCallExpressionCoercion2.ts (35 errors) ====
     declare class A {
         static from(): string;
     }
@@ -67,6 +91,34 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774:
         }
     
         // error
+        if (required1 || b) {
+            ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (required1 || required2) {
+            ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                         ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (required1 ?? b) {
+            ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (required1 ?? required2) {
+            ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                         ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
         if (((required1 && b))) {
               ~~~~~~~~~
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
@@ -78,8 +130,61 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774:
         }
     
         // ok
+        if (required1 || b) {
+            required1();
+        }
+    
+        // ok
+        if (required1 ?? b) {
+            required1();
+        }
+    
+        // ok
+        if (b ?? required1) {
+            required1();
+        }
+    
+        // ok
         if (((required1 && b))) {
             required1();
+        }
+    
+        // error, extra parens are on purpose here
+        if ((required1)) {
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (b && (required1 || required2)) {
+                  ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                               ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if ((required1 || required2) && b) {
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                          ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (b && (required1 ?? required2)) {
+                  ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                               ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if ((required1 ?? required2) && b) {
+             ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                          ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         }
     }
     
@@ -129,6 +234,44 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774:
         x1.a.b.c && x2.a.b.c();
         ~~~~~~~~
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // error, extra parens are on purpose here
+        if ((x1.a.b.c)) {
+             ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (1 && (x1.a.b.c || x2.a.b.c)) {
+                  ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                              ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if ((x1.a.b.c || x2.a.b.c) && 1) {
+             ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                         ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+                  ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                              ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
+    
+        // error
+        if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+             ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                         ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        }
     }
     
     class Foo {

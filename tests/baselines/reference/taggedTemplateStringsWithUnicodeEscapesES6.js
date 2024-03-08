@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapesES6.ts] ////
+
 //// [taggedTemplateStringsWithUnicodeEscapesES6.ts]
 function f(...args: any[]) {
 }

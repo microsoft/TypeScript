@@ -1,8 +1,13 @@
-//// [parserArrowFunctionExpression9.ts]
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression9.ts] ////
+
+//// [fileJs.js]
+b ? (c) : d => e // Legal JS
+
+//// [fileTs.ts]
 b ? (c) : d => e
 
 
-//// [parserArrowFunctionExpression9.js]
-b ? function (c) { return e; }
-    :
-;
+//// [fileJs.js]
+b ? (c) : d => e; // Legal JS
+//// [fileTs.js]
+b ? (c) : d => e;

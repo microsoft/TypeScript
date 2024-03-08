@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(15,14): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(21,13): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(40,14): error TS2554: Expected 1-2 arguments, but got 0.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0.
+classWithConstructors.ts(6,13): error TS2554: Expected 1 arguments, but got 0.
+classWithConstructors.ts(15,14): error TS2554: Expected 1 arguments, but got 0.
+classWithConstructors.ts(21,13): error TS2554: Expected 1 arguments, but got 0.
+classWithConstructors.ts(31,13): error TS2554: Expected 1 arguments, but got 0.
+classWithConstructors.ts(40,14): error TS2554: Expected 1-2 arguments, but got 0.
+classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0.
 
 
-==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts (6 errors) ====
+==== classWithConstructors.ts (6 errors) ====
     module NonGeneric {
         class C {
             constructor(x: string) { }
@@ -15,7 +15,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
         var c = new C(); // error
                 ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts:3:21: An argument for 'x' was not provided.
+!!! related TS6210 classWithConstructors.ts:3:21: An argument for 'x' was not provided.
         var c2 = new C(''); // ok
     
         class C2 {
@@ -27,7 +27,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
         var c3 = new C2(); // error
                  ~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts:10:21: An argument for 'x' was not provided.
+!!! related TS6210 classWithConstructors.ts:10:21: An argument for 'x' was not provided.
         var c4 = new C2(''); // ok
         var c5 = new C2(1); // ok
     
@@ -36,7 +36,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
         var d = new D(); // error
                 ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts:10:21: An argument for 'x' was not provided.
+!!! related TS6210 classWithConstructors.ts:10:21: An argument for 'x' was not provided.
         var d2 = new D(1); // ok
         var d3 = new D(''); // ok
     }
@@ -49,7 +49,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
         var c = new C(); // error
                 ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts:28:21: An argument for 'x' was not provided.
+!!! related TS6210 classWithConstructors.ts:28:21: An argument for 'x' was not provided.
         var c2 = new C(''); // ok
     
         class C2<T,U> {
@@ -61,7 +61,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
         var c3 = new C2(); // error
                  ~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts:35:21: An argument for 'x' was not provided.
+!!! related TS6210 classWithConstructors.ts:35:21: An argument for 'x' was not provided.
         var c4 = new C2(''); // ok
         var c5 = new C2(1, 2); // ok
     
@@ -70,7 +70,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
         var d = new D(); // error
                 ~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts:35:21: An argument for 'x' was not provided.
+!!! related TS6210 classWithConstructors.ts:35:21: An argument for 'x' was not provided.
         var d2 = new D(1); // ok
         var d3 = new D(''); // ok
     }

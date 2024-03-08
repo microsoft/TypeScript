@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnDecoratedClassDeclaration.ts ===
+//// [tests/cases/compiler/commentOnDecoratedClassDeclaration.ts] ////
+
+=== commentOnDecoratedClassDeclaration.ts ===
 declare function decorator(x: string): any;
 >decorator : (x: string) => any
 >x : string

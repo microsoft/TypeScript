@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndLatebound.ts] ////
+
+=== index.js ===
+const LazySet = require("./LazySet");
+>LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./LazySet" : Symbol("LazySet", Decl(LazySet.js, 0, 0))
+
+/** @type {LazySet} */
+const stringSet = undefined;
+>stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
+>undefined : Symbol(undefined)
+
+stringSet.addAll(stringSet);
+>stringSet.addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
+>stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
+>addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
+>stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
+
+
+=== LazySet.js ===
+// Comment out this JSDoc, and note that the errors index.js go away.
+/**
+ * @typedef {Object} SomeObject
+ */
+class LazySet {
+>LazySet : Symbol(LazySet, Decl(LazySet.js, 0, 0))
+
+    /**
+     * @param {LazySet} iterable
+     */
+    addAll(iterable) {}
+>addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
+>iterable : Symbol(iterable, Decl(LazySet.js, 8, 11))
+
+    [Symbol.iterator]() {}
+>[Symbol.iterator] : Symbol(LazySet[Symbol.iterator], Decl(LazySet.js, 8, 23))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+}
+
+module.exports = LazySet;
+>module.exports : Symbol(module.exports, Decl(LazySet.js, 0, 0))
+>module : Symbol(export=, Decl(LazySet.js, 10, 1))
+>exports : Symbol(export=, Decl(LazySet.js, 10, 1))
+>LazySet : Symbol(LazySet, Decl(LazySet.js, 0, 0))
+

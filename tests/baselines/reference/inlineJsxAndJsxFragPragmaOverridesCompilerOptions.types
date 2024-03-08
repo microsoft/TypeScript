@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/react.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxAndJsxFragPragmaOverridesCompilerOptions.tsx] ////
+
+=== react.d.ts ===
 declare global {
 >global : any
 
@@ -15,18 +17,18 @@ export function createElement(): void;
 export function Fragment(): void;
 >Fragment : () => void
 
-=== tests/cases/conformance/jsx/inline/preact.d.ts ===
+=== preact.d.ts ===
 export function h(): void;
 >h : () => void
 
 export function Frag(): void;
 >Frag : () => void
 
-=== tests/cases/conformance/jsx/inline/snabbdom.d.ts ===
+=== snabbdom.d.ts ===
 export function h(): void;
 >h : () => void
 
-=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+=== reacty.tsx ===
 import {createElement, Fragment} from "./react";
 >createElement : () => void
 >Fragment : () => void
@@ -37,7 +39,7 @@ import {createElement, Fragment} from "./react";
 >span : any
 >span : any
 
-=== tests/cases/conformance/jsx/inline/preacty.tsx ===
+=== preacty.tsx ===
 /**
  * @jsx h
  * @jsxFrag Frag
@@ -52,7 +54,7 @@ import {h, Frag} from "./preact";
 >div : any
 >div : any
 
-=== tests/cases/conformance/jsx/inline/snabbdomy.tsx ===
+=== snabbdomy.tsx ===
 /**
  * @jsx h
  * @jsxfrag null
@@ -66,7 +68,7 @@ import {h} from "./snabbdom";
 >div : any
 >div : any
 
-=== tests/cases/conformance/jsx/inline/mix-n-match.tsx ===
+=== mix-n-match.tsx ===
 /* @jsx h */
 /* @jsxFrag Fragment */
 import {h} from "./preact";

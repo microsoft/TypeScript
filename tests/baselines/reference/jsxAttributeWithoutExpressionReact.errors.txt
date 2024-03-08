@@ -1,13 +1,13 @@
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(2,2): error TS2304: Cannot find name 'View'.
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(3,6): error TS2304: Cannot find name 'ListView'.
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(4,10): error TS2304: Cannot find name 'RefreshControl'.
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(4,35): error TS17000: JSX attributes must only be assigned a non-empty 'expression'.
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(5,44): error TS17000: JSX attributes must only be assigned a non-empty 'expression'.
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(6,7): error TS2304: Cannot find name 'ListView'.
-tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx(7,3): error TS2304: Cannot find name 'View'.
+jsxAttributeWithoutExpressionReact.tsx(2,2): error TS2304: Cannot find name 'View'.
+jsxAttributeWithoutExpressionReact.tsx(3,6): error TS2304: Cannot find name 'ListView'.
+jsxAttributeWithoutExpressionReact.tsx(4,10): error TS2304: Cannot find name 'RefreshControl'.
+jsxAttributeWithoutExpressionReact.tsx(4,35): error TS17000: JSX attributes must only be assigned a non-empty 'expression'.
+jsxAttributeWithoutExpressionReact.tsx(5,44): error TS17000: JSX attributes must only be assigned a non-empty 'expression'.
+jsxAttributeWithoutExpressionReact.tsx(6,7): error TS2304: Cannot find name 'ListView'.
+jsxAttributeWithoutExpressionReact.tsx(7,3): error TS2304: Cannot find name 'View'.
 
 
-==== tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx (7 errors) ====
+==== jsxAttributeWithoutExpressionReact.tsx (7 errors) ====
     declare var React: any;
     <View>
      ~~~~

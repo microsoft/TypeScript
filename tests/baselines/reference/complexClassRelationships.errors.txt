@@ -1,12 +1,12 @@
-tests/cases/compiler/complexClassRelationships.ts(2,23): error TS2449: Class 'Base' used before its declaration.
+complexClassRelationships.ts(2,23): error TS2449: Class 'Base' used before its declaration.
 
 
-==== tests/cases/compiler/complexClassRelationships.ts (1 errors) ====
+==== complexClassRelationships.ts (1 errors) ====
     // There should be no errors in this file
     class Derived extends Base {
                           ~~~~
 !!! error TS2449: Class 'Base' used before its declaration.
-!!! related TS2728 tests/cases/compiler/complexClassRelationships.ts:13:7: 'Base' is declared here.
+!!! related TS2728 complexClassRelationships.ts:13:7: 'Base' is declared here.
         public static createEmpty(): Derived {
             var item = new Derived();
             return item;

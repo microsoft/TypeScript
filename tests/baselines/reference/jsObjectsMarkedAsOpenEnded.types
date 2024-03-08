@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/jsObjectsMarkedAsOpenEnded.ts] ////
+
+=== a.js ===
 var variable = {};
 >variable : typeof variable
 >{} : {}
@@ -68,7 +70,7 @@ function getObj() {
 }
 
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 variable.a = 1;
 >variable.a = 1 : 1
 >variable.a : number

@@ -1,0 +1,45 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected2.ts ===
+// --- (line: 38) skipped ---
+//         export class C2 {
+//             public pub1;
+//             private priv1;
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] prot1;
+// 
+//             [|{| kind: "none" |}protected|] constructor(public public, [|{| kind: "none" |}protected|] protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// --- (line: 48) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected2.ts ===
+// --- (line: 38) skipped ---
+//         export class C2 {
+//             public pub1;
+//             private priv1;
+//             [|{| kind: "none" |}protected|] prot1;
+// 
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] constructor(public public, [|{| kind: "none" |}protected|] protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// --- (line: 48) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesProtected2.ts ===
+// --- (line: 38) skipped ---
+//         export class C2 {
+//             public pub1;
+//             private priv1;
+//             [|{| kind: "none" |}protected|] prot1;
+// 
+//             [|{| kind: "none" |}protected|] constructor(public public, /*HIGHLIGHTS*/[|{| kind: "none" |}protected|] protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// --- (line: 48) skipped ---

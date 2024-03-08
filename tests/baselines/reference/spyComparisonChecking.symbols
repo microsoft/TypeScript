@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spyComparisonChecking.ts ===
+//// [tests/cases/compiler/spyComparisonChecking.ts] ////
+
+=== spyComparisonChecking.ts ===
 interface Spy {
 >Spy : Symbol(Spy, Decl(spyComparisonChecking.ts, 0, 0))
 

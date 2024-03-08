@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRest2.ts] ////
+
 //// [objectRest2.ts]
 // test for #12203
 declare function connectionFromArray(objects: number, args: any): {};

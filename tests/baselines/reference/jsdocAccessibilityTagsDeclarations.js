@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAccessibilityTagsDeclarations.ts] ////
+
 //// [jsdocAccessibilityTagDeclarations.js]
 class Protected {
     /** @protected */
@@ -36,6 +38,7 @@ class C {
     constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {
     }
 }
+
 
 //// [foo.js]
 class Protected {
@@ -84,7 +87,7 @@ declare class Protected {
     /** @protected */
     protected m(): any;
     /** @protected */
-    protected set p(arg: any);
+    protected set p(value: any);
     /** @protected */
     protected get p(): any;
 }
@@ -96,7 +99,7 @@ declare class Private {
     /** @private */
     private m;
     /** @private */
-    private set p(arg);
+    private set p(value);
     /** @private */
     private get p();
 }

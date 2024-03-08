@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveGenericTypeHierarchy.ts ===
+//// [tests/cases/compiler/recursiveGenericTypeHierarchy.ts] ////
+
+=== recursiveGenericTypeHierarchy.ts ===
 // used to ICE
 interface A<T extends A<T, S>, S extends A<T, S>> { }
 >A : Symbol(A, Decl(recursiveGenericTypeHierarchy.ts, 0, 0))

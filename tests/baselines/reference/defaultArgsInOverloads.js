@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultArgsInOverloads.ts] ////
+
 //// [defaultArgsInOverloads.ts]
 function fun(a: string);
 function fun(a = 3);

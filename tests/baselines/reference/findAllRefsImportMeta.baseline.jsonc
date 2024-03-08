@@ -1,3 +1,4 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/foo.ts ===
 // /// <reference no-default-lib="true"/>
 // /// <reference path='./bar.d.ts' />
@@ -11,48 +12,23 @@
 //   .  // hai :)
 //     [|meta|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/foo.ts",
-      "kind": "keyword",
-      "textSpan": {
-        "start": 82,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 82,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/foo.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 109,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/baz.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.ts ===
+  // /// <reference no-default-lib="true"/>
+  // /// <reference path='./bar.d.ts' />
+  // import./*FIND ALL REFS*/[|meta|];
+  // import.meta;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "displayParts": [
+     {
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

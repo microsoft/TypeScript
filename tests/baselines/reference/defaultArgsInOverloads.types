@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultArgsInOverloads.ts ===
+//// [tests/cases/compiler/defaultArgsInOverloads.ts] ////
+
+=== defaultArgsInOverloads.ts ===
 function fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
 >a : string
@@ -11,7 +13,6 @@ function fun(a = 3);
 function fun(a = null) { }
 >fun : { (a: string): any; (a?: number): any; }
 >a : any
->null : null
 
 class C {
 >C : C
@@ -28,7 +29,6 @@ class C {
 	fun(a = null) { }
 >fun : { (a: string): any; (a?: number): any; }
 >a : any
->null : null
 
 	static fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
@@ -42,7 +42,6 @@ class C {
 	static fun(a = null) { }
 >fun : { (a: string): any; (a?: number): any; }
 >a : any
->null : null
 }
 
 interface I {

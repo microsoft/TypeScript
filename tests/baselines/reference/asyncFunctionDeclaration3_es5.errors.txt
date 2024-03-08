@@ -1,7 +1,7 @@
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration3_es5.ts(1,20): error TS2372: Parameter 'await' cannot reference itself.
+asyncFunctionDeclaration3_es5.ts(1,20): error TS2372: Parameter 'await' cannot reference itself.
 
 
-==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration3_es5.ts (1 errors) ====
+==== asyncFunctionDeclaration3_es5.ts (1 errors) ====
     function f(await = await) {
                        ~~~~~
 !!! error TS2372: Parameter 'await' cannot reference itself.

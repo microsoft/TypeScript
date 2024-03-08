@@ -1,7 +1,7 @@
 test.ts(2,39): error TS1147: Import declarations in a namespace cannot reference a module.
-test.ts(2,39): error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+test.ts(2,39): error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 test.ts(42,35): error TS1147: Import declarations in a namespace cannot reference a module.
-test.ts(42,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+test.ts(42,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
 ==== test.ts (4 errors) ====
@@ -10,7 +10,7 @@ test.ts(42,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                           ~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
         module Internal_M1 {
             export var c1 = new mExported.me.class1;
@@ -54,7 +54,7 @@ test.ts(42,35): error TS2792: Cannot find module 'mNonExported'. Did you mean to
                                       ~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
                                       ~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mNonExported'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
         module Internal_M3 {
             export var c3 = new mNonExported.mne.class1;
             export function f3() {

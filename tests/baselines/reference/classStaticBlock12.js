@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock12.ts] ////
+
 //// [classStaticBlock12.ts]
 class C {
   static #x = 1;
@@ -20,5 +22,5 @@ class C {
 _a = C;
 _C_x = { value: 1 };
 (() => {
-    __classPrivateFieldGet(C, _a, "f", _C_x);
+    __classPrivateFieldGet(_a, _a, "f", _C_x);
 })();

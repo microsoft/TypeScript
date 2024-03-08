@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes2.ts] ////
+
 //// [mappedTypes2.ts]
 function verifyLibTypes<T, K extends keyof T, U>() {
     var x1: Partial<T>;
@@ -139,14 +141,14 @@ function f6(shape) {
 
 //// [mappedTypes2.d.ts]
 declare function verifyLibTypes<T, K extends keyof T, U>(): void;
-declare type Proxy<T> = {
+type Proxy<T> = {
     get(): T;
     set(value: T): void;
 };
-declare type Proxify<T> = {
+type Proxify<T> = {
     [P in keyof T]: Proxy<T[P]>;
 };
-declare type DeepReadonly<T> = {
+type DeepReadonly<T> = {
     readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
 declare function assign<T>(obj: T, props: Partial<T>): void;

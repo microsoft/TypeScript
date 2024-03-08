@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadComputedProperty.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadComputedProperty.ts] ////
+
+=== objectSpreadComputedProperty.ts ===
 // fixes #12200
 function f() {
 >f : () => void
@@ -13,7 +15,6 @@ function f() {
 
     let a: any = null;
 >a : any
->null : null
 
     const o1 = { ...{}, [n]: n };
 >o1 : {}

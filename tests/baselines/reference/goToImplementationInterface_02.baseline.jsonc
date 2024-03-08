@@ -1,0 +1,67 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_02.ts ===
+// interface Fo/*GOTO IMPL*/o { hello: () => void }
+// 
+// let x: number = 9;
+// 
+// function createFoo(): Foo {
+//     if (x === 2) {
+//         return [|{| defId: 0 |}{
+//             hello() {}
+//         }|];
+//     }
+//     return [|{| defId: 1 |}{
+//         hello() {}
+//     }|];
+// }
+// 
+// let createFoo2 = (): Foo => [|{| defId: 2 |}({hello() {}})|];
+// 
+// function createFooLike() {
+//     return {
+// --- (line: 20) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "kind": "",
+    "displayParts": []
+   }
+  ]

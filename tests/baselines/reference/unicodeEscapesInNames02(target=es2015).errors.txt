@@ -1,0 +1,43 @@
+astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
+astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
+astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
+astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
+
+
+==== extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
+    // U+102A7 CARIAN LETTER A2
+    var 𐊧: string;
+    var \u{102A7}: string;
+    
+    if (Math.random()) {
+        𐊧 = "hello";
+    }
+    else {
+        \u{102A7} = "hallo";
+    }
+    
+    class Foo {
+        \u{102A7}: string;
+        constructor() {
+            this.\u{102A7} = " world";
+        }
+        methodA() {
+            return this.𐊧;
+        }
+    }
+    
+    export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
+    
+    _\u{102A7} += "!";
+    
+==== astralAsSurrogatePair.ts (4 errors) ====
+    import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
+                    
+!!! error TS1127: Invalid character.
+                     ~~~~~
+!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
+                          
+!!! error TS1127: Invalid character.
+                           ~~~~~
+!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
+    

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts ===
+//// [tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts] ////
+
+=== exportDefaultInterfaceAndTwoFunctions.ts ===
 export default interface A { a: string; }
 >A : Symbol(A, Decl(exportDefaultInterfaceAndTwoFunctions.ts, 0, 41), Decl(exportDefaultInterfaceAndTwoFunctions.ts, 1, 39), Decl(exportDefaultInterfaceAndTwoFunctions.ts, 0, 0))
 >a : Symbol(A.a, Decl(exportDefaultInterfaceAndTwoFunctions.ts, 0, 28))

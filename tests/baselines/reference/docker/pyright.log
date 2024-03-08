@@ -1,9 +1,0 @@
-Exit Code: 0
-Standard output:
-
-
-
-Standard error:
-lerna notice cli vX.X.X
-lerna info Executing command in 3 packages: "tsc --noEmit"
-lerna success exec Executed command in 3 packages: "tsc --noEmit"

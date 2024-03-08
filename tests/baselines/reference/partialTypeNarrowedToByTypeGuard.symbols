@@ -1,4 +1,6 @@
-=== tests/cases/compiler/partialTypeNarrowedToByTypeGuard.ts ===
+//// [tests/cases/compiler/partialTypeNarrowedToByTypeGuard.ts] ////
+
+=== partialTypeNarrowedToByTypeGuard.ts ===
 type Obj = {} | undefined;
 >Obj : Symbol(Obj, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 0))
 

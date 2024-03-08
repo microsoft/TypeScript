@@ -9,8 +9,9 @@ error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you 
 !!! related TS1410 DifferentNamesSpecified/tsconfig.json:3:22: File is matched by 'files' list specified here.
 ==== DifferentNamesSpecified/tsconfig.json (0 errors) ====
     {
-      "compilerOptions": { "out": "test.js" },
+      "compilerOptions": { "outFile": "test.js" },
       "files": [ "a.ts", "b.js" ]
     }
+    
 ==== DifferentNamesSpecified/a.ts (0 errors) ====
     var test = 10;

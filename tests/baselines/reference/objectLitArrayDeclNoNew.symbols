@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLitArrayDeclNoNew.ts ===
+//// [tests/cases/compiler/objectLitArrayDeclNoNew.ts] ////
+
+=== objectLitArrayDeclNoNew.ts ===
 declare var console;
 >console : Symbol(console, Decl(objectLitArrayDeclNoNew.ts, 0, 11))
 

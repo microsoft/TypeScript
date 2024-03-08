@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleVisibilityTest4.ts] ////
+
 //// [moduleVisibilityTest4.ts]
 module M {
     export type nums = number;

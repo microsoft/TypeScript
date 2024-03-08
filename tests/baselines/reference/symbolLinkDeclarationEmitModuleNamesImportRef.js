@@ -22,13 +22,12 @@ export function getStyles() {
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
-exports.getStyles = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getStyles = getStyles;
 var package_a_1 = require("package-a");
 function getStyles() {
     return package_a_1.styles;
 }
-exports.getStyles = getStyles;
 
 
 //// [index.d.ts]

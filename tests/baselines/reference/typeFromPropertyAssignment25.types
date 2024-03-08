@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug24703.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment25.ts] ////
+
+=== bug24703.js ===
 var Common = {};
 >Common : typeof Common
 >{} : {}

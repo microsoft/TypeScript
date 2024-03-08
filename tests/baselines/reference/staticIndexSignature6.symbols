@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts ===
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts] ////
+
+=== staticIndexSignature6.ts ===
 function foo () {
 >foo : Symbol(foo, Decl(staticIndexSignature6.ts, 0, 0))
 
@@ -24,10 +26,14 @@ const C = foo()
 >foo : Symbol(foo, Decl(staticIndexSignature6.ts, 0, 0))
 
 C.a;
+>C.a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
 >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+>a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
 
 C.a = 1;
+>C.a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
 >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+>a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
 
 C[2];
 >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))

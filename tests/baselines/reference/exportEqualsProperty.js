@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/exportEqualsProperty.ts] ////
 
 //// [declarations.d.ts]
-// This test is just like exportDefaultProperty, but with `export =`.
-
 declare namespace foo.bar {
     export type X = number;
     export const X: number;
@@ -60,7 +58,7 @@ module.exports = A.B;
 module.exports = "foo".length;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
 var X2 = require("foobarx");

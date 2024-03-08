@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnTypeParameterWithModules.ts] ////
+
 //// [returnTypeParameterWithModules.ts]
 module M1 {
     export function reduce<A>(ar, f, e?): Array<A> {

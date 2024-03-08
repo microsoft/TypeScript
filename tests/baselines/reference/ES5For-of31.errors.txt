@@ -1,8 +1,8 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-of31.ts(3,8): error TS2339: Property 'a' does not exist on type 'undefined'.
-tests/cases/conformance/statements/for-ofStatements/ES5For-of31.ts(3,18): error TS2339: Property 'b' does not exist on type 'undefined'.
+ES5For-of31.ts(3,8): error TS2339: Property 'a' does not exist on type 'undefined'.
+ES5For-of31.ts(3,18): error TS2339: Property 'b' does not exist on type 'undefined'.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-of31.ts (2 errors) ====
+==== ES5For-of31.ts (2 errors) ====
     var a: string, b: number;
     
     for ({ a: b = 1, b: a = ""} of []) {

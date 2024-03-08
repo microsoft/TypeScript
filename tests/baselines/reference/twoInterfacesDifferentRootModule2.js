@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule2.ts] ////
+
 //// [twoInterfacesDifferentRootModule2.ts]
 // two interfaces with different root modules should not merge
 

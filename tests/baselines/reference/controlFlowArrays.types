@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowArrays.ts ===
+//// [tests/cases/compiler/controlFlowArrays.ts] ////
+
+=== controlFlowArrays.ts ===
 declare function cond(): boolean;
 >cond : () => boolean
 
@@ -195,7 +197,6 @@ function f7() {
 
     let x = null;
 >x : any
->null : null
 
     if (cond()) {
 >cond() : boolean

@@ -34,7 +34,13 @@ export async function h() {
 }
 
 //// [index.js]
+import { createRequire as _createRequire } from "module";
+const __require = _createRequire(import.meta.url);
+// esm format file
+import { h as _h } from "./index.js";
+const mod = __require("./index.js");
 import { f } from "./subfolder/index.js";
+const mod2 = __require("./subfolder/index.js");
 export async function h() {
     const mod3 = await import("./index.js");
     const mod4 = await import("./subfolder/index.js");
@@ -43,15 +49,17 @@ export async function h() {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 // cjs format file
 const index_js_1 = require("../index.js");
+const mod = require("../index.js");
+const index_js_2 = require("./index.js");
+const mod2 = require("./index.js");
 async function f() {
     const mod3 = await import("../index.js");
     const mod4 = await import("./index.js");
     (0, index_js_1.h)();
 }
-exports.f = f;
 
 
 //// [index.d.ts]

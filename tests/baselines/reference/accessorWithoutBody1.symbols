@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorWithoutBody1.ts ===
+//// [tests/cases/compiler/accessorWithoutBody1.ts] ////
+
+=== accessorWithoutBody1.ts ===
 var v = { get foo() }
 >v : Symbol(v, Decl(accessorWithoutBody1.ts, 0, 3))
 >foo : Symbol(foo, Decl(accessorWithoutBody1.ts, 0, 9))

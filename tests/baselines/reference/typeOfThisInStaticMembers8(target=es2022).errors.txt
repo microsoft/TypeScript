@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(5,49): error TS2339: Property 'f' does not exist on type '(Anonymous class)'.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(11,22): error TS2339: Property 'f' does not exist on type 'CC'.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(13,29): error TS2339: Property 'f' does not exist on type 'CC'.
+typeOfThisInStaticMembers8.ts(5,49): error TS2339: Property 'f' does not exist on type '(Anonymous class)'.
+typeOfThisInStaticMembers8.ts(11,22): error TS2339: Property 'f' does not exist on type 'CC'.
+typeOfThisInStaticMembers8.ts(13,29): error TS2339: Property 'f' does not exist on type 'CC'.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts (3 errors) ====
+==== typeOfThisInStaticMembers8.ts (3 errors) ====
     class C {
         static f = 1;
         static arrowFunctionBoundary = () => this.f + 1;

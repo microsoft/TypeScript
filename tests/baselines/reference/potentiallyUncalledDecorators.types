@@ -1,4 +1,6 @@
-=== tests/cases/compiler/potentiallyUncalledDecorators.ts ===
+//// [tests/cases/compiler/potentiallyUncalledDecorators.ts] ////
+
+=== potentiallyUncalledDecorators.ts ===
 // Angular-style Input/Output API:
 declare function Input(bindingPropertyName?: string): any;
 >Input : (bindingPropertyName?: string) => any

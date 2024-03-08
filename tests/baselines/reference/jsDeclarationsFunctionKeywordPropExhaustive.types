@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionKeywordPropExhaustive.ts] ////
+
+=== source.js ===
 function foo() {}
 >foo : typeof foo
 

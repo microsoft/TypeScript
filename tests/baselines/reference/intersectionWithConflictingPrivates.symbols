@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionWithConflictingPrivates.ts ===
+//// [tests/cases/compiler/intersectionWithConflictingPrivates.ts] ////
+
+=== intersectionWithConflictingPrivates.ts ===
 class A { private x: unknown; y?: string; }
 >A : Symbol(A, Decl(intersectionWithConflictingPrivates.ts, 0, 0))
 >x : Symbol(A.x, Decl(intersectionWithConflictingPrivates.ts, 0, 9))
@@ -132,9 +134,9 @@ class Foo {
 >options : Symbol(options, Decl(intersectionWithConflictingPrivates.ts, 52, 92))
 
     return Promise.resolve(undefined);
->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >undefined : Symbol(undefined)
   }
 }

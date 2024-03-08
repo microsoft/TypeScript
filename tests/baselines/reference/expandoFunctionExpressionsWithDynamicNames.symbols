@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/expandoFunctionExpressionsWithDynamicNames.ts] ////
+
+=== expandoFunctionExpressionsWithDynamicNames.ts ===
+// https://github.com/microsoft/TypeScript/issues/54809
+
+const s = "X";
+>s : Symbol(s, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 2, 5))
+
+export const expr = () => {}
+>expr : Symbol(expr, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 28))
+
+expr[s] = 0
+>expr : Symbol(expr, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 4, 28))
+>s : Symbol(s, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 2, 5))
+
+export const expr2 = function () {}
+>expr2 : Symbol(expr2, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 35))
+
+expr2[s] = 0
+>expr2 : Symbol(expr2, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 12), Decl(expandoFunctionExpressionsWithDynamicNames.ts, 7, 35))
+>s : Symbol(s, Decl(expandoFunctionExpressionsWithDynamicNames.ts, 2, 5))
+

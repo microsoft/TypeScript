@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts] ////
+
+=== numberAssignableToEnum.ts ===
 enum E { A }
 >E : E
 >A : E.A

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty.ts] ////
+
+=== interfaceThatHidesBaseProperty.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(interfaceThatHidesBaseProperty.ts, 0, 0))
 

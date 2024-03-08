@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callConstructAssignment.ts ===
+//// [tests/cases/compiler/callConstructAssignment.ts] ////
+
+=== callConstructAssignment.ts ===
 var foo:{ ( ):void; }
 >foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 3))
 

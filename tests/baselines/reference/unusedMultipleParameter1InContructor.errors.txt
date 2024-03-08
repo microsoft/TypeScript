@@ -1,9 +1,9 @@
-tests/cases/compiler/unusedMultipleParameter1InContructor.ts(2,17): error TS6133: 'person' is declared but its value is never read.
-tests/cases/compiler/unusedMultipleParameter1InContructor.ts(2,33): error TS6133: 'person2' is declared but its value is never read.
-tests/cases/compiler/unusedMultipleParameter1InContructor.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
+unusedMultipleParameter1InContructor.ts(2,17): error TS6133: 'person' is declared but its value is never read.
+unusedMultipleParameter1InContructor.ts(2,33): error TS6133: 'person2' is declared but its value is never read.
+unusedMultipleParameter1InContructor.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedMultipleParameter1InContructor.ts (3 errors) ====
+==== unusedMultipleParameter1InContructor.ts (3 errors) ====
     class Dummy {
         constructor(person: string, person2: string) {
                     ~~~~~~

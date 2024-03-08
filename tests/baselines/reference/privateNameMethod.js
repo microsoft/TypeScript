@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethod.ts] ////
+
 //// [privateNameMethod.ts]
 class A1 {
     #method(param: string): string {

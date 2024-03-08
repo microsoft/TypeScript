@@ -1,3 +1,5 @@
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: core paths", () => {
     it("normalizeSlashes", () => {
         assert.strictEqual(ts.normalizeSlashes("a"), "a");
@@ -292,19 +294,19 @@ describe("unittests:: core paths", () => {
     it("toFileNameLowerCase", () => {
         assert.strictEqual(
             ts.toFileNameLowerCase("/user/UserName/projects/Project/file.ts"),
-            "/user/username/projects/project/file.ts"
+            "/user/username/projects/project/file.ts",
         );
         assert.strictEqual(
             ts.toFileNameLowerCase("/user/UserName/projects/projectß/file.ts"),
-            "/user/username/projects/projectß/file.ts"
+            "/user/username/projects/projectß/file.ts",
         );
         assert.strictEqual(
             ts.toFileNameLowerCase("/user/UserName/projects/İproject/file.ts"),
-            "/user/username/projects/İproject/file.ts"
+            "/user/username/projects/İproject/file.ts",
         );
         assert.strictEqual(
             ts.toFileNameLowerCase("/user/UserName/projects/ı/file.ts"),
-            "/user/username/projects/ı/file.ts"
+            "/user/username/projects/ı/file.ts",
         );
     });
 });

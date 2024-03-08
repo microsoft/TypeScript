@@ -1,4 +1,6 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts] ////
+
+=== noUncheckedIndexedAccess.ts ===
 type CheckBooleanOnly<T extends boolean> = any;
 >CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
 >T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 0, 22))
@@ -36,7 +38,9 @@ const e1: boolean = strMap["foo"];
 
 const e2: boolean = strMap.bar;
 >e2 : Symbol(e2, Decl(noUncheckedIndexedAccess.ts, 12, 5))
+>strMap.bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
 >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
 
 const e3: boolean = strMap[0];
 >e3 : Symbol(e3, Decl(noUncheckedIndexedAccess.ts, 13, 5))
@@ -114,7 +118,9 @@ const ok1: boolean | undefined = strMap["foo"];
 
 const ok2: boolean | undefined = strMap.bar;
 >ok2 : Symbol(ok2, Decl(noUncheckedIndexedAccess.ts, 28, 5))
+>strMap.bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
 >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
 
 type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
 >T_OK1 : Symbol(T_OK1, Decl(noUncheckedIndexedAccess.ts, 28, 44))
@@ -147,7 +153,9 @@ strMap["baz"] = undefined;
 >undefined : Symbol(undefined)
 
 strMap.qua = undefined;
+>strMap.qua : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
 >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>qua : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
 >undefined : Symbol(undefined)
 
 strMap[0] = undefined;

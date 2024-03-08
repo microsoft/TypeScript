@@ -1,9 +1,11 @@
-=== tests/cases/conformance/statements/breakStatements/invalidSwitchBreakStatement.ts ===
+//// [tests/cases/conformance/statements/breakStatements/invalidSwitchBreakStatement.ts] ////
+
+=== invalidSwitchBreakStatement.ts ===
+
 // break is not allowed in a switch statement
-No type information for this code.
-No type information for this code.switch (12) {
-No type information for this code.    case 5:
-No type information for this code.        break;
-No type information for this code.}
-No type information for this code.
-No type information for this code.
+
+switch (12) {
+    case 5:
+        break;
+}
+

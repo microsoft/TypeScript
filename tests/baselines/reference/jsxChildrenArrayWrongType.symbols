@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/jsxChildrenArrayWrongType.tsx] ////
+
+=== index.tsx ===
+/// <reference path="react18/react18.d.ts" />
+/// <reference path="react18/global.d.ts" />
+
+// target is ES5, so no `Iterable` type is present.
+
+interface PropsType {
+>PropsType : Symbol(PropsType, Decl(index.tsx, 0, 0))
+
+    children: [string, number] | boolean[];
+>children : Symbol(PropsType.children, Decl(index.tsx, 5, 21))
+}
+declare class Foo extends React.Component<PropsType, {}> {}
+>Foo : Symbol(Foo, Decl(index.tsx, 7, 1))
+>React.Component : Symbol(React.Component, Decl(react18.d.ts, 427, 50), Decl(react18.d.ts, 430, 90))
+>React : Symbol(React, Decl(react18.d.ts, 62, 15))
+>Component : Symbol(React.Component, Decl(react18.d.ts, 427, 50), Decl(react18.d.ts, 430, 90))
+>PropsType : Symbol(PropsType, Decl(index.tsx, 0, 0))
+
+const b = (
+>b : Symbol(b, Decl(index.tsx, 9, 5))
+
+    <Foo>
+>Foo : Symbol(Foo, Decl(index.tsx, 7, 1))
+
+        {<div/> as unknown}
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react18.d.ts, 3174, 110))
+
+        {"aa"}
+    </Foo>
+>Foo : Symbol(Foo, Decl(index.tsx, 7, 1))
+
+);

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionCall11.ts ===
+//// [tests/cases/compiler/functionCall11.ts] ////
+
+=== functionCall11.ts ===
 function foo(a:string, b?:number){} 
 >foo : (a: string, b?: number) => void
 >a : string

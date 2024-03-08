@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ipromise3.ts ===
+//// [tests/cases/compiler/ipromise3.ts] ////
+
+=== ipromise3.ts ===
 interface IPromise3<T> {
 >IPromise3 : Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
 >T : Symbol(T, Decl(ipromise3.ts, 0, 20))

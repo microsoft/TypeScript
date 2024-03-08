@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/unusedInvalidTypeArguments.ts] ////
 
 //// [typeReference.ts]
-// Tests that types are marked as used, even if used in places that don't accept type arguments.
-
-
 type N = number;
 type U = number;
 export type Z = U<N>;
@@ -49,8 +46,7 @@ export class C extends A<B> {
 
 //// [typeReference.js]
 "use strict";
-// Tests that types are marked as used, even if used in places that don't accept type arguments.
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [classReference.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -68,7 +64,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -86,15 +82,15 @@ var D = /** @class */ (function (_super) {
 exports.D = D;
 //// [interface.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [call.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var unknown_1 = require("unknown");
 (0, unknown_1.foo)();
 //// [new.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var unkown_1 = require("unkown");
 new unkown_1.Foo();
 //// [callAny.js]
@@ -117,7 +113,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var unknown_1 = require("unknown");
 var C = /** @class */ (function (_super) {

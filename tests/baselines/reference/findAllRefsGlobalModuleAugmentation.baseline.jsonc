@@ -1,258 +1,186 @@
-// === /b.ts ===
-// [|f|]();
-
+// === findAllReferences ===
 // === /a.ts ===
 // export {};
 // declare global {
-//     /*FIND ALL REFS*/function [|f|](): void;
+//     /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}f|](): void;|>
 // }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "function",
-      "name": "function f(): void",
-      "textSpan": {
-        "start": 41,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
 
 // === /b.ts ===
 // [|f|]();
 
+  // === Definitions ===
+  // === /a.ts ===
+  // export {};
+  // declare global {
+  //     /*FIND ALL REFS*/<|function [|f|](): void;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
 // export {};
 // declare global {
-//     function /*FIND ALL REFS*/[|f|](): void;
+//     <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|](): void;|>
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "function",
-      "name": "function f(): void",
-      "textSpan": {
-        "start": 41,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+// === /b.ts ===
+// [|f|]();
+
+  // === Definitions ===
+  // === /a.ts ===
+  // export {};
+  // declare global {
+  //     <|function /*FIND ALL REFS*/[|f|](): void;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// export {};
+// declare global {
+//     <|function [|{| isWriteAccess: true |}f|](): void;|>
+// }
 
 // === /b.ts ===
 // /*FIND ALL REFS*/[|f|]();
 
-// === /a.ts ===
-// export {};
-// declare global {
-//     function [|f|](): void;
-// }
+  // === Definitions ===
+  // === /a.ts ===
+  // export {};
+  // declare global {
+  //     <|function [|f|](): void;|>
+  // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "function",
-      "name": "function f(): void",
-      "textSpan": {
-        "start": 41,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

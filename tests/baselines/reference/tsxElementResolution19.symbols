@@ -1,10 +1,12 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxElementResolution19.tsx] ////
+
+=== react.d.ts ===
 declare module "react" {
 >"react" : Symbol("react", Decl(react.d.ts, 0, 0))
 
 }
 
-=== tests/cases/conformance/jsx/file1.tsx ===
+=== file1.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file1.tsx, 0, 0))
 
@@ -14,7 +16,7 @@ declare module JSX {
 export class MyClass { }
 >MyClass : Symbol(MyClass, Decl(file1.tsx, 2, 1))
 
-=== tests/cases/conformance/jsx/file2.tsx ===
+=== file2.tsx ===
 // Should not elide React import
 import * as React from 'react';
 >React : Symbol(React, Decl(file2.tsx, 1, 6))

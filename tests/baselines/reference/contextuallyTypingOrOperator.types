@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypingOrOperator.ts ===
+//// [tests/cases/compiler/contextuallyTypingOrOperator.ts] ////
+
+=== contextuallyTypingOrOperator.ts ===
 var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 >v : { a: (_: string) => number; }
 >a : (_: string) => number

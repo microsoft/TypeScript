@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeInference3.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference3.ts] ////
+
+=== intersectionTypeInference3.ts ===
 // Repro from #19682
 
 type Nominal<Kind extends string, Type> = Type & {
@@ -52,7 +54,7 @@ declare function from<T>(): T[];
 
 const c2: ReadonlyArray<A> = from();
 >c2 : Symbol(c2, Decl(intersectionTypeInference3.ts, 16, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
 >from : Symbol(from, Decl(intersectionTypeInference3.ts, 11, 47))
 

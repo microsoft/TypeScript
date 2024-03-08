@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts] ////
+
 //// [indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts]
 type AnyFunction = (...args: any[]) => any;
 type Params<T> = Parameters<Extract<T, AnyFunction>>;

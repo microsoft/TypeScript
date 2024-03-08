@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericRestParameters3.ts] ////
+
 //// [genericRestParameters3.ts]
 declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
 declare let f2: (x: string, y: string) => void;
@@ -160,9 +162,9 @@ declare const ca: CoolArray<number>;
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
 declare function foo2(...args: string[] | number[]): void;
 declare let x2: ReadonlyArray<string>;
-declare type RestParams = [y: string] | [y: number];
-declare type Signature = (x: string, ...rest: RestParams) => void;
-declare type MergedParams = Parameters<Signature>;
+type RestParams = [y: string] | [y: number];
+type Signature = (x: string, ...rest: RestParams) => void;
+type MergedParams = Parameters<Signature>;
 declare let ff1: (...rest: [string, string] | [string, number]) => void;
 declare let ff2: (x: string, ...rest: [string] | [number]) => void;
 declare function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void): void;

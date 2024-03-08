@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeRelations.ts] ////
+
 //// [recursiveTypeRelations.ts]
 // Repro from #14896
 
@@ -39,8 +41,8 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 //// [recursiveTypeRelations.js]
 "use strict";
 // Repro from #14896
-exports.__esModule = true;
-exports.css = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.css = css;
 var Query = /** @class */ (function () {
     function Query() {
     }
@@ -68,4 +70,3 @@ function css(styles) {
     });
     return "";
 }
-exports.css = css;

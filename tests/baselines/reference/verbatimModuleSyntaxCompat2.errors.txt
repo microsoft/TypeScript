@@ -1,0 +1,23 @@
+/tsconfig.json(5,9): error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
+/tsconfig.json(6,9): error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
+
+
+==== /tsconfig.json (2 errors) ====
+    {
+        "compilerOptions": {
+            "verbatimModuleSyntax": true,
+            "isolatedModules": true,
+            "preserveValueImports": true,
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+            "importsNotUsedAsValues": "error",
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+        }
+    }
+==== /index.ts (0 errors) ====
+    

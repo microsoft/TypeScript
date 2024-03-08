@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts] ////
+
+=== thisTypeInFunctions2.ts ===
 interface IndexedWithThis {
 >IndexedWithThis : Symbol(IndexedWithThis, Decl(thisTypeInFunctions2.ts, 0, 0))
 
@@ -93,7 +95,9 @@ extend2({
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
+>this.mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+>mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
 
     },
     mine: 13,
@@ -106,7 +110,9 @@ extend2({
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
+>this.mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+>mine : Symbol(IndexedWithoutThis.__index, Decl(thisTypeInFunctions2.ts, 9, 29))
     }
 });
 

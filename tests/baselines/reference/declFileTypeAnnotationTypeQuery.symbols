@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationTypeQuery.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationTypeQuery.ts] ////
+
+=== declFileTypeAnnotationTypeQuery.ts ===
 class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationTypeQuery.ts, 0, 0))
 }

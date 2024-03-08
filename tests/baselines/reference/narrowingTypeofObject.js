@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingTypeofObject.ts] ////
+
 //// [narrowingTypeofObject.ts]
 interface F { (): string }
 

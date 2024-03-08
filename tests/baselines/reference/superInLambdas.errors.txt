@@ -1,10 +1,10 @@
-tests/cases/compiler/superInLambdas.ts(47,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superInLambdas.ts(51,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superInLambdas.ts(61,34): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/compiler/superInLambdas.ts(65,34): error TS1034: 'super' must be followed by an argument list or member access.
+superInLambdas.ts(47,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superInLambdas.ts(51,49): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superInLambdas.ts(61,34): error TS1034: 'super' must be followed by an argument list or member access.
+superInLambdas.ts(65,34): error TS1034: 'super' must be followed by an argument list or member access.
 
 
-==== tests/cases/compiler/superInLambdas.ts (4 errors) ====
+==== superInLambdas.ts (4 errors) ====
     class User {
         name: string = "Bob";
         sayHello(): void {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithMemberInterfaceConflict.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithMemberInterfaceConflict.ts] ////
+
+=== collisionCodeGenModuleWithMemberInterfaceConflict.ts ===
 module m1 {
 >m1 : typeof m1
 

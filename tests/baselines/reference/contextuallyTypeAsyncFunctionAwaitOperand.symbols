@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionAwaitOperand.ts ===
+//// [tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionAwaitOperand.ts] ////
+
+=== contextuallyTypeAsyncFunctionAwaitOperand.ts ===
 interface Obj { key: "value"; }
 >Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionAwaitOperand.ts, 0, 0))
 >key : Symbol(Obj.key, Decl(contextuallyTypeAsyncFunctionAwaitOperand.ts, 0, 15))

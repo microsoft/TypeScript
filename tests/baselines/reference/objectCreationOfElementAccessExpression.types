@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectCreationOfElementAccessExpression.ts ===
+//// [tests/cases/compiler/objectCreationOfElementAccessExpression.ts] ////
+
+=== objectCreationOfElementAccessExpression.ts ===
 class Food {
 >Food : Food
 

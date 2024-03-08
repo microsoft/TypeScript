@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/user.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarationsPatterns.ts] ////
+
+=== user.ts ===
 ///<reference path="declarations.d.ts" />
 import {foo, baz} from "foobarbaz";
 >foo : (s: string) => void
@@ -26,7 +28,7 @@ foo(fileText);
 >foo : (s: string) => void
 >fileText : string
 
-=== tests/cases/conformance/ambient/declarations.d.ts ===
+=== declarations.d.ts ===
 declare module "foo*baz" {
 >"foo*baz" : typeof import("foo*baz")
 

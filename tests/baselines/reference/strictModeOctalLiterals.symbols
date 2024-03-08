@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts ===
+//// [tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts] ////
+
+=== strictModeOctalLiterals.ts ===
 export enum E {
 >E : Symbol(E, Decl(strictModeOctalLiterals.ts, 0, 0))
 

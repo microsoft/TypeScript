@@ -1,6 +1,6 @@
 // @module: nodenext
 // @outDir: ./dist
-// @rootDir: tests/cases/compiler
+// @rootDir: .
 // @filename: package.json
 {
   "name": "@this/package",

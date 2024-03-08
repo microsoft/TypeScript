@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newMap.ts] ////
+
 //// [newMap.ts]
 new Map<string>();
 

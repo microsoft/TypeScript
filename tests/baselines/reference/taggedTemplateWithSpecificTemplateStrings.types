@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateWithSpecificTemplateStrings.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateWithSpecificTemplateStrings.ts] ////
+
+=== taggedTemplateWithSpecificTemplateStrings.ts ===
 // overload resolution
 declare function f1(array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A";
 >f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
@@ -70,7 +72,6 @@ const f0_r0 = f0`a${"b"}c`; // [TemplateStringsArrayOf<readonly ["a", "c"], read
 // interpolation example
 type TemplatePrimitive = string | number | bigint | boolean | null | undefined;
 >TemplatePrimitive : string | number | bigint | boolean | null | undefined
->null : null
 
 type Interpolate<T extends readonly string[], A extends any[], R extends string = ''> =
 >Interpolate : Interpolate<T, A, R>
@@ -191,7 +192,6 @@ type JestEach<T extends readonly string[], A extends any[]> =
     T extends readonly [infer TH extends string, ...infer TT extends readonly string[]] ?
         JestEachFunction<JestEachArgument<Split<Trim<TH>, "|">, ParseRows<A, TT>>> :
         null;
->null : null
 
 declare function each<T extends readonly string[], A extends unknown[]>(strs: T, ...args: A): JestEach<T, A>;
 >each : <T extends readonly string[], A extends unknown[]>(strs: T, ...args: A) => JestEach<T, A>

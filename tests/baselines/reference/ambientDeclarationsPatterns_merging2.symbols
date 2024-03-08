@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/types.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarationsPatterns_merging2.ts] ////
+
+=== types.ts ===
 declare module "*.foo" {
 >"*.foo" : Symbol("*.foo", Decl(types.ts, 0, 0))
 
@@ -7,7 +9,7 @@ declare module "*.foo" {
 }
 
 
-=== tests/cases/conformance/ambient/testA.ts ===
+=== testA.ts ===
 import { everywhere, onlyInA, alsoOnlyInA } from "a.foo";
 >everywhere : Symbol(everywhere, Decl(testA.ts, 0, 8))
 >onlyInA : Symbol(onlyInA, Decl(testA.ts, 0, 20))
@@ -20,7 +22,7 @@ declare module "a.foo" {
 >onlyInA : Symbol(onlyInA, Decl(testA.ts, 2, 5))
 }
 
-=== tests/cases/conformance/ambient/testB.ts ===
+=== testB.ts ===
 import { everywhere, onlyInA, alsoOnlyInA } from "b.foo"; // Error
 >everywhere : Symbol(everywhere, Decl(testB.ts, 0, 8))
 >onlyInA : Symbol(onlyInA, Decl(testB.ts, 0, 20))

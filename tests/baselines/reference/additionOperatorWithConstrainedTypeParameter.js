@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithConstrainedTypeParameter.ts] ////
+
 //// [additionOperatorWithConstrainedTypeParameter.ts]
 // test for #17069
 function sum<T extends Record<K, number>, K extends string>(n: number, v: T, k: K) {

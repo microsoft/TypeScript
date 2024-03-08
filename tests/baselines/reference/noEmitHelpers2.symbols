@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noEmitHelpers2.ts ===
+//// [tests/cases/compiler/noEmitHelpers2.ts] ////
+
+=== noEmitHelpers2.ts ===
 declare var decorator: any;
 >decorator : Symbol(decorator, Decl(noEmitHelpers2.ts, 0, 11))
 

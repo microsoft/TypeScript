@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop12.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop12.ts] ////
+
+=== capturedLetConstInLoop12.ts ===
 (function() {
 >(function() {    "use strict";    for (let i = 0; i < 4; i++) {        (() => [i] = [i + 1])();    }})() : void
 >(function() {    "use strict";    for (let i = 0; i < 4; i++) {        (() => [i] = [i + 1])();    }}) : () => void

@@ -1,7 +1,7 @@
-tests/cases/compiler/classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type 'typeof M'.
+classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type 'typeof M'.
 
 
-==== tests/cases/compiler/classExtendingQualifiedName.ts (1 errors) ====
+==== classExtendingQualifiedName.ts (1 errors) ====
     module M {
         class C {
         }

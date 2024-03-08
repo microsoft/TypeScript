@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/vararg.ts] ////
+
 //// [vararg.ts]
 module M {
     export class C {

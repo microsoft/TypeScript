@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts ===
+//// [tests/cases/compiler/noImplicitAnyFunctionExpressionAssignment.ts] ////
+
+=== noImplicitAnyFunctionExpressionAssignment.ts ===
 var x: (a: any) => void = function <T>(x: T) {
 >x : Symbol(x, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 0, 3))
 >a : Symbol(a, Decl(noImplicitAnyFunctionExpressionAssignment.ts, 0, 8))

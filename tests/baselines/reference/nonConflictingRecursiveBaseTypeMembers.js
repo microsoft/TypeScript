@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonConflictingRecursiveBaseTypeMembers.ts] ////
+
 //// [nonConflictingRecursiveBaseTypeMembers.ts]
 interface A<T> {
     x: C<T>

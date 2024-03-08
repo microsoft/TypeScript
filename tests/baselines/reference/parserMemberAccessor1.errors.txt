@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessor1.ts(2,7): error TS2378: A 'get' accessor must return a value.
+parserMemberAccessor1.ts(2,7): error TS2378: A 'get' accessor must return a value.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessor1.ts (1 errors) ====
+==== parserMemberAccessor1.ts (1 errors) ====
     class C {
       get foo() { }
           ~~~

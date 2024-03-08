@@ -1,7 +1,7 @@
-tests/cases/compiler/accessInstanceMemberFromStaticMethod01.ts(5,17): error TS2662: Cannot find name 'foo'. Did you mean the static member 'C.foo'?
+accessInstanceMemberFromStaticMethod01.ts(5,17): error TS2662: Cannot find name 'foo'. Did you mean the static member 'C.foo'?
 
 
-==== tests/cases/compiler/accessInstanceMemberFromStaticMethod01.ts (1 errors) ====
+==== accessInstanceMemberFromStaticMethod01.ts (1 errors) ====
     class C {
         static foo: string;
     

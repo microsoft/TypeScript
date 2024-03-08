@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/newWithSpreadES5.ts] ////
+
 //// [newWithSpreadES5.ts]
 function f(x: number, y: number, ...z: string[]) {
 }

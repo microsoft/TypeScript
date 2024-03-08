@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts ===
+//// [tests/cases/compiler/emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts] ////
+
+=== emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts ===
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string })[x];
 >x : Symbol(x, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 0, 1))
 >"1" : Symbol("1", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 0, 9))
@@ -8,7 +10,9 @@
 
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x;
 >x : Symbol(x, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 1, 1))
+>({ "1": "one", "2": "two" } as { [key: string]: string }).x : Symbol(__index, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 1, 39))
 >"1" : Symbol("1", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 1, 9))
 >"2" : Symbol("2", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 1, 21))
 >key : Symbol(key, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 1, 41))
+>x : Symbol(__index, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts, 1, 39))
 

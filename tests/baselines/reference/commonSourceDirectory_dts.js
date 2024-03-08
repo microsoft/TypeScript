@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/commonSourceDirectory_dts.ts] ////
 
 //// [bar.d.ts]
-// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
-
 declare const y: number;
 
 //// [index.ts]
@@ -12,7 +10,7 @@ export const x = y;
 
 //// [/app/bin/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /// <reference path="../lib/bar.d.ts" />
 exports.x = y;

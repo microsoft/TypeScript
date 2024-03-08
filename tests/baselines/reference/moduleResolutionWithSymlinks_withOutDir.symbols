@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_withOutDir.ts] ////
+
 === /src/app.ts ===
 import { MyClass } from "./library-a";
 >MyClass : Symbol(MyClass, Decl(app.ts, 0, 8))
@@ -22,11 +24,9 @@ y = x;
 >x : Symbol(x, Decl(app.ts, 3, 3))
 
 === /src/library-a/index.ts ===
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
-
 export class MyClass { private x: number; }
 >MyClass : Symbol(MyClass, Decl(index.ts, 0, 0))
->x : Symbol(MyClass.x, Decl(index.ts, 2, 22))
+>x : Symbol(MyClass.x, Decl(index.ts, 0, 22))
 
 === /src/library-b/index.ts ===
 import {MyClass} from "library-a";

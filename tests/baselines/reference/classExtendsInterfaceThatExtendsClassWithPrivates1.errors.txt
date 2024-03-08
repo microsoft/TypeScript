@@ -1,8 +1,8 @@
-tests/cases/compiler/classExtendsInterfaceThatExtendsClassWithPrivates1.ts(10,7): error TS2420: Class 'D2' incorrectly implements interface 'I'.
+classExtendsInterfaceThatExtendsClassWithPrivates1.ts(10,7): error TS2420: Class 'D2' incorrectly implements interface 'I'.
   Types have separate declarations of a private property 'x'.
 
 
-==== tests/cases/compiler/classExtendsInterfaceThatExtendsClassWithPrivates1.ts (1 errors) ====
+==== classExtendsInterfaceThatExtendsClassWithPrivates1.ts (1 errors) ====
     class C {
         public foo(x: any) { return x; }
         private x = 1;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorWithRestParam.ts ===
+//// [tests/cases/compiler/accessorWithRestParam.ts] ////
+
+=== accessorWithRestParam.ts ===
 class C {
 >C : Symbol(C, Decl(accessorWithRestParam.ts, 0, 0))
 

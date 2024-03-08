@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccessOnObjectLiteral.ts] ////
+
 //// [propertyAccessOnObjectLiteral.ts]
 class A { }
 

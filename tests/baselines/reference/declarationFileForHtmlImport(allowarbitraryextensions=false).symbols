@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForHtmlImport.ts] ////
+
+=== component.d.html.ts ===
+// html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md
+
+// per proposal, `default` is user-defined, but if not present, will be the document of the imported module
+declare var doc: Document;
+>doc : Symbol(doc, Decl(component.d.html.ts, 3, 11))
+>Document : Symbol(Document, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+export default doc;
+>doc : Symbol(doc, Decl(component.d.html.ts, 3, 11))
+
+// all other exports are just whatever was exported in module script blocks in the html file
+export const blogPost: Element;
+>blogPost : Symbol(blogPost, Decl(component.d.html.ts, 7, 12))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+export class HTML5Element extends HTMLElement {
+>HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    connectedCallback(): void;
+>connectedCallback : Symbol(HTML5Element.connectedCallback, Decl(component.d.html.ts, 9, 47))
+}
+
+=== file.ts ===
+import * as mod from "./component.html";
+>mod : Symbol(mod, Decl(file.ts, 0, 6))
+
+window.customElements.define("my-html5-element", mod.HTML5Element);
+>window.customElements.define : Symbol(CustomElementRegistry.define, Decl(lib.dom.d.ts, --, --))
+>window.customElements : Symbol(customElements, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>customElements : Symbol(customElements, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>define : Symbol(CustomElementRegistry.define, Decl(lib.dom.d.ts, --, --))
+>mod : Symbol(mod, Decl(file.ts, 0, 6))
+
+if (document !== mod.default) {
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>mod : Symbol(mod, Decl(file.ts, 0, 6))
+
+    document.body.appendChild(mod.blogPost);
+>document.body.appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+>document.body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))
+>appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+>mod : Symbol(mod, Decl(file.ts, 0, 6))
+}

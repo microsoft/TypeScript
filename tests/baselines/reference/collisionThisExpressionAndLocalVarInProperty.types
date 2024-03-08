@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts] ////
+
+=== collisionThisExpressionAndLocalVarInProperty.ts ===
 class class1 {
 >class1 : class1
 

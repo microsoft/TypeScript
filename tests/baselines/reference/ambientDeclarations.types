@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/ambientDeclarations.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarations.ts] ////
+
+=== ambientDeclarations.ts ===
 // Ambient variable without type annotation
 declare var n;
 >n : any
@@ -82,13 +84,13 @@ declare enum E1 {
 >E1 : E1
 
     x,
->x : E1
+>x : E1.x
 
     y,
->y : E1
+>y : E1.y
 
     z
->z : E1
+>z : E1.z
 }
 
 // Ambient enum with integer literal initializer
@@ -96,21 +98,21 @@ declare enum E2 {
 >E2 : E2
 
     q,
->q : E2
+>q : E2.q
 
     a = 1,
->a : E2
+>a : E2.a
 >1 : 1
 
     b,
->b : E2
+>b : E2.b
 
     c = 2,
->c : E2
+>c : E2.c
 >2 : 2
 
     d
->d : E2
+>d : E2.d
 }
 
 // Ambient enum members are always exported with or without export keyword
@@ -118,7 +120,7 @@ declare enum E3 {
 >E3 : E3
 
     A
->A : E3
+>A : E3.A
 }
 declare module E3 {
 >E3 : typeof E3

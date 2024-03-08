@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts] ////
+
 //// [accessibilityModifiers.ts]
 // No errors
 class C {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxChildrenIndividualErrorElaborations.tsx] ////
+
 //// [index.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -78,14 +80,15 @@ var a = <Blah3>
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
-exports.Blah3 = exports.Blah2 = exports.Blah = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Blah = Blah;
+exports.Blah2 = Blah2;
+exports.Blah3 = Blah3;
 /// <reference path="react16.d.ts" />
 var React = require("react");
 function Blah(props) {
     return React.createElement(React.Fragment, null);
 }
-exports.Blah = Blah;
 // Incompatible child.
 var a = React.createElement(Blah, null, function (x) { return x; });
 // Blah components don't accept text as child elements
@@ -97,7 +100,6 @@ var a = React.createElement(Blah, null,
 function Blah2(props) {
     return React.createElement(React.Fragment, null);
 }
-exports.Blah2 = Blah2;
 // Incompatible child.
 var a = React.createElement(Blah2, null, function (x) { return x; });
 // Blah2 components don't accept text as child elements
@@ -109,7 +111,6 @@ var a = React.createElement(Blah2, null,
 function Blah3(props) {
     return React.createElement(React.Fragment, null);
 }
-exports.Blah3 = Blah3;
 // Incompatible child.
 var a = React.createElement(Blah3, null, function (x) { return x; });
 // Blah3 components don't accept text as child elements

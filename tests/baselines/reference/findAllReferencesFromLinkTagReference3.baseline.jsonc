@@ -1,0 +1,41 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|interface [|{| isWriteAccess: true |}Foo|] {
+//     foo: E.Foo;
+// }|>
+
+// === /tests/cases/fourslash/b.ts ===
+// enum E {
+//     /** {@link /*FIND ALL REFS*/[|Foo|]} */
+//     Foo
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|interface [|Foo|] {
+  //     foo: E.Foo;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface Foo",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]

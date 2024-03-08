@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionInference2.ts ===
+//// [tests/cases/compiler/genericFunctionInference2.ts] ////
+
+=== genericFunctionInference2.ts ===
 // Repro from #30685
 
 type Reducer<S> = (state: S) => S;

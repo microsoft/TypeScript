@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedArray.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedArray.ts] ////
+
+=== templateStringWithEmbeddedArray.ts ===
 var x = `abc${ [1,2,3] }def`;
 >x : string
 >`abc${ [1,2,3] }def` : string

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts] ////
+
 //// [ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts]
 // all expected to be errors
 

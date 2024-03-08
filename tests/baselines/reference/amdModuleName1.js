@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdModuleName1.ts] ////
+
 //// [amdModuleName1.ts]
 ///<amd-module name='NamedModule'/>
 class Foo {

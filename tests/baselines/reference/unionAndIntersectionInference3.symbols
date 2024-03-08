@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
+
+=== unionAndIntersectionInference3.ts ===
 // Repro from #30720
 
 type Maybe<T> = T | undefined;
@@ -308,4 +310,20 @@ let z = foo(ab);  // [AB<string>, string]
 >z : Symbol(z, Decl(unionAndIntersectionInference3.ts, 86, 3))
 >foo : Symbol(foo, Decl(unionAndIntersectionInference3.ts, 80, 33))
 >ab : Symbol(ab, Decl(unionAndIntersectionInference3.ts, 84, 11))
+
+// Repro from #51399
+
+declare let a: <T>() => (T extends true ? true : false) & boolean;
+>a : Symbol(a, Decl(unionAndIntersectionInference3.ts, 90, 11))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 90, 16))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 90, 16))
+
+declare let b: <T>() => (T extends true ? true : false) & boolean;
+>b : Symbol(b, Decl(unionAndIntersectionInference3.ts, 91, 11))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 91, 16))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 91, 16))
+
+a = b;
+>a : Symbol(a, Decl(unionAndIntersectionInference3.ts, 90, 11))
+>b : Symbol(b, Decl(unionAndIntersectionInference3.ts, 91, 11))
 

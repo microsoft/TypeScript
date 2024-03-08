@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts] ////
+
+=== destructuringWithLiteralInitializers2.ts ===
 function f00([x, y]) {}
 >f00 : ([x, y]: [any, any]) => void
 >x : any

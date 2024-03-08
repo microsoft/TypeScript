@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts] ////
+
+=== typeAliasesForObjectTypes.ts ===
 type T1 = { x: string }
 >T1 : { x: string; }
 >x : string

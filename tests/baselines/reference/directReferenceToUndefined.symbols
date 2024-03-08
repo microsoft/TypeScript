@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/undefined/directReferenceToUndefined.ts ===
+//// [tests/cases/conformance/types/primitives/undefined/directReferenceToUndefined.ts] ////
+
+=== directReferenceToUndefined.ts ===
 var x: Undefined;
 >x : Symbol(x, Decl(directReferenceToUndefined.ts, 0, 3))
 >Undefined : Symbol(Undefined)

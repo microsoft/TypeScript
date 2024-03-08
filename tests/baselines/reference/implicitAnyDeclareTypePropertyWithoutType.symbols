@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts] ////
+
+=== implicitAnyDeclareTypePropertyWithoutType.ts ===
 class C {
 >C : Symbol(C, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 0, 0))
 

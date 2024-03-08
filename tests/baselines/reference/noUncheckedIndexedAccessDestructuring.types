@@ -1,4 +1,6 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts] ////
+
+=== noUncheckedIndexedAccessDestructuring.ts ===
 declare const strArray: string[];
 >strArray : string[]
 
@@ -129,6 +131,41 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >q.z.toFixed : (fractionDigits?: number | undefined) => string
 >q.z : number | undefined
 >q : { [s: string]: number; y: number; }
+>z : number | undefined
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+{
+    const { x, ...q } = numMapPoint;
+>x : number
+>q : { [s: string]: number; y: number; }
+>numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+
+    x.
+>x.    toFixed() : string
+>x.    toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+
+    toFixed(); // Should OK
+>toFixed : (fractionDigits?: number | undefined) => string
+
+    q.
+>q.    y.toFixed() : string
+>q.    y.toFixed : (fractionDigits?: number | undefined) => string
+>q.    y : number
+>q : { [s: string]: number; y: number; }
+
+    y.toFixed(); // Should OK
+>y : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+    q.
+>q.    z.toFixed() : string
+>q.    z.toFixed : (fractionDigits?: number | undefined) => string
+>q.    z : number | undefined
+>q : { [s: string]: number; y: number; }
+
+    z.toFixed(); // Should error
 >z : number | undefined
 >toFixed : (fractionDigits?: number | undefined) => string
 }

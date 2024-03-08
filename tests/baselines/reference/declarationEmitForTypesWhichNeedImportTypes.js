@@ -14,15 +14,14 @@ export const Value = createNamed();
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports.createNamed = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createNamed = createNamed;
 function createNamed() {
     return {};
 }
-exports.createNamed = createNamed;
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = void 0;
 var b_1 = require("./b");
 exports.Value = (0, b_1.createNamed)();

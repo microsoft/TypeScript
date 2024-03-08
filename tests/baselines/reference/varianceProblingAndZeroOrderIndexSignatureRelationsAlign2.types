@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts ===
+//// [tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts] ////
+
+=== varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts ===
 type Either<L, A> = Left<L, A> | Right<L, A>;
 >Either : Either<L, A>
 
@@ -35,7 +37,6 @@ class Left<L, A> {
 
       return null as any
 >null as any : any
->null : null
     }
 }
 
@@ -76,7 +77,6 @@ class Right<L, A> {
 
       return null as any;
 >null as any : any
->null : null
     }
 }
 
@@ -119,7 +119,6 @@ class Type<A, O = A, I = unknown> {
 >decode : (i: I) => Either<{}[], A>
 >i : I
 >null as any : any
->null : null
 }
 
 interface Any extends Type<any, any, any> {}
@@ -148,7 +147,6 @@ export type MyInfo = NeededInfo<ToB<{ initialize: any }>>;
 const tmp1: MyInfo = null!;
 >tmp1 : MyInfo
 >null! : never
->null : null
 
 function tmp2<N extends NeededInfo>(n: N) {}
 >tmp2 : <N extends NeededInfo<{}>>(n: N) => void

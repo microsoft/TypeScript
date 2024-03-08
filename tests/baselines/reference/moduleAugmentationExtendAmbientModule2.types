@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationExtendAmbientModule2.ts] ////
+
+=== main.ts ===
 /// <reference path="observable.d.ts"/>
 import { Observable } from "observable"
 >Observable : typeof Observable
@@ -38,7 +40,7 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 >someAnotherValue : string
 >toLowerCase : () => string
 
-=== tests/cases/compiler/map.ts ===
+=== map.ts ===
 import { Observable } from "observable"
 >Observable : typeof Observable
 
@@ -70,7 +72,7 @@ declare module "observable" {
     }
 }
 
-=== tests/cases/compiler/observable.d.ts ===
+=== observable.d.ts ===
 declare module "observable" {
 >"observable" : typeof import("observable")
 

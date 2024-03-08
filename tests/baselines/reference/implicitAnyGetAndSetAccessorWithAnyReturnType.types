@@ -1,11 +1,12 @@
-=== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
+//// [tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts] ////
+
+=== implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
 // these should be errors
 class GetAndSet {
 >GetAndSet : GetAndSet
 
     getAndSet = null;             // error at "getAndSet"
 >getAndSet : any
->null : null
 
     public get haveGetAndSet() {  // this should not be an error
 >haveGetAndSet : any
@@ -46,6 +47,5 @@ class GetterOnly {
 >haveOnlyGet : any
 
         return null;
->null : null
     }
 }

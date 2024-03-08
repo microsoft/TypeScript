@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatArrowfunctionAsType.ts ===
+//// [tests/cases/compiler/fatArrowfunctionAsType.ts] ////
+
+=== fatArrowfunctionAsType.ts ===
 declare var b: <T>(x: T) => void ;
 >b : <T>(x: T) => void
 >x : T

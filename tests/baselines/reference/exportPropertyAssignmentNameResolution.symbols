@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug24492.js ===
+//// [tests/cases/conformance/salsa/exportPropertyAssignmentNameResolution.ts] ////
+
+=== bug24492.js ===
 module.exports.D = class { }
 >module.exports.D : Symbol(D, Decl(bug24492.js, 0, 0))
 >module.exports : Symbol(D, Decl(bug24492.js, 0, 0))

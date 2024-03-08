@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance2.ts] ////
+
+=== constructSignatureAssignabilityInInheritance2.ts ===
 // checking subtype relations for function types as it relates to contextual signature instantiation
 
 class Base { foo: string; }
@@ -231,7 +233,7 @@ interface I extends A {
 >y : T
 
     a14: new <T, U>(x: { a: T; b: U }) => T; // ok
->a14 : new <T, U>(x: { a: T; b: U; }) => T
+>a14 : new <T, U>(x: {    a: T;    b: U;}) => T
 >x : { a: T; b: U; }
 >a : T
 >b : U

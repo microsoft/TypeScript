@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classExpressions/classExpression4.ts] ////
+
 //// [classExpression4.ts]
 let C = class {
     foo() {

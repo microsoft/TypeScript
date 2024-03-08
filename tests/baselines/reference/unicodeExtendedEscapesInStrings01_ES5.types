@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings01_ES5.ts ===
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings01_ES5.ts] ////
+
+=== unicodeExtendedEscapesInStrings01_ES5.ts ===
 var x = "\u{0}";
 >x : string
 >"\u{0}" : "\0"

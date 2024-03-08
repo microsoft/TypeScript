@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/assignObjectToNonPrimitive.ts] ////
+
 //// [assignObjectToNonPrimitive.ts]
 var x = {};
 var y = {foo: "bar"};

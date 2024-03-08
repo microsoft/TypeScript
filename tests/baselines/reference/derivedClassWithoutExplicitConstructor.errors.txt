@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts(11,9): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts(24,9): error TS2554: Expected 1 arguments, but got 0.
+derivedClassWithoutExplicitConstructor.ts(11,9): error TS2554: Expected 1 arguments, but got 0.
+derivedClassWithoutExplicitConstructor.ts(24,9): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts (2 errors) ====
+==== derivedClassWithoutExplicitConstructor.ts (2 errors) ====
     class Base {
         a = 1;
         constructor(x: number) { this.a = x; }
@@ -16,7 +16,7 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var r = new Derived(); // error
             ~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts:3:17: An argument for 'x' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor.ts:3:17: An argument for 'x' was not provided.
     var r2 = new Derived(1); 
     
     class Base2<T> {
@@ -32,5 +32,5 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var d = new D(); // error
             ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts:16:17: An argument for 'x' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor.ts:16:17: An argument for 'x' was not provided.
     var d2 = new D(new Date()); // ok

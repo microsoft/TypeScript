@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts] ////
+
 //// [circularIndexedAccessErrors.ts]
 type T1 = {
     x: T1["x"];  // Error
@@ -56,10 +58,10 @@ function foo() {
 
 
 //// [circularIndexedAccessErrors.d.ts]
-declare type T1 = {
+type T1 = {
     x: T1["x"];
 };
-declare type T2<K extends "x" | "y"> = {
+type T2<K extends "x" | "y"> = {
     x: T2<K>[K];
     y: number;
 };

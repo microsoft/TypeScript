@@ -1,8 +1,8 @@
-tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts(3,1): error TS2322: Type 'String' is not assignable to type 'string'.
+assignFromStringInterface.ts(3,1): error TS2322: Type 'String' is not assignable to type 'string'.
   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
-==== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts (1 errors) ====
+==== assignFromStringInterface.ts (1 errors) ====
     var x = '';
     var a: String;
     x = a;

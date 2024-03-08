@@ -1,12 +1,12 @@
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(8,5): error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(9,5): error TS2367: This condition will always return 'false' since the types '"bar"' and '"foo"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(10,5): error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(17,5): error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(18,5): error TS2367: This condition will always return 'true' since the types '"bar"' and '"foo"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(19,5): error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks02.ts(8,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks02.ts(9,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
+stringLiteralsWithEqualityChecks02.ts(10,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks02.ts(17,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks02.ts(18,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
+stringLiteralsWithEqualityChecks02.ts(19,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
 
 
-==== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts (6 errors) ====
+==== stringLiteralsWithEqualityChecks02.ts (6 errors) ====
     let x: "foo";
     let y: "foo" | "bar";
     
@@ -16,13 +16,13 @@ tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(19,5
     b = y == "foo";
     b = "foo" == "bar";
         ~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
     b = "bar" == x;
         ~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"bar"' and '"foo"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
     b = x == "bar";
         ~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"foo"' and '"bar"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
     b = y == "bar";
     b = "bar" == y;
     
@@ -31,13 +31,13 @@ tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts(19,5
     b = y != "foo";
     b = "foo" != "bar";
         ~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
     b = "bar" != x;
         ~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"bar"' and '"foo"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
     b = x != "bar";
         ~~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types '"foo"' and '"bar"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
     b = y != "bar";
     b = "bar" != y;
     

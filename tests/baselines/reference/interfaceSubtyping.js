@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceSubtyping.ts] ////
+
 //// [interfaceSubtyping.ts]
 interface iface {
     foo(): void;

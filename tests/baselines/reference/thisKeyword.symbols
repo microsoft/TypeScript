@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisKeyword.ts ===
+//// [tests/cases/compiler/thisKeyword.ts] ////
+
+=== thisKeyword.ts ===
 module foo {
 >foo : Symbol(foo, Decl(thisKeyword.ts, 0, 0))
 

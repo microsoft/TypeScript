@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/taggedTemplateChain/taggedTemplateChain.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/taggedTemplateChain/taggedTemplateChain.ts] ////
+
+=== taggedTemplateChain.ts ===
 declare let a: any;
 >a : Symbol(a, Decl(taggedTemplateChain.ts, 0, 11))
 

@@ -20,22 +20,23 @@
 ////<[|Text|]></Text>;
 
 goTo.file("/a.tsx");
+
 verify.codeFix({
     index: 0,
-    description: [ts.Diagnostics.Import_0_from_1.message, "React", "react"],
-    applyChanges: true,
+    description: [ts.Diagnostics.Add_import_from_0.message, "react-native"],
+    applyChanges: false,
     newFileContent:
-`import React from "react";
+`import { Text } from "react-native";
 
 <Text></Text>;`
 });
 
 verify.codeFix({
-    index: 0,
-    description: [ts.Diagnostics.Add_import_from_0.message, "react-native"],
-    newFileContent:
+  index: 1,
+  description: [ts.Diagnostics.Import_0_from_1.message, "React", "react"],
+  applyChanges: false,
+  newFileContent:
 `import React from "react";
-import { Text } from "react-native";
 
 <Text></Text>;`
 });

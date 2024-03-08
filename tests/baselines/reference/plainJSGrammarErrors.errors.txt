@@ -1,108 +1,108 @@
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(3,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(5,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(10,15): error TS2803: Cannot assign to private method '#m'. Private methods are not writable.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(14,13): error TS18038: 'For await' loops cannot be used inside a class static block.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(17,9): error TS18041: A 'return' statement cannot be used inside a class static block.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(20,5): error TS1089: 'static' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(21,5): error TS1089: 'async' modifier cannot appear on a constructor declaration.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(22,5): error TS8009: The 'const' modifier can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(22,11): error TS1248: A class member cannot have the 'const' keyword.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(23,5): error TS8009: The 'const' modifier can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(23,11): error TS1248: A class member cannot have the 'const' keyword.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(26,11): error TS1030: 'async' modifier already seen.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(28,11): error TS1029: 'static' modifier must precede 'async' modifier.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(29,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(29,5): error TS8009: The 'export' modifier can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(30,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(34,22): error TS1005: '{' expected.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(35,9): error TS1054: A 'get' accessor cannot have parameters.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(36,9): error TS1049: A 'set' accessor must have exactly one parameter.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(37,9): error TS1049: A 'set' accessor must have exactly one parameter.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(38,18): error TS1053: A 'set' accessor cannot have rest parameter.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(41,5): error TS18006: Classes may not have a field named 'constructor'.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(43,1): error TS1211: A class declaration without the 'default' modifier must have a name.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(46,25): error TS1172: 'extends' clause already seen.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(47,25): error TS1174: Classes can only extend a single class.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(49,1): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(50,6): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(51,9): error TS18013: Property '#m' is not accessible outside class 'C' because it has a private identifier.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(54,8): error TS1030: 'export' modifier already seen.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(55,8): error TS1044: 'static' modifier cannot appear on a module or namespace element.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(56,22): error TS1090: 'static' modifier cannot appear on a parameter.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(56,22): error TS8012: Parameter modifiers can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(57,7): error TS1029: 'export' modifier must precede 'async' modifier.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(58,26): error TS1090: 'export' modifier cannot appear on a parameter.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(58,26): error TS8012: Parameter modifiers can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(59,25): error TS1090: 'async' modifier cannot appear on a parameter.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(59,25): error TS8012: Parameter modifiers can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(60,7): error TS1030: 'async' modifier already seen.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(61,1): error TS1042: 'async' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(62,5): error TS1042: 'async' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(62,5): error TS8009: The 'async' modifier can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(64,1): error TS1042: 'async' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(65,1): error TS1042: 'async' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(66,1): error TS1042: 'async' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(67,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(68,1): error TS1193: An export declaration cannot have modifiers.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(70,5): error TS1474: An export declaration can only be used at the top level of a module.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(71,5): error TS1473: An import declaration can only be used at the top level of a module.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(72,5): error TS1258: A default export must be at the top level of a file or module declaration.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(75,5): error TS1184: Modifiers cannot appear here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(78,5): error TS1042: 'static' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(78,5): error TS1184: Modifiers cannot appear here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(83,25): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(85,37): error TS1048: A rest parameter cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(87,41): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(89,8): error TS2501: A rest element cannot contain a binding pattern.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(91,12): error TS2462: A rest element must be last in a destructuring pattern.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(92,33): error TS2566: A rest element cannot have a property name.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(93,42): error TS1186: A rest element cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(96,4): error TS1123: Variable declaration list cannot be empty.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(97,9): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(98,14): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(100,3): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(102,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(104,6): error TS1171: A comma expression is not allowed in a computed property name.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(105,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(106,5): error TS1042: 'export' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(108,25): error TS1162: An object member cannot be declared optional.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(109,6): error TS1162: An object member cannot be declared optional.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(109,6): error TS8009: The '?' modifier can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(110,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(111,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(114,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(116,24): error TS1009: Trailing comma not allowed.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(117,29): error TS1097: 'extends' list cannot be empty.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(120,7): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(121,7): error TS1155: 'const' declarations must be initialized.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(122,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(122,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(124,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(126,5): error TS1156: 'const' declarations can only be declared inside a block.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(131,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(134,12): error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(137,12): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(140,13): error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(143,13): error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(154,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(161,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(167,12): error TS1197: Catch clause variable cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(170,5): error TS1114: Duplicate label 'label'.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(179,13): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(187,13): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(191,5): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(194,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(195,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(197,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(198,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(201,28): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(202,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
+plainJSGrammarErrors.js(3,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+plainJSGrammarErrors.js(5,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+plainJSGrammarErrors.js(10,15): error TS2803: Cannot assign to private method '#m'. Private methods are not writable.
+plainJSGrammarErrors.js(14,13): error TS18038: 'for await' loops cannot be used inside a class static block.
+plainJSGrammarErrors.js(17,9): error TS18041: A 'return' statement cannot be used inside a class static block.
+plainJSGrammarErrors.js(20,5): error TS1089: 'static' modifier cannot appear on a constructor declaration.
+plainJSGrammarErrors.js(21,5): error TS1089: 'async' modifier cannot appear on a constructor declaration.
+plainJSGrammarErrors.js(22,5): error TS8009: The 'const' modifier can only be used in TypeScript files.
+plainJSGrammarErrors.js(22,11): error TS1248: A class member cannot have the 'const' keyword.
+plainJSGrammarErrors.js(23,5): error TS8009: The 'const' modifier can only be used in TypeScript files.
+plainJSGrammarErrors.js(23,11): error TS1248: A class member cannot have the 'const' keyword.
+plainJSGrammarErrors.js(26,11): error TS1030: 'async' modifier already seen.
+plainJSGrammarErrors.js(28,11): error TS1029: 'static' modifier must precede 'async' modifier.
+plainJSGrammarErrors.js(29,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
+plainJSGrammarErrors.js(29,5): error TS8009: The 'export' modifier can only be used in TypeScript files.
+plainJSGrammarErrors.js(30,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
+plainJSGrammarErrors.js(34,22): error TS1005: '{' expected.
+plainJSGrammarErrors.js(35,9): error TS1054: A 'get' accessor cannot have parameters.
+plainJSGrammarErrors.js(36,9): error TS1049: A 'set' accessor must have exactly one parameter.
+plainJSGrammarErrors.js(37,9): error TS1049: A 'set' accessor must have exactly one parameter.
+plainJSGrammarErrors.js(38,18): error TS1053: A 'set' accessor cannot have rest parameter.
+plainJSGrammarErrors.js(41,5): error TS18006: Classes may not have a field named 'constructor'.
+plainJSGrammarErrors.js(43,1): error TS1211: A class declaration without the 'default' modifier must have a name.
+plainJSGrammarErrors.js(46,25): error TS1172: 'extends' clause already seen.
+plainJSGrammarErrors.js(47,25): error TS1174: Classes can only extend a single class.
+plainJSGrammarErrors.js(49,1): error TS18016: Private identifiers are not allowed outside class bodies.
+plainJSGrammarErrors.js(50,6): error TS18016: Private identifiers are not allowed outside class bodies.
+plainJSGrammarErrors.js(51,9): error TS18013: Property '#m' is not accessible outside class 'C' because it has a private identifier.
+plainJSGrammarErrors.js(54,8): error TS1030: 'export' modifier already seen.
+plainJSGrammarErrors.js(55,8): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+plainJSGrammarErrors.js(56,22): error TS1090: 'static' modifier cannot appear on a parameter.
+plainJSGrammarErrors.js(56,22): error TS8012: Parameter modifiers can only be used in TypeScript files.
+plainJSGrammarErrors.js(57,7): error TS1029: 'export' modifier must precede 'async' modifier.
+plainJSGrammarErrors.js(58,26): error TS1090: 'export' modifier cannot appear on a parameter.
+plainJSGrammarErrors.js(58,26): error TS8012: Parameter modifiers can only be used in TypeScript files.
+plainJSGrammarErrors.js(59,25): error TS1090: 'async' modifier cannot appear on a parameter.
+plainJSGrammarErrors.js(59,25): error TS8012: Parameter modifiers can only be used in TypeScript files.
+plainJSGrammarErrors.js(60,7): error TS1030: 'async' modifier already seen.
+plainJSGrammarErrors.js(61,1): error TS1042: 'async' modifier cannot be used here.
+plainJSGrammarErrors.js(62,5): error TS1042: 'async' modifier cannot be used here.
+plainJSGrammarErrors.js(62,5): error TS8009: The 'async' modifier can only be used in TypeScript files.
+plainJSGrammarErrors.js(64,1): error TS1042: 'async' modifier cannot be used here.
+plainJSGrammarErrors.js(65,1): error TS1042: 'async' modifier cannot be used here.
+plainJSGrammarErrors.js(66,1): error TS1042: 'async' modifier cannot be used here.
+plainJSGrammarErrors.js(67,1): error TS1191: An import declaration cannot have modifiers.
+plainJSGrammarErrors.js(68,1): error TS1193: An export declaration cannot have modifiers.
+plainJSGrammarErrors.js(70,5): error TS1474: An export declaration can only be used at the top level of a module.
+plainJSGrammarErrors.js(71,5): error TS1473: An import declaration can only be used at the top level of a module.
+plainJSGrammarErrors.js(72,5): error TS1258: A default export must be at the top level of a file or module declaration.
+plainJSGrammarErrors.js(75,5): error TS1184: Modifiers cannot appear here.
+plainJSGrammarErrors.js(78,5): error TS1042: 'static' modifier cannot be used here.
+plainJSGrammarErrors.js(78,5): error TS1184: Modifiers cannot appear here.
+plainJSGrammarErrors.js(83,25): error TS1014: A rest parameter must be last in a parameter list.
+plainJSGrammarErrors.js(85,37): error TS1048: A rest parameter cannot have an initializer.
+plainJSGrammarErrors.js(87,41): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+plainJSGrammarErrors.js(89,8): error TS2501: A rest element cannot contain a binding pattern.
+plainJSGrammarErrors.js(91,12): error TS2462: A rest element must be last in a destructuring pattern.
+plainJSGrammarErrors.js(92,33): error TS2566: A rest element cannot have a property name.
+plainJSGrammarErrors.js(93,42): error TS1186: A rest element cannot have an initializer.
+plainJSGrammarErrors.js(96,4): error TS1123: Variable declaration list cannot be empty.
+plainJSGrammarErrors.js(97,9): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+plainJSGrammarErrors.js(98,14): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+plainJSGrammarErrors.js(100,3): error TS1200: Line terminator not permitted before arrow.
+plainJSGrammarErrors.js(102,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
+plainJSGrammarErrors.js(104,6): error TS1171: A comma expression is not allowed in a computed property name.
+plainJSGrammarErrors.js(105,5): error TS18016: Private identifiers are not allowed outside class bodies.
+plainJSGrammarErrors.js(106,5): error TS1042: 'export' modifier cannot be used here.
+plainJSGrammarErrors.js(108,25): error TS1162: An object member cannot be declared optional.
+plainJSGrammarErrors.js(109,6): error TS1162: An object member cannot be declared optional.
+plainJSGrammarErrors.js(109,6): error TS8009: The '?' modifier can only be used in TypeScript files.
+plainJSGrammarErrors.js(110,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+plainJSGrammarErrors.js(111,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+plainJSGrammarErrors.js(114,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
+plainJSGrammarErrors.js(116,24): error TS1009: Trailing comma not allowed.
+plainJSGrammarErrors.js(117,29): error TS1097: 'extends' list cannot be empty.
+plainJSGrammarErrors.js(120,7): error TS1182: A destructuring declaration must have an initializer.
+plainJSGrammarErrors.js(121,7): error TS1155: 'const' declarations must be initialized.
+plainJSGrammarErrors.js(122,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+plainJSGrammarErrors.js(122,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+plainJSGrammarErrors.js(124,5): error TS1156: 'let' declarations can only be declared inside a block.
+plainJSGrammarErrors.js(126,5): error TS1156: 'const' declarations can only be declared inside a block.
+plainJSGrammarErrors.js(131,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
+plainJSGrammarErrors.js(134,12): error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
+plainJSGrammarErrors.js(137,12): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
+plainJSGrammarErrors.js(140,13): error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
+plainJSGrammarErrors.js(143,13): error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
+plainJSGrammarErrors.js(154,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+plainJSGrammarErrors.js(161,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
+plainJSGrammarErrors.js(167,12): error TS1197: Catch clause variable cannot have an initializer.
+plainJSGrammarErrors.js(170,5): error TS1114: Duplicate label 'label'.
+plainJSGrammarErrors.js(179,13): error TS1107: Jump target cannot cross function boundary.
+plainJSGrammarErrors.js(187,13): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+plainJSGrammarErrors.js(191,5): error TS1107: Jump target cannot cross function boundary.
+plainJSGrammarErrors.js(194,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+plainJSGrammarErrors.js(195,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+plainJSGrammarErrors.js(197,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+plainJSGrammarErrors.js(198,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+plainJSGrammarErrors.js(201,28): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+plainJSGrammarErrors.js(202,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
+plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
 
 
-==== tests/cases/conformance/salsa/plainJSGrammarErrors.js (102 errors) ====
+==== plainJSGrammarErrors.js (102 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -124,7 +124,7 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(205,36): error TS1325: Arg
         static {
             for await (const x of [1,2,3]) {
                 ~~~~~
-!!! error TS18038: 'For await' loops cannot be used inside a class static block.
+!!! error TS18038: 'for await' loops cannot be used inside a class static block.
                 console.log(x)
             }
             return null
@@ -386,7 +386,7 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(205,36): error TS1325: Arg
     if (true)
         let onlyBlockLet = 17;
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1157: 'let' declarations can only be declared inside a block.
+!!! error TS1156: 'let' declarations can only be declared inside a block.
     if (true)
         const onlyBlockConst = 18;
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -505,10 +505,10 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(205,36): error TS1325: Arg
 !!! error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
     const nullaryDynamicImport = import()
                                  ~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const trinaryDynamicImport = import('1', '2', '3')
                                  ~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
     const spreadDynamicImport = import(...[])
                                        ~~~~~
 !!! error TS1325: Argument of dynamic import cannot be spread element.

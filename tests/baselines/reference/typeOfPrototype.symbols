@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeOfPrototype.ts ===
+//// [tests/cases/compiler/typeOfPrototype.ts] ////
+
+=== typeOfPrototype.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(typeOfPrototype.ts, 0, 0))
 

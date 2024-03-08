@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts ===
+//// [tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts] ////
+
+=== genericInterfacesWithoutTypeArguments.ts ===
 interface I<T> { }
 >I : Symbol(I, Decl(genericInterfacesWithoutTypeArguments.ts, 0, 0))
 >T : Symbol(T, Decl(genericInterfacesWithoutTypeArguments.ts, 0, 12))

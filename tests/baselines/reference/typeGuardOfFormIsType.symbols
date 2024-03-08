@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsType.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsType.ts] ////
+
+=== typeGuardOfFormIsType.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(typeGuardOfFormIsType.ts, 0, 0))
 

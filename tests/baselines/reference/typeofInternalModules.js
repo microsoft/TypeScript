@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofInternalModules.ts] ////
+
 //// [typeofInternalModules.ts]
 module Outer {
     export module instantiated {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeConstraints.ts ===
+//// [tests/cases/compiler/genericTypeConstraints.ts] ////
+
+=== genericTypeConstraints.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(genericTypeConstraints.ts, 0, 0))
 

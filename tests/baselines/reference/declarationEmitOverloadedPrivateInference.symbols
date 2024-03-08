@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitOverloadedPrivateInference.ts ===
+//// [tests/cases/compiler/declarationEmitOverloadedPrivateInference.ts] ////
+
+=== declarationEmitOverloadedPrivateInference.ts ===
 function noArgs(): string {
 >noArgs : Symbol(noArgs, Decl(declarationEmitOverloadedPrivateInference.ts, 0, 0))
 

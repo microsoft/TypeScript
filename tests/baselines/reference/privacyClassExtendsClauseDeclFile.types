@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyClassExtendsClauseDeclFile.ts] ////
+
+=== privacyClassExtendsClauseDeclFile_externalModule.ts ===
 export module publicModule {
 >publicModule : typeof publicModule
 
@@ -133,7 +135,7 @@ export class publicClassExtendingFromPrivateModuleClass extends privateModule.pu
 >publicClassInPrivateModule : typeof privateModule.publicClassInPrivateModule
 }
 
-=== tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
+=== privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
 module publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
 

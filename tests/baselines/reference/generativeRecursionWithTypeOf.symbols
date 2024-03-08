@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generativeRecursionWithTypeOf.ts ===
+//// [tests/cases/compiler/generativeRecursionWithTypeOf.ts] ////
+
+=== generativeRecursionWithTypeOf.ts ===
 class C<T> {
 >C : Symbol(C, Decl(generativeRecursionWithTypeOf.ts, 0, 0))
 >T : Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters3.ts] ////
+
 //// [declarationEmitTypeAliasWithTypeParameters3.ts]
 type Foo<T> = {
     foo<U>(): Foo<U>
@@ -14,7 +16,7 @@ function bar() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters3.d.ts]
-declare type Foo<T> = {
+type Foo<T> = {
     foo<U>(): Foo<U>;
 };
 declare function bar(): Foo<number>;

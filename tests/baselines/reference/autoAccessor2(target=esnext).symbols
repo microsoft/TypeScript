@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor2.ts] ////
+
+=== autoAccessor2.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(autoAccessor2.ts, 0, 0))
+
+    accessor #a: any;
+>#a : Symbol(C1.#a, Decl(autoAccessor2.ts, 0, 10))
+
+    accessor #b = 1;
+>#b : Symbol(C1.#b, Decl(autoAccessor2.ts, 1, 21))
+
+    static accessor #c: any;
+>#c : Symbol(C1.#c, Decl(autoAccessor2.ts, 2, 20))
+
+    static accessor #d = 2;
+>#d : Symbol(C1.#d, Decl(autoAccessor2.ts, 3, 28))
+
+    constructor() {
+        this.#a = 3;
+>this.#a : Symbol(C1.#a, Decl(autoAccessor2.ts, 0, 10))
+>this : Symbol(C1, Decl(autoAccessor2.ts, 0, 0))
+
+        this.#b = 4;
+>this.#b : Symbol(C1.#b, Decl(autoAccessor2.ts, 1, 21))
+>this : Symbol(C1, Decl(autoAccessor2.ts, 0, 0))
+    }
+
+    static {
+        this.#c = 5;
+>this.#c : Symbol(C1.#c, Decl(autoAccessor2.ts, 2, 20))
+>this : Symbol(C1, Decl(autoAccessor2.ts, 0, 0))
+
+        this.#d = 6;
+>this.#d : Symbol(C1.#d, Decl(autoAccessor2.ts, 3, 28))
+>this : Symbol(C1, Decl(autoAccessor2.ts, 0, 0))
+    }
+}
+

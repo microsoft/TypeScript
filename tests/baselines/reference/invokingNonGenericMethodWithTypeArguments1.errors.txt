@@ -1,7 +1,7 @@
-tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts(3,14): error TS2339: Property 'foo' does not exist on type 'Foo'.
+invokingNonGenericMethodWithTypeArguments1.ts(3,14): error TS2339: Property 'foo' does not exist on type 'Foo'.
 
 
-==== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts (1 errors) ====
+==== invokingNonGenericMethodWithTypeArguments1.ts (1 errors) ====
     class Foo {
         constructor() {
             this.foo<string>();

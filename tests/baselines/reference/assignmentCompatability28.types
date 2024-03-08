@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatability28.ts ===
+//// [tests/cases/compiler/assignmentCompatability28.ts] ////
+
+=== assignmentCompatability28.ts ===
 module __test1__ {
 >__test1__ : typeof __test1__
 

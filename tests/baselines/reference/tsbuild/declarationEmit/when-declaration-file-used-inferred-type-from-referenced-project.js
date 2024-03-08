@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -23,7 +24,15 @@ export interface IThings {
 }
 
 //// [/src/packages/pkg1/tsconfig.json]
-{"extends":"../../tsconfig","compilerOptions":{"outDir":"lib"},"include":["src"]}
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/src/packages/pkg2/src/index.ts]
 import { IThings } from '@fluentui/pkg1';
@@ -33,10 +42,33 @@ export function fn4() {
 }
 
 //// [/src/packages/pkg2/tsconfig.json]
-{"extends":"../../tsconfig","compilerOptions":{"outDir":"lib"},"include":["src"],"references":[{"path":"../pkg1"}]}
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../pkg1"
+    }
+  ]
+}
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":".","paths":{"@fluentui/*":["packages/*/src"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@fluentui/*": [
+        "packages/*/src"
+      ]
+    }
+  }
+}
 
 
 
@@ -50,9 +82,9 @@ Output::
 
 [[90m12:00:18 AM[0m] Building project '/src/packages/pkg1/tsconfig.json'...
 
-[[90m12:00:27 AM[0m] Project 'src/packages/pkg2/tsconfig.json' is out of date because output file 'src/packages/pkg2/lib/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:26 AM[0m] Project 'src/packages/pkg2/tsconfig.json' is out of date because output file 'src/packages/pkg2/lib/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/src/packages/pkg2/tsconfig.json'...
+[[90m12:00:27 AM[0m] Building project '/src/packages/pkg2/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -68,11 +100,11 @@ export interface IThings {
 
 //// [/src/packages/pkg1/lib/src/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}","signature":"-5386205042-export interface IThing {\r\n    a: string;\r\n}\r\nexport interface IThings {\r\n    thing1: IThing;\r\n}\r\n"}],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":19000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}","signature":"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -83,15 +115,29 @@ exports.__esModule = true;
     ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../src/index.ts": {
+        "original": {
+          "version": "-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}",
+          "signature": "-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n"
+        },
         "version": "-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}",
-        "signature": "-5386205042-export interface IThing {\r\n    a: string;\r\n}\r\nexport interface IThings {\r\n    thing1: IThing;\r\n}\r\n"
+        "signature": "-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n"
       }
     },
+    "root": [
+      [
+        2,
+        "../src/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -102,10 +148,10 @@ exports.__esModule = true;
       "../../../../lib/lib.d.ts",
       "../src/index.ts"
     ],
-    "dtsChangeTime": 19000
+    "latestChangedDtsFile": "./src/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 990
+  "size": 1009
 }
 
 //// [/src/packages/pkg2/lib/src/index.d.ts]
@@ -114,17 +160,16 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
 
 //// [/src/packages/pkg2/lib/src/index.js]
 "use strict";
-exports.__esModule = true;
-exports.fn4 = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fn4 = fn4;
 function fn4() {
     var a = { thing1: { a: 'b' } };
     return a.thing1;
 }
-exports.fn4 = fn4;
 
 
 //// [/src/packages/pkg2/lib/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","../../pkg1/lib/src/index.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5386205042-export interface IThing {\r\n    a: string;\r\n}\r\nexport interface IThings {\r\n    thing1: IThing;\r\n}\r\n",{"version":"8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}","signature":"-9447422063-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\r\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":29000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","../../pkg1/lib/src/index.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n",{"version":"8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}","signature":"-8485768540-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg2/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -141,19 +186,33 @@ exports.fn4 = fn4;
     ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "../../pkg1/lib/src/index.d.ts": {
-        "version": "-5386205042-export interface IThing {\r\n    a: string;\r\n}\r\nexport interface IThings {\r\n    thing1: IThing;\r\n}\r\n",
-        "signature": "-5386205042-export interface IThing {\r\n    a: string;\r\n}\r\nexport interface IThings {\r\n    thing1: IThing;\r\n}\r\n"
+        "version": "-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n",
+        "signature": "-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n"
       },
       "../src/index.ts": {
+        "original": {
+          "version": "8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}",
+          "signature": "-8485768540-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n"
+        },
         "version": "8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}",
-        "signature": "-9447422063-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\r\n"
+        "signature": "-8485768540-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n"
       }
     },
+    "root": [
+      [
+        3,
+        "../src/index.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./"
@@ -173,9 +232,9 @@ exports.fn4 = fn4;
       "../../pkg1/lib/src/index.d.ts",
       "../src/index.ts"
     ],
-    "dtsChangeTime": 29000
+    "latestChangedDtsFile": "./src/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1180
+  "size": 1197
 }
 

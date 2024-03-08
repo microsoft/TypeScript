@@ -5,7 +5,7 @@ sourceRoot:
 sources: es6-sourcemap-amd.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/es6-sourcemap-amd.js
+emittedFile:es6-sourcemap-amd.js
 sourceFile:es6-sourcemap-amd.ts
 -------------------------------------------------------------------
 >>>class A {

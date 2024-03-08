@@ -19,15 +19,4 @@
 ////    return/*7*/ true;
 ////}
 
-function verifyOccurrencesAtMarker(marker: string, count: number) {
-    goTo.marker(marker);
-    verify.occurrencesAtPositionCount(count);
-}
-
-verifyOccurrencesAtMarker("1", 4);
-verifyOccurrencesAtMarker("2", 4);
-verifyOccurrencesAtMarker("3", 4);
-verifyOccurrencesAtMarker("4", 4);
-verifyOccurrencesAtMarker("5", 1);
-verifyOccurrencesAtMarker("6", 3);
-verifyOccurrencesAtMarker("7", 3);
+verify.baselineDocumentHighlights(test.markers());

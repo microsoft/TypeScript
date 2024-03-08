@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/restParameters/emitRestParametersFunction.ts ===
+//// [tests/cases/conformance/es6/restParameters/emitRestParametersFunction.ts] ////
+
+=== emitRestParametersFunction.ts ===
 function bar(...rest) { }
 >bar : (...rest: any[]) => void
 >rest : any[]

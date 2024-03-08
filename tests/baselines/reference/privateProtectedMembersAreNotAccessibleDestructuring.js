@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts] ////
+
 //// [privateProtectedMembersAreNotAccessibleDestructuring.ts]
 class K {
     private priv;

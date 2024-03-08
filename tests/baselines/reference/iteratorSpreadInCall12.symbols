@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInCall12.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall12.ts] ////
+
+=== iteratorSpreadInCall12.ts ===
 class Foo<T> {
 >Foo : Symbol(Foo, Decl(iteratorSpreadInCall12.ts, 0, 0))
 >T : Symbol(T, Decl(iteratorSpreadInCall12.ts, 0, 10))

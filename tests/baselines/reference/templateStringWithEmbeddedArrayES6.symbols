@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedArrayES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedArrayES6.ts] ////
+
+=== templateStringWithEmbeddedArrayES6.ts ===
 var x = `abc${ [1,2,3] }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedArrayES6.ts, 0, 3))
 

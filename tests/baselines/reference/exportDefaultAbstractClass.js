@@ -29,13 +29,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-exports["default"] = A;
+exports.default = A;
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
@@ -61,7 +61,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
@@ -69,5 +69,5 @@ var C = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
-}(a_1["default"]));
+}(a_1.default));
 new C().a.toExponential();

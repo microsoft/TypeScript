@@ -1,9 +1,9 @@
-tests/cases/conformance/override/override6.ts(9,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
-tests/cases/conformance/override/override6.ts(10,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
-tests/cases/conformance/override/override6.ts(10,37): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
+override6.ts(9,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+override6.ts(10,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
+override6.ts(10,37): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
 
 
-==== tests/cases/conformance/override/override6.ts (3 errors) ====
+==== override6.ts (3 errors) ====
     class B {
         public baz: number = 1;
         constructor(public foo: string, public bar: number) {

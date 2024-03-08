@@ -1,10 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts(15,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts(18,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts(24,24): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+parserErrantSemicolonInClass1.ts(15,16): error TS1049: A 'set' accessor must have exactly one parameter.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts (4 errors) ====
+==== parserErrantSemicolonInClass1.ts (1 errors) ====
     class a {
         //constructor ();
         constructor (n: number);
@@ -17,26 +14,20 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonIn
     
         public pv;
         public get d() {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 30;
         }
         public set d() {
                    ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1049: A 'set' accessor must have exactly one parameter.
         }
     
         public static get p2() {
-                          ~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return { x: 30, y: 40 };
         }
     
         private static d2() {
         }
         private static get p3() {
-                           ~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return "string";
         }
         private pv3;

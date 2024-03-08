@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloadAmbiguity1.ts ===
+//// [tests/cases/compiler/functionOverloadAmbiguity1.ts] ////
+
+=== functionOverloadAmbiguity1.ts ===
 function callb(lam: (l: number) => void );
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
 >lam : (l: number) => void

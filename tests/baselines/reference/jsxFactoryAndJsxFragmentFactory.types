@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxFactoryAndJsxFragmentFactory.tsx ===
+//// [tests/cases/compiler/jsxFactoryAndJsxFragmentFactory.tsx] ////
+
+=== jsxFactoryAndJsxFragmentFactory.tsx ===
 declare var h: any;
 >h : any
 

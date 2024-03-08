@@ -1,4 +1,6 @@
-=== tests/cases/compiler/localTypeParameterInferencePriority.ts ===
+//// [tests/cases/compiler/localTypeParameterInferencePriority.ts] ////
+
+=== localTypeParameterInferencePriority.ts ===
 export type UnrollOnHover<O extends object> = O extends object ?
 >UnrollOnHover : Symbol(UnrollOnHover, Decl(localTypeParameterInferencePriority.ts, 0, 0))
 >O : Symbol(O, Decl(localTypeParameterInferencePriority.ts, 0, 26))

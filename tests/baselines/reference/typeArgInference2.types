@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgInference2.ts ===
+//// [tests/cases/compiler/typeArgInference2.ts] ////
+
+=== typeArgInference2.ts ===
 interface Item {
     name: string;
 >name : string
@@ -13,7 +15,6 @@ var z1 = foo(null);                   // any
 >z1 : any
 >foo(null) : any
 >foo : <T extends Item>(x?: T, y?: T) => T
->null : null
 
 var z2 = foo();                       // Item
 >z2 : Item
@@ -26,7 +27,6 @@ var z3 = foo({ name: null });         // { name: any }
 >foo : <T extends Item>(x?: T, y?: T) => T
 >{ name: null } : { name: null; }
 >name : null
->null : null
 
 var z4 = foo({ name: "abc" });        // { name: string }
 >z4 : { name: string; }

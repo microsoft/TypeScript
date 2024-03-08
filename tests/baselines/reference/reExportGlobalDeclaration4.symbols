@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/reExportGlobalDeclaration4.ts] ////
+
+=== file1.d.ts ===
 declare class Cls1 {
 >Cls1 : Symbol(Cls1, Decl(file1.d.ts, 0, 0))
 
@@ -13,7 +15,7 @@ declare class Cls2 {
 }
 
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export {Cls1, Cls1 as CCls1};
 >Cls1 : Symbol(Cls1, Decl(file2.ts, 0, 8))
 >Cls1 : Symbol(Cls1, Decl(file1.d.ts, 0, 0))

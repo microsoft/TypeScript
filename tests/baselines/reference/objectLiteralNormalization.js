@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts] ////
+
 //// [objectLiteralNormalization.ts]
 // Object literals in unions are normalized upon widening
 let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];

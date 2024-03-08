@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedWords.ts ===
+//// [tests/cases/compiler/reservedWords.ts] ////
+
+=== reservedWords.ts ===
 var obj = {
 >obj : { if: number; debugger: number; break: number; function: number; }
 >{    if: 0,    debugger: 2,    break: 3,    function: 4} : { if: number; debugger: number; break: number; function: number; }

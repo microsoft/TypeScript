@@ -1,11 +1,11 @@
-tests/cases/compiler/a.ts(1,10): error TS2393: Duplicate function implementation.
+a.ts(1,10): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/compiler/b.js (0 errors) ====
+==== b.js (0 errors) ====
     function foo() {
         return 10;
     }
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     function foo() {
              ~~~
 !!! error TS2393: Duplicate function implementation.

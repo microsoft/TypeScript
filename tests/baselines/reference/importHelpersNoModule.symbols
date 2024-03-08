@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpersNoModule.ts] ////
+
+=== external.ts ===
 export class A { }
 >A : Symbol(A, Decl(external.ts, 0, 0))
 
@@ -22,7 +24,7 @@ class C {
     }
 }
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : Symbol(A, Decl(script.ts, 0, 0))
 

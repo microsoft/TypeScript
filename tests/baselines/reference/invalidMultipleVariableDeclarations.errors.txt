@@ -1,18 +1,18 @@
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(34,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(35,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(40,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(46,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(47,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '(C | D<string>)[]'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(50,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
-tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts(53,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
+invalidMultipleVariableDeclarations.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
+invalidMultipleVariableDeclarations.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
+invalidMultipleVariableDeclarations.ts(34,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
+invalidMultipleVariableDeclarations.ts(35,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
+invalidMultipleVariableDeclarations.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
+invalidMultipleVariableDeclarations.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
+invalidMultipleVariableDeclarations.ts(40,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
+invalidMultipleVariableDeclarations.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
+invalidMultipleVariableDeclarations.ts(46,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
+invalidMultipleVariableDeclarations.ts(47,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '(C | D<string>)[]'.
+invalidMultipleVariableDeclarations.ts(50,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
+invalidMultipleVariableDeclarations.ts(53,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
 
 
-==== tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts (12 errors) ====
+==== invalidMultipleVariableDeclarations.ts (12 errors) ====
     interface I {
         id: number;
     }
@@ -47,58 +47,58 @@ tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDec
     var a = 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
     var a = 'a string';
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
     var a = new C();
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
     var a = new D<string>();
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
     var a = M;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:31:5: 'a' was also declared here.
     
     var b: I;
     var b = new C();
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:38:5: 'b' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:38:5: 'b' was also declared here.
     var b = new C2();
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:38:5: 'b' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:38:5: 'b' was also declared here.
     
     var f = F;
     var f = (x: number) => '';
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '(x: string) => number', but here has type '(x: number) => string'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:42:5: 'f' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:42:5: 'f' was also declared here.
     
     var arr: string[];
     var arr = [1, 2, 3, 4];
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:45:5: 'arr' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:45:5: 'arr' was also declared here.
     var arr = [new C(), new C2(), new D<string>()];
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '(C | D<string>)[]'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:45:5: 'arr' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:45:5: 'arr' was also declared here.
     
     var arr2 = [new D<string>()];
     var arr2 = new Array<D<number>>();
         ~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:49:5: 'arr2' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:49:5: 'arr2' was also declared here.
     
     var m: typeof M;
     var m = M.A;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
-!!! related TS6203 tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts:52:5: 'm' was also declared here.
+!!! related TS6203 invalidMultipleVariableDeclarations.ts:52:5: 'm' was also declared here.

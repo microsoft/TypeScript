@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceExtendsClass1.ts] ////
+
 //// [interfaceExtendsClass1.ts]
 class Control {
     private state: any;

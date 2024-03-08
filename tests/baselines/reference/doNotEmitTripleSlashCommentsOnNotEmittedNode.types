@@ -1,9 +1,12 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/doNotEmitTripleSlashCommentsOnNotEmittedNode.ts] ////
+
+=== file1.ts ===
+
 /// <reference path="file0.ts" />
-No type information for this code.interface F { }
-No type information for this code.
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/file0.ts ===
+interface F { }
+
+
+=== file0.ts ===
 /// <reference path="file1.ts" />
 declare var OData: any;
 >OData : any

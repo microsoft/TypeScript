@@ -1,12 +1,14 @@
-=== tests/cases/conformance/directives/ts-expect-error.ts ===
+//// [tests/cases/conformance/directives/ts-expect-error.ts] ////
+
+=== ts-expect-error.ts ===
 // @ts-expect-error additional commenting
 var invalidCommentedFancySingle: number = 'nope';
->invalidCommentedFancySingle : Symbol(invalidCommentedFancySingle, Decl(ts-expect-error.ts, 1, 3))
+>invalidCommentedFancySingle : Symbol(invalidCommentedFancySingle, Decl(ts-expect-error.ts, 1, 3), Decl(ts-expect-error.ts, 42, 3))
 
 /*
  @ts-expect-error additional commenting */
 var invalidCommentedFancyMulti: number = 'nope';
->invalidCommentedFancyMulti : Symbol(invalidCommentedFancyMulti, Decl(ts-expect-error.ts, 5, 3))
+>invalidCommentedFancyMulti : Symbol(invalidCommentedFancyMulti, Decl(ts-expect-error.ts, 5, 3), Decl(ts-expect-error.ts, 46, 3))
 
 // @ts-expect-error additional commenting
 var validCommentedFancySingle: string = 'nope';
@@ -68,4 +70,13 @@ var validPlain: string = 'nope';
 >a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
 >const : Symbol(const)
 >a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
+
+// @ts-expect-error: additional commenting with no whitespace
+var invalidCommentedFancySingle: number = 'nope';
+>invalidCommentedFancySingle : Symbol(invalidCommentedFancySingle, Decl(ts-expect-error.ts, 1, 3), Decl(ts-expect-error.ts, 42, 3))
+
+/*
+ @ts-expect-error: additional commenting with no whitespace */
+var invalidCommentedFancyMulti: number = 'nope';
+>invalidCommentedFancyMulti : Symbol(invalidCommentedFancyMulti, Decl(ts-expect-error.ts, 5, 3), Decl(ts-expect-error.ts, 46, 3))
 

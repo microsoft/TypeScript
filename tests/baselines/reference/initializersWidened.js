@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/initializersWidened.ts] ////
+
 //// [initializersWidened.ts]
 // these are widened to any at the point of assignment
 

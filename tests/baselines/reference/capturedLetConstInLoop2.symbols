@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop2.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop2.ts] ////
+
+=== capturedLetConstInLoop2.ts ===
 // ========let
 function foo0(x) {
 >foo0 : Symbol(foo0, Decl(capturedLetConstInLoop2.ts, 0, 0))

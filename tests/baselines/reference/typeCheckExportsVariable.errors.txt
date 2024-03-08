@@ -1,0 +1,8 @@
+typeCheckExportsVariable.ts(2,1): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== typeCheckExportsVariable.ts (1 errors) ====
+    let exports: number;
+    exports = '';
+    ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

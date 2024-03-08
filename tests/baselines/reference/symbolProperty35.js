@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty35.ts] ////
+
 //// [symbolProperty35.ts]
 interface I1 {
     [Symbol.toStringTag](): { x: string }

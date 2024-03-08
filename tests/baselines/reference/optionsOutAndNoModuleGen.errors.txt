@@ -1,7 +1,8 @@
-tests/cases/compiler/optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
-==== tests/cases/compiler/optionsOutAndNoModuleGen.ts (1 errors) ====
+==== optionsOutAndNoModuleGen.ts (1 errors) ====
     export var x = 10;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+    

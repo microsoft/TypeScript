@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 export let x = 5
@@ -22,7 +23,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/c/tsconfig.json]
-{"compilerOptions":{},"files":["f2.ts","f3.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f2.ts",
+    "f3.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /a/c/tsconfig.json
@@ -34,8 +41,47 @@ Output::
 
 
 
-Program root files: ["/a/c/f2.ts","/a/c/f3.ts"]
-Program options: {"watch":true,"project":"/a/c/tsconfig.json","configFilePath":"/a/c/tsconfig.json"}
+//// [/a/b/f1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 5;
+
+
+//// [/a/c/f2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/a/c/f3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 1;
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/c/f2.ts: *new*
+  {}
+/a/c/f3.ts: *new*
+  {}
+/a/c/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/c/f2.ts",
+  "/a/c/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/c/tsconfig.json",
+  "configFilePath": "/a/c/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -55,42 +101,4 @@ Shape signatures in builder refreshed for::
 /a/c/f2.ts (used version)
 /a/c/f3.ts (used version)
 
-WatchedFiles::
-/a/c/tsconfig.json:
-  {"fileName":"/a/c/tsconfig.json","pollingInterval":250}
-/a/c/f2.ts:
-  {"fileName":"/a/c/f2.ts","pollingInterval":250}
-/a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
-/a/c/f3.ts:
-  {"fileName":"/a/c/f3.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/c/node_modules/@types:
-  {"fileName":"/a/c/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-exports.x = 5;
-
-
-//// [/a/c/f2.js]
-"use strict";
-exports.__esModule = true;
-
-
-//// [/a/c/f3.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 1;
-
-

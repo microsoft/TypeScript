@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitLiteralValues.ts] ////
+
 //// [awaitLiteralValues.ts]
 function awaitString() {
     await 'literal';

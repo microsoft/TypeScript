@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/numericStringLiteralTypes.ts ===
+//// [tests/cases/conformance/types/literal/numericStringLiteralTypes.ts] ////
+
+=== numericStringLiteralTypes.ts ===
 type T0 = string & `${string}`;  // string
 >T0 : string
 
@@ -12,7 +14,7 @@ type T3<T extends string> = string & `${T}`;  // `${T}
 >T3 : `${T}`
 
 type T4<T extends string> = string & `${Capitalize<`${T}`>}`;  // `${Capitalize<T>}`
->T4 : `${Capitalize<`${T}`>}`
+>T4 : `${Capitalize<T>}`
 
 function f1(a: boolean[], x: `${number}`) {
 >f1 : (a: boolean[], x: `${number}`) => void

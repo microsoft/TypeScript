@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @noImplicitOverride: true
 ////abstract class A {
 ////    abstract m(): void;
 ////    abstract n(): void;
@@ -16,18 +17,18 @@ verify.codeFixAll({
     abstract n(): void;
 }
 class B extends A {
-    m(): void {
+    override m(): void {
         throw new Error("Method not implemented.");
     }
-    n(): void {
+    override n(): void {
         throw new Error("Method not implemented.");
     }
 }
 class C extends A {
-    m(): void {
+    override m(): void {
         throw new Error("Method not implemented.");
     }
-    n(): void {
+    override n(): void {
         throw new Error("Method not implemented.");
     }
 }`,

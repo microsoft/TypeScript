@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts] ////
+
 //// [typeGuardOfFormThisMemberErrors.ts]
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 namespace Test {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
+//// [tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts] ////
+
+=== throwInEnclosingStatements.ts ===
 function fn(x) {
 >fn : (x: any) => void
 >x : any
@@ -53,7 +55,6 @@ for (var idx in {}) { throw idx; }
 >idx : string
 
 do { throw null; }while(true)
->null : null
 >true : true
 
 var j = 0;

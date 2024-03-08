@@ -1,7 +1,7 @@
-tests/cases/compiler/sourceMapValidationFor.ts(32,21): error TS2695: Left side of comma operator is unused and has no side effects.
+sourceMapValidationFor.ts(32,21): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/compiler/sourceMapValidationFor.ts (1 errors) ====
+==== sourceMapValidationFor.ts (1 errors) ====
     for (var i = 0; i < 10; i++) {
         WScript.Echo("i: " + i);
     }

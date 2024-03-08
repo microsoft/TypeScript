@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts] ////
+
+=== fatarrowfunctionsInFunctionParameterDefaults.ts ===
 function fn(x = () => this, y = x()) {
 >fn : (x?: () => any, y?: any) => any
 >x : () => any

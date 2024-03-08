@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallSpecializedToTypeArg.ts ===
+//// [tests/cases/compiler/genericCallSpecializedToTypeArg.ts] ////
+
+=== genericCallSpecializedToTypeArg.ts ===
 function dupe<T>(x: T): T {
 >dupe : Symbol(dupe, Decl(genericCallSpecializedToTypeArg.ts, 0, 0))
 >T : Symbol(T, Decl(genericCallSpecializedToTypeArg.ts, 0, 14))

@@ -1,75 +1,58 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // class Base {}
 // interface Implemented1 {}
-// /*FIND ALL REFS*/class [|C1|] extends Base implements Implemented1 {
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}C1|] extends Base implements Implemented1 {
 //     get e() { return 1; }
 //     set e(v) {}
-// }
+// }|>
 // interface I1 extends Base { }
 // type T = { }
 // enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 10) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "class",
-      "name": "class C1",
-      "textSpan": {
-        "start": 46,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 40,
-        "length": 91
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 40,
-          "length": 91
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // class Base {}
+  // interface Implemented1 {}
+  // /*FIND ALL REFS*/<|class [|C1|] extends Base implements Implemented1 {
+  //     get e() { return 1; }
+  //     set e(v) {}
+  // }|>
+  // interface I1 extends Base { }
+  // type T = { }
+  // enum E { }
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C1",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class [|Base|] {}
+// <|class [|{| isWriteAccess: true |}Base|] {}|>
 // interface Implemented1 {}
 // class C1 /*FIND ALL REFS*/extends [|Base|] implements Implemented1 {
 //     get e() { return 1; }
@@ -79,453 +62,309 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "class",
-      "name": "class Base",
-      "textSpan": {
-        "start": 6,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Base",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 153,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // <|class [|Base|] {}|>
+  // interface Implemented1 {}
+  // class C1 /*FIND ALL REFS*/extends Base implements Implemented1 {
+  //     get e() { return 1; }
+  //     set e(v) {}
+  // }
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class Base",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // class Base {}
-// interface [|Implemented1|] {}
+// <|interface [|{| isWriteAccess: true |}Implemented1|] {}|>
 // class C1 extends Base /*FIND ALL REFS*/implements [|Implemented1|] {
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
+// --- (line: 7) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // class Base {}
+  // <|interface [|Implemented1|] {}|>
+  // class C1 extends Base /*FIND ALL REFS*/implements Implemented1 {
+  //     get e() { return 1; }
+  //     set e(v) {}
+  // }
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface Implemented1",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Implemented1",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+// --- (line: 14) skipped ---
 // const z = 1;
 // interface Implemented2 {}
 // interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
+// class C2 /*FIND ALL REFS*/implements Implemented2, Implemented3 {}
 // interface I2 extends Implemented2, Implemented3 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "interface",
-      "name": "interface Implemented1",
-      "textSpan": {
-        "start": 24,
-        "length": 12
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Implemented1",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 25
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
-undefined
 
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // class Base {}
 // interface Implemented1 {}
 // class C1 extends Base implements Implemented1 {
-//     /*FIND ALL REFS*/get [|e|]() { return 1; }
-//     set [|e|](v) {}
+//     /*FIND ALL REFS*/<|get [|{| isWriteAccess: true, isDefinition: true |}e|]() { return 1; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}e|](v) {}|>
 // }
 // interface I1 extends Base { }
 // type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "property",
-      "name": "(property) C1.e: number",
-      "textSpan": {
-        "start": 96,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "e",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 92,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 96,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 92,
-          "length": 21
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 122,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 118,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // class Base {}
+  // interface Implemented1 {}
+  // class C1 extends Base implements Implemented1 {
+  //     /*FIND ALL REFS*/<|get [|e|]() { return 1; }|>
+  //     set e(v) {}
+  // }
+  // interface I1 extends Base { }
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.e: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "e",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // class Base {}
 // interface Implemented1 {}
 // class C1 extends Base implements Implemented1 {
-//     get [|e|]() { return 1; }
-//     /*FIND ALL REFS*/set [|e|](v) {}
+//     <|get [|{| isWriteAccess: true, isDefinition: true |}e|]() { return 1; }|>
+//     /*FIND ALL REFS*/<|set [|{| isWriteAccess: true, isDefinition: true |}e|](v) {}|>
 // }
 // interface I1 extends Base { }
 // type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "property",
-      "name": "(property) C1.e: number",
-      "textSpan": {
-        "start": 96,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "e",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 92,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 96,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 92,
-          "length": 21
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 122,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 118,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // class Base {}
+  // interface Implemented1 {}
+  // class C1 extends Base implements Implemented1 {
+  //     <|get [|e|]() { return 1; }|>
+  //     /*FIND ALL REFS*/set e(v) {}
+  // }
+  // interface I1 extends Base { }
+  // type T = { }
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.e: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "e",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
+// --- (line: 3) skipped ---
 //     get e() { return 1; }
 //     set e(v) {}
 // }
-// /*FIND ALL REFS*/interface [|I1|] extends Base { }
+// /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}I1|] extends Base { }|>
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "interface",
-      "name": "interface I1",
-      "textSpan": {
-        "start": 142,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I1",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 132,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 142,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 132,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 3) skipped ---
+  //     get e() { return 1; }
+  //     set e(v) {}
+  // }
+  // /*FIND ALL REFS*/<|interface [|I1|] extends Base { }|>
+  // type T = { }
+  // enum E { }
+  // namespace N { }
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface I1",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I1",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class [|Base|] {}
+// <|class [|{| isWriteAccess: true |}Base|] {}|>
 // interface Implemented1 {}
 // class C1 extends [|Base|] implements Implemented1 {
 //     get e() { return 1; }
@@ -535,714 +374,530 @@ undefined
 // type T = { }
 // enum E { }
 // namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
+// --- (line: 11) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // <|class [|Base|] {}|>
+  // interface Implemented1 {}
+  // class C1 extends Base implements Implemented1 {
+  //     get e() { return 1; }
+  //     set e(v) {}
+  // }
+  // interface I1 /*FIND ALL REFS*/extends Base { }
+  // type T = { }
+  // enum E { }
+  // namespace N { }
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class Base",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Base",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+// --- (line: 15) skipped ---
 // interface Implemented2 {}
 // interface Implemented3 {}
 // class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// interface I2 /*FIND ALL REFS*/extends Implemented2, Implemented3 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "class",
-      "name": "class Base",
-      "textSpan": {
-        "start": 6,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Base",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 153,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
-undefined
 
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
+// --- (line: 4) skipped ---
 //     set e(v) {}
 // }
 // interface I1 extends Base { }
-// /*FIND ALL REFS*/type [|T|] = { }
+// /*FIND ALL REFS*/<|type [|{| isWriteAccess: true, isDefinition: true |}T|] = { }|>
 // enum E { }
 // namespace N { }
 // module M { }
-// function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 12) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "type",
-      "name": "type T = {}",
-      "textSpan": {
-        "start": 167,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 162,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 167,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 162,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 4) skipped ---
+  //     set e(v) {}
+  // }
+  // interface I1 extends Base { }
+  // /*FIND ALL REFS*/<|type [|T|] = { }|>
+  // enum E { }
+  // namespace N { }
+  // module M { }
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = {}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
+// --- (line: 5) skipped ---
 // }
 // interface I1 extends Base { }
 // type T = { }
-// /*FIND ALL REFS*/enum [|E|] { }
+// /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] { }|>
 // namespace N { }
 // module M { }
 // function fn() {}
-// var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 13) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 180,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 175,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 180,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 175,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 5) skipped ---
+  // }
+  // interface I1 extends Base { }
+  // type T = { }
+  // /*FIND ALL REFS*/<|enum [|E|] { }|>
+  // namespace N { }
+  // module M { }
+  // function fn() {}
+  // --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
+// --- (line: 6) skipped ---
 // interface I1 extends Base { }
 // type T = { }
 // enum E { }
-// /*FIND ALL REFS*/namespace [|N|] { }
+// /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}N|] { }|>
 // module M { }
 // function fn() {}
 // var x;
-// let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 14) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "module",
-      "name": "namespace N",
-      "textSpan": {
-        "start": 196,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 186,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 196,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 186,
-          "length": 15
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 6) skipped ---
+  // interface I1 extends Base { }
+  // type T = { }
+  // enum E { }
+  // /*FIND ALL REFS*/<|namespace [|N|] { }|>
+  // module M { }
+  // function fn() {}
+  // var x;
+  // --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace N",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
+// --- (line: 7) skipped ---
 // type T = { }
 // enum E { }
 // namespace N { }
-// /*FIND ALL REFS*/module [|M|] { }
+// /*FIND ALL REFS*/<|module [|{| isWriteAccess: true, isDefinition: true |}M|] { }|>
 // function fn() {}
 // var x;
 // let y;
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 15) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "module",
-      "name": "namespace M",
-      "textSpan": {
-        "start": 209,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "M",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 202,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 209,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 202,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 7) skipped ---
+  // type T = { }
+  // enum E { }
+  // namespace N { }
+  // /*FIND ALL REFS*/<|module [|M|] { }|>
+  // function fn() {}
+  // var x;
+  // let y;
+  // --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace M",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "M",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
+// --- (line: 8) skipped ---
 // enum E { }
 // namespace N { }
 // module M { }
-// /*FIND ALL REFS*/function [|fn|]() {}
+// /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}fn|]() {}|>
 // var x;
 // let y;
 // const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
+// --- (line: 16) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "function",
-      "name": "function fn(): void",
-      "textSpan": {
-        "start": 224,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "fn",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 215,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 224,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 215,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 8) skipped ---
+  // enum E { }
+  // namespace N { }
+  // module M { }
+  // /*FIND ALL REFS*/<|function [|fn|]() {}|>
+  // var x;
+  // let y;
+  // const z = 1;
+  // --- (line: 16) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function fn(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "fn",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
+// --- (line: 9) skipped ---
 // namespace N { }
 // module M { }
 // function fn() {}
-// /*FIND ALL REFS*/var [|x|];
+// /*FIND ALL REFS*/<|var [|{| isDefinition: true |}x|];|>
 // let y;
+// const z = 1;
+// interface Implemented2 {}
+// --- (line: 17) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 9) skipped ---
+  // namespace N { }
+  // module M { }
+  // function fn() {}
+  // /*FIND ALL REFS*/<|var [|x|];|>
+  // let y;
+  // const z = 1;
+  // interface Implemented2 {}
+  // --- (line: 17) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+// --- (line: 10) skipped ---
+// module M { }
+// function fn() {}
+// var x;
+// /*FIND ALL REFS*/<|let [|{| isDefinition: true |}y|];|>
 // const z = 1;
 // interface Implemented2 {}
 // interface Implemented3 {}
 // class C2 implements Implemented2, Implemented3 {}
 // interface I2 extends Implemented2, Implemented3 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "var",
-      "name": "var x: any",
-      "textSpan": {
-        "start": 236,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 232,
-        "length": 6
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 236,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 232,
-          "length": 6
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 10) skipped ---
+  // module M { }
+  // function fn() {}
+  // var x;
+  // /*FIND ALL REFS*/<|let [|y|];|>
+  // const z = 1;
+  // interface Implemented2 {}
+  // interface Implemented3 {}
+  // class C2 implements Implemented2, Implemented3 {}
+  // interface I2 extends Implemented2, Implemented3 {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "let",
+    "name": "let y: any",
+    "displayParts": [
+     {
+      "text": "let",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "y",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
-// function fn() {}
-// var x;
-// /*FIND ALL REFS*/let [|y|];
-// const z = 1;
-// interface Implemented2 {}
-// interface Implemented3 {}
-// class C2 implements Implemented2, Implemented3 {}
-// interface I2 extends Implemented2, Implemented3 {}
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "let",
-      "name": "let y: any",
-      "textSpan": {
-        "start": 243,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "let",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "y",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 239,
-        "length": 6
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 243,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 239,
-          "length": 6
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
-// class Base {}
-// interface Implemented1 {}
-// class C1 extends Base implements Implemented1 {
-//     get e() { return 1; }
-//     set e(v) {}
-// }
-// interface I1 extends Base { }
-// type T = { }
-// enum E { }
-// namespace N { }
-// module M { }
+// --- (line: 11) skipped ---
 // function fn() {}
 // var x;
 // let y;
-// /*FIND ALL REFS*/const [|z|] = 1;
+// /*FIND ALL REFS*/<|const [|{| isWriteAccess: true, isDefinition: true |}z|] = 1;|>
 // interface Implemented2 {}
 // interface Implemented3 {}
 // class C2 implements Implemented2, Implemented3 {}
 // interface I2 extends Implemented2, Implemented3 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-      "kind": "const",
-      "name": "const z: 1",
-      "textSpan": {
-        "start": 252,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "z",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 246,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 252,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForDeclarationKeywords.ts",
-        "contextSpan": {
-          "start": 246,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
+  // --- (line: 11) skipped ---
+  // function fn() {}
+  // var x;
+  // let y;
+  // /*FIND ALL REFS*/<|const [|z|] = 1;|>
+  // interface Implemented2 {}
+  // interface Implemented3 {}
+  // class C2 implements Implemented2, Implemented3 {}
+  // interface I2 extends Implemented2, Implemented3 {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const z: 1",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "z",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

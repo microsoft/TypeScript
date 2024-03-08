@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularGetAccessor.ts ===
+//// [tests/cases/compiler/circularGetAccessor.ts] ////
+
+=== circularGetAccessor.ts ===
 declare class C {
 >C : C
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadedStaticMethodSpecialization.ts ===
+//// [tests/cases/compiler/overloadedStaticMethodSpecialization.ts] ////
+
+=== overloadedStaticMethodSpecialization.ts ===
 class A<T> {
 >A : Symbol(A, Decl(overloadedStaticMethodSpecialization.ts, 0, 0))
 >T : Symbol(T, Decl(overloadedStaticMethodSpecialization.ts, 0, 8))

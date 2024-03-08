@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionCall3.ts ===
+//// [tests/cases/compiler/functionCall3.ts] ////
+
+=== functionCall3.ts ===
 function foo():any[]{return [1];} 
 >foo : Symbol(foo, Decl(functionCall3.ts, 0, 0))
 

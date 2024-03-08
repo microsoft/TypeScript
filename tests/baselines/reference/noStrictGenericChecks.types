@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noStrictGenericChecks.ts ===
+//// [tests/cases/compiler/noStrictGenericChecks.ts] ////
+
+=== noStrictGenericChecks.ts ===
 type A = <T, U>(x: T, y: U) => [T, U];
 >A : <T, U>(x: T, y: U) => [T, U]
 >x : T

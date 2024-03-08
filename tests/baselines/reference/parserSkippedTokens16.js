@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts] ////
+
 //// [parserSkippedTokens16.ts]
 foo(): Bar { }
 function Foo      () ¬   { }

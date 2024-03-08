@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads37.ts ===
+//// [tests/cases/compiler/functionOverloads37.ts] ////
+
+=== functionOverloads37.ts ===
 function foo(bar:{a:number;}[]):string;
 >foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: number; }[]

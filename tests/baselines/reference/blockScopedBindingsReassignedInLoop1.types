@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedBindingsReassignedInLoop1.ts ===
+//// [tests/cases/compiler/blockScopedBindingsReassignedInLoop1.ts] ////
+
+=== blockScopedBindingsReassignedInLoop1.ts ===
 declare function use(n: number): void;
 >use : (n: number) => void
 >n : number

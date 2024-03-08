@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declareDottedExtend.ts ===
+//// [tests/cases/compiler/declareDottedExtend.ts] ////
+
+=== declareDottedExtend.ts ===
 declare module A.B
 >A : typeof A
 >B : typeof B

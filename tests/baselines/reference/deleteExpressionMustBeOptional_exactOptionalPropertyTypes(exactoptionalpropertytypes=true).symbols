@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts ===
+//// [tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts] ////
+
+=== deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 0))
 
@@ -158,10 +160,14 @@ delete g.j
 >g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
 
 delete a.a
+>a.a : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 >a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
+>a : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 
 delete a.b
+>a.b : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 >a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
+>b : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 
 delete b.a
 >b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 23, 13))

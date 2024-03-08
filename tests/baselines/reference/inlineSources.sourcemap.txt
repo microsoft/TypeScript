@@ -2,12 +2,12 @@
 JsFile: out.js
 mapUrl: out.js.map
 sourceRoot: 
-sources: tests/cases/compiler/a.ts,tests/cases/compiler/b.ts
-sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]
+sources: a.ts,b.ts
+sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);\n"]
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:out.js
-sourceFile:tests/cases/compiler/a.ts
+sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var a = 0;
 1 >
@@ -59,7 +59,7 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 -------------------------------------------------------------------
 emittedFile:out.js
-sourceFile:tests/cases/compiler/b.ts
+sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var b = 0;
 1 >

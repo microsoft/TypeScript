@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts] ////
+
+=== thisTypeSyntacticContext.ts ===
 function f(this: { n: number }) {
 >f : (this: {    n: number;}) => void
 >this : { n: number; }

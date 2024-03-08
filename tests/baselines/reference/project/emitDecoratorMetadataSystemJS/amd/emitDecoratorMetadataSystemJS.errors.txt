@@ -1,4 +1,4 @@
-main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
 ==== tsconfig.json (0 errors) ====
@@ -17,7 +17,7 @@ main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to
 ==== main.ts (1 errors) ====
     import * as ng from "angular2/core";
                         ~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     declare function foo(...args: any[]);
     

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/jsObjectsMarkedAsOpenEnded.ts] ////
+
+=== a.js ===
 var variable = {};
 >variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
 
@@ -49,7 +51,7 @@ function getObj() {
 }
 
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 variable.a = 1;
 >variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
 >variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitOptionalMethod.ts ===
+//// [tests/cases/compiler/declarationEmitOptionalMethod.ts] ////
+
+=== declarationEmitOptionalMethod.ts ===
 export const Foo = (opts: {
 >Foo : (opts: {    a?(): void;    b?: () => void;}) => {    c?(): void;    d?: () => void;}
 >(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: {    a?(): void;    b?: () => void;}) => {    c?(): void;    d?: () => void;}

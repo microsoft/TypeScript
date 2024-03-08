@@ -39,8 +39,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define("Configurable", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    exports.Configurable = void 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Configurable = Configurable;
     function Configurable(base) {
         return /** @class */ (function (_super) {
             __extends(class_1, _super);
@@ -54,11 +54,10 @@ define("Configurable", ["require", "exports"], function (require, exports) {
             return class_1;
         }(base));
     }
-    exports.Configurable = Configurable;
 });
 define("Class", ["require", "exports", "Configurable"], function (require, exports, Configurable_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ActualClass = exports.HiddenClass = void 0;
     var HiddenClass = /** @class */ (function () {
         function HiddenClass() {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts] ////
+
+=== sourceMapValidationDestructuringParameterObjectBindingPattern.ts ===
 interface Robot {
     name: string;
 >name : string
@@ -26,7 +28,7 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 >"mowing" : "mowing"
 
 function foo1({ name: nameA }: Robot) {
->foo1 : ({ name }: Robot) => void
+>foo1 : ({ name: nameA }: Robot) => void
 >name : any
 >nameA : string
 
@@ -38,7 +40,7 @@ function foo1({ name: nameA }: Robot) {
 >nameA : string
 }
 function foo2({ name: nameB, skill: skillB }: Robot) {
->foo2 : ({ name, skill }: Robot) => void
+>foo2 : ({ name: nameB, skill: skillB }: Robot) => void
 >name : any
 >nameB : string
 >skill : any
@@ -65,12 +67,12 @@ function foo3({ name }: Robot) {
 
 foo1(robotA);
 >foo1(robotA) : void
->foo1 : ({ name }: Robot) => void
+>foo1 : ({ name: nameA }: Robot) => void
 >robotA : Robot
 
 foo1({ name: "Edger", skill: "cutting edges" });
 >foo1({ name: "Edger", skill: "cutting edges" }) : void
->foo1 : ({ name }: Robot) => void
+>foo1 : ({ name: nameA }: Robot) => void
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
 >"Edger" : "Edger"
@@ -79,12 +81,12 @@ foo1({ name: "Edger", skill: "cutting edges" });
 
 foo2(robotA);
 >foo2(robotA) : void
->foo2 : ({ name, skill }: Robot) => void
+>foo2 : ({ name: nameB, skill: skillB }: Robot) => void
 >robotA : Robot
 
 foo2({ name: "Edger", skill: "cutting edges" });
 >foo2({ name: "Edger", skill: "cutting edges" }) : void
->foo2 : ({ name, skill }: Robot) => void
+>foo2 : ({ name: nameB, skill: skillB }: Robot) => void
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
 >"Edger" : "Edger"

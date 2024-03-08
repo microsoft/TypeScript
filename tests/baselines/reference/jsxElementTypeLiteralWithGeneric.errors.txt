@@ -1,0 +1,33 @@
+jsxElementTypeLiteralWithGeneric.tsx(21,9): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementTypeLiteralWithGeneric.tsx(21,10): error TS2786: 'ruhroh' cannot be used as a JSX component.
+  Its type '"ruhroh"' is not a valid JSX element type.
+
+
+==== jsxElementTypeLiteralWithGeneric.tsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    declare global {
+      namespace JSX {
+        type ElementType<P = any> =
+          | {
+            [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
+            ? K
+            : never;
+          }[keyof JSX.IntrinsicElements]
+          | React.ComponentType<P>;
+      }
+    }
+    
+    // should be fine - `ElementType` accepts `div`
+    let a = <div />;
+    
+    // Should be an error.
+    // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
+    let c = <ruhroh />;
+            ~~~~~~~~~~
+!!! error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
+             ~~~~~~
+!!! error TS2786: 'ruhroh' cannot be used as a JSX component.
+!!! error TS2786:   Its type '"ruhroh"' is not a valid JSX element type.
+    

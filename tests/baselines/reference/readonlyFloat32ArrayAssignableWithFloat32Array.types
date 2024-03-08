@@ -1,4 +1,6 @@
-=== tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts ===
+//// [tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts] ////
+
+=== readonlyFloat32ArrayAssignableWithFloat32Array.ts ===
 function update(b: Readonly<Float32Array>) {
 >update : (b: Readonly<Float32Array>) => void
 >b : Readonly<Float32Array>

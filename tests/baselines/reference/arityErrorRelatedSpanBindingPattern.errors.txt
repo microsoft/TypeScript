@@ -1,19 +1,19 @@
-tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts(5,1): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts(7,1): error TS2554: Expected 3 arguments, but got 2.
+arityErrorRelatedSpanBindingPattern.ts(5,1): error TS2554: Expected 3 arguments, but got 2.
+arityErrorRelatedSpanBindingPattern.ts(7,1): error TS2554: Expected 3 arguments, but got 2.
 
 
-==== tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts (2 errors) ====
+==== arityErrorRelatedSpanBindingPattern.ts (2 errors) ====
     function foo(a, b, {c}): void {}
     
     function bar(a, b, [c]): void {}
     
     foo("", 0);
-    ~~~~~~~~~~
+    ~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
-!!! related TS6211 tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts:1:20: An argument matching this binding pattern was not provided.
+!!! related TS6211 arityErrorRelatedSpanBindingPattern.ts:1:20: An argument matching this binding pattern was not provided.
     
     bar("", 0);
-    ~~~~~~~~~~
+    ~~~
 !!! error TS2554: Expected 3 arguments, but got 2.
-!!! related TS6211 tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts:3:20: An argument matching this binding pattern was not provided.
+!!! related TS6211 arityErrorRelatedSpanBindingPattern.ts:3:20: An argument matching this binding pattern was not provided.
     

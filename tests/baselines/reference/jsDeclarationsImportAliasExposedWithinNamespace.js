@@ -67,7 +67,7 @@ export namespace myTypes {
         prop2: string;
     };
     type typeC = myTypes.typeB | Function;
-    const myTypes: {
+    let myTypes: {
         [x: string]: any;
     };
 }
@@ -83,7 +83,7 @@ export namespace testFnTypes {
  * @returns {number|null} Result.
  */
 export function testFn(input: testFnTypes.input): number | null;
-import { myTypes } from "./file.js";
+import { myTypes } from './file.js';
 /**
  * @namespace testFnTypes
  * @global

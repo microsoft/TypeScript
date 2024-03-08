@@ -1,4 +1,6 @@
-=== tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.tsx ===
+//// [tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.ts] ////
+
+=== quickIntersectionCheckCorrectlyCachesErrors.tsx ===
 interface F<P> {
     (props: P & { children?: boolean }): void;
 >props : P & { children?: boolean; }
@@ -6,7 +8,6 @@ interface F<P> {
 
     propTypes: { [K in keyof P]: null extends P ? K : K };
 >propTypes : { [K in keyof P]: null extends P ? K : K; }
->null : null
 }
 declare function g(C: F<unknown>): string;
 >g : (C: F<unknown>) => string
@@ -34,7 +35,6 @@ export function wu<CP extends { o: object }>(CC: F<CP>) {
 >(null as unknown as CP) : CP
 >null as unknown as CP : CP
 >null as unknown : unknown
->null : null
         }
     }
 }

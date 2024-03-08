@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery4.ts(1,15): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery4.ts(1,17): error TS1003: Identifier expected.
+parserTypeQuery4.ts(1,15): error TS2304: Cannot find name 'A'.
+parserTypeQuery4.ts(1,17): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery4.ts (2 errors) ====
+==== parserTypeQuery4.ts (2 errors) ====
     var v: typeof A.;
                   ~
 !!! error TS2304: Cannot find name 'A'.

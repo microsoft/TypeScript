@@ -20,8 +20,8 @@ let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("./component");
 var React = require("react");
-var x = <component_1.MyComp />, <Prop> a={10} b="hi" />; // error, no type arguments in js
+var x = <component_1.MyComp />, <component_1.Prop> a={10} b="hi" />; // error, no type arguments in js
 </>;

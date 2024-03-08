@@ -1,4 +1,6 @@
-=== tests/cases/compiler/locale.d.ts ===
+//// [tests/cases/compiler/declarationEmitAliasFromIndirectFile.ts] ////
+
+=== locale.d.ts ===
 export type Locale = {
 >Locale : Symbol(Locale, Decl(locale.d.ts, 0, 0))
 
@@ -30,7 +32,7 @@ export type CustomLocale = {
 export type key = "ar" | "bg";
 >key : Symbol(key, Decl(locale.d.ts, 11, 2))
 
-=== tests/cases/compiler/instance.d.ts ===
+=== instance.d.ts ===
 import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 >Locale : Symbol(Locale, Decl(instance.d.ts, 0, 8))
 >CustomLocale : Symbol(CustomLocale, Decl(instance.d.ts, 0, 16))
@@ -49,7 +51,7 @@ export interface FlatpickrFn {
 >Locale : Symbol(Locale, Decl(instance.d.ts, 0, 8))
 }
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import { FlatpickrFn } from "./instance";
 >FlatpickrFn : Symbol(FlatpickrFn, Decl(app.ts, 0, 8))
 

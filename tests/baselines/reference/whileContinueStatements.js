@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts] ////
+
 //// [whileContinueStatements.ts]
 while(true) {
     continue;

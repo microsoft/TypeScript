@@ -11,7 +11,7 @@ new myModule.c();
 
 //// [test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var myModule = require("myModule");
 new myModule.c();
 

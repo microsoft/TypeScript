@@ -1,4 +1,6 @@
-=== tests/cases/compiler/core-js.d.ts ===
+//// [tests/cases/compiler/systemDefaultImportCallable.ts] ////
+
+=== core-js.d.ts ===
 declare module core {
 >core : Symbol(core, Decl(core-js.d.ts, 0, 0))
 
@@ -26,7 +28,7 @@ declare module "core-js/fn/string/repeat" {
     export default repeat;
 >repeat : Symbol(repeat, Decl(core-js.d.ts, 6, 7))
 }
-=== tests/cases/compiler/greeter.ts ===
+=== greeter.ts ===
 import repeat from "core-js/fn/string/repeat";
 >repeat : Symbol(repeat, Decl(greeter.ts, 0, 6))
 

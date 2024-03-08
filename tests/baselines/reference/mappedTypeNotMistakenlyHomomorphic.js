@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts] ////
+
 //// [mappedTypeNotMistakenlyHomomorphic.ts]
 enum ABC { A, B }
 

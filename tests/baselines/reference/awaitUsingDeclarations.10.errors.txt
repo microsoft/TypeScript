@@ -1,0 +1,12 @@
+awaitUsingDeclarations.10.ts(5,12): error TS1156: 'await using' declarations can only be declared inside a block.
+
+
+==== awaitUsingDeclarations.10.ts (1 errors) ====
+    export {};
+    
+    declare var x: any;
+    async function f() {
+        if (x) await using a = null;
+               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1156: 'await using' declarations can only be declared inside a block.
+    }

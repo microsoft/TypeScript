@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts] ////
+
 //// [privateNameMethodAssignment.ts]
 class A3 {
     #method() { };
@@ -26,6 +28,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _A3_instances, _A3_method;
 class A3 {
+    ;
     constructor(a, b) {
         var _a, _b, _c;
         _A3_instances.add(this);
@@ -36,6 +39,5 @@ class A3 {
         let x = __classPrivateFieldGet(this, _A3_instances, "m", _A3_method);
         __classPrivateFieldSet(_b = b, _A3_instances, (_c = __classPrivateFieldGet(_b, _A3_instances, "m", _A3_method), _c++, _c), "m"); //Error, not writable 
     }
-    ;
 }
 _A3_instances = new WeakSet(), _A3_method = function _A3_method() { };

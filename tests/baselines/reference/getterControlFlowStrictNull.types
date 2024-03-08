@@ -1,10 +1,11 @@
-=== tests/cases/compiler/getterControlFlowStrictNull.ts ===
+//// [tests/cases/compiler/getterControlFlowStrictNull.ts] ////
+
+=== getterControlFlowStrictNull.ts ===
 class A {
 >A : A
 
    a(): string | null {
 >a : () => string | null
->null : null
 
         if (Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -26,7 +27,6 @@ class B {
 
     get a(): string | null {
 >a : string | null
->null : null
 
         if (Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean

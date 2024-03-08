@@ -1,7 +1,7 @@
-tests/cases/compiler/nonArrayRestArgs.ts(1,14): error TS2370: A rest parameter must be of an array type.
+nonArrayRestArgs.ts(1,14): error TS2370: A rest parameter must be of an array type.
 
 
-==== tests/cases/compiler/nonArrayRestArgs.ts (1 errors) ====
+==== nonArrayRestArgs.ts (1 errors) ====
     function foo(...rest: number) { // error
                  ~~~~~~~~~~~~~~~
 !!! error TS2370: A rest parameter must be of an array type.

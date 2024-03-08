@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithArrayLiteralArgs.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithArrayLiteralArgs.ts] ////
+
+=== genericCallWithArrayLiteralArgs.ts ===
 function foo<T>(t: T) {
 >foo : Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >T : Symbol(T, Decl(genericCallWithArrayLiteralArgs.ts, 0, 13))

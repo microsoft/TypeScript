@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileConstructors_0.ts ===
+//// [tests/cases/compiler/declFileConstructors.ts] ////
+
+=== declFileConstructors_0.ts ===
 export class SimpleConstructor {
 >SimpleConstructor : SimpleConstructor
 
@@ -88,7 +90,7 @@ export class ConstructorWithParameterInitializer {
     }
 }
 
-=== tests/cases/compiler/declFileConstructors_1.ts ===
+=== declFileConstructors_1.ts ===
 class GlobalSimpleConstructor {
 >GlobalSimpleConstructor : GlobalSimpleConstructor
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts] ////
+
+=== logicalAndOperatorStrictMode.ts ===
 const a = [0];
 >a : Symbol(a, Decl(logicalAndOperatorStrictMode.ts, 0, 5))
 

@@ -7,6 +7,8 @@
 ////    abstract get b(): number;
 ////
 ////    abstract set c(arg: number | string);
+////
+////    abstract accessor d: string;
 ////}
 ////
 ////class C implements A {}
@@ -21,6 +23,8 @@ verify.codeFix({
     abstract get b(): number;
 
     abstract set c(arg: number | string);
+
+    abstract accessor d: string;
 }
 
 class C implements A {
@@ -36,5 +40,6 @@ class C implements A {
     set c(arg: string | number) {
         throw new Error("Method not implemented.");
     }
+    accessor d: string;
 }`,
 });

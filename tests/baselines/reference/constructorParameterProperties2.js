@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts] ////
+
 //// [constructorParameterProperties2.ts]
 class C {
     y: number;

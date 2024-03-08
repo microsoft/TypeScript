@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAsNamespaceConflict.ts] ////
+
 === /a.d.ts ===
 declare global { namespace N {} }
 >global : any

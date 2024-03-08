@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/commonSourceDirectory.ts] ////
 
 //// [index.ts]
-// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
-
 export const x = 0;
 
 //// [bar.d.ts]
@@ -19,7 +17,7 @@ x + y;
 
 //// [/app/bin/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../types/bar.d.ts"/>
 var foo_1 = require("foo");
 var bar_1 = require("bar");

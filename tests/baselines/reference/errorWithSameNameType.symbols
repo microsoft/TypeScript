@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/errorWithSameNameType.ts] ////
+
+=== a.ts ===
 export interface F {
 >F : Symbol(F, Decl(a.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export interface F {
 >foo1 : Symbol(F.foo1, Decl(a.ts, 0, 20))
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export interface F {
 >F : Symbol(F, Decl(b.ts, 0, 0))
 
@@ -14,7 +16,7 @@ export interface F {
 >foo2 : Symbol(F.foo2, Decl(b.ts, 0, 20))
 }
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 import * as A from './a'
 >A : Symbol(A, Decl(c.ts, 0, 6))
 

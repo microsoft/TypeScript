@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error TS2769: No overload matches this call.
+iterableArrayPattern28.ts(2,28): error TS2769: No overload matches this call.
   Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
@@ -13,10 +13,10 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
     Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts (1 errors) ====
+==== iterableArrayPattern28.ts (1 errors) ====
     function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
     takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                               ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
 !!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.

@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag5.ts] ////
+
+=== /a.js ===
+/** @typedef {{ move(distance: number): void }} Movable */
+
+const car = /** @satisfies {Movable & Record<string, unknown>} */ ({
+>car : Symbol(car, Decl(a.js, 2, 5))
+
+    start() { },
+>start : Symbol(start, Decl(a.js, 2, 68))
+
+    move(d) {
+>move : Symbol(move, Decl(a.js, 3, 16))
+>d : Symbol(d, Decl(a.js, 4, 9))
+
+        // d should be number
+    },
+    stop() { }
+>stop : Symbol(stop, Decl(a.js, 6, 6))
+
+})
+

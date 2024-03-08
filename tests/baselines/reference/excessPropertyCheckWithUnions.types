@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckWithUnions.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithUnions.ts] ////
+
+=== excessPropertyCheckWithUnions.ts ===
 type ADT = {
 >ADT : { tag: "A"; a1: string; } | { tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; } | { tag: "T"; }
 
@@ -126,9 +128,7 @@ amb = { tag: "A", y: 12, extra: 12 }
 >extra : number
 >12 : 12
 
-// assignability errors still work.
-// But note that the error for `z: true` is the fallback one of reporting on
-// the last constituent since assignability error reporting can't find a single best discriminant either.
+// assignability errors still work
 amb = { tag: "A" }
 >amb = { tag: "A" } : { tag: "A"; }
 >amb : Ambiguous
@@ -137,12 +137,12 @@ amb = { tag: "A" }
 >"A" : "A"
 
 amb = { tag: "A", z: true }
->amb = { tag: "A", z: true } : { tag: "A"; z: true; }
+>amb = { tag: "A", z: true } : { tag: "A"; z: boolean; }
 >amb : Ambiguous
->{ tag: "A", z: true } : { tag: "A"; z: true; }
+>{ tag: "A", z: true } : { tag: "A"; z: boolean; }
 >tag : "A"
 >"A" : "A"
->z : true
+>z : boolean
 >true : true
 
 type Overlapping =
@@ -319,7 +319,7 @@ interface IValue {
 >value : string
 }
 
-interface StringKeys { 
+interface StringKeys {
     [propertyName: string]: IValue;
 >propertyName : string
 

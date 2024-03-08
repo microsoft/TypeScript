@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/throwStatements/throwStatements.ts ===
+//// [tests/cases/conformance/statements/throwStatements/throwStatements.ts] ////
+
+=== throwStatements.ts ===
 // all legal
 
 interface I {
@@ -83,7 +85,6 @@ throw anObject;
 
 var anAny = null;
 >anAny : any
->null : null
 
 throw anAny;
 >anAny : any
@@ -200,8 +201,6 @@ throw false;
 >false : false
 
 throw null;
->null : null
-
 throw undefined;
 >undefined : undefined
 

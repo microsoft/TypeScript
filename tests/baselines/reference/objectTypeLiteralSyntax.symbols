@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax.ts] ////
+
+=== objectTypeLiteralSyntax.ts ===
 var x: {
 >x : Symbol(x, Decl(objectTypeLiteralSyntax.ts, 0, 3))
 

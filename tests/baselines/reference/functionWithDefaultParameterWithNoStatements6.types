@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements6.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements6.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements6.ts ===
 function foo(a = true) { }
 >foo : (a?: boolean) => void
 >a : boolean

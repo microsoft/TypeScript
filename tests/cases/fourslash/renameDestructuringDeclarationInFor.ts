@@ -14,5 +14,4 @@
 ////}
 
 const [r0Def, r0, r1Def, r1, r2Def, r2, r3] = test.ranges();
-verify.renameLocations([r0, r1], [r0, r1, { range: r2, suffixText: ": property1" }]);
-verify.renameLocations([r2, r3], [{ range: r2, prefixText: "property1: " }, r3]);
+verify.baselineRename([r0, r1, r2, r3]);

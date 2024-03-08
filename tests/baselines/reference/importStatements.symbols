@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/codeGeneration/importStatements.ts ===
+//// [tests/cases/conformance/internalModules/codeGeneration/importStatements.ts] ////
+
+=== importStatements.ts ===
 module A {
 >A : Symbol(A, Decl(importStatements.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructureComputedProperty.ts] ////
+
 //// [destructureComputedProperty.ts]
 declare const ab: { n: number } | { n: string };
 const nameN = "n";

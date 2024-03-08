@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern24.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern24.ts] ////
+
+=== iterableArrayPattern24.ts ===
 var a: string, b: boolean[];
 >a : Symbol(a, Decl(iterableArrayPattern24.ts, 0, 3))
 >b : Symbol(b, Decl(iterableArrayPattern24.ts, 0, 14))

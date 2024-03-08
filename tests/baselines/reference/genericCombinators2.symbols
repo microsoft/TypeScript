@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCombinators2.ts ===
+//// [tests/cases/compiler/genericCombinators2.ts] ////
+
+=== genericCombinators2.ts ===
 interface Collection<T, U> {
 >Collection : Symbol(Collection, Decl(genericCombinators2.ts, 0, 0))
 >T : Symbol(T, Decl(genericCombinators2.ts, 0, 21))

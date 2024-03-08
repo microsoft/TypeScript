@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationLambdaSpanningMultipleLines.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationLambdaSpanningMultipleLines.js
+emittedFile:sourceMapValidationLambdaSpanningMultipleLines.js
 sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
 -------------------------------------------------------------------
 >>>(function (item) {

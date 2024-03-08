@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports10.ts] ////
+
+=== a.ts ===
 import Foo = require("./b");
 >Foo : typeof Foo
 
@@ -20,7 +22,7 @@ Foo.default.default.foo();
 >default : any
 >foo : any
 
-=== tests/cases/compiler/b.d.ts ===
+=== b.d.ts ===
 export function foo();
 >foo : () => any
 

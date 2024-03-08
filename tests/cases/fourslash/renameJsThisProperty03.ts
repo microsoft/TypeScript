@@ -10,4 +10,4 @@
 ////var t = new C(12);
 ////[|t.[|{| "contextRangeIndex": 2 |}x|] = 11;|]
 
-verify.rangesWithSameTextAreRenameLocations("x");
+verify.baselineRenameAtRangesWithText("x");

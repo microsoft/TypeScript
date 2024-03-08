@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumsWithMultipleDeclarations2.ts] ////
+
 //// [enumsWithMultipleDeclarations2.ts]
 enum E {
   A

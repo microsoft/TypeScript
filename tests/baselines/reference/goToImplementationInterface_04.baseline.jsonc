@@ -1,0 +1,40 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_04.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     (a: number): void
+// }
+// 
+// var bar: Foo = [|{| defId: 0 |}(a) => {/**0*/}|];
+// 
+// function whatever(x: Foo = [|{| defId: 1 |}(a) => {/**1*/}|] ) {
+// }
+// 
+// class Bar {
+//     x: Foo = [|{| defId: 2 |}(a) => {/**2*/}|]
+// 
+//     constructor(public f: Foo = [|{| defId: 3 |}function(a) {}|] ) {}
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "function",
+    "displayParts": []
+   },
+   {
+    "defId": 1,
+    "kind": "function",
+    "displayParts": []
+   },
+   {
+    "defId": 2,
+    "kind": "function",
+    "displayParts": []
+   },
+   {
+    "defId": 3,
+    "kind": "function",
+    "displayParts": []
+   }
+  ]

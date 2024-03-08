@@ -1,5 +1,7 @@
 // https://github.com/microsoft/TypeScript/issues/48671
 
+class C {}
+
 class Foo1 {
   constructor(private A: string) {
     "ngInject1";
@@ -41,4 +43,39 @@ class Foo6 {
     "ngInject2";
     console.log("hi");
   }
+}
+
+class Foo7 extends C {
+  constructor(
+    private member: boolean,
+  ) {
+    "ngInject1";
+    super();
+    console.log("hi");
+  }
+}
+
+class Foo8 extends C {
+  constructor(
+    private member: boolean,
+  ) {
+    "ngInject1";
+    super();
+    this.m();
+    console.log("hi");
+  }
+
+  m() {}
+}
+
+class Foo9 extends C {
+  constructor() {
+    "ngInject1";
+    "ngInject2";
+    super();
+    this.m();
+    console.log("hi");
+  }
+
+  m() {}
 }

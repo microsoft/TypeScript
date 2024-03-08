@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiLineErrors.ts ===
+//// [tests/cases/compiler/multiLineErrors.ts] ////
+
+=== multiLineErrors.ts ===
 var t = 32;
 >t : Symbol(t, Decl(multiLineErrors.ts, 0, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessStaticMemberFromInstanceMethod01.ts] ////
+
 //// [accessStaticMemberFromInstanceMethod01.ts]
 class C {
     foo: string;

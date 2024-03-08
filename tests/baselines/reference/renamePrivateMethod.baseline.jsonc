@@ -1,0 +1,19 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateMethod.ts ===
+// class Foo {
+//    /*RENAME*/<|[|#fooRENAME|]() { }|>
+//    callFoo() {
+//        return this.[|#fooRENAME|]();
+//    }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renamePrivateMethod.ts ===
+// class Foo {
+//    <|[|#fooRENAME|]() { }|>
+//    callFoo() {
+//        return this./*RENAME*/[|#fooRENAME|]();
+//    }
+// }

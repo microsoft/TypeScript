@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts] ////
+
 //// [nonGenericTypeReferenceWithTypeArguments.ts]
 // Check that errors are reported for non-generic types with type arguments
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceMemberValidation.ts ===
+//// [tests/cases/compiler/interfaceMemberValidation.ts] ////
+
+=== interfaceMemberValidation.ts ===
 interface i1 { name: string; }
 >i1 : Symbol(i1, Decl(interfaceMemberValidation.ts, 0, 0))
 >name : Symbol(i1.name, Decl(interfaceMemberValidation.ts, 0, 14))

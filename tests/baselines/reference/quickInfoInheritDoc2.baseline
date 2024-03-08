@@ -1,3 +1,27 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritDoc2.ts ===
+// class Base<T> {
+//     /**
+//      * Base.prop
+//      */
+//     prop: T | undefined;
+// }
+// 
+// class SubClass<T> extends Base<T> {
+//     /**
+//      * @inheritdoc
+//      * SubClass.prop
+//      */
+//     prop: T | undefined;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) SubClass<T>.prop: T
+// | Base.prop
+// | SubClass.prop
+// | @inheritdoc SubClass.prop
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +29,7 @@
       "position": 173,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {

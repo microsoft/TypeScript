@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts ===
+//// [tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts] ////
+
+=== constructorParametersThatShadowExternalNamesInVariableDeclarations.ts ===
 var x = 1;
 >x : Symbol(x, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 0, 3))
 
@@ -7,6 +9,7 @@ class A {
 
     private a = x;
 >a : Symbol(A.a, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 1, 9))
+>x : Symbol(x, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 0, 3))
 
     constructor(x: number) {
 >x : Symbol(x, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 3, 16))
@@ -18,6 +21,7 @@ class B {
 
     private a = x;
 >a : Symbol(B.a, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 7, 9))
+>x : Symbol(x, Decl(constructorParametersThatShadowExternalNamesInVariableDeclarations.ts, 0, 3))
 
     constructor() {
         var x = "";

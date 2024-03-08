@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/observableInferenceCanBeMade.ts] ////
+
 //// [observableInferenceCanBeMade.ts]
 // Repro from #33131
 

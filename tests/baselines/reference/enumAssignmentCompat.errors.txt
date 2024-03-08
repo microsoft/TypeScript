@@ -1,11 +1,13 @@
-tests/cases/compiler/enumAssignmentCompat.ts(26,5): error TS2322: Type 'typeof W' is not assignable to type 'number'.
-tests/cases/compiler/enumAssignmentCompat.ts(28,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat.ts(30,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat.ts(32,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
-tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
+enumAssignmentCompat.ts(26,5): error TS2322: Type 'typeof W' is not assignable to type 'number'.
+enumAssignmentCompat.ts(28,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
+enumAssignmentCompat.ts(30,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
+enumAssignmentCompat.ts(31,5): error TS2322: Type '4' is not assignable to type 'W.a'.
+enumAssignmentCompat.ts(32,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
+enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
+enumAssignmentCompat.ts(34,5): error TS2322: Type '3' is not assignable to type 'W'.
 
 
-==== tests/cases/compiler/enumAssignmentCompat.ts (5 errors) ====
+==== enumAssignmentCompat.ts (7 errors) ====
     module W {
         export class D { }
     }
@@ -43,6 +45,8 @@ tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' 
         ~
 !!! error TS2322: Type 'number' is not assignable to type 'typeof W'.
     var e: typeof W.a = 4;
+        ~
+!!! error TS2322: Type '4' is not assignable to type 'W.a'.
     var f: WStatic = W.a; // error
         ~
 !!! error TS2322: Type 'W' is not assignable to type 'WStatic'.
@@ -50,6 +54,8 @@ tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' 
         ~
 !!! error TS2322: Type 'number' is not assignable to type 'WStatic'.
     var h: W = 3;
+        ~
+!!! error TS2322: Type '3' is not assignable to type 'W'.
     var i: W = W.a;
     i = W.a;
     W.D;

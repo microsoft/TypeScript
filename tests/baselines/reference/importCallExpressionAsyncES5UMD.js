@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionAsyncES5UMD.ts] ////
+
 //// [test.ts]
 export async function fn() {
     const req = await import('./test') // ONE
@@ -44,7 +46,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -77,7 +79,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
+    exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
+    exports.fn = fn;
     function fn() {
         return __awaiter(this, void 0, void 0, function () {
             var req;
@@ -92,7 +95,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         });
     }
-    exports.fn = fn;
     var cl1 = /** @class */ (function () {
         function cl1() {
         }

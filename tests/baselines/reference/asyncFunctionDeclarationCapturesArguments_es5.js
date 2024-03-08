@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclarationCapturesArguments_es5.ts] ////
+
 //// [asyncFunctionDeclarationCapturesArguments_es5.ts]
 class C {
    method() {
@@ -16,10 +18,11 @@ var C = /** @class */ (function () {
     C.prototype.method = function () {
         function other() { }
         function fn() {
-            return __awaiter(this, arguments, void 0, function () {
+            var arguments_1 = arguments;
+            return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, other.apply(this, arguments)];
+                        case 0: return [4 /*yield*/, other.apply(this, arguments_1)];
                         case 1:
                             _a.sent();
                             return [2 /*return*/];

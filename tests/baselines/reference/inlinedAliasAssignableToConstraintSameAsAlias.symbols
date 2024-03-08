@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inlinedAliasAssignableToConstraintSameAsAlias.ts ===
+//// [tests/cases/compiler/inlinedAliasAssignableToConstraintSameAsAlias.ts] ////
+
+=== inlinedAliasAssignableToConstraintSameAsAlias.ts ===
 interface RelationFields {
 >RelationFields : Symbol(RelationFields, Decl(inlinedAliasAssignableToConstraintSameAsAlias.ts, 0, 0))
 

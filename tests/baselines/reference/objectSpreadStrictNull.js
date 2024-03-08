@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadStrictNull.ts] ////
+
 //// [objectSpreadStrictNull.ts]
 function f(
     definiteBoolean: { sn: boolean },

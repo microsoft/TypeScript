@@ -1,4 +1,6 @@
-=== tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts ===
+//// [tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts] ////
+
+=== definiteAssignmentWithErrorStillStripped.ts ===
 class C {
 >C : Symbol(C, Decl(definiteAssignmentWithErrorStillStripped.ts, 0, 0))
 

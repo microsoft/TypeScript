@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newMissingIdentifier.ts ===
+//// [tests/cases/compiler/newMissingIdentifier.ts] ////
+
+=== newMissingIdentifier.ts ===
 var x = new ();
 >x : Symbol(x, Decl(newMissingIdentifier.ts, 0, 3))
 

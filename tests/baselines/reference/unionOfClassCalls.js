@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionOfClassCalls.ts] ////
+
 //// [unionOfClassCalls.ts]
 // from https://github.com/microsoft/TypeScript/issues/30717
 declare class Test<T> {

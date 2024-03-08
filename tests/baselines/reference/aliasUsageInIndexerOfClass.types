@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInIndexerOfClass_main.ts ===
+//// [tests/cases/compiler/aliasUsageInIndexerOfClass.ts] ////
+
+=== aliasUsageInIndexerOfClass_main.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 >Backbone : typeof Backbone
 
@@ -32,7 +34,7 @@ class N2 {
     x: IHasVisualizationModel;
 >x : IHasVisualizationModel
 }
-=== tests/cases/compiler/aliasUsageInIndexerOfClass_backbone.ts ===
+=== aliasUsageInIndexerOfClass_backbone.ts ===
 export class Model {
 >Model : Model
 
@@ -40,7 +42,7 @@ export class Model {
 >someData : string
 }
 
-=== tests/cases/compiler/aliasUsageInIndexerOfClass_moduleA.ts ===
+=== aliasUsageInIndexerOfClass_moduleA.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 >Backbone : typeof Backbone
 

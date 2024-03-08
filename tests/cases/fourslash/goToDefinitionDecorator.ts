@@ -16,7 +16,7 @@
 ////    return target => target;
 ////}
 
-verify.goToDefinition({
-    decoratorUse: "decoratorDefinition",
-    decoratorFactoryUse: "decoratorFactoryDefinition"
-});
+verify.baselineGoToDefinition(
+    "decoratorUse",
+    "decoratorFactoryUse",
+);

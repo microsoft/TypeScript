@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2018/useRegexpGroups.ts] ////
+
 //// [useRegexpGroups.ts]
 let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
 let result = re.exec("2015-01-02");

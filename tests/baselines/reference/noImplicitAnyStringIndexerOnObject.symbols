@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
+//// [tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts] ////
+
+=== noImplicitAnyStringIndexerOnObject.ts ===
 var a = {}["hello"];
 >a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 0, 3))
 

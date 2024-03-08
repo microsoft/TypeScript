@@ -1,7 +1,7 @@
-tests/cases/compiler/checkSuperCallBeforeThisAccessing2.ts(5,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccessing2.ts(5,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/checkSuperCallBeforeThisAccessing2.ts (1 errors) ====
+==== checkSuperCallBeforeThisAccessing2.ts (1 errors) ====
     class Based { }
     class Derived extends Based {
         public x: number;

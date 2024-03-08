@@ -6,10 +6,10 @@
 goTo.marker();
 
 // Function with bodies can only merge with classes
-// Class declaration cannot implement overload list x 2
-verify.numberOfErrorsInCurrentFile(4);
+// Class declaration cannot implement overload list
+verify.numberOfErrorsInCurrentFile(2);
 
 // Shouldn't change the number of errors
 edit.insert('return null;');
-verify.numberOfErrorsInCurrentFile(4);
+verify.numberOfErrorsInCurrentFile(2);
 

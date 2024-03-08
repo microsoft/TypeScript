@@ -1,281 +1,283 @@
-=== tests/cases/conformance/parser/ecmascript5/parserSyntaxWalker.generated.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserSyntaxWalker.generated.ts] ////
+
+=== parserSyntaxWalker.generated.ts ===
+
 //declare module "fs" {
-No type information for this code.//    export class File {
-No type information for this code.//        constructor(filename: string);
-No type information for this code.//        public ReadAllText(): string;
-No type information for this code.//    }
-No type information for this code.//    export interface IFile {
-No type information for this code.//        [index: number]: string;
-No type information for this code.//    }
-No type information for this code.//}
-No type information for this code.
-No type information for this code.//import fs = module("fs");
-No type information for this code.
-No type information for this code.
-No type information for this code.//module TypeScriptAllInOne {
-No type information for this code.//    export class Program {
-No type information for this code.//        static Main(...args: string[]) {
-No type information for this code.//            try {
-No type information for this code.//                var bfs = new BasicFeatures();
-No type information for this code.//                var retValue: number = 0;
-No type information for this code.
-No type information for this code.//                retValue = bfs.VARIABLES();
-No type information for this code.//                if (retValue != 0) {
-No type information for this code.
-No type information for this code.//                    return 1;
-No type information for this code.//                }
-No type information for this code.
-No type information for this code.//                retValue = bfs.STATEMENTS(4);
-No type information for this code.//                if (retValue != 0) {
-No type information for this code.
-No type information for this code.//                    return 1;
-No type information for this code.//                }
-No type information for this code.
-No type information for this code.
-No type information for this code.//                retValue = bfs.TYPES();
-No type information for this code.//                if (retValue != 0) {
-No type information for this code.
-No type information for this code.//                    return 1;
-No type information for this code.//                }
-No type information for this code.
-No type information for this code.//                retValue = bfs.OPERATOR();
-No type information for this code.//                if (retValue != 0) {
-No type information for this code.
-No type information for this code.//                    return 1;
-No type information for this code.//                }
-No type information for this code.//            }
-No type information for this code.//            catch (e) {
-No type information for this code.//                console.log(e);
-No type information for this code.//            }
-No type information for this code.//            finally {
-No type information for this code.
-No type information for this code.//            }
-No type information for this code.
-No type information for this code.//            console.log('Done');
-No type information for this code.
-No type information for this code.//            return 0;
-No type information for this code.
-No type information for this code.//        }
-No type information for this code.//    }
-No type information for this code.
-No type information for this code.//    class BasicFeatures {
-No type information for this code.//        /// <summary>
-No type information for this code.//        /// Test various of variables. Including nullable,key world as variable,special format
-No type information for this code.//        /// </summary>
-No type information for this code.//        /// <returns></returns>
-No type information for this code.//        public VARIABLES(): number {
-No type information for this code.//            var local = Number.MAX_VALUE;
-No type information for this code.//            var min = Number.MIN_VALUE;
-No type information for this code.//            var inf = Number.NEGATIVE_INFINITY;
-No type information for this code.//            var nan = Number.NaN;
-No type information for this code.//            var undef = undefined;
-No type information for this code.
-No type information for this code.//            var п = local;
-No type information for this code.//            var м = local;
-No type information for this code.
-No type information for this code.//            var local5 = <fs.File>null;
-No type information for this code.//            var local6 = local5 instanceof fs.File;
-No type information for this code.
-No type information for this code.//            var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
-No type information for this code.//            var float = 6.02e23, float2 = 6.02E-23
-No type information for this code.//            var char = 'c', \u0066 = '\u0066', hexchar = '\x42';
-No type information for this code.//            var quoted = '"', quoted2 = "'";
-No type information for this code.//            var reg = /\w*/;
-No type information for this code.//            var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, toString: () => 'objLit{42}' };
-No type information for this code.//            var weekday = Weekdays.Monday;
-No type information for this code.
-No type information for this code.//            var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
-No type information for this code.
-No type information for this code.//            //
-No type information for this code.//            var any = 0;
-No type information for this code.//            var boolean = 0;
-No type information for this code.//            var declare = 0;
-No type information for this code.//            var constructor = 0;
-No type information for this code.//            var get = 0;
-No type information for this code.//            var implements = 0;
-No type information for this code.//            var interface = 0;
-No type information for this code.//            var let = 0;
-No type information for this code.//            var module = 0;
-No type information for this code.//            var number = 0;
-No type information for this code.//            var package = 0;
-No type information for this code.//            var private = 0;
-No type information for this code.//            var protected = 0;
-No type information for this code.//            var public = 0;
-No type information for this code.//            var set = 0;
-No type information for this code.//            var static = 0;
-No type information for this code.//            var string = 0;
-No type information for this code.//            var yield = 0;
-No type information for this code.
-No type information for this code.//            var sum3 = any + boolean + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
-No type information for this code.
-No type information for this code.//            return 0;
-No type information for this code.//        }
-No type information for this code.
-No type information for this code.//        /// <summary>
-No type information for this code.//        /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
-No type information for this code.//        /// </summary>
-No type information for this code.//        /// <param name="i"></param>
-No type information for this code.//        /// <returns></returns>
-No type information for this code.//        STATEMENTS(i: number): number {
-No type information for this code.//            var retVal = 0;
-No type information for this code.//            if (i == 1)
-No type information for this code.//                retVal = 1;
-No type information for this code.//            else
-No type information for this code.//                retVal = 0;
-No type information for this code.//            switch (i) {
-No type information for this code.//                case 2:
-No type information for this code.//                    retVal = 1;
-No type information for this code.//                    break;
-No type information for this code.//                case 3:
-No type information for this code.//                    retVal = 1;
-No type information for this code.//                    break;
-No type information for this code.//                default:
-No type information for this code.//                    break;
-No type information for this code.//            }
-No type information for this code.
-No type information for this code.//            for (var x in { x: 0, y: 1 }) {
-No type information for this code.//            }
-No type information for this code.
-No type information for this code.//            try {
-No type information for this code.//                throw null;
-No type information for this code.//            }
-No type information for this code.//            catch (Exception) {
-No type information for this code.//            }
-No type information for this code.//            finally {
-No type information for this code.//                try { }
-No type information for this code.//                catch (Exception) { }
-No type information for this code.//            }
-No type information for this code.
-No type information for this code.//            return retVal;
-No type information for this code.//        }
-No type information for this code.
-No type information for this code.//        /// <summary>
-No type information for this code.//        /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
-No type information for this code.//        /// </summary>
-No type information for this code.//        /// <returns></returns>
-No type information for this code.//        public TYPES(): number {
-No type information for this code.//            var retVal = 0;
-No type information for this code.//            var c = new CLASS();
-No type information for this code.//            var xx: IF = c;
-No type information for this code.//            retVal += c.Property;
-No type information for this code.//            retVal += c.Member();
-No type information for this code.//            retVal += xx ^= Foo() ? 0 : 1;
-No type information for this code.
-No type information for this code.//            //anonymous type
-No type information for this code.//            var anony = { a: new CLASS() };
-No type information for this code.
-No type information for this code.//            retVal += anony.a.d();
-No type information for this code.
-No type information for this code.//            return retVal;
-No type information for this code.//        }
-No type information for this code.
-No type information for this code.
-No type information for this code.//        ///// <summary>
-No type information for this code.//        ///// Test different operators
-No type information for this code.//        ///// </summary>
-No type information for this code.//        ///// <returns></returns>
-No type information for this code.//        public OPERATOR(): number {
-No type information for this code.//            var a: number[] = [1, 2, 3, 4,  implements , ];/*[] bug*/ // YES []
-No type information for this code.//            var i = a[1];/*[]*/
-No type information for this code.//            i = i + i - i * i / i % i & i | i ^ i;/*+ - * / % & | ^*/
-No type information for this code.//            var b = true && false || true ^ false;/*& | ^*/
-No type information for this code.//            b = !b;/*!*/
-No type information for this code.//            i = ~i;/*~i*/
-No type information for this code.//            b = i < (i -  continue ) && (i + 1) > i;/*< && >*/
-No type information for this code.//            var f = true ? 1 : 0;/*? :*/   // YES :
-No type information for this code.//            i++;/*++*/
-No type information for this code.//            i--;/*--*/
-No type information for this code.//            b = true && false || true;/*&& ||*/
-No type information for this code.//            i = i << 5;/*<<*/
-No type information for this code.//            i = i >> 5;/*>>*/
-No type information for this code.//            var j = i;
-No type information for this code.//            b = i == j && i != j && i <= j && i >= j;/*= == && != <= >=*/
-No type information for this code.//            i += <number>5.0;/*+=*/
-No type information for this code.//            i -= i;/*-=*/
-No type information for this code.//            i *= i;/**=*/
-No type information for this code.//            if (i == 0)
-No type information for this code.//                i++;
-No type information for this code.//            i /= i;/*/=*/
-No type information for this code.//            i %= i;/*%=*/
-No type information for this code.//            i &= i;/*&=*/
-No type information for this code.//            i |= i;/*|=*/
-No type information for this code.//            i ^= i;/*^=*/
-No type information for this code.//            i <<= i;/*<<=*/
-No type information for this code.//            i >>= i;/*>>=*/
-No type information for this code.
-No type information for this code.//            if (i == 0 && !b && f == 1)
-No type information for this code.//                return 0;
-No type information for this code.//            else return 1;
-No type information for this code.//        }
-No type information for this code.
-No type information for this code.//    }
-No type information for this code.
-No type information for this code.//    interface IF {
-No type information for this code.//        Foo <!-- ): boolean;
-No type information for this code.//    }
-No type information for this code.
-No type information for this code.//    class CLASS implements IF {
-No type information for this code.
-No type information for this code.//        public d = () =>  '  return 0; };
-No type information for this code.//        public get Property() { return 0; }
-No type information for this code.//        public Member() {
-No type information for this code.//            return 0;
-No type information for this code.//        }
-No type information for this code.//        public Foo(): boolean {
-No type information for this code.//            var myEvent = () => { return 1; };
-No type information for this code.//            if (myEvent() == 1)
-No type information for this code.//                return true;
-No type information for this code.//            else
-No type information for this code.//                return false;
-No type information for this code.//        }
-No type information for this code.//    }
-No type information for this code.
-No type information for this code.
-No type information for this code.//    // todo: use these
-No type information for this code.//    class A {
-No type information for this code.//        public method1(val:number) {
-No type information for this code.//            return val;
-No type information for this code.//        }
-No type information for this code.//        public method2() {
-No type information for this code.//            return 2 * this.method1(2);
-No type information for this code.//        }
-No type information for this code.//    }
-No type information for this code.
-No type information for this code.//    class B extends A {
-No type information for this code.
-No type information for this code.//        public method2() {
-No type information for this code.//            return this.method1(2);
-No type information for this code.//        }
-No type information for this code.//    }
-No type information for this code.
-No type information for this code.//    class Overloading {
-No type information for this code.
-No type information for this code.//        private otherValue = 42;
-No type information for this code.
-No type information for this code.//        constructor(private value: number, public name: string) { }
-No type information for this code.       
-No type information for this code.//        public Overloads(value: string);
-No type information for this code.//        public Overloads(value: string, ...rest: string[]) { }
-No type information for this code.
-No type information for this code.//        public DefaultValue(value?: string = "Hello") { }
-No type information for this code.//    }
-No type information for this code.//}
-No type information for this code.
-No type information for this code.//enum Weekdays {
-No type information for this code.//    Monday,
-No type information for this code.//    Tuesday,
-No type information for this code.//    Weekend,
-No type information for this code.//}
-No type information for this code.
-No type information for this code.//enum Fruit {
-No type information for this code.//    Apple,
-No type information for this code.//    Pear
-No type information for this code.//}
-No type information for this code.
-No type information for this code.//interface IDisposable {
-No type information for this code.//    Dispose(): void;
-No type information for this code.//}
-No type information for this code.
-No type information for this code.//TypeScriptAllInOne.Program.Main();
-No type information for this code.
-No type information for this code.
+//    export class File {
+//        constructor(filename: string);
+//        public ReadAllText(): string;
+//    }
+//    export interface IFile {
+//        [index: number]: string;
+//    }
+//}
+
+//import fs = module("fs");
+
+
+//module TypeScriptAllInOne {
+//    export class Program {
+//        static Main(...args: string[]) {
+//            try {
+//                var bfs = new BasicFeatures();
+//                var retValue: number = 0;
+
+//                retValue = bfs.VARIABLES();
+//                if (retValue != 0) {
+
+//                    return 1;
+//                }
+
+//                retValue = bfs.STATEMENTS(4);
+//                if (retValue != 0) {
+
+//                    return 1;
+//                }
+
+
+//                retValue = bfs.TYPES();
+//                if (retValue != 0) {
+
+//                    return 1;
+//                }
+
+//                retValue = bfs.OPERATOR();
+//                if (retValue != 0) {
+
+//                    return 1;
+//                }
+//            }
+//            catch (e) {
+//                console.log(e);
+//            }
+//            finally {
+
+//            }
+
+//            console.log('Done');
+
+//            return 0;
+
+//        }
+//    }
+
+//    class BasicFeatures {
+//        /// <summary>
+//        /// Test various of variables. Including nullable,key world as variable,special format
+//        /// </summary>
+//        /// <returns></returns>
+//        public VARIABLES(): number {
+//            var local = Number.MAX_VALUE;
+//            var min = Number.MIN_VALUE;
+//            var inf = Number.NEGATIVE_INFINITY;
+//            var nan = Number.NaN;
+//            var undef = undefined;
+
+//            var п = local;
+//            var м = local;
+
+//            var local5 = <fs.File>null;
+//            var local6 = local5 instanceof fs.File;
+
+//            var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
+//            var float = 6.02e23, float2 = 6.02E-23
+//            var char = 'c', \u0066 = '\u0066', hexchar = '\x42';
+//            var quoted = '"', quoted2 = "'";
+//            var reg = /\w*/;
+//            var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, toString: () => 'objLit{42}' };
+//            var weekday = Weekdays.Monday;
+
+//            var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
+
+//            //
+//            var any = 0;
+//            var boolean = 0;
+//            var declare = 0;
+//            var constructor = 0;
+//            var get = 0;
+//            var implements = 0;
+//            var interface = 0;
+//            var let = 0;
+//            var module = 0;
+//            var number = 0;
+//            var package = 0;
+//            var private = 0;
+//            var protected = 0;
+//            var public = 0;
+//            var set = 0;
+//            var static = 0;
+//            var string = 0;
+//            var yield = 0;
+
+//            var sum3 = any + boolean + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
+
+//            return 0;
+//        }
+
+//        /// <summary>
+//        /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
+//        /// </summary>
+//        /// <param name="i"></param>
+//        /// <returns></returns>
+//        STATEMENTS(i: number): number {
+//            var retVal = 0;
+//            if (i == 1)
+//                retVal = 1;
+//            else
+//                retVal = 0;
+//            switch (i) {
+//                case 2:
+//                    retVal = 1;
+//                    break;
+//                case 3:
+//                    retVal = 1;
+//                    break;
+//                default:
+//                    break;
+//            }
+
+//            for (var x in { x: 0, y: 1 }) {
+//            }
+
+//            try {
+//                throw null;
+//            }
+//            catch (Exception) {
+//            }
+//            finally {
+//                try { }
+//                catch (Exception) { }
+//            }
+
+//            return retVal;
+//        }
+
+//        /// <summary>
+//        /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
+//        /// </summary>
+//        /// <returns></returns>
+//        public TYPES(): number {
+//            var retVal = 0;
+//            var c = new CLASS();
+//            var xx: IF = c;
+//            retVal += c.Property;
+//            retVal += c.Member();
+//            retVal += xx ^= Foo() ? 0 : 1;
+
+//            //anonymous type
+//            var anony = { a: new CLASS() };
+
+//            retVal += anony.a.d();
+
+//            return retVal;
+//        }
+
+
+//        ///// <summary>
+//        ///// Test different operators
+//        ///// </summary>
+//        ///// <returns></returns>
+//        public OPERATOR(): number {
+//            var a: number[] = [1, 2, 3, 4,  implements , ];/*[] bug*/ // YES []
+//            var i = a[1];/*[]*/
+//            i = i + i - i * i / i % i & i | i ^ i;/*+ - * / % & | ^*/
+//            var b = true && false || true ^ false;/*& | ^*/
+//            b = !b;/*!*/
+//            i = ~i;/*~i*/
+//            b = i < (i -  continue ) && (i + 1) > i;/*< && >*/
+//            var f = true ? 1 : 0;/*? :*/   // YES :
+//            i++;/*++*/
+//            i--;/*--*/
+//            b = true && false || true;/*&& ||*/
+//            i = i << 5;/*<<*/
+//            i = i >> 5;/*>>*/
+//            var j = i;
+//            b = i == j && i != j && i <= j && i >= j;/*= == && != <= >=*/
+//            i += <number>5.0;/*+=*/
+//            i -= i;/*-=*/
+//            i *= i;/**=*/
+//            if (i == 0)
+//                i++;
+//            i /= i;/*/=*/
+//            i %= i;/*%=*/
+//            i &= i;/*&=*/
+//            i |= i;/*|=*/
+//            i ^= i;/*^=*/
+//            i <<= i;/*<<=*/
+//            i >>= i;/*>>=*/
+
+//            if (i == 0 && !b && f == 1)
+//                return 0;
+//            else return 1;
+//        }
+
+//    }
+
+//    interface IF {
+//        Foo <!-- ): boolean;
+//    }
+
+//    class CLASS implements IF {
+
+//        public d = () =>  '  return 0; };
+//        public get Property() { return 0; }
+//        public Member() {
+//            return 0;
+//        }
+//        public Foo(): boolean {
+//            var myEvent = () => { return 1; };
+//            if (myEvent() == 1)
+//                return true;
+//            else
+//                return false;
+//        }
+//    }
+
+
+//    // todo: use these
+//    class A {
+//        public method1(val:number) {
+//            return val;
+//        }
+//        public method2() {
+//            return 2 * this.method1(2);
+//        }
+//    }
+
+//    class B extends A {
+
+//        public method2() {
+//            return this.method1(2);
+//        }
+//    }
+
+//    class Overloading {
+
+//        private otherValue = 42;
+
+//        constructor(private value: number, public name: string) { }
+       
+//        public Overloads(value: string);
+//        public Overloads(value: string, ...rest: string[]) { }
+
+//        public DefaultValue(value?: string = "Hello") { }
+//    }
+//}
+
+//enum Weekdays {
+//    Monday,
+//    Tuesday,
+//    Weekend,
+//}
+
+//enum Fruit {
+//    Apple,
+//    Pear
+//}
+
+//interface IDisposable {
+//    Dispose(): void;
+//}
+
+//TypeScriptAllInOne.Program.Main();
+

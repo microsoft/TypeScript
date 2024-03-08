@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression.ts] ////
+
 //// [moduleExportAliasElementAccessExpression.js]
 function D () { }
 exports["D"] = D;

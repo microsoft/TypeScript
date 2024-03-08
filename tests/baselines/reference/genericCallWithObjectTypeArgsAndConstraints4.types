@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts] ////
+
+=== genericCallWithObjectTypeArgsAndConstraints4.ts ===
 // Generic call with constraints infering type parameter from object member properties
 
 class C {
@@ -64,21 +66,17 @@ var r4 = foo(null, null);
 >r4 : (x: any) => any
 >foo(null, null) : (x: any) => any
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->null : null
->null : null
 
 var r5 = foo({}, null);
 >r5 : (x: {}) => any
 >foo({}, null) : (x: {}) => any
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
 >{} : {}
->null : null
 
 var r6 = foo(null, {});
 >r6 : (x: any) => {}
 >foo(null, {}) : (x: any) => {}
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->null : null
 >{} : {}
 
 var r7 = foo({}, {});
@@ -109,14 +107,14 @@ function other<T, U extends T>() {
     var r4 = foo(c, d);
 >r4 : (x: C) => D
 >foo(c, d) : (x: C) => D
->foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
 >c : C
 >d : D
 
     var r5 = foo<T, U>(c, d); // error
 >r5 : (x: T) => U
 >foo<T, U>(c, d) : (x: T) => U
->foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
 >c : C
 >d : D
 }

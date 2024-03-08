@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperator.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperator.ts] ////
+
+=== templateStringWithEmbeddedNewOperator.ts ===
 var x = `abc${ new String("Hi") }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedNewOperator.ts, 0, 3))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

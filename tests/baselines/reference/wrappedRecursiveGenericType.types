@@ -1,4 +1,6 @@
-=== tests/cases/compiler/wrappedRecursiveGenericType.ts ===
+//// [tests/cases/compiler/wrappedRecursiveGenericType.ts] ////
+
+=== wrappedRecursiveGenericType.ts ===
 interface X<T> { e: T; }
 >e : T
 

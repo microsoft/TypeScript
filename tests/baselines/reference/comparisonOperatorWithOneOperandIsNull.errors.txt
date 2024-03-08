@@ -1,85 +1,85 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(4,22): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(5,22): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(6,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(7,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(13,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(14,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(15,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(16,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(32,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(33,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(34,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(35,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(36,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(37,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(38,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(40,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(41,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(42,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(43,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(44,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(45,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(46,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(49,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(50,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(51,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(53,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(54,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(57,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(58,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(59,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(60,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(61,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(62,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(63,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(66,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(67,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(68,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(69,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(70,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(72,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(74,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(75,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(76,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(77,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(78,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(79,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(80,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(83,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(84,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(85,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(86,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(87,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(88,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(89,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(91,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(92,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(93,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(94,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(95,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(96,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS2531: Object is possibly 'null'.
+comparisonOperatorWithOneOperandIsNull.ts(4,22): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(5,22): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(6,23): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(7,23): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(13,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(14,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(15,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(16,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(32,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(33,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(34,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(35,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(36,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(37,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(38,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(40,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(41,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(42,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(43,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(44,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(45,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(46,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(49,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(50,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(51,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(53,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(54,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(57,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(58,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(59,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(60,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(61,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(62,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(63,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(66,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(67,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(68,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(69,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(70,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(72,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(74,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(75,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(76,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(77,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(78,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(79,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(80,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(83,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(84,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(85,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(86,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(87,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(88,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(89,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(91,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(92,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(93,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(94,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(95,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(96,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null' cannot be used here.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts (64 errors) ====
+==== comparisonOperatorWithOneOperandIsNull.ts (64 errors) ====
     enum E { a, b, c }
     
     function foo<T>(t: T) {
         var foo_r1 = t < null;
                          ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r2 = t > null;
                          ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r3 = t <= null;
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r4 = t >= null;
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r5 = t == null;
         var foo_r6 = t != null;
         var foo_r7 = t === null;
@@ -87,16 +87,16 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     
         var foo_r1 = null < t;
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r2 = null > t;
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r3 = null <= t;
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r4 = null >= t;
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
         var foo_r5 = null == t;
         var foo_r6 = null != t;
         var foo_r7 = null === t;
@@ -114,182 +114,182 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     // operator <
     var r1a1 = null < a;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1a2 = null < b;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1a3 = null < c;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1a4 = null < d;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1a5 = null < e;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1a6 = null < f;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1a7 = null < g;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     var r1b1 = a < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1b2 = b < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1b3 = c < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1b4 = d < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1b5 = e < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1b6 = f < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r1b7 = g < null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     // operator >
     var r2a1 = null > a;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2a2 = null > b;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2a3 = null > c;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2a4 = null > d;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2a5 = null > e;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2a6 = null > f;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2a7 = null > g;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     var r2b1 = a > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2b2 = b > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2b3 = c > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2b4 = d > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2b5 = e > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2b6 = f > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2b7 = g > null;
                    ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     // operator <=
     var r3a1 = null <= a;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3a2 = null <= b;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3a3 = null <= c;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3a4 = null <= d;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3a5 = null <= e;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3a6 = null <= f;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3a7 = null <= g;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     var r3b1 = a <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3b2 = b <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3b3 = c <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3b4 = d <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3b5 = e <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3b6 = f <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r3b7 = g <= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     // operator >=
     var r4a1 = null >= a;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4a2 = null >= b;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4a3 = null >= c;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4a4 = null >= d;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4a5 = null >= e;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4a6 = null >= f;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4a7 = null >= g;
                ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     var r4b1 = a >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4b2 = b >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4b3 = c >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4b4 = d >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4b5 = e >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4b6 = f >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4b7 = g >= null;
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     // operator ==
     var r5a1 = null == a;

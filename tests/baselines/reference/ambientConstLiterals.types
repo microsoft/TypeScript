@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientConstLiterals.ts ===
+//// [tests/cases/compiler/ambientConstLiterals.ts] ////
+
+=== ambientConstLiterals.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
 >x : T

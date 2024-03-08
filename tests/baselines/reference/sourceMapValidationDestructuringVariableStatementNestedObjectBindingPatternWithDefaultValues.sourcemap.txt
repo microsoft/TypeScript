@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js
+emittedFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js
 sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts
 -------------------------------------------------------------------
 >>>var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
@@ -607,7 +607,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 4 >         ^^^^
 5 >             ^^^^^
 6 >                  ^^
-7 >                    ^^^^->
+7 >                    ^
+8 >                     ^^^->
 1 >
   >
   >
@@ -616,12 +617,14 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 4 >          == 
 5 >             nameB
 6 >                  ) 
+7 >                    {
 1 >Emitted(6, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(6, 5) Source(35, 5) + SourceIndex(0)
 3 >Emitted(6, 10) Source(35, 10) + SourceIndex(0)
 4 >Emitted(6, 14) Source(35, 14) + SourceIndex(0)
 5 >Emitted(6, 19) Source(35, 19) + SourceIndex(0)
 6 >Emitted(6, 21) Source(35, 21) + SourceIndex(0)
+7 >Emitted(6, 22) Source(35, 22) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -632,7 +635,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1->{
+1->
   >    
 2 >    console
 3 >           .
@@ -651,18 +654,24 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 8 >Emitted(7, 24) Source(36, 24) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^->
 1 >
-  >}
-1 >Emitted(8, 2) Source(37, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(8, 1) Source(37, 1) + SourceIndex(0)
+2 >Emitted(8, 2) Source(37, 2) + SourceIndex(0)
 ---
 >>>else {
 1->^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^->
+2 >     ^
+3 >      ^^^^^^^^^^^^^^^^^^->
 1->
   >else 
+2 >     {
 1->Emitted(9, 6) Source(38, 6) + SourceIndex(0)
+2 >Emitted(9, 7) Source(38, 7) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -673,7 +682,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1->{
+1->
   >    
 2 >    console
 3 >           .
@@ -692,10 +701,13 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 8 >Emitted(10, 24) Source(39, 24) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(11, 2) Source(40, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(11, 1) Source(40, 1) + SourceIndex(0)
+2 >Emitted(11, 2) Source(40, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js.map

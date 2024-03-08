@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dottedModuleName.ts] ////
+
 //// [dottedModuleName.ts]
 module M {
     export module N {

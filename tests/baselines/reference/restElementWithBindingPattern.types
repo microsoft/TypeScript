@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithBindingPattern.ts ===
+//// [tests/cases/conformance/es6/destructuring/restElementWithBindingPattern.ts] ////
+
+=== restElementWithBindingPattern.ts ===
 var [...[a, b]] = [0, 1];
 >a : number
 >b : number

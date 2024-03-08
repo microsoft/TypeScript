@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -18,7 +19,12 @@ declare const console: { log(msg: any): void; };
 export const x = 10;
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"outDir":"dist","rootDir":"src"}}
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  }
+}
 
 
 
@@ -36,7 +42,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/dist/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 

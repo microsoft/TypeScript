@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts] ////
+
+=== typeGuardOfFormThisMember.ts ===
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 namespace Test {
 >Test : Symbol(Test, Decl(typeGuardOfFormThisMember.ts, 0, 0))

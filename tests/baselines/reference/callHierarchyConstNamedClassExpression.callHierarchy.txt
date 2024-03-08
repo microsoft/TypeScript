@@ -1,3 +1,4 @@
+// === Call Hierarchy ===
 ╭ name: Bar
 ├ kind: class
 ├ file: /tests/cases/fourslash/callHierarchyConstNamedClassExpression.ts

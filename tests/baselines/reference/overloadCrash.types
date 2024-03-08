@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadCrash.ts ===
+//// [tests/cases/compiler/overloadCrash.ts] ////
+
+=== overloadCrash.ts ===
 interface I1 {a:number; b:number;};
 >a : number
 >b : number

@@ -1,0 +1,88 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor9.ts] ////
+
+=== autoAccessor9.ts ===
+// Auto-accessors do not use Set semantics themselves, so do not need to be transformed if there are no other
+// initializers that need to be transformed:
+class C1 {
+>C1 : Symbol(C1, Decl(autoAccessor9.ts, 0, 0))
+
+    accessor x = 1;
+>x : Symbol(C1.x, Decl(autoAccessor9.ts, 2, 10))
+}
+
+// If there are other field initializers to transform, we must transform auto-accessors so that we can preserve
+// initialization order:
+class C2 {
+>C2 : Symbol(C2, Decl(autoAccessor9.ts, 4, 1))
+
+    x = 1;
+>x : Symbol(C2.x, Decl(autoAccessor9.ts, 8, 10))
+
+    accessor y = 2;
+>y : Symbol(C2.y, Decl(autoAccessor9.ts, 9, 10))
+
+    z = 3;
+>z : Symbol(C2.z, Decl(autoAccessor9.ts, 10, 19))
+}
+
+// Private field initializers also do not use Set semantics, so they do not force an auto-accessor transformation:
+class C3 {
+>C3 : Symbol(C3, Decl(autoAccessor9.ts, 12, 1))
+
+    #x = 1;
+>#x : Symbol(C3.#x, Decl(autoAccessor9.ts, 15, 10))
+
+    accessor y = 2;
+>y : Symbol(C3.y, Decl(autoAccessor9.ts, 16, 11))
+}
+
+// However, we still need to hoist private field initializers to the constructor if we need to preserve initialization
+// order:
+class C4 {
+>C4 : Symbol(C4, Decl(autoAccessor9.ts, 18, 1))
+
+    x = 1;
+>x : Symbol(C4.x, Decl(autoAccessor9.ts, 22, 10))
+
+    #y = 2;
+>#y : Symbol(C4.#y, Decl(autoAccessor9.ts, 23, 10))
+
+    z = 3;
+>z : Symbol(C4.z, Decl(autoAccessor9.ts, 24, 11))
+}
+
+class C5 {
+>C5 : Symbol(C5, Decl(autoAccessor9.ts, 26, 1))
+
+    #x = 1;
+>#x : Symbol(C5.#x, Decl(autoAccessor9.ts, 28, 10))
+
+    accessor y = 2;
+>y : Symbol(C5.y, Decl(autoAccessor9.ts, 29, 11))
+
+    z = 3;
+>z : Symbol(C5.z, Decl(autoAccessor9.ts, 30, 19))
+}
+
+// Static accessors aren't affected:
+class C6 {
+>C6 : Symbol(C6, Decl(autoAccessor9.ts, 32, 1))
+
+    static accessor x = 1;
+>x : Symbol(C6.x, Decl(autoAccessor9.ts, 35, 10))
+}
+
+// Static accessors aren't affected:
+class C7 {
+>C7 : Symbol(C7, Decl(autoAccessor9.ts, 37, 1))
+
+    static x = 1;
+>x : Symbol(C7.x, Decl(autoAccessor9.ts, 40, 10))
+
+    static accessor y = 2;
+>y : Symbol(C7.y, Decl(autoAccessor9.ts, 41, 17))
+
+    static z = 3;
+>z : Symbol(C7.z, Decl(autoAccessor9.ts, 42, 26))
+}
+

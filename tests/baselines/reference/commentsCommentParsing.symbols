@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsCommentParsing.ts ===
+//// [tests/cases/compiler/commentsCommentParsing.ts] ////
+
+=== commentsCommentParsing.ts ===
 /// This is simple /// comments
 function simple() {
 >simple : Symbol(simple, Decl(commentsCommentParsing.ts, 0, 0))

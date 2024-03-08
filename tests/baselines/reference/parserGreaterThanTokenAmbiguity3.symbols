@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity3.ts] ////
+
+=== parserGreaterThanTokenAmbiguity3.ts ===
+
 1 >/**/> 2;
-No type information for this code.

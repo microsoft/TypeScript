@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule6.ts] ////
+
 //// [systemModule6.ts]
 export class C {}
 function foo() {

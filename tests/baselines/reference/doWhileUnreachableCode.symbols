@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doWhileUnreachableCode.ts ===
+//// [tests/cases/compiler/doWhileUnreachableCode.ts] ////
+
+=== doWhileUnreachableCode.ts ===
 function test() {
 >test : Symbol(test, Decl(doWhileUnreachableCode.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor4.ts ===
+//// [tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor4.ts] ////
+
+=== decoratorOnClassAccessor4.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : Symbol(dec, Decl(decoratorOnClassAccessor4.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorOnClassAccessor4.ts, 0, 21))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newOnInstanceSymbol.ts ===
+//// [tests/cases/compiler/newOnInstanceSymbol.ts] ////
+
+=== newOnInstanceSymbol.ts ===
 class C {}
 >C : Symbol(C, Decl(newOnInstanceSymbol.ts, 0, 0))
 

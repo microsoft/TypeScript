@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of15.ts] ////
+
 //// [for-of15.ts]
 class StringIterator {
     next() {

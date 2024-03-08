@@ -1,0 +1,45 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty03.ts ===
+// <|var [|x|] = {
+//     /*GOTO DEF*/x
+// }|>
+// let y = {
+//     y
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "x",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty03.ts ===
+// var x = {
+//     x
+// }
+// <|let [|y|] = {
+//     /*GOTO DEF*/y
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "let",
+    "name": "y",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

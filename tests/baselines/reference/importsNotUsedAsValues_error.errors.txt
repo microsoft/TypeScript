@@ -1,28 +1,24 @@
-/b.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
-/c.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
 /e.ts(1,1): error TS6192: All imports in import declaration are unused.
-/g.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
-/i.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
 
 
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
 ==== /a.ts (0 errors) ====
     export default class {}
     export class A {}
     export type B = {};
     export const enum C { One, Two }
     
-==== /b.ts (1 errors) ====
+==== /b.ts (0 errors) ====
     import { A, B } from './a'; // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
     let a: A;
     let b: B;
     console.log(a, b);
     
-==== /c.ts (1 errors) ====
+==== /c.ts (0 errors) ====
     import Default, * as named from './a'; // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
     let a: Default;
     let b: named.B;
     console.log(a, b);
@@ -46,10 +42,8 @@
     let d: D.Two = C.Two;
     console.log(c, d);
     
-==== /g.ts (1 errors) ====
+==== /g.ts (0 errors) ====
     import { C } from './a';
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
     let c: C;
     let d: C.Two;
     console.log(c, d);
@@ -58,10 +52,8 @@
     class H {}
     export = H;
     
-==== /i.ts (1 errors) ====
+==== /i.ts (0 errors) ====
     import H = require('./h'); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
     let h: H = {};
     console.log(h);
     

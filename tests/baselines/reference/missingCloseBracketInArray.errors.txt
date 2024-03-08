@@ -1,8 +1,8 @@
-tests/cases/compiler/missingCloseBracketInArray.ts(1,48): error TS1005: ']' expected.
+missingCloseBracketInArray.ts(1,48): error TS1005: ']' expected.
 
 
-==== tests/cases/compiler/missingCloseBracketInArray.ts (1 errors) ====
+==== missingCloseBracketInArray.ts (1 errors) ====
     var alphas:string[] = alphas = ["1","2","3","4"
                                                    
 !!! error TS1005: ']' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseBracketInArray.ts:1:32: The parser expected to find a ']' to match the '[' token here.
+!!! related TS1007 missingCloseBracketInArray.ts:1:32: The parser expected to find a ']' to match the '[' token here.

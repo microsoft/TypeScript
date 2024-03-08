@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_withOutDir.ts] ////
+
 === /src/app.ts ===
 import { MyClass } from "./library-a";
 >MyClass : typeof MyClass
@@ -22,8 +24,6 @@ y = x;
 >x : MyClass
 
 === /src/library-a/index.ts ===
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
-
 export class MyClass { private x: number; }
 >MyClass : MyClass
 >x : number

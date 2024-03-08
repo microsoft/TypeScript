@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyFunctions.ts ===
+//// [tests/cases/compiler/noImplicitAnyFunctions.ts] ////
+
+=== noImplicitAnyFunctions.ts ===
 declare function f1();
 >f1 : Symbol(f1, Decl(noImplicitAnyFunctions.ts, 0, 0))
 

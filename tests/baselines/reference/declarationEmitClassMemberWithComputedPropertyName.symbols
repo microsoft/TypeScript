@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts ===
+//// [tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts] ////
+
+=== declarationEmitClassMemberWithComputedPropertyName.ts ===
 const k1 = Symbol();
 >k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))

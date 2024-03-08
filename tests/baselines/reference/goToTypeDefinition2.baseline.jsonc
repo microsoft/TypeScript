@@ -1,0 +1,26 @@
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition2_Definition.ts ===
+// <|interface [|I1|] {
+//     p;
+// }|>
+// type propertyType = I1;
+// interface I2 {
+//     property: propertyType;
+// }
+
+// === /tests/cases/fourslash/goToTypeDefinition2_Consumption.ts ===
+// var i2: I2;
+// i2.prop/*GOTO TYPE*/erty;
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "I1",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,42 +1,63 @@
 name: Twoslash Code Sample Repros
 
 on:
-  push:
-    branches:
-      - orta-twoslash-repros
   schedule:
-    - cron:  '0 8 * * *'
-  repository_dispatch:
-    types: run-twoslash-repros
-  issues:
-    types:
-      - labeled
+    - cron: '0 8 * * *'
   workflow_dispatch:
     inputs:
-      bisect_issue:
-        description: Triggers a bisect request on the given issue number instead of updating repros on all issues
+      issue:
+        description: Limits run to a single issue.
+        required: false
+        type: string
+      bisect:
+        description: If set, runs a git bisect on an existing repro. Requires 'issue' to be set. Value can be revision labels (e.g. `good v4.7.3 bad main`) or `true` to infer bisect range.
         required: false
         type: string
 
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
+      requesting_user:
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
 jobs:
   run:
-    if: ${{ github.repository == 'microsoft/TypeScript' && !github.event.label && !github.event.inputs.bisect_issue }}
+    if: ${{ github.repository == 'microsoft/TypeScript' }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-node@v3
-    - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
-      with:
-        github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-
-  bisect:
-    if: ${{ github.event.label.name == 'Bisect Repro' || github.event.inputs.bisect_issue }}
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-node@v3
-    - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
-      with:
-        github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-        bisect: ${{ github.event.issue.number || github.event.inputs.bisect_issue }}
+      - if: ${{ github.event.inputs.bisect }}
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
+          fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
+      - if: ${{ !github.event.inputs.bisect }}
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: microsoft/TypeScript-Twoslash-Repro-Action@8680b5b290d48a7badbc7ba65971d526c61b86b8 # master
+        with:
+          github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          issue: ${{ github.event.inputs.issue }}
+          bisect: ${{ github.event.inputs.bisect }}

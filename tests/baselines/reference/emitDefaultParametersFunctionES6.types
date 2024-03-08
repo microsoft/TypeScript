@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionES6.ts ===
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionES6.ts] ////
+
+=== emitDefaultParametersFunctionES6.ts ===
 function foo(x: string, y = 10) { }
 >foo : (x: string, y?: number) => void
 >x : string

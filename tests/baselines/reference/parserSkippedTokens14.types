@@ -1,7 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens14.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens14.ts] ////
+
+=== parserSkippedTokens14.ts ===
+
 \
-No type information for this code./*existing trivia*/ 
-No type information for this code.\
-No type information for this code.;
-No type information for this code.
-No type information for this code.
+/*existing trivia*/ 
+\
+;
+

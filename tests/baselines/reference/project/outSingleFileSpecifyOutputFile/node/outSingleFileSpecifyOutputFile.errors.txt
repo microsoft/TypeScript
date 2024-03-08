@@ -1,7 +1,7 @@
-error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== test.ts (0 errors) ====
     var a1 = 10;
     class c1 {

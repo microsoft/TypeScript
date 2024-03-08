@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one.ts] ////
+
 === /index.ts ===
 import { ios } from "./foo";
 >ios : Symbol(ios, Decl(index.ts, 0, 8))

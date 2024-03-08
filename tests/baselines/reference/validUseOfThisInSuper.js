@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/validUseOfThisInSuper.ts] ////
+
 //// [validUseOfThisInSuper.ts]
 class Base {
     constructor(public b: Base) {
@@ -34,7 +36,7 @@ var Base = /** @class */ (function () {
 var Super = /** @class */ (function (_super) {
     __extends(Super, _super);
     function Super() {
-        var _this = _super.call(this, (function () { return _this; })()) || this;
+        var _this = _super.call(this, (function () { return _this; })()) || this; // ok since this is not the case: The constructor declares parameter properties or the containing class declares instance member variables with initializers.
         return _this;
     }
     return Super;

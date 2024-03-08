@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -23,7 +24,12 @@ export class A {
 export class B {}
 
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
+{
+  "compilerOptions": {
+    "target": "es6",
+    "verbatimModuleSyntax": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -31,22 +37,110 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[91merror[0m[90m TS2318: [0mCannot find global type 'ClassDecoratorContext'.
 
-[7m1[0m import {B} from './b'
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[96ma.ts[0m:[93m2[0m:[93m2[0m - [91merror[0m[90m TS1238: [0mUnable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
 
-[96ma.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS1219: [0mExperimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
-
-[7m3[0m export class A {
-[7m [0m [91m             ~[0m
+[7m2[0m @((_) => {})
+[7m [0m [91m ~~~~~~~~~~~[0m
 
 [[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/tsconfig.json"}
+//// [/b.js]
+export class B {
+}
+
+
+//// [/a.js]
+var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+    var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+    var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+    var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+    var _, done = false;
+    for (var i = decorators.length - 1; i >= 0; i--) {
+        var context = {};
+        for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+        for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+        context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+        var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+        if (kind === "accessor") {
+            if (result === void 0) continue;
+            if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+            if (_ = accept(result.get)) descriptor.get = _;
+            if (_ = accept(result.set)) descriptor.set = _;
+            if (_ = accept(result.init)) initializers.unshift(_);
+        }
+        else if (_ = accept(result)) {
+            if (kind === "field") initializers.unshift(_);
+            else descriptor[key] = _;
+        }
+    }
+    if (target) Object.defineProperty(target, contextIn.name, descriptor);
+    done = true;
+};
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+import { B } from './b';
+let A = (() => {
+    let _classDecorators = [((_) => { })];
+    let _classDescriptor;
+    let _classExtraInitializers = [];
+    let _classThis;
+    var A = _classThis = class {
+        constructor(p) { }
+    };
+    __setFunctionName(_classThis, "A");
+    (() => {
+        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+        A = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
+    return A = _classThis;
+})();
+export { A };
+
+
+
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "verbatimModuleSyntax": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /b.ts
@@ -63,29 +157,37 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":""}
-
 exitCode:: ExitStatus.undefined
 
-//// [/b.js]
-export class B {
+Change:: Enable experimentalDecorators
+
+Input::
+//// [/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es6",
+    "verbatimModuleSyntax": true,
+    "experimentalDecorators": true
+  }
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/b.js] file written with same contents
 //// [/a.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -93,7 +195,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import './b';
+import { B } from './b';
 let A = class A {
     constructor(p) { }
 };
@@ -104,28 +206,19 @@ export { A };
 
 
 
-Change:: Enable experimentalDecorators
 
-Input::
-//// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
-
-
-Output::
->> Screen clear
-[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
-
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
-
-[7m1[0m import {B} from './b'
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "verbatimModuleSyntax": true,
+  "experimentalDecorators": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /b.ts
@@ -139,72 +232,36 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":""}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Enable emitDecoratorMetadata
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
+{
+  "compilerOptions": {
+    "target": "es6",
+    "verbatimModuleSyntax": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"watch":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
-
-No shapes updated in the builder::
-
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":""}
-
-exitCode:: ExitStatus.undefined
 
 //// [/b.js] file written with same contents
 //// [/a.js]
@@ -228,3 +285,32 @@ A = __decorate([
 export { A };
 
 
+
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "verbatimModuleSyntax": true,
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

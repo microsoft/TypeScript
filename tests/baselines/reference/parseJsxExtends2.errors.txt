@@ -1,0 +1,13 @@
+index.tsx(5,13): error TS2304: Cannot find name 'T'.
+
+
+==== index.tsx (1 errors) ====
+    declare const React: any;
+    
+    export function Foo() {
+        // Error: T is not declared.
+        return <T extends/>
+                ~
+!!! error TS2304: Cannot find name 'T'.
+    }
+    

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration7.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration7.ts] ////
+
+=== parserIndexMemberDeclaration7.ts ===
 class C {
 >C : Symbol(C, Decl(parserIndexMemberDeclaration7.ts, 0, 0))
 

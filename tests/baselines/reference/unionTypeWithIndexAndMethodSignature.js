@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts] ////
+
 //// [unionTypeWithIndexAndMethodSignature.ts]
 interface Options {
     m(x: number): void;
@@ -11,5 +13,5 @@ f({
 //// [unionTypeWithIndexAndMethodSignature.js]
 "use strict";
 f({
-    m: function (x) { }
+    m: function (x) { },
 });

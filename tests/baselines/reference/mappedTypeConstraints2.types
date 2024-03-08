@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
+=== mappedTypeConstraints2.ts ===
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 >Mapped1 : Mapped1<K>
 >a : P
@@ -50,6 +52,62 @@ function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
 >key : Uppercase<K>
 }
 
+type Mapped4<K extends `_${string}`> = {
+>Mapped4 : Mapped4<K>
+
+  [P in K]: P;
+};
+
+function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
+>f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) => void
+>obj : Mapped4<K>
+>key : K
+
+  let s: `_${string}` = obj[key];
+>s : `_${string}`
+>obj[key] : Mapped4<K>[K]
+>obj : Mapped4<K>
+>key : K
+}
+
+type Mapped5<K extends string> = {
+>Mapped5 : Mapped5<K>
+
+  [P in K as P extends `_${string}` ? P : never]: P;
+};
+
+function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
+>f5 : <K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) => void
+>obj : Mapped5<K>
+>key : K extends `_${string}` ? K : never
+
+  let s: `_${string}` = obj[key];
+>s : `_${string}`
+>obj[key] : Mapped5<K>[K extends `_${string}` ? K : never]
+>obj : Mapped5<K>
+>key : K extends `_${string}` ? K : never
+}
+
+// repro from #53066#issuecomment-1913384757
+
+type Mapped6<K extends string> = {
+>Mapped6 : Mapped6<K>
+
+  [P in K as `_${P}`]: P;
+};
+
+function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
+>f6 : <K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) => void
+>obj : Mapped6<K>
+>key : keyof Mapped6<K>
+
+  let s: `_${string}` = obj[key]; // Error
+>s : `_${string}`
+>obj[key] : Mapped6<K>[keyof Mapped6<K>]
+>obj : Mapped6<K>
+>key : keyof Mapped6<K>
+}
+
 // Repro from #47794
 
 type Foo<T extends string> = {
@@ -93,9 +151,9 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >key : string
 >val : any
 >Object.entries(obj) : [string, any][]
->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 >obj : T
 
         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
@@ -126,5 +184,29 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     }
     return true;
 >true : true
+}
+
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+>ObjectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+
+    [k in K as `_${k}`]: true;
+>true : true
+
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+>genericTest : <K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) => void
+>objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+>key : K
+
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`]; // assignability fails here, but ideally should not
+>shouldBeTrue : true
+>true : true
+>objectWithUnderscoredKeys[`_${key}`] : ObjectWithUnderscoredKeys<K>[`_${K}`]
+>objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+>`_${key}` : `_${K}`
+>key : K
 }
 

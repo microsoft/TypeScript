@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty3.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty3.ts]
 type Foo = (number | undefined)[] | undefined;
 

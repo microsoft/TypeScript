@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock19.ts] ////
+
 //// [classStaticBlock19.ts]
 class C {
     @decorator

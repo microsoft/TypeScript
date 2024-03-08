@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts] ////
+
 //// [generatorTypeCheck63.ts]
 export interface StrategicState {
     lastStrategyApplied?: string;
@@ -42,7 +44,8 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 //// [generatorTypeCheck63.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nothing3 = exports.Nothing2 = exports.Nothing1 = exports.Nothing = exports.strategy = void 0;
+exports.Nothing3 = exports.Nothing2 = exports.Nothing1 = exports.Nothing = void 0;
+exports.strategy = strategy;
 function strategy(stratName, gen) {
     return function* (state) {
         for (const next of gen(state)) {
@@ -53,7 +56,6 @@ function strategy(stratName, gen) {
         }
     };
 }
-exports.strategy = strategy;
 exports.Nothing = strategy("Nothing", function* (state) {
     yield 1;
     return state;

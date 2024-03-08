@@ -1,5 +1,6 @@
+// === findAllReferences ===
 // === /a.js ===
-// /** @template /*FIND ALL REFS*/[|T|] */
+// /** @template /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|] */
 // class C {
 //     constructor() {
 //         /** @type {[|T|]} */
@@ -7,94 +8,79 @@
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type parameter",
-      "name": "(type parameter) T in C<T>",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 68,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.js ===
+  // /** @template /*FIND ALL REFS*/[|T|] */
+  // class C {
+  //     constructor() {
+  //         /** @type {T} */
+  // --- (line: 5) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in C<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.js ===
-// /** @template [|T|] */
+// /** @template [|{| isWriteAccess: true |}T|] */
 // class C {
 //     constructor() {
 //         /** @type {/*FIND ALL REFS*/[|T|]} */
@@ -102,86 +88,72 @@
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type parameter",
-      "name": "(type parameter) T in C<T>",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 68,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.js ===
+  // /** @template [|T|] */
+  // class C {
+  //     constructor() {
+  //         /** @type {/*FIND ALL REFS*/T} */
+  //         this.x = null;
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in C<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

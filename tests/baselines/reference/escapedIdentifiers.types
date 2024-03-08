@@ -1,4 +1,6 @@
-=== tests/cases/compiler/escapedIdentifiers.ts ===
+//// [tests/cases/compiler/escapedIdentifiers.ts] ////
+
+=== escapedIdentifiers.ts ===
 /*
     0 .. \u0030
     9 .. \u0039

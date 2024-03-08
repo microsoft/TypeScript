@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,6): error TS2456: Type alias 'T1' circularly references itself.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,9): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,11): error TS2300: Duplicate identifier '(Missing)'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,11): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,12): error TS1359: Identifier expected. 'in' is a reserved word that cannot be used here.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(2,6): error TS2456: Type alias 'T2' circularly references itself.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(2,9): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotationsWithCircularlyReferencesError.ts(1,6): error TS2456: Type alias 'T1' circularly references itself.
+varianceAnnotationsWithCircularlyReferencesError.ts(1,9): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotationsWithCircularlyReferencesError.ts(1,11): error TS2300: Duplicate identifier '(Missing)'.
+varianceAnnotationsWithCircularlyReferencesError.ts(1,11): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotationsWithCircularlyReferencesError.ts(1,12): error TS1359: Identifier expected. 'in' is a reserved word that cannot be used here.
+varianceAnnotationsWithCircularlyReferencesError.ts(2,6): error TS2456: Type alias 'T2' circularly references itself.
+varianceAnnotationsWithCircularlyReferencesError.ts(2,9): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts (7 errors) ====
+==== varianceAnnotationsWithCircularlyReferencesError.ts (7 errors) ====
     type T1<in in> = T1 // Error: circularly references 
          ~~
 !!! error TS2456: Type alias 'T1' circularly references itself.

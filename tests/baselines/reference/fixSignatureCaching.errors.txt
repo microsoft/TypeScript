@@ -1,64 +1,65 @@
-tests/cases/conformance/fixSignatureCaching.ts(9,10): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(284,10): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(293,10): error TS2339: Property 'FALLBACK_PHONE' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(294,10): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(295,10): error TS2339: Property 'FALLBACK_MOBILE' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(330,74): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(369,10): error TS2339: Property 'findMatch' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(387,10): error TS2339: Property 'findMatches' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(407,10): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(408,26): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(431,10): error TS2339: Property 'getVersion' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(432,28): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(433,31): error TS2339: Property 'prepareVersionNo' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(443,10): error TS2339: Property 'prepareVersionNo' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(458,10): error TS2339: Property 'isMobileFallback' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(459,21): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(460,18): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(463,10): error TS2339: Property 'isTabletFallback' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(464,21): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(467,10): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(474,23): error TS2339: Property 'findMatch' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(474,38): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(481,22): error TS2339: Property 'findMatch' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(481,37): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(489,18): error TS2339: Property 'isMobileFallback' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(492,37): error TS2339: Property 'FALLBACK_MOBILE' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(495,51): error TS2339: Property 'FALLBACK_PHONE' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(498,52): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(501,25): error TS2339: Property 'isTabletFallback' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(502,48): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(511,10): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(636,10): error TS2339: Property 'detectOS' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(637,21): error TS2339: Property 'findMatch' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(637,36): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(638,18): error TS2339: Property 'findMatch' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(638,33): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(641,10): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(707,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(737,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(786,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(808,46): error TS2339: Property 'findMatch' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(808,61): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(831,47): error TS2339: Property 'findMatches' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(831,64): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(848,39): error TS2339: Property 'detectOS' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(872,25): error TS2339: Property 'getVersion' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(893,25): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(915,36): error TS2339: Property 'findMatches' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(915,53): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(955,42): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(964,57): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/fixSignatureCaching.ts(978,42): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/fixSignatureCaching.ts(979,37): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/fixSignatureCaching.ts(980,23): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(980,48): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(981,16): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not exist on type 'Window & typeof globalThis'.
+fixSignatureCaching.ts(9,10): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(284,10): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
+fixSignatureCaching.ts(293,10): error TS2339: Property 'FALLBACK_PHONE' does not exist on type '{}'.
+fixSignatureCaching.ts(294,10): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
+fixSignatureCaching.ts(295,10): error TS2339: Property 'FALLBACK_MOBILE' does not exist on type '{}'.
+fixSignatureCaching.ts(301,17): error TS2339: Property 'isArray' does not exist on type 'never'.
+fixSignatureCaching.ts(330,74): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(369,10): error TS2339: Property 'findMatch' does not exist on type '{}'.
+fixSignatureCaching.ts(387,10): error TS2339: Property 'findMatches' does not exist on type '{}'.
+fixSignatureCaching.ts(407,10): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
+fixSignatureCaching.ts(408,26): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(431,10): error TS2339: Property 'getVersion' does not exist on type '{}'.
+fixSignatureCaching.ts(432,28): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
+fixSignatureCaching.ts(433,31): error TS2339: Property 'prepareVersionNo' does not exist on type '{}'.
+fixSignatureCaching.ts(443,10): error TS2339: Property 'prepareVersionNo' does not exist on type '{}'.
+fixSignatureCaching.ts(458,10): error TS2339: Property 'isMobileFallback' does not exist on type '{}'.
+fixSignatureCaching.ts(459,21): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
+fixSignatureCaching.ts(460,18): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
+fixSignatureCaching.ts(463,10): error TS2339: Property 'isTabletFallback' does not exist on type '{}'.
+fixSignatureCaching.ts(464,21): error TS2339: Property 'detectMobileBrowsers' does not exist on type '{}'.
+fixSignatureCaching.ts(467,10): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
+fixSignatureCaching.ts(474,23): error TS2339: Property 'findMatch' does not exist on type '{}'.
+fixSignatureCaching.ts(474,38): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(481,22): error TS2339: Property 'findMatch' does not exist on type '{}'.
+fixSignatureCaching.ts(481,37): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(489,18): error TS2339: Property 'isMobileFallback' does not exist on type '{}'.
+fixSignatureCaching.ts(492,37): error TS2339: Property 'FALLBACK_MOBILE' does not exist on type '{}'.
+fixSignatureCaching.ts(495,51): error TS2339: Property 'FALLBACK_PHONE' does not exist on type '{}'.
+fixSignatureCaching.ts(498,52): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
+fixSignatureCaching.ts(501,25): error TS2339: Property 'isTabletFallback' does not exist on type '{}'.
+fixSignatureCaching.ts(502,48): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
+fixSignatureCaching.ts(511,10): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
+fixSignatureCaching.ts(636,10): error TS2339: Property 'detectOS' does not exist on type '{}'.
+fixSignatureCaching.ts(637,21): error TS2339: Property 'findMatch' does not exist on type '{}'.
+fixSignatureCaching.ts(637,36): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(638,18): error TS2339: Property 'findMatch' does not exist on type '{}'.
+fixSignatureCaching.ts(638,33): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(641,10): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
+fixSignatureCaching.ts(707,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
+fixSignatureCaching.ts(737,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
+fixSignatureCaching.ts(786,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
+fixSignatureCaching.ts(808,46): error TS2339: Property 'findMatch' does not exist on type '{}'.
+fixSignatureCaching.ts(808,61): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(831,47): error TS2339: Property 'findMatches' does not exist on type '{}'.
+fixSignatureCaching.ts(831,64): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(848,39): error TS2339: Property 'detectOS' does not exist on type '{}'.
+fixSignatureCaching.ts(872,25): error TS2339: Property 'getVersion' does not exist on type '{}'.
+fixSignatureCaching.ts(893,25): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
+fixSignatureCaching.ts(915,36): error TS2339: Property 'findMatches' does not exist on type '{}'.
+fixSignatureCaching.ts(915,53): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+fixSignatureCaching.ts(955,42): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
+fixSignatureCaching.ts(964,57): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
+fixSignatureCaching.ts(978,16): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+fixSignatureCaching.ts(978,42): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+fixSignatureCaching.ts(979,37): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+fixSignatureCaching.ts(980,23): error TS2304: Cannot find name 'define'.
+fixSignatureCaching.ts(980,48): error TS2304: Cannot find name 'define'.
+fixSignatureCaching.ts(981,16): error TS2304: Cannot find name 'define'.
+fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not exist on type 'Window & typeof globalThis'.
 
 
-==== tests/cases/conformance/fixSignatureCaching.ts (58 errors) ====
+==== fixSignatureCaching.ts (59 errors) ====
     // Repro from #10697
     
     (function (define, undefined) {
@@ -370,6 +371,8 @@ tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property '
         isArray = 'isArray' in Array
             ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }
             : Array.isArray;
+                    ~~~~~~~
+!!! error TS2339: Property 'isArray' does not exist on type 'never'.
     
         function equalIC(a, b) {
             return a != null && b != null && a.toLowerCase() === b.toLowerCase();

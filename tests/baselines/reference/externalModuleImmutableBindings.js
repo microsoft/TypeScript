@@ -52,12 +52,12 @@ for ((stuff[n]) of []) {}
 
 //// [f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 1;
 //// [f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // all mutations below are illegal and should be fixed
 var stuff = require("./f1");
 var n = 'baz';

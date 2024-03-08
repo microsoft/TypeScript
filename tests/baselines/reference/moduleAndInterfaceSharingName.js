@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAndInterfaceSharingName.ts] ////
+
 //// [moduleAndInterfaceSharingName.ts]
 module X {
     export module Y {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers4.ts] ////
+
 //// [subtypingWithObjectMembers4.ts]
 // subtyping when property names do not match
 

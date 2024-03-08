@@ -1,4 +1,6 @@
-=== tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts ===
+//// [tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts] ////
+
+=== untypedFunctionCallsWithTypeParameters1.ts ===
 // none of these function calls should be allowed
 var x = function () { return; };
 >x : () => void
@@ -31,7 +33,6 @@ class C implements Function {
 
     prototype = null;
 >prototype : any
->null : null
 
     length = 1;
 >length : number
@@ -39,7 +40,6 @@ class C implements Function {
 
     arguments = null;
 >arguments : any
->null : null
 
     caller = () => { };
 >caller : () => void

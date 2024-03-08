@@ -1,7 +1,9 @@
-=== tests/cases/compiler/decoratorMetadataConditionalType.ts ===
+//// [tests/cases/compiler/decoratorMetadataConditionalType.ts] ////
+
+=== decoratorMetadataConditionalType.ts ===
 declare function d(): PropertyDecorator;
 >d : Symbol(d, Decl(decoratorMetadataConditionalType.ts, 0, 0))
->PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 
 abstract class BaseEntity<T> {
 >BaseEntity : Symbol(BaseEntity, Decl(decoratorMetadataConditionalType.ts, 0, 40))

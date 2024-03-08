@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional.ts] ////
+
 //// [uncalledFunctionChecksInConditional.ts]
 declare function isFoo(): boolean;
 declare function isBar(): boolean;

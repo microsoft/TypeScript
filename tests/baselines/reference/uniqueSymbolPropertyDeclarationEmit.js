@@ -26,24 +26,24 @@ export declare const Po: {
 
 //// [op.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = Op;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Op;
 //// [test.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = foo;
 var op_1 = __importDefault(require("./op"));
 var po_1 = require("./po");
 function foo() {
     var _a;
     return _a = {},
-        _a[op_1["default"].or] = [],
+        _a[op_1.default.or] = [],
         _a[po_1.Po.ro] = {},
         _a;
 }
-exports["default"] = foo;
 
 
 //// [op.d.ts]

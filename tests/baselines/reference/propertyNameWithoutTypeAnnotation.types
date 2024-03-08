@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts] ////
+
+=== propertyNameWithoutTypeAnnotation.ts ===
 class C {
 >C : C
 
@@ -24,7 +26,6 @@ var b = {
 
     foo: null
 >foo : null
->null : null
 }
 
 // These should all be of type 'any'
@@ -41,7 +42,6 @@ var r2 = (<I>null).foo;
 >(<I>null).foo : any
 >(<I>null) : I
 ><I>null : I
->null : null
 >foo : any
 
 var r3 = a.foo;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/voidReturnLambdaValue.ts ===
+//// [tests/cases/compiler/voidReturnLambdaValue.ts] ////
+
+=== voidReturnLambdaValue.ts ===
 function foo(arg1, arg2, callback:(v1,v2,v3) => void):void {
 >foo : Symbol(foo, Decl(voidReturnLambdaValue.ts, 0, 0))
 >arg1 : Symbol(arg1, Decl(voidReturnLambdaValue.ts, 0, 13))

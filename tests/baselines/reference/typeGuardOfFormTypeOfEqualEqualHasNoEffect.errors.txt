@@ -1,11 +1,11 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r1' must be of type 'string', but here has type 'number'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(20,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'boolean', but here has type 'string'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(27,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r3' must be of type 'number', but here has type 'boolean'.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(30,5): error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(34,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'C', but here has type 'string'.
+typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r1' must be of type 'string', but here has type 'number'.
+typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(20,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'boolean', but here has type 'string'.
+typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(27,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r3' must be of type 'number', but here has type 'boolean'.
+typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(30,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(34,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'C', but here has type 'string'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts (5 errors) ====
+==== typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts (5 errors) ====
     class C { private p: string };
     
     var strOrNum: string | number;
@@ -21,7 +21,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHa
         var r1 = strOrNum; // string | number
             ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r1' must be of type 'string', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:10:9: 'r1' was also declared here.
+!!! related TS6203 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:10:9: 'r1' was also declared here.
     }
     
     if (typeof strOrBool == "boolean") {
@@ -31,7 +31,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHa
         var r2 = strOrBool; // string | boolean
             ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'boolean', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:17:9: 'r2' was also declared here.
+!!! related TS6203 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:17:9: 'r2' was also declared here.
     }
     
     if (typeof numOrBool == "number") {
@@ -41,17 +41,17 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHa
         var r3 =  numOrBool; // number | boolean
             ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r3' must be of type 'number', but here has type 'boolean'.
-!!! related TS6203 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:24:9: 'r3' was also declared here.
+!!! related TS6203 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:24:9: 'r3' was also declared here.
     }
     
     if (typeof strOrC == "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
         var r4 = strOrC; // string | C
     }
     else {
         var r4 = strOrC; // string | C
             ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'C', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:31:9: 'r4' was also declared here.
+!!! related TS6203 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts:31:9: 'r4' was also declared here.
     }

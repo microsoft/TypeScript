@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts] ////
+
+=== typeFromPrivatePropertyAssignment.ts ===
 type Foo = { foo?: string };
 >Foo : { foo?: string; }
 >foo : string

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportVisibility.ts] ////
+
 //// [exportVisibility.ts]
 export class Foo {
 }
@@ -11,8 +13,9 @@ export function test(foo: Foo) {
 
 //// [exportVisibility.js]
 "use strict";
-exports.__esModule = true;
-exports.test = exports.foo = exports.Foo = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = exports.Foo = void 0;
+exports.test = test;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -23,4 +26,3 @@ exports.foo = new Foo();
 function test(foo) {
     return true;
 }
-exports.test = test;

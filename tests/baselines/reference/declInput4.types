@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declInput4.ts ===
+//// [tests/cases/compiler/declInput4.ts] ////
+
+=== declInput4.ts ===
 module M {
 >M : typeof M
 
@@ -27,11 +29,9 @@ module M {
 
         public m232(): E { return null;}
 >m232 : () => E
->null : null
 
         public m242(): I1 { return null; }
 >m242 : () => I1
->null : null
 
         public m26(i:I1) {}
 >m26 : (i: I1) => void

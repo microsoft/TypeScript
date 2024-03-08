@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers.ts] ////
+
 //// [destructuringWithLiteralInitializers.ts]
 // (arg: { x: any, y: any }) => void
 function f1({ x, y }) { }

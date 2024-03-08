@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts] ////
+
 //// [inferringReturnTypeFromConstructSignatureGeneric.ts]
 class GenericObject<T extends {} = {}> {
   give(value: T) {
@@ -28,6 +30,11 @@ g2.give(1);
 const g3 = g(GenericNumberOrString);
 g3.give(1);
 g3.give('1');
+
+// repro from #35636
+class C<T> {}
+const g4 = g(C);
+
 
 //// [inferringReturnTypeFromConstructSignatureGeneric.js]
 var GenericObject = /** @class */ (function () {
@@ -64,3 +71,10 @@ g2.give(1);
 var g3 = g(GenericNumberOrString);
 g3.give(1);
 g3.give('1');
+// repro from #35636
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var g4 = g(C);

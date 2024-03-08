@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES5.ts] ////
+
+=== computedPropertyNamesSourceMap2_ES5.ts ===
 var v = {
 >v : { hello(): void; readonly goodbye: number; }
 >{    ["hello"]() {        debugger;	},    get ["goodbye"]() {		return 0;	}} : { hello(): void; readonly goodbye: number; }

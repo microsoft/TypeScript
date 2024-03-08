@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
@@ -28,8 +29,35 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js]
+var x = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -43,28 +71,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/main.ts:
-  {"fileName":"/user/username/projects/myproject/main.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js]
-var x = 10;
-
-
 
 Change:: Write a file
 
@@ -78,8 +85,39 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/bar.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js] file written with same contents
+//// [/user/username/projects/myproject/bar.js]
+var y = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/bar.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/bar.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -95,28 +133,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/bar.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/main.ts:
-  {"fileName":"/user/username/projects/myproject/main.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/bar.ts:
-  {"fileName":"/user/username/projects/myproject/bar.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents
-//// [/user/username/projects/myproject/bar.js]
-var y = 10;
-
-

@@ -20,14 +20,13 @@ file1.bar();
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file2.js]
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file1.js]
 "use strict";
-exports.__esModule = true;
-exports.foo = void 0;
-function foo() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
+function foo() { }
 ;
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
 var file1 = require("./externalModuleRefernceResolutionOrderInImportDeclaration_file1");
 file1.foo();

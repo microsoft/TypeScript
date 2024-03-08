@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendingQualifiedName.ts] ////
+
 //// [classExtendingQualifiedName.ts]
 module M {
     class C {

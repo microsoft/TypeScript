@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/declarationEmitCommonSourceDirectoryDoesNotContainAllFiles.ts] ////
+
 === /a/index.ts ===
+
 export * from "./src/"
-No type information for this code.=== /b/index.ts ===
+=== /b/index.ts ===
+
 export * from "./src/"
-No type information for this code.=== /b/src/index.ts ===
+=== /b/src/index.ts ===
 export class B {}
 >B : Symbol(B, Decl(index.ts, 0, 0))
 

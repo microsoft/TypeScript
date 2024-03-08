@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ClassTest8.ts ===
+//// [tests/cases/compiler/es6ClassTest8.ts] ////
+
+=== es6ClassTest8.ts ===
 function f1(x:any) {return x;}
 >f1 : (x: any) => any
 >x : any
@@ -34,25 +36,21 @@ class Vector {
     static norm(v:Vector):Vector {return null;}
 >norm : (v: Vector) => Vector
 >v : Vector
->null : null
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
 >minus : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >v2 : Vector
->null : null
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
 >times : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >v2 : Vector
->null : null
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
 >cross : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >v2 : Vector
->null : null
 
     constructor(public x: number,
 >x : number
@@ -68,7 +66,6 @@ class Vector {
 >dot : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >v2 : Vector
->null : null
 
 }              
 

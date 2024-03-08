@@ -1,14 +1,10 @@
-error TS5053: Option 'out' cannot be specified with option 'isolatedModules'.
-tests/cases/compiler/file1.ts(1,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
-tests/cases/compiler/file2.ts(1,1): error TS1208: 'file2.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
+error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+  Use 'outFile' instead.
 
 
-!!! error TS5053: Option 'out' cannot be specified with option 'isolatedModules'.
-==== tests/cases/compiler/file1.ts (1 errors) ====
+!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
+==== file1.ts (0 errors) ====
     export var x;
-    ~~~~~~~~~~~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
-==== tests/cases/compiler/file2.ts (1 errors) ====
+==== file2.ts (0 errors) ====
     var y;
-    ~~~
-!!! error TS1208: 'file2.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.

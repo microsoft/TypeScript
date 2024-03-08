@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_relativeImportWithinPackage_scoped.ts] ////
+
 === /index.ts ===
 import { use } from "@foo/bar/use";
 >use : (o: import("/node_modules/@foo/bar/index").C) => void

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultNamedExportWithType2.ts ===
+//// [tests/cases/compiler/defaultNamedExportWithType2.ts] ////
+
+=== defaultNamedExportWithType2.ts ===
 type Foo = number;
 >Foo : number
 

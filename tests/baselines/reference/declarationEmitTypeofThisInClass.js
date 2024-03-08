@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeofThisInClass.ts] ////
+
 //// [declarationEmitTypeofThisInClass.ts]
 class Foo {
     public foo!: string

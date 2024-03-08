@@ -68,7 +68,7 @@ System.register(["./file3"], function (exports_1, context_1) {
         ],
         execute: function () {
             exports_1("moduleCStar", moduleCStar);
-            exports_1("moduleC", file3_1["default"]);
+            exports_1("moduleC", file3_1.default);
             exports_1("value", file3_2.value);
         }
     };

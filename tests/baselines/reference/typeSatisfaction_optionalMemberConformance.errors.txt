@@ -1,0 +1,14 @@
+typeSatisfaction_optionalMemberConformance.ts(7,11): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
+
+
+==== typeSatisfaction_optionalMemberConformance.ts (1 errors) ====
+    type Point2d = { x: number, y: number };
+    // Undesirable behavior today with type annotation
+    const a = { x: 10 } satisfies Partial<Point2d>;
+    // Should OK
+    console.log(a.x.toFixed());
+    // Should error
+    let p = a.y;
+              ~
+!!! error TS2339: Property 'y' does not exist on type '{ x: number; }'.
+    

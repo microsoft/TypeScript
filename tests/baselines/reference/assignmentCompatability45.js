@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability45.ts] ////
+
 //// [assignmentCompatability45.ts]
 abstract class A {}
 class B extends A {

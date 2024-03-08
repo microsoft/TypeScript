@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nondistributiveConditionalTypeInfer.ts ===
+//// [tests/cases/compiler/nondistributiveConditionalTypeInfer.ts] ////
+
+=== nondistributiveConditionalTypeInfer.ts ===
 type _R<T> = [T] extends [{ _R: (_: infer R) => void }] ? R : never;
 >_R : Symbol(_R, Decl(nondistributiveConditionalTypeInfer.ts, 0, 0))
 >T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 0, 8))

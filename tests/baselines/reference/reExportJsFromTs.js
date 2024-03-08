@@ -11,11 +11,11 @@ export { tsConstants };
 
 //// [constants.js]
 module.exports = {
-    str: 'x'
+    str: 'x',
 };
 //// [constants.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.tsConstants = void 0;
 var tsConstants = require("../lib/constants");
 exports.tsConstants = tsConstants;

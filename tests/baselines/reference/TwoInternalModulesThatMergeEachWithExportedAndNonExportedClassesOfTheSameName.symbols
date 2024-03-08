@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts] ////
+
+=== TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts ===
 module A {
 >A : Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 5, 1))
 

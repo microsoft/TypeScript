@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
 
 //// [ThingA.ts]
-// https://github.com/Microsoft/TypeScript/issues/8612
 export class ThingA { } 
 
 //// [ThingB.ts]
@@ -20,9 +19,8 @@ export class Test {
 
 //// [ThingA.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThingA = void 0;
-// https://github.com/Microsoft/TypeScript/issues/8612
 var ThingA = /** @class */ (function () {
     function ThingA() {
     }
@@ -31,7 +29,7 @@ var ThingA = /** @class */ (function () {
 exports.ThingA = ThingA;
 //// [ThingB.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThingB = void 0;
 var ThingB = /** @class */ (function () {
     function ThingB() {
@@ -41,26 +39,15 @@ var ThingB = /** @class */ (function () {
 exports.ThingB = ThingB;
 //// [Things.js]
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThingB = exports.ThingA = void 0;
 var ThingA_1 = require("./ThingA");
-__createBinding(exports, ThingA_1, "ThingA");
+Object.defineProperty(exports, "ThingA", { enumerable: true, get: function () { return ThingA_1.ThingA; } });
 var ThingB_1 = require("./ThingB");
-__createBinding(exports, ThingB_1, "ThingB");
+Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { return ThingB_1.ThingB; } });
 //// [Test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
 var Test = /** @class */ (function () {
     function Test() {

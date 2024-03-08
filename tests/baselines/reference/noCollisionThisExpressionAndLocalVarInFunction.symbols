@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCollisionThisExpressionAndLocalVarInFunction.ts ===
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInFunction.ts] ////
+
+=== noCollisionThisExpressionAndLocalVarInFunction.ts ===
 var console: {
 >console : Symbol(console, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 3))
 

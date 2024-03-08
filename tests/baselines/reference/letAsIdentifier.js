@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letAsIdentifier.ts] ////
+
 //// [letAsIdentifier.ts]
 var let = 10;
 var a = 10;

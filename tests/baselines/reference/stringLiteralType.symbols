@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/stringLiteral/stringLiteralType.ts ===
+//// [tests/cases/conformance/types/primitives/stringLiteral/stringLiteralType.ts] ////
+
+=== stringLiteralType.ts ===
 var x: 'hi';
 >x : Symbol(x, Decl(stringLiteralType.ts, 0, 3))
 

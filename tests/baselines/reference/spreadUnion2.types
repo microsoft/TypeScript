@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadUnion2.ts ===
+//// [tests/cases/conformance/types/spread/spreadUnion2.ts] ////
+
+=== spreadUnion2.ts ===
 declare const undefinedUnion: { a: number } | undefined;
 >undefinedUnion : { a: number; } | undefined
 >a : number
@@ -6,7 +8,6 @@ declare const undefinedUnion: { a: number } | undefined;
 declare const nullUnion: { b: number } | null;
 >nullUnion : { b: number; } | null
 >b : number
->null : null
 
 var o1: {} | { a: number };
 >o1 : {} | { a: number; }

@@ -1,16 +1,16 @@
-tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(7,9): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
+intersectionWithUnionConstraint.ts(7,9): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
   Type 'undefined' is not assignable to type 'string | number'.
-tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(8,9): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
+intersectionWithUnionConstraint.ts(8,9): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
   Type 'undefined' is not assignable to type 'string | null'.
-tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(10,9): error TS2322: Type 'string | undefined' is not assignable to type 'number | null'.
+intersectionWithUnionConstraint.ts(10,9): error TS2322: Type 'string | undefined' is not assignable to type 'number | null'.
   Type 'undefined' is not assignable to type 'number | null'.
-tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(11,9): error TS2322: Type 'string | undefined' is not assignable to type 'number | undefined'.
+intersectionWithUnionConstraint.ts(11,9): error TS2322: Type 'string | undefined' is not assignable to type 'number | undefined'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(12,9): error TS2322: Type 'string | undefined' is not assignable to type 'null | undefined'.
+intersectionWithUnionConstraint.ts(12,9): error TS2322: Type 'string | undefined' is not assignable to type 'null | undefined'.
   Type 'string' is not assignable to type 'null | undefined'.
 
 
-==== tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts (5 errors) ====
+==== intersectionWithUnionConstraint.ts (5 errors) ====
     function f1<T extends string | number, U extends string | number>(x: T & U) {
         // Combined constraint of 'T & U' is 'string | number'
         let y: string | number = x;

@@ -1,5 +1,10 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression9.ts] ////
+
+=== fileJs.js ===
+b ? (c) : d => e // Legal JS
+>d : Symbol(d, Decl(fileJs.js, 0, 9))
+
+=== fileTs.ts ===
 b ? (c) : d => e
->c : Symbol(c, Decl(parserArrowFunctionExpression9.ts, 0, 5))
->d : Symbol(d)
+>d : Symbol(d, Decl(fileTs.ts, 0, 9))
 

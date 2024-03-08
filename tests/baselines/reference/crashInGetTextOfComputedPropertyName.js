@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashInGetTextOfComputedPropertyName.ts] ////
+
 //// [crashInGetTextOfComputedPropertyName.ts]
 // https://github.com/Microsoft/TypeScript/issues/29006
 export interface A { type: 'a' }
@@ -32,7 +34,7 @@ typeof itemWithTSError // :(
 
 //// [crashInGetTextOfComputedPropertyName.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var itemId = 'some-id';
 // --- test on first level ---
 var items = {};

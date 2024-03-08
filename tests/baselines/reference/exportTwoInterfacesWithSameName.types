@@ -1,5 +1,7 @@
-=== tests/cases/compiler/exportTwoInterfacesWithSameName.ts ===
+//// [tests/cases/compiler/exportTwoInterfacesWithSameName.ts] ////
+
+=== exportTwoInterfacesWithSameName.ts ===
+
 export interface I {}
-No type information for this code.export interface I {}
-No type information for this code.
-No type information for this code.
+export interface I {}
+

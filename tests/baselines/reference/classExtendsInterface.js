@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendsInterface.ts] ////
+
 //// [classExtendsInterface.ts]
 interface Comparable {}
 class A extends Comparable {}

@@ -1,3 +1,5 @@
-=== tests/cases/conformance/es6/templates/templateStringTermination3_ES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringTermination3_ES6.ts] ////
+
+=== templateStringTermination3_ES6.ts ===
+
 `\``
-No type information for this code.

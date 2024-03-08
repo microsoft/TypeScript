@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameters9.ts] ////
+
 //// [unusedTypeParameters9.ts]
 // clas + interface
 class C1<T> { }

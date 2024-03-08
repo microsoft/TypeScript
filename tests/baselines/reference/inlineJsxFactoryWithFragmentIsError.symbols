@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryWithFragmentIsError.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : Symbol(global, Decl(renderer.d.ts, 0, 0))
 
@@ -19,21 +21,21 @@ export function dom(): void;
 export function createElement(): void;
 >createElement : Symbol(createElement, Decl(renderer.d.ts, 7, 28))
 
-=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+=== reacty.tsx ===
 /** @jsx React.createElement */
 import * as React from "./renderer";
 >React : Symbol(React, Decl(reacty.tsx, 1, 6))
 
 <><h></h></>
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer";
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))
 
 <><h></h></>
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 

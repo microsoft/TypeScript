@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6DeclOrdering.ts ===
+//// [tests/cases/compiler/es6DeclOrdering.ts] ////
+
+=== es6DeclOrdering.ts ===
 class Bar {
 >Bar : Symbol(Bar, Decl(es6DeclOrdering.ts, 0, 0))
 

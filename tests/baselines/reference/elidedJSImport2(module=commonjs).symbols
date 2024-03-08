@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/elidedJSImport2.ts] ////
+
+=== index.js ===
+import { Foo } from "./other.js";
+>Foo : Symbol(Foo, Decl(index.js, 0, 8))
+
+import * as other from "./other.js";
+>other : Symbol(other, Decl(index.js, 1, 6))
+
+import defaultFoo from "./other.js";
+>defaultFoo : Symbol(defaultFoo, Decl(index.js, 2, 6))
+
+const x = new Foo();
+>x : Symbol(x, Decl(index.js, 4, 5))
+
+const y = other.Foo();
+>y : Symbol(y, Decl(index.js, 5, 5))
+>other : Symbol(other, Decl(index.js, 1, 6))
+
+const z = new defaultFoo();
+>z : Symbol(z, Decl(index.js, 6, 5))
+
+=== other.d.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(other.d.ts, 0, 0))
+
+    bar: number;
+>bar : Symbol(Foo.bar, Decl(other.d.ts, 0, 22))
+}
+
+export default interface Bar {
+>Bar : Symbol(Bar, Decl(other.d.ts, 2, 1))
+
+    foo: number;
+>foo : Symbol(Bar.foo, Decl(other.d.ts, 4, 30))
+}
+
+=== other.js ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(other.js, 0, 0))
+
+    bar = 2.4;
+>bar : Symbol(Foo.bar, Decl(other.js, 0, 18))
+}
+
+export default class Bar {
+>Bar : Symbol(Bar, Decl(other.js, 2, 1))
+
+    foo = 1.2;
+>foo : Symbol(Bar.foo, Decl(other.js, 4, 26))
+}
+

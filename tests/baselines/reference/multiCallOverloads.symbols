@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiCallOverloads.ts ===
+//// [tests/cases/compiler/multiCallOverloads.ts] ////
+
+=== multiCallOverloads.ts ===
 interface ICallback {
 >ICallback : Symbol(ICallback, Decl(multiCallOverloads.ts, 0, 0))
 

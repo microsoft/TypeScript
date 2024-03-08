@@ -1,6 +1,15 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/project/tsconfig.json]
-{"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "../dist"
+  }
+}
 
 //// [/project/src/index.ts]
 import * as Thing from "thing";
@@ -11,7 +20,13 @@ Thing.fn();
 declare module "thing";
 
 //// [/project/package.json]
-{"name":"some-proj","version":"1.0.0","description":"","type":"module","main":"index.js"}
+{
+  "name": "some-proj",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js"
+}
 
 //// [/a/lib/lib.es2020.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -36,8 +51,40 @@ Output::
 
 
 
-Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+//// [/dist/index.js]
+import * as Thing from "thing";
+Thing.fn();
+
+
+
+FsWatches::
+/a/lib/lib.es2020.full.d.ts: *new*
+  {}
+/project/src/deps.d.ts: *new*
+  {}
+/project/src/index.ts: *new*
+  {}
+/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/project: *new*
+  {}
+
+Program root files: [
+  "/project/src/deps.d.ts",
+  "/project/src/index.ts"
+]
+Program options: {
+  "strict": true,
+  "target": 7,
+  "module": 199,
+  "moduleResolution": 99,
+  "outDir": "/dist",
+  "watch": true,
+  "project": "/project/tsconfig.json",
+  "configFilePath": "/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
@@ -54,31 +101,7 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-WatchedFiles::
-/project/tsconfig.json:
-  {"fileName":"/project/tsconfig.json","pollingInterval":250}
-/project/src/deps.d.ts:
-  {"fileName":"/project/src/deps.d.ts","pollingInterval":250}
-/project/src/index.ts:
-  {"fileName":"/project/src/index.ts","pollingInterval":250}
-/a/lib/lib.es2020.full.d.ts:
-  {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
-/project/node_modules/@types:
-  {"fileName":"/project/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/project:
-  {"directoryName":"/project"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/dist/index.js]
-import * as Thing from "thing";
-Thing.fn();
-
-
 
 Change:: Modify typescript file
 
@@ -88,6 +111,13 @@ import * as Thing from "thing";
 Thing.fn();
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
@@ -96,8 +126,23 @@ Output::
 
 
 
-Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+//// [/dist/index.js] file written with same contents
+
+
+Program root files: [
+  "/project/src/deps.d.ts",
+  "/project/src/index.ts"
+]
+Program options: {
+  "strict": true,
+  "target": 7,
+  "module": 199,
+  "moduleResolution": 99,
+  "outDir": "/dist",
+  "watch": true,
+  "project": "/project/tsconfig.json",
+  "configFilePath": "/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.es2020.full.d.ts
@@ -110,24 +155,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
-/project/tsconfig.json:
-  {"fileName":"/project/tsconfig.json","pollingInterval":250}
-/project/src/deps.d.ts:
-  {"fileName":"/project/src/deps.d.ts","pollingInterval":250}
-/project/src/index.ts:
-  {"fileName":"/project/src/index.ts","pollingInterval":250}
-/a/lib/lib.es2020.full.d.ts:
-  {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
-/project/node_modules/@types:
-  {"fileName":"/project/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/project:
-  {"directoryName":"/project"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/dist/index.js] file written with same contents

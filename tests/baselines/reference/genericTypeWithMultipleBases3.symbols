@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeWithMultipleBases3.ts ===
+//// [tests/cases/compiler/genericTypeWithMultipleBases3.ts] ////
+
+=== genericTypeWithMultipleBases3.ts ===
 interface IA<T> {
 >IA : Symbol(IA, Decl(genericTypeWithMultipleBases3.ts, 0, 0))
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 0, 13))

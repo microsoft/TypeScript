@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolType11.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType11.ts] ////
+
+=== symbolType11.ts ===
 var s = Symbol.for("logical");
 >s : Symbol(s, Decl(symbolType11.ts, 0, 3))
 >Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))

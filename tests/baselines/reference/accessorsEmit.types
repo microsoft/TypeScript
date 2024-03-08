@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorsEmit.ts ===
+//// [tests/cases/compiler/accessorsEmit.ts] ////
+
+=== accessorsEmit.ts ===
 class Result { }
 >Result : Result
 
@@ -13,7 +15,6 @@ class Test {
 >1 : 1
 
         return null;
->null : null
     }
 }
 
@@ -28,6 +29,5 @@ class Test2 {
 >1 : 1
 
         return null;
->null : null
     }
 }

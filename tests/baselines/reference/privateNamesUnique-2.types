@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/a.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-2.ts] ////
+
+=== a.ts ===
 export class Foo {
 >Foo : Foo
 
@@ -7,15 +9,15 @@ export class Foo {
 
     copy(other: import("./b").Foo) {
 >copy : (other: import("./b").Foo) => void
->other : import("tests/cases/conformance/classes/members/privateNames/b").Foo
+>other : import("b").Foo
 
         other.#x; // error
 >other.#x : any
->other : import("tests/cases/conformance/classes/members/privateNames/b").Foo
+>other : import("b").Foo
     }
 }
     
-=== tests/cases/conformance/classes/members/privateNames/b.ts ===
+=== b.ts ===
 export class Foo {
 >Foo : Foo
 
@@ -23,7 +25,7 @@ export class Foo {
 >#x : any
 }
 
-=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+=== main.ts ===
 import { Foo as A } from "./a";
 >Foo : typeof A
 >A : typeof A

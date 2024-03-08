@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts] ////
+
 //// [derivedClassConstructorWithExplicitReturns01.ts]
 class C {
     cProp = 10;

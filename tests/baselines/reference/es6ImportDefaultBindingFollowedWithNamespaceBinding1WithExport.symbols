@@ -1,11 +1,13 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.ts] ////
+
+=== server.ts ===
 var a = 10;
 >a : Symbol(a, Decl(server.ts, 0, 3))
 
 export default a;
 >a : Symbol(a, Decl(server.ts, 0, 3))
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import defaultBinding, * as nameSpaceBinding  from "server";
 >defaultBinding : Symbol(defaultBinding, Decl(client.ts, 0, 13))
 >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(client.ts, 0, 29))

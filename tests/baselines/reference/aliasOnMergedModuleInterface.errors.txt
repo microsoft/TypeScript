@@ -1,7 +1,7 @@
-tests/cases/compiler/aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cannot use namespace 'foo' as a value.
+aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cannot use namespace 'foo' as a value.
 
 
-==== tests/cases/compiler/aliasOnMergedModuleInterface_1.ts (1 errors) ====
+==== aliasOnMergedModuleInterface_1.ts (1 errors) ====
     ///<reference path='aliasOnMergedModuleInterface_0.ts' />
     import foo = require("foo")
     var z: foo;
@@ -10,7 +10,7 @@ tests/cases/compiler/aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cann
                    ~~~
 !!! error TS2708: Cannot use namespace 'foo' as a value.
     
-==== tests/cases/compiler/aliasOnMergedModuleInterface_0.ts (0 errors) ====
+==== aliasOnMergedModuleInterface_0.ts (0 errors) ====
     declare module "foo"
     {
         module B {

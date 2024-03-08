@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParamTag2.ts] ////
+
+=== 0.js ===
 // Object literal syntax
 /**
  * @param {{a: string, b: string}} obj
@@ -92,6 +94,22 @@ function good8({a, b}) {}
 >good8 : ({ a, b }: {    a: string;    b: string;}) => void
 >a : string
 >b : string
+
+/**
+ * @param {{ a: string }} argument
+ */
+function good9({ a }) {
+>good9 : ({ a }: {    a: string;}, ...args: any[]) => void
+>a : string
+
+    console.log(arguments, a);
+>console.log(arguments, a) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>arguments : IArguments
+>a : string
+}
 
 /**
  * @param {object} obj - this type gets ignored

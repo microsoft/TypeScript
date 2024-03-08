@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reexportedMissingAlias.ts] ////
 
 //// [second.d.ts]
-// Fixes #15094
 export import Component = CompletelyMissing;
 //// [first.d.ts]
 import * as Second from './second';
@@ -28,7 +27,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var first_1 = require("./first");
 var C = /** @class */ (function (_super) {
     __extends(C, _super);

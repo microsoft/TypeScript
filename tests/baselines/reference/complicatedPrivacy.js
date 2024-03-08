@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complicatedPrivacy.ts] ////
+
 //// [complicatedPrivacy.ts]
 module m1 {
     export module m2 {

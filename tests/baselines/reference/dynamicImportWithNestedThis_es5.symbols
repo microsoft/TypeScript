@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dynamicImportWithNestedThis_es5.ts ===
+//// [tests/cases/compiler/dynamicImportWithNestedThis_es5.ts] ////
+
+=== dynamicImportWithNestedThis_es5.ts ===
 // https://github.com/Microsoft/TypeScript/issues/17564
 class C {
 >C : Symbol(C, Decl(dynamicImportWithNestedThis_es5.ts, 0, 0))

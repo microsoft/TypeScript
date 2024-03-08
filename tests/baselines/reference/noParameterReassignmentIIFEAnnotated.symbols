@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/noParameterReassignmentIIFEAnnotated.ts] ////
+
+=== index.js ===
 self.importScripts = (function (importScripts) {
 >self.importScripts : Symbol(importScripts, Decl(lib.webworker.importscripts.d.ts, --, --))
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts] ////
+
+=== fatarrowfunctionsOptionalArgsErrors1.ts ===
 (arg1?, arg2) => 101;
 >(arg1?, arg2) => 101 : (arg1?: any, arg2: any) => number
 >arg1 : any

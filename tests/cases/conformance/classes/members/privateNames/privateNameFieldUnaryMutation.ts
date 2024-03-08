@@ -13,6 +13,17 @@ class C {
         const d = --this.#test;
         for (this.#test = 0; this.#test < 10; ++this.#test) {}
         for (this.#test = 0; this.#test < 10; this.#test++) {}
+
+        (this.#test)++;
+        (this.#test)--;
+        ++(this.#test);
+        --(this.#test);
+        const e = (this.#test)++;
+        const f = (this.#test)--;
+        const g = ++(this.#test);
+        const h = --(this.#test);
+        for (this.#test = 0; this.#test < 10; ++(this.#test)) {}
+        for (this.#test = 0; this.#test < 10; (this.#test)++) {}
     }
     test() {
         this.getInstance().#test++;
@@ -25,6 +36,17 @@ class C {
         const d = --this.getInstance().#test;
         for (this.getInstance().#test = 0; this.getInstance().#test < 10; ++this.getInstance().#test) {}
         for (this.getInstance().#test = 0; this.getInstance().#test < 10; this.getInstance().#test++) {}
+
+        (this.getInstance().#test)++;
+        (this.getInstance().#test)--;
+        ++(this.getInstance().#test);
+        --(this.getInstance().#test);
+        const e = (this.getInstance().#test)++;
+        const f = (this.getInstance().#test)--;
+        const g = ++(this.getInstance().#test);
+        const h = --(this.getInstance().#test);
+        for (this.getInstance().#test = 0; this.getInstance().#test < 10; ++(this.getInstance().#test)) {}
+        for (this.getInstance().#test = 0; this.getInstance().#test < 10; (this.getInstance().#test)++) {}
     }
     getInstance() { return new C(); }
 }

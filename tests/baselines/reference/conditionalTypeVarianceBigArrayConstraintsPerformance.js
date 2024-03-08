@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts] ////
+
 //// [conditionalTypeVarianceBigArrayConstraintsPerformance.ts]
 /// <reference path="/.lib/react16.d.ts" />
 

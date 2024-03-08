@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckOnTypeParameterReferenceInConstructorParameter.ts] ////
+
 //// [privacyCheckOnTypeParameterReferenceInConstructorParameter.ts]
 export class A<T1>{
     constructor(callback: (self: A<T1>) => void) {
@@ -13,7 +15,7 @@ export class B<T2> {
 //// [privacyCheckOnTypeParameterReferenceInConstructorParameter.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = exports.A = void 0;
     var A = /** @class */ (function () {
         function A(callback) {

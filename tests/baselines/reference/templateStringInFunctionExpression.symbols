@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInFunctionExpression.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInFunctionExpression.ts] ////
+
+=== templateStringInFunctionExpression.ts ===
 var x = function y() {
 >x : Symbol(x, Decl(templateStringInFunctionExpression.ts, 0, 3))
 >y : Symbol(y, Decl(templateStringInFunctionExpression.ts, 0, 7))

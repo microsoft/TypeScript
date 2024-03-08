@@ -1,7 +1,7 @@
-tests/cases/compiler/inferFromGenericFunctionReturnTypes1.ts(68,16): error TS2339: Property 'toUpperCase' does not exist on type 'number'.
+inferFromGenericFunctionReturnTypes1.ts(68,16): error TS2339: Property 'toUpperCase' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/inferFromGenericFunctionReturnTypes1.ts (1 errors) ====
+==== inferFromGenericFunctionReturnTypes1.ts (1 errors) ====
     // Repro from #15680
     
     // This is a contrived class. We could do the same thing with Observables, etc.

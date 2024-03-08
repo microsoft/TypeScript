@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letAsIdentifier.ts ===
+//// [tests/cases/compiler/letAsIdentifier.ts] ////
+
+=== letAsIdentifier.ts ===
 var let = 10;
 >let : Symbol(let, Decl(letAsIdentifier.ts, 0, 3))
 

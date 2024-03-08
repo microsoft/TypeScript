@@ -40,7 +40,7 @@ var t = p.x;
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="math2d-augment.d.ts" />
 var m = require("math2d");
 var v = new m.Vector(3, 2);

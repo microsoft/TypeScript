@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts(3,5): error TS18004: No value exists in scope for the shorthand property 'undefinedVariable'. Either declare one or provide an initializer.
+objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts(3,5): error TS18004: No value exists in scope for the shorthand property 'undefinedVariable'. Either declare one or provide an initializer.
 
 
-==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts (1 errors) ====
+==== objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts (1 errors) ====
     var x = {
         x, // OK
         undefinedVariable // Error

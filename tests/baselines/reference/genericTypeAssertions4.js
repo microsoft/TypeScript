@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions4.ts] ////
+
 //// [genericTypeAssertions4.ts]
 class A {
     foo() { return ""; }

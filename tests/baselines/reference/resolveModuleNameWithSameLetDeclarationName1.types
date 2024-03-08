@@ -1,4 +1,6 @@
-=== tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName1.ts ===
+//// [tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName1.ts] ////
+
+=== resolveModuleNameWithSameLetDeclarationName1.ts ===
 declare module foo {
 
     interface Bar {

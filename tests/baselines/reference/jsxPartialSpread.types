@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxPartialSpread.tsx ===
+//// [tests/cases/compiler/jsxPartialSpread.tsx] ////
+
+=== jsxPartialSpread.tsx ===
 /// <reference path="react16.d.ts" />
 const Select = (p: {value?: unknown}) => <p></p>;
 >Select : (p: {    value?: unknown;}) => JSX.Element

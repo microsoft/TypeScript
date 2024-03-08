@@ -1,7 +1,9 @@
-=== tests/cases/conformance/es6/templates/templateStringInModuleName.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInModuleName.ts] ////
+
+=== templateStringInModuleName.ts ===
+
 declare module `M1` {
-No type information for this code.}
-No type information for this code.
-No type information for this code.declare module `M${2}` {
-No type information for this code.}
-No type information for this code.
+}
+
+declare module `M${2}` {
+}

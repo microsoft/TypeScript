@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocResolveNameFailureInTypedef.ts] ////
+
 === /a.js ===
 /**
  * @param {Ty} x

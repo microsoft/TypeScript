@@ -1,7 +1,7 @@
-tests/cases/compiler/topLevelLambda4.ts(1,22): error TS2532: Object is possibly 'undefined'.
+topLevelLambda4.ts(1,22): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/compiler/topLevelLambda4.ts (1 errors) ====
+==== topLevelLambda4.ts (1 errors) ====
     export var x = () => this.window;
                          ~~~~
 !!! error TS2532: Object is possibly 'undefined'.

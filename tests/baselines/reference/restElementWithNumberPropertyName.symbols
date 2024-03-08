@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restElementWithNumberPropertyName.ts ===
+//// [tests/cases/compiler/restElementWithNumberPropertyName.ts] ////
+
+=== restElementWithNumberPropertyName.ts ===
 const { 0: a, ...b } = [0, 1, 2];
 >a : Symbol(a, Decl(restElementWithNumberPropertyName.ts, 0, 7))
 >b : Symbol(b, Decl(restElementWithNumberPropertyName.ts, 0, 13))

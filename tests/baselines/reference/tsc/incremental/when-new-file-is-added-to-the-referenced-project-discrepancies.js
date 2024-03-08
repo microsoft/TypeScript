@@ -19,11 +19,17 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "module": 0
     },
-    "dtsChangeTime": "FakeTime"
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
@@ -44,6 +50,12 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "module": 0
@@ -53,7 +65,7 @@ IncrementalBuild:
       "../project1/class1.d.ts",
       "./class2.ts"
     ],
-    "dtsChangeTime": "FakeTime"
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
@@ -78,11 +90,17 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "module": 0
     },
-    "dtsChangeTime": "FakeTime"
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
@@ -103,6 +121,12 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "module": 0
@@ -110,7 +134,7 @@ IncrementalBuild:
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts"
     ],
-    "dtsChangeTime": "FakeTime"
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }

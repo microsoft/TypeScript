@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorLocationForInterfaceExtension.ts ===
+//// [tests/cases/compiler/errorLocationForInterfaceExtension.ts] ////
+
+=== errorLocationForInterfaceExtension.ts ===
 var n = '';
 >n : Symbol(n, Decl(errorLocationForInterfaceExtension.ts, 0, 3))
 

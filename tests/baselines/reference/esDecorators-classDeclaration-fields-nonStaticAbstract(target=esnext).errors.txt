@@ -1,0 +1,22 @@
+esDecorators-classDeclaration-fields-nonStaticAbstract.ts(6,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-nonStaticAbstract.ts(7,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-fields-nonStaticAbstract.ts(8,5): error TS1206: Decorators are not valid here.
+
+
+==== esDecorators-classDeclaration-fields-nonStaticAbstract.ts (3 errors) ====
+    declare let dec: any;
+    
+    const field3 = "field3";
+    
+    abstract class C {
+        @dec(1) abstract field1: number;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @dec(2) abstract ["field2"]: number;
+        ~
+!!! error TS1206: Decorators are not valid here.
+        @dec(3) abstract [field3]: number;
+        ~
+!!! error TS1206: Decorators are not valid here.
+    }
+    

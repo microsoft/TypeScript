@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/moduleResolution_classicPrefersTs.ts] ////
+
+=== /dir1/dir2/dir3/a.js ===
+
+export default "dir1/dir2/dir3/a.js";
+
+=== /dir1/dir2/a.ts ===
+
+export default "dir1/dir2/a.ts";
+
+=== /dir1/dir2/dir3/index.ts ===
+import a from "a";
+>a : Symbol(a, Decl(index.ts, 0, 6))
+

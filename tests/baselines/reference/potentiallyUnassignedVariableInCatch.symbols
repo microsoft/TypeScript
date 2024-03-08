@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts] ////
+
+=== potentiallyUnassignedVariableInCatch.ts ===
+let foo;
+>foo : Symbol(foo, Decl(potentiallyUnassignedVariableInCatch.ts, 0, 3))
+
+try {
+	if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+		foo = 1234;
+>foo : Symbol(foo, Decl(potentiallyUnassignedVariableInCatch.ts, 0, 3))
+	}
+} catch {
+	foo;
+>foo : Symbol(foo, Decl(potentiallyUnassignedVariableInCatch.ts, 0, 3))
+}
+

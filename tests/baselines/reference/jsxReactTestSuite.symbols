@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
+//// [tests/cases/conformance/jsx/jsxReactTestSuite.tsx] ////
+
+=== jsxReactTestSuite.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(jsxReactTestSuite.tsx, 0, 11))
 

@@ -1,8 +1,8 @@
-tests/cases/compiler/collisionExportsRequireAndEnum_externalmodule.ts(1,13): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-tests/cases/compiler/collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndEnum_externalmodule.ts(1,13): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndEnum_externalmodule.ts(5,13): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 
 
-==== tests/cases/compiler/collisionExportsRequireAndEnum_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndEnum_externalmodule.ts (2 errors) ====
     export enum require { // Error
                 ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
@@ -36,7 +36,7 @@ tests/cases/compiler/collisionExportsRequireAndEnum_externalmodule.ts(5,13): err
         }
     }
     
-==== tests/cases/compiler/collisionExportsRequireAndEnum_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndEnum_globalFile.ts (0 errors) ====
     enum require {
         _thisVal1,
         _thisVal2,

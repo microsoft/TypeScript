@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bluebirdStaticThis.ts] ////
+
 //// [bluebirdStaticThis.ts]
 // This version is reduced from the full d.ts by removing almost all the tests
 // and all the comments.
@@ -140,17 +142,17 @@ fooProm = Promise.try(Promise, () => {
 
 //// [bluebirdStaticThis.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 var arr;
 var foo;
 var fooProm;
-fooProm = Promise["try"](Promise, function () {
+fooProm = Promise.try(Promise, function () {
     return foo;
 });
-fooProm = Promise["try"](Promise, function () {
+fooProm = Promise.try(Promise, function () {
     return foo;
 }, arr);
-fooProm = Promise["try"](Promise, function () {
+fooProm = Promise.try(Promise, function () {
     return foo;
 }, arr, x);

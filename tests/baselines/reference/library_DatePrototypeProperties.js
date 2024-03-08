@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/library_DatePrototypeProperties.ts] ////
+
 //// [library_DatePrototypeProperties.ts]
 // Properties of the Date prototype object as per ES5 spec
 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.5

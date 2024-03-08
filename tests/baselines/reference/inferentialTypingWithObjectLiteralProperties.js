@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts] ////
+
 //// [inferentialTypingWithObjectLiteralProperties.ts]
 function f<T>(x: T, y: T): T {
 return x;

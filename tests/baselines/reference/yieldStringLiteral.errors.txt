@@ -1,7 +1,7 @@
-tests/cases/compiler/yieldStringLiteral.ts(2,5): error TS1163: A 'yield' expression is only allowed in a generator body.
+yieldStringLiteral.ts(2,5): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== tests/cases/compiler/yieldStringLiteral.ts (1 errors) ====
+==== yieldStringLiteral.ts (1 errors) ====
     function yieldString() {
         yield 'literal';
         ~~~~~

@@ -1,7 +1,7 @@
-tests/cases/compiler/parameterPropertyInConstructor3.ts(2,22): error TS2398: 'constructor' cannot be used as a parameter property name.
+parameterPropertyInConstructor3.ts(2,22): error TS2398: 'constructor' cannot be used as a parameter property name.
 
 
-==== tests/cases/compiler/parameterPropertyInConstructor3.ts (1 errors) ====
+==== parameterPropertyInConstructor3.ts (1 errors) ====
     class Foo {
       constructor(public constructor: string) {}
                          ~~~~~~~~~~~
