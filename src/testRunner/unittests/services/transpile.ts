@@ -675,7 +675,7 @@ export * as alias from './file';`,
     );
 
     transpilesCorrectly(
-        "Syntactically string but non-evaulatable enum members do not get reverse mapping",
+        "Syntactically string but non-evaluatable enum members do not get reverse mapping",
         // eslint-disable-next-line no-template-curly-in-string
         "import { BAR } from './bar'; enum Foo { A = `${BAR}` }",
         {
