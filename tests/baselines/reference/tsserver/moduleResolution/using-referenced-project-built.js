@@ -119,7 +119,7 @@ export const FOO = "bar";
 
 
 //// [/home/src/projects/project/packages/package-a/build/subfolder/index.d.ts.map]
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/subfolder/index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,QAAQ,CAAC"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/subfolder/index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,GAAG,KAAK,CAAC"}
 
 //// [/home/src/projects/project/packages/package-a/build/subfolder/index.d.ts]
 export declare const FOO = "bar";

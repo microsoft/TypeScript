@@ -627,7 +627,7 @@ declare function f(): string;
 //# sourceMappingURL=first-output.d.ts.map
 
 //// [/src/first/bin/first-output.d.ts.map]
-{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
+{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,GAAG,cAAc,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
 
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -681,22 +681,25 @@ sourceFile:../first_PART1.ts
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^
-5 >               ^^^^^^^^^^^^^^^^^
-6 >                                ^
+5 >               ^^^
+6 >                  ^^^^^^^^^^^^^^
+7 >                                ^
 1->
   >
   >
 2 >
 3 >        const 
 4 >              s
-5 >                = "Hello, world"
-6 >                                ;
+5 >                = 
+6 >                  "Hello, world"
+7 >                                ;
 1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(4, 9) Source(5, 1) + SourceIndex(0)
 3 >Emitted(4, 15) Source(5, 7) + SourceIndex(0)
 4 >Emitted(4, 16) Source(5, 8) + SourceIndex(0)
-5 >Emitted(4, 33) Source(5, 25) + SourceIndex(0)
-6 >Emitted(4, 34) Source(5, 26) + SourceIndex(0)
+5 >Emitted(4, 19) Source(5, 11) + SourceIndex(0)
+6 >Emitted(4, 33) Source(5, 25) + SourceIndex(0)
+7 >Emitted(4, 34) Source(5, 26) + SourceIndex(0)
 ---
 >>>interface NoJsForHereEither {
 1 >
@@ -1196,7 +1199,7 @@ declare function f(): string;
 //# sourceMappingURL=first-output.d.ts.map
 
 //// [/src/first/bin/first-output.d.ts.map]
-{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
+{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,GAAG,aAAa,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
 
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -1250,22 +1253,25 @@ sourceFile:../first_PART1.ts
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^
-5 >               ^^^^^^^^^^^^^^^^
-6 >                               ^
+5 >               ^^^
+6 >                  ^^^^^^^^^^^^^
+7 >                               ^
 1->
   >
   >
 2 >
 3 >        const 
 4 >              s
-5 >                = "Hola, world"
-6 >                               ;
+5 >                = 
+6 >                  "Hola, world"
+7 >                               ;
 1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(4, 9) Source(5, 1) + SourceIndex(0)
 3 >Emitted(4, 15) Source(5, 7) + SourceIndex(0)
 4 >Emitted(4, 16) Source(5, 8) + SourceIndex(0)
-5 >Emitted(4, 32) Source(5, 24) + SourceIndex(0)
-6 >Emitted(4, 33) Source(5, 25) + SourceIndex(0)
+5 >Emitted(4, 19) Source(5, 11) + SourceIndex(0)
+6 >Emitted(4, 32) Source(5, 24) + SourceIndex(0)
+7 >Emitted(4, 33) Source(5, 25) + SourceIndex(0)
 ---
 >>>interface NoJsForHereEither {
 1 >

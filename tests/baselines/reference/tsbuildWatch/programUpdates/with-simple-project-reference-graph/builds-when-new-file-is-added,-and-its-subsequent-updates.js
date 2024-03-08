@@ -110,7 +110,7 @@ exports.World = "hello";
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map]
-{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
+{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,GAAG,OAAO,CAAC"}
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
 export declare const World = "hello";
@@ -678,7 +678,7 @@ exports.newFileConst = 30;
 
 
 //// [/user/username/projects/sample1/core/newfile.d.ts.map]
-{"version":3,"file":"newfile.d.ts","sourceRoot":"","sources":["newfile.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,YAAY,KAAK,CAAC"}
+{"version":3,"file":"newfile.d.ts","sourceRoot":"","sources":["newfile.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,YAAY,GAAG,EAAE,CAAC"}
 
 //// [/user/username/projects/sample1/core/newfile.d.ts]
 export declare const newFileConst = 30;
@@ -937,7 +937,7 @@ exports.someClass2 = someClass2;
 
 
 //// [/user/username/projects/sample1/core/newfile.d.ts.map]
-{"version":3,"file":"newfile.d.ts","sourceRoot":"","sources":["newfile.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,YAAY,KAAK,CAAC;AAC/B,qBAAa,UAAU;CAAI"}
+{"version":3,"file":"newfile.d.ts","sourceRoot":"","sources":["newfile.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,YAAY,GAAG,EAAE,CAAC;AAC/B,qBAAa,UAAU;CAAI"}
 
 //// [/user/username/projects/sample1/core/newfile.d.ts]
 export declare const newFileConst = 30;

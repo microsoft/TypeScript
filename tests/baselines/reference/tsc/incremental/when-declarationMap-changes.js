@@ -269,7 +269,7 @@ declare const x = 10;
 //# sourceMappingURL=a.d.ts.map
 
 //// [/src/project/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAK,CAAC"}
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,GAAG,EAAE,CAAC"}
 
 //// [/src/project/a.js] file written with same contents
 //// [/src/project/b.d.ts]
@@ -277,7 +277,7 @@ declare const y = 10;
 //# sourceMappingURL=b.d.ts.map
 
 //// [/src/project/b.d.ts.map]
-{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAK,CAAC"}
+{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,GAAG,EAAE,CAAC"}
 
 //// [/src/project/b.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]

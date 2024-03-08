@@ -117,7 +117,7 @@ exports.World = "hello";
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map]
-{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
+{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,GAAG,OAAO,CAAC"}
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts]
 export declare const World = "hello";
@@ -406,7 +406,7 @@ exports.y = 10;
 
 
 //// [/user/username/projects/sample1/core/file3.d.ts.map]
-{"version":3,"file":"file3.d.ts","sourceRoot":"","sources":["file3.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,KAAK,CAAC"}
+{"version":3,"file":"file3.d.ts","sourceRoot":"","sources":["file3.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,GAAG,EAAE,CAAC"}
 
 //// [/user/username/projects/sample1/core/file3.d.ts]
 export declare const y = 10;

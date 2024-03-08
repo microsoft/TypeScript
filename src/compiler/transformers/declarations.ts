@@ -127,6 +127,7 @@ import {
     isModifier,
     isModuleDeclaration,
     isOmittedExpression,
+    isPrimitiveLiteralValue,
     isPrivateIdentifier,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
@@ -208,6 +209,7 @@ import {
     TypeParameterDeclaration,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
+    unwrapParenthesizedExpression,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -702,7 +704,8 @@ export function transformDeclarations(context: TransformationContext) {
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
         if (shouldPrintWithInitializer(node)) {
-            return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
+            const unwrappedInitializer = unwrapParenthesizedExpression(node.initializer);
+            return isPrimitiveLiteralValue(unwrappedInitializer) ? unwrappedInitializer : resolver.createLiteralConstValue(getParseTreeNode(node, canHaveLiteralInitializer)!, symbolTracker);
         }
         return undefined;
     }

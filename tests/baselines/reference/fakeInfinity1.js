@@ -43,4 +43,4 @@ export type NegativeInfinity = -1e999;
 export type TypeOfInfinity = typeof Infinity;
 export type TypeOfNaN = typeof NaN;
 export type Oops = 123456789123456789123456789123456789123456789123456789;
-export declare const oops = 1.2345678912345678e+53;
+export declare const oops = 123456789123456789123456789123456789123456789123456789;

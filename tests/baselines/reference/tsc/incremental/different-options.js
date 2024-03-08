@@ -681,14 +681,14 @@ export declare const a = 10;
 //# sourceMappingURL=a.d.ts.map
 
 //// [/src/project/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,KAAK,CAAC"}
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,GAAG,EAAE,CAAC"}
 
 //// [/src/project/b.d.ts]
 export declare const b = 10;
 //# sourceMappingURL=b.d.ts.map
 
 //// [/src/project/b.d.ts.map]
-{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,KAAK,CAAC"}
+{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,GAAG,EAAE,CAAC"}
 
 //// [/src/project/c.d.ts]
 export declare const c = 10;

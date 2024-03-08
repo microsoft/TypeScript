@@ -99,7 +99,7 @@ declare const myVar = 30;
 //# sourceMappingURL=module.d.ts.map
 
 //// [/src/app/module.d.ts.map]
-{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file3.ts","file4.ts"],"names":[],"mappings":";IAAA,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC"}
+{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file3.ts","file4.ts"],"names":[],"mappings":";IAAA,MAAM,CAAC,MAAM,CAAC,GAAG,EAAE,CAAC;;ACApB,QAAA,MAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/src/app/module.d.ts.map.baseline.txt]
 ===================================================================
@@ -119,22 +119,25 @@ sourceFile:file3.ts
 3 >          ^
 4 >           ^^^^^^
 5 >                 ^
-6 >                  ^^^^^
-7 >                       ^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
 1 >
 2 >    export
 3 >           
 4 >           const 
 5 >                 z
-6 >                   = 30
-7 >                       ;
+6 >                   = 
+7 >                     30
+8 >                       ;
 1 >Emitted(2, 5) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 11) Source(1, 7) + SourceIndex(0)
 3 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
 4 >Emitted(2, 18) Source(1, 14) + SourceIndex(0)
 5 >Emitted(2, 19) Source(1, 15) + SourceIndex(0)
-6 >Emitted(2, 24) Source(1, 20) + SourceIndex(0)
-7 >Emitted(2, 25) Source(1, 21) + SourceIndex(0)
+6 >Emitted(2, 22) Source(1, 18) + SourceIndex(0)
+7 >Emitted(2, 24) Source(1, 20) + SourceIndex(0)
+8 >Emitted(2, 25) Source(1, 21) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.d.ts
@@ -146,21 +149,24 @@ sourceFile:file4.ts
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^^^^^
-5 >                   ^^^^^
-6 >                        ^
-7 >                         ^^^^^^^^^^->
+5 >                   ^^^
+6 >                      ^^
+7 >                        ^
+8 >                         ^^^^^^^^^^->
 1 >
 2 >
 3 >        const 
 4 >              myVar
-5 >                    = 30
-6 >                        ;
+5 >                    = 
+6 >                      30
+7 >                        ;
 1 >Emitted(4, 1) Source(1, 1) + SourceIndex(1)
 2 >Emitted(4, 9) Source(1, 1) + SourceIndex(1)
 3 >Emitted(4, 15) Source(1, 7) + SourceIndex(1)
 4 >Emitted(4, 20) Source(1, 12) + SourceIndex(1)
-5 >Emitted(4, 25) Source(1, 17) + SourceIndex(1)
-6 >Emitted(4, 26) Source(1, 18) + SourceIndex(1)
+5 >Emitted(4, 23) Source(1, 15) + SourceIndex(1)
+6 >Emitted(4, 25) Source(1, 17) + SourceIndex(1)
+7 >Emitted(4, 26) Source(1, 18) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=module.d.ts.map
 
@@ -296,7 +302,7 @@ declare const globalConst = 10;
 //# sourceMappingURL=module.d.ts.map
 
 //// [/src/lib/module.d.ts.map]
-{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
+{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,MAAM,GAAG,EAAE,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,GAAG,EAAE,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,GAAG,EAAE,CAAC;;ACApB,QAAA,MAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.d.ts.map.baseline.txt]
 ===================================================================
@@ -314,20 +320,23 @@ sourceFile:file0.ts
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^^^^^^
-5 >                    ^^^^^
-6 >                         ^
+5 >                    ^^^
+6 >                       ^^
+7 >                         ^
 1 >
 2 >
 3 >        const 
 4 >              myGlob
-5 >                     = 20
-6 >                         ;
+5 >                     = 
+6 >                       20
+7 >                         ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 9) Source(1, 1) + SourceIndex(0)
 3 >Emitted(1, 15) Source(1, 7) + SourceIndex(0)
 4 >Emitted(1, 21) Source(1, 13) + SourceIndex(0)
-5 >Emitted(1, 26) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
+5 >Emitted(1, 24) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 26) Source(1, 18) + SourceIndex(0)
+7 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.d.ts
@@ -340,22 +349,25 @@ sourceFile:file1.ts
 3 >          ^
 4 >           ^^^^^^
 5 >                 ^
-6 >                  ^^^^^
-7 >                       ^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
 1 >
 2 >    export
 3 >           
 4 >           const 
 5 >                 x
-6 >                   = 10
-7 >                       ;
+6 >                   = 
+7 >                     10
+8 >                       ;
 1 >Emitted(3, 5) Source(1, 1) + SourceIndex(1)
 2 >Emitted(3, 11) Source(1, 7) + SourceIndex(1)
 3 >Emitted(3, 12) Source(1, 8) + SourceIndex(1)
 4 >Emitted(3, 18) Source(1, 14) + SourceIndex(1)
 5 >Emitted(3, 19) Source(1, 15) + SourceIndex(1)
-6 >Emitted(3, 24) Source(1, 20) + SourceIndex(1)
-7 >Emitted(3, 25) Source(1, 21) + SourceIndex(1)
+6 >Emitted(3, 22) Source(1, 18) + SourceIndex(1)
+7 >Emitted(3, 24) Source(1, 20) + SourceIndex(1)
+8 >Emitted(3, 25) Source(1, 21) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.d.ts
@@ -369,22 +381,25 @@ sourceFile:file2.ts
 3 >          ^
 4 >           ^^^^^^
 5 >                 ^
-6 >                  ^^^^^
-7 >                       ^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
 1 >
 2 >    export
 3 >           
 4 >           const 
 5 >                 y
-6 >                   = 20
-7 >                       ;
+6 >                   = 
+7 >                     20
+8 >                       ;
 1 >Emitted(6, 5) Source(1, 1) + SourceIndex(2)
 2 >Emitted(6, 11) Source(1, 7) + SourceIndex(2)
 3 >Emitted(6, 12) Source(1, 8) + SourceIndex(2)
 4 >Emitted(6, 18) Source(1, 14) + SourceIndex(2)
 5 >Emitted(6, 19) Source(1, 15) + SourceIndex(2)
-6 >Emitted(6, 24) Source(1, 20) + SourceIndex(2)
-7 >Emitted(6, 25) Source(1, 21) + SourceIndex(2)
+6 >Emitted(6, 22) Source(1, 18) + SourceIndex(2)
+7 >Emitted(6, 24) Source(1, 20) + SourceIndex(2)
+8 >Emitted(6, 25) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.d.ts
@@ -396,21 +411,24 @@ sourceFile:global.ts
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^^^^^^^^^^^
-5 >                         ^^^^^
-6 >                              ^
-7 >                               ^^^^->
+5 >                         ^^^
+6 >                            ^^
+7 >                              ^
+8 >                               ^^^^->
 1 >
 2 >
 3 >        const 
 4 >              globalConst
-5 >                          = 10
-6 >                              ;
+5 >                          = 
+6 >                            10
+7 >                              ;
 1 >Emitted(8, 1) Source(1, 1) + SourceIndex(3)
 2 >Emitted(8, 9) Source(1, 1) + SourceIndex(3)
 3 >Emitted(8, 15) Source(1, 7) + SourceIndex(3)
 4 >Emitted(8, 26) Source(1, 18) + SourceIndex(3)
-5 >Emitted(8, 31) Source(1, 23) + SourceIndex(3)
-6 >Emitted(8, 32) Source(1, 24) + SourceIndex(3)
+5 >Emitted(8, 29) Source(1, 21) + SourceIndex(3)
+6 >Emitted(8, 31) Source(1, 23) + SourceIndex(3)
+7 >Emitted(8, 32) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.d.ts.map
 

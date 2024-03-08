@@ -351,7 +351,7 @@ declare class C11 {
     a: number;
     constructor();
 }
-declare const a = "a";
+declare const a = 'a';
 declare const b: unique symbol;
 declare class C12 {
     [a]: number;

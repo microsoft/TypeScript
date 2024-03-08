@@ -103,7 +103,7 @@ var container;
 
 
 //// [/user/username/projects/container/built/local/lib.d.ts.map]
-{"version":3,"file":"lib.d.ts","sourceRoot":"","sources":["../../lib/index.ts"],"names":[],"mappings":"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,KAAK,CAAC;CAC7B"}
+{"version":3,"file":"lib.d.ts","sourceRoot":"","sources":["../../lib/index.ts"],"names":[],"mappings":"AAAA,kBAAU,SAAS,CAAC;IACT,MAAM,OAAO,GAAG,EAAE,CAAC;CAC7B"}
 
 //// [/user/username/projects/container/built/local/lib.d.ts]
 declare namespace container {

@@ -135,7 +135,7 @@ export declare const World = "hello";
 //# sourceMappingURL=anotherModule.d.ts.map
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map]
-{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
+{"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,GAAG,OAAO,CAAC"}
 
 //// [/user/username/projects/sample1/core/anothermodule.d.ts.map.baseline.txt]
 ===================================================================
@@ -153,21 +153,24 @@ sourceFile:anotherModule.ts
 2 >^^^^^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^^^^^
-5 >                          ^^^^^^^^^^
-6 >                                    ^
-7 >                                     ^^^^^->
+5 >                          ^^^
+6 >                             ^^^^^^^
+7 >                                    ^
+8 >                                     ^^^^^->
 1 >
 2 >export 
 3 >               const 
 4 >                     World
-5 >                           = "hello"
-6 >                                    ;
+5 >                           = 
+6 >                             "hello"
+7 >                                    ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 16) Source(1, 8) + SourceIndex(0)
 3 >Emitted(1, 22) Source(1, 14) + SourceIndex(0)
 4 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
-5 >Emitted(1, 37) Source(1, 29) + SourceIndex(0)
-6 >Emitted(1, 38) Source(1, 30) + SourceIndex(0)
+5 >Emitted(1, 30) Source(1, 22) + SourceIndex(0)
+6 >Emitted(1, 37) Source(1, 29) + SourceIndex(0)
+7 >Emitted(1, 38) Source(1, 30) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=anotherModule.d.ts.map
 
