@@ -145,7 +145,6 @@ import {
     ObjectLiteralExpression,
     OuterExpression,
     OuterExpressionKinds,
-    outFile,
     ParenthesizedExpression,
     parseNodeFactory,
     PlusToken,
@@ -860,7 +859,7 @@ export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile 
     if (file.moduleName) {
         return factory.createStringLiteral(file.moduleName);
     }
-    if (!file.isDeclarationFile && outFile(options)) {
+    if (!file.isDeclarationFile && options.outFile) {
         return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
     }
     return undefined;

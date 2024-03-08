@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-// @importsNotUsedAsValues: error
+// @module: esnext
+// @verbatimModuleSyntax: true
 
 // @Filename: Presenter.ts
 //// export type DisplayStyle = "normal" | "compact";

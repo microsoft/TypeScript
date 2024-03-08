@@ -4202,7 +4202,7 @@ export class ProjectService {
 
     closeExternalProject(uncheckedFileName: string): void;
     /** @internal */
-    closeExternalProject(uncheckedFileName: string, print: boolean): void;
+    closeExternalProject(uncheckedFileName: string, print: boolean): void; // eslint-disable-line @typescript-eslint/unified-signatures
     closeExternalProject(uncheckedFileName: string, print?: boolean): void {
         const fileName = toNormalizedPath(uncheckedFileName);
         const configuredProjects = this.externalProjectToConfiguredProjectMap.get(fileName);
@@ -4373,7 +4373,7 @@ export class ProjectService {
 
     openExternalProject(proj: protocol.ExternalProject): void;
     /** @internal */
-    openExternalProject(proj: protocol.ExternalProject, print: boolean): void;
+    openExternalProject(proj: protocol.ExternalProject, print: boolean): void; // eslint-disable-line @typescript-eslint/unified-signatures
     openExternalProject(proj: protocol.ExternalProject, print?: boolean): void {
         const existingExternalProject = this.findExternalProjectByProjectName(proj.projectFileName);
         const existingConfiguredProjects = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);

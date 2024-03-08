@@ -243,7 +243,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.5"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Projects::

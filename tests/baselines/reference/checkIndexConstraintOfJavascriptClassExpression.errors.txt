@@ -1,12 +1,8 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 weird.js(1,1): error TS2552: Cannot find name 'someFunction'. Did you mean 'Function'?
 weird.js(1,23): error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
 weird.js(9,17): error TS7006: Parameter 'error' implicitly has an 'any' type.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== weird.js (3 errors) ====
     someFunction(function(BaseClass) {
     ~~~~~~~~~~~~
