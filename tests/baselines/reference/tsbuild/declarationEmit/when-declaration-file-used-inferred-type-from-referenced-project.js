@@ -161,12 +161,11 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
 //// [/src/packages/pkg2/lib/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn4 = void 0;
+exports.fn4 = fn4;
 function fn4() {
     var a = { thing1: { a: 'b' } };
     return a.thing1;
 }
-exports.fn4 = fn4;
 
 
 //// [/src/packages/pkg2/lib/tsconfig.tsbuildinfo]

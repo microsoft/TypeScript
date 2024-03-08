@@ -38,9 +38,8 @@ Output::
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
+function Foo() { return 10; }
 
 
 //// [/a/b/f2.js]
@@ -131,11 +130,10 @@ Output::
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
-function foo2() { return 2; }
 exports.foo2 = foo2;
+function Foo() { return 10; }
+function foo2() { return 2; }
 
 
 //// [/a/b/f2.js] file written with same contents
@@ -196,13 +194,12 @@ Output::
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooN = exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
-function foo2() { return 2; }
 exports.foo2 = foo2;
-function fooN() { return 2; }
 exports.fooN = fooN;
+function Foo() { return 10; }
+function foo2() { return 2; }
+function fooN() { return 2; }
 
 
 //// [/a/b/f2.js] file written with same contents

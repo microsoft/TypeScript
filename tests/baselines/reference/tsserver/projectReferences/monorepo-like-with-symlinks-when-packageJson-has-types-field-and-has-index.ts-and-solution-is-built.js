@@ -66,9 +66,8 @@ export function bar() { }
 //// [/user/username/projects/myproject/packages/B/lib/bar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 
 
 //// [/user/username/projects/myproject/packages/B/lib/bar.d.ts]
@@ -78,9 +77,8 @@ export declare function bar(): void;
 //// [/user/username/projects/myproject/packages/B/lib/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
+function foo() { }
 
 
 //// [/user/username/projects/myproject/packages/B/lib/index.d.ts]
