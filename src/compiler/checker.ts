@@ -26179,7 +26179,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const targetProp of properties) {
                 const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                 if (sourceProp && !some(sourceProp.declarations, hasSkipDirectInferenceFlag)) {
-                    inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
+                    inferFromTypes(
+                        removeMissingType(getTypeOfSymbol(sourceProp), !!(sourceProp.flags & SymbolFlags.Optional)),
+                        removeMissingType(getTypeOfSymbol(targetProp), !!(targetProp.flags & SymbolFlags.Optional)),
+                    );
                 }
             }
         }
@@ -30575,7 +30578,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (t.flags & TypeFlags.StructuredType) {
                 const prop = getPropertyOfType(t, name);
                 if (prop) {
-                    return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop && prop.flags & SymbolFlags.Optional));
+                    return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));
                 }
                 if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
                     const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
