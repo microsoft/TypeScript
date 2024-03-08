@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/verbatim-declarations-literals.ts] ////
+
+=== verbatim-declarations-literals.ts ===
+enum E { "some value" = 1 };
+>E : E
+>"some value" : (typeof E)["some value"]
+>1 : 1
+
+const e: typeof E["some value"] = E["some value"];
+>e : (typeof E)["some value"]
+>E : typeof E
+>E["some value"] : E
+>E : typeof E
+>"some value" : "some value"
+
+declare function f3<T>(a: T, b: T): T;
+>f3 : <T>(a: T, b: T) => T
+>a : T
+>b : T
+
+const x3 = f3("abc", "def");  // "abc" | "def"
+>x3 : "abc" | "def"
+>f3("abc", "def") : "abc" | "def"
+>f3 : <T>(a: T, b: T) => T
+>"abc" : "abc"
+>"def" : "def"
+
+const octal = 0o16;
+>octal : 14
+>0o16 : 14
+
+const octalParen = ((0o16));
+>octalParen : 14
+>((0o16)) : 14
+>(0o16) : 14
+>0o16 : 14
+
+const octalIndirect = octal;
+>octalIndirect : 14
+>octal : 14
+
+const hex = 0x10;
+>hex : 16
+>0x10 : 16
+
+const hexParen = ((0x10));
+>hexParen : 16
+>((0x10)) : 16
+>(0x10) : 16
+>0x10 : 16
+
+const hexIndirect = hex;
+>hexIndirect : 16
+>hex : 16
+
+const seps = 1_000_000;
+>seps : 1000000
+>1_000_000 : 1000000
+
+const sepsParen = (1_000_000);
+>sepsParen : 1000000
+>(1_000_000) : 1000000
+>1_000_000 : 1000000
+
+const sepsIndirect = seps;
+>sepsIndirect : 1000000
+>seps : 1000000
+
+const singleQuote = 'x'
+>singleQuote : "x"
+>'x' : "x"
+
+const singleQuoteParen = (('x'))
+>singleQuoteParen : "x"
+>(('x')) : "x"
+>('x') : "x"
+>'x' : "x"
+
+const singleQuoteIndirect = singleQuote;
+>singleQuoteIndirect : "x"
+>singleQuote : "x"
+
+const noSubstTemplate = `Test`
+>noSubstTemplate : "Test"
+>`Test` : "Test"
+
+const noSubstTemplateParen = (`Test`)
+>noSubstTemplateParen : "Test"
+>(`Test`) : "Test"
+>`Test` : "Test"
+
+const noSubstTemplateIndirect = noSubstTemplate;
+>noSubstTemplateIndirect : "Test"
+>noSubstTemplate : "Test"
+
