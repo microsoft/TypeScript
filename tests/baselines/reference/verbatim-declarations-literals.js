@@ -58,7 +58,7 @@ const noSubstTemplateIndirect = noSubstTemplate;
 declare enum E {
     "some value" = 1
 }
-declare const e = E["some value"];
+declare const e: typeof E["some value"];
 declare function f3<T>(a: T, b: T): T;
 declare const x3: "abc" | "def";
 declare const octal = 14;

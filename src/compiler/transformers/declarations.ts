@@ -41,6 +41,7 @@ import {
     EnumDeclaration,
     ExportAssignment,
     ExportDeclaration,
+    Expression,
     ExpressionWithTypeArguments,
     factory,
     FileReference,
@@ -666,7 +667,7 @@ export function transformDeclarations(context: TransformationContext) {
                 elem.dotDotDotToken,
                 elem.propertyName,
                 filterBindingPatternInitializers(elem.name),
-                shouldPrintWithInitializer(elem) ? elem.initializer : undefined,
+                /*initializer*/ undefined,
             );
         }
     }
@@ -692,8 +693,11 @@ export function transformDeclarations(context: TransformationContext) {
         return newParam;
     }
 
-    function shouldPrintWithInitializer(node: Node) {
-        return canHaveLiteralInitializer(node) && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
+    function shouldPrintWithInitializer(node: Node): node is CanHaveLiteralInitializer & { initializer: Expression; } {
+        return canHaveLiteralInitializer(node)
+            && !node.type
+            && !!node.initializer
+            && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
     }
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
@@ -1937,7 +1941,7 @@ function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode 
 }
 
 type CanHaveLiteralInitializer = VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration;
-function canHaveLiteralInitializer(node: Node): boolean {
+function canHaveLiteralInitializer(node: Node): node is CanHaveLiteralInitializer {
     switch (node.kind) {
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
