@@ -26969,9 +26969,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (strictNullChecks) {
             switch (facts) {
                 case TypeFacts.NEUndefined:
-                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQUndefined) ? getIntersectionType([t, hasTypeFacts(t, TypeFacts.EQNull) && !maybeTypeOfKind(reduced, TypeFlags.Null) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]) : t);
+                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQUndefined) ? getIntersectionType([t, hasTypeFacts(t, TypeFacts.EQNull) && (!maybeTypeOfKind(reduced, TypeFlags.Null) || maybeTypeOfKind(t, TypeFlags.Null)) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]) : t);
                 case TypeFacts.NENull:
-                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQNull) ? getIntersectionType([t, hasTypeFacts(t, TypeFacts.EQUndefined) && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]) : t);
+                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQNull) ? getIntersectionType([t, hasTypeFacts(t, TypeFacts.EQUndefined) && (!maybeTypeOfKind(reduced, TypeFlags.Undefined) || maybeTypeOfKind(t, TypeFlags.Undefined)) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]) : t);
                 case TypeFacts.NEUndefinedOrNull:
                 case TypeFacts.Truthy:
                     return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQUndefinedOrNull) ? getGlobalNonNullableTypeInstantiation(t) : t);

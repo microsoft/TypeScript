@@ -1,0 +1,47 @@
+narrowByUndefinedEqualityGeneric1.ts(21,23): error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
+  'P[K] & ({} | null)' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+    Type 'P[K] & null' is not assignable to type 'S[K]'.
+      'P[K] & null' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+narrowByUndefinedEqualityGeneric1.ts(24,23): error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
+  'P[K] & ({} | null)' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+    Type 'P[K] & null' is not assignable to type 'S[K]'.
+      'P[K] & null' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+
+
+==== narrowByUndefinedEqualityGeneric1.ts (2 errors) ====
+    type AnyObject = Record<string, any>;
+    type State = AnyObject;
+    
+    declare function hasOwnProperty<T extends AnyObject>(
+      object: T,
+      prop: PropertyKey,
+    ): prop is keyof T;
+    
+    interface Store<S = State> {
+      setState<K extends keyof S>(key: K, value: S[K]): void;
+    }
+    
+    export function syncStoreProp<
+      S extends State,
+      P extends Partial<S>,
+      K extends keyof S,
+    >(store: Store<S>, props: P, key: K) {
+      const value = hasOwnProperty(props, key) ? props[key] : undefined;
+    
+      if (value === undefined) return;
+      store.setState(key, value);
+                          ~~~~~
+!!! error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
+!!! error TS2345:   'P[K] & ({} | null)' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2345:     Type 'P[K] & null' is not assignable to type 'S[K]'.
+!!! error TS2345:       'P[K] & null' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+    
+      if (value === undefined) return;
+      store.setState(key, value);
+                          ~~~~~
+!!! error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
+!!! error TS2345:   'P[K] & ({} | null)' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2345:     Type 'P[K] & null' is not assignable to type 'S[K]'.
+!!! error TS2345:       'P[K] & null' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
+    }
+    

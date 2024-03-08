@@ -1,0 +1,101 @@
+//// [tests/cases/compiler/narrowByUndefinedEqualityGeneric1.ts] ////
+
+=== narrowByUndefinedEqualityGeneric1.ts ===
+type AnyObject = Record<string, any>;
+>AnyObject : Symbol(AnyObject, Decl(narrowByUndefinedEqualityGeneric1.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type State = AnyObject;
+>State : Symbol(State, Decl(narrowByUndefinedEqualityGeneric1.ts, 0, 37))
+>AnyObject : Symbol(AnyObject, Decl(narrowByUndefinedEqualityGeneric1.ts, 0, 0))
+
+declare function hasOwnProperty<T extends AnyObject>(
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(narrowByUndefinedEqualityGeneric1.ts, 1, 23))
+>T : Symbol(T, Decl(narrowByUndefinedEqualityGeneric1.ts, 3, 32))
+>AnyObject : Symbol(AnyObject, Decl(narrowByUndefinedEqualityGeneric1.ts, 0, 0))
+
+  object: T,
+>object : Symbol(object, Decl(narrowByUndefinedEqualityGeneric1.ts, 3, 53))
+>T : Symbol(T, Decl(narrowByUndefinedEqualityGeneric1.ts, 3, 32))
+
+  prop: PropertyKey,
+>prop : Symbol(prop, Decl(narrowByUndefinedEqualityGeneric1.ts, 4, 12))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+): prop is keyof T;
+>prop : Symbol(prop, Decl(narrowByUndefinedEqualityGeneric1.ts, 4, 12))
+>T : Symbol(T, Decl(narrowByUndefinedEqualityGeneric1.ts, 3, 32))
+
+interface Store<S = State> {
+>Store : Symbol(Store, Decl(narrowByUndefinedEqualityGeneric1.ts, 6, 19))
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 16))
+>State : Symbol(State, Decl(narrowByUndefinedEqualityGeneric1.ts, 0, 37))
+
+  setState<K extends keyof S>(key: K, value: S[K]): void;
+>setState : Symbol(Store.setState, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 28))
+>K : Symbol(K, Decl(narrowByUndefinedEqualityGeneric1.ts, 9, 11))
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 16))
+>key : Symbol(key, Decl(narrowByUndefinedEqualityGeneric1.ts, 9, 30))
+>K : Symbol(K, Decl(narrowByUndefinedEqualityGeneric1.ts, 9, 11))
+>value : Symbol(value, Decl(narrowByUndefinedEqualityGeneric1.ts, 9, 37))
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 16))
+>K : Symbol(K, Decl(narrowByUndefinedEqualityGeneric1.ts, 9, 11))
+}
+
+export function syncStoreProp<
+>syncStoreProp : Symbol(syncStoreProp, Decl(narrowByUndefinedEqualityGeneric1.ts, 10, 1))
+
+  S extends State,
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 12, 30))
+>State : Symbol(State, Decl(narrowByUndefinedEqualityGeneric1.ts, 0, 37))
+
+  P extends Partial<S>,
+>P : Symbol(P, Decl(narrowByUndefinedEqualityGeneric1.ts, 13, 18))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 12, 30))
+
+  K extends keyof S,
+>K : Symbol(K, Decl(narrowByUndefinedEqualityGeneric1.ts, 14, 23))
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 12, 30))
+
+>(store: Store<S>, props: P, key: K) {
+>store : Symbol(store, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 2))
+>Store : Symbol(Store, Decl(narrowByUndefinedEqualityGeneric1.ts, 6, 19))
+>S : Symbol(S, Decl(narrowByUndefinedEqualityGeneric1.ts, 12, 30))
+>props : Symbol(props, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 18))
+>P : Symbol(P, Decl(narrowByUndefinedEqualityGeneric1.ts, 13, 18))
+>key : Symbol(key, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 28))
+>K : Symbol(K, Decl(narrowByUndefinedEqualityGeneric1.ts, 14, 23))
+
+  const value = hasOwnProperty(props, key) ? props[key] : undefined;
+>value : Symbol(value, Decl(narrowByUndefinedEqualityGeneric1.ts, 17, 7))
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(narrowByUndefinedEqualityGeneric1.ts, 1, 23))
+>props : Symbol(props, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 18))
+>key : Symbol(key, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 28))
+>props : Symbol(props, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 18))
+>key : Symbol(key, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 28))
+>undefined : Symbol(undefined)
+
+  if (value === undefined) return;
+>value : Symbol(value, Decl(narrowByUndefinedEqualityGeneric1.ts, 17, 7))
+>undefined : Symbol(undefined)
+
+  store.setState(key, value);
+>store.setState : Symbol(Store.setState, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 28))
+>store : Symbol(store, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 2))
+>setState : Symbol(Store.setState, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 28))
+>key : Symbol(key, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 28))
+>value : Symbol(value, Decl(narrowByUndefinedEqualityGeneric1.ts, 17, 7))
+
+  if (value === undefined) return;
+>value : Symbol(value, Decl(narrowByUndefinedEqualityGeneric1.ts, 17, 7))
+>undefined : Symbol(undefined)
+
+  store.setState(key, value);
+>store.setState : Symbol(Store.setState, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 28))
+>store : Symbol(store, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 2))
+>setState : Symbol(Store.setState, Decl(narrowByUndefinedEqualityGeneric1.ts, 8, 28))
+>key : Symbol(key, Decl(narrowByUndefinedEqualityGeneric1.ts, 16, 28))
+>value : Symbol(value, Decl(narrowByUndefinedEqualityGeneric1.ts, 17, 7))
+}
+
