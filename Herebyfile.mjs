@@ -211,7 +211,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
         if (taskOptions.useTypeScriptPublicAPI) {
             options.external = ["./typescript.js"];
-            options.plugins ||= [];
+            options.plugins = options.plugins || [];
             options.plugins.push({
                 name: "remap-typescript-to-require",
                 setup(build) {
@@ -249,7 +249,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const toCommonJsRegExp = /var __toCommonJS .*/;
             const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
 
-            options.plugins ||= [];
+            options.plugins = options.plugins || [];
             options.plugins.push(
                 {
                     name: "post-process-exports",
