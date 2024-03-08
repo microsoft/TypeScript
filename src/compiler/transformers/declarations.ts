@@ -582,7 +582,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function collectLibReferenceDirectives(sourceFile: SourceFile, ret: Map<string, boolean>) {
-        // TODO(c): simplify
+        // TODO(jakebailey): simplify
         forEach(sourceFile.libReferenceDirectives, ref => {
             if (!ref.preserve) return;
             ret.set(ref.fileName, true);
