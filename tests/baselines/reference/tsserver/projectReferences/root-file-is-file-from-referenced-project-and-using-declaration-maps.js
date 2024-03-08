@@ -74,10 +74,9 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/project/out/input/keyboard.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluateKeyboardEvent = void 0;
+exports.evaluateKeyboardEvent = evaluateKeyboardEvent;
 function bar() { return "just a random function so .d.ts location doesnt match"; }
 function evaluateKeyboardEvent() { }
-exports.evaluateKeyboardEvent = evaluateKeyboardEvent;
 
 
 //// [/user/username/projects/project/out/input/keyboard.d.ts.map]

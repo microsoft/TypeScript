@@ -54,14 +54,13 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/exec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/exec.js",
                     },
                     files: [
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -79,7 +78,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/compositeExec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/compositeExec.js",
                         composite: true,
                         declarationMap: true,
@@ -88,7 +86,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -115,14 +113,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
             if (tempFile) files.push(tempFile);
-
-            const rootNames = [containerConfig.path];
-            const host = createServerHost(files);
-            // Can't use createHostWithSolutionBuild. This test used to work,
-            // but no longer does since prepend isn't allowed in project references.
-            // We just baseline and assert nothing about the output.
-            solutionBuildWithBaseline(host, rootNames);
-
+            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
             const session = new TestSession(host);
             return { files, session, containerConfig, containerCompositeExecIndex };
         }

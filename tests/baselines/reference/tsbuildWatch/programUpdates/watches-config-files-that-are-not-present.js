@@ -105,12 +105,12 @@ export declare const World = "hello";
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.multiply = exports.leftPad = exports.someString = void 0;
+exports.someString = void 0;
+exports.leftPad = leftPad;
+exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
-exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]
@@ -322,17 +322,17 @@ Output::
 
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AACA,0CAEC;AAHD,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.m = exports.getSecondsInDay = void 0;
+exports.m = void 0;
+exports.getSecondsInDay = getSecondsInDay;
 var c = require("../core/index");
 function getSecondsInDay() {
     return c.multiply(10, 15);
 }
-exports.getSecondsInDay = getSecondsInDay;
 var mod = require("../core/anotherModule");
 exports.m = mod;
 //# sourceMappingURL=index.js.map

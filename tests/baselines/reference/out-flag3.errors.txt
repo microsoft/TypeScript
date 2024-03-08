@@ -1,16 +1,8 @@
-error TS5053: Option 'out' cannot be specified with option 'outFile'.
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-!!! error TS5053: Option 'out' cannot be specified with option 'outFile'.
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== a.ts (0 errors) ====
-    // --out and --outFile error
-    
     class A { }
     
 ==== b.ts (0 errors) ====

@@ -17,8 +17,6 @@ export let y = () => x
 >x : number
 
 === /types/lib/index.d.ts ===
-// local value shadows global - no need to add type reference directive 
-   
 declare let $: { x: number }
 >$ : { x: number; }
 >x : number
