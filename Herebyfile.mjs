@@ -184,6 +184,7 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {boolean} [useTypeScriptPublicAPI]
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
@@ -204,13 +205,22 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             sourcesContent: false,
             treeShaking: taskOptions.treeShaking,
             packages: "external",
-            external: ["typescript", "./typescript.js"],
-            alias: {
-                typescript: "./typescript.js",
-            },
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
+
+        if (taskOptions.useTypeScriptPublicAPI) {
+            options.external = ["./typescript.js"];
+            options.plugins ||= [];
+            options.plugins.push({
+                name: "remap-typescript-to-require",
+                setup(build) {
+                    build.onLoad({ filter: /src[\\/]typescript[\\/]typescript\.ts$/ }, () => {
+                        return { contents: `export * from "./typescript.js"` };
+                    });
+                },
+            });
+        }
 
         if (taskOptions.exportIsTsObject) {
             // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
@@ -239,9 +249,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const toCommonJsRegExp = /var __toCommonJS .*/;
             const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
 
-            options.plugins = [
+            options.plugins ||= [];
+            options.plugins.push(
                 {
-                    name: "post-process",
+                    name: "post-process-exports",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
@@ -256,7 +267,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                         });
                     },
                 },
-            ];
+            );
         }
 
         return options;
@@ -427,6 +438,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs, services],
+    bundlerOptions: { useTypeScriptPublicAPI: true },
 });
 export { tsserver, watchTsserver };
 

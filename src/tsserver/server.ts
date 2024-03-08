@@ -1,5 +1,4 @@
-import * as ts from "typescript";
-
+import * as ts from "./_namespaces/ts";
 import {
     StartInput,
 } from "./common";

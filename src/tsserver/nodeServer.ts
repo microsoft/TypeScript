@@ -23,9 +23,8 @@ import {
     validateLocaleAndSetLanguage,
     versionMajorMinor,
     WatchOptions,
-} from "typescript";
-import * as ts from "typescript";
-
+} from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts";
 import {
     getLogLevel,
     StartInput,
