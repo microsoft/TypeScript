@@ -2912,6 +2912,9 @@ export interface DiagnosticEventBody {
      * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
      */
     spans?: TextSpan[];
+
+    // >> TODO: remove this; testing only
+    perf?: string;
 }
 
 export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";

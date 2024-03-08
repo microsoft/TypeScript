@@ -995,6 +995,9 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
+    // >> TODO: for testing; remove later.
+    private checkTime: [number, number] | undefined;
+
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
@@ -1259,6 +1262,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
+        this.checkTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
@@ -1268,18 +1272,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
+        this.checkTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
+        this.checkTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         tracing?.pop();
     }
 
     private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]) {
+        this.checkTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         // >> TODO: get adjusted ranges from the nodes we actually end up checking...
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSemanticDiagnostics(file, ranges), "regionSemanticDiag", ranges.map(createTextSpanFromRange));
@@ -1290,7 +1297,12 @@ export class Session<TMessage = string> implements EventSender {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
             this.event<protocol.DiagnosticEventBody>(
-                { file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)), spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)) },
+                {
+                    file,
+                    diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
+                    spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+                    perf: hrTimeToMilliseconds(this.hrtime(this.checkTime)).toFixed(4),
+                },
                 kind);
         }
         catch (err) {
