@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/importAliasInModuleAugmentation.ts] ////
+
+=== importAliasInModuleAugmentation.ts ===
+export { }
+
+namespace A {
+>A : Symbol(A, Decl(importAliasInModuleAugmentation.ts, 0, 10))
+
+    export const y = 34;
+>y : Symbol(y, Decl(importAliasInModuleAugmentation.ts, 3, 16), Decl(importAliasInModuleAugmentation.ts, 3, 24))
+
+    export interface y { s: string }
+>y : Symbol(y, Decl(importAliasInModuleAugmentation.ts, 3, 16), Decl(importAliasInModuleAugmentation.ts, 3, 24))
+>s : Symbol(y.s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
+}
+
+declare global {
+>global : Symbol(global, Decl(importAliasInModuleAugmentation.ts, 5, 1))
+
+    export import x = A.y;
+>x : Symbol(x, Decl(importAliasInModuleAugmentation.ts, 7, 16))
+>A : Symbol(A, Decl(importAliasInModuleAugmentation.ts, 0, 10))
+>y : Symbol(x, Decl(importAliasInModuleAugmentation.ts, 3, 16), Decl(importAliasInModuleAugmentation.ts, 3, 24))
+
+    // Should still error
+    import f = require("fs");
+>f : Symbol(f, Decl(importAliasInModuleAugmentation.ts, 8, 26))
+}
+
+const m: number = x;
+>m : Symbol(m, Decl(importAliasInModuleAugmentation.ts, 14, 5))
+>x : Symbol(x, Decl(importAliasInModuleAugmentation.ts, 7, 16))
+
+let s: x = { s: "" };
+>s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 15, 3))
+>x : Symbol(x, Decl(importAliasInModuleAugmentation.ts, 7, 16))
+>s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 15, 12))
+
+void s.s;
+>s.s : Symbol(x.s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
+>s : Symbol(s, Decl(importAliasInModuleAugmentation.ts, 15, 3))
+>s : Symbol(x.s, Decl(importAliasInModuleAugmentation.ts, 4, 24))
+
