@@ -442,18 +442,10 @@ interface String {
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A variable name or string literal containing the regular expression pattern and flags.
-      */
-    match(regexp: string): string[];
->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
->regexp : string
-
-    /** 
-      * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
+      * @param regexp The regular expression to match against.
       */
     match(regexp: RegExp): string[];
->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
+>match : (regexp: RegExp) => string[]
 >regexp : RegExp
 
     /**
@@ -502,18 +494,10 @@ interface String {
 
     /**
       * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags. 
-      */
-    search(regexp: string): number;
->search : { (regexp: string): number; (regexp: RegExp): number; }
->regexp : string
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags. 
+      * @param regexp The regular expression to match against.
       */
     search(regexp: RegExp): number;
->search : { (regexp: string): number; (regexp: RegExp): number; }
+>search : (regexp: RegExp) => number
 >regexp : RegExp
 
     /**

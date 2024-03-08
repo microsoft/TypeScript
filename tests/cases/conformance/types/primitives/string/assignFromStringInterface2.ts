@@ -11,13 +11,11 @@ interface NotString {
     indexOf(searchString: string, position?: number): number;
     lastIndexOf(searchString: string, position?: number): number;
     localeCompare(that: string): number;
-    match(regexp: string): RegExpMatchArray;
     match(regexp: RegExp): RegExpMatchArray;
     replace(searchValue: string, replaceValue: string): string;
     replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
     replace(searchValue: RegExp, replaceValue: string): string;
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
-    search(regexp: string): number;
     search(regexp: RegExp): number;
     slice(start?: number, end?: number): string;
     split(separator: string, limit?: number): string[];

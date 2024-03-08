@@ -8,8 +8,8 @@ var a = "Hello";
 var b = a.match(/\/ver=([^/]+)/);
 >b : RegExpMatchArray
 >a.match(/\/ver=([^/]+)/) : RegExpMatchArray
->a.match : (regexp: string | RegExp) => RegExpMatchArray
+>a.match : (regexp: RegExp) => RegExpMatchArray
 >a : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: RegExp) => RegExpMatchArray
 >/\/ver=([^/]+)/ : RegExp
 

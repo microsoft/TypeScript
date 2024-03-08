@@ -10,9 +10,9 @@
 // | (method) String.lastIndexOf(searchString: string, position?: number): number
 // | (property) String.length: number
 // | (method) String.localeCompare(that: string): number (+1 overload)
-// | (method) String.match(regexp: string | RegExp): RegExpMatchArray
+// | (method) String.match(regexp: RegExp): RegExpMatchArray
 // | (method) String.replace(searchValue: string | RegExp, replaceValue: string): string (+1 overload)
-// | (method) String.search(regexp: string | RegExp): number
+// | (method) String.search(regexp: RegExp): number
 // | (method) String.slice(start?: number, end?: number): string
 // | (method) String.split(separator: string | RegExp, limit?: number): string[]
 // | (method) String.substring(start: number, end?: number): string
@@ -856,22 +856,6 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
               "text": "RegExp",
               "kind": "localName"
             },
@@ -911,7 +895,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A variable name or string literal containing the regular expression pattern and flags.",
+                  "text": "The regular expression to match against.",
                   "kind": "text"
                 }
               ]
@@ -1197,22 +1181,6 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
               "text": "RegExp",
               "kind": "localName"
             },
@@ -1235,7 +1203,7 @@
           ],
           "documentation": [
             {
-              "text": "Finds the first substring match in a regular expression search.",
+              "text": "Finds the index of the first substring match of a regular expression search.",
               "kind": "text"
             }
           ],
@@ -1252,7 +1220,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The regular expression pattern and applicable flags.",
+                  "text": "The regular expression to match against.",
                   "kind": "text"
                 }
               ]

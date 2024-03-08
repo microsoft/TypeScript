@@ -2702,7 +2702,7 @@ export function createLanguageService(
                 pos = commentRange.end + 1;
             }
             else { // If it's not in a comment range, then we need to comment the uncommented portions.
-                const newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
+                const newPos = text.substring(pos, textRange.end).search(new RegExp(`(${openMultilineRegex})|(${closeMultilineRegex})`));
 
                 isCommenting = insertComment !== undefined
                     ? insertComment

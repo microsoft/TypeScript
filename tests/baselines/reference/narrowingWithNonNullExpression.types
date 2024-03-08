@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/narrowingWithNonNullExpression.ts] ////
 
 === narrowingWithNonNullExpression.ts ===
-const m = ''.match('');
+const m = ''.match(/(?:)/);
 >m : RegExpMatchArray
->''.match('') : RegExpMatchArray
->''.match : (regexp: string | RegExp) => RegExpMatchArray
+>''.match(/(?:)/) : RegExpMatchArray
+>''.match : (regexp: RegExp) => RegExpMatchArray
 >'' : ""
->match : (regexp: string | RegExp) => RegExpMatchArray
->'' : ""
+>match : (regexp: RegExp) => RegExpMatchArray
+>/(?:)/ : RegExp
 
 m! && m[0];
 >m! && m[0] : string

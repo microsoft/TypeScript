@@ -433,9 +433,9 @@ interface String {
 
     /**
      * Matches a string with a regular expression, and returns an array containing the results of that search.
-     * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+     * @param regexp The regular expression to match against.
      */
-    match(regexp: string | RegExp): RegExpMatchArray | null;
+    match(regexp: RegExp): RegExpMatchArray | null;
 
     /**
      * Replaces text in a string, using a regular expression or search string.
@@ -452,10 +452,10 @@ interface String {
     replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
-     * Finds the first substring match in a regular expression search.
-     * @param regexp The regular expression pattern and applicable flags.
+     * Finds the index of the first substring match of a regular expression search.
+     * @param regexp The regular expression to match against.
      */
-    search(regexp: string | RegExp): number;
+    search(regexp: RegExp): number;
 
     /**
      * Returns a section of a string.

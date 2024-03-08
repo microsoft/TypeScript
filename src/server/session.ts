@@ -2259,7 +2259,7 @@ export class Session<TMessage = string> implements EventSender {
         // add edits necessary to properly indent the current line.
         if ((args.key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
             const { lineText, absolutePosition } = scriptInfo.textStorage.getAbsolutePositionAndLineText(args.line);
-            if (lineText && lineText.search("\\S") < 0) {
+            if (lineText && lineText.search(/\S/) < 0) {
                 const preferredIndent = languageService.getIndentationAtPosition(file, position, formatOptions);
                 let hasIndent = 0;
                 let i: number, len: number;

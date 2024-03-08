@@ -41,9 +41,9 @@ const repro_43249 = (value: unknown) => {
 >match : [] | RegExpMatchArray
 >value.match(/anything/) || [] : RegExpMatchArray | []
 >value.match(/anything/) : RegExpMatchArray | null
->value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>value.match : { (regexp: RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >value : string
->match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>match : { (regexp: RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >/anything/ : RegExp
 >[] : []
 

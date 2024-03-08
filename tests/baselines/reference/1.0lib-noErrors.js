@@ -318,13 +318,7 @@ interface String {
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A variable name or string literal containing the regular expression pattern and flags.
-      */
-    match(regexp: string): string[];
-
-    /** 
-      * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
+      * @param regexp The regular expression to match against.
       */
     match(regexp: RegExp): string[];
 
@@ -358,13 +352,7 @@ interface String {
 
     /**
       * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags. 
-      */
-    search(regexp: string): number;
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags. 
+      * @param regexp The regular expression to match against.
       */
     search(regexp: RegExp): number;
 
@@ -1143,7 +1131,8 @@ declare var Array: {
     <T>(...items: T[]): T[];
     isArray(arg: any): boolean;
     prototype: Array<any>;
-}
+}
+
 
 //// [1.0lib-noErrors.js]
 /* *****************************************************************************
