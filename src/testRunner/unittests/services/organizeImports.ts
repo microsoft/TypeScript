@@ -442,37 +442,32 @@ console.log(Type1, Type2, Type3, Type4, Type5, Type6, Type7, Type8, Type9, func1
 
         testDetectionBaseline("detection6", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content:
-`import { A, B, a, b } from 'foo';
-console.log(A, B, a, b);`
+            content: `import { A, B, a, b } from 'foo';
+console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection7", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content:
-`import { A, a, B, b } from 'foo';
-console.log(A, B, a, b);`
+            content: `import { A, a, B, b } from 'foo';
+console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection8", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content:
-`import { A, a, b, B } from 'foo';
-console.log(A, B, a, b);`
+            content: `import { A, a, b, B } from 'foo';
+console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection9", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content:
-`import { a, b, A, B } from 'foo';
-console.log(A, B, a, b);`
+            content: `import { a, b, A, B } from 'foo';
+console.log(A, B, a, b);`,
         });
 
         testDetectionBaseline("detection10", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content:
-`import { a, A, b, B } from 'foo';
-console.log(A, B, a, b);`
+            content: `import { a, A, b, B } from 'foo';
+console.log(A, B, a, b);`,
         });
 
         testOrganizeImports("Renamed_used", /*skipDestructiveCodeActions*/ false, {
@@ -1069,7 +1064,7 @@ export * from "lib";
             );
         }
 
-        function testDetectionBaseline(testName: string, skipDestructiveCodeActions: boolean, testFile: File, ... otherFiles: File[]) {
+        function testDetectionBaseline(testName: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {
             it(testName, () => {
                 // this differs from the test above, in that it doesn't assert that there are changes
                 const baselinePath = `organizeImports/${testName}.ts`;

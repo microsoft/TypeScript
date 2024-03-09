@@ -9966,9 +9966,9 @@ export interface UserPreferences {
     /**
      * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
      * type-only.
-    *
-    * Default: `last`
-    */
+     *
+     * Default: `last`
+     */
     readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
     /**
      * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
