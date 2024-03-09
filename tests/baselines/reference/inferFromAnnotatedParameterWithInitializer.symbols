@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/inferFromAnnotatedParameterWithInitializer.ts] ////
+
+=== inferFromAnnotatedParameterWithInitializer.ts ===
+// https://github.com/microsoft/TypeScript/issues/57706
+
+declare function infer1<T>(fn: Factory<T>): T;
+>infer1 : Symbol(infer1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 0, 0))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 24))
+>fn : Symbol(fn, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 27))
+>Factory : Symbol(Factory, Decl(inferFromAnnotatedParameterWithInitializer.ts, 3, 47))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 24))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 24))
+
+declare function infer2<T>(fn: Factory2<T>): T;
+>infer2 : Symbol(infer2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 46))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 3, 24))
+>fn : Symbol(fn, Decl(inferFromAnnotatedParameterWithInitializer.ts, 3, 27))
+>Factory2 : Symbol(Factory2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 5, 53))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 3, 24))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 3, 24))
+
+export type Factory<T> = (arg1: T, arg2: any) => any;
+>Factory : Symbol(Factory, Decl(inferFromAnnotatedParameterWithInitializer.ts, 3, 47))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 5, 20))
+>arg1 : Symbol(arg1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 5, 26))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 5, 20))
+>arg2 : Symbol(arg2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 5, 34))
+
+export type Factory2<T> = (...args: [T, any]) => any;
+>Factory2 : Symbol(Factory2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 5, 53))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 6, 21))
+>args : Symbol(args, Decl(inferFromAnnotatedParameterWithInitializer.ts, 6, 27))
+>T : Symbol(T, Decl(inferFromAnnotatedParameterWithInitializer.ts, 6, 21))
+
+const f1 = (msg: string = "hello", test: any) => {};
+>f1 : Symbol(f1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 8, 5))
+>msg : Symbol(msg, Decl(inferFromAnnotatedParameterWithInitializer.ts, 8, 12))
+>test : Symbol(test, Decl(inferFromAnnotatedParameterWithInitializer.ts, 8, 34))
+
+const a1 = infer1(f1);
+>a1 : Symbol(a1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 9, 5))
+>infer1 : Symbol(infer1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 0, 0))
+>f1 : Symbol(f1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 8, 5))
+
+const a2 = infer2(f1);
+>a2 : Symbol(a2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 10, 5))
+>infer2 : Symbol(infer2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 46))
+>f1 : Symbol(f1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 8, 5))
+
+const f2 = (msg: string = "hello") => {};
+>f2 : Symbol(f2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 12, 5))
+>msg : Symbol(msg, Decl(inferFromAnnotatedParameterWithInitializer.ts, 12, 12))
+
+const b1 = infer1(f2);
+>b1 : Symbol(b1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 13, 5))
+>infer1 : Symbol(infer1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 0, 0))
+>f2 : Symbol(f2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 12, 5))
+
+const b2 = infer2(f2);
+>b2 : Symbol(b2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 14, 5))
+>infer2 : Symbol(infer2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 46))
+>f2 : Symbol(f2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 12, 5))
+
+const c1 = infer1((msg: string = "hello") => {});
+>c1 : Symbol(c1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 16, 5))
+>infer1 : Symbol(infer1, Decl(inferFromAnnotatedParameterWithInitializer.ts, 0, 0))
+>msg : Symbol(msg, Decl(inferFromAnnotatedParameterWithInitializer.ts, 16, 19))
+
+const c2 = infer2((msg: string = "hello") => {});
+>c2 : Symbol(c2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 17, 5))
+>infer2 : Symbol(infer2, Decl(inferFromAnnotatedParameterWithInitializer.ts, 2, 46))
+>msg : Symbol(msg, Decl(inferFromAnnotatedParameterWithInitializer.ts, 17, 19))
+

@@ -36542,7 +36542,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const declaration = signature.parameters[i].valueDeclaration as ParameterDeclaration;
             const typeNode = getEffectiveTypeAnnotationNode(declaration);
             if (typeNode) {
-                const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, isOptionalDeclaration(declaration));
+                const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, hasInitializer(declaration) || isOptionalDeclaration(declaration));
                 const target = getTypeAtPosition(context, i);
                 inferTypes(inferenceContext.inferences, source, target);
             }
