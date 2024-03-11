@@ -762,7 +762,7 @@ export namespace Compiler {
             // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
             const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx) ?
                 baselinePath.replace(/\.tsx?/, "") : baselinePath;
-
+            
             if (!multifile) {
                 const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                 Baseline.runBaseline(outputFileName + fullExtension, fullBaseLine, opts);
@@ -776,12 +776,36 @@ export namespace Compiler {
 
         function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {
             let result = "";
+            const perfLines: string[] = [];
+            if (!isSymbolBaseline) {
+                const perfStats: [name: string, reportThreshold: number, rounding: number, value: number][] = [];
+                const checker = program.getTypeChecker();
+                const caches = checker.getRelationCacheSizes();
+                perfStats.push(["Strict subtype cache", 1000, 100, caches.strictSubtype]);
+                perfStats.push(["Subtype cache", 1000, 100, caches.subtype]);
+                perfStats.push(["Identity cache", 1000, 100, caches.identity]);
+                perfStats.push(["Assignability cache", 1000, 100, caches.assignable]);
+                perfStats.push(["Type Count", 1000, 100, checker.getTypeCount()]);
+                perfStats.push(["Instantiation count", 1500, 500, checker.getInstantiationCount()]);
+                perfStats.push(["Symbol count", 45000, 500, checker.getSymbolCount()]);
+
+                if (perfStats.some(([, threshold, , value]) => value >= threshold)) {
+                    perfLines.push(`//// Performance Stats`);
+                    for (const [name, _, rounding, value] of perfStats) {
+                        const display = (Math.round(value / rounding) * rounding).toLocaleString("en-US");
+                        perfLines.push(`${name}: ${display} (nearest ${rounding})`);
+                    }
+                    perfLines.push('');
+                    perfLines.push('');
+                }
+            }
+
             const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
             for (const value of gen) {
                 const [, content] = value;
                 result += content;
             }
-            return result ? (`//// [${header}] ////\r\n\r\n` + result) : null; // eslint-disable-line no-null/no-null
+            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join('\n')}${result}`) : null; // eslint-disable-line no-null/no-null
         }
 
         function* iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
