@@ -21175,13 +21175,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (reduced !== type) {
             return reduced;
         }
-        if (type.flags & TypeFlags.Intersection && some((type as IntersectionType).types, isEmptyAnonymousObjectType)) {
+        if (type.flags & TypeFlags.Intersection && shouldNormalizeIntersection(type as IntersectionType)) {
+            // Normalization handles cases like
+            // Partial<T>[K] & ({} | null) ==>
+            // Partial<T>[K] & {} | Partial<T>[K} & null ==>
+            // (T[K] | undefined) & {} | (T[K] | undefined) & null ==>
+            // T[K] & {} | undefined & {} | T[K] & null | undefined & null ==>
+            // T[K] & {} | T[K] & null
             const normalizedTypes = sameMap(type.types, t => getNormalizedType(t, writing));
             if (normalizedTypes !== type.types) {
                 return getIntersectionType(normalizedTypes);
             }
         }
         return type;
+    }
+
+    function shouldNormalizeIntersection(type: IntersectionType) {
+        let hasInstantiable = false;
+        let hasNullableOrEmpty = false;
+        for (const t of type.types) {
+            hasInstantiable ||= !!(t.flags & TypeFlags.Instantiable);
+            hasNullableOrEmpty ||= !!(t.flags & TypeFlags.Nullable) || isEmptyAnonymousObjectType(t);
+        }
+        return hasInstantiable && hasNullableOrEmpty;
     }
 
     function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
