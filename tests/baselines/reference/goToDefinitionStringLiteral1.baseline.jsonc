@@ -1,0 +1,24 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionStringLiteral1.ts ===
+// type User = {
+//   <|[|name|]: string;|>
+//   age: number;
+// };
+// 
+// declare function fn<T>(obj: T, key: keyof T): void;
+// 
+// declare const user: User;
+// 
+// fn(user, "name/*GOTO DEF*/");
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "name",
+    "containerName": "__type",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
