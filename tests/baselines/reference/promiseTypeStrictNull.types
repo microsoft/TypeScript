@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/promiseTypeStrictNull.ts] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 200 (nearest 100)
+Assignability cache: 200 (nearest 100)
+Type Count: 700 (nearest 100)
+Instantiation count: 2,000 (nearest 500)
+Symbol count: 27,500 (nearest 500)
+
 === promiseTypeStrictNull.ts ===
 declare var p: Promise<boolean>;
 >p : Promise<boolean>

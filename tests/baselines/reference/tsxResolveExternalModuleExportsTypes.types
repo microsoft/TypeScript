@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 600 (nearest 100)
+Type Count: 2,500 (nearest 100)
+Instantiation count: 1,500 (nearest 500)
+Symbol count: 27,000 (nearest 500)
+
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : import("/node_modules/@types/a/index.d.ts").Foo

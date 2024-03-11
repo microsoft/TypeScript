@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 2,100 (nearest 100)
+Type Count: 6,700 (nearest 100)
+Instantiation count: 73,000 (nearest 500)
+Symbol count: 67,000 (nearest 500)
+
 === jsxFragmentFactoryNoUnusedLocals.tsx ===
 /// <reference path="react16.d.ts" />
 import { Fragment, createElement } from "react"

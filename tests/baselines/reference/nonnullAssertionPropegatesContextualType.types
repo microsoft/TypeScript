@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/nonnullAssertionPropegatesContextualType.ts] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 0 (nearest 100)
+Type Count: 1,200 (nearest 100)
+Instantiation count: 0 (nearest 500)
+Symbol count: 25,500 (nearest 500)
+
 === nonnullAssertionPropegatesContextualType.ts ===
 let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error: Element
 >rect2 : SVGRectElement

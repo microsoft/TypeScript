@@ -1,5 +1,14 @@
 //// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 300 (nearest 100)
+Type Count: 2,200 (nearest 100)
+Instantiation count: 1,500 (nearest 500)
+Symbol count: 34,000 (nearest 500)
+
 === dependentDestructuredVariables.ts ===
 type Action =
 >Action : { kind: 'A'; payload: number; } | { kind: 'B'; payload: string; }

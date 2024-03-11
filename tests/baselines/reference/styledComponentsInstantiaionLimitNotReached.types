@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 200 (nearest 100)
+Assignability cache: 13,300 (nearest 100)
+Type Count: 27,200 (nearest 100)
+Instantiation count: 374,500 (nearest 500)
+Symbol count: 92,000 (nearest 500)
+
 === styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";

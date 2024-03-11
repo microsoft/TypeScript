@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/jsxImportForSideEffectsNonExtantNoError.tsx] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 2,100 (nearest 100)
+Type Count: 6,700 (nearest 100)
+Instantiation count: 73,000 (nearest 500)
+Symbol count: 66,500 (nearest 500)
+
 === jsxImportForSideEffectsNonExtantNoError.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";

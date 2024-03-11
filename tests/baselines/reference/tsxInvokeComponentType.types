@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/tsxInvokeComponentType.tsx] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 2,200 (nearest 100)
+Type Count: 7,700 (nearest 100)
+Instantiation count: 90,000 (nearest 500)
+Symbol count: 66,000 (nearest 500)
+
 === tsxInvokeComponentType.tsx ===
 /// <reference path="react16.d.ts" />
 import React, { ComponentType } from "react";

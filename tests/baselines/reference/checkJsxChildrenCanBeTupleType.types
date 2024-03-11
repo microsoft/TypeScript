@@ -1,5 +1,14 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
 
+//// Performance Stats
+Strict subtype cache: 0 (nearest 100)
+Subtype cache: 0 (nearest 100)
+Identity cache: 0 (nearest 100)
+Assignability cache: 2,200 (nearest 100)
+Type Count: 7,800 (nearest 100)
+Instantiation count: 90,000 (nearest 500)
+Symbol count: 66,500 (nearest 500)
+
 === checkJsxChildrenCanBeTupleType.tsx ===
 /// <reference path="react16.d.ts" />
 
