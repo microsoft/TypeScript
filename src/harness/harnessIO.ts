@@ -762,7 +762,7 @@ export namespace Compiler {
             // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
             const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx) ?
                 baselinePath.replace(/\.tsx?/, "") : baselinePath;
-            
+
             if (!multifile) {
                 const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
                 Baseline.runBaseline(outputFileName + fullExtension, fullBaseLine, opts);
