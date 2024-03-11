@@ -887,7 +887,7 @@ function addCompletionEntriesFromPathsOrExports(
             if (typeof pathPattern === "string" || matchedPath === undefined || comparePaths(key, matchedPath) !== Comparison.GreaterThan) {
                 pathResults.push({
                     matchedPattern: isMatch,
-                    results: getCompletionsForPathMapping(keyWithoutLeadingDotSlash, patterns, fragment, baseDirectory, extensionOptions, (isExports || isImports) && endsWith(keyWithoutLeadingDotSlash, '*'), isImports, compilerOptions, host, moduleSpecifierResolutionHost)
+                    results: getCompletionsForPathMapping(keyWithoutLeadingDotSlash, patterns, fragment, baseDirectory, extensionOptions, (isExports || isImports) && endsWith(keyWithoutLeadingDotSlash, "*"), isImports, compilerOptions, host, moduleSpecifierResolutionHost)
                         .map(({ name, kind, extension }) => nameAndKind(name, kind, extension)),
                 });
             }
@@ -1096,9 +1096,9 @@ function getCompletionsForPathMapping(
     isImports: boolean,
     compilerOptions: CompilerOptions,
     host: LanguageServiceHost,
-    moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost | undefined
+    moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost | undefined,
 ): readonly NameAndKind[] {
-    const parsedPath = tryParsePattern(path)
+    const parsedPath = tryParsePattern(path);
     if (!parsedPath) {
         return emptyArray;
     }
@@ -1109,7 +1109,7 @@ function getCompletionsForPathMapping(
     }
     const remainingFragment = tryRemovePrefix(fragment, parsedPath.prefix);
     if (remainingFragment === undefined) {
-        const starIsFullPathComponent = endsWith(path, '/*');
+        const starIsFullPathComponent = endsWith(path, "/*");
         return starIsFullPathComponent ? justPathMappingName(parsedPath.prefix, ScriptElementKind.directory) : flatMap(patterns, pattern => getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, isExportsWildcard, isImports, compilerOptions, host, moduleSpecifierResolutionHost)?.map(({ name, ...rest }) => ({ name: parsedPath.prefix + name + parsedPath.suffix, ...rest })));
     }
     return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExportsWildcard, isImports, compilerOptions, host, moduleSpecifierResolutionHost));
@@ -1128,7 +1128,7 @@ function getModulesForPathsPattern(
     isImports: boolean,
     compilerOptions: CompilerOptions,
     host: LanguageServiceHost,
-    moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost | undefined
+    moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost | undefined,
 ): readonly NameAndKind[] | undefined {
     if (!host.readDirectory) {
         return undefined;
@@ -1157,7 +1157,7 @@ function getModulesForPathsPattern(
     const matchingSuffixes = [...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []), declarationExtension && changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix].filter(isString);
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
-    const inputBaseDirectory = isImports && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, !hostUsesCaseSensitiveFileNames(moduleSpecifierResolutionHost!), compilerOptions.outDir,  () => moduleSpecifierResolutionHost!.getCommonSourceDirectory());
+    const inputBaseDirectory = isImports && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, !hostUsesCaseSensitiveFileNames(moduleSpecifierResolutionHost!), compilerOptions.outDir, () => moduleSpecifierResolutionHost!.getCommonSourceDirectory());
     const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
     // If we have a suffix, then we read the directory all the way down to avoid returning completions for
