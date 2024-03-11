@@ -433,7 +433,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // this set is used to filter names brought by star expors.
 
         // local names set should only be added if we have anything exported
-        if (!moduleInfo.exportedNames && moduleInfo.exportSpecifiers.size === 0) {
+        if (!some(moduleInfo.exportedNames) && !some(moduleInfo.exportedFunctions) && moduleInfo.exportSpecifiers.size === 0) {
             // no exported declarations (export var ...) or export specifiers (export {x})
             // check if we have any non star export declarations.
             let hasExportDeclarationWithExportClause = false;
@@ -463,6 +463,23 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 exportedNames.push(
                     factory.createPropertyAssignment(
                         factory.createStringLiteralFromNode(exportedLocalName),
+                        factory.createTrue(),
+                    ),
+                );
+            }
+        }
+
+        if (moduleInfo.exportedFunctions) {
+            for (const f of moduleInfo.exportedFunctions) {
+                if (hasSyntacticModifier(f, ModifierFlags.Default)) {
+                    continue;
+                }
+                Debug.assert(!!f.name);
+
+                // write name of exported declaration, i.e 'export var x...'
+                exportedNames.push(
+                    factory.createPropertyAssignment(
+                        factory.createStringLiteralFromNode(f.name),
                         factory.createTrue(),
                     ),
                 );

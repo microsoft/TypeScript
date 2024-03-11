@@ -1,4 +1,4 @@
-// @target: ES3
+// @target: ES5
 // @inlinesourcemap: true
 // @inlinesources: true
 // @outFile: out.js
