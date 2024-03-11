@@ -231,17 +231,16 @@ Output::
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lastElementOf = exports.makeRandomName = void 0;
+exports.makeRandomName = makeRandomName;
+exports.lastElementOf = lastElementOf;
 function makeRandomName() {
     return "Bob!?! ";
 }
-exports.makeRandomName = makeRandomName;
 function lastElementOf(arr) {
     if (arr.length === 0)
         return undefined;
     return arr[arr.length - 1];
 }
-exports.lastElementOf = lastElementOf;
 
 
 //// [/user/username/projects/demo/lib/core/utilities.d.ts]
@@ -360,7 +359,7 @@ export { createDog, Dog };
 //// [/user/username/projects/demo/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = void 0;
+exports.createDog = createDog;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -371,7 +370,6 @@ function createDog() {
         name: (0, utilities_1.makeRandomName)()
     });
 }
-exports.createDog = createDog;
 
 
 //// [/user/username/projects/demo/lib/animals/dog.d.ts]
@@ -506,14 +504,13 @@ export declare function createDog(): Dog;
 //// [/user/username/projects/demo/lib/zoo/zoo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createZoo = void 0;
+exports.createZoo = createZoo;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
         (0, index_1.createDog)()
     ];
 }
-exports.createZoo = createZoo;
 
 
 //// [/user/username/projects/demo/lib/zoo/zoo.d.ts]

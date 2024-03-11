@@ -49,7 +49,7 @@ Info seq  [hh:mm:ss:mss] Config: /Bar/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Bar/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /Bar/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Bar/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Bar/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Bar/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/Bar/a.ts SVC-1-0 "const a = 1;\nconst b = 2;\nconsole.log(a, b);"
@@ -186,6 +186,17 @@ PolledWatches::
 FsWatches::
 /Bar/tsconfig.json: *new*
   {}
+
+Projects::
+/Bar/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/Bar/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /Bar/tsconfig.json *default*
 
 Before request
 

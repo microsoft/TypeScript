@@ -12,6 +12,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.base = void 0;
-function base() { }
 exports.base = base;
+function base() { }

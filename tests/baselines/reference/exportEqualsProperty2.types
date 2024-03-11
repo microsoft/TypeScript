@@ -11,8 +11,6 @@ const x: B = { c: B };
 >B : number
 
 === a.ts ===
-// This test is just like exportDefaultProperty2, but with `export =`.
-
 class C {
 >C : C
 

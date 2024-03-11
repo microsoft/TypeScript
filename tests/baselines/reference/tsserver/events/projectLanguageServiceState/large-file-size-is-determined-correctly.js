@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/extremlylarge.d.ts 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -195,6 +195,29 @@ FsWatches::
   {}
 /a/lib/lib.d.ts: *new*
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/jsconfig.json *default*
+/a/extremlylarge.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
+/a/largefile.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
 
 Info seq  [hh:mm:ss:mss] languageServiceEnabled: false
 Info seq  [hh:mm:ss:mss] lastFileExceededProgramSize: /a/largefile.js

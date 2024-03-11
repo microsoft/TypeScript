@@ -59,6 +59,7 @@ import {
     Scanner,
     setEmitFlags,
     some,
+    sort,
     SortKind,
     SourceFile,
     stableSort,
@@ -322,96 +323,111 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
         return importGroup;
     }
 
-    const { importWithoutClause, typeOnlyImports, regularImports } = getCategorizedImports(importGroup);
+    const importGroupsByAttributes = groupBy(importGroup, decl => {
+        if (decl.attributes) {
+            let attrs = decl.attributes.token + " ";
+            for (const x of sort(decl.attributes.elements, (x, y) => compareStringsCaseSensitive(x.name.text, y.name.text))) {
+                attrs += x.name.text + ":";
+                attrs += isStringLiteralLike(x.value) ? `"${x.value.text}"` : x.value.getText() + " ";
+            }
+            return attrs;
+        }
+        return "";
+    });
+
     const coalescedImports: ImportDeclaration[] = [];
+    for (const attribute in importGroupsByAttributes) {
+        const importGroupSameAttrs = importGroupsByAttributes[attribute] as ImportDeclaration[];
+        const { importWithoutClause, typeOnlyImports, regularImports } = getCategorizedImports(importGroupSameAttrs);
 
-    if (importWithoutClause) {
-        coalescedImports.push(importWithoutClause);
-    }
-
-    for (const group of [regularImports, typeOnlyImports]) {
-        const isTypeOnly = group === typeOnlyImports;
-        const { defaultImports, namespaceImports, namedImports } = group;
-        // Normally, we don't combine default and namespace imports, but it would be silly to
-        // produce two import declarations in this special case.
-        if (!isTypeOnly && defaultImports.length === 1 && namespaceImports.length === 1 && namedImports.length === 0) {
-            // Add the namespace import to the existing default ImportDeclaration.
-            const defaultImport = defaultImports[0];
-            coalescedImports.push(
-                updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings),
-            );
-
-            continue;
+        if (importWithoutClause) {
+            coalescedImports.push(importWithoutClause);
         }
 
-        const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
+        for (const group of [regularImports, typeOnlyImports]) {
+            const isTypeOnly = group === typeOnlyImports;
+            const { defaultImports, namespaceImports, namedImports } = group;
+            // Normally, we don't combine default and namespace imports, but it would be silly to
+            // produce two import declarations in this special case.
+            if (!isTypeOnly && defaultImports.length === 1 && namespaceImports.length === 1 && namedImports.length === 0) {
+                // Add the namespace import to the existing default ImportDeclaration.
+                const defaultImport = defaultImports[0];
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings),
+                );
 
-        for (const namespaceImport of sortedNamespaceImports) {
-            // Drop the name, if any
-            coalescedImports.push(
-                updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings),
-            );
-        }
+                continue;
+            }
 
-        const firstDefaultImport = firstOrUndefined(defaultImports);
-        const firstNamedImport = firstOrUndefined(namedImports);
-        const importDecl = firstDefaultImport ?? firstNamedImport;
-        if (!importDecl) {
-            continue;
-        }
+            const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
 
-        let newDefaultImport: Identifier | undefined;
-        const newImportSpecifiers: ImportSpecifier[] = [];
-        if (defaultImports.length === 1) {
-            newDefaultImport = defaultImports[0].importClause.name;
-        }
-        else {
-            for (const defaultImport of defaultImports) {
-                newImportSpecifiers.push(
-                    factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name),
+            for (const namespaceImport of sortedNamespaceImports) {
+                // Drop the name, if any
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings),
                 );
             }
-        }
 
-        newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
+            const firstDefaultImport = firstOrUndefined(defaultImports);
+            const firstNamedImport = firstOrUndefined(namedImports);
+            const importDecl = firstDefaultImport ?? firstNamedImport;
+            if (!importDecl) {
+                continue;
+            }
 
-        const sortedImportSpecifiers = factory.createNodeArray(
-            sortSpecifiers(newImportSpecifiers, comparer, preferences),
-            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
-        );
+            let newDefaultImport: Identifier | undefined;
+            const newImportSpecifiers: ImportSpecifier[] = [];
+            if (defaultImports.length === 1) {
+                newDefaultImport = defaultImports[0].importClause.name;
+            }
+            else {
+                for (const defaultImport of defaultImports) {
+                    newImportSpecifiers.push(
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name),
+                    );
+                }
+            }
 
-        const newNamedImports = sortedImportSpecifiers.length === 0
-            ? newDefaultImport
-                ? undefined
-                : factory.createNamedImports(emptyArray)
-            : firstNamedImport
-            ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
-            : factory.createNamedImports(sortedImportSpecifiers);
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
-        if (
-            sourceFile &&
-            newNamedImports &&
-            firstNamedImport?.importClause.namedBindings &&
-            !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
-        ) {
-            setEmitFlags(newNamedImports, EmitFlags.MultiLine);
-        }
-
-        // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
-        // We could rewrite a default import as a named import (`import { default as name }`), but we currently
-        // choose not to as a stylistic preference.
-        if (isTypeOnly && newDefaultImport && newNamedImports) {
-            coalescedImports.push(
-                updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined),
+            const sortedImportSpecifiers = factory.createNodeArray(
+                sortSpecifiers(newImportSpecifiers, comparer, preferences),
+                firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
             );
-            coalescedImports.push(
-                updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports),
-            );
-        }
-        else {
-            coalescedImports.push(
-                updateImportDeclarationAndClause(importDecl, newDefaultImport, newNamedImports),
-            );
+
+            const newNamedImports = sortedImportSpecifiers.length === 0
+                ? newDefaultImport
+                    ? undefined
+                    : factory.createNamedImports(emptyArray)
+                : firstNamedImport
+                ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
+                : factory.createNamedImports(sortedImportSpecifiers);
+
+            if (
+                sourceFile &&
+                newNamedImports &&
+                firstNamedImport?.importClause.namedBindings &&
+                !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
+            ) {
+                setEmitFlags(newNamedImports, EmitFlags.MultiLine);
+            }
+
+            // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
+            // We could rewrite a default import as a named import (`import { default as name }`), but we currently
+            // choose not to as a stylistic preference.
+            if (isTypeOnly && newDefaultImport && newNamedImports) {
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined),
+                );
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports),
+                );
+            }
+            else {
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(importDecl, newDefaultImport, newNamedImports),
+                );
+            }
         }
     }
 

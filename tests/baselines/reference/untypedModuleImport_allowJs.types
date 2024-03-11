@@ -11,8 +11,6 @@ foo.bar();
 >bar : () => number
 
 === /node_modules/foo/index.js ===
-// Same as untypedModuleImport.ts but with --allowJs, so the package will actually be typed.
-
 exports.default = { bar() { return 0; } }
 >exports.default = { bar() { return 0; } } : { bar(): number; }
 >exports.default : { bar(): number; }
