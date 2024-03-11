@@ -27006,7 +27006,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For each constituent type that can compare equal to the target nullable, intersect with the above union
         // if the type doesn't already include the opppsite nullable and the constituent can compare equal to the
         // opposite nullable; otherwise, just intersect with {}.
-        return mapType(type, t => hasTypeFacts(t, targetFacts) ? getIntersectionType([t, !(facts & otherIncludesFacts) && hasTypeFacts(t, otherFacts) ? emptyAndOtherUnion : emptyObjectType]): t);
+        return mapType(type, t => hasTypeFacts(t, targetFacts) ? getIntersectionType([t, !(facts & otherIncludesFacts) && hasTypeFacts(t, otherFacts) ? emptyAndOtherUnion : emptyObjectType]) : t);
     }
 
     function recombineUnknownType(type: Type) {
