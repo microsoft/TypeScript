@@ -2722,7 +2722,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const targetSymbol = globals.get(name);
         if (targetSymbol) {
             forEach(targetSymbol.declarations, declaration => {
-                // checkTypeNameIsReserved will have added better diagnostics for undefined.
+                // checkTypeNameIsReserved will have added better diagnostics for type declarations.
                 if (!isTypeDeclaration(declaration)) {
                     diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, unescapeLeadingUnderscores(name)));
                 }
