@@ -21192,8 +21192,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const t of type.types) {
             hasInstantiable ||= !!(t.flags & TypeFlags.Instantiable);
             hasNullableOrEmpty ||= !!(t.flags & TypeFlags.Nullable) || isEmptyAnonymousObjectType(t);
+            if (hasInstantiable && hasNullableOrEmpty) return true;
         }
-        return hasInstantiable && hasNullableOrEmpty;
+        return false;
     }
 
     function getNormalizedTupleType(type: TupleTypeReference, writing: boolean): Type {
