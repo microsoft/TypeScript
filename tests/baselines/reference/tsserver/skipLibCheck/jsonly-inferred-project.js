@@ -668,6 +668,9 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
+    isClosed: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

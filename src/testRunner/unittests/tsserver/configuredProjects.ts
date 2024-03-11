@@ -12,8 +12,6 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    logConfiguredProjectsHasOpenRefStatus,
-    logInferredProjectsOrphanStatus,
     openFilesForSession,
     TestSession,
     verifyGetErrRequest,
@@ -230,8 +228,6 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         host.runQueuedTimeoutCallbacks();
 
         // will not remove project 1
-        logInferredProjectsOrphanStatus(session);
-
         // Open random file and it will reuse first inferred project
         openFilesForSession([randomFile], session);
         baselineTsserverLogs("configuredProjects", "should properly handle module resolution changes in config file", session);
@@ -301,13 +297,8 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const host = createServerHost([file1, file2, configFile, libFile]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file1
-
         closeFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No open files
-
         openFilesForSession([file2], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file2
         baselineTsserverLogs("configuredProjects", "should reuse same project if file is opened from the configured project that has no open files", session);
     });
 
@@ -328,13 +319,8 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const host = createServerHost([file1, configFile, libFile]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file1
-
         closeFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
-
         openFilesForSession([libFile], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files + project closed
         baselineTsserverLogs("configuredProjects", "should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", session);
     });
 
@@ -362,7 +348,6 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("configuredProjects", "open file become a part of configured project if it is referenced from root file", session);
     });
 
@@ -466,24 +451,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const session = new TestSession(host);
         openFilesForSession([file1, file2, file3, file4], session);
 
-        logConfiguredProjectsHasOpenRefStatus(session); // file1 and file3
-
         host.writeFile(configFile.path, "{}");
         host.runQueuedTimeoutCallbacks();
-
-        logConfiguredProjectsHasOpenRefStatus(session); // file1, file2, file3
-        logInferredProjectsOrphanStatus(session);
-
         closeFilesForSession([file1, file2, file4], session);
-
-        logConfiguredProjectsHasOpenRefStatus(session); // file3
-        logInferredProjectsOrphanStatus(session);
-
         openFilesForSession([file4], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file3
-
         closeFilesForSession([file3], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
 
         const file5: File = {
             path: "/file5.ts",
@@ -523,23 +495,15 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const host = createServerHost(hostFiles);
         const session = new TestSession(host);
         openFilesForSession([file1, file2, file3], session);
-
-        logConfiguredProjectsHasOpenRefStatus(session); // file1 and file3
-
         closeFilesForSession([file1, file3], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
 
         host.writeFile(configFile.path, "{}");
         session.host.baselineHost("configFile updated");
         // Time out is not yet run so there is project update pending
-        logConfiguredProjectsHasOpenRefStatus(session); // Pending update and file2 might get into the project
 
         openFilesForSession([file4], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // Pending update and F2 might get into the project
 
         host.runQueuedTimeoutCallbacks();
-        logConfiguredProjectsHasOpenRefStatus(session); // file2
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", session);
     });
 
@@ -566,29 +530,13 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         const session = new TestSession(host);
         openFilesForSession([f1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // f1
-
         closeFilesForSession([f1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
-
-        for (const f of [f1, f2, f3]) {
-            // All the script infos should be present and contain the project since it is still alive.
-            const scriptInfo = session.getProjectService().getScriptInfoForNormalizedPath(ts.server.toNormalizedPath(f.path))!;
-            session.logger.log(`Containing projects for ${f.path}:: ${scriptInfo.containingProjects.map(p => p.projectName).join(",")}`);
-        }
-
         const f4 = {
             path: "/aa.js",
             content: "var x = 1",
         };
         host.writeFile(f4.path, f4.content);
         openFilesForSession([f4], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
-
-        for (const f of [f1, f2, f3]) {
-            // All the script infos should not be present since the project is closed and orphan script infos are collected
-            assert.isUndefined(session.getProjectService().getScriptInfoForNormalizedPath(ts.server.toNormalizedPath(f.path)));
-        }
         baselineTsserverLogs("configuredProjects", "files are properly detached when language service is disabled", session);
     });
 

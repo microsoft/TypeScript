@@ -276,6 +276,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer3.ts 500 undefined WatchType: Closed Script info
@@ -366,6 +367,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/file1Consumer1.ts
@@ -423,6 +425,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/file1Consumer1.ts
@@ -496,3 +499,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: false *changed*

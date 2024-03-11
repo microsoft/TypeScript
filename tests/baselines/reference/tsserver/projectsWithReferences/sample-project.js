@@ -376,6 +376,7 @@ Projects::
 /user/username/projects/sample1/tests/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -443,6 +444,12 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/user/username/projects/sample1/tests/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -491,6 +498,7 @@ Projects::
 /user/username/projects/sample1/tests/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -558,6 +566,12 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/user/username/projects/sample1/tests/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -611,6 +625,7 @@ Projects::
 /user/username/projects/sample1/tests/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
@@ -676,3 +691,4 @@ Projects::
 /user/username/projects/sample1/tests/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*

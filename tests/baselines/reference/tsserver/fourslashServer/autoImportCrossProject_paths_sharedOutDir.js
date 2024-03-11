@@ -506,6 +506,7 @@ Projects::
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /lib.d.ts

@@ -243,7 +243,6 @@ ScriptInfos::
     containingProjects: 1
         /a/b/tsconfig.json
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -279,6 +278,12 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/main.ts *changed*
     open: false *changed*
@@ -290,7 +295,6 @@ ScriptInfos::
     containingProjects: 1
         /a/b/tsconfig.json
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -332,6 +336,12 @@ FsWatches *deleted*::
 /a/b/main2.ts:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/b/main.ts
     version: SVC-1-0
@@ -342,5 +352,3 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json *default*
-
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false

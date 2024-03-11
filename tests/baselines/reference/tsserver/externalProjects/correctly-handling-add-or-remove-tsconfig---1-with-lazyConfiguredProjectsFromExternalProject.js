@@ -219,6 +219,7 @@ Projects::
 /a/b/proj1 (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open)
@@ -248,6 +249,8 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -262,8 +265,6 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
@@ -290,9 +291,12 @@ Projects::
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*
@@ -492,6 +496,8 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    isClosed: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {

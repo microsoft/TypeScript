@@ -71,7 +71,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-^/inmemory/model/6 (Open) *new*
+^/inmemory/model/6 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -127,11 +127,11 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-^/inmemory/model/4 (Open) *new*
+^/inmemory/model/4 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-^/inmemory/model/6 (Open)
+^/inmemory/model/6 (Dynamic) (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -164,14 +164,15 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
-^/inmemory/model/4 *deleted*
+^/inmemory/model/4 (Dynamic) *deleted*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-^/inmemory/model/6 (Open)
+^/inmemory/model/6 (Dynamic) (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -248,13 +249,14 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
-^/inmemory/model/4 (Open) *new*
+^/inmemory/model/4 (Dynamic) (Open) *new*
     version: SVC-2-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-^/inmemory/model/6 (Open) *changed*
+^/inmemory/model/6 (Dynamic) (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
         /dev/null/inferredProject1* *default*

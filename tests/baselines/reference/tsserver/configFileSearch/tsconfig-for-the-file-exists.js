@@ -233,6 +233,8 @@ Projects::
 /a/b/projects/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/projects/project/src/index.ts (Open) *changed*
@@ -383,6 +385,7 @@ Projects::
 /a/b/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -527,9 +530,11 @@ Projects::
 /a/b/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/projects/project/src/index.ts (Open) *changed*

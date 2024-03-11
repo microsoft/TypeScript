@@ -521,6 +521,7 @@ Projects::
 /user/username/projects/myproject/usage/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -574,6 +575,15 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/usage/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -598,12 +608,11 @@ After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn3 = void 0;
+exports.fn3 = fn3;
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
 function fn3() { }
-exports.fn3 = fn3;
 
 
 
@@ -626,7 +635,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/user/username/projects/myproject/usage/usage.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = fn3;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\n"
           }
         ],
         "emitSkipped": false,

@@ -461,9 +461,14 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/b/tsconfig.json (Configured)
+    noOpenRef: true
+/user/username/projects/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/a/a.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 1 *changed*
+        /user/username/projects/a/tsconfig.json *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -471,12 +476,17 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /user/username/projects/b/tsconfig.json
         /user/username/projects/a/tsconfig.json *new*
-/user/username/projects/a/a.d.ts
+/user/username/projects/a/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/a/a.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/b/tsconfig.json
 /user/username/projects/a/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/a/a.d.ts
+    sourceInfos: 1
+        /user/username/projects/a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/a/a.ts *new*
     version: Text-1
@@ -486,3 +496,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/b/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

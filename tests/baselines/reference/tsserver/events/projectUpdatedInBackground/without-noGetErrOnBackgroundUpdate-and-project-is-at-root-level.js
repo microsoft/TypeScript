@@ -214,6 +214,7 @@ Projects::
 /a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/project/file1.ts (Open)
@@ -274,6 +275,12 @@ After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
 3: checkOne *new*
+
+Projects::
+/a/b/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/project/file1.ts (Open)

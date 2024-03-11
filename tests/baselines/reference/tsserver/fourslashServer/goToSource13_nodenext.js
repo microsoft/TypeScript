@@ -356,6 +356,8 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/left-pad/index.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -379,8 +381,9 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /tsconfig.json
-/node_modules/left-pad/index.d.ts
+/node_modules/left-pad/index.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /tsconfig.json
 /node_modules/left-pad/index.js *new*

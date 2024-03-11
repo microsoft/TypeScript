@@ -293,6 +293,8 @@ Projects::
 /user/username/projects/solution/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -725,18 +727,29 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/solution/api/tsconfig.json (Configured)
+/user/username/projects/solution/api/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/solution/shared/tsconfig.json *new*
+        /user/username/projects/solution/api/tsconfig.json *new*
 /user/username/projects/solution/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/solution/shared/tsconfig.json
+        /user/username/projects/solution/api/tsconfig.json
+        /user/username/projects/solution/app/tsconfig.json
 /user/username/projects/solution/shared/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/solution/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

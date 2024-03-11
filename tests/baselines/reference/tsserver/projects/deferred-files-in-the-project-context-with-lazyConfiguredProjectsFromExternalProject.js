@@ -120,6 +120,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Info seq  [hh:mm:ss:mss] Calling ensureInferredProjectsUpToDate_TestOnly
 Info seq  [hh:mm:ss:mss] Loading configured project /tsconfig.json

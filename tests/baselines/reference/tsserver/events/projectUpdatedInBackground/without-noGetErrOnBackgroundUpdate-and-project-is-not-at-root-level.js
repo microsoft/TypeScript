@@ -230,6 +230,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -290,6 +291,12 @@ After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
 3: checkOne *new*
+
+Projects::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

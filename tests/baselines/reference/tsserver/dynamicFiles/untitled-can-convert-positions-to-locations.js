@@ -271,12 +271,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /proj/tsconfig.json *default*
-untitled:^Untitled-1 (Open) *new*
+untitled:^Untitled-1 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-/proj/untitled:^untitled-1 isDynamic:: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

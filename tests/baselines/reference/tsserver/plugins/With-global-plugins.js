@@ -60,17 +60,43 @@ Info seq  [hh:mm:ss:mss] Enabling plugin @myscoped/plugin from candidate paths: 
 Info seq  [hh:mm:ss:mss] Loading @myscoped/plugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
 Loading plugin: @myscoped/plugin
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
+Info seq  [hh:mm:ss:mss] Loading global plugin @myscoped/plugin/subpath
+Info seq  [hh:mm:ss:mss] Enabling plugin @myscoped/plugin/subpath from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Loading @myscoped/plugin/subpath from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Loading plugin: @myscoped/plugin/subpath
+Info seq  [hh:mm:ss:mss] Plugin activation failed: Error: Protocol handler already exists for command "testProtocolCommand"
+Info seq  [hh:mm:ss:mss] Loading global plugin @myscoped/plugin/sub/path
+Info seq  [hh:mm:ss:mss] Enabling plugin @myscoped/plugin/sub/path from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Loading @myscoped/plugin/sub/path from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Loading plugin: @myscoped/plugin/sub/path
+Info seq  [hh:mm:ss:mss] Plugin activation failed: Error: Protocol handler already exists for command "testProtocolCommand"
 Info seq  [hh:mm:ss:mss] Loading global plugin unscopedPlugin
 Info seq  [hh:mm:ss:mss] Enabling plugin unscopedPlugin from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Loading unscopedPlugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
 Loading plugin: unscopedPlugin
 Info seq  [hh:mm:ss:mss] Plugin activation failed: Error: Protocol handler already exists for command "testProtocolCommand"
+Info seq  [hh:mm:ss:mss] Loading global plugin unscopedPlugin/subpath
+Info seq  [hh:mm:ss:mss] Enabling plugin unscopedPlugin/subpath from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Loading unscopedPlugin/subpath from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Loading plugin: unscopedPlugin/subpath
+Info seq  [hh:mm:ss:mss] Plugin activation failed: Error: Protocol handler already exists for command "testProtocolCommand"
+Info seq  [hh:mm:ss:mss] Loading global plugin unscopedPlugin/sub/path
+Info seq  [hh:mm:ss:mss] Enabling plugin unscopedPlugin/sub/path from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Loading unscopedPlugin/sub/path from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Loading plugin: unscopedPlugin/sub/path
+Info seq  [hh:mm:ss:mss] Plugin activation failed: Error: Protocol handler already exists for command "testProtocolCommand"
 Info seq  [hh:mm:ss:mss] Loading global plugin ../myPlugin
 Info seq  [hh:mm:ss:mss] Enabling plugin ../myPlugin from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Skipped loading plugin ../myPlugin because only package name is allowed plugin name
+Info seq  [hh:mm:ss:mss] Loading global plugin @myscoped/plugin/../malicious
+Info seq  [hh:mm:ss:mss] Enabling plugin @myscoped/plugin/../malicious from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Skipped loading plugin @myscoped/plugin/../malicious because only package name is allowed plugin name
 Info seq  [hh:mm:ss:mss] Loading global plugin myPlugin/../malicious
 Info seq  [hh:mm:ss:mss] Enabling plugin myPlugin/../malicious from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Skipped loading plugin myPlugin/../malicious because only package name is allowed plugin name
+Info seq  [hh:mm:ss:mss] Loading global plugin myPlugin/subpath/../../malicious
+Info seq  [hh:mm:ss:mss] Enabling plugin myPlugin/subpath/../../malicious from candidate paths: /a/lib/tsc.js/../../..
+Info seq  [hh:mm:ss:mss] Skipped loading plugin myPlugin/subpath/../../malicious because only package name is allowed plugin name
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms

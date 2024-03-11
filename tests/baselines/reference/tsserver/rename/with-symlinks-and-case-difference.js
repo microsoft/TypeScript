@@ -239,6 +239,8 @@ c:/temp/test/project1/tsconfig.json (Configured) *new*
 c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *new*
@@ -472,8 +474,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/index.d.ts 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Missing generated file
-Info seq  [hh:mm:ss:mss] Search path: C:/temp/test/project1
-Info seq  [hh:mm:ss:mss] For info: C:/temp/test/project1/index.ts :: Config file name: C:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -594,15 +594,23 @@ c:/temp/test/project2: *new*
   {}
 
 Projects::
-c:/temp/test/project1/tsconfig.json (Configured)
+c:/temp/test/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        c:/temp/test/project1/index.d.ts: identitySourceMapConsumer *new*
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 2
+        c:/temp/test/project1/tsconfig.json
+        c:/temp/test/project2/tsconfig.json
 c:/temp/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *changed*

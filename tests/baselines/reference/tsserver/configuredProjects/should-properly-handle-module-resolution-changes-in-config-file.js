@@ -365,6 +365,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -560,9 +561,11 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -583,8 +586,6 @@ ScriptInfos::
         /a/b/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-Inferred project: /dev/null/inferredProject2* isOrphan:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -644,6 +645,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 3 *changed*
+    isOrphan: false *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1

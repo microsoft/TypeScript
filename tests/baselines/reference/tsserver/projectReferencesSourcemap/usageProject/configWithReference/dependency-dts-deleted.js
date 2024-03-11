@@ -69,17 +69,16 @@ let a = 10;
 //// [/user/username/projects/myproject/dependency/FnS.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.fn1 = void 0;
-function fn1() { }
 exports.fn1 = fn1;
-function fn2() { }
 exports.fn2 = fn2;
-function fn3() { }
 exports.fn3 = fn3;
-function fn4() { }
 exports.fn4 = fn4;
-function fn5() { }
 exports.fn5 = fn5;
+function fn1() { }
+function fn2() { }
+function fn3() { }
+function fn4() { }
+function fn5() { }
 
 
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
@@ -1015,6 +1014,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1104,6 +1112,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1187,6 +1204,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1269,6 +1295,16 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
+
+Projects::
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1395,9 +1431,12 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/random/tsconfig.json (Configured)
+    isClosed: true *changed*
+    noOpenRef: true
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

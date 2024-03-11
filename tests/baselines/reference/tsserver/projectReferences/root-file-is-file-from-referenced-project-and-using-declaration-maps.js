@@ -74,10 +74,9 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/project/out/input/keyboard.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluateKeyboardEvent = void 0;
+exports.evaluateKeyboardEvent = evaluateKeyboardEvent;
 function bar() { return "just a random function so .d.ts location doesnt match"; }
 function evaluateKeyboardEvent() { }
-exports.evaluateKeyboardEvent = evaluateKeyboardEvent;
 
 
 //// [/user/username/projects/project/out/input/keyboard.d.ts.map]
@@ -487,6 +486,8 @@ Projects::
 /user/username/projects/project/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -711,6 +712,8 @@ Projects::
 /user/username/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -753,10 +756,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -894,18 +893,38 @@ FsWatchesRecursive::
 /user/username/projects/project/src/common:
   {}
 
+Projects::
+/user/username/projects/project/src/common/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/project/out/input/keyboard.d.ts: DocumentPositionMapper1 *new*
+/user/username/projects/project/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/project/out/input/keyboard.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/project/src/common/tsconfig.json *new*
+        /user/username/projects/project/src/tsconfig.json *new*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json
-/user/username/projects/project/out/input/keyboard.d.ts
+/user/username/projects/project/out/input/keyboard.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/project/out/input/keyboard.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/out/input/keyboard.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/project/out/input/keyboard.d.ts
+    sourceInfos: 1
+        /user/username/projects/project/src/common/input/keyboard.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/project/src/common/input/keyboard.test.ts
     version: Text-1
@@ -921,3 +940,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/src/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

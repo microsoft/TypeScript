@@ -261,6 +261,8 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts *new*
@@ -539,19 +541,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 13 in project /tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
 Info seq  [hh:mm:ss:mss] For info: /packages/a/index.ts :: Config file name: /packages/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
 Info seq  [hh:mm:ss:mss] For info: /packages/a/index.ts :: Config file name: /packages/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 13 in project /packages/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -644,6 +638,11 @@ Projects::
 /packages/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /packages/b/tsconfig.json
+        /tsconfig.json
+        /packages/a/tsconfig.json
 /packages/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -651,6 +650,12 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
+    originalConfiguredProjects: 3 *changed*
+        /packages/b/tsconfig.json *new*
+        /tsconfig.json *new*
+        /packages/a/tsconfig.json *new*
 
 ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts

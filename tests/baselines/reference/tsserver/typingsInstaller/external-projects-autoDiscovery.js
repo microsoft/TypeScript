@@ -223,7 +223,7 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -324,3 +324,4 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*

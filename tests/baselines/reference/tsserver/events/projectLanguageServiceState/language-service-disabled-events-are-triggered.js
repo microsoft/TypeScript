@@ -259,6 +259,7 @@ Projects::
 /a/jsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /a/jsconfig.json
@@ -323,6 +324,12 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/app.js (Open)
@@ -398,6 +405,7 @@ Projects::
 /a/jsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -582,5 +590,11 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Language service enabled: true

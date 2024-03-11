@@ -729,6 +729,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -918,6 +919,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -1070,6 +1072,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -1238,6 +1241,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -1392,6 +1396,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -1568,6 +1573,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -1722,6 +1728,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -1877,6 +1884,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
     projectProgramVersion: 5 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -2039,6 +2047,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 5
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -2192,6 +2201,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 6
     projectProgramVersion: 6 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2365,6 +2375,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 7 *changed*
     projectProgramVersion: 6
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -2546,6 +2557,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 7
     projectProgramVersion: 7 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2706,6 +2718,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 8 *changed*
     projectProgramVersion: 7
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -2934,6 +2947,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 8
     projectProgramVersion: 8 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -3110,6 +3124,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 9 *changed*
     projectProgramVersion: 8
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -3278,6 +3293,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 9
     projectProgramVersion: 9 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -3479,6 +3495,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 10 *changed*
     projectProgramVersion: 9
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -3668,6 +3685,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 10
     projectProgramVersion: 10 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 19: semanticCheck
@@ -3841,6 +3859,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 11 *changed*
     projectProgramVersion: 10
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -4009,6 +4028,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 11
     projectProgramVersion: 11 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 21: semanticCheck
@@ -4163,6 +4183,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 12 *changed*
     projectProgramVersion: 11
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -4339,6 +4360,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 12
     projectProgramVersion: 12 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 23: semanticCheck
@@ -4493,6 +4515,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 13 *changed*
     projectProgramVersion: 12
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -4648,6 +4671,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 13
     projectProgramVersion: 13 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 25: semanticCheck
