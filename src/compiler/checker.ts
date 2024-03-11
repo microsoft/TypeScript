@@ -12997,7 +12997,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // conflicting flags.
                 const earlySymbol = earlySymbols && earlySymbols.get(memberName);
                 // Duplicate property declarations of classes are checked in checkClassForDuplicateDeclarations.
-                if (!(parent.flags & SymbolFlags.Class) && (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol)) {
+                if (!(parent.flags & SymbolFlags.Class) && lateSymbol.flags & getExcludedSymbolFlags(symbolFlags)) {
                     // If we have an existing early-bound member, combine its declarations so that we can
                     // report an error at each declaration.
                     const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
