@@ -20,7 +20,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ESNext"
+          "target": "esnext"
         }
       },
       "seq": 1,
@@ -41,7 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ES2015"
+          "target": "es2015"
         },
         "projectRootPath": "/a"
       },
@@ -2348,7 +2348,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ES2017"
+          "target": "es2017"
         },
         "projectRootPath": "/A"
       },

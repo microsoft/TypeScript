@@ -29,7 +29,6 @@ function isNonNullable(obj) {
         throw new Error("Must not be a nullable value");
     }
 }
-exports.isNonNullable = isNonNullable;
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
