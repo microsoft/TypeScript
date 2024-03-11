@@ -1697,7 +1697,7 @@ export class NodeLinks extends SpeculatableLinks {
 
 /**
  * SpeculatableMap is like a Map, except it lazily follows the speculation state of the host
- * 
+ *
  * Also, it doesn't support `.delete` or `.clear` - not because it couldn't, buit just because
  * the use for this (relationship caches), doesn't use either feature of `Map`s.
  */
@@ -1729,19 +1729,19 @@ class SpeculatableMap<K, V> implements Map<K, V> {
     get(key: K): V | undefined {
         const valueList = this.innerMap.get(key);
         if (!valueList || !valueList.length) return undefined;
-        const [ exists, unwrappedValue ] = this.getCurrentStateFromList(key, valueList);
+        const [exists, unwrappedValue] = this.getCurrentStateFromList(key, valueList);
         if (!exists) return undefined;
         return unwrappedValue;
     }
     has(key: K): boolean {
         const valueList = this.innerMap.get(key);
         if (!valueList || !valueList.length) return false;
-        const [ exists, _unwrappedValue ] = this.getCurrentStateFromList(key, valueList);
+        const [exists, _unwrappedValue] = this.getCurrentStateFromList(key, valueList);
         return exists;
     }
     set(key: K, value: V): this {
         const valueList = this.innerMap.get(key) || this.innerMap.set(key, []).get(key)!;
-        valueList.push([ this.host.getCurrentSpeculativeEpoch(), value ]);
+        valueList.push([this.host.getCurrentSpeculativeEpoch(), value]);
         return this;
     }
     /**
@@ -1761,7 +1761,7 @@ class SpeculatableMap<K, V> implements Map<K, V> {
     // Implemented just to provide utlity when debugging
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
         return this.innerMap.forEach((valueList, k, _inner) => {
-            const [ exists, unwrappedValue ] = this.getCurrentStateFromList(k, valueList);
+            const [exists, unwrappedValue] = this.getCurrentStateFromList(k, valueList);
             if (exists) {
                 return callbackfn.call(thisArg, unwrappedValue, k, this);
             }
@@ -49213,6 +49213,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function registerSpeculativeCache<T extends (typeof speculativeCaches)[number]>(collection: T): T {
+        if (collection instanceof SpeculatableMap) {
+            return Debug.fail("Collection is already inherently speculatable, no need to globally register.");
+        }
         speculativeCaches.push(collection);
         return collection;
     }
