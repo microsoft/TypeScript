@@ -1695,6 +1695,87 @@ export class NodeLinks extends SpeculatableLinks {
     declare fakeScopeForSignatureDeclaration?: "params" | "typeParams";
 }
 
+/**
+ * SpeculatableMap is like a Map, except it lazily follows the speculation state of the host
+ * 
+ * Also, it doesn't support `.delete` or `.clear` - not because it couldn't, buit just because
+ * the use for this (relationship caches), doesn't use either feature of `Map`s.
+ */
+class SpeculatableMap<K, V> implements Map<K, V> {
+    private innerMap = new Map<K, [epoch: number, value: V][]>();
+    constructor(public host: SpeculationHost) {}
+
+    private getCurrentStateFromList(key: K, valueList: [epoch: number, value: V][]): [exists: boolean, value: V] {
+        const discarded = this.host.getDiscardedSpeculativeEpochs();
+        let unwrappedValue: V | undefined;
+        let exists = false;
+        for (let i = valueList.length - 1; i >= 0; i--) {
+            const [epoch, value] = valueList[i];
+            if (discarded.has(epoch)) {
+                valueList.splice(i, 1);
+                if (valueList.length === 0) {
+                    this.innerMap.delete(key);
+                    break;
+                }
+                continue;
+            }
+            unwrappedValue = value;
+            exists = true;
+            break;
+        }
+        return [exists, unwrappedValue!];
+    }
+
+    get(key: K): V | undefined {
+        const valueList = this.innerMap.get(key);
+        if (!valueList || !valueList.length) return undefined;
+        const [ exists, unwrappedValue ] = this.getCurrentStateFromList(key, valueList);
+        if (!exists) return undefined;
+        return unwrappedValue;
+    }
+    has(key: K): boolean {
+        const valueList = this.innerMap.get(key);
+        if (!valueList || !valueList.length) return false;
+        const [ exists, _unwrappedValue ] = this.getCurrentStateFromList(key, valueList);
+        return exists;
+    }
+    set(key: K, value: V): this {
+        const valueList = this.innerMap.get(key) || this.innerMap.set(key, []).get(key)!;
+        valueList.push([ this.host.getCurrentSpeculativeEpoch(), value ]);
+        return this;
+    }
+    /**
+     * Approximate - does not include lazy removals
+     */
+    get size(): number {
+        return this.innerMap.size;
+    }
+
+    // These methods are unimplemented mostly because they're thus-far unused.
+    declare clear: never;
+    declare delete: never;
+    declare entries: never;
+    declare values: never;
+    declare [globalThis.Symbol.iterator]: never;
+
+    // Implemented just to provide utlity when debugging
+    forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
+        return this.innerMap.forEach((valueList, k, _inner) => {
+            const [ exists, unwrappedValue ] = this.getCurrentStateFromList(k, valueList);
+            if (exists) {
+                return callbackfn.call(thisArg, unwrappedValue, k, this);
+            }
+        });
+    }
+
+    // Likewise, provided for debuggability
+    keys(): IterableIterator<K> {
+        return this.innerMap.keys();
+    }
+
+    [globalThis.Symbol.toStringTag] = SpeculatableMap.name;
+}
+
 /** @internal */
 export function getNodeId(node: Node): number {
     if (!node.id) {
@@ -2586,12 +2667,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Relationship caches need to be speculative so we can un-upgrade "ErrorAndReported" results back down, since we're rewinding the error
     // Otherwise, we think we've emitted lots of elaboration that we just swallow up in discarded speculative contexts
-    var subtypeRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
-    var strictSubtypeRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
-    var assignableRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
-    var comparableRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
-    var identityRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
-    var enumRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
+    var subtypeRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var strictSubtypeRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var assignableRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var comparableRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var identityRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var enumRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
 
     var builtinGlobals = createSymbolTable();
     builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
