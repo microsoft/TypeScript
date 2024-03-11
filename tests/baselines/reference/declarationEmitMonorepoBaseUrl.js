@@ -49,12 +49,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolveParserPlugins = void 0;
+exports.resolveParserPlugins = resolveParserPlugins;
 const parser_1 = require("@babel/parser");
 function resolveParserPlugins() {
     return [(0, parser_1.createPlugin)()];
 }
-exports.resolveParserPlugins = resolveParserPlugins;
 
 
 //// [index.d.ts]

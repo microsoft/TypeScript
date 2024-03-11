@@ -16,10 +16,10 @@ test(example, "default");
 //// [example.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = add;
 function add(a, b) {
     return a + b;
 }
-exports.default = add;
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

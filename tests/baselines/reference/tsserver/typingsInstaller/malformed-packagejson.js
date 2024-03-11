@@ -290,7 +290,7 @@ Before running PendingInstalls callback:: count: 1
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.5"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 TI:: Installation #1 with arguments:: [

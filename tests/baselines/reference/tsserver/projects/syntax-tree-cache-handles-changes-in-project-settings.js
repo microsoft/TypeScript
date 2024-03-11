@@ -10,7 +10,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "target": "ES5",
+          "target": "es5",
           "allowJs": false
         }
       },
@@ -128,7 +128,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "target": "ES5",
+          "target": "es5",
           "allowJs": true
         }
       },

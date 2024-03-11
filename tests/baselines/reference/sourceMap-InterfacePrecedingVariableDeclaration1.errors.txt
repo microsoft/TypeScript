@@ -1,7 +1,0 @@
-error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-==== sourceMap-InterfacePrecedingVariableDeclaration1.ts (0 errors) ====
-    interface I {}
-    var x = 0;

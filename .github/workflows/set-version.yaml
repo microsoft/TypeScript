@@ -1,8 +1,40 @@
 name: Set branch version
 
 on:
-  repository_dispatch:
-    types: [set-version]
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: Release branch name to create
+        required: true
+        type: string
+      package_version:
+        description: Release package version
+        required: true
+        type: string
+      core_major_minor:
+        description: Release core major.minor version
+        required: true
+        type: string
+
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
+      requesting_user:
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}
 
 permissions:
   contents: read
@@ -19,7 +51,7 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          ref: ${{ github.event.client_payload.branch_name }}
+          ref: ${{ inputs.branch_name }}
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
       - run: |
@@ -35,11 +67,11 @@ jobs:
       # package_version - the full version string (eg, `3.9.1-rc` or `3.9.2`)
       # core_major_minor - the major.minor pair associated with the desired package_version (eg, `3.9` for `3.9.3`)
       - run: |
-          sed -i -e 's/"version": ".*"/"version": "${{ github.event.client_payload.package_version }}"/g' package.json
-          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' src/compiler/corePublic.ts
-          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' tests/baselines/reference/api/typescript.d.ts
-          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
-          sed -i -e 's/const version\(: string\)\{0,1\} = .*;/const version = "${{ github.event.client_payload.package_version }}" as string;/g' src/compiler/corePublic.ts
+          sed -i -e 's/"version": ".*"/"version": "${{ inputs.package_version }}"/g' package.json
+          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' src/compiler/corePublic.ts
+          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' tests/baselines/reference/api/typescript.d.ts
+          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
+          sed -i -e 's/const version\(: string\)\{0,1\} = .*;/const version = "${{ inputs.package_version }}" as string;/g' src/compiler/corePublic.ts
           npm ci
           npm install # update package-lock.json to ensure the version bump is included
           npx hereby LKG
@@ -52,5 +84,16 @@ jobs:
           git add --force ./lib
           git config user.email "typescriptbot@microsoft.com"
           git config user.name "TypeScript Bot"
-          git commit -m 'Bump version to ${{ github.event.client_payload.package_version }} and LKG'
+          git commit -m 'Bump version to ${{ inputs.package_version }} and LKG'
           git push
+
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
+        if: ${{ !cancelled() && inputs.distinct_id }}
+        with:
+          success_comment: "I've set the version of ${{ inputs.branch_name }} to ${{ inputs.package_version }} for you."
+          failure_comment: 'I was unable set the version.'
+          github_token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          distinct_id: ${{ inputs.distinct_id }}
+          source_issue: ${{ inputs.source_issue }}
+          requesting_user: ${{ inputs.requesting_user }}
+          status_comment: ${{ inputs.status_comment }}

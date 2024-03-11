@@ -27,7 +27,7 @@ export function y(arg: Type): void {
 "use strict";
 // Repro from #12101
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
+exports.y = y;
 var guard = function (arg) { return arg.type === 1; };
 var otherFunc = function (arg1, arg2) { };
 function y(arg) {
@@ -39,4 +39,3 @@ function y(arg) {
         }
     }
 }
-exports.y = y;

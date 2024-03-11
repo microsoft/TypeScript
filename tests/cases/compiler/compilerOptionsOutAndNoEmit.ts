@@ -1,4 +1,4 @@
-// @out: outDir
+// @outFile: outDir
 // @noEmit: true
 // @fileName: a.ts
 
