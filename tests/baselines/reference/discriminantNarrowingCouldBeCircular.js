@@ -12,15 +12,16 @@ if (o) {
   }
 }
 
+type SomeRecord = { a: string };
 declare const kPresentationInheritanceParents: { [tagName: string]: string[] };
-declare function parentElementOrShadowHost(element: Element): Element | undefined;
+declare function parentElementOrShadowHost(element: SomeRecord): SomeRecord | undefined;
 
-function getImplicitAriaRole(element: Element) {
-  let ancestor: Element | null = element;
+function getImplicitAriaRole(element: SomeRecord) {
+  let ancestor: SomeRecord | null = element;
   while (ancestor) {
     const parent = parentElementOrShadowHost(ancestor);
-    const parents = kPresentationInheritanceParents[ancestor.tagName];
-    if (!parents || !parent || !parents.includes(parent.tagName))
+    const parents = kPresentationInheritanceParents[ancestor.a];
+    if (!parents || !parent || !parents.includes(parent.a))
       break;
     ancestor = parent;
   }
@@ -53,8 +54,8 @@ function getImplicitAriaRole(element) {
     var ancestor = element;
     while (ancestor) {
         var parent = parentElementOrShadowHost(ancestor);
-        var parents = kPresentationInheritanceParents[ancestor.tagName];
-        if (!parents || !parent || !parents.includes(parent.tagName))
+        var parents = kPresentationInheritanceParents[ancestor.a];
+        if (!parents || !parent || !parents.includes(parent.a))
             break;
         ancestor = parent;
     }

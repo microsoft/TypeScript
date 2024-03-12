@@ -31,60 +31,64 @@ if (o) {
   }
 }
 
+type SomeRecord = { a: string };
+>SomeRecord : { a: string; }
+>a : string
+
 declare const kPresentationInheritanceParents: { [tagName: string]: string[] };
 >kPresentationInheritanceParents : { [tagName: string]: string[]; }
 >tagName : string
 
-declare function parentElementOrShadowHost(element: Element): Element | undefined;
->parentElementOrShadowHost : (element: Element) => Element | undefined
->element : Element
+declare function parentElementOrShadowHost(element: SomeRecord): SomeRecord | undefined;
+>parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
+>element : SomeRecord
 
-function getImplicitAriaRole(element: Element) {
->getImplicitAriaRole : (element: Element) => void
->element : Element
+function getImplicitAriaRole(element: SomeRecord) {
+>getImplicitAriaRole : (element: SomeRecord) => void
+>element : SomeRecord
 
-  let ancestor: Element | null = element;
->ancestor : any
->element : Element
+  let ancestor: SomeRecord | null = element;
+>ancestor : SomeRecord | null
+>element : SomeRecord
 
   while (ancestor) {
->ancestor : any
+>ancestor : SomeRecord
 
     const parent = parentElementOrShadowHost(ancestor);
->parent : any
->parentElementOrShadowHost(ancestor) : any
->parentElementOrShadowHost : (element: Element) => any
->ancestor : any
+>parent : SomeRecord | undefined
+>parentElementOrShadowHost(ancestor) : SomeRecord | undefined
+>parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
+>ancestor : SomeRecord
 
-    const parents = kPresentationInheritanceParents[ancestor.tagName];
+    const parents = kPresentationInheritanceParents[ancestor.a];
 >parents : string[]
->kPresentationInheritanceParents[ancestor.tagName] : string[]
+>kPresentationInheritanceParents[ancestor.a] : string[]
 >kPresentationInheritanceParents : { [tagName: string]: string[]; }
->ancestor.tagName : any
->ancestor : any
->tagName : any
+>ancestor.a : string
+>ancestor : SomeRecord
+>a : string
 
-    if (!parents || !parent || !parents.includes(parent.tagName))
->!parents || !parent || !parents.includes(parent.tagName) : boolean
+    if (!parents || !parent || !parents.includes(parent.a))
+>!parents || !parent || !parents.includes(parent.a) : boolean
 >!parents || !parent : boolean
 >!parents : false
 >parents : string[]
 >!parent : boolean
->parent : any
->!parents.includes(parent.tagName) : boolean
->parents.includes(parent.tagName) : boolean
+>parent : SomeRecord | undefined
+>!parents.includes(parent.a) : boolean
+>parents.includes(parent.a) : boolean
 >parents.includes : (searchElement: string, fromIndex?: number | undefined) => boolean
 >parents : string[]
 >includes : (searchElement: string, fromIndex?: number | undefined) => boolean
->parent.tagName : any
->parent : any
->tagName : any
+>parent.a : string
+>parent : SomeRecord
+>a : string
 
       break;
     ancestor = parent;
->ancestor = parent : any
->ancestor : any
->parent : any
+>ancestor = parent : SomeRecord
+>ancestor : SomeRecord | null
+>parent : SomeRecord
   }
 }
 
