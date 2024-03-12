@@ -17641,7 +17641,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const typeVarIndex = typeSet[0].flags & TypeFlags.TypeVariable ? 0 : 1;
             const typeVariable = typeSet[typeVarIndex];
             const primitiveType = typeSet[1 - typeVarIndex];
-            if (typeVariable.flags & TypeFlags.TypeVariable && (primitiveType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive) || includes & TypeFlags.IncludesEmptyObject)) {
+            if (
+                typeVariable.flags & TypeFlags.TypeVariable &&
+                (primitiveType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive) && !isGenericStringLikeType(primitiveType) || includes & TypeFlags.IncludesEmptyObject)
+            ) {
                 // We have an intersection T & P or P & T, where T is a type variable and P is a primitive type, the object type, or {}.
                 const constraint = getBaseConstraintOfType(typeVariable);
                 // Check that T's constraint is similarly composed of primitive types, the object type, or {}.
@@ -18388,6 +18391,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
     }
 
+    function isGenericStringLikeType(type: Type) {
+        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
+    }
+
     function isGenericType(type: Type): boolean {
         return !!getGenericObjectFlags(type);
     }
@@ -18416,7 +18423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index) || isGenericStringLikeType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
