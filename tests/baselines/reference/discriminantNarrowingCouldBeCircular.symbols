@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/discriminantNarrowingCouldBeCircular.ts] ////
+
+=== discriminantNarrowingCouldBeCircular.ts ===
+// #57705, 57690
+declare function is<T>(v: T): v is T;
+>is : Symbol(is, Decl(discriminantNarrowingCouldBeCircular.ts, 0, 0))
+>T : Symbol(T, Decl(discriminantNarrowingCouldBeCircular.ts, 1, 20))
+>v : Symbol(v, Decl(discriminantNarrowingCouldBeCircular.ts, 1, 23))
+>T : Symbol(T, Decl(discriminantNarrowingCouldBeCircular.ts, 1, 20))
+>v : Symbol(v, Decl(discriminantNarrowingCouldBeCircular.ts, 1, 23))
+>T : Symbol(T, Decl(discriminantNarrowingCouldBeCircular.ts, 1, 20))
+
+const o: Record<string, string> | undefined = {};
+>o : Symbol(o, Decl(discriminantNarrowingCouldBeCircular.ts, 2, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+if (o) {
+>o : Symbol(o, Decl(discriminantNarrowingCouldBeCircular.ts, 2, 5))
+
+  for (const key in o) {
+>key : Symbol(key, Decl(discriminantNarrowingCouldBeCircular.ts, 4, 12))
+>o : Symbol(o, Decl(discriminantNarrowingCouldBeCircular.ts, 2, 5))
+
+    const value = o[key];
+>value : Symbol(value, Decl(discriminantNarrowingCouldBeCircular.ts, 5, 9))
+>o : Symbol(o, Decl(discriminantNarrowingCouldBeCircular.ts, 2, 5))
+>key : Symbol(key, Decl(discriminantNarrowingCouldBeCircular.ts, 4, 12))
+
+    if (is<string>(value)) {
+>is : Symbol(is, Decl(discriminantNarrowingCouldBeCircular.ts, 0, 0))
+>value : Symbol(value, Decl(discriminantNarrowingCouldBeCircular.ts, 5, 9))
+    }
+  }
+}
+
+declare const kPresentationInheritanceParents: { [tagName: string]: string[] };
+>kPresentationInheritanceParents : Symbol(kPresentationInheritanceParents, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 13))
+>tagName : Symbol(tagName, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 50))
+
+declare function parentElementOrShadowHost(element: Element): Element | undefined;
+>parentElementOrShadowHost : Symbol(parentElementOrShadowHost, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 79))
+>element : Symbol(element, Decl(discriminantNarrowingCouldBeCircular.ts, 12, 43))
+>Element : Symbol(Element)
+>Element : Symbol(Element)
+
+function getImplicitAriaRole(element: Element) {
+>getImplicitAriaRole : Symbol(getImplicitAriaRole, Decl(discriminantNarrowingCouldBeCircular.ts, 12, 82))
+>element : Symbol(element, Decl(discriminantNarrowingCouldBeCircular.ts, 14, 29))
+>Element : Symbol(Element)
+
+  let ancestor: Element | null = element;
+>ancestor : Symbol(ancestor, Decl(discriminantNarrowingCouldBeCircular.ts, 15, 5))
+>Element : Symbol(Element)
+>element : Symbol(element, Decl(discriminantNarrowingCouldBeCircular.ts, 14, 29))
+
+  while (ancestor) {
+>ancestor : Symbol(ancestor, Decl(discriminantNarrowingCouldBeCircular.ts, 15, 5))
+
+    const parent = parentElementOrShadowHost(ancestor);
+>parent : Symbol(parent, Decl(discriminantNarrowingCouldBeCircular.ts, 17, 9))
+>parentElementOrShadowHost : Symbol(parentElementOrShadowHost, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 79))
+>ancestor : Symbol(ancestor, Decl(discriminantNarrowingCouldBeCircular.ts, 15, 5))
+
+    const parents = kPresentationInheritanceParents[ancestor.tagName];
+>parents : Symbol(parents, Decl(discriminantNarrowingCouldBeCircular.ts, 18, 9))
+>kPresentationInheritanceParents : Symbol(kPresentationInheritanceParents, Decl(discriminantNarrowingCouldBeCircular.ts, 11, 13))
+>ancestor : Symbol(ancestor, Decl(discriminantNarrowingCouldBeCircular.ts, 15, 5))
+
+    if (!parents || !parent || !parents.includes(parent.tagName))
+>parents : Symbol(parents, Decl(discriminantNarrowingCouldBeCircular.ts, 18, 9))
+>parent : Symbol(parent, Decl(discriminantNarrowingCouldBeCircular.ts, 17, 9))
+>parents.includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>parents : Symbol(parents, Decl(discriminantNarrowingCouldBeCircular.ts, 18, 9))
+>includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>parent : Symbol(parent, Decl(discriminantNarrowingCouldBeCircular.ts, 17, 9))
+
+      break;
+    ancestor = parent;
+>ancestor : Symbol(ancestor, Decl(discriminantNarrowingCouldBeCircular.ts, 15, 5))
+>parent : Symbol(parent, Decl(discriminantNarrowingCouldBeCircular.ts, 17, 9))
+  }
+}
+
+declare function isPlainObject2<T>(
+>isPlainObject2 : Symbol(isPlainObject2, Decl(discriminantNarrowingCouldBeCircular.ts, 23, 1))
+>T : Symbol(T, Decl(discriminantNarrowingCouldBeCircular.ts, 25, 32))
+
+    data: unknown,
+>data : Symbol(data, Decl(discriminantNarrowingCouldBeCircular.ts, 25, 35))
+
+  ): data is Record<PropertyKey, unknown>;
+>data : Symbol(data, Decl(discriminantNarrowingCouldBeCircular.ts, 25, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+  
+  declare const myObj2: unknown;
+>myObj2 : Symbol(myObj2, Decl(discriminantNarrowingCouldBeCircular.ts, 29, 15))
+
+  if (isPlainObject2(myObj2)) {
+>isPlainObject2 : Symbol(isPlainObject2, Decl(discriminantNarrowingCouldBeCircular.ts, 23, 1))
+>myObj2 : Symbol(myObj2, Decl(discriminantNarrowingCouldBeCircular.ts, 29, 15))
+
+      for (const key of ["a", "b", "c"]) {
+>key : Symbol(key, Decl(discriminantNarrowingCouldBeCircular.ts, 31, 16))
+
+        const deeper = myObj2[key];
+>deeper : Symbol(deeper, Decl(discriminantNarrowingCouldBeCircular.ts, 32, 13))
+>myObj2 : Symbol(myObj2, Decl(discriminantNarrowingCouldBeCircular.ts, 29, 15))
+>key : Symbol(key, Decl(discriminantNarrowingCouldBeCircular.ts, 31, 16))
+
+        const deeperKeys = isPlainObject2(deeper) ? Object.keys(deeper) : [];
+>deeperKeys : Symbol(deeperKeys, Decl(discriminantNarrowingCouldBeCircular.ts, 33, 13))
+>isPlainObject2 : Symbol(isPlainObject2, Decl(discriminantNarrowingCouldBeCircular.ts, 23, 1))
+>deeper : Symbol(deeper, Decl(discriminantNarrowingCouldBeCircular.ts, 32, 13))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>deeper : Symbol(deeper, Decl(discriminantNarrowingCouldBeCircular.ts, 32, 13))
+      }
+  }
+

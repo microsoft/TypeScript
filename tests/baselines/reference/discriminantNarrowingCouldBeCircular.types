@@ -1,0 +1,134 @@
+//// [tests/cases/compiler/discriminantNarrowingCouldBeCircular.ts] ////
+
+=== discriminantNarrowingCouldBeCircular.ts ===
+// #57705, 57690
+declare function is<T>(v: T): v is T;
+>is : <T>(v: T) => v is T
+>v : T
+
+const o: Record<string, string> | undefined = {};
+>o : Record<string, string> | undefined
+>{} : {}
+
+if (o) {
+>o : Record<string, string>
+
+  for (const key in o) {
+>key : string
+>o : Record<string, string>
+
+    const value = o[key];
+>value : string
+>o[key] : string
+>o : Record<string, string>
+>key : string
+
+    if (is<string>(value)) {
+>is<string>(value) : boolean
+>is : <T>(v: T) => v is T
+>value : string
+    }
+  }
+}
+
+declare const kPresentationInheritanceParents: { [tagName: string]: string[] };
+>kPresentationInheritanceParents : { [tagName: string]: string[]; }
+>tagName : string
+
+declare function parentElementOrShadowHost(element: Element): Element | undefined;
+>parentElementOrShadowHost : (element: Element) => Element | undefined
+>element : Element
+
+function getImplicitAriaRole(element: Element) {
+>getImplicitAriaRole : (element: Element) => void
+>element : Element
+
+  let ancestor: Element | null = element;
+>ancestor : any
+>element : Element
+
+  while (ancestor) {
+>ancestor : any
+
+    const parent = parentElementOrShadowHost(ancestor);
+>parent : any
+>parentElementOrShadowHost(ancestor) : any
+>parentElementOrShadowHost : (element: Element) => any
+>ancestor : any
+
+    const parents = kPresentationInheritanceParents[ancestor.tagName];
+>parents : string[]
+>kPresentationInheritanceParents[ancestor.tagName] : string[]
+>kPresentationInheritanceParents : { [tagName: string]: string[]; }
+>ancestor.tagName : any
+>ancestor : any
+>tagName : any
+
+    if (!parents || !parent || !parents.includes(parent.tagName))
+>!parents || !parent || !parents.includes(parent.tagName) : boolean
+>!parents || !parent : boolean
+>!parents : false
+>parents : string[]
+>!parent : boolean
+>parent : any
+>!parents.includes(parent.tagName) : boolean
+>parents.includes(parent.tagName) : boolean
+>parents.includes : (searchElement: string, fromIndex?: number | undefined) => boolean
+>parents : string[]
+>includes : (searchElement: string, fromIndex?: number | undefined) => boolean
+>parent.tagName : any
+>parent : any
+>tagName : any
+
+      break;
+    ancestor = parent;
+>ancestor = parent : any
+>ancestor : any
+>parent : any
+  }
+}
+
+declare function isPlainObject2<T>(
+>isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
+
+    data: unknown,
+>data : unknown
+
+  ): data is Record<PropertyKey, unknown>;
+  
+  declare const myObj2: unknown;
+>myObj2 : unknown
+
+  if (isPlainObject2(myObj2)) {
+>isPlainObject2(myObj2) : boolean
+>isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
+>myObj2 : unknown
+
+      for (const key of ["a", "b", "c"]) {
+>key : string
+>["a", "b", "c"] : string[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+        const deeper = myObj2[key];
+>deeper : unknown
+>myObj2[key] : unknown
+>myObj2 : Record<PropertyKey, unknown>
+>key : string
+
+        const deeperKeys = isPlainObject2(deeper) ? Object.keys(deeper) : [];
+>deeperKeys : string[]
+>isPlainObject2(deeper) ? Object.keys(deeper) : [] : string[]
+>isPlainObject2(deeper) : boolean
+>isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
+>deeper : unknown
+>Object.keys(deeper) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>deeper : Record<PropertyKey, unknown>
+>[] : never[]
+      }
+  }
+
