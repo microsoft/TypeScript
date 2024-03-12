@@ -41640,7 +41640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (errorNode) {
                 addRelatedInfo(
                     error(decorator.expression, Diagnostics.Expression_must_be_enclosed_in_parentheses_to_be_used_as_a_decorator),
-                    createDiagnosticForNode(errorNode, Diagnostics.Invalid_syntax_in_decorator)
+                    createDiagnosticForNode(errorNode, Diagnostics.Invalid_syntax_in_decorator),
                 );
                 return true;
             }

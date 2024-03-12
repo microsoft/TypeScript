@@ -6,7 +6,7 @@ import {
     getTokenAtPosition,
     isDecorator,
     SourceFile,
-    textChanges
+    textChanges,
 } from "../_namespaces/ts";
 import {
     codeFixAll,
