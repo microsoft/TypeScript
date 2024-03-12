@@ -319,6 +319,7 @@ import {
     isNumericLiteral,
     isObjectLiteralExpression,
     isOmittedExpression,
+    isOuterExpression,
     isParameter,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
@@ -10642,6 +10643,7 @@ export function getNameFromImportAttribute(node: ImportAttribute) {
 
 /** @internal */
 export function isSyntacticallyString(expr: Expression): boolean {
+    expr = skipOuterExpressions(expr);
     switch (expr.kind) {
         case SyntaxKind.BinaryExpression:
             const left = (expr as BinaryExpression).left;
@@ -10650,8 +10652,6 @@ export function isSyntacticallyString(expr: Expression): boolean {
                 (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken &&
                 (isSyntacticallyString(left) || isSyntacticallyString(right))
             );
-        case SyntaxKind.ParenthesizedExpression:
-            return isSyntacticallyString((expr as ParenthesizedExpression).expression);
         case SyntaxKind.TemplateExpression:
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
