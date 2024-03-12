@@ -47108,9 +47108,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
 
-            checkSourceFileWithEagerDiagnostics(sourceFile, nodesToCheck); // >> TODO: change this
-            // >> TODO: where do we clean up the diagnostics?
+            checkSourceFileWithEagerDiagnostics(sourceFile, nodesToCheck);
             const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+            if (nodesToCheck) {
+                // No need to get global diagnostics;
+                // reset diagnostic collection.
+                // >> TODO: do we really need this?
+                diagnostics = createDiagnosticCollection();
+                return semanticDiagnostics;
+            }
             const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             if (currentGlobalDiagnostics !== previousGlobalDiagnostics) {
                 // If the arrays are not the same reference, new diagnostics were added.

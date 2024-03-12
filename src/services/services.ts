@@ -144,6 +144,7 @@ import {
     IntersectionType,
     isArray,
     isBindingPattern,
+    isBlockLike,
     isComputedPropertyName,
     isConstTypeReference,
     IScriptSnapshot,
@@ -2055,11 +2056,33 @@ export function createLanguageService(
         const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
         const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
 
-        const nodes = enclosingNode === file ? file.statements.filter(s => textRangeIntersectsWithTextSpan(s, span)) : [enclosingNode];
+        const nodes = [];
+        enclosingNode.forEachChild(includeNodes);
+
         if (file.end === span.start + span.length) {
             nodes.push(file.endOfFileToken);
         }
         return nodes;
+        
+        function includeNodes(node: Node): true | undefined {
+            if (!textRangeIntersectsWithTextSpan(node, span)) {
+                // TODO: if node is after span, we can quit the rest of the for each child calls
+                if (node.pos >= span.start + span.length) {
+                    return true;
+                }
+                return;
+            }
+            if (textSpanContainsTextRange(span, node) || !isBlockLike(node)) {
+                nodes.push(node);
+                return;
+            }
+            const stmts = node.statements.filter(node => textRangeIntersectsWithTextSpan(node, span));
+            if (stmts.length === node.statements.length) {
+                nodes.push(node);
+                return;
+            }
+            stmts.forEach(includeNodes);
+        }
     }
 
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {

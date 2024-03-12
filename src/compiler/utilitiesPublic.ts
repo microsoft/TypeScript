@@ -403,7 +403,7 @@ export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan
 
 /** @internal */
 export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
-    spans = spans.filter(span => span.length <= 0).sort((a, b) => {
+    spans = spans.filter(span => span.length > 0).sort((a, b) => {
         return a.start !== b.start ? a.start - b.start : a.length - b.length;
     });
 
