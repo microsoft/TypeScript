@@ -8,6 +8,7 @@ import {
     createMultiMap,
     Debug,
     emptyArray,
+    ensureTrailingDirectorySeparator,
     findIndex,
     firstDefined,
     forEachAncestorDirectory,
@@ -20,8 +21,8 @@ import {
     getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
-    getPatternFromSpec,
     getRegexFromPattern,
+    getSubPatternFromSpec,
     getSymbolId,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -43,13 +44,13 @@ import {
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
+    pathContainsNodeModules,
     Program,
     skipAlias,
     skipOuterExpressions,
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     stripQuotes,
     Symbol,
     SymbolFlags,
@@ -113,8 +114,8 @@ export interface ExportInfoMap {
     isUsableByFile(importingFile: Path): boolean;
     clear(): void;
     add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
-    get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
+    get(importingFile: Path, key: ExportMapInfoKey): readonly SymbolExportInfo[] | undefined;
+    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: ExportMapInfoKey) => T | undefined): T | undefined;
     releaseSymbols(): void;
     isEmpty(): boolean;
     /** @returns Whether the change resulted in the cache being cleared */
@@ -128,10 +129,11 @@ export interface CacheableExportInfoMapHost {
     getGlobalTypingsCacheLocation(): string | undefined;
 }
 
+export type ExportMapInfoKey = string & { __exportInfoKey: void; };
 /** @internal */
 export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
     let exportInfoId = 1;
-    const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
+    const exportInfo = createMultiMap<ExportMapInfoKey, CachedSymbolExportInfo>();
     const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
     /**
      * Key: node_modules package name (no @types).
@@ -267,7 +269,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         },
     };
     if (Debug.isDebugging) {
-        Object.defineProperty(cache, "__cache", { get: () => exportInfo });
+        Object.defineProperty(cache, "__cache", { value: exportInfo });
     }
     return cache;
 
@@ -310,14 +312,19 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         };
     }
 
-    function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker): string {
+    function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker) {
         const moduleKey = ambientModuleName || "";
-        return `${importedName}|${getSymbolId(skipAlias(symbol, checker))}|${moduleKey}`;
+        return `${importedName.length} ${getSymbolId(skipAlias(symbol, checker))} ${importedName} ${moduleKey}` as ExportMapInfoKey;
     }
 
-    function parseKey(key: string) {
-        const symbolName = key.substring(0, key.indexOf("|"));
-        const moduleKey = key.substring(key.lastIndexOf("|") + 1);
+    function parseKey(key: ExportMapInfoKey) {
+        const firstSpace = key.indexOf(" ");
+        const secondSpace = key.indexOf(" ", firstSpace + 1);
+        const symbolNameLength = parseInt(key.substring(0, firstSpace), 10);
+
+        const data = key.substring(secondSpace + 1);
+        const symbolName = data.substring(0, symbolNameLength);
+        const moduleKey = data.substring(symbolNameLength + 1);
         const ambientModuleName = moduleKey === "" ? undefined : moduleKey;
         return { symbolName, ambientModuleName };
     }
@@ -418,16 +425,16 @@ export function forEachExternalModuleToImportFrom(
     const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
         // The client is expected to send rooted path specs since we don't know
         // what directory a relative path is relative to.
-        const pattern = getPatternFromSpec(spec, "", "exclude");
+        const pattern = getSubPatternFromSpec(spec, "", "exclude");
         return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
     });
 
-    forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
+    forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, host, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
     const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
     if (autoImportProvider) {
         const start = timestamp();
         const checker = program.getTypeChecker();
-        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => {
+        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, host, (module, file) => {
             if (file && !program.getSourceFile(file.fileName) || !file && !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)) {
                 // The AutoImportProvider filters files already in the main program out of its *root* files,
                 // but non-root files can still be present in both programs, and already in the export info map
@@ -440,15 +447,30 @@ export function forEachExternalModuleToImportFrom(
     }
 }
 
-function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
-    const isExcluded = excludePatterns && ((fileName: string) => excludePatterns.some(p => p.test(fileName)));
+function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, host: LanguageServiceHost, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    const realpathsWithSymlinks = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
+    const isExcluded = excludePatterns && (({ fileName, path }: SourceFile) => {
+        if (excludePatterns.some(p => p.test(fileName))) return true;
+        if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
+            let dir = getDirectoryPath(fileName);
+            return forEachAncestorDirectory(getDirectoryPath(path), dirPath => {
+                const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
+                if (symlinks) {
+                    return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
+                }
+                dir = getDirectoryPath(dir);
+            }) ?? false;
+        }
+        return false;
+    });
+
     for (const ambient of checker.getAmbientModules()) {
-        if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }
     for (const sourceFile of allSourceFiles) {
-        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile.fileName)) {
+        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile)) {
             cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
         }
     }

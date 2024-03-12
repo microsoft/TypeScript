@@ -19,38 +19,25 @@ declare const console: { log(msg: any): void; };
 export function __assign(...args: any[]): any;
 
 //// [/users/username/projects/project/node_modules/tslib/package.json]
-{"name":"tslib","version":"0.0.1"}
+{
+  "name": "tslib",
+  "version": "0.0.1"
+}
 
 //// [/users/username/projects/project/index.tsx]
 export const x = {...{}};
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"importHelpers":true}}
+{
+  "compilerOptions": {
+    "importHelpers": true
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/tslib/index.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/tslib/index.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/tslib/index.d.ts (used version)
-/users/username/projects/project/index.tsx (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/index.js]
 "use strict";
@@ -125,6 +112,32 @@ exports.x = tslib_1.__assign({});
 }
 
 
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/tslib/index.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/tslib/index.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/tslib/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
+exitCode:: ExitStatus.Success
+
 Change::
 
 Input::
@@ -141,21 +154,6 @@ Output::
 Found 1 error in index.tsx[90m:1[0m
 
 
-
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"importHelpers":true,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/index.tsx (computed .d.ts)
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -219,3 +217,24 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 986
 }
 
+
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "importHelpers": true,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.tsx (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

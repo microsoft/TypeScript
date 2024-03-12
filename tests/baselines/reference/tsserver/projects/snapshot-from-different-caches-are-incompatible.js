@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.ts]
 let x = 1;
@@ -23,7 +23,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts Text-1 "let x = 1;"
@@ -33,6 +33,48 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "7d0d239eb8f7600241cce3b3ce765a6b11bf39462cafa1532e07ec468540ed99",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 10,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -48,6 +90,17 @@ FsWatches::
 /a/b/app.ts: *new*
   {}
 
+Projects::
+/a/b/proj.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj.csproj
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -62,7 +115,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts SVC-2-0 "let x = 1;\nlet y = 2;"
@@ -88,6 +141,18 @@ PolledWatches::
 FsWatches *deleted*::
 /a/b/app.ts:
   {}
+
+Projects::
+/a/b/proj.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-2-0 *changed*
+    containingProjects: 1
+        /a/b/proj.csproj *default*
 
 Before request
 
@@ -197,6 +262,20 @@ FsWatches::
 /a/b/app.ts: *new*
   {}
 
+Projects::
+/a/b/proj.csproj (External) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/a/b/app.ts *changed*
+    open: false *changed*
+    version: SVC-2-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /a/b/proj.csproj
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -210,7 +289,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts SVC-3-0 "let x = 1;"
@@ -236,6 +315,20 @@ PolledWatches::
 FsWatches *deleted*::
 /a/b/app.ts:
   {}
+
+Projects::
+/a/b/proj.csproj (External) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-3-0 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /a/b/proj.csproj *default*
 
 Before request
 

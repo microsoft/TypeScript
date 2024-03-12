@@ -22,10 +22,24 @@ export enum e { }
 export function f2() { } // trailing
 
 //// [/src/shared/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/src/tsconfig.json]
-{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/src/webpack/index.ts]
 export function f2() { }
@@ -35,7 +49,16 @@ export enum e2 { }
 export function f22() { } // trailing
 
 //// [/src/webpack/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../shared/tsconfig.json"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
 
 
 
@@ -55,8 +78,13 @@ Output::
 [[90m12:00:22 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/shared/index.ts"]
-Program options: {"composite":true,"configFilePath":"/src/shared/tsconfig.json"}
+Program root files: [
+  "/src/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/shared/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -70,8 +98,13 @@ Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
 /src/shared/index.ts (used version)
 
-Program root files: ["/src/webpack/index.ts"]
-Program options: {"composite":true,"configFilePath":"/src/webpack/tsconfig.json"}
+Program root files: [
+  "/src/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/webpack/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -98,10 +131,11 @@ export declare function f2(): void;
 //// [/src/shared/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f2 = exports.e = exports.c = exports.f1 = void 0;
+exports.e = exports.c = void 0;
+exports.f1 = f1;
+exports.f2 = f2;
 /*@before/src/shared/tsconfig.json*/
 function f1() { }
-exports.f1 = f1;
 //@after/src/shared/tsconfig.json
 var c = /** @class */ (function () {
     function c() {
@@ -116,7 +150,6 @@ var e;
 // leading
 /*@before/src/shared/tsconfig.json*/
 function f2() { } // trailing
-exports.f2 = f2;
 
 
 //// [/src/shared/tsconfig.tsbuildinfo]
@@ -183,10 +216,11 @@ export declare function f22(): void;
 //// [/src/webpack/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f22 = exports.e2 = exports.c2 = exports.f2 = void 0;
+exports.e2 = exports.c2 = void 0;
+exports.f2 = f2;
+exports.f22 = f22;
 /*@before/src/webpack/tsconfig.json*/
 function f2() { }
-exports.f2 = f2;
 //@after/src/webpack/tsconfig.json
 var c2 = /** @class */ (function () {
     function c2() {
@@ -201,7 +235,6 @@ var e2;
 // leading
 /*@before/src/webpack/tsconfig.json*/
 function f22() { } // trailing
-exports.f22 = f22;
 
 
 //// [/src/webpack/tsconfig.tsbuildinfo]

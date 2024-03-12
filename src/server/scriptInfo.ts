@@ -25,15 +25,14 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    orderedRemoveItem,
     Path,
     ScriptKind,
     ScriptSnapshot,
     some,
     SourceFile,
     SourceFileLike,
-    stringContains,
     TextSpan,
-    unorderedRemoveItem,
 } from "./_namespaces/ts";
 import {
     AbsolutePositionAndLineText,
@@ -41,13 +40,13 @@ import {
     Errors,
     ExternalProject,
     InferredProject,
+    isBackgroundProject,
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
     maxFileSize,
     NormalizedPath,
     Project,
-    ProjectKind,
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
@@ -94,7 +93,7 @@ export class TextStorage {
     /**
      * True when reloading contents of file from the disk is pending
      */
-    private pendingReloadFromDisk = false;
+    pendingReloadFromDisk = false;
 
     constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: number) {
         this.version = initialVersion || 0;
@@ -339,9 +338,9 @@ export class TextStorage {
 
 export function isDynamicFileName(fileName: NormalizedPath) {
     return fileName[0] === "^" ||
-        ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&
+        ((fileName.includes("walkThroughSnippet:/") || fileName.includes("untitled:/")) &&
             getBaseFileName(fileName)[0] === "^") ||
-        (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
+        (fileName.includes(":^") && !fileName.includes(directorySeparator));
 }
 
 /** @internal */
@@ -537,7 +536,8 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                // We use first configured project as default so we shouldnt change the order of the containing projects
+                if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;
@@ -683,7 +683,7 @@ export class ScriptInfo {
     isContainedByBackgroundProject() {
         return some(
             this.containingProjects,
-            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary,
+            isBackgroundProject,
         );
     }
 
@@ -731,7 +731,7 @@ export class ScriptInfo {
  * reported as the default project for a ScriptInfo.
  */
 function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
+    if (!project || isBackgroundProject(project)) {
         return Errors.ThrowNoProject();
     }
     return project;

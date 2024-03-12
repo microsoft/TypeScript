@@ -4,7 +4,10 @@
 //// [/sub/node_modules/a/index.ts] symlink(/modules/a.ts)
 
 //// [/sub/node_modules/a/package.json]
-{"version": "0.0.0", "main": "./index"}
+{
+  "version": "0.0.0",
+  "main": "./index"
+}
 
 Resolving "a" from /sub/dir/foo.ts
 Resolution:: {
@@ -28,8 +31,7 @@ Resolution:: {
     "/sub/dir/node_modules/@types/a/index.d.ts",
     "/sub/node_modules/a.ts",
     "/sub/node_modules/a.tsx",
-    "/sub/node_modules/a.d.ts",
-    "/sub/node_modules/a/index"
+    "/sub/node_modules/a.d.ts"
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"
@@ -58,8 +60,7 @@ Resolution:: {
     "/sub/dir/node_modules/@types/a/index.d.ts",
     "/sub/node_modules/a.ts",
     "/sub/node_modules/a.tsx",
-    "/sub/node_modules/a.d.ts",
-    "/sub/node_modules/a/index"
+    "/sub/node_modules/a.d.ts"
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"

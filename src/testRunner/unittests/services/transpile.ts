@@ -20,7 +20,7 @@ describe("unittests:: services:: Transpile", () => {
                     transpileOptions.compilerOptions = {};
                 }
                 if (transpileOptions.compilerOptions.target === undefined) {
-                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
+                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES5;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
@@ -660,6 +660,17 @@ export * as alias from './file';`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
             testVerbatimModuleSyntax: true,
+        },
+    );
+
+    transpilesCorrectly(
+        "Elides re-export of type-only import",
+        `
+        import type { Foo } from "./types";
+        export { Foo };
+        `,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
         },
     );
 });

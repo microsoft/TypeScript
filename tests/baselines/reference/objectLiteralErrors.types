@@ -297,8 +297,8 @@ var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
 
 // Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
 var g1 = { get a(): number { return 4; }, set a(n: string) { } };
->g1 : { a: number; }
->{ get a(): number { return 4; }, set a(n: string) { } } : { a: number; }
+>g1 : { get a(): number; set a(n: string); }
+>{ get a(): number { return 4; }, set a(n: string) { } } : { get a(): number; set a(n: string); }
 >a : number
 >4 : 4
 >a : number
@@ -313,8 +313,8 @@ var g2 = { get a() { return 4; }, set a(n: string) { } };
 >n : string
 
 var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
->g3 : { a: number; }
->{ get a(): number { return undefined; }, set a(n: string) { } } : { a: number; }
+>g3 : { get a(): number; set a(n: string); }
+>{ get a(): number { return undefined; }, set a(n: string) { } } : { get a(): number; set a(n: string); }
 >a : number
 >undefined : undefined
 >a : number

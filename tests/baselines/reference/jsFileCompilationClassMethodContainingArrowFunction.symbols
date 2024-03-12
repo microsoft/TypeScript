@@ -17,3 +17,4 @@ class c {
 >a : Symbol(a, Decl(a.js, 2, 15))
     }
 }
+

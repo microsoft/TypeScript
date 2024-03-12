@@ -12,6 +12,8 @@ body:
 
         Most module resolution bug reports are actually misconfigurations, so we require a thorough pre-investigation before we can look into any potential issues.
 
+        Many module problems can be automatically detected with [Are The Types Wrong?](https://arethetypeswrong.github.io/) and you should use this tool first if it appears that the module shape is wrong.
+
         Let's make sure you're ready to file a module resolution bug.
 
   - type: markdown
@@ -25,8 +27,7 @@ body:
         4. The configuration of the target module
         5. A difference in runtime behavior
 
-        You will also be required to post a cloneable repository.
-        This repo must involve running `tsc`, not a third-party tool (e.g. vue-tsc, ngc, expo, ...)
+        You will also be required to post a cloneable repository. This repo must involve running `tsc`, not a third-party tool (e.g. vue-tsc, ngc, expo, ...)
 
   - type: input
     id: repo-url

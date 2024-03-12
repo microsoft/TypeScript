@@ -43,7 +43,12 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true
+  }
+}
 
 
 
@@ -297,10 +302,9 @@ export declare function writeLog(s: string): void;
 //// [/src/project/src/noChangeFile.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeLog = void 0;
+exports.writeLog = writeLog;
 function writeLog(s) {
 }
-exports.writeLog = writeLog;
 
 
 //// [/src/project/src/noChangeFileWithEmitSpecificError.d.ts]

@@ -11,7 +11,8 @@ function m1_f1() {
 define("ref/m2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.m2_f1 = exports.m2_instance1 = exports.m2_c1 = exports.m2_a1 = void 0;
+    exports.m2_instance1 = exports.m2_c1 = exports.m2_a1 = void 0;
+    exports.m2_f1 = m2_f1;
     exports.m2_a1 = 10;
     var m2_c1 = /** @class */ (function () {
         function m2_c1() {
@@ -23,7 +24,6 @@ define("ref/m2", ["require", "exports"], function (require, exports) {
     function m2_f1() {
         return exports.m2_instance1;
     }
-    exports.m2_f1 = m2_f1;
 });
 /// <reference path='ref/m1.ts'/>
 /// <reference path='ref/m2.ts'/>

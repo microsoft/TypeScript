@@ -18,12 +18,11 @@ export function b(text: string) {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
+exports.b = b;
 var a_1 = require("@ts-bug/a");
 function b(text) {
     return (0, a_1.a)(text);
 }
-exports.b = b;
 
 
 //// [index.d.ts]

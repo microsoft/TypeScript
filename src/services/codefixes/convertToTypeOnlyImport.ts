@@ -26,8 +26,8 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [
-    Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code,
     Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
+    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
 ];
 const fixId = "convertToTypeOnlyImport";
 
@@ -125,13 +125,13 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
                     factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
-                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
                     factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
-                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
             ]);
         }
@@ -142,7 +142,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
                 )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.assertClause);
+            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }

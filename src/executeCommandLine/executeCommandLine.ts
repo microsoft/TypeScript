@@ -57,12 +57,11 @@ import {
     getNormalizedAbsolutePath,
     isIncrementalCompilation,
     isWatchSet,
+    JSDocParsingMode,
     normalizePath,
     optionDeclarations,
     optionsForBuild,
     optionsForWatch,
-    padLeft,
-    padRight,
     parseBuildCommand,
     parseCommandLine,
     parseConfigFileWithSystem,
@@ -77,7 +76,6 @@ import {
     SourceFile,
     startsWith,
     startTracing,
-    stringContains,
     supportedJSExtensionsFlat,
     supportedTSExtensionsFlat,
     sys,
@@ -193,7 +191,7 @@ function createColors(sys: System) {
         return `\x1b[1m${str}\x1b[22m`;
     }
 
-    const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+    const isWindows = sys.getEnvironmentVariable("OS") && sys.getEnvironmentVariable("OS").toLowerCase().includes("windows");
     const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
     const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
 
@@ -330,12 +328,12 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         while (remainRight.length > 0) {
             let curLeft = "";
             if (isFirstLine) {
-                curLeft = padLeft(left, rightAlignOfLeft);
-                curLeft = padRight(curLeft, leftAlignOfRight);
+                curLeft = left.padStart(rightAlignOfLeft);
+                curLeft = curLeft.padEnd(leftAlignOfRight);
                 curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
             }
             else {
-                curLeft = padLeft("", leftAlignOfRight);
+                curLeft = "".padStart(leftAlignOfRight);
             }
 
             const curRight = remainRight.substr(0, rightCharacterNumber);
@@ -397,7 +395,9 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     // Group synonyms: es6/es2015
                     const inverted: { [value: string]: string[]; } = {};
                     option.type.forEach((value, name) => {
-                        (inverted[value] ||= []).push(name);
+                        if (!option.deprecatedKeys?.has(name)) {
+                            (inverted[value] ||= []).push(name);
+                        }
                     });
                     return Object.entries(inverted)
                         .map(([, synonyms]) => synonyms.join("/"))
@@ -525,15 +525,15 @@ function getHeader(sys: System, message: string) {
     const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
     const tsIconLength = 5;
 
-    const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-    const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
+    const tsIconFirstLine = colors.blueBackground("".padStart(tsIconLength));
+    const tsIconSecondLine = colors.blueBackground(colors.brightWhite("TS ".padStart(tsIconLength)));
     // If we have enough space, print TS icon.
     if (terminalWidth >= message.length + tsIconLength) {
         // right align of the icon is 120 at most.
         const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
         const leftAlign = rightAlign - tsIconLength;
-        header.push(padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
-        header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
+        header.push(message.padEnd(leftAlign) + tsIconFirstLine + sys.newLine);
+        header.push("".padStart(leftAlign) + tsIconSecondLine + sys.newLine);
     }
     else {
         header.push(message + sys.newLine);
@@ -792,6 +792,9 @@ function reportWatchModeWithoutSysSupport(sys: System, reportDiagnostic: Diagnos
     return false;
 }
 
+// This could be inlined everywhere, but this is convenient for debugging and patching.
+const defaultJSDocParsingMode = JSDocParsingMode.ParseForTypeErrors;
+
 function performBuild(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
@@ -842,6 +845,7 @@ function performBuild(
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
         );
+        buildHost.jsDocParsingMode = defaultJSDocParsingMode;
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const onWatchStatusChange = buildHost.onWatchStatusChange;
@@ -871,6 +875,7 @@ function performBuild(
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
     );
+    buildHost.jsDocParsingMode = defaultJSDocParsingMode;
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
     const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -894,6 +899,7 @@ function performCompilation(
 ) {
     const { fileNames, options, projectReferences } = config;
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
+    host.jsDocParsingMode = defaultJSDocParsingMode;
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -927,6 +933,7 @@ function performIncrementalCompilation(
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
     const host = createIncrementalCompilerHost(options, sys);
+    host.jsDocParsingMode = defaultJSDocParsingMode;
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
@@ -955,11 +962,6 @@ function updateSolutionBuilderHost(
         reportStatistics(sys, program.getProgram(), solutionPerformance);
         cb(program);
     };
-    buildHost.beforeEmitBundle = config => enableStatisticsAndTracing(sys, config.options, /*isBuildMode*/ true);
-    buildHost.afterEmitBundle = config => {
-        reportStatistics(sys, config, solutionPerformance);
-        cb(config);
-    };
 }
 
 function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { createProgram: CreateProgram<T>; }, isBuildMode: boolean) {
@@ -978,6 +980,7 @@ function updateWatchCompilationHost(
     cb: ExecuteCommandLineCallbacks,
     watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
+    watchCompilerHost.jsDocParsingMode = defaultJSDocParsingMode;
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
@@ -1140,14 +1143,8 @@ function isSolutionMarkOrMeasure(name: string) {
     return startsWith(name, "SolutionBuilder::");
 }
 
-function isProgram(programOrConfig: Program | ParsedCommandLine): programOrConfig is Program {
-    return !(programOrConfig as ParsedCommandLine).options;
-}
-
-function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine, solutionPerformance: SolutionPerformance | undefined) {
-    const program = isProgram(programOrConfig) ? programOrConfig : undefined;
-    const config = isProgram(programOrConfig) ? undefined : programOrConfig;
-    const compilerOptions = program ? program.getCompilerOptions() : config!.options;
+function reportStatistics(sys: System, program: Program, solutionPerformance: SolutionPerformance | undefined) {
+    const compilerOptions = program.getCompilerOptions();
 
     if (canTrace(sys, compilerOptions)) {
         tracing?.stopTracing();
@@ -1157,24 +1154,22 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
     if (canReportDiagnostics(sys, compilerOptions)) {
         statistics = [];
         const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
-        if (program) {
-            reportCountStatistic("Files", program.getSourceFiles().length);
+        reportCountStatistic("Files", program.getSourceFiles().length);
 
-            const lineCounts = countLines(program);
-            if (compilerOptions.extendedDiagnostics) {
-                for (const [key, value] of lineCounts.entries()) {
-                    reportCountStatistic("Lines of " + key, value);
-                }
+        const lineCounts = countLines(program);
+        if (compilerOptions.extendedDiagnostics) {
+            for (const [key, value] of lineCounts.entries()) {
+                reportCountStatistic("Lines of " + key, value);
             }
-            else {
-                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
-            }
-
-            reportCountStatistic("Identifiers", program.getIdentifierCount());
-            reportCountStatistic("Symbols", program.getSymbolCount());
-            reportCountStatistic("Types", program.getTypeCount());
-            reportCountStatistic("Instantiations", program.getInstantiationCount());
         }
+        else {
+            reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+        }
+
+        reportCountStatistic("Identifiers", program.getIdentifierCount());
+        reportCountStatistic("Symbols", program.getSymbolCount());
+        reportCountStatistic("Types", program.getTypeCount());
+        reportCountStatistic("Instantiations", program.getInstantiationCount());
         if (memoryUsed >= 0) {
             reportStatisticalValue({ name: "Memory used", value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
         }
@@ -1185,13 +1180,11 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
         const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
         const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
         if (compilerOptions.extendedDiagnostics) {
-            if (program) {
-                const caches = program.getRelationCacheSizes();
-                reportCountStatistic("Assignability cache size", caches.assignable);
-                reportCountStatistic("Identity cache size", caches.identity);
-                reportCountStatistic("Subtype cache size", caches.subtype);
-                reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
-            }
+            const caches = program.getRelationCacheSizes();
+            reportCountStatistic("Assignability cache size", caches.assignable);
+            reportCountStatistic("Identity cache size", caches.identity);
+            reportCountStatistic("Subtype cache size", caches.subtype);
+            reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
             if (isPerformanceEnabled) {
                 performance.forEachMeasure((name, duration) => {
                     if (!isSolutionMarkOrMeasure(name)) reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true);
@@ -1262,7 +1255,7 @@ function reportAllStatistics(sys: System, statistics: Statistic[]) {
     }
 
     for (const s of statistics) {
-        sys.write(padRight(s.name + ":", nameSize + 2) + padLeft(statisticValue(s).toString(), valueSize) + sys.newLine);
+        sys.write(`${s.name}:`.padEnd(nameSize + 2) + statisticValue(s).toString().padStart(valueSize) + sys.newLine);
     }
 }
 

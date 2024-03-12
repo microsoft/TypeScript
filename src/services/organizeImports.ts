@@ -23,8 +23,10 @@ import {
     flatMap,
     formatting,
     getNewLineOrDefaultFromHost,
+    getStringComparer,
     getUILocale,
     group,
+    groupBy,
     Identifier,
     identity,
     ImportClause,
@@ -57,6 +59,7 @@ import {
     Scanner,
     setEmitFlags,
     some,
+    sort,
     SortKind,
     SourceFile,
     stableSort,
@@ -94,7 +97,7 @@ export function organizeImports(
 
     const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
         if (shouldRemove) importGroup = removeUnusedImports(importGroup, sourceFile, program);
-        if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, comparer, sourceFile);
+        if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, comparer, sourceFile, preferences);
         if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, comparer));
         return importGroup;
     };
@@ -104,7 +107,7 @@ export function organizeImports(
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
-        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer)));
+        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer, preferences)));
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
@@ -116,7 +119,7 @@ export function organizeImports(
         // Exports are always used
         if (mode !== OrganizeImportsMode.RemoveUnused) {
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
-            organizeImportsWorker(ambientModuleExportDecls, group => coalesceExportsWorker(group, comparer));
+            organizeImportsWorker(ambientModuleExportDecls, group => coalesceExportsWorker(group, comparer, preferences));
         }
     }
 
@@ -269,7 +272,7 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
                     importDecl.modifiers,
                     /*importClause*/ undefined,
                     moduleSpecifier,
-                    /*assertClause*/ undefined,
+                    /*attributes*/ undefined,
                 ));
             }
             // If we're not in a declaration file, we can't remove the import clause even though
@@ -310,106 +313,121 @@ function getExternalModuleName(specifier: Expression | undefined) {
  * @deprecated Only used for testing
  * @internal
  */
-export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase: boolean, sourceFile?: SourceFile): readonly ImportDeclaration[] {
+export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase: boolean, sourceFile?: SourceFile, preferences?: UserPreferences): readonly ImportDeclaration[] {
     const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
-    return coalesceImportsWorker(importGroup, comparer, sourceFile);
+    return coalesceImportsWorker(importGroup, comparer, sourceFile, preferences);
 }
 
-function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], comparer: Comparer<string>, sourceFile?: SourceFile): readonly ImportDeclaration[] {
+function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], comparer: Comparer<string>, sourceFile?: SourceFile, preferences?: UserPreferences): readonly ImportDeclaration[] {
     if (importGroup.length === 0) {
         return importGroup;
     }
 
-    const { importWithoutClause, typeOnlyImports, regularImports } = getCategorizedImports(importGroup);
+    const importGroupsByAttributes = groupBy(importGroup, decl => {
+        if (decl.attributes) {
+            let attrs = decl.attributes.token + " ";
+            for (const x of sort(decl.attributes.elements, (x, y) => compareStringsCaseSensitive(x.name.text, y.name.text))) {
+                attrs += x.name.text + ":";
+                attrs += isStringLiteralLike(x.value) ? `"${x.value.text}"` : x.value.getText() + " ";
+            }
+            return attrs;
+        }
+        return "";
+    });
+
     const coalescedImports: ImportDeclaration[] = [];
+    for (const attribute in importGroupsByAttributes) {
+        const importGroupSameAttrs = importGroupsByAttributes[attribute] as ImportDeclaration[];
+        const { importWithoutClause, typeOnlyImports, regularImports } = getCategorizedImports(importGroupSameAttrs);
 
-    if (importWithoutClause) {
-        coalescedImports.push(importWithoutClause);
-    }
-
-    for (const group of [regularImports, typeOnlyImports]) {
-        const isTypeOnly = group === typeOnlyImports;
-        const { defaultImports, namespaceImports, namedImports } = group;
-        // Normally, we don't combine default and namespace imports, but it would be silly to
-        // produce two import declarations in this special case.
-        if (!isTypeOnly && defaultImports.length === 1 && namespaceImports.length === 1 && namedImports.length === 0) {
-            // Add the namespace import to the existing default ImportDeclaration.
-            const defaultImport = defaultImports[0];
-            coalescedImports.push(
-                updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings),
-            );
-
-            continue;
+        if (importWithoutClause) {
+            coalescedImports.push(importWithoutClause);
         }
 
-        const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
+        for (const group of [regularImports, typeOnlyImports]) {
+            const isTypeOnly = group === typeOnlyImports;
+            const { defaultImports, namespaceImports, namedImports } = group;
+            // Normally, we don't combine default and namespace imports, but it would be silly to
+            // produce two import declarations in this special case.
+            if (!isTypeOnly && defaultImports.length === 1 && namespaceImports.length === 1 && namedImports.length === 0) {
+                // Add the namespace import to the existing default ImportDeclaration.
+                const defaultImport = defaultImports[0];
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings),
+                );
 
-        for (const namespaceImport of sortedNamespaceImports) {
-            // Drop the name, if any
-            coalescedImports.push(
-                updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings),
-            );
-        }
+                continue;
+            }
 
-        const firstDefaultImport = firstOrUndefined(defaultImports);
-        const firstNamedImport = firstOrUndefined(namedImports);
-        const importDecl = firstDefaultImport ?? firstNamedImport;
-        if (!importDecl) {
-            continue;
-        }
+            const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
 
-        let newDefaultImport: Identifier | undefined;
-        const newImportSpecifiers: ImportSpecifier[] = [];
-        if (defaultImports.length === 1) {
-            newDefaultImport = defaultImports[0].importClause.name;
-        }
-        else {
-            for (const defaultImport of defaultImports) {
-                newImportSpecifiers.push(
-                    factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name),
+            for (const namespaceImport of sortedNamespaceImports) {
+                // Drop the name, if any
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings),
                 );
             }
-        }
 
-        newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
+            const firstDefaultImport = firstOrUndefined(defaultImports);
+            const firstNamedImport = firstOrUndefined(namedImports);
+            const importDecl = firstDefaultImport ?? firstNamedImport;
+            if (!importDecl) {
+                continue;
+            }
 
-        const sortedImportSpecifiers = factory.createNodeArray(
-            sortSpecifiers(newImportSpecifiers, comparer),
-            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
-        );
+            let newDefaultImport: Identifier | undefined;
+            const newImportSpecifiers: ImportSpecifier[] = [];
+            if (defaultImports.length === 1) {
+                newDefaultImport = defaultImports[0].importClause.name;
+            }
+            else {
+                for (const defaultImport of defaultImports) {
+                    newImportSpecifiers.push(
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name),
+                    );
+                }
+            }
 
-        const newNamedImports = sortedImportSpecifiers.length === 0
-            ? newDefaultImport
-                ? undefined
-                : factory.createNamedImports(emptyArray)
-            : firstNamedImport
-            ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
-            : factory.createNamedImports(sortedImportSpecifiers);
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
-        if (
-            sourceFile &&
-            newNamedImports &&
-            firstNamedImport?.importClause.namedBindings &&
-            !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
-        ) {
-            setEmitFlags(newNamedImports, EmitFlags.MultiLine);
-        }
-
-        // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
-        // We could rewrite a default import as a named import (`import { default as name }`), but we currently
-        // choose not to as a stylistic preference.
-        if (isTypeOnly && newDefaultImport && newNamedImports) {
-            coalescedImports.push(
-                updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined),
+            const sortedImportSpecifiers = factory.createNodeArray(
+                sortSpecifiers(newImportSpecifiers, comparer, preferences),
+                firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
             );
-            coalescedImports.push(
-                updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports),
-            );
-        }
-        else {
-            coalescedImports.push(
-                updateImportDeclarationAndClause(importDecl, newDefaultImport, newNamedImports),
-            );
+
+            const newNamedImports = sortedImportSpecifiers.length === 0
+                ? newDefaultImport
+                    ? undefined
+                    : factory.createNamedImports(emptyArray)
+                : firstNamedImport
+                ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
+                : factory.createNamedImports(sortedImportSpecifiers);
+
+            if (
+                sourceFile &&
+                newNamedImports &&
+                firstNamedImport?.importClause.namedBindings &&
+                !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
+            ) {
+                setEmitFlags(newNamedImports, EmitFlags.MultiLine);
+            }
+
+            // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
+            // We could rewrite a default import as a named import (`import { default as name }`), but we currently
+            // choose not to as a stylistic preference.
+            if (isTypeOnly && newDefaultImport && newNamedImports) {
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined),
+                );
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports),
+                );
+            }
+            else {
+                coalescedImports.push(
+                    updateImportDeclarationAndClause(importDecl, newDefaultImport, newNamedImports),
+                );
+            }
         }
     }
 
@@ -491,18 +509,17 @@ function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
  * @deprecated Only used for testing
  * @internal
  */
-export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean) {
+export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean, preferences?: UserPreferences) {
     const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
-    return coalesceExportsWorker(exportGroup, comparer);
+    return coalesceExportsWorker(exportGroup, comparer, preferences);
 }
 
-function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], comparer: Comparer<string>) {
+function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], comparer: Comparer<string>, preferences?: UserPreferences) {
     if (exportGroup.length === 0) {
         return exportGroup;
     }
 
     const { exportWithoutClause, namedExports, typeOnlyExports } = getCategorizedExports(exportGroup);
-
     const coalescedExports: ExportDeclaration[] = [];
 
     if (exportWithoutClause) {
@@ -516,7 +533,7 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
         const newExportSpecifiers: ExportSpecifier[] = [];
         newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
-        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, comparer);
+        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, comparer, preferences);
 
         const exportDecl = exportGroup[0];
         coalescedExports.push(
@@ -530,7 +547,7 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
                         factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                 ),
                 exportDecl.moduleSpecifier,
-                exportDecl.assertClause,
+                exportDecl.attributes,
             ),
         );
     }
@@ -579,17 +596,24 @@ function updateImportDeclarationAndClause(
         importDeclaration.modifiers,
         factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
         importDeclaration.moduleSpecifier,
-        importDeclaration.assertClause,
+        importDeclaration.attributes,
     );
 }
 
-function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>) {
-    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer));
+function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>, preferences?: UserPreferences): readonly T[] {
+    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
 }
 
 /** @internal */
-export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>): Comparison {
-    return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
+export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>, preferences?: UserPreferences): Comparison {
+    switch (preferences?.organizeImportsTypeOrder) {
+        case "first":
+            return compareBooleans(s2.isTypeOnly, s1.isTypeOnly) || comparer(s1.name.text, s2.name.text);
+        case "inline":
+            return comparer(s1.name.text, s2.name.text);
+        default:
+            return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
+    }
 }
 
 /**
@@ -721,11 +745,51 @@ class ImportSpecifierSortingCache implements MemoizeCache<[readonly ImportSpecif
 
 /** @internal */
 export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly ImportSpecifier[], preferences: UserPreferences): SortKind => {
-    if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) {
-        return SortKind.None;
+    // If types are not sorted as specified, then imports are assumed to be unsorted.
+    // If there is no type sorting specification, we default to "last" and move on to case sensitivity detection.
+    switch (preferences.organizeImportsTypeOrder) {
+        case "first":
+            if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) return SortKind.None;
+            break;
+        case "inline":
+            if (
+                !arrayIsSorted(specifiers, (s1, s2) => {
+                    const comparer = getStringComparer(/*ignoreCase*/ true);
+                    return comparer(s1.name.text, s2.name.text);
+                })
+            ) {
+                return SortKind.None;
+            }
+            break;
+        default:
+            if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) return SortKind.None;
+            break;
     }
+
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
+
+    if (preferences.organizeImportsTypeOrder !== "inline") {
+        const { type: regularImports, regular: typeImports } = groupBy(specifiers, s => s.isTypeOnly ? "type" : "regular");
+        const regularCaseSensitivity = regularImports?.length
+            ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
+            : undefined;
+        const typeCaseSensitivity = typeImports?.length
+            ? detectSortCaseSensitivity(typeImports, specifier => specifier.name.text ?? "", collateCaseSensitive, collateCaseInsensitive)
+            : undefined;
+        if (regularCaseSensitivity === undefined) {
+            return typeCaseSensitivity ?? SortKind.None;
+        }
+        if (typeCaseSensitivity === undefined) {
+            return regularCaseSensitivity;
+        }
+        if (regularCaseSensitivity === SortKind.None || typeCaseSensitivity === SortKind.None) {
+            return SortKind.None;
+        }
+        return typeCaseSensitivity & regularCaseSensitivity;
+    }
+
+    // else inline
     return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
 }, new ImportSpecifierSortingCache());
 
@@ -736,8 +800,8 @@ export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyIm
 }
 
 /** @internal */
-export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<string>) {
-    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer));
+export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<string>, preferences: UserPreferences) {
+    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
     return index < 0 ? ~index : index;
 }
 

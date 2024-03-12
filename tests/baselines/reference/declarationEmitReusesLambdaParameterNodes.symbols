@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/declarationEmitReusesLambdaParameterNodes.ts] ////
+
+=== node_modules/react-select/index.d.ts ===
+export type Whatever = {x: string, y: number};
+>Whatever : Symbol(Whatever, Decl(index.d.ts, 0, 0))
+>x : Symbol(x, Decl(index.d.ts, 0, 24))
+>y : Symbol(y, Decl(index.d.ts, 0, 34))
+
+export type Props<T, TThing = Whatever> = Omit<TThing, "y"> & Partial<TThing> & T;
+>Props : Symbol(Props, Decl(index.d.ts, 0, 46))
+>T : Symbol(T, Decl(index.d.ts, 1, 18))
+>TThing : Symbol(TThing, Decl(index.d.ts, 1, 20))
+>Whatever : Symbol(Whatever, Decl(index.d.ts, 0, 0))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>TThing : Symbol(TThing, Decl(index.d.ts, 1, 20))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>TThing : Symbol(TThing, Decl(index.d.ts, 1, 20))
+>T : Symbol(T, Decl(index.d.ts, 1, 18))
+
+=== index.ts ===
+import { Props } from "react-select";
+>Props : Symbol(Props, Decl(index.ts, 0, 8))
+
+export const CustomSelect1 = <Option,>(x: Props<Option> & {}) => {}
+>CustomSelect1 : Symbol(CustomSelect1, Decl(index.ts, 2, 12))
+>Option : Symbol(Option, Decl(index.ts, 2, 30))
+>x : Symbol(x, Decl(index.ts, 2, 39))
+>Props : Symbol(Props, Decl(index.ts, 0, 8))
+>Option : Symbol(Option, Decl(index.ts, 2, 30))
+
+export function CustomSelect2<Option,>(x: Props<Option> & {}) {}
+>CustomSelect2 : Symbol(CustomSelect2, Decl(index.ts, 2, 67))
+>Option : Symbol(Option, Decl(index.ts, 3, 30))
+>x : Symbol(x, Decl(index.ts, 3, 39))
+>Props : Symbol(Props, Decl(index.ts, 0, 8))
+>Option : Symbol(Option, Decl(index.ts, 3, 30))
+

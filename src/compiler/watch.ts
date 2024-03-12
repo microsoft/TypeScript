@@ -77,7 +77,6 @@ import {
     ModuleKind,
     noop,
     normalizePath,
-    outFile,
     packageIdToString,
     ParseConfigFileHost,
     ParsedCommandLine,
@@ -442,7 +441,7 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
 export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain {
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
-        const referenceLocation = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
+        const referenceLocation = getReferencedFileLocation(program, reason);
         const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end) : `"${referenceLocation.text}"`;
         let message: DiagnosticMessage;
         Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");
@@ -515,7 +514,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             const referencedResolvedRef = Debug.checkDefined(program.getResolvedProjectReferences()?.[reason.index]);
             return chainDiagnosticMessages(
                 /*details*/ undefined,
-                outFile(options) ?
+                options.outFile ?
                     isOutput ?
                         Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
                         Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
@@ -744,7 +743,6 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
-            getCompilerOptions,
             /*setParentNodes*/ undefined,
         ),
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
@@ -768,6 +766,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+        jsDocParsingMode: host.jsDocParsingMode,
     };
     return compilerHost;
 }

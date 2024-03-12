@@ -22,7 +22,6 @@ import {
     mapDefinedIterator,
     ModuleDeclaration,
     ModuleKind,
-    outFile,
     OutputFile,
     Path,
     Program,
@@ -84,11 +83,11 @@ export interface BuilderState {
      */
     hasCalledUpdateShapeSignature?: Set<Path>;
     /**
-     * Stores signatures before before the update till affected file is commited
+     * Stores signatures before before the update till affected file is committed
      */
     oldSignatures?: Map<Path, string | false>;
     /**
-     * Stores exportedModulesMap before the update till affected file is commited
+     * Stores exportedModulesMap before the update till affected file is committed
      */
     oldExportedModulesMap?: Map<Path, ReadonlySet<Path> | false>;
     /**
@@ -238,17 +237,15 @@ export namespace BuilderState {
         }
 
         // Handle type reference directives
-        if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
-                if (!resolvedTypeReferenceDirective) {
-                    return;
-                }
+        program.forEachResolvedTypeReferenceDirective(({ resolvedTypeReferenceDirective }) => {
+            if (!resolvedTypeReferenceDirective) {
+                return;
+            }
 
-                const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
-                const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
-                addReferencedFile(typeFilePath);
-            });
-        }
+            const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
+            const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
+            addReferencedFile(typeFilePath);
+        }, sourceFile);
 
         // Add module augmentation as references
         if (sourceFile.moduleAugmentations.length) {
@@ -306,7 +303,7 @@ export namespace BuilderState {
     export function create(newProgram: Program, oldState: Readonly<BuilderState> | undefined, disableUseFileVersionAsSignature: boolean): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
-        const isOutFile = outFile(options);
+        const isOutFile = options.outFile;
         const referencedMap = options.module !== ModuleKind.None && !isOutFile ?
             createManyToManyPathMap() : undefined;
         const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
@@ -516,7 +513,7 @@ export namespace BuilderState {
     export function getAllDependencies(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile): readonly string[] {
         const compilerOptions = programOfThisState.getCompilerOptions();
         // With --out or --outFile all outputs go into single file, all files depend on each other
-        if (outFile(compilerOptions)) {
+        if (compilerOptions.outFile) {
             return getAllFileNames(state, programOfThisState);
         }
 
@@ -627,7 +624,7 @@ export namespace BuilderState {
         const compilerOptions = programOfThisState.getCompilerOptions();
         // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
         // so returning the file itself is good enough.
-        if (compilerOptions && outFile(compilerOptions)) {
+        if (compilerOptions && compilerOptions.outFile) {
             return [sourceFileWithUpdatedShape];
         }
         return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
@@ -648,7 +645,7 @@ export namespace BuilderState {
         }
 
         const compilerOptions = programOfThisState.getCompilerOptions();
-        if (compilerOptions && (getIsolatedModules(compilerOptions) || outFile(compilerOptions))) {
+        if (compilerOptions && (getIsolatedModules(compilerOptions) || compilerOptions.outFile)) {
             return [sourceFileWithUpdatedShape];
         }
 

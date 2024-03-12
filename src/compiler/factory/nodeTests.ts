@@ -67,6 +67,8 @@ import {
     HeritageClause,
     Identifier,
     IfStatement,
+    ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -217,8 +219,6 @@ import {
     TypeQueryNode,
     TypeReferenceNode,
     UnionTypeNode,
-    UnparsedPrepend,
-    UnparsedSource,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -847,12 +847,22 @@ export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAs
     return node.kind === SyntaxKind.ImportTypeAssertionContainer;
 }
 
+/** @deprecated */
 export function isAssertClause(node: Node): node is AssertClause {
     return node.kind === SyntaxKind.AssertClause;
 }
 
+/** @deprecated */
 export function isAssertEntry(node: Node): node is AssertEntry {
     return node.kind === SyntaxKind.AssertEntry;
+}
+
+export function isImportAttributes(node: Node): node is ImportAttributes {
+    return node.kind === SyntaxKind.ImportAttributes;
+}
+
+export function isImportAttribute(node: Node): node is ImportAttribute {
+    return node.kind === SyntaxKind.ImportAttribute;
 }
 
 export function isNamespaceImport(node: Node): node is NamespaceImport {
@@ -994,18 +1004,6 @@ export function isEnumMember(node: Node): node is EnumMember {
     return node.kind === SyntaxKind.EnumMember;
 }
 
-// Unparsed
-
-// TODO(rbuckton): isUnparsedPrologue
-/** @deprecated */
-export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
-    return node.kind === SyntaxKind.UnparsedPrepend;
-}
-
-// TODO(rbuckton): isUnparsedText
-// TODO(rbuckton): isUnparsedInternalText
-// TODO(rbuckton): isUnparsedSyntheticReference
-
 // Top-level nodes
 export function isSourceFile(node: Node): node is SourceFile {
     return node.kind === SyntaxKind.SourceFile;
@@ -1013,11 +1011,6 @@ export function isSourceFile(node: Node): node is SourceFile {
 
 export function isBundle(node: Node): node is Bundle {
     return node.kind === SyntaxKind.Bundle;
-}
-
-/** @deprecated */
-export function isUnparsedSource(node: Node): node is UnparsedSource {
-    return node.kind === SyntaxKind.UnparsedSource;
 }
 
 // TODO(rbuckton): isInputFiles
