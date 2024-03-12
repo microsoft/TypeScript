@@ -24,7 +24,6 @@ export function createSolutionBuilderHostForBaseline(
     const { cb } = commandLineCallbacks(sys, originalRead);
     const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
-    host.afterEmitBundle = cb;
     return host;
 }
 

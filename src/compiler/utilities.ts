@@ -34,9 +34,6 @@ import {
     BindingElement,
     BindingElementOfBareOrAccessedRequire,
     Block,
-    BundleFileSection,
-    BundleFileSectionKind,
-    BundleFileTextLike,
     CallExpression,
     CallLikeExpression,
     CallSignatureDeclaration,
@@ -360,7 +357,6 @@ import {
     JSDocMemberName,
     JSDocOverloadTag,
     JSDocParameterTag,
-    JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
     JSDocSatisfiesTag,
     JSDocSignature,
@@ -1878,12 +1874,8 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
         return true;
     }
     if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
-        // ECMAScript Modules are always strict.
-        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
-            return true;
-        }
-        // Other modules are strict unless otherwise specified.
-        return !compilerOptions.noImplicitUseStrict;
+        // Modules are always strict.
+        return true;
     }
     return false;
 }
@@ -6082,10 +6074,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         }
     }
 
-    function getTextPosWithWriteLine() {
-        return lineStart ? output.length : (output.length + newLine.length);
-    }
-
     reset();
 
     return {
@@ -6118,7 +6106,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         writeSymbol: (s, _) => write(s),
         writeTrailingSemicolon: write,
         writeComment,
-        getTextPosWithWriteLine,
     };
 }
 
@@ -6300,11 +6287,6 @@ export function getPossibleOriginalInputExtensionForExtension(path: string) {
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
 }
 
-/** @internal */
-export function outFile(options: CompilerOptions) {
-    return options.outFile || options.out;
-}
-
 /**
  * Returns 'undefined' if and only if 'options.paths' is undefined.
  *
@@ -6337,7 +6319,7 @@ export interface EmitFileNames {
  */
 export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile, forceDtsEmit?: boolean): readonly SourceFile[] {
     const options = host.getCompilerOptions();
-    if (outFile(options)) {
+    if (options.outFile) {
         const moduleKind = getEmitModuleKind(options);
         const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
         // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
@@ -6379,7 +6361,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (!isJsonSourceFile(sourceFile)) return true;
     if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
-    if (outFile(options)) return true;
+    if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
     if (!options.outDir) return false;
     // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
@@ -8059,17 +8041,6 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @deprecated @internal */
-export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
-    switch (section.kind) {
-        case BundleFileSectionKind.Text:
-        case BundleFileSectionKind.Internal:
-            return true;
-        default:
-            return false;
-    }
-}
-
 /** @internal */
 export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
     return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
@@ -8622,7 +8593,8 @@ export const computedOptions = createComputedCompilerOptions({
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
-            return compilerOptions.target ??
+            const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
+            return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
@@ -8884,11 +8856,6 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
             return false;
     }
     return true;
-}
-
-/** @internal */
-export function importNameElisionDisabled(options: CompilerOptions) {
-    return options.verbatimModuleSyntax || options.isolatedModules && options.preserveValueImports;
 }
 
 /** @internal */
@@ -10517,7 +10484,7 @@ export function canHaveExportModifier(node: Node): node is Extract<HasModifiers,
 }
 
 /** @internal */
-export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+export function isOptionalJSDocPropertyLikeTag(node: Node): boolean {
     if (!isJSDocPropertyLikeTag(node)) {
         return false;
     }
@@ -10546,7 +10513,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
         node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) => isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType)
+        || getJSDocParameterTags(node).some(isOptionalJSDocPropertyLikeTag)
     );
 }
 

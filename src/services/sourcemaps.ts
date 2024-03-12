@@ -18,7 +18,6 @@ import {
     isString,
     LineAndCharacter,
     LineInfo,
-    outFile,
     Program,
     removeFileExtension,
     SourceFileLike,
@@ -114,7 +113,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         }
 
         const options = program.getCompilerOptions();
-        const outPath = outFile(options);
+        const outPath = options.outFile;
 
         const declarationPath = outPath ?
             removeFileExtension(outPath) + Extension.Dts :

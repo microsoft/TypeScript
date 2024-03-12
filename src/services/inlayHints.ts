@@ -22,6 +22,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -354,7 +355,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 

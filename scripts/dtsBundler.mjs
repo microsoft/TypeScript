@@ -214,20 +214,27 @@ function nodeToLocation(node) {
 
 /**
  * @param {ts.Node} node
+ * @param {boolean} needExportModifier
  * @returns {ts.Node | undefined}
  */
-function removeDeclareConstExport(node) {
+function removeDeclareConstExport(node, needExportModifier) {
     switch (node.kind) {
         case ts.SyntaxKind.DeclareKeyword: // No need to emit this in d.ts files.
         case ts.SyntaxKind.ConstKeyword: // Remove const from const enums.
-        case ts.SyntaxKind.ExportKeyword: // No export modifier; we are already in the namespace.
             return undefined;
+        case ts.SyntaxKind.ExportKeyword: // No export modifier; we are already in the namespace.
+            if (!needExportModifier) {
+                return undefined;
+            }
     }
     return node;
 }
 
-/** @type {Map<string, ts.Symbol>[]} */
+/** @type {{ locals: Map<string, { symbol: ts.Symbol, writeTarget: WriteTarget }>, exports: Map<string, ts.Symbol>}[]} */
 const scopeStack = [];
+
+/** @type {Map<ts.Symbol, string>} */
+const symbolToNamespace = new Map();
 
 /**
  * @param {string} name
@@ -235,7 +242,7 @@ const scopeStack = [];
 function findInScope(name) {
     for (let i = scopeStack.length - 1; i >= 0; i--) {
         const scope = scopeStack[i];
-        const symbol = scope.get(name);
+        const symbol = scope.exports.get(name);
         if (symbol) {
             return symbol;
         }
@@ -290,8 +297,9 @@ function symbolsConflict(s1, s2) {
 
 /**
  * @param {ts.Statement} decl
+ * @param {boolean} isInternal
  */
-function verifyMatchingSymbols(decl) {
+function verifyMatchingSymbols(decl, isInternal) {
     ts.visitEachChild(decl, /** @type {(node: ts.Node) => ts.Node} */ function visit(node) {
         if (ts.isIdentifier(node) && ts.isPartOfTypeNode(node)) {
             if (ts.isQualifiedName(node.parent) && node !== node.parent.left) {
@@ -310,6 +318,10 @@ function verifyMatchingSymbols(decl) {
             }
             const symbolInScope = findInScope(symbolOfNode.name);
             if (!symbolInScope) {
+                if (symbolOfNode.declarations?.every(d => isLocalDeclaration(d) && d.getSourceFile() === decl.getSourceFile()) && !isSelfReference(node, symbolOfNode)) {
+                    // The symbol is a local that needs to be copied into the scope.
+                    scopeStack[scopeStack.length - 1].locals.set(symbolOfNode.name, { symbol: symbolOfNode, writeTarget: isInternal ? WriteTarget.Internal : WriteTarget.Both });
+                }
                 // We didn't find the symbol in scope at all. Just allow it and we'll fail at test time.
                 return node;
             }
@@ -324,38 +336,71 @@ function verifyMatchingSymbols(decl) {
 }
 
 /**
+ * @param {ts.Declaration} decl
+ */
+function isLocalDeclaration(decl) {
+    return ts.canHaveModifiers(decl)
+        && !ts.getModifiers(decl)?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)
+        && !!getDeclarationStatement(decl);
+}
+
+/**
+ * @param {ts.Node} reference
+ * @param {ts.Symbol} symbol
+ */
+function isSelfReference(reference, symbol) {
+    return symbol.declarations?.every(parent => ts.findAncestor(reference, p => p === parent));
+}
+
+/**
  * @param {string} name
+ * @param {string} parent
+ * @param {boolean} needExportModifier
  * @param {ts.Symbol} moduleSymbol
  */
-function emitAsNamespace(name, moduleSymbol) {
+function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
     assert(moduleSymbol.flags & ts.SymbolFlags.ValueModule, "moduleSymbol is not a module");
 
-    scopeStack.push(new Map());
+    const fullName = parent ? `${parent}.${name}` : name;
+
+    scopeStack.push({ locals: new Map(), exports: new Map() });
     const currentScope = scopeStack[scopeStack.length - 1];
 
     const target = containsPublicAPI(moduleSymbol) ? WriteTarget.Both : WriteTarget.Internal;
 
     if (name === "ts") {
         // We will write `export = ts` at the end.
+        assert(!needExportModifier, "ts namespace should not have an export modifier");
         write(`declare namespace ${name} {`, target);
     }
     else {
-        // No export modifier; we are already in the namespace.
-        write(`namespace ${name} {`, target);
+        write(`${needExportModifier ? "export " : ""}namespace ${name} {`, target);
     }
     increaseIndent();
 
     const moduleExports = typeChecker.getExportsOfModule(moduleSymbol);
     for (const me of moduleExports) {
-        currentScope.set(me.name, me);
+        currentScope.exports.set(me.name, me);
+        symbolToNamespace.set(me, fullName);
     }
 
+    /** @type {[ts.Statement, ts.SourceFile, WriteTarget][]} */
+    const exportedStatements = [];
+    /** @type {[name: string, fullName: string, moduleSymbol: ts.Symbol][]} */
+    const nestedNamespaces = [];
     for (const me of moduleExports) {
         assert(me.declarations?.length);
 
         if (me.flags & ts.SymbolFlags.Alias) {
             const resolved = typeChecker.getAliasedSymbol(me);
-            emitAsNamespace(me.name, resolved);
+            if (resolved.flags & ts.SymbolFlags.ValueModule) {
+                nestedNamespaces.push([me.name, fullName, resolved]);
+            }
+            else {
+                const namespaceName = symbolToNamespace.get(resolved);
+                assert(namespaceName, `Failed to find namespace for ${me.name} at ${nodeToLocation(me.declarations[0])}`);
+                write(`export import ${me.name} = ${namespaceName}.${me.name}`, target);
+            }
             continue;
         }
 
@@ -367,26 +412,52 @@ function emitAsNamespace(name, moduleSymbol) {
                 fail(`Unhandled declaration for ${me.name} at ${nodeToLocation(decl)}`);
             }
 
-            verifyMatchingSymbols(statement);
-
             const isInternal = ts.isInternalDeclaration(statement);
+            if (!ts.isModuleDeclaration(decl)) {
+                verifyMatchingSymbols(statement, isInternal);
+            }
+
             if (!isInternal) {
                 const publicStatement = ts.visitEachChild(statement, node => {
                     // No @internal comments in the public API.
                     if (ts.isInternalDeclaration(node)) {
                         return undefined;
                     }
-                    return removeDeclareConstExport(node);
+                    return node;
                 }, /*context*/ undefined);
 
-                writeNode(publicStatement, sourceFile, WriteTarget.Public);
+                exportedStatements.push([publicStatement, sourceFile, WriteTarget.Public]);
             }
 
-            const internalStatement = ts.visitEachChild(statement, removeDeclareConstExport, /*context*/ undefined);
-
-            writeNode(internalStatement, sourceFile, WriteTarget.Internal);
+            exportedStatements.push([statement, sourceFile, WriteTarget.Internal]);
         }
     }
+
+    const childrenNeedExportModifier = !!currentScope.locals.size;
+
+    nestedNamespaces.forEach(namespace => emitAsNamespace(...namespace, childrenNeedExportModifier));
+
+    currentScope.locals.forEach(({ symbol, writeTarget }) => {
+        symbol.declarations?.forEach(decl => {
+            // We already checked that getDeclarationStatement(decl) works for each declaration.
+            const statement = getDeclarationStatement(decl);
+            writeNode(/** @type {ts.Statement} */ (statement), decl.getSourceFile(), writeTarget);
+        });
+    });
+
+    exportedStatements.forEach(([statement, ...rest]) => {
+        let updated = ts.visitEachChild(statement, node => removeDeclareConstExport(node, childrenNeedExportModifier), /*context*/ undefined);
+        if (childrenNeedExportModifier && ts.canHaveModifiers(updated) && !updated.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)) {
+            updated = ts.factory.replaceModifiers(
+                updated,
+                [
+                    ts.factory.createModifier(ts.SyntaxKind.ExportKeyword),
+                    .../**@type {ts.NodeArray<ts.Modifier> | undefined}*/ (updated.modifiers) ?? [],
+                ],
+            );
+        }
+        writeNode(updated, ...rest);
+    });
 
     scopeStack.pop();
 
@@ -394,7 +465,7 @@ function emitAsNamespace(name, moduleSymbol) {
     write(`}`, target);
 }
 
-emitAsNamespace("ts", moduleSymbol);
+emitAsNamespace("ts", "", moduleSymbol, /*needExportModifier*/ false);
 
 write("export = ts;", WriteTarget.Both);
 
