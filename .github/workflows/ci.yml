@@ -39,6 +39,10 @@ jobs:
           - node-version: '*'
             bundle: false
             os: ubuntu-latest
+        exclude:
+          # No Node 14 on ARM macOS
+          - node-version: '14'
+            os: macos-14
 
     runs-on: ${{ matrix.os }}
     name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
