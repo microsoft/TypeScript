@@ -1637,6 +1637,14 @@
         "category": "Error",
         "code": 1496
     },
+    "Expression must be enclosed in parentheses to be used as a decorator.": {
+        "category": "Error",
+        "code": 1497
+    },
+    "Invalid syntax in decorator.": {
+        "category": "Error",
+        "code": 1498
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -7791,6 +7799,14 @@
     "Add all optional parameters": {
         "category": "Message",
         "code": 95193
+    },
+    "Wrap in parentheses": {
+        "category": "Message",
+        "code": 95194
+    },
+    "Wrap all invalid decorator expressions in parentheses": {
+        "category": "Message",
+        "code": 95195
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
