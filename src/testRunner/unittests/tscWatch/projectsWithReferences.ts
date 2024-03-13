@@ -63,7 +63,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                     sys.writeFile(
                         "/user/username/projects/sample1/logic/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
+                            compilerOptions: { module: "nodenext", target: "es5", composite: true, declaration: true, declarationDir: "decls" },
                             references: [{ path: "../core" }],
                         }),
                     );

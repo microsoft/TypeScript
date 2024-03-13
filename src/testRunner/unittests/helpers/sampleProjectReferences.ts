@@ -35,6 +35,8 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
         [libFile.path]: libFile.content,
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
+                module: "nodenext",
+                target: "es5",
                 composite: true,
                 declaration: true,
                 declarationMap: true,
@@ -64,6 +66,8 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
             ],
             files: ["index.ts"],
             compilerOptions: {
+                module: "nodenext",
+                target: "es5",
                 composite: true,
                 declaration: true,
                 forceConsistentCasingInFileNames: true,

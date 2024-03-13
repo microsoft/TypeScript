@@ -739,6 +739,19 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
                 const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
                 for (let i = existing.length; i < expected; i++) {
+                    // Somehow, this loop is incorrect. Before the debug assertion happens in the failing test,
+                    // a referenced config file is updated to include "declarationDir": "decls", which causes
+                    // a file from that project to be renamed from `.../logic/index.d.ts` to
+                    // `.../logic/decls/index.d.ts` between `oldProgram` and `newProgram` here. The new
+                    // version of the source file has an additional package.json lookup location
+                    // (`.../logic/decls/package.json`) compared to the old. `existing.length` is 5 and
+                    // `expected` is 6, so the loop runs once to create a file watcher for the last element
+                    // of `newFile.packageJsonLocations`, which is `/package.json`, incrementing its
+                    // `files` count. It seems like the correct behavior would have been to create a file
+                    // watcher for the *new* package.json location, which happens to be the *first* element
+                    // of `newFile.packageJsonLocations`, but I'm not sure how this code is supposed to know
+                    // which locations have been added and/or removed - relying on length/order doesn't appear
+                    // to be reliable.
                     createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
                 }
                 if (existing.length > expected) {
