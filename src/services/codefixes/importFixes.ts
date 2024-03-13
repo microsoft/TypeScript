@@ -58,7 +58,6 @@ import {
     hostGetCanonicalFileName,
     Identifier,
     impliedNodeFormatForEmit,
-    impliedNodeFormatForInteropChecking,
     ImportClause,
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
@@ -1158,7 +1157,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
             return ImportKind.Namespace;
         case ModuleKind.Node16:
         case ModuleKind.NodeNext:
-            return impliedNodeFormatForInteropChecking(importingFile, compilerOptions) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
+            return impliedNodeFormatForEmit(importingFile, compilerOptions) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
             return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
     }

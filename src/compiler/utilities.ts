@@ -8632,11 +8632,6 @@ export function impliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName"
     return undefined;
 }
 
-/** @internal */
-export function impliedNodeFormatForInteropChecking(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
-    return impliedNodeFormatForEmit(sourceFile, options);
-}
-
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
 function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
     options: {

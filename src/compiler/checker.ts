@@ -408,7 +408,6 @@ import {
     idText,
     IfStatement,
     impliedNodeFormatForEmit,
-    impliedNodeFormatForInteropChecking,
     impliedNodeFormatForModuleResolution,
     ImportAttribute,
     ImportAttributes,
@@ -4078,7 +4077,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
         const usageMode = file && getEmitSyntaxForModuleSpecifierExpression(usage);
         if (file && usageMode !== undefined) {
-            const targetMode = impliedNodeFormatForInteropChecking(file, compilerOptions);
+            const targetMode = impliedNodeFormatForEmit(file, compilerOptions);
             const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, targetMode);
             if (usageMode === ModuleKind.ESNext && targetMode !== undefined || result) {
                 return result;
@@ -5306,7 +5305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
-                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getEmitSyntaxForModuleSpecifierExpression(reference), impliedNodeFormatForInteropChecking(targetFile, compilerOptions));
+                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getEmitSyntaxForModuleSpecifierExpression(reference), impliedNodeFormatForEmit(targetFile, compilerOptions));
                 if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
                     let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
                     if (!sigs || !sigs.length) {
