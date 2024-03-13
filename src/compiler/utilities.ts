@@ -319,7 +319,6 @@ import {
     isNumericLiteral,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isOuterExpression,
     isParameter,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
