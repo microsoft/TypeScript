@@ -91,3 +91,4 @@ class C {
 >z : Symbol(z, Decl(jsdocAccessibilityTagDeclarations.js, 34, 54))
     }
 }
+

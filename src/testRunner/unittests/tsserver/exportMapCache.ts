@@ -83,6 +83,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         project.getPackageJsonAutoImportProvider();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         baselineTsserverLogs("exportMapCache", "does not invalidate the cache when package.json is changed inconsequentially", session);
     });
 
@@ -93,6 +94,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         project.getPackageJsonAutoImportProvider();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         baselineTsserverLogs("exportMapCache", "invalidates the cache when package.json change results in AutoImportProvider change", session);
     });
 
@@ -206,6 +208,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
 
         // Cache is invalidated because other file has changed
         assert.ok(!exportMapCache.isUsableByFile(classesTs.path as ts.Path));

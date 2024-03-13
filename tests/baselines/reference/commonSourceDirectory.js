@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/commonSourceDirectory.ts] ////
 
 //// [index.ts]
-// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
-
 export const x = 0;
 
 //// [bar.d.ts]

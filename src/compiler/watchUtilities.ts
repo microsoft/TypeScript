@@ -40,7 +40,6 @@ import {
     mutateMap,
     noop,
     normalizePath,
-    outFile,
     Path,
     PollingInterval,
     Program,
@@ -600,7 +599,7 @@ export function isIgnoredFileFromWildCardWatching({
 
     // We want to ignore emit file check if file is not going to be emitted next to source file
     // In that case we follow config file inclusion rules
-    if (outFile(options) || options.outDir) return false;
+    if (options.outFile || options.outDir) return false;
 
     // File if emitted next to input needs to be ignored
     if (isDeclarationFileName(fileOrDirectoryPath)) {

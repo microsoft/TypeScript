@@ -73,7 +73,6 @@ export function f22() { } // trailing`,
             (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
-        buildHost.afterEmitBundle = cb;
         const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
         const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
         sys.exit(exitStatus);

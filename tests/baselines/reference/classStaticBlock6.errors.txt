@@ -10,7 +10,7 @@ classStaticBlock6.ts(32,17): error TS2337: Super calls are not permitted outside
 classStaticBlock6.ts(41,13): error TS2815: 'arguments' cannot be referenced in property initializers.
 classStaticBlock6.ts(42,13): error TS18037: 'await' expression cannot be used inside a class static block.
 classStaticBlock6.ts(42,18): error TS1109: Expression expected.
-classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
+classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
 classStaticBlock6.ts(46,22): error TS1109: Expression expected.
 classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers.
 
@@ -86,7 +86,7 @@ classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in p
                 async function ff () {
                     arguments;
                     ~~~~~~~~~
-!!! error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
+!!! error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
                     await;
                          ~
 !!! error TS1109: Expression expected.

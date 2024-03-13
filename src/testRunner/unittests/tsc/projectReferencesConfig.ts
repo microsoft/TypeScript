@@ -150,38 +150,6 @@ describe("unittests:: config:: project-references constraint checking for settin
             }),
         commandLineArgs: ["--p", "/primary/tsconfig.json"],
     });
-
-    verifyTsc({
-        scenario: "projectReferencesConfig",
-        subScenario: "errors when a prepended project reference doesnt set outFile",
-        fs: () =>
-            loadProjectFromFiles({
-                "/primary/tsconfig.json": getConfig({
-                    references: [{ path: "../someProj", prepend: true }],
-                }),
-                "/primary/a.ts": emptyModule(),
-                "/someProj/tsconfig.json": getConfig(),
-                "/someProj/b.ts": "const x = 100;",
-            }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json", "--ignoreDeprecations", "5.0"],
-    });
-
-    verifyTsc({
-        scenario: "projectReferencesConfig",
-        subScenario: "errors when a prepended project reference output doesnt exist",
-        fs: () =>
-            loadProjectFromFiles({
-                "/primary/tsconfig.json": getConfig({
-                    references: [{ path: "../someProj", prepend: true }],
-                }),
-                "/primary/a.ts": "const y = x;",
-                "/someProj/tsconfig.json": getConfig({
-                    options: { outFile: "foo.js" },
-                }),
-                "/someProj/b.ts": "const x = 100;",
-            }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json", "--ignoreDeprecations", "5.0"],
-    });
 });
 
 /**
