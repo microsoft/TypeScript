@@ -1,2 +1,2 @@
-// @target: ES3
+// @target: ES5
 // @sourcemap: true

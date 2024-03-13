@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/references/library-reference-8.ts] ////
 
 //// [index.d.ts]
-// Don't crash in circular library reference situations
-
 /// <reference types="beta" />
 declare var alpha: { a: string };
 

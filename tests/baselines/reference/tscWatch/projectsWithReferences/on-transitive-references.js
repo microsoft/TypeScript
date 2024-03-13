@@ -389,11 +389,11 @@ export function gfoo() { }
 //// [/user/username/projects/transitiveReferences/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gfoo = exports.b = void 0;
+exports.b = void 0;
+exports.gfoo = gfoo;
 var a_1 = require("@ref/a");
 exports.b = new a_1.A();
 function gfoo() { }
-exports.gfoo = gfoo;
 
 
 //// [/user/username/projects/transitiveReferences/b.d.ts]

@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/unionCallMixedTypeParameterPresence.ts] ////
+
+=== unionCallMixedTypeParameterPresence.ts ===
+// https://github.com/microsoft/TypeScript/issues/57356
+
+interface Err<T> {
+>Err : Symbol(Err, Decl(unionCallMixedTypeParameterPresence.ts, 0, 0))
+>T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 2, 14))
+
+  f<U>(a: (err: T) => U): Err<U>;
+>f : Symbol(Err.f, Decl(unionCallMixedTypeParameterPresence.ts, 2, 18))
+>U : Symbol(U, Decl(unionCallMixedTypeParameterPresence.ts, 3, 4))
+>a : Symbol(a, Decl(unionCallMixedTypeParameterPresence.ts, 3, 7))
+>err : Symbol(err, Decl(unionCallMixedTypeParameterPresence.ts, 3, 11))
+>T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 2, 14))
+>U : Symbol(U, Decl(unionCallMixedTypeParameterPresence.ts, 3, 4))
+>Err : Symbol(Err, Decl(unionCallMixedTypeParameterPresence.ts, 0, 0))
+>U : Symbol(U, Decl(unionCallMixedTypeParameterPresence.ts, 3, 4))
+}
+interface Ok<T> {
+>Ok : Symbol(Ok, Decl(unionCallMixedTypeParameterPresence.ts, 4, 1))
+>T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 5, 13))
+
+  f(a: (err: T) => unknown): Err<T>;
+>f : Symbol(Ok.f, Decl(unionCallMixedTypeParameterPresence.ts, 5, 17))
+>a : Symbol(a, Decl(unionCallMixedTypeParameterPresence.ts, 6, 4))
+>err : Symbol(err, Decl(unionCallMixedTypeParameterPresence.ts, 6, 8))
+>T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 5, 13))
+>Err : Symbol(Err, Decl(unionCallMixedTypeParameterPresence.ts, 0, 0))
+>T : Symbol(T, Decl(unionCallMixedTypeParameterPresence.ts, 5, 13))
+}
+declare const e: Err<0> | Err<1> | Ok<2>;
+>e : Symbol(e, Decl(unionCallMixedTypeParameterPresence.ts, 8, 13))
+>Err : Symbol(Err, Decl(unionCallMixedTypeParameterPresence.ts, 0, 0))
+>Err : Symbol(Err, Decl(unionCallMixedTypeParameterPresence.ts, 0, 0))
+>Ok : Symbol(Ok, Decl(unionCallMixedTypeParameterPresence.ts, 4, 1))
+
+const e2 = e.f((e) => e);
+>e2 : Symbol(e2, Decl(unionCallMixedTypeParameterPresence.ts, 9, 5))
+>e.f : Symbol(f, Decl(unionCallMixedTypeParameterPresence.ts, 2, 18), Decl(unionCallMixedTypeParameterPresence.ts, 2, 18), Decl(unionCallMixedTypeParameterPresence.ts, 5, 17))
+>e : Symbol(e, Decl(unionCallMixedTypeParameterPresence.ts, 8, 13))
+>f : Symbol(f, Decl(unionCallMixedTypeParameterPresence.ts, 2, 18), Decl(unionCallMixedTypeParameterPresence.ts, 2, 18), Decl(unionCallMixedTypeParameterPresence.ts, 5, 17))
+>e : Symbol(e, Decl(unionCallMixedTypeParameterPresence.ts, 9, 16))
+>e : Symbol(e, Decl(unionCallMixedTypeParameterPresence.ts, 9, 16))
+
