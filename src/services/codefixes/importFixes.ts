@@ -38,6 +38,7 @@ import {
     getDefaultExportInfoWorker,
     getDefaultLikeExportInfo,
     getDirectoryPath,
+    getEmitModuleFormatOfFile,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
@@ -1112,7 +1113,7 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
  * @internal
  */
 export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
-    if (compilerOptions.verbatimModuleSyntax && (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS || impliedNodeFormatForEmit(importingFile, compilerOptions) === ModuleKind.CommonJS)) {
+    if (compilerOptions.verbatimModuleSyntax && getEmitModuleFormatOfFile(importingFile, compilerOptions) === ModuleKind.CommonJS) {
         // TODO: if the exporting file is ESM under nodenext, or `forceImport` is given in a JS file, this is impossible
         return ImportKind.CommonJS;
     }

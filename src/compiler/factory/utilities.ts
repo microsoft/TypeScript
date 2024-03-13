@@ -53,6 +53,7 @@ import {
     getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
+    getEmitModuleFormatOfFile,
     getEmitModuleKind,
     getESModuleInterop,
     getExternalModuleName,
@@ -770,10 +771,8 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactor
             return externalHelpersModuleName;
         }
 
-        const moduleKind = getEmitModuleKind(compilerOptions);
         let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && moduleKind !== ModuleKind.System
-            && (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(node, compilerOptions) === ModuleKind.CommonJS);
+            && getEmitModuleFormatOfFile(node, compilerOptions) < ModuleKind.System;
         if (!create) {
             const helpers = getEmitHelpers(node);
             if (helpers) {

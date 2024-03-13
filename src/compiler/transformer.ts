@@ -93,6 +93,24 @@ function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<Source
     }
 }
 
+// function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
+//     switch (moduleKind) {
+//         case ModuleKind.ESNext:
+//         case ModuleKind.ES2022:
+//         case ModuleKind.ES2020:
+//         case ModuleKind.ES2015:
+//         case ModuleKind.Preserve:
+//         case ModuleKind.Node16:
+//         case ModuleKind.NodeNext:
+//         case ModuleKind.CommonJS:
+//             return transformNodeModule;
+//         case ModuleKind.System:
+//             return transformSystemModule;
+//         default:
+//             return transformModule;
+//     }
+// }
+
 const enum TransformationState {
     Uninitialized,
     Initialized,

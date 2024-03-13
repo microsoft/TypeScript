@@ -273,6 +273,7 @@ import {
     getEffectiveTypeParameterDeclarations,
     getElementOrPropertyAccessName,
     getEmitDeclarations,
+    getEmitModuleFormatOfFile,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
@@ -42465,7 +42466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
         // No need to check for require or exports for ES6 modules and later
-        if (moduleKind >= ModuleKind.ES2015 && !(moduleKind >= ModuleKind.Node16 && impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS)) {
+        if (getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) >= ModuleKind.ES2015) {
             return;
         }
 
@@ -44348,7 +44349,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkClassNameCollisionWithObject(name: Identifier): void {
         if (
             languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
-            && (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(getSourceFileOfNode(name), compilerOptions) === ModuleKind.CommonJS)
+            && getEmitModuleFormatOfFile(getSourceFileOfNode(name), compilerOptions) < ModuleKind.ES2015
         ) {
             error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
         }
@@ -45722,7 +45723,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     compilerOptions.verbatimModuleSyntax &&
                     node.parent.kind === SyntaxKind.SourceFile &&
-                    (moduleKind === ModuleKind.CommonJS || impliedNodeFormatForEmit(node.parent, compilerOptions) === ModuleKind.CommonJS)
+                    getEmitModuleFormatOfFile(node.parent, compilerOptions) === ModuleKind.CommonJS
                 ) {
                     const exportModifier = node.modifiers?.find(m => m.kind === SyntaxKind.ExportKeyword);
                     if (exportModifier) {
@@ -46002,7 +46003,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     compilerOptions.verbatimModuleSyntax &&
                     node.kind !== SyntaxKind.ImportEqualsDeclaration &&
                     !isInJSFile(node) &&
-                    (moduleKind === ModuleKind.CommonJS || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS)
+                    getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS
                 ) {
                     error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
                 }
@@ -46054,7 +46055,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.ImportSpecifier &&
             idText(node.propertyName || node.name) === "default" &&
             getESModuleInterop(compilerOptions) &&
-            moduleKind !== ModuleKind.System && (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS)
+            getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) < ModuleKind.System
         ) {
             checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportDefault);
         }
@@ -46118,7 +46119,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (importClause.namedBindings) {
                     if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         checkImportBinding(importClause.namedBindings);
-                        if (moduleKind !== ModuleKind.System && (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS) && getESModuleInterop(compilerOptions)) {
+                        if (getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) < ModuleKind.System && getESModuleInterop(compilerOptions)) {
                             // import * as ns from "foo";
                             checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportStar);
                         }
@@ -46208,7 +46209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (node.exportClause) {
                     checkAliasSymbol(node.exportClause);
                 }
-                if (moduleKind !== ModuleKind.System && (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS)) {
+                if (getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) < ModuleKind.System) {
                     if (node.exportClause) {
                         // export * as ns from "foo";
                         // For ES2015 modules, we emit it as a pair of `import * as a_1 ...; export { a_1 as ns }` and don't need the helper.
@@ -46267,8 +46268,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             if (
                 getESModuleInterop(compilerOptions) &&
-                moduleKind !== ModuleKind.System &&
-                (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS) &&
+                getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) < ModuleKind.System &&
                 idText(node.propertyName || node.name) === "default"
             ) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportDefault);
@@ -46309,7 +46309,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isIllegalExportDefaultInCJS = !node.isExportEquals &&
             !(node.flags & NodeFlags.Ambient) &&
             compilerOptions.verbatimModuleSyntax &&
-            (moduleKind === ModuleKind.CommonJS || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS);
+            getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS;
 
         if (node.expression.kind === SyntaxKind.Identifier) {
             const id = node.expression as Identifier;
@@ -49222,7 +49222,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // ModuleDeclaration needs to be checked that it is uninstantiated later
                             node.kind !== SyntaxKind.ModuleDeclaration &&
                             node.parent.kind === SyntaxKind.SourceFile &&
-                            (moduleKind === ModuleKind.CommonJS || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS)
+                            getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS
                         ) {
                             return grammarErrorOnNode(modifier, Diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
                         }
@@ -50381,7 +50381,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (
-            (moduleKind < ModuleKind.ES2015 || impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS) && moduleKind !== ModuleKind.System &&
+            getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) < ModuleKind.System &&
             !(node.parent.parent.flags & NodeFlags.Ambient) && hasSyntacticModifier(node.parent.parent, ModifierFlags.Export)
         ) {
             checkESModuleMarker(node.name);

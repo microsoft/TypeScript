@@ -8632,6 +8632,11 @@ export function impliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName"
     return undefined;
 }
 
+/** @internal */
+export function getEmitModuleFormatOfFile(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ModuleKind {
+    return impliedNodeFormatForEmit(sourceFile, options) ?? getEmitModuleKind(options);
+}
+
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
 function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
     options: {
