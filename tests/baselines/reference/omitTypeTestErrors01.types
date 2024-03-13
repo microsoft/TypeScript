@@ -13,7 +13,7 @@ interface Foo {
 }
 
 export type Bar = Omit<Foo, "c">;
->Bar : { a: string; b: number; }
+>Bar : { b: number; a: string; }
 
 export type Baz = Omit<Foo, "b" | "c">;
 >Baz : { a: string; }
