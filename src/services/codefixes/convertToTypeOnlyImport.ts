@@ -13,8 +13,10 @@ import {
     isValidTypeOnlyAliasUseSite,
     Program,
     sameMap,
+    skipAlias,
     some,
     SourceFile,
+    SymbolFlags,
     SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
@@ -102,6 +104,11 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
     // Otherwise, we need to check the usage of the other specifiers
     const checker = program.getTypeChecker();
     for (const specifier of nonTypeOnlySpecifiers) {
+        const symbol = checker.getSymbolAtLocation(specifier.name);
+        if (symbol && skipAlias(symbol, checker).flags & SymbolFlags.Value) {
+            return false;
+        }
+
         const isUsedAsValue = FindAllReferences.Core.eachSymbolReferenceInFile(specifier.name, checker, sourceFile, usage => {
             return !isValidTypeOnlyAliasUseSite(usage);
         });
