@@ -728,3 +728,23 @@ function narrowFromAny(x: any) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 258, 23))
 }
 
+const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
+>noInferenceFromRest : Symbol(noInferenceFromRest, Decl(inferTypePredicates.ts, 262, 5))
+>f : Symbol(f, Decl(inferTypePredicates.ts, 262, 29))
+>f : Symbol(f, Decl(inferTypePredicates.ts, 262, 29))
+>0 : Symbol(0)
+
+const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
+>noInferenceFromImpossibleRest : Symbol(noInferenceFromImpossibleRest, Decl(inferTypePredicates.ts, 263, 5))
+>f : Symbol(f, Decl(inferTypePredicates.ts, 263, 39))
+>f : Symbol(f, Decl(inferTypePredicates.ts, 263, 39))
+
+function inferWithRest(x: string | null, ...f: ["a", "b"]) {
+>inferWithRest : Symbol(inferWithRest, Decl(inferTypePredicates.ts, 263, 77))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 265, 23))
+>f : Symbol(f, Decl(inferTypePredicates.ts, 265, 40))
+
+  return typeof x === 'string';
+>x : Symbol(x, Decl(inferTypePredicates.ts, 265, 23))
+}
+

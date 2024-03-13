@@ -262,3 +262,10 @@ function isNumberWithThis(this: Date, x: number | string) {
 function narrowFromAny(x: any) {
   return typeof x === 'number';
 }
+
+const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
+const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
+
+function inferWithRest(x: string | null, ...f: ["a", "b"]) {
+  return typeof x === 'string';
+}
