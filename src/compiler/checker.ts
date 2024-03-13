@@ -15481,7 +15481,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         createTypePredicateFromTypePredicateNode(type, signature) :
                         jsdocPredicate || noTypePredicate;
                 }
-                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.Boolean)) {
+                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.Boolean) && getParameterCount(signature) > 0) {
                     const { declaration } = signature;
                     signature.resolvedTypePredicate = noTypePredicate; // avoid infinite loop
                     signature.resolvedTypePredicate = getTypePredicateFromBody(declaration) || noTypePredicate;
@@ -37457,7 +37457,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return undefined;
         }
         const functionFlags = getFunctionFlags(func);
-        if (functionFlags !== FunctionFlags.Normal || func.parameters.length === 0) return undefined;
+        if (functionFlags !== FunctionFlags.Normal) return undefined;
 
         // Only attempt to infer a type predicate if there's exactly one return.
         let singleReturn: Expression | undefined;
