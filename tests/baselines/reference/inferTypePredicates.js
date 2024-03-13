@@ -263,6 +263,13 @@ function narrowFromAny(x: any) {
   return typeof x === 'number';
 }
 
+const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
+const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
+
+function inferWithRest(x: string | null, ...f: ["a", "b"]) {
+  return typeof x === 'string';
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -495,4 +502,25 @@ function isNumberWithThis(x) {
 }
 function narrowFromAny(x) {
     return typeof x === 'number';
+}
+var noInferenceFromRest = function () {
+    var f = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        f[_i] = arguments[_i];
+    }
+    return f[0] === "a";
+};
+var noInferenceFromImpossibleRest = function () {
+    var f = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        f[_i] = arguments[_i];
+    }
+    return typeof f === "undefined";
+};
+function inferWithRest(x) {
+    var f = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        f[_i - 1] = arguments[_i];
+    }
+    return typeof x === 'string';
 }
