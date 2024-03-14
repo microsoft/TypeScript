@@ -1637,6 +1637,14 @@
         "category": "Error",
         "code": 1496
     },
+    "Expression must be enclosed in parentheses to be used as a decorator.": {
+        "category": "Error",
+        "code": 1497
+    },
+    "Invalid syntax in decorator.": {
+        "category": "Error",
+        "code": 1498
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2484,7 +2492,7 @@
         "category": "Error",
         "code": 2514
     },
-    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+    "Non-abstract class '{0}' does not implement inherited abstract member {1} from class '{2}'.": {
         "category": "Error",
         "code": 2515
     },
@@ -2926,6 +2934,10 @@
         "category": "Error",
         "code": 2649
     },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1} and {2} more.": {
+        "category": "Error",
+        "code": 2650
+    },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
@@ -2937,6 +2949,18 @@
     "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
         "category": "Error",
         "code": 2653
+    },
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2}.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2} and {3} more.": {
+        "category": "Error",
+        "code": 2655
+    },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1}.": {
+        "category": "Error",
+        "code": 2656
     },
     "JSX expressions must have one parent element.": {
         "category": "Error",
@@ -7019,6 +7043,10 @@
         "category": "Message",
         "code": 90060
     },
+    "Update modifiers of '{0}'": {
+        "category": "Message",
+        "code": 90061
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -7772,6 +7800,14 @@
         "category": "Message",
         "code": 95193
     },
+    "Wrap in parentheses": {
+        "category": "Message",
+        "code": 95194
+    },
+    "Wrap all invalid decorator expressions in parentheses": {
+        "category": "Message",
+        "code": 95195
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7932,10 +7968,6 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
-    },
-    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
-        "category": "Error",
-        "code": 18052
     },
     "Its type '{0}' is not a valid JSX element type.": {
         "category": "Error",

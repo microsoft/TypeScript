@@ -1757,10 +1757,21 @@ function createCompletionEntry(
         isClassLikeMemberCompletion(symbol, location, sourceFile)
     ) {
         let importAdder;
-        const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
+        const memberCompletionEntry = getEntryForMemberCompletion(
+            host,
+            program,
+            options,
+            preferences,
+            name,
+            symbol,
+            location,
+            position,
+            contextToken,
+            formatContext,
+        );
         if (memberCompletionEntry) {
             ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
-            if (importAdder?.hasFixes()) {
+            if (importAdder?.hasFixes() || memberCompletionEntry.eraseRange) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
             }
@@ -2068,6 +2079,7 @@ function getPresentModifiers(
     let decorators: Decorator[] | undefined;
     let contextMod;
     const range: TextRange = { pos: position, end: position };
+
     /*
     Cases supported:
     In
@@ -2083,23 +2095,41 @@ function getPresentModifiers(
     }`
         `contextToken` is ``override`` (as a keyword),
     `contextToken.parent` is property declaration,
-    `location` is identifier ``m``,
-    `location.parent` is property declaration ``protected override m``,
-    `location.parent.parent` is class declaration ``class C { ... }``.
+    `location` is identifier ``m``.
     */
-    if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
-        modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
-        decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
-        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
-    }
-    if (contextMod = isModifierLike(contextToken)) {
+    if (isPropertyDeclaration(contextToken.parent) && (contextMod = isModifierLike(contextToken))) {
+        if (contextToken.parent.modifiers) {
+            modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
+            decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
+            range.pos = Math.min(...contextToken.parent.modifiers.map(n => n.getStart(sourceFile)));
+        }
         const contextModifierFlag = modifierToFlag(contextMod);
         if (!(modifiers & contextModifierFlag)) {
             modifiers |= contextModifierFlag;
-            range.pos = Math.min(range.pos, contextToken.pos);
+            range.pos = Math.min(range.pos, contextToken.getStart(sourceFile));
+        }
+        /*
+        We have two cases:
+        1.
+        `class C {
+            modifier |
+        }`
+        `contextToken` is `modifier`,
+        and the range should be `modifier |`, ending at `position`,
+        and
+        2.
+        `class C {
+            modifier otherToken|
+        }`
+        `contextToken` is `modifier`,
+        `contextToken.parent.name` is `otherToken`,
+        and the range should be `modifier `, ending at the start of `otherToken`.
+        */
+        if (contextToken.parent.name !== contextToken) {
+            range.end = contextToken.parent.name.getStart(sourceFile);
         }
     }
-    return { modifiers, decorators, range: range.pos !== position ? range : undefined };
+    return { modifiers, decorators, range: range.pos < range.end ? range : undefined };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
@@ -2941,7 +2971,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             contextToken,
             formatContext,
         )!;
-        if (importAdder || eraseRange) {
+        if (importAdder?.hasFixes() || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
                 tracker => {
@@ -2957,7 +2987,9 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
                 sourceDisplay: undefined,
                 codeActions: [{
                     changes,
-                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                    description: importAdder?.hasFixes() ?
+                        diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]) :
+                        diagnosticToString([Diagnostics.Update_modifiers_of_0, name]),
                 }],
             };
         }
