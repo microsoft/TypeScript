@@ -496,3 +496,81 @@ function isNumberWithThis(x) {
 function narrowFromAny(x) {
     return typeof x === 'number';
 }
+
+
+//// [inferTypePredicates.d.ts]
+declare const numsOrNull: (number | null)[];
+declare const filteredNumsTruthy: number[];
+declare const filteredNumsNonNullish: number[];
+declare const evenSquaresInline: number[];
+declare const isTruthy: (x: number | null) => boolean;
+declare const evenSquares: number[];
+declare const evenSquaresNonNull: number[];
+declare function isNonNull(x: number | null): boolean;
+declare function isNonNullVar(x: number | null): boolean;
+declare function isNonNullGeneric<T>(x: T): boolean;
+declare const myGuard: (o: string | undefined) => o is string;
+declare const mySecondGuard: (o: string | undefined) => o is string;
+type MyObj = {
+    data?: string;
+};
+type MyArray = {
+    list?: MyObj[];
+}[];
+declare const myArray: MyArray;
+declare const result: any[][];
+declare const result2: any[][];
+type Foo = {
+    foo: string;
+};
+type Bar = Foo & {
+    bar: string;
+};
+declare const list: (Foo | Bar)[];
+declare const resultBars: Bar[];
+declare function isBarNonNull(x: Foo | Bar | null): boolean;
+declare const fooOrBar: Foo | Bar;
+declare const a: string[];
+declare function backwardsGuard(x: number | string): x is number;
+declare function isString(x: string | number): boolean;
+declare let strOrNum: string | number;
+declare function flakyIsString(x: string | number): boolean;
+declare function isDate(x: object): x is Date;
+declare function flakyIsDate(x: object): x is Date;
+declare let maybeDate: object;
+declare function irrelevantIsNumber(x: string | number): boolean;
+declare function irrelevantIsNumberDestructuring(x: string | number): boolean;
+declare function areBothNums(x: string | number, y: string | number): boolean;
+declare function doubleReturn(x: string | number): boolean;
+declare function guardsOneButNotOthers(a: string | number, b: string | number, c: string | number): boolean;
+declare function dunderguard(__x: number | string): boolean;
+declare const booleanIdentity: (x: boolean) => boolean;
+declare const numOrBoolean: (x: number | boolean) => x is number | true;
+interface NumberInferrer {
+    isNumber(x: number | string): x is number;
+}
+declare class Inferrer implements NumberInferrer {
+    isNumber(x: number | string): boolean;
+}
+declare let numOrStr: number | string;
+declare const inf: Inferrer;
+declare class C1 {
+    isC2(): boolean;
+}
+declare class C2 extends C1 {
+    z: number;
+}
+declare let c: C1;
+declare function doNotRefineDestructuredParam({ x, y }: {
+    x: number | null;
+    y: number;
+}): boolean;
+declare function isShortString(x: unknown): boolean;
+declare let str: string;
+declare function isStringFromUnknown(x: unknown): boolean;
+declare function isNumOrStr(x: unknown): boolean;
+declare let unk: unknown;
+declare function assertAndPredicate(x: string | number | Date): boolean;
+declare let snd: string | number | Date;
+declare function isNumberWithThis(this: Date, x: number | string): boolean;
+declare function narrowFromAny(x: any): boolean;
