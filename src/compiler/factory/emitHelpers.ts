@@ -1165,7 +1165,7 @@ export const createBindingHelper: UnscopedEmitHelper = {
                 if (k2 === undefined) k2 = k;
                 var desc = Object.getOwnPropertyDescriptor(m, k);
                 if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-                  desc = { enumerable: true, get: function() { return m[k]; } };
+                  desc = { enumerable: true, configurable: true, get: function() { return m[k]; } };
                 }
                 Object.defineProperty(o, k2, desc);
             }) : (function(o, m, k, k2) {
@@ -1182,7 +1182,7 @@ export const setModuleDefaultHelper: UnscopedEmitHelper = {
     priority: 1,
     text: `
             var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-                Object.defineProperty(o, "default", { enumerable: true, value: v });
+                Object.defineProperty(o, "default", { enumerable: true, configurable: true, value: v });
             }) : function(o, v) {
                 o["default"] = v;
             });`,
