@@ -433,6 +433,13 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/b/lib/index.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open)
     version: SVC-1-0
@@ -451,5 +458,8 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/b/lib/index.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/b/index.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

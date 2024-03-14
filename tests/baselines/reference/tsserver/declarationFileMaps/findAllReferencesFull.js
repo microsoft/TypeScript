@@ -959,6 +959,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *new*
     originalConfiguredProjects: 1 *changed*
         /a/tsconfig.json *new*
 
@@ -977,7 +979,7 @@ ScriptInfos::
     declarationInfoPath: /a/bin/a.d.ts
     sourceInfos: 1
         /a/a.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -987,6 +989,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -1065,7 +1070,7 @@ ScriptInfos::
     declarationInfoPath: /a/bin/a.d.ts
     sourceInfos: 1
         /a/a.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1185,6 +1190,8 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *deleted*
     originalConfiguredProjects: 1
         /a/tsconfig.json
 /dev/null/inferredProject2* (Inferred) *new*
@@ -1206,7 +1213,7 @@ ScriptInfos::
     declarationInfoPath: /a/bin/a.d.ts
     sourceInfos: 1
         /a/a.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts *deleted*
     version: Text-1
@@ -1219,3 +1226,6 @@ ScriptInfos::
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

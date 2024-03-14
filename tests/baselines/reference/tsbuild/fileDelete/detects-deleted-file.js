@@ -103,12 +103,11 @@ export declare function child(): void;
 //// [/src/child/child.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.child = void 0;
+exports.child = child;
 var child2_1 = require("../child/child2");
 function child() {
     (0, child2_1.child2)();
 }
-exports.child = child;
 
 
 //// [/src/child/child2.d.ts]
@@ -118,10 +117,9 @@ export declare function child2(): void;
 //// [/src/child/child2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.child2 = void 0;
+exports.child2 = child2;
 function child2() {
 }
-exports.child2 = child2;
 
 
 //// [/src/child/tsconfig.tsbuildinfo]
@@ -204,12 +202,11 @@ export declare function main(): void;
 //// [/src/main/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
+exports.main = main;
 var child_1 = require("../child/child");
 function main() {
     (0, child_1.child)();
 }
-exports.main = main;
 
 
 //// [/src/main/tsconfig.tsbuildinfo]

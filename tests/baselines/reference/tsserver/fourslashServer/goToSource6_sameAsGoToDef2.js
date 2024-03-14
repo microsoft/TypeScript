@@ -256,6 +256,16 @@ watchedFiles::
 /node_modules/foo/types/a.d.ts.map: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/foo/types/a.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /b.ts (Open)
     version: SVC-1-0
@@ -293,8 +303,11 @@ ScriptInfos::
     declarationInfoPath: /node_modules/foo/types/a.d.ts
     sourceInfos: 1
         /node_modules/foo/src/a.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {

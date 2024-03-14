@@ -457,9 +457,8 @@ Output::
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooBar = void 0;
-function fooBar() { }
 exports.fooBar = fooBar;
+function fooBar() { }
 
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -469,9 +468,8 @@ export declare function fooBar(): void;
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 
 
 //// [/user/username/projects/myproject/b.d.ts]
