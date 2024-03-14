@@ -952,8 +952,8 @@ const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
 >"a" : "a"
 
 const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
->noInferenceFromImpossibleRest : () => boolean
->(...f: []) => typeof f === "undefined" : () => boolean
+>noInferenceFromImpossibleRest : () => f is never
+>(...f: []) => typeof f === "undefined" : () => f is never
 >f : []
 >typeof f === "undefined" : boolean
 >typeof f : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"

@@ -37431,7 +37431,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         return forEach(func.parameters, (param, i) => {
             const initType = getTypeOfSymbol(param.symbol);
-            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
+            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol)) {
                 // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                 return;
             }
