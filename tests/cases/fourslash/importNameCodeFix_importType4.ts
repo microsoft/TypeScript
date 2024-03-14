@@ -14,5 +14,5 @@
 
 goTo.marker("");
 verify.importFixAtPosition([
-`import { type SomeInterface, SomePig } from "./exports.js";
+`import { SomePig, type SomeInterface } from "./exports.js";
 new SomePig`]);
