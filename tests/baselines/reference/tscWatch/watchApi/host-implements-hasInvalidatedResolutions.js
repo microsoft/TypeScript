@@ -234,9 +234,8 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 
 //// [/user/username/projects/myproject/other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
+function foo() { }
 
 
 

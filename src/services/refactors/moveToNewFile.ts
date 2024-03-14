@@ -18,7 +18,6 @@ import {
     nodeSeenTracker,
     Program,
     QuotePreference,
-    RefactorContext,
     RefactorEditInfo,
     SourceFile,
     Symbol,
@@ -75,16 +74,15 @@ registerRefactor(refactorName, {
     getEditsForAction: function getRefactorEditsToMoveToNewFile(context, actionName): RefactorEditInfo {
         Debug.assert(actionName === refactorName, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences, context));
+        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     },
 });
 
-function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences, context: RefactorContext): void {
+function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-
-    const newFilename = createNewFileName(oldFile, program, context, host);
+    const newFilename = createNewFileName(oldFile, program, host, toMove);
 
     // If previous file was global, this is easy.
     changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences));

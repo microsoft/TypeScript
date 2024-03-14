@@ -1,7 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "module": "commonjs",
         "types": [
             "node"
         ]

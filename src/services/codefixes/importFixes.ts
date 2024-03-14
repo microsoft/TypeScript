@@ -61,8 +61,6 @@ import {
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
     ImportKind,
-    importNameElisionDisabled,
-    ImportsNotUsedAsValues,
     insertImports,
     InternalSymbolName,
     isExternalModule,
@@ -97,7 +95,6 @@ import {
     mapDefined,
     memoizeOne,
     ModuleKind,
-    ModuleResolutionKind,
     moduleResolutionUsesNodeModules,
     moduleSpecifiers,
     MultiMap,
@@ -716,12 +713,8 @@ function getAddAsTypeOnly(
         // Can't use a type-only import if the usage is an emitting position
         return AddAsTypeOnly.NotAllowed;
     }
-    if (isForNewImportDeclaration && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error) {
-        // Not writing a (top-level) type-only import here would create an error because the runtime dependency is unnecessary
-        return AddAsTypeOnly.Required;
-    }
     if (
-        importNameElisionDisabled(compilerOptions) &&
+        compilerOptions.verbatimModuleSyntax &&
         (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
     ) {
         // A type-only import is required for this symbol if under these settings if the symbol will
@@ -1054,13 +1047,11 @@ function compareModuleSpecifiers(
 // This is a simple heuristic to try to avoid creating an import cycle with a barrel re-export.
 // E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
 // This can produce false positives or negatives if re-exports cross into sibling directories
-// (e.g. `export * from "../whatever"`) or are not named "index" (we don't even try to consider
-// this if we're in a resolution mode where you can't drop trailing "/index" from paths).
+// (e.g. `export * from "../whatever"`) or are not named "index".
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (
         fix.isReExport &&
         fix.exportInfo?.moduleFileName &&
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
         isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));
@@ -1399,7 +1390,7 @@ function promoteFromTypeOnly(
 ) {
     const compilerOptions = program.getCompilerOptions();
     // See comment in `doAddExistingFix` on constant with the same name.
-    const convertExistingToTypeOnly = importNameElisionDisabled(compilerOptions);
+    const convertExistingToTypeOnly = compilerOptions.verbatimModuleSyntax;
     switch (aliasDeclaration.kind) {
         case SyntaxKind.ImportSpecifier:
             if (aliasDeclaration.isTypeOnly) {

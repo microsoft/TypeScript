@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/spreadObjectNoCircular1.ts] ////
+
+=== spreadObjectNoCircular1.ts ===
+type Box = {
+>Box : Symbol(Box, Decl(spreadObjectNoCircular1.ts, 0, 0))
+
+  content?: Foo | Box;
+>content : Symbol(content, Decl(spreadObjectNoCircular1.ts, 0, 12))
+>Foo : Symbol(Foo, Decl(spreadObjectNoCircular1.ts, 4, 21))
+>Box : Symbol(Box, Decl(spreadObjectNoCircular1.ts, 0, 0))
+
+};
+
+declare const b: Box;
+>b : Symbol(b, Decl(spreadObjectNoCircular1.ts, 4, 13))
+>Box : Symbol(Box, Decl(spreadObjectNoCircular1.ts, 0, 0))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(spreadObjectNoCircular1.ts, 4, 21))
+
+  get foo() {
+>foo : Symbol(Foo.foo, Decl(spreadObjectNoCircular1.ts, 6, 11))
+
+    return {
+      content: this as Foo | Box,
+>content : Symbol(content, Decl(spreadObjectNoCircular1.ts, 8, 12))
+>this : Symbol(Foo, Decl(spreadObjectNoCircular1.ts, 4, 21))
+>Foo : Symbol(Foo, Decl(spreadObjectNoCircular1.ts, 4, 21))
+>Box : Symbol(Box, Decl(spreadObjectNoCircular1.ts, 0, 0))
+
+      ...b,
+>b : Symbol(b, Decl(spreadObjectNoCircular1.ts, 4, 13))
+
+    };
+  }
+}
+

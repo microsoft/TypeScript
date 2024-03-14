@@ -131,10 +131,11 @@ export declare function f2(): void;
 //// [/src/shared/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f2 = exports.e = exports.c = exports.f1 = void 0;
+exports.e = exports.c = void 0;
+exports.f1 = f1;
+exports.f2 = f2;
 /*@before/src/shared/tsconfig.json*/
 function f1() { }
-exports.f1 = f1;
 //@after/src/shared/tsconfig.json
 var c = /** @class */ (function () {
     function c() {
@@ -149,7 +150,6 @@ var e;
 // leading
 /*@before/src/shared/tsconfig.json*/
 function f2() { } // trailing
-exports.f2 = f2;
 
 
 //// [/src/shared/tsconfig.tsbuildinfo]
@@ -216,10 +216,11 @@ export declare function f22(): void;
 //// [/src/webpack/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f22 = exports.e2 = exports.c2 = exports.f2 = void 0;
+exports.e2 = exports.c2 = void 0;
+exports.f2 = f2;
+exports.f22 = f22;
 /*@before/src/webpack/tsconfig.json*/
 function f2() { }
-exports.f2 = f2;
 //@after/src/webpack/tsconfig.json
 var c2 = /** @class */ (function () {
     function c2() {
@@ -234,7 +235,6 @@ var e2;
 // leading
 /*@before/src/webpack/tsconfig.json*/
 function f22() { } // trailing
-exports.f22 = f22;
 
 
 //// [/src/webpack/tsconfig.tsbuildinfo]

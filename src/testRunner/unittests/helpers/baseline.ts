@@ -130,45 +130,6 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
     }
 }
 
-function generateBundleFileSectionInfo(sys: ts.System, originalReadCall: ts.System["readFile"], baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: ts.BundleFileInfo | undefined, outFile: string | undefined) {
-    if (!ts.length(bundleFileInfo && bundleFileInfo.sections) && !outFile) return; // Nothing to baseline
-
-    const content = outFile && sys.fileExists(outFile) ? originalReadCall.call(sys, outFile, "utf8")! : "";
-    baselineRecorder.WriteLine("======================================================================");
-    baselineRecorder.WriteLine(`File:: ${outFile}`);
-    for (const section of bundleFileInfo ? bundleFileInfo.sections : ts.emptyArray) {
-        baselineRecorder.WriteLine("----------------------------------------------------------------------");
-        writeSectionHeader(section);
-        if (section.kind !== ts.BundleFileSectionKind.Prepend) {
-            writeTextOfSection(section.pos, section.end);
-        }
-        else if (section.texts.length > 0) {
-            ts.Debug.assert(section.pos === ts.first(section.texts).pos);
-            ts.Debug.assert(section.end === ts.last(section.texts).end);
-            for (const text of section.texts) {
-                baselineRecorder.WriteLine(">>--------------------------------------------------------------------");
-                writeSectionHeader(text);
-                writeTextOfSection(text.pos, text.end);
-            }
-        }
-        else {
-            ts.Debug.assert(section.pos === section.end);
-        }
-    }
-    baselineRecorder.WriteLine("======================================================================");
-
-    function writeTextOfSection(pos: number, end: number) {
-        const textLines = content.substring(pos, end).split(/\r?\n/);
-        for (const line of textLines) {
-            baselineRecorder.WriteLine(line);
-        }
-    }
-
-    function writeSectionHeader(section: ts.BundleFileSection) {
-        baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}${section.kind === ts.BundleFileSectionKind.Prepend ? " texts:: " + section.texts.length : ""}`);
-    }
-}
-
 export type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ts.ReusableDiagnostic[]];
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
@@ -202,7 +163,7 @@ export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildI
 export type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
 export function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | undefined): info is ReadableProgramBundleEmitBuildInfo {
-    return !!info && !!ts.outFile(info.options || {});
+    return !!info && !!info.options?.outFile;
 }
 export type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
 function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string, buildInfo: ts.BuildInfo) {
@@ -255,22 +216,6 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     }
     const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
     const result: ReadableBuildInfo = {
-        // Baseline fixed order for bundle
-        bundle: buildInfo.bundle && {
-            ...buildInfo.bundle,
-            js: buildInfo.bundle.js && {
-                sections: buildInfo.bundle.js.sections,
-                hash: buildInfo.bundle.js.hash,
-                mapHash: buildInfo.bundle.js.mapHash,
-                sources: buildInfo.bundle.js.sources,
-            },
-            dts: buildInfo.bundle.dts && {
-                sections: buildInfo.bundle.dts.sections,
-                hash: buildInfo.bundle.dts.hash,
-                mapHash: buildInfo.bundle.dts.mapHash,
-                sources: buildInfo.bundle.dts.sources,
-            },
-        },
         program,
         version,
         size: ts.getBuildInfoText({ ...buildInfo, version }).length,
@@ -358,19 +303,6 @@ export function baselineBuildInfo(
     const buildInfo = ts.getBuildInfo(buildInfoPath, (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8"));
     if (!buildInfo) return sys.writeFile(`${buildInfoPath}.baseline.txt`, "Error reading valid buildinfo file");
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
-
-    if (!ts.outFile(options)) return;
-    const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDtsPaths*/ false);
-    const bundle = buildInfo.bundle;
-    if (!bundle || (!ts.length(bundle.js && bundle.js.sections) && !ts.length(bundle.dts && bundle.dts.sections))) return;
-
-    // Write the baselines:
-    const baselineRecorder = new Harness.Compiler.WriterAggregator();
-    generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
-    generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
-    baselineRecorder.Close();
-    const text = baselineRecorder.lines.join("\r\n");
-    sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
 }
 
 export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], isWatch?: boolean, suffix?: string) {
