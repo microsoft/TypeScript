@@ -48578,11 +48578,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const signature = getSignatureFromDeclaration(signatureDeclaration);
         const typePredicate = getTypePredicateOfSignature(signature);
         if (typePredicate) {
+            // Inferred type predicates
+            const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                factory.createToken(SyntaxKind.AssertsKeyword) :
+                undefined;
             const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
                 setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                 factory.createThisTypeNode();
             const typeNode = typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type);
-            return factory.createTypePredicateNode(/*assertsModifier*/ undefined, parameterName, typeNode);
+            return factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
         }
         return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
