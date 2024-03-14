@@ -39,13 +39,7 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'ClassDecoratorContext'.
 
-[96ma.ts[0m:[93m2[0m:[93m2[0m - [91merror[0m[90m TS1238: [0mUnable to resolve signature of class decorator when called as an expression.
-  The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
-
-[7m2[0m @((_) => {})
-[7m [0m [91m ~~~~~~~~~~~[0m
-
-[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 
 

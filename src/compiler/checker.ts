@@ -34454,7 +34454,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getDecoratorArgumentCount(node: Decorator, signature: Signature) {
         return compilerOptions.experimentalDecorators ?
             getLegacyDecoratorArgumentCount(node, signature) :
-            2;
+            // Allow the runtime to oversupply arguments to an ES decorator as long as there's at least one parameter.
+            Math.min(Math.max(getParameterCount(signature), 1), 2);
     }
 
     /**
