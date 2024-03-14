@@ -603,5 +603,5 @@ declare let snd: string | number | Date;
 declare function isNumberWithThis(this: Date, x: number | string): boolean;
 declare function narrowFromAny(x: any): boolean;
 declare const noInferenceFromRest: (f_0: "a" | "b") => boolean;
-declare const noInferenceFromImpossibleRest: () => f is never;
+declare const noInferenceFromImpossibleRest: () => boolean;
 declare function inferWithRest(x: string | null, ...f: ["a", "b"]): boolean;
