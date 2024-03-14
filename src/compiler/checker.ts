@@ -12062,13 +12062,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.type) {
             Debug.assertIsDefined(links.deferralParent);
             Debug.assertIsDefined(links.deferralConstituents);
-            if (links.deferralParent === neverType) {
-                const functionDecl = links.jsSyntheticRestParameterFunctionDeclaration!;
-                if (isFunctionExpressionOrArrowFunction(functionDecl)) {
-                    const contextualSignature = getContextualSignature(functionDecl);
-                    if (contextualSignature) {
-                        return getRestTypeAtPosition(contextualSignature, functionDecl.parameters.length);
-                    }
+            const jsSyntheticRestParameterFunctionDeclaration = links.jsSyntheticRestParameterFunctionDeclaration;
+            if (jsSyntheticRestParameterFunctionDeclaration && isFunctionExpressionOrArrowFunction(jsSyntheticRestParameterFunctionDeclaration)) {
+                const contextualSignature = getContextualSignature(jsSyntheticRestParameterFunctionDeclaration);
+                if (contextualSignature) {
+                    return getRestTypeAtPosition(contextualSignature, jsSyntheticRestParameterFunctionDeclaration.parameters.length);
                 }
             }
             links.type = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents) : getIntersectionType(links.deferralConstituents);
