@@ -378,25 +378,24 @@ if (flakyIsString(strOrNum)) {
 >strOrNum : Symbol(strOrNum, Decl(inferTypePredicates.ts, 101, 11))
 }
 
-function isDate(x: object): x is Date {
+function isDate(x: object) {
 >isDate : Symbol(isDate, Decl(inferTypePredicates.ts, 115, 1))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 117, 16))
->x : Symbol(x, Decl(inferTypePredicates.ts, 117, 16))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
   return x instanceof Date;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 117, 16))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
-function flakyIsDate(x: object): x is Date {
+function flakyIsDate(x: object) {
 >flakyIsDate : Symbol(flakyIsDate, Decl(inferTypePredicates.ts, 119, 1))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 120, 21))
->x : Symbol(x, Decl(inferTypePredicates.ts, 120, 21))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
-  return x instanceof Date;
+  return x instanceof Date && Math.random() > 0.5;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 120, 21))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 }
 
 declare let maybeDate: object;
@@ -421,7 +420,7 @@ if (flakyIsDate(maybeDate)) {
 >flakyIsDate : Symbol(flakyIsDate, Decl(inferTypePredicates.ts, 119, 1))
 >maybeDate : Symbol(maybeDate, Decl(inferTypePredicates.ts, 124, 11))
 
-  let t: Date = maybeDate;  // should ok
+  let t: Date = maybeDate;  // should error
 >t : Symbol(t, Decl(inferTypePredicates.ts, 132, 5))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >maybeDate : Symbol(maybeDate, Decl(inferTypePredicates.ts, 124, 11))

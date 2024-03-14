@@ -13,10 +13,11 @@ inferTypePredicates.ts(113,7): error TS2322: Type 'string | number' is not assig
   Type 'number' is not assignable to type 'string'.
 inferTypePredicates.ts(115,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
+inferTypePredicates.ts(133,7): error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
 inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1' but required in type 'C2'.
 
 
-==== inferTypePredicates.ts (10 errors) ====
+==== inferTypePredicates.ts (11 errors) ====
     // https://github.com/microsoft/TypeScript/issues/16069
     
     const numsOrNull = [1, 2, 3, 4, null];
@@ -158,11 +159,11 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
     }
     
-    function isDate(x: object): x is Date {
+    function isDate(x: object) {
       return x instanceof Date;
     }
-    function flakyIsDate(x: object): x is Date {
-      return x instanceof Date;
+    function flakyIsDate(x: object) {
+      return x instanceof Date && Math.random() > 0.5;
     }
     
     declare let maybeDate: object;
@@ -173,7 +174,9 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
     }
     
     if (flakyIsDate(maybeDate)) {
-      let t: Date = maybeDate;  // should ok
+      let t: Date = maybeDate;  // should error
+          ~
+!!! error TS2740: Type '{}' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
     } else {
       let t: object = maybeDate;  // should ok
     }

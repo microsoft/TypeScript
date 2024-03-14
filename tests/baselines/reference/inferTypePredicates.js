@@ -118,11 +118,11 @@ if (flakyIsString(strOrNum)) {
   let t: number = strOrNum;  // should error
 }
 
-function isDate(x: object): x is Date {
+function isDate(x: object) {
   return x instanceof Date;
 }
-function flakyIsDate(x: object): x is Date {
-  return x instanceof Date;
+function flakyIsDate(x: object) {
+  return x instanceof Date && Math.random() > 0.5;
 }
 
 declare let maybeDate: object;
@@ -133,7 +133,7 @@ if (isDate(maybeDate)) {
 }
 
 if (flakyIsDate(maybeDate)) {
-  let t: Date = maybeDate;  // should ok
+  let t: Date = maybeDate;  // should error
 } else {
   let t: object = maybeDate;  // should ok
 }
@@ -375,7 +375,7 @@ function isDate(x) {
     return x instanceof Date;
 }
 function flakyIsDate(x) {
-    return x instanceof Date;
+    return x instanceof Date && Math.random() > 0.5;
 }
 if (isDate(maybeDate)) {
     var t = maybeDate; // should ok
@@ -384,7 +384,7 @@ else {
     var t = maybeDate; // should ok
 }
 if (flakyIsDate(maybeDate)) {
-    var t = maybeDate; // should ok
+    var t = maybeDate; // should error
 }
 else {
     var t = maybeDate; // should ok
@@ -564,7 +564,7 @@ declare function isString(x: string | number): x is string;
 declare let strOrNum: string | number;
 declare function flakyIsString(x: string | number): boolean;
 declare function isDate(x: object): x is Date;
-declare function flakyIsDate(x: object): x is Date;
+declare function flakyIsDate(x: object): boolean;
 declare let maybeDate: object;
 declare function irrelevantIsNumber(x: string | number): boolean;
 declare function irrelevantIsNumberDestructuring(x: string | number): boolean;

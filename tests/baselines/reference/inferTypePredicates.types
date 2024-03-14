@@ -507,7 +507,7 @@ if (flakyIsString(strOrNum)) {
 >strOrNum : string | number
 }
 
-function isDate(x: object): x is Date {
+function isDate(x: object) {
 >isDate : (x: object) => x is Date
 >x : object
 
@@ -516,14 +516,21 @@ function isDate(x: object): x is Date {
 >x : object
 >Date : DateConstructor
 }
-function flakyIsDate(x: object): x is Date {
->flakyIsDate : (x: object) => x is Date
+function flakyIsDate(x: object) {
+>flakyIsDate : (x: object) => boolean
 >x : object
 
-  return x instanceof Date;
+  return x instanceof Date && Math.random() > 0.5;
+>x instanceof Date && Math.random() > 0.5 : boolean
 >x instanceof Date : boolean
 >x : object
 >Date : DateConstructor
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
 }
 
 declare let maybeDate: object;
@@ -546,12 +553,12 @@ if (isDate(maybeDate)) {
 
 if (flakyIsDate(maybeDate)) {
 >flakyIsDate(maybeDate) : boolean
->flakyIsDate : (x: object) => x is Date
+>flakyIsDate : (x: object) => boolean
 >maybeDate : object
 
-  let t: Date = maybeDate;  // should ok
+  let t: Date = maybeDate;  // should error
 >t : Date
->maybeDate : Date
+>maybeDate : object
 
 } else {
   let t: object = maybeDate;  // should ok
