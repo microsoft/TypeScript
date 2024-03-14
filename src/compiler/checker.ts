@@ -48585,7 +48585,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
                 setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                 factory.createThisTypeNode();
-            const typeNode = typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type);
+            const typeNode = typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
             return factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
         }
         return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
