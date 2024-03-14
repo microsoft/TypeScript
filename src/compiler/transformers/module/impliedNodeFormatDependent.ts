@@ -2,7 +2,7 @@ import {
     Bundle,
     Debug,
     EmitHint,
-    impliedNodeFormatForEmit,
+    getEmitModuleFormatOfFile,
     isSourceFile,
     map,
     ModuleKind,
@@ -15,7 +15,7 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export function transformNodeModule(context: TransformationContext) {
+export function transformImpliedNodeFormatDependentModule(context: TransformationContext) {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
 
@@ -53,7 +53,7 @@ export function transformNodeModule(context: TransformationContext) {
             if (!currentSourceFile) {
                 return previousOnSubstituteNode(hint, node);
             }
-            if (impliedNodeFormatForEmit(currentSourceFile, compilerOptions) === ModuleKind.ESNext) {
+            if (getEmitModuleFormatOfFile(currentSourceFile, compilerOptions) >= ModuleKind.ES2015) {
                 return esmOnSubstituteNode(hint, node);
             }
             return cjsOnSubstituteNode(hint, node);
@@ -67,14 +67,14 @@ export function transformNodeModule(context: TransformationContext) {
         if (!currentSourceFile) {
             return previousOnEmitNode(hint, node, emitCallback);
         }
-        if (impliedNodeFormatForEmit(currentSourceFile, compilerOptions) === ModuleKind.ESNext) {
+        if (getEmitModuleFormatOfFile(currentSourceFile, compilerOptions) >= ModuleKind.ES2015) {
             return esmOnEmitNode(hint, node, emitCallback);
         }
         return cjsOnEmitNode(hint, node, emitCallback);
     }
 
     function getModuleTransformForFile(file: SourceFile): typeof esmTransform {
-        return impliedNodeFormatForEmit(file, compilerOptions) === ModuleKind.ESNext ? esmTransform : cjsTransform;
+        return getEmitModuleFormatOfFile(file, compilerOptions) >= ModuleKind.ES2015 ? esmTransform : cjsTransform;
     }
 
     function transformSourceFile(node: SourceFile) {
