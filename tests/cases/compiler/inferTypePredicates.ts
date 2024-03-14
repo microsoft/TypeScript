@@ -174,7 +174,7 @@ function dunderguard(__x: number | string) {
 // could infer a type guard here but it doesn't seem that helpful.
 const booleanIdentity = (x: boolean) => x;
 
-// we infer "x is number | true" which is accurate of debatable utility.
+// we infer "x is number | true" which is accurate but of debatable utility.
 const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 
 // inferred guards in methods

@@ -48576,6 +48576,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
         }
         const signature = getSignatureFromDeclaration(signatureDeclaration);
+        const typePredicate = getTypePredicateOfSignature(signature);
+        if (typePredicate) {
+            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                factory.createThisTypeNode();
+            const typeNode = typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type);
+            return factory.createTypePredicateNode(/*assertsModifier*/ undefined, parameterName, typeNode);
+        }
         return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
