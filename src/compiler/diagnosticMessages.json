@@ -967,6 +967,10 @@
         "category": "Error",
         "code": 1292
     },
+    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+        "category": "Error",
+        "code": 1293
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1527,6 +1531,10 @@
     "Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.": {
         "category": "Error",
         "code": 1464
+    },
+    "File is CommonJS module because '{0}' has field\"type\" with value \"commonjs\"": {
+        "category": "Message",
+        "code": 1465
     },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {

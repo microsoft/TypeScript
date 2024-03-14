@@ -8601,7 +8601,9 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
 /** @internal */
 export function impliedNodeFormatAffectsModuleResolution(options: CompilerOptions) {
     const moduleResolution = getEmitModuleResolutionKind(options);
-    return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
+        || getResolvePackageJsonExports(options)
+        || getResolvePackageJsonImports(options);
 }
 
 /** @internal */
@@ -8630,6 +8632,15 @@ export function impliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName"
         return ModuleKind.ESNext;
     }
     return undefined;
+}
+
+/** @internal */
+export function shouldTransformImportCall(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): boolean {
+    const moduleKind = getEmitModuleKind(options);
+    if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext || moduleKind === ModuleKind.Preserve) {
+        return false;
+    }
+    return getEmitModuleFormatOfFile(sourceFile, options) < ModuleKind.ES2015;
 }
 
 /** @internal */

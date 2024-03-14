@@ -114,6 +114,7 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitDeclarations,
+    getEmitModuleFormatOfFile,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
@@ -166,7 +167,6 @@ import {
     HeritageClause,
     Identifier,
     identity,
-    impliedNodeFormatAffectsModuleResolution,
     impliedNodeFormatForModuleResolution,
     ImportAttributes,
     ImportClause,
@@ -288,6 +288,7 @@ import {
     ScriptTarget,
     setParent,
     setParentRecursive,
+    shouldTransformImportCall,
     skipTrivia,
     skipTypeChecking,
     some,
@@ -326,6 +327,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
+    impliedNodeFormatAffectsModuleResolution,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -836,9 +838,11 @@ export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageCha
  * @internal
  */
 export interface SourceFileImportsList {
-    /** @internal */ imports: SourceFile["imports"];
-    /** @internal */ moduleAugmentations: SourceFile["moduleAugmentations"];
+    imports: SourceFile["imports"];
+    moduleAugmentations: SourceFile["moduleAugmentations"];
     impliedNodeFormat?: ResolutionMode;
+    fileName: string;
+    packageJsonScope?: SourceFile["packageJsonScope"];
 }
 
 /**
@@ -920,11 +924,11 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * should be the options of the referenced project, not the referencing project.
  * @returns The final resolution mode of the import
  */
-export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
+export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
     return getModeForUsageLocationWorker(file, usage, compilerOptions);
 }
 
-function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
+function getModeForUsageLocationWorker(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
@@ -941,45 +945,35 @@ function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMod
         }
     }
 
-    const emitSyntax = getEmitSyntaxForUsageLocationWorker(file, usage, compilerOptions);
-    const moduleResolution = compilerOptions && getEmitModuleResolutionKind(compilerOptions);
-    if (
-        compilerOptions && (
-            getResolvePackageJsonExports(compilerOptions) ||
-            getResolvePackageJsonImports(compilerOptions) ||
-            ModuleResolutionKind.Node16 <= moduleResolution! && moduleResolution! <= ModuleResolutionKind.NodeNext
-        )
-    ) {
-        return emitSyntax;
+    if (compilerOptions && impliedNodeFormatAffectsModuleResolution(compilerOptions)) {
+        return getEmitSyntaxForUsageLocationWorker(file, usage, compilerOptions);
     }
 }
 
-function getEmitSyntaxForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions?: CompilerOptions): ResolutionMode {
-    if (compilerOptions && getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
-        return (usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) || isRequireCall(usage.parent, /*requireStringLiteralLikeArgument*/ false))
-            ? ModuleKind.CommonJS
-            : ModuleKind.ESNext;
-    }
+function getEmitSyntaxForUsageLocationWorker(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, usage: StringLiteralLike, compilerOptions?: CompilerOptions): ResolutionMode {
     if (!compilerOptions) {
         // This should always be provided, but we try to fail somewhat
         // gracefully to allow projects like ts-node time to update.
         return undefined;
     }
-    if (impliedNodeFormatAffectsModuleResolution(compilerOptions)) {
-        if (file.impliedNodeFormat !== ModuleKind.ESNext) {
-            // in cjs files, import call expressions are esm format, otherwise everything is cjs
-            return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
-        }
-        const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
-        return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
-    }
-    if (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) {
+    const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
+    if (exprParentParent && isImportEqualsDeclaration(exprParentParent) || isRequireCall(usage.parent, /*requireStringLiteralLikeArgument*/ false)) {
         return ModuleKind.CommonJS;
     }
-    if (emitModuleKindIsNonNodeESM(getEmitModuleKind(compilerOptions))) {
-        return ModuleKind.ESNext;
+    if (isImportCall(walkUpParenthesizedExpressions(usage.parent))) {
+        return shouldTransformImportCall(file, compilerOptions) ? ModuleKind.CommonJS : ModuleKind.ESNext;
     }
-    return undefined;
+    // If we're in --module preserve on an input file, we know that an import
+    // is an import. But if this is a declaration file, we'd prefer to use the
+    // impliedNodeFormat. Since we want things to be consistent between the two,
+    // we need to issue errors when the user writes ESM syntax in a definitely-CJS
+    // file, until/unless declaration emit can indicate a true ESM import. On the
+    // other hand, writing CJS syntax in a definitely-ESM file is fine, since declaration
+    // emit preserves the CJS syntax.
+    const fileEmitMode = getEmitModuleFormatOfFile(file, compilerOptions);
+    return fileEmitMode === ModuleKind.CommonJS ? ModuleKind.CommonJS :
+        emitModuleKindIsNonNodeESM(fileEmitMode) || fileEmitMode === ModuleKind.Preserve ? ModuleKind.ESNext :
+        undefined;
 }
 
 /** @internal */
