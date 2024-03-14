@@ -941,34 +941,3 @@ function narrowFromAny(x: any) {
 >'number' : "number"
 }
 
-const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
->noInferenceFromRest : (f_0: "a" | "b") => boolean
->(...f: ["a" | "b"]) => f[0] === "a" : (f_0: "a" | "b") => boolean
->f : ["a" | "b"]
->f[0] === "a" : boolean
->f[0] : "a" | "b"
->f : ["a" | "b"]
->0 : 0
->"a" : "a"
-
-const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
->noInferenceFromImpossibleRest : () => f is never
->(...f: []) => typeof f === "undefined" : () => f is never
->f : []
->typeof f === "undefined" : boolean
->typeof f : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->f : []
->"undefined" : "undefined"
-
-function inferWithRest(x: string | null, ...f: ["a", "b"]) {
->inferWithRest : (x: string | null, f_0: "a", f_1: "b") => x is string
->x : string | null
->f : ["a", "b"]
-
-  return typeof x === 'string';
->typeof x === 'string' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : string | null
->'string' : "string"
-}
-
