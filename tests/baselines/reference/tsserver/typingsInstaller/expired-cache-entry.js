@@ -232,7 +232,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.5"
+  "@types/jquery@tsFakeMajor.Minor"
 ] *new*
 
 Projects::

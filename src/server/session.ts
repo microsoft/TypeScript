@@ -100,7 +100,6 @@ import {
     normalizePath,
     OperationCanceledException,
     OrganizeImportsMode,
-    outFile,
     OutliningSpan,
     Path,
     perfLogger,
@@ -2424,7 +2423,7 @@ export class Session<TMessage = string> implements EventSender {
                 return {
                     projectFileName: project.getProjectName(),
                     fileNames: project.getCompileOnSaveAffectedFileList(info),
-                    projectUsesOutFile: !!outFile(compilationSettings),
+                    projectUsesOutFile: !!compilationSettings.outFile,
                 };
             },
         );

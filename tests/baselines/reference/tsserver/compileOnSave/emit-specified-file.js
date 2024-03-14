@@ -265,8 +265,7 @@ After request
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
+function Foo() { return 10; }
 
 

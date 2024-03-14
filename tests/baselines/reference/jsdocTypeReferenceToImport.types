@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.ts] ////
 
 === jsdocTypeReferenceToImport.js ===
-// #34802
-
 const C = require('./ex').C;
 >C : typeof C
 >require('./ex').C : typeof C

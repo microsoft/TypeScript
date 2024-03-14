@@ -436,13 +436,16 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     compilerHost.readFile = fileName => {
         const path = project.toPath(fileName);
         const info = project.projectService.filenameToScriptInfo.get(path);
-        if (info?.isDynamicOrHasMixedContent() || project.fileIsOpen(path)) {
-            return ts.getSnapshotText(info!.getSnapshot());
+        if (info?.isDynamicOrHasMixedContent()) {
+            return ts.getSnapshotText(info.getSnapshot());
         }
         if (!ts.isAnySupportedFileExtension(path)) {
             // Some external file
             const snapshot = project.getScriptSnapshot(path);
             return snapshot ? ts.getSnapshotText(snapshot) : undefined;
+        }
+        if (project.fileIsOpen(path)) {
+            return ts.getSnapshotText(info!.getSnapshot());
         }
         // Read only rooted disk paths from host similar to ProjectService
         if (!ts.isRootedDiskPath(fileName) || !compilerHost.fileExists(fileName)) return undefined;

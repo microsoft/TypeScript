@@ -20,7 +20,7 @@ describe("unittests:: services:: Transpile", () => {
                     transpileOptions.compilerOptions = {};
                 }
                 if (transpileOptions.compilerOptions.target === undefined) {
-                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
+                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES5;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
@@ -671,6 +671,15 @@ export * as alias from './file';`,
         `,
         {
             options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+        },
+    );
+
+    transpilesCorrectly(
+        "Syntactically string but non-evaluatable enum members do not get reverse mapping",
+        // eslint-disable-next-line no-template-curly-in-string
+        "import { BAR } from './bar'; enum Foo { A = `${BAR}` }",
+        {
+            options: { compilerOptions: { target: ts.ScriptTarget.ESNext } },
         },
     );
 });
