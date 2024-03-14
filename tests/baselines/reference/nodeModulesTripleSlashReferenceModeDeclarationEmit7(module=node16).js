@@ -22,7 +22,7 @@ declare global {
     function getInterR(): RequireInterface;
 }
 //// [uses.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 //// [package.json]
 {
@@ -30,7 +30,7 @@ export default getInterI();
     "type": "module"
 }
 //// [uses.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 //// [package.json]
 {
@@ -49,12 +49,12 @@ import obj2 from "./sub2/uses.js"
 export default [obj1, obj2.default] as const;
 
 //// [uses.js]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 //// [uses.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 exports.default = getInterR();
 //// [index.js]
 // only an esm file can `import` both kinds of files
@@ -64,9 +64,11 @@ export default [obj1, obj2.default];
 
 
 //// [uses.d.ts]
+/// <reference types="pkg" preserve="true" />
 declare const _default: ImportInterface;
 export default _default;
 //// [uses.d.ts]
+/// <reference types="pkg" preserve="true" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
@@ -111,6 +113,7 @@ out/index.d.ts(1,52): error TS2304: Cannot find name 'RequireInterface'.
         function getInterR(): RequireInterface;
     }
 ==== out/sub1/uses.d.ts (0 errors) ====
+    /// <reference types="pkg" preserve="true" />
     declare const _default: ImportInterface;
     export default _default;
     
@@ -120,6 +123,7 @@ out/index.d.ts(1,52): error TS2304: Cannot find name 'RequireInterface'.
         "type": "module"
     }
 ==== out/sub2/uses.d.ts (0 errors) ====
+    /// <reference types="pkg" preserve="true" />
     declare const _default: RequireInterface;
     export default _default;
     

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents.ts] ////
 
 //// [jsDeclarationsReactComponents1.jsx]
-/// <reference path="/.lib/react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" preserve="true" />
 import React from "react";
 import PropTypes from "prop-types"
 
@@ -101,7 +101,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
+/// <reference path="react16.d.ts" preserve="true" />
 var react_1 = __importDefault(require("react"));
 var prop_types_1 = __importDefault(require("prop-types"));
 var TabbedShowLayout = function (_a) {
@@ -185,6 +185,7 @@ exports.default = Tree;
 
 
 //// [jsDeclarationsReactComponents1.d.ts]
+/// <reference path="../..react16.d.ts" preserve="true" />
 export default TabbedShowLayout;
 declare function TabbedShowLayout({}: {}): JSX.Element;
 declare namespace TabbedShowLayout {
@@ -241,93 +242,3 @@ declare namespace Tree {
     }
 }
 import PropTypes from 'prop-types';
-
-
-//// [DtsFileErrors]
-
-
-out/jsDeclarationsReactComponents1.d.ts(2,44): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents1.d.ts(11,23): error TS2307: Cannot find module 'prop-types' or its corresponding type declarations.
-out/jsDeclarationsReactComponents2.d.ts(6,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-out/jsDeclarationsReactComponents3.d.ts(11,7): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents4.d.ts(4,5): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents5.d.ts(4,5): error TS2503: Cannot find namespace 'JSX'.
-out/jsDeclarationsReactComponents5.d.ts(15,23): error TS2307: Cannot find module 'prop-types' or its corresponding type declarations.
-
-
-==== out/jsDeclarationsReactComponents1.d.ts (2 errors) ====
-    export default TabbedShowLayout;
-    declare function TabbedShowLayout({}: {}): JSX.Element;
-                                               ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    declare namespace TabbedShowLayout {
-        namespace propTypes {
-            let version: PropTypes.Requireable<number>;
-        }
-        namespace defaultProps {
-            let tabs: undefined;
-        }
-    }
-    import PropTypes from "prop-types";
-                          ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'prop-types' or its corresponding type declarations.
-    
-==== out/jsDeclarationsReactComponents2.d.ts (1 errors) ====
-    export default TabbedShowLayout;
-    /**
-     * @type {React.SFC}
-     */
-    declare const TabbedShowLayout: React.SFC;
-    import React from "react";
-                      ~~~~~~~
-!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
-    
-==== out/jsDeclarationsReactComponents3.d.ts (1 errors) ====
-    export default TabbedShowLayout;
-    /**
-     * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
-     */
-    declare const TabbedShowLayout: {
-        defaultProps: {
-            tabs: string;
-        };
-    } & ((props?: {
-        elem: string;
-    }) => JSX.Element);
-          ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    
-==== out/jsDeclarationsReactComponents4.d.ts (1 errors) ====
-    export default TabbedShowLayout;
-    declare function TabbedShowLayout(prop: {
-        className: string;
-    }): JSX.Element;
-        ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    declare namespace TabbedShowLayout {
-        namespace defaultProps {
-            let tabs: string;
-        }
-    }
-    
-==== out/jsDeclarationsReactComponents5.d.ts (2 errors) ====
-    export default Tree;
-    declare function Tree({ allowDropOnRoot }: {
-        allowDropOnRoot: any;
-    }): JSX.Element;
-        ~~~
-!!! error TS2503: Cannot find namespace 'JSX'.
-    declare namespace Tree {
-        namespace propTypes {
-            let classes: PropTypes.Requireable<object>;
-        }
-        namespace defaultProps {
-            let classes_1: {};
-            export { classes_1 as classes };
-            export let parentSource: string;
-        }
-    }
-    import PropTypes from 'prop-types';
-                          ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'prop-types' or its corresponding type declarations.
-    

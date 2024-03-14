@@ -25,15 +25,16 @@ declare global {
     "type": "module"
 }
 //// [index.ts]
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export interface LocalInterface extends RequireInterface {}
 
 //// [index.js]
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export {};
 
 
 //// [index.d.ts]
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends RequireInterface {
 }
 
@@ -41,10 +42,11 @@ export interface LocalInterface extends RequireInterface {
 //// [DtsFileErrors]
 
 
-out/index.d.ts(1,41): error TS2304: Cannot find name 'RequireInterface'.
+out/index.d.ts(2,41): error TS2304: Cannot find name 'RequireInterface'.
 
 
 ==== out/index.d.ts (1 errors) ====
+    /// <reference types="pkg" preserve="true" />
     export interface LocalInterface extends RequireInterface {
                                             ~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'RequireInterface'.
