@@ -24,7 +24,15 @@ export interface IThings {
 }
 
 //// [/src/packages/pkg1/tsconfig.json]
-{"extends":"../../tsconfig","compilerOptions":{"outDir":"lib"},"include":["src"]}
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/src/packages/pkg2/src/index.ts]
 import { IThings } from '@fluentui/pkg1';
@@ -34,10 +42,33 @@ export function fn4() {
 }
 
 //// [/src/packages/pkg2/tsconfig.json]
-{"extends":"../../tsconfig","compilerOptions":{"outDir":"lib"},"include":["src"],"references":[{"path":"../pkg1"}]}
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../pkg1"
+    }
+  ]
+}
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":".","paths":{"@fluentui/*":["packages/*/src"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@fluentui/*": [
+        "packages/*/src"
+      ]
+    }
+  }
+}
 
 
 
@@ -130,12 +161,11 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
 //// [/src/packages/pkg2/lib/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn4 = void 0;
+exports.fn4 = fn4;
 function fn4() {
     var a = { thing1: { a: 'b' } };
     return a.thing1;
 }
-exports.fn4 = fn4;
 
 
 //// [/src/packages/pkg2/lib/tsconfig.tsbuildinfo]

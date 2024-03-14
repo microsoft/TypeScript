@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/blockScopedNamespaceDifferentFile.ts] ////
 
 === test.ts ===
-// #15734 failed when test.ts comes before typings.d.ts
 namespace C {
 >C : typeof C
 

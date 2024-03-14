@@ -1,11 +1,21 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a.js]
 
 
 //// [/jsconfig.json]
-{"compilerOptions":{},"typeAcquisition":{"enable":true,"include":["hunter2","hunter3"],"exclude":[]}}
+{
+  "compilerOptions": {},
+  "typeAcquisition": {
+    "enable": true,
+    "include": [
+      "hunter2",
+      "hunter3"
+    ],
+    "exclude": []
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -48,7 +58,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Conf
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.js SVC-1-0 ""
@@ -72,6 +82,17 @@ FsWatchesRecursive::
 /: *new*
   {}
 
+Projects::
+/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /jsconfig.json *default*
+
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
@@ -87,7 +108,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /jsconfig.json Detected new package.json: a/data/package.json
+Info seq  [hh:mm:ss:mss] Config: /jsconfig.json Detected new package.json: /a/data/package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project: /jsconfig.json Detected file add/remove of non supported extension: a/data/package.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
@@ -104,14 +125,14 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /jsconfig.json Detected file add/remove of non supported extension: a/data/node_modules/types-registry/index.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/node_modules/types-registry/index.json :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
@@ -128,6 +149,16 @@ FsWatches::
 FsWatchesRecursive::
 /:
   {}
+
+Timeout callback:: count: 2
+7: /jsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 0
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -154,12 +185,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["hunter2","hunter3"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -220,6 +247,35 @@ Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [
+            "hunter2",
+            "hunter3"
+          ],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "configFilePath": "/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/jsconfig.json"
@@ -273,7 +329,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -362,3 +418,9 @@ FsWatches::
 FsWatchesRecursive::
 /:
   {}
+
+Projects::
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1 *changed*
+    dirty: false *changed*

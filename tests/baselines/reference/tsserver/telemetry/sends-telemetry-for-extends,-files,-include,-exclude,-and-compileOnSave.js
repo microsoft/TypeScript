@@ -1,11 +1,24 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/hunter2/a.ts]
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{},"extends":"hunter2.json","files":["hunter2/a.ts"],"include":["hunter2"],"exclude":["hunter2"],"compileOnSave":true}
+{
+  "compilerOptions": {},
+  "extends": "hunter2.json",
+  "files": [
+    "hunter2/a.ts"
+  ],
+  "include": [
+    "hunter2"
+  ],
+  "exclude": [
+    "hunter2"
+  ],
+  "compileOnSave": true
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -43,7 +56,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /hunter2 1 undefi
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /hunter2 1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/hunter2/a.ts SVC-1-0 ""
@@ -159,12 +172,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 33
+              "line": 3,
+              "offset": 14
             },
             "end": {
-              "line": 1,
-              "offset": 47
+              "line": 3,
+              "offset": 28
             },
             "text": "File 'hunter2.json' not found.",
             "code": 6053,
@@ -198,3 +211,14 @@ FsWatches::
 FsWatchesRecursive::
 /hunter2: *new*
   {}
+
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/hunter2/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*

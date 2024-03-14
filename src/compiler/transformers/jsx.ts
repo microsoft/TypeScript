@@ -36,6 +36,7 @@ import {
     isJsxSelfClosingElement,
     isJsxSpreadAttribute,
     isLineBreak,
+    isObjectLiteralElementLike,
     isObjectLiteralExpression,
     isPropertyAssignment,
     isSourceFile,
@@ -63,6 +64,7 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     PropertyAssignment,
+    sameMap,
     ScriptTarget,
     setIdentifierGeneratedImportReference,
     setParentRecursive,
@@ -444,7 +446,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function transformJsxSpreadAttributeToProps(node: JsxSpreadAttribute) {
         if (isObjectLiteralExpression(node.expression) && !hasProto(node.expression)) {
-            return node.expression.properties;
+            return sameMap(node.expression.properties, p => Debug.checkDefined(visitNode(p, visitor, isObjectLiteralElementLike)));
         }
         return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }

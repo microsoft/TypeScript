@@ -323,7 +323,9 @@ import {
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import {
+    containsJsx,
     createNewFileName,
+    getStatementsToMove,
 } from "./_namespaces/ts.refactor";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
@@ -1620,6 +1622,15 @@ export function createLanguageService(
     }
 
     function synchronizeHostData(): void {
+        if (host.updateFromProject && !host.updateFromProjectInProgress) {
+            host.updateFromProject();
+        }
+        else {
+            synchronizeHostDataWorker();
+        }
+    }
+
+    function synchronizeHostDataWorker(): void {
         Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
         // perform fast check if host supports it
         if (host.getProjectVersion) {
@@ -2553,20 +2564,25 @@ export function createLanguageService(
             const openTag = tag.parent.openingElement;
             const closeTag = tag.parent.closingElement;
 
-            const openTagStart = openTag.tagName.getStart(sourceFile);
-            const openTagEnd = openTag.tagName.end;
-            const closeTagStart = closeTag.tagName.getStart(sourceFile);
-            const closeTagEnd = closeTag.tagName.end;
+            const openTagNameStart = openTag.tagName.getStart(sourceFile);
+            const openTagNameEnd = openTag.tagName.end;
+            const closeTagNameStart = closeTag.tagName.getStart(sourceFile);
+            const closeTagNameEnd = closeTag.tagName.end;
+            // do not return linked cursors if tags are not well-formed
+            if (
+                openTagNameStart === openTag.getStart(sourceFile) || closeTagNameStart === closeTag.getStart(sourceFile)
+                || openTagNameEnd === openTag.getEnd() || closeTagNameEnd === closeTag.getEnd()
+            ) return undefined;
 
             // only return linked cursors if the cursor is within a tag name
-            if (!(openTagStart <= position && position <= openTagEnd || closeTagStart <= position && position <= closeTagEnd)) return undefined;
+            if (!(openTagNameStart <= position && position <= openTagNameEnd || closeTagNameStart <= position && position <= closeTagNameEnd)) return undefined;
 
             // only return linked cursors if text in both tags is identical
             const openingTagText = openTag.tagName.getText(sourceFile);
             if (openingTagText !== closeTag.tagName.getText(sourceFile)) return undefined;
 
             return {
-                ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
+                ranges: [{ start: openTagNameStart, length: openTagNameEnd - openTagNameStart }, { start: closeTagNameStart, length: closeTagNameEnd - closeTagNameStart }],
                 wordPattern: jsxTagWordPattern,
             };
         }
@@ -3016,13 +3032,20 @@ export function createLanguageService(
         const sourceFile = getValidSourceFile(fileName);
         const allFiles = Debug.checkDefined(program.getSourceFiles());
         const extension = extensionFromPath(fileName);
-        const files = mapDefined(allFiles, file =>
-            !program?.isSourceFileFromExternalLibrary(sourceFile) &&
-                !(sourceFile === getValidSourceFile(file.fileName) || extension === Extension.Ts && extensionFromPath(file.fileName) === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && extensionFromPath(file.fileName) === Extension.Dts)
-                && extension === extensionFromPath(file.fileName) ? file.fileName : undefined);
+        const toMove = getStatementsToMove(getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions));
+        const toMoveContainsJsx = containsJsx(toMove?.all);
 
-        const newFileName = createNewFileName(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
-        return { newFileName, files };
+        const files = mapDefined(allFiles, file => {
+            const fileNameExtension = extensionFromPath(file.fileName);
+            const isValidSourceFile = !program?.isSourceFileFromExternalLibrary(sourceFile) && !(
+                sourceFile === getValidSourceFile(file.fileName) ||
+                extension === Extension.Ts && fileNameExtension === Extension.Dts ||
+                extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
+            );
+            return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx) ? file.fileName : undefined;
+        });
+
+        return { newFileName: createNewFileName(sourceFile, program, host, toMove), files };
     }
 
     function getEditsForRefactor(
@@ -3273,16 +3296,21 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
         return symbol ? [symbol] : emptyArray;
     }
 
-    const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent) || isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+    const filteredTypes = isObjectLiteralExpression(node.parent) || isJsxAttributes(node.parent)
+        ? filter(contextualType.types, t => !checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent))
+        : contextualType.types;
+    const discriminatedPropertySymbols = mapDefined(filteredTypes, t => t.getProperty(name));
     if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
         const symbol = contextualType.getProperty(name);
         if (symbol) return [symbol];
     }
-    if (discriminatedPropertySymbols.length === 0) {
+    if (!filteredTypes.length && !discriminatedPropertySymbols.length) {
         // Bad discriminant -- do again without discriminating
         return mapDefined(contextualType.types, t => t.getProperty(name));
     }
-    return discriminatedPropertySymbols;
+    // by eliminating duplicates we might even end up with a single symbol
+    // that helps with displaying better quick infos on properties of union types
+    return deduplicate(discriminatedPropertySymbols, equateValues);
 }
 
 function isArgumentOfElementAccessExpression(node: Node) {

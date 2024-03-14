@@ -235,7 +235,7 @@ export function getVar(): {
 //// [/out/sub-project-2/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVar = void 0;
+exports.getVar = getVar;
 var index_1 = require("../sub-project/index");
 var variable = {
     key: index_1.m,
@@ -243,7 +243,6 @@ var variable = {
 function getVar() {
     return variable;
 }
-exports.getVar = getVar;
 
 
 //// [/out/sub-project-2/tsconfig.tsbuildinfo]

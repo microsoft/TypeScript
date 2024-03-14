@@ -247,7 +247,16 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Change:: builds after fixing config file errors
 Input::
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "files": [
+    "a.ts",
+    "b.ts"
+  ]
+}
 
 
 
@@ -264,11 +273,10 @@ export declare function fooBar(): void;
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooBar = exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
-function fooBar() { }
 exports.fooBar = fooBar;
+function foo() { }
+function fooBar() { }
 
 
 //// [/src/b.d.ts]
@@ -278,9 +286,8 @@ export declare function bar(): void;
 //// [/src/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 
 
 //// [/src/tsconfig.tsbuildinfo]

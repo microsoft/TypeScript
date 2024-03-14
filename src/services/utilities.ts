@@ -9,6 +9,7 @@ import {
     BinaryExpression,
     binarySearchKey,
     BindingElement,
+    BlockLike,
     BreakOrContinueStatement,
     CallExpression,
     canHaveModifiers,
@@ -59,7 +60,10 @@ import {
     EndOfFileToken,
     endsWith,
     ensureScriptKind,
+    EqualityComparer,
     EqualityOperator,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
     escapeString,
     ExportAssignment,
     ExportDeclaration,
@@ -291,7 +295,6 @@ import {
     normalizePath,
     NoSubstitutionTemplateLiteral,
     notImplemented,
-    nullTransformationContext,
     NumericLiteral,
     or,
     OrganizeImports,
@@ -359,6 +362,7 @@ import {
     tokenToString,
     toPath,
     tryCast,
+    tryParseJson,
     Type,
     TypeChecker,
     TypeFlags,
@@ -1955,7 +1959,7 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
 /** @internal */
 export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
     const closeTokenText = tokenToString(token.kind)!;
-    const matchingTokenText = tokenToString(matchingTokenKind)!;
+    const matchingTokenText = tokenToString(matchingTokenKind);
     const tokenFullStart = token.getFullStart();
     // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
     // a good, fast approximation without too much extra work in the cases where it fails.
@@ -2470,6 +2474,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
+        getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
     };
 }
 
@@ -2663,8 +2668,14 @@ export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined)
     return !!a && !!b && a.start === b.start && a.length === b.length;
 }
 /** @internal */
-export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
-    return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
+export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan, useCaseSensitiveFileNames: boolean): boolean {
+    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.fileName, b.fileName) &&
+        textSpansEqual(a.textSpan, b.textSpan);
+}
+
+/** @internal */
+export function getDocumentSpansEqualityComparer(useCaseSensitiveFileNames: boolean): EqualityComparer<DocumentSpan> {
+    return (a, b) => documentSpansEqual(a, b, useCaseSensitiveFileNames);
 }
 
 /**
@@ -2968,16 +2979,18 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
     }
     else {
         const symbol = checker?.getSymbolAtLocation(link.name);
+        const targetSymbol = symbol && checker ? getSymbolTarget(symbol, checker) : undefined;
         const suffix = findLinkNameEnd(link.text);
         const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
         const text = skipSeparatorFromLinkText(link.text.slice(suffix));
-        const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+        const decl = targetSymbol?.valueDeclaration || targetSymbol?.declarations?.[0];
         if (decl) {
             parts.push(linkNamePart(name, decl));
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
+            const separator = suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " " : "";
+            parts.push(linkTextPart(name + separator + text));
         }
     }
     parts.push(linkPart("}"));
@@ -3162,7 +3175,7 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (n
     const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
         ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
         : ns => ns && getSynthesizedDeepClones(ns);
-    const visited = visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
+    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
 
     if (visited === node) {
         // This only happens for leaf nodes - internal nodes always see their children change.
@@ -3383,7 +3396,7 @@ export function quote(sourceFile: SourceFile, preferences: UserPreferences, text
     // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const quoted = JSON.stringify(text);
-    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
+    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, () => "\\'").replace(/\\"/g, '"')}'` : quoted;
 }
 
 /** @internal */
@@ -3885,15 +3898,6 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 }
 
-function tryParseJson(text: string) {
-    try {
-        return JSON.parse(text);
-    }
-    catch {
-        return undefined;
-    }
-}
-
 /** @internal */
 export function consumesNodeCoreModules(sourceFile: SourceFile): boolean {
     return some(sourceFile.imports, ({ text }) => JsTyping.nodeCoreModules.has(text));
@@ -4270,4 +4274,17 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
         }
     }
     return preferRequire;
+}
+
+/** @internal */
+export function isBlockLike(node: Node): node is BlockLike {
+    switch (node.kind) {
+        case SyntaxKind.Block:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.CaseClause:
+            return true;
+        default:
+            return false;
+    }
 }

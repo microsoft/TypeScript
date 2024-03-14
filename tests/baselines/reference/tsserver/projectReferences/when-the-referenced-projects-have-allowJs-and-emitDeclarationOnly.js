@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: true
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -15,10 +15,26 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/packages/emit-composite/tsconfig.json]
-{"compilerOptions":{"composite":true,"allowJs":true,"emitDeclarationOnly":true,"outDir":"lib","rootDir":"src"},"include":["src"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "allowJs": true,
+    "emitDeclarationOnly": true,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/emit-composite/package.json]
-{"name":"emit-composite","version":"1.0.0","main":"src/index.js","typings":"lib/index.d.ts"}
+{
+  "name": "emit-composite",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "typings": "lib/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/packages/emit-composite/src/index.js]
 const testModule = require('./testModule');
@@ -37,7 +53,16 @@ module.exports = {
 }
 
 //// [/user/username/projects/myproject/packages/consumer/tsconfig.json]
-{"include":["src"],"references":[{"path":"../emit-composite"}]}
+{
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../emit-composite"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/consumer/src/index.ts]
 import { testCompositeFunction } from 'emit-composite';
@@ -125,7 +150,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/consumer/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/consumer/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -256,6 +281,29 @@ FsWatchesRecursive::
 /user/username/projects/myproject/packages/emit-composite/src: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/packages/consumer/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/consumer/tsconfig.json
+/user/username/projects/myproject/packages/consumer/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/packages/consumer/tsconfig.json *default*
+/user/username/projects/myproject/packages/emit-composite/src/index.js *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/consumer/tsconfig.json
+/user/username/projects/myproject/packages/emit-composite/src/testModule.js *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/consumer/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -276,6 +324,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -290,6 +341,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -319,7 +373,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck

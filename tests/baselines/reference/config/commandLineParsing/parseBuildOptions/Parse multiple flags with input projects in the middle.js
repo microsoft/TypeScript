@@ -1,8 +1,8 @@
 --force src tests --verbose
 buildOptions::
 {
- "force": true,
- "verbose": true
+  "force": true,
+  "verbose": true
 }
 WatchOptions::
 

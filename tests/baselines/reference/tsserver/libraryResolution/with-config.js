@@ -1,5 +1,5 @@
 currentDirectory:: /home/src/projects useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project1/utils.d.ts]
 export const y = 10;
@@ -20,7 +20,19 @@ export const x = "type1";
 
 
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
@@ -32,7 +44,16 @@ export const y = 10;
 export const y = 10
 
 //// [/home/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project3/utils.d.ts]
 export const y = 10;
@@ -41,7 +62,16 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project3/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project4/utils.d.ts]
 export const y = 10;
@@ -50,7 +80,17 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project4/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["esnext","dom","webworker"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "webworker"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
@@ -108,6 +148,16 @@ Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project1
 Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project1/index.ts :: Config file name: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project1/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project1/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project1/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/project1/core.d.ts",
@@ -261,7 +311,7 @@ Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not reso
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -300,6 +350,77 @@ Info seq  [hh:mm:ss:mss] 	Files (10)
 	  Entry point for implicit type library 'sometype'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project1/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "a56ae0b7959ff2b0cb325077d485dcad15515353d68a035269eb930e78171949",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 3,
+            "tsSize": 142,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 7,
+            "dtsSize": 576,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "composite": true,
+            "typeRoots": [
+              ""
+            ],
+            "lib": [
+              "es5",
+              "dom"
+            ],
+            "traceResolution": true
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project1/index.ts",
+        "configFile": "/home/src/projects/project1/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project1
 Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project1/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
@@ -349,6 +470,53 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1: *new*
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.es5.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -361,12 +529,23 @@ Before running Timeout callback:: count: 1
 interface DOMInterface { }
 
 
+Timeout callback:: count: 1
+2: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-3: /home/src/projects/project1/tsconfig.json
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+3: /home/src/projects/project1/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 3: /home/src/projects/project1/tsconfig.json
@@ -395,7 +574,7 @@ Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was successf
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -451,7 +630,71 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/file.ts 1:: WatchInfo: /home/src/projects/project1/file.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
@@ -464,13 +707,69 @@ Before running Timeout callback:: count: 2
 export const file = 10;export const xyz = 10;
 
 
+Timeout callback:: count: 2
+5: /home/src/projects/project1/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -502,7 +801,71 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/core.d.ts 2:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info
@@ -554,6 +917,61 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Timeout callback:: count: 2
+9: /home/src/projects/project1/tsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
@@ -561,7 +979,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthos
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -614,7 +1032,25 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
@@ -630,6 +1066,58 @@ Before running Timeout callback:: count: 3
 12: /home/src/projects/project1/tsconfig.json
 13: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
+
+Timeout callback:: count: 3
+11: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+12: /home/src/projects/project1/tsconfig.json *new*
+13: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 3
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -671,7 +1159,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -724,7 +1212,63 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 4 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
@@ -734,11 +1278,44 @@ Before running Timeout callback:: count: 2
 14: /home/src/projects/project1/tsconfig.json
 15: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1","./typeroot2"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1",
+      "./typeroot2"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
+
+Timeout callback:: count: 2
+14: /home/src/projects/project1/tsconfig.json *new*
+15: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6 *changed*
+    projectProgramVersion: 4
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project1/tsconfig.json",
+        "reason": "Change in config file detected"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project1/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/project1/file.ts",
@@ -775,7 +1352,7 @@ Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was succes
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 6 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -789,6 +1366,26 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/projects/project1/typeroot1/sometype/index.d.ts Text-1 "export type TheNum = \"type1\";"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project1/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project1/tsconfig.json",
+        "configFile": "/home/src/projects/project1/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
@@ -806,6 +1403,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
 PolledWatches::
@@ -842,6 +1451,12 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6
+    projectProgramVersion: 5 *changed*
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -854,15 +1469,48 @@ Before running Timeout callback:: count: 3
 17: *ensureProjectForOpenFiles*
 18: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts]
 interface DOMInterface { }
 
 
+Timeout callback:: count: 3
+16: /home/src/projects/project1/tsconfig.json *new*
+17: *ensureProjectForOpenFiles* *new*
+18: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7 *changed*
+    projectProgramVersion: 5
+    dirty: true *changed*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project1/tsconfig.json",
+        "reason": "Change in config file detected"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project1/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/project1/file.ts",
@@ -914,7 +1562,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 7 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -950,8 +1598,27 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 	  Entry point for implicit type library 'sometype'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project1/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project1/tsconfig.json",
+        "configFile": "/home/src/projects/project1/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 After running Timeout callback:: count: 1
-19: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /home/src/projects/project1/node_modules:
@@ -989,6 +1656,59 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Timeout callback:: count: 1
+17: *ensureProjectForOpenFiles* *deleted*
+18: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *deleted*
+19: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7
+    projectProgramVersion: 6 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -1005,6 +1725,10 @@ Before running Timeout callback:: count: 2
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts]
 interface WebWorkerInterface { }
 
+
+Timeout callback:: count: 2
+19: *ensureProjectForOpenFiles*
+21: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
@@ -1023,12 +1747,32 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-22: /home/src/projects/project1/tsconfig.json
-23: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+22: /home/src/projects/project1/tsconfig.json *new*
+23: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 8 *changed*
+    projectProgramVersion: 6
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 22: /home/src/projects/project1/tsconfig.json
@@ -1055,7 +1799,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthos
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 8 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 8 projectProgramVersion: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1108,7 +1852,70 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 8
+    projectProgramVersion: 7 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
@@ -1122,6 +1929,61 @@ Before running Timeout callback:: count: 3
 25: /home/src/projects/project1/tsconfig.json
 26: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
+
+Timeout callback:: count: 3
+24: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+25: /home/src/projects/project1/tsconfig.json *new*
+26: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9 *changed*
+    projectProgramVersion: 7
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -1163,7 +2025,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthos
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 9 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 9 projectProgramVersion: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.es5.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -1216,4 +2078,63 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project1/index.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project1/index.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9
+    projectProgramVersion: 8 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json

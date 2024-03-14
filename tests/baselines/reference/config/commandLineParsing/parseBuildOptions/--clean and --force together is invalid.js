@@ -1,8 +1,8 @@
 --clean --force
 buildOptions::
 {
- "clean": true,
- "force": true
+  "clean": true,
+  "force": true
 }
 WatchOptions::
 
