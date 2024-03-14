@@ -1,4 +1,6 @@
 // @strictNullChecks: true
+// @declaration: true
+
 // https://github.com/microsoft/TypeScript/issues/16069
 
 const numsOrNull = [1, 2, 3, 4, null];
