@@ -24,7 +24,8 @@ export function applyModelsAndClientExtensions(client: Client) {
 //// [circularConstructorWithReturn.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.applyModelsAndClientExtensions = exports.getPrismaClient = void 0;
+exports.getPrismaClient = getPrismaClient;
+exports.applyModelsAndClientExtensions = applyModelsAndClientExtensions;
 function getPrismaClient(options) {
     var PrismaClient = /** @class */ (function () {
         function PrismaClient(options) {
@@ -34,8 +35,6 @@ function getPrismaClient(options) {
     }());
     return PrismaClient;
 }
-exports.getPrismaClient = getPrismaClient;
 function applyModelsAndClientExtensions(client) {
     return client;
 }
-exports.applyModelsAndClientExtensions = applyModelsAndClientExtensions;
