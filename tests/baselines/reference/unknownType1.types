@@ -342,7 +342,7 @@ function f23<T extends unknown>(x: T) {
 // Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
->f24 : (x: { [x: string]: unknown; }) => void
+>f24 : (x: {    [x: string]: unknown;}) => void
 >x : { [x: string]: unknown; }
 >x : string
 
