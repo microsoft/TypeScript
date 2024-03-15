@@ -12,15 +12,14 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
     it("diagnostics for select nodes", () => {
         const file1 = {
             path: "/a/b/app.ts",
-            content:
-`function foo(x: number, y: string): number {
+            content: `function foo(x: number, y: string): number {
     return x + y;
 }
 
 
 
-foo(10, 50);`
-        }
+foo(10, 50);`,
+        };
         const host = createServerHost([file1]);
         const session = new RegionTestSession(host);
 
@@ -33,7 +32,7 @@ foo(10, 50);`
             session,
             files: [{
                 file: file1.path,
-                ranges: [{ startLine: 6, startOffset: 1, endLine: 7, endOffset: 13 }]
+                ranges: [{ startLine: 6, startOffset: 1, endLine: 7, endOffset: 13 }],
             }],
         });
 
@@ -53,14 +52,19 @@ function verifyGetErrRegionRequest(request: VerifyGetErrRegionRequest): void {
         command: ts.server.protocol.CommandTypes.Geterr,
         arguments: {
             delay: 0,
-            files
+            files,
         },
     });
 
+    // Run syntax diagnostics
     session.host.runQueuedTimeoutCallbacks();
-    for (let i = 0; i < 3; ++i) {
-        session.host.runQueuedImmediateCallbacks();
-    }
+    // Run region semantic diagnostics
+    session.host.runQueuedImmediateCallbacks();
+    // Run full semantic diagnostics
+    session.host.runQueuedTimeoutCallbacks();
+    session.host.runQueuedImmediateCallbacks();
+    // Run suggestion diagnostics
+    session.host.runQueuedImmediateCallbacks();
 }
 
 class RegionTestSession extends TestSession {
@@ -68,7 +72,7 @@ class RegionTestSession extends TestSession {
         super(optsOrHost);
     }
 
-    protected override shouldDoRegionCheck(file: ts.server.NormalizedPath): boolean {
+    protected override shouldDoRegionCheck(_file: ts.server.NormalizedPath): boolean {
         return true;
     }
 }

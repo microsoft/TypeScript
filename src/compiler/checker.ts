@@ -46579,6 +46579,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
         }
 
+        // If editing this, keep `isSourceElement` in utilities up to date.
         switch (kind) {
             case SyntaxKind.TypeParameter:
                 return checkTypeParameter(node as TypeParameterDeclaration);
@@ -47053,15 +47054,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
 
-            // >> TODO: skip this? do this?
             // Grammar checking
             checkGrammarSourceFile(file);
 
             forEach(nodes, checkSourceElement);
 
             checkDeferredNodes(file);
-
-            // >> TODO: do `checkPotentialUncheckedRenamedBindingElementsInTypes`?
         }
     }
 
@@ -47111,9 +47109,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkSourceFileWithEagerDiagnostics(sourceFile, nodesToCheck);
             const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
             if (nodesToCheck) {
-                // No need to get global diagnostics;
-                // reset diagnostic collection.
-                diagnostics = createDiagnosticCollection();
+                // No need to get global diagnostics.
                 return semanticDiagnostics;
             }
             const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();

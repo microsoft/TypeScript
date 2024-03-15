@@ -184,6 +184,7 @@ import {
     isRightSideOfPropertyAccess,
     isRightSideOfQualifiedName,
     isSetAccessor,
+    isSourceElement,
     isStringOrNumericLiteralLike,
     isTagName,
     isTextWhiteSpaceLike,
@@ -2021,8 +2022,8 @@ export function createLanguageService(
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
         return {
             diagnostics: semanticDiagnostics.slice(),
-            ranges: nodes.map(node => createTextRangeFromNode(node, targetSourceFile)), // >> TODO: return span, and normalize them
-        }
+            spans: normalizeSpans(nodes.map(node => createTextSpanFromNode(node, targetSourceFile))),
+        };
     }
 
     function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
@@ -2060,22 +2061,28 @@ export function createLanguageService(
 
         function includeNodes(node: Node): true | undefined {
             if (!textRangeIntersectsWithTextSpan(node, span)) {
-                // TODO: if node is after span, we can quit the rest of the for each child calls
                 if (node.pos >= span.start + span.length) {
                     return true;
                 }
                 return;
             }
             if (textSpanContainsTextRange(span, node) || !isBlockLike(node)) {
-                nodes.push(node);
+                includeNode(node);
                 return;
             }
             const stmts = node.statements.filter(node => textRangeIntersectsWithTextSpan(node, span));
             if (stmts.length === node.statements.length) {
-                nodes.push(node);
+                includeNode(node);
                 return;
             }
             stmts.forEach(includeNodes);
+        }
+
+        function includeNode(node: Node): void {
+            while (!isSourceElement(node)) {
+                node = node.parent;
+            }
+            nodes.push(node);
         }
     }
 

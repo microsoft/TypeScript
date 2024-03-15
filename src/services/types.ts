@@ -447,7 +447,7 @@ export const enum SemanticClassificationFormat {
 
 export interface RegionDiagnosticsResult {
     diagnostics: Diagnostic[];
-    ranges: TextRange[];
+    spans: TextSpan[];
 }
 
 //

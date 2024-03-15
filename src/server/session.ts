@@ -1297,7 +1297,7 @@ export class Session<TMessage = string> implements EventSender {
             tracing?.pop();
             return false;
         }
-        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsResult.ranges.map(createTextSpanFromRange));
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsResult.spans);
         tracing?.pop();
         return true;
     }
