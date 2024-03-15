@@ -6,7 +6,6 @@ import {
     Debug,
     EmitOutput,
     emptyArray,
-    ExportedModulesFromDeclarationEmit,
     GetCanonicalFileName,
     getDirectoryPath,
     getIsolatedModules,
@@ -70,14 +69,6 @@ export interface BuilderState {
      */
     readonly referencedMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
     /**
-     * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
-     * Otherwise undefined
-     *
-     * This is equivalent to referencedMap, but for the emitted .d.ts file.
-     */
-    readonly exportedModulesMap?: BuilderState.ManyToManyPathMap | undefined;
-
-    /**
      * true if file version is used as signature
      * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
      */
@@ -92,10 +83,6 @@ export interface BuilderState {
      * Stores signatures before before the update till affected file is committed
      */
     oldSignatures?: Map<Path, string | false>;
-    /**
-     * Stores exportedModulesMap before the update till affected file is committed
-     */
-    oldExportedModulesMap?: Map<Path, ReadonlySet<Path> | false>;
     /**
      * Cache of all files excluding default library file for the current program
      */
@@ -314,7 +301,6 @@ export namespace BuilderState {
         const isOutFile = options.outFile;
         const referencedMap = options.module !== ModuleKind.None && !isOutFile ?
             createManyToManyPathMap() : undefined;
-        const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
         const useOldState = canReuseOldState(referencedMap, oldState);
 
         // Ensure source files have parent pointers set
@@ -332,16 +318,6 @@ export namespace BuilderState {
                 if (newReferences) {
                     referencedMap.set(sourceFile.resolvedPath, newReferences);
                 }
-                // Copy old visible to outside files map
-                if (useOldState) {
-                    const oldUncommittedExportedModules = oldState!.oldExportedModulesMap?.get(sourceFile.resolvedPath);
-                    const exportedModules = oldUncommittedExportedModules === undefined ?
-                        oldState!.exportedModulesMap!.getValues(sourceFile.resolvedPath) :
-                        oldUncommittedExportedModules || undefined;
-                    if (exportedModules) {
-                        exportedModulesMap!.set(sourceFile.resolvedPath, exportedModules);
-                    }
-                }
             }
             fileInfos.set(sourceFile.resolvedPath, {
                 version,
@@ -355,7 +331,6 @@ export namespace BuilderState {
         return {
             fileInfos,
             referencedMap,
-            exportedModulesMap,
             useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState,
         };
     }
@@ -386,7 +361,6 @@ export namespace BuilderState {
             host,
         );
         state.oldSignatures?.clear();
-        state.oldExportedModulesMap?.clear();
         return result;
     }
 
@@ -461,60 +435,20 @@ export namespace BuilderState {
         const prevSignature = info.signature;
         let latestSignature: string | undefined;
         if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
-            computeDtsSignature(programOfThisState, sourceFile, cancellationToken, host, (signature, sourceFiles) => {
+            computeDtsSignature(programOfThisState, sourceFile, cancellationToken, host, signature => {
                 latestSignature = signature;
                 if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.ComputedDts);
-                if (latestSignature !== prevSignature) {
-                    updateExportedModules(state, sourceFile, sourceFiles[0].exportedModulesFromDeclarationEmit);
-                }
             });
         }
         // Default is to use file version as signature
         if (latestSignature === undefined) {
             latestSignature = sourceFile.version;
             if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.UsedVersion);
-            if (state.exportedModulesMap && latestSignature !== prevSignature) {
-                (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
-                // All the references in this file are exported
-                const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
-                if (references) {
-                    state.exportedModulesMap.set(sourceFile.resolvedPath, references);
-                }
-                else {
-                    state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
-                }
-            }
         }
         (state.oldSignatures ||= new Map()).set(sourceFile.resolvedPath, prevSignature || false);
         (state.hasCalledUpdateShapeSignature ||= new Set()).add(sourceFile.resolvedPath);
         info.signature = latestSignature;
         return latestSignature !== prevSignature;
-    }
-
-    /**
-     * Coverts the declaration emit result into exported modules map
-     */
-    export function updateExportedModules(state: BuilderState, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
-        if (!state.exportedModulesMap) return;
-        (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
-        const exportedModules = getExportedModules(exportedModulesFromDeclarationEmit);
-        if (exportedModules) {
-            state.exportedModulesMap.set(sourceFile.resolvedPath, exportedModules);
-        }
-        else {
-            state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
-        }
-    }
-
-    export function getExportedModules(exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
-        let exportedModules: Set<Path> | undefined;
-        exportedModulesFromDeclarationEmit?.forEach(
-            symbol =>
-                getReferencedFilesFromImportedModuleSymbol(symbol).forEach(
-                    path => (exportedModules ??= new Set()).add(path),
-                ),
-        );
-        return exportedModules;
     }
 
     /**
