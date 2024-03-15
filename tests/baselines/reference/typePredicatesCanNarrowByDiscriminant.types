@@ -26,11 +26,11 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
 
     fruit.kind
 >fruit.kind : "apple" | "banana"
->fruit : { kind: "apple"; } | { kind: "banana"; }
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >kind : "apple" | "banana"
 
     fruit
->fruit : { kind: "apple"; } | { kind: "banana"; }
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 }
 
 declare const fruit2: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
@@ -55,10 +55,10 @@ if (isOneOf(kind, ['apple', 'banana'] as const)) {
 >'banana' : "banana"
 
     fruit2.kind
->fruit2.kind : "apple" | "banana"
->fruit2 : { kind: "apple"; } | { kind: "banana"; }
->kind : "apple" | "banana"
+>fruit2.kind : "apple" | "banana" | "cherry"
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
+>kind : "apple" | "banana" | "cherry"
 
     fruit2
->fruit2 : { kind: "apple"; } | { kind: "banana"; }
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 }
