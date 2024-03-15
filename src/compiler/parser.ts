@@ -10512,7 +10512,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                     const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
                     const preserve = !!_preserve ? true : undefined;
-                    if (arg.arguments["no-default-lib"]) {
+                    if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {
