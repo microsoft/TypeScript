@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/jsxElementTypeLiteralWithGeneric.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,100 (nearest 100)
 Type Count: 7,800 (nearest 100)
 Instantiation count: 91,500 (nearest 500)

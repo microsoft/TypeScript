@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 300 (nearest 100)
 Type Count: 800 (nearest 100)
 Instantiation count: 2,000 (nearest 500)

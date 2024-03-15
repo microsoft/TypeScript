@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/genericFunctionInference1.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Subtype cache: 100 (nearest 100)
 Assignability cache: 200 (nearest 100)
 Type Count: 1,200 (nearest 100)

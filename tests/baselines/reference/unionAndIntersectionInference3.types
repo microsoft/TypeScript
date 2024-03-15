@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 300 (nearest 100)
 Type Count: 1,500 (nearest 100)
 Instantiation count: 2,500 (nearest 500)

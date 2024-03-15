@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/excessivelyLargeTupleSpread.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Type Count: 33,100 (nearest 100)
 Instantiation count: 49,500 (nearest 500)
 Symbol count: 108,000 (nearest 500)

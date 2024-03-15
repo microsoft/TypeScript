@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Identity cache: 100 (nearest 100)
 Assignability cache: 300 (nearest 100)
 Type Count: 507,600 (nearest 100)

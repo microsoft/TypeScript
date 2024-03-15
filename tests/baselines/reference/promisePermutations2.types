@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/promisePermutations2.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Subtype cache: 200 (nearest 100)
 Assignability cache: 200 (nearest 100)
 Type Count: 800 (nearest 100)

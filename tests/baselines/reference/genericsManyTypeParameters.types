@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/genericsManyTypeParameters.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Strict subtype cache: 11,700 (nearest 100)
 Type Count: 200 (nearest 100)
 Symbol count: 25,500 (nearest 500)

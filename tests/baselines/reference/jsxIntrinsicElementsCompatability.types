@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,300 (nearest 100)
 Type Count: 7,700 (nearest 100)
 Instantiation count: 94,000 (nearest 500)

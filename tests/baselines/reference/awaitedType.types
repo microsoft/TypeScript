@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/awaitedType.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 200 (nearest 100)
 Type Count: 900 (nearest 100)
 Instantiation count: 26,000 (nearest 500)

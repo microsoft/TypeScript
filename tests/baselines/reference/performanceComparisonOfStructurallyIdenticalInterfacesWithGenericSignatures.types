@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 100 (nearest 100)
 Type Count: 5,800 (nearest 100)
 Instantiation count: 17,000 (nearest 500)

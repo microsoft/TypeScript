@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/intersectionsOfLargeUnions2.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Strict subtype cache: 1,000 (nearest 100)
 Subtype cache: 1,300 (nearest 100)
 Assignability cache: 1,200 (nearest 100)

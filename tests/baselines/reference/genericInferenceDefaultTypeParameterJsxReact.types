@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 4,000 (nearest 100)
 Type Count: 10,300 (nearest 100)
 Instantiation count: 221,500 (nearest 500)

@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/hugeDeclarationOutputGetsTruncatedWithError.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Type Count: 101,100 (nearest 100)
 Instantiation count: 400,000 (nearest 500)
 Symbol count: 127,000 (nearest 500)

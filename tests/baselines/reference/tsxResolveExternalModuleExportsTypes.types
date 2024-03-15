@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 600 (nearest 100)
 Type Count: 2,500 (nearest 100)
 Instantiation count: 1,500 (nearest 500)

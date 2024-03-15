@@ -790,7 +790,7 @@ export namespace Compiler {
                 perfStats.push(["Symbol count", 45000, 500, checker.getSymbolCount()]);
 
                 if (perfStats.some(([, threshold, , value]) => value >= threshold)) {
-                    perfLines.push(`//// Performance Stats`);
+                    perfLines.push(`=== Performance Stats ===`);
                     for (const [name, _, rounding, value] of perfStats) {
                         const display = (Math.round(value / rounding) * rounding).toLocaleString("en-US");
                         if (display !== "0") {

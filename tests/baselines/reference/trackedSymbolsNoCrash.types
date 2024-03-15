@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/trackedSymbolsNoCrash.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Strict subtype cache: 100 (nearest 100)
 Assignability cache: 16,000 (nearest 100)
 Type Count: 700 (nearest 100)

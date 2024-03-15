@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/unionSubtypeReductionErrors.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Type Count: 11,100 (nearest 100)
 Symbol count: 28,500 (nearest 500)
 

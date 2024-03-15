@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/relationComplexityError.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,000,000 (nearest 100)
 Type Count: 31,200 (nearest 100)
 Symbol count: 25,500 (nearest 500)

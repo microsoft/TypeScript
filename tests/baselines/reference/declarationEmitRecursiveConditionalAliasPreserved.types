@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 1,900 (nearest 100)
 Type Count: 14,200 (nearest 100)
 Instantiation count: 57,000 (nearest 500)

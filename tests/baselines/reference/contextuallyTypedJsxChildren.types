@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/contextuallyTypedJsxChildren.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,200 (nearest 100)
 Type Count: 7,800 (nearest 100)
 Instantiation count: 90,000 (nearest 500)

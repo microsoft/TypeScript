@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 500 (nearest 100)
 Type Count: 1,100 (nearest 100)
 Instantiation count: 2,000 (nearest 500)

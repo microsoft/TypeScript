@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,700 (nearest 100)
 Type Count: 6,900 (nearest 100)
 Instantiation count: 74,000 (nearest 500)

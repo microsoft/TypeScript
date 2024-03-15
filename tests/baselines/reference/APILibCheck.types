@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/APILibCheck.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Identity cache: 100 (nearest 100)
 Assignability cache: 9,300 (nearest 100)
 Type Count: 22,500 (nearest 100)

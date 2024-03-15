@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 400 (nearest 100)
 Type Count: 1,600 (nearest 100)
 Instantiation count: 2,000 (nearest 500)

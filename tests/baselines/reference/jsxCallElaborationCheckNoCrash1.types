@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Subtype cache: 100 (nearest 100)
 Assignability cache: 3,600 (nearest 100)
 Type Count: 7,800 (nearest 100)

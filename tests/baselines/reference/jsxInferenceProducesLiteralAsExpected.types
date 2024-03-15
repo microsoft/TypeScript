@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 600 (nearest 100)
 Type Count: 2,600 (nearest 100)
 Instantiation count: 2,000 (nearest 500)

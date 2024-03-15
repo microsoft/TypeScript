@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Identity cache: 100 (nearest 100)
 Assignability cache: 200 (nearest 100)
 Type Count: 700 (nearest 100)

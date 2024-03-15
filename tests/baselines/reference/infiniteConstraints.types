@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/infiniteConstraints.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 200 (nearest 100)
 Type Count: 1,000 (nearest 100)
 Instantiation count: 2,500 (nearest 500)

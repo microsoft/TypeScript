@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 900 (nearest 100)
 Type Count: 15,000 (nearest 100)
 Instantiation count: 3,500 (nearest 500)

@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/largeTupleTypes.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 1,600 (nearest 100)
 Type Count: 18,600 (nearest 100)
 Instantiation count: 46,000 (nearest 500)

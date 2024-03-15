@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,100 (nearest 100)
 Type Count: 6,800 (nearest 100)
 Instantiation count: 73,000 (nearest 500)

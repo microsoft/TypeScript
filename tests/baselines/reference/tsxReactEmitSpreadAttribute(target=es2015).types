@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
 
-//// Performance Stats
+=== Performance Stats ===
 Assignability cache: 2,200 (nearest 100)
 Type Count: 6,900 (nearest 100)
 Instantiation count: 73,000 (nearest 500)
