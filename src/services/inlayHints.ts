@@ -11,6 +11,7 @@ import {
     EnumMember,
     equateStringsCaseInsensitive,
     escapeString,
+    escapeTemplateSubstitution,
     Expression,
     findChildOfKind,
     findIndex,
@@ -21,6 +22,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -53,6 +55,7 @@ import {
     isIdentifierText,
     isImportTypeNode,
     isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
     isInferTypeNode,
     isInfinityOrNaNString,
     isIntersectionTypeNode,
@@ -76,7 +79,12 @@ import {
     isQualifiedName,
     isRestTypeNode,
     isSpreadElement,
-    isStringLiteral,
+    isTemplateHead,
+    isTemplateLiteralTypeNode,
+    isTemplateLiteralTypeSpan,
+    isTemplateMiddle,
+    isTemplateTail,
+    isThisTypeNode,
     isTupleTypeNode,
     isTypeLiteralNode,
     isTypeNode,
@@ -88,7 +96,7 @@ import {
     isUnionTypeNode,
     isVarConst,
     isVariableDeclaration,
-    LiteralExpression,
+    LiteralLikeNode,
     MethodDeclaration,
     NewExpression,
     Node,
@@ -105,10 +113,12 @@ import {
     Symbol,
     SymbolFlags,
     SyntaxKind,
+    TemplateLiteralLikeNode,
     textSpanIntersectsWith,
     tokenToString,
     TupleTypeReference,
     Type,
+    TypeFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -251,7 +261,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
+            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+        ) {
             return;
         }
 
@@ -342,7 +355,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 
@@ -743,6 +756,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(node.type);
                     }
                     break;
+                case SyntaxKind.IndexSignature:
+                    Debug.assertNode(node, isIndexSignatureDeclaration);
+                    parts.push({ text: "[" });
+                    visitDisplayPartList(node.parameters, ", ");
+                    parts.push({ text: "]" });
+                    if (node.type) {
+                        parts.push({ text: ": " });
+                        visitForDisplayParts(node.type);
+                    }
+                    break;
                 case SyntaxKind.MethodSignature:
                     Debug.assertNode(node, isMethodSignature);
                     if (node.modifiers?.length) {
@@ -792,6 +815,32 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     parts.push({ text: tokenToString(node.operator) });
                     visitForDisplayParts(node.operand);
                     break;
+                case SyntaxKind.TemplateLiteralType:
+                    Debug.assertNode(node, isTemplateLiteralTypeNode);
+                    visitForDisplayParts(node.head);
+                    node.templateSpans.forEach(visitForDisplayParts);
+                    break;
+                case SyntaxKind.TemplateHead:
+                    Debug.assertNode(node, isTemplateHead);
+                    parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.TemplateLiteralTypeSpan:
+                    Debug.assertNode(node, isTemplateLiteralTypeSpan);
+                    visitForDisplayParts(node.type);
+                    visitForDisplayParts(node.literal);
+                    break;
+                case SyntaxKind.TemplateMiddle:
+                    Debug.assertNode(node, isTemplateMiddle);
+                    parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.TemplateTail:
+                    Debug.assertNode(node, isTemplateTail);
+                    parts.push({ text: getLiteralText(node) });
+                    break;
+                case SyntaxKind.ThisType:
+                    Debug.assertNode(node, isThisTypeNode);
+                    parts.push({ text: "this" });
+                    break;
                 default:
                     Debug.failBadSyntaxKind(node);
             }
@@ -823,9 +872,23 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             });
         }
 
-        function getLiteralText(node: LiteralExpression) {
-            if (isStringLiteral(node)) {
-                return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'` : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
+        function getLiteralText(node: LiteralLikeNode) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                    return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'` : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail: {
+                    const rawText = (node as TemplateLiteralLikeNode).rawText ?? escapeTemplateSubstitution(escapeString(node.text, CharacterCodes.backtick));
+                    switch (node.kind) {
+                        case SyntaxKind.TemplateHead:
+                            return "`" + rawText + "${";
+                        case SyntaxKind.TemplateMiddle:
+                            return "}" + rawText + "${";
+                        case SyntaxKind.TemplateTail:
+                            return "}" + rawText + "`";
+                    }
+                }
             }
             return node.text;
         }

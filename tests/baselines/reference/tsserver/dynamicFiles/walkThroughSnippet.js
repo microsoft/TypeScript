@@ -29,9 +29,9 @@ Info seq  [hh:mm:ss:mss] Search path: walkThroughSnippet:/usr/share/code/resourc
 Info seq  [hh:mm:ss:mss] For info: walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /walkthroughsnippet:/usr/share/code/resources/app/out/vs/typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /walkthroughsnippet:/usr/share/code/resources/app/out/vs/typings/@epic/shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -58,13 +58,26 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/walkthroughsnippet:/usr/share/code/resources/app/out/vs/typings/@epic/core.d.ts: *new*
+/walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Core.d.ts: *new*
   {"pollingInterval":500}
-/walkthroughsnippet:/usr/share/code/resources/app/out/vs/typings/@epic/shell.d.ts: *new*
+/walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Shell.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-/walkthroughsnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkthrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts isDynamic:: true
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts (Dynamic) (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*

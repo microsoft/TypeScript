@@ -32,9 +32,8 @@ Output::
 //// [/users/username/projects/project/moduleFile.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 ;
 
 
@@ -51,7 +50,7 @@ FsWatches::
   {}
 /users/username/projects/project/file1.ts: *new*
   {}
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 Program root files: [
@@ -116,7 +115,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/users/username/projects/project/modulefile.ts:
+/users/username/projects/project/moduleFile.ts:
   {}
 
 FsWatchesRecursive::
@@ -182,9 +181,8 @@ Output::
 //// [/users/username/projects/project/moduleFile.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 ;
 
 
@@ -194,7 +192,7 @@ FsWatches::
   {}
 /users/username/projects/project/file1.ts:
   {}
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 FsWatchesRecursive *deleted*::

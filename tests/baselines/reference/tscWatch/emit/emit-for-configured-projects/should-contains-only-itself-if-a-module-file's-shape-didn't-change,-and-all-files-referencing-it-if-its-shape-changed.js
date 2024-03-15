@@ -44,9 +44,8 @@ Output::
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -75,15 +74,15 @@ exports.Foo4 = 10;
 
 
 FsWatches::
-/a/b/file1consumer1.ts: *new*
+/a/b/file1Consumer1.ts: *new*
   {}
-/a/b/file1consumer2.ts: *new*
+/a/b/file1Consumer2.ts: *new*
   {}
-/a/b/globalfile3.ts: *new*
+/a/b/globalFile3.ts: *new*
   {}
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
-/a/b/modulefile2.ts: *new*
+/a/b/moduleFile2.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -158,9 +157,9 @@ Output::
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
+exports.T = void 0;
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -231,9 +230,9 @@ Output::
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { console.log('hi'); }
+exports.T = void 0;
 exports.Foo = Foo;
+function Foo() { console.log('hi'); }
 ;
 
 

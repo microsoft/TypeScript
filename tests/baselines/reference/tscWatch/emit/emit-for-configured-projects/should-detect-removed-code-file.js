@@ -41,9 +41,8 @@ Output::
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -57,9 +56,9 @@ exports.x = Foo();
 
 
 FsWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
-/a/b/referencefile1.ts: *new*
+/a/b/referenceFile1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -130,11 +129,11 @@ Output::
 //// [/a/b/referenceFile1.js] file written with same contents
 
 PolledWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/referencefile1.ts:
+/a/b/referenceFile1.ts:
   {}
 /a/b/tsconfig.json:
   {}
@@ -142,7 +141,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/modulefile1.ts:
+/a/b/moduleFile1.ts:
   {}
 
 FsWatchesRecursive::
