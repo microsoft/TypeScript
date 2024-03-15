@@ -1,15 +1,4 @@
-import {
-    Debug,
-    setStackTraceLimit,
-    sys,
-    version,
-} from "./_namespaces/ts";
-import {
-    emptyArray,
-    findArgument,
-    hasArgument,
-    Msg,
-} from "./_namespaces/ts.server";
+import * as ts from "./_namespaces/ts";
 import {
     StartInput,
 } from "./common";
@@ -17,51 +6,49 @@ import {
     initializeNodeSystem,
 } from "./nodeServer";
 
-export * from "./_namespaces/ts";
-
 function findArgumentStringArray(argName: string): readonly string[] {
-    const arg = findArgument(argName);
+    const arg = ts.server.findArgument(argName);
     if (arg === undefined) {
-        return emptyArray;
+        return ts.emptyArray;
     }
     return arg.split(",").filter(name => name !== "");
 }
 
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
     logger.info(`Starting TS Server`);
-    logger.info(`Version: ${version}`);
+    logger.info(`Version: ${ts.version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
-    logger.info(`Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(`Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${ts.sys.useCaseSensitiveFileNames}`);
     logger.info(`ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`);
 
-    setStackTraceLimit();
+    ts.setStackTraceLimit();
 
-    if (Debug.isDebugging) {
-        Debug.enableDebugInfo();
+    if (ts.Debug.isDebugging) {
+        ts.Debug.enableDebugInfo();
     }
 
-    if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
-        sys.tryEnableSourceMapsForHost();
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
     }
 
     // Overwrites the current console messages to instead write to
     // the log. This is so that language service plugins which use
     // console.log don't break the message passing between tsserver
     // and the client
-    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
-    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
-    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Info);
+    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Err);
+    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Err);
 
     startServer(
         {
             globalPlugins: findArgumentStringArray("--globalPlugins"),
             pluginProbeLocations: findArgumentStringArray("--pluginProbeLocations"),
-            allowLocalPluginLoads: hasArgument("--allowLocalPluginLoads"),
-            useSingleInferredProject: hasArgument("--useSingleInferredProject"),
-            useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
-            suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
-            noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
-            canUseWatchEvents: hasArgument("--canUseWatchEvents"),
+            allowLocalPluginLoads: ts.server.hasArgument("--allowLocalPluginLoads"),
+            useSingleInferredProject: ts.server.hasArgument("--useSingleInferredProject"),
+            useInferredProjectPerProjectRoot: ts.server.hasArgument("--useInferredProjectPerProjectRoot"),
+            suppressDiagnosticEvents: ts.server.hasArgument("--suppressDiagnosticEvents"),
+            noGetErrOnBackgroundUpdate: ts.server.hasArgument("--noGetErrOnBackgroundUpdate"),
+            canUseWatchEvents: ts.server.hasArgument("--canUseWatchEvents"),
             serverMode,
         },
         logger,
@@ -69,5 +56,5 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
     );
 }
 
-setStackTraceLimit();
+ts.setStackTraceLimit();
 start(initializeNodeSystem(), require("os").platform());
