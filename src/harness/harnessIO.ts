@@ -803,12 +803,12 @@ export namespace Compiler {
                             perfLines.push(`${name}: ${preDisplay} / ${valueToString(postValue, rounding)} (nearest ${rounding})`);
                         }
                     }
-                    perfLines.push('');
-                    perfLines.push('');
+                    perfLines.push("");
+                    perfLines.push("");
                 }
             }
 
-            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join('\n')}${result}`) : null; // eslint-disable-line no-null/no-null
+            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join("\n")}${result}`) : null; // eslint-disable-line no-null/no-null
         }
 
         function valueToString(value: number, rounding: number) {
@@ -825,7 +825,7 @@ export namespace Compiler {
                 assignability: caches.assignable,
                 typeCount: checker.getTypeCount(),
                 instantiation: checker.getInstantiationCount(),
-                symbol: checker.getSymbolCount()
+                symbol: checker.getSymbolCount(),
             };
         }
 
