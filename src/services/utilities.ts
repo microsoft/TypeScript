@@ -327,7 +327,6 @@ import {
     skipOuterExpressions,
     skipParentheses,
     some,
-    SortKind,
     SourceFile,
     SourceFileLike,
     SourceMapper,
@@ -2624,14 +2623,12 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
-    const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    const { comparer, isSorted } = OrganizeImports.getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences);
     const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && (sortKind = OrganizeImports.detectImportDeclarationSorting(existingImportStatements, preferences))) {
-        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    else if (existingImportStatements && isSorted) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
