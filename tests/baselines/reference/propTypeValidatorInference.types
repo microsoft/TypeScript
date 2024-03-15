@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/propTypeValidatorInference.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
-Identity cache: 0 (nearest 100)
 Assignability cache: 100 (nearest 100)
 Type Count: 400 (nearest 100)
 Instantiation count: 3,000 (nearest 500)

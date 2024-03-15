@@ -1,12 +1,7 @@
 //// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
-Identity cache: 0 (nearest 100)
-Assignability cache: 0 (nearest 100)
 Type Count: 1,000 (nearest 100)
-Instantiation count: 0 (nearest 500)
 Symbol count: 28,500 (nearest 500)
 
 === uncalledFunctionChecksInConditional2.ts ===

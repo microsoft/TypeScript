@@ -1,12 +1,8 @@
 //// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
-Identity cache: 0 (nearest 100)
 Assignability cache: 400 (nearest 100)
 Type Count: 1,300 (nearest 100)
-Instantiation count: 0 (nearest 500)
 Symbol count: 27,500 (nearest 500)
 
 === generatedContextualTyping.ts ===

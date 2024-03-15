@@ -1,12 +1,7 @@
 //// [tests/cases/compiler/enumLiteralsSubtypeReduction.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
-Identity cache: 0 (nearest 100)
-Assignability cache: 0 (nearest 100)
 Type Count: 3,200 (nearest 100)
-Instantiation count: 0 (nearest 500)
 Symbol count: 26,500 (nearest 500)
 
 === enumLiteralsSubtypeReduction.ts ===

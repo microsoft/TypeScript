@@ -793,7 +793,9 @@ export namespace Compiler {
                     perfLines.push(`//// Performance Stats`);
                     for (const [name, _, rounding, value] of perfStats) {
                         const display = (Math.round(value / rounding) * rounding).toLocaleString("en-US");
-                        perfLines.push(`${name}: ${display} (nearest ${rounding})`);
+                        if (display !== "0") {
+                            perfLines.push(`${name}: ${display} (nearest ${rounding})`);
+                        }
                     }
                     perfLines.push('');
                     perfLines.push('');

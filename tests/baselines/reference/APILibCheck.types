@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/APILibCheck.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
 Identity cache: 100 (nearest 100)
 Assignability cache: 9,300 (nearest 100)
 Type Count: 22,500 (nearest 100)

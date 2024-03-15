@@ -1,9 +1,6 @@
 //// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
-Identity cache: 0 (nearest 100)
 Assignability cache: 1,400 (nearest 100)
 Type Count: 900 (nearest 100)
 Instantiation count: 1,000 (nearest 500)

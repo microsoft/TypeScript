@@ -2,8 +2,6 @@
 
 //// Performance Stats
 Strict subtype cache: 300 (nearest 100)
-Subtype cache: 0 (nearest 100)
-Identity cache: 0 (nearest 100)
 Assignability cache: 5,000 (nearest 100)
 Type Count: 15,000 (nearest 100)
 Instantiation count: 486,000 (nearest 500)

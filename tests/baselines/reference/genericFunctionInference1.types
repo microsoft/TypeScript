@@ -1,9 +1,7 @@
 //// [tests/cases/compiler/genericFunctionInference1.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
 Subtype cache: 100 (nearest 100)
-Identity cache: 0 (nearest 100)
 Assignability cache: 200 (nearest 100)
 Type Count: 1,200 (nearest 100)
 Instantiation count: 1,500 (nearest 500)

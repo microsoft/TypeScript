@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/complexRecursiveCollections.ts] ////
 
 //// Performance Stats
-Strict subtype cache: 0 (nearest 100)
-Subtype cache: 0 (nearest 100)
 Identity cache: 600 (nearest 100)
 Assignability cache: 7,600 (nearest 100)
 Type Count: 53,300 (nearest 100)
