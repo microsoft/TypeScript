@@ -6456,6 +6456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createNodeBuilder() {
         return {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
+            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
             signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
             symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
@@ -7704,14 +7705,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let returnTypeNode: TypeNode | undefined;
             const typePredicate = getTypePredicateOfSignature(signature);
             if (typePredicate) {
-                const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                    factory.createToken(SyntaxKind.AssertsKeyword) :
-                    undefined;
-                const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                    setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-                    factory.createThisTypeNode();
-                const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
-                returnTypeNode = factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
+                returnTypeNode = typePredicateToTypePredicateNodeHelper(typePredicate, context);
             }
             else {
                 const returnType = getReturnTypeOfSignature(signature);
@@ -7788,6 +7782,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
             const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
             return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
+        }
+
+        function typePredicateToTypePredicateNodeHelper(typePredicate: TypePredicate, context: NodeBuilderContext): TypePredicateNode {
+            const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                factory.createToken(SyntaxKind.AssertsKeyword) :
+                undefined;
+            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                factory.createThisTypeNode();
+            const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
+            return factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
         }
 
         function getEffectiveParameterDeclaration(parameterSymbol: Symbol): ParameterDeclaration | JSDocParameterTag | undefined {
@@ -10309,11 +10314,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
         function typePredicateToStringWorker(writer: EmitTextWriter) {
-            const predicate = factory.createTypePredicateNode(
-                typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createToken(SyntaxKind.AssertsKeyword) : undefined,
-                typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createIdentifier(typePredicate.parameterName) : factory.createThisTypeNode(),
-                typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)!, // TODO: GH#18217
-            );
+            const nodeBuilderFlags = toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName;
+            const predicate = nodeBuilder.typePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, nodeBuilderFlags)!; // TODO: GH#18217
             const printer = createPrinterWithRemoveComments();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, predicate, /*sourceFile*/ sourceFile, writer);
@@ -48579,14 +48581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typePredicate = getTypePredicateOfSignature(signature);
         if (typePredicate) {
             // Inferred type predicates
-            const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                factory.createToken(SyntaxKind.AssertsKeyword) :
-                undefined;
-            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-                factory.createThisTypeNode();
-            const typeNode = typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
-            return factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
+            return nodeBuilder.typePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
         }
         return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
