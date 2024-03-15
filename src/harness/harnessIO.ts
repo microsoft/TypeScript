@@ -812,7 +812,7 @@ export namespace Compiler {
         }
 
         function valueToString(value: number, rounding: number) {
-            return (Math.round(value / rounding) * rounding).toLocaleString("en-US")
+            return (Math.round(value / rounding) * rounding).toLocaleString("en-US");
         }
 
         function getPerformanceBaselineValues() {
