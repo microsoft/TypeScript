@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives6.ts] ////
 
 //// [ref.d.ts]
-// $ comes from type declaration file - type reference directive should be added
-
 declare let $: { x: number }
     
 //// [index.d.ts]

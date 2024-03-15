@@ -2,7 +2,6 @@ import {
     getModuleSpecifier,
 } from "../../compiler/moduleSpecifiers";
 import {
-    __String,
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
@@ -40,6 +39,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findIndex,
     findLast,
     firstDefined,
@@ -51,7 +51,6 @@ import {
     getDecorators,
     getDirectoryPath,
     getLocaleSpecificMessage,
-    getModeForUsageLocation,
     getModifiers,
     getPropertySymbolFromBindingElement,
     getQuotePreference,
@@ -60,6 +59,7 @@ import {
     getRelativePathFromFile,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
+    getTokenAtPosition,
     getUniqueName,
     hasJSFileExtension,
     hasSyntacticModifier,
@@ -75,6 +75,7 @@ import {
     isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
+    isBlockLike,
     isDeclarationName,
     isExportDeclaration,
     isExportSpecifier,
@@ -167,6 +168,16 @@ registerRefactor(refactorNameForMoveToFile, {
         if (!interactiveRefactorArguments) {
             return emptyArray;
         }
+        /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
+         *  This condition is used in order to show less often the `Move to file` code action */
+        if (context.endPosition !== undefined) {
+            const file = context.file;
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+                return emptyArray;
+            }
+        }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
         }
@@ -206,7 +217,7 @@ function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: str
     else {
         const targetSourceFile = Debug.checkDefined(program.getSourceFile(targetFile));
         const importAdder = codefix.createImportAdder(targetSourceFile, context.program, context.preferences, context.host);
-        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, getUsageInfo(oldFile, toMove.all, checker, getExistingImports(targetSourceFile, checker)), changes, toMove, program, host, preferences, importAdder);
+        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, getUsageInfo(oldFile, toMove.all, checker, getExistingLocals(targetSourceFile, toMove.all, checker)), changes, toMove, program, host, preferences, importAdder);
     }
 }
 
@@ -313,10 +324,11 @@ function getTargetFileImportsAndAddExportInOldFile(
             forEachImportInStatement(oldStatement, i => {
                 // Recomputing module specifier
                 const moduleSpecifier = moduleSpecifierFromImport(i);
-                const resolved = program.getResolvedModule(oldFile, moduleSpecifier.text, getModeForUsageLocation(oldFile, moduleSpecifier));
+                const compilerOptions = program.getCompilerOptions();
+                const resolved = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier);
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
                 if (fileName && targetSourceFile) {
-                    const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));
+                    const newModuleSpecifier = getModuleSpecifier(compilerOptions, targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));
                     append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
                 }
                 else {
@@ -894,12 +906,10 @@ export interface TopLevelVariableDeclaration extends VariableDeclaration {
 export type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
 
 /** @internal */
-export function createNewFileName(oldFile: SourceFile, program: Program, context: RefactorContext, host: LanguageServiceHost): string {
+export function createNewFileName(oldFile: SourceFile, program: Program, host: LanguageServiceHost, toMove: ToMove | undefined): string {
     const checker = program.getTypeChecker();
-    const toMove = getStatementsToMove(context);
-    let usage;
     if (toMove) {
-        usage = getUsageInfo(oldFile, toMove.all, checker);
+        const usage = getUsageInfo(oldFile, toMove.all, checker);
         const currentDirectory = getDirectoryPath(oldFile.fileName);
         const extension = extensionFromPath(oldFile.fileName);
         const newFileName = combinePaths(
@@ -975,6 +985,11 @@ export function getStatementsToMove(context: RefactorContext): ToMove | undefine
     return all.length === 0 ? undefined : { all, ranges };
 }
 
+/** @internal */
+export function containsJsx(statements: readonly Statement[] | undefined) {
+    return find(statements, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
+}
+
 function isAllowedStatementToMove(statement: Statement): boolean {
     // Filters imports and prologue directives out of the range of statements to move.
     // Imports will be copied to the new file anyway, and may still be needed in the old file.
@@ -996,13 +1011,12 @@ function isPureImport(node: Node): boolean {
 }
 
 /** @internal */
-export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetImports: ReadonlySet<Symbol> = new Set()): UsageInfo {
+export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetLocals: ReadonlySet<Symbol> = new Set()): UsageInfo {
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByTargetFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
     const targetFileImportsFromOldFile = new Set<Symbol>();
 
-    const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
-    const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
+    const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx(toMove));
 
     if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
         oldImportsNeededByTargetFile.set(jsxNamespaceSymbol, false);
@@ -1020,7 +1034,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             if (!symbol.declarations) {
                 return;
             }
-            if (existingTargetImports.has(skipAlias(symbol, checker))) {
+            if (existingTargetLocals.has(skipAlias(symbol, checker))) {
                 unusedImportsFromOldFile.add(symbol);
                 return;
             }
@@ -1243,8 +1257,8 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
     return undefined;
 }
 
-function getExistingImports(sourceFile: SourceFile, checker: TypeChecker) {
-    const imports = new Set<Symbol>();
+function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
+    const existingLocals = new Set<Symbol>();
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);
         if (
@@ -1254,7 +1268,7 @@ function getExistingImports(sourceFile: SourceFile, checker: TypeChecker) {
             for (const e of declaration.importClause.namedBindings.elements) {
                 const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
                 if (symbol) {
-                    imports.add(skipAlias(symbol, checker));
+                    existingLocals.add(skipAlias(symbol, checker));
                 }
             }
         }
@@ -1262,10 +1276,19 @@ function getExistingImports(sourceFile: SourceFile, checker: TypeChecker) {
             for (const e of declaration.parent.name.elements) {
                 const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
                 if (symbol) {
-                    imports.add(skipAlias(symbol, checker));
+                    existingLocals.add(skipAlias(symbol, checker));
                 }
             }
         }
     }
-    return imports;
+
+    for (const statement of statements) {
+        forEachReference(statement, checker, s => {
+            const symbol = skipAlias(s, checker);
+            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration) === sourceFile) {
+                existingLocals.add(symbol);
+            }
+        });
+    }
+    return existingLocals;
 }

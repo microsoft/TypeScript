@@ -1,0 +1,37 @@
+error TS2468: Cannot find global value 'Promise'.
+/mainJs.js(2,1): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2468: Cannot find global value 'Promise'.
+==== /node_modules/@types/node/index.d.ts (0 errors) ====
+    declare var require: (...args: any[]) => any;
+    
+==== /ambient.d.ts (0 errors) ====
+    declare module "fs" {
+        export function readFileSync(path: string, encoding?: string): string;
+    }
+    declare module "path" {
+        import fs = require("fs"); // ok
+        namespace path {
+            export const sep: string;
+        }
+        export = path; // ok
+    }
+    
+==== /mainJs.js (1 errors) ====
+    import {} from "./a";
+    import("./a");
+    ~~~~~~~~~~~~~
+!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+    const _ = require("./a");
+    _.a; // any
+    
+==== /main.ts (0 errors) ====
+    import {} from "./a";
+    import _ = require("./a"); // Error in esnext
+    export = {}; // Error
+    export {};
+    
+==== /a.ts (0 errors) ====
+    export const a = "a";
+    

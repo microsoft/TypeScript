@@ -2,6 +2,7 @@
 import {
     CancelToken,
 } from "@esfx/canceltoken";
+import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
@@ -9,12 +10,13 @@ import {
     EventEmitter,
 } from "events";
 import fs from "fs";
-import _glob from "glob";
+import {
+    glob,
+} from "glob";
 import {
     task,
 } from "hereby";
 import path from "path";
-import util from "util";
 
 import {
     localizationDirectories,
@@ -41,13 +43,11 @@ import {
     rimraf,
 } from "./scripts/build/utils.mjs";
 
-const glob = util.promisify(_glob);
-
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
 const copyrightFilename = "./scripts/CopyrightNotice.txt";
-const copyright = memoize(async () => {
+const getCopyrightHeader = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
@@ -77,7 +77,7 @@ export const generateLibs = task({
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
         for (const lib of libs()) {
-            let output = await copyright();
+            let output = await getCopyrightHeader();
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
@@ -160,13 +160,15 @@ export const cleanSrc = task({
     run: () => cleanProject("src"),
 });
 
+const dtsBundlerPath = "./scripts/dtsBundler.mjs";
+
 /**
  * @param {string} entrypoint
  * @param {string} output
  */
 async function runDtsBundler(entrypoint, output) {
     await exec(process.execPath, [
-        "./scripts/dtsBundler.mjs",
+        dtsBundlerPath,
         "--entrypoint",
         entrypoint,
         "--output",
@@ -186,10 +188,13 @@ async function runDtsBundler(entrypoint, output) {
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
+        const copyright = await getCopyrightHeader();
+        const banner = taskOptions.exportIsTsObject ? "var ts = {}; ((module) => {" : "";
+
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
-            banner: { js: await copyright() },
+            banner: { js: copyright + banner },
             bundle: true,
             outfile,
             platform: "node",
@@ -204,12 +209,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         };
 
         if (taskOptions.exportIsTsObject) {
-            // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
-            options.format = "iife";
-            // Name the variable ts, matching our old big bundle and so we can use the code below.
-            options.globalName = "ts";
-            // If we are in a CJS context, export the ts namespace.
-            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+            // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
+            // but then does not use it, instead using the `ts` variable. Ensure that if we think we're CJS
+            // that we still set `ts` to the module.exports object.
+            options.footer = { js: `})(typeof module !== "undefined" && module.exports ? module : { exports: ts });\nif (typeof module !== "undefined" && module.exports) { ts = module.exports; }` };
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
@@ -226,13 +229,25 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
             options.define = { [require]: fakeName };
+
+            // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
+            // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
+            const toCommonJsRegExp = /var __toCommonJS .*/;
+            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
+
             options.plugins = [
                 {
-                    name: "fix-require",
+                    name: "post-process",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(fakeNameRegExp, require);
+                            let matches = 0;
+                            contents = contents.replace(toCommonJsRegExp, () => {
+                                matches++;
+                                return toCommonJsRegExpReplacement;
+                            });
+                            assert(matches === 1, "Expected exactly one match for __toCommonJS");
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
@@ -393,7 +408,7 @@ export const dtsServices = task({
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
     run: async () => {
-        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+        if (needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", dtsBundlerPath], ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
             await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
@@ -449,7 +464,7 @@ export = ts;
  * @param {string} contents
  */
 async function fileContentsWithCopyright(contents) {
-    return await copyright() + contents.trim().replace(/\r\n/g, "\n") + "\n";
+    return await getCopyrightHeader() + contents.trim().replace(/\r\n/g, "\n") + "\n";
 }
 
 const lssl = task({
@@ -516,6 +531,7 @@ export const lint = task({
             `${folder}/.eslintcache`,
             "--format",
             formatter,
+            "--report-unused-disable-directives",
         ];
 
         if (cmdLineOptions.fix) {

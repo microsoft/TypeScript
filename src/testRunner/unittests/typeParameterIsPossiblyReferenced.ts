@@ -32,7 +32,7 @@ describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => 
             .type as ts.TypeQueryNode // typeof a
         ;
         const typeParameterDecl = (file.statements[0] as ts.FunctionDeclaration).typeParameters![0]; // T in f<T>
-        const typeParameter = checker.getTypeAtLocation(typeParameterDecl)! as ts.TypeParameter;
+        const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as ts.TypeParameter;
         const isReferenced = checker.isTypeParameterPossiblyReferenced(typeParameter, typeQueryNode);
         assert.ok(isReferenced, "Type parameter is referenced in type query node");
     });

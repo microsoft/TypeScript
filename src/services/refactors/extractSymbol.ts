@@ -6,7 +6,6 @@ import {
     assertType,
     BindingElement,
     Block,
-    BlockLike,
     BreakStatement,
     CancellationToken,
     canHaveModifiers,
@@ -67,6 +66,7 @@ import {
     isAssignmentExpression,
     isBinaryExpression,
     isBlock,
+    isBlockLike,
     isBlockScope,
     isCaseClause,
     isClassLike,
@@ -120,7 +120,6 @@ import {
     Node,
     NodeBuilderFlags,
     NodeFlags,
-    nullTransformationContext,
     ObjectLiteralElementLike,
     ParameterDeclaration,
     positionIsSynthesized,
@@ -1648,7 +1647,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
             const oldIgnoreReturns = ignoreReturns;
             ignoreReturns = ignoreReturns || isFunctionLikeDeclaration(node) || isClassLike(node);
             const substitution = substitutions.get(getNodeId(node).toString());
-            const result = substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
+            const result = substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, /*context*/ undefined);
             ignoreReturns = oldIgnoreReturns;
             return result;
         }
@@ -1662,7 +1661,7 @@ function transformConstantInitializer(initializer: Expression, substitutions: Re
 
     function visitor(node: Node): VisitResult<Node> {
         const substitution = substitutions.get(getNodeId(node).toString());
-        return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
+        return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, /*context*/ undefined);
     }
 }
 
@@ -2220,18 +2219,6 @@ function isExtractableExpression(node: Node): boolean {
                 parent.kind !== SyntaxKind.ExportSpecifier;
     }
     return true;
-}
-
-function isBlockLike(node: Node): node is BlockLike {
-    switch (node.kind) {
-        case SyntaxKind.Block:
-        case SyntaxKind.SourceFile:
-        case SyntaxKind.ModuleBlock:
-        case SyntaxKind.CaseClause:
-            return true;
-        default:
-            return false;
-    }
 }
 
 function isInJSXContent(node: Node) {
