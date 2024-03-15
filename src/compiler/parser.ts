@@ -10511,7 +10511,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                     const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
-                    const preserve = !!_preserve ? true : undefined;
+                    const preserve = _preserve === "true" ? true : undefined;
                     if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
