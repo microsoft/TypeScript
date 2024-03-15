@@ -45114,9 +45114,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (isSyntacticallyString(right) || rightIsNumeric) &&
                     (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
                 );
+            case SyntaxKind.TemplateExpression:
+                return (expr as TemplateExpression).templateSpans.every(span => isSyntacticallyString(span.expression));
             case SyntaxKind.ParenthesizedExpression:
                 return isSyntacticallyString((expr as ParenthesizedExpression).expression);
-            case SyntaxKind.TemplateExpression:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return true;
@@ -48296,7 +48297,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
             },
-            isSyntacticallyString,
             collectLinkedAliases,
             getReferencedValueDeclaration,
             getReferencedValueDeclarations,
