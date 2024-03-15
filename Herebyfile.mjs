@@ -252,7 +252,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.plugins = options.plugins || [];
             options.plugins.push(
                 {
-                    name: "post-process-exports",
+                    name: "post-process",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
