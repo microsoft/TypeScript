@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/jsxElementType.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,400 / 2,400 (nearest 100)
+Type Count: 8,000 / 8,000 (nearest 100)
+Instantiation count: 90,500 / 91,000 (nearest 500)
+Symbol count: 67,000 / 67,000 (nearest 500)
+
 === jsxElementType.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";

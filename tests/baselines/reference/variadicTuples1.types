@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 400 / 400 (nearest 100)
+Type Count: 1,600 / 1,600 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 30,500 / 31,000 (nearest 500)
+
 === variadicTuples1.ts ===
 // Variadics in tuple types
 
