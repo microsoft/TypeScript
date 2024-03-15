@@ -122,6 +122,7 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
+    isSyntacticallyString,
     isTemplateLiteral,
     isTryStatement,
     JsxOpeningElement,
@@ -1922,7 +1923,7 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+        const outerAssignment = isSyntacticallyString(valueExpression) ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(
