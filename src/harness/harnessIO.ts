@@ -777,24 +777,30 @@ export namespace Compiler {
         function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {
             let result = "";
             const perfLines: string[] = [];
-            if (!isSymbolBaseline) {
-                const perfStats: [name: string, reportThreshold: number, rounding: number, value: number][] = [];
-                const checker = program.getTypeChecker();
-                const caches = checker.getRelationCacheSizes();
-                perfStats.push(["Strict subtype cache", 1000, 100, caches.strictSubtype]);
-                perfStats.push(["Subtype cache", 1000, 100, caches.subtype]);
-                perfStats.push(["Identity cache", 1000, 100, caches.identity]);
-                perfStats.push(["Assignability cache", 1000, 100, caches.assignable]);
-                perfStats.push(["Type Count", 1000, 100, checker.getTypeCount()]);
-                perfStats.push(["Instantiation count", 1500, 500, checker.getInstantiationCount()]);
-                perfStats.push(["Symbol count", 45000, 500, checker.getSymbolCount()]);
+            const prePerformanceValues = getPerformanceBaselineValues();
+            const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
+            for (const value of gen) {
+                const [, content] = value;
+                result += content;
+            }
+            const postPerformanceValues = getPerformanceBaselineValues();
 
-                if (perfStats.some(([, threshold, , value]) => value >= threshold)) {
+            if (!isSymbolBaseline) {
+                const perfStats: [name: string, reportThreshold: number, rounding: number, beforeValue: number, afterValue: number][] = [];
+                perfStats.push(["Strict subtype cache", 1000, 100, prePerformanceValues.strictSubtype, postPerformanceValues.strictSubtype]);
+                perfStats.push(["Subtype cache", 1000, 100, prePerformanceValues.subtype, postPerformanceValues.subtype]);
+                perfStats.push(["Identity cache", 1000, 100, prePerformanceValues.identity, postPerformanceValues.identity]);
+                perfStats.push(["Assignability cache", 1000, 100, prePerformanceValues.assignability, postPerformanceValues.assignability]);
+                perfStats.push(["Type Count", 1000, 100, prePerformanceValues.typeCount, postPerformanceValues.typeCount]);
+                perfStats.push(["Instantiation count", 1500, 500, prePerformanceValues.instantiation, postPerformanceValues.instantiation]);
+                perfStats.push(["Symbol count", 45000, 500, prePerformanceValues.symbol, postPerformanceValues.symbol]);
+
+                if (perfStats.some(([, threshold, , , postValue]) => postValue >= threshold)) {
                     perfLines.push(`=== Performance Stats ===`);
-                    for (const [name, _, rounding, value] of perfStats) {
-                        const display = (Math.round(value / rounding) * rounding).toLocaleString("en-US");
-                        if (display !== "0") {
-                            perfLines.push(`${name}: ${display} (nearest ${rounding})`);
+                    for (const [name, _, rounding, preValue, postValue] of perfStats) {
+                        const preDisplay = valueToString(preValue, rounding);
+                        if (preDisplay !== "0") {
+                            perfLines.push(`${name}: ${preDisplay} / ${valueToString(postValue, rounding)} (nearest ${rounding})`);
                         }
                     }
                     perfLines.push('');
@@ -802,12 +808,25 @@ export namespace Compiler {
                 }
             }
 
-            const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
-            for (const value of gen) {
-                const [, content] = value;
-                result += content;
-            }
             return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join('\n')}${result}`) : null; // eslint-disable-line no-null/no-null
+        }
+
+        function valueToString(value: number, rounding: number) {
+            return (Math.round(value / rounding) * rounding).toLocaleString("en-US")
+        }
+
+        function getPerformanceBaselineValues() {
+            const checker = program.getTypeChecker();
+            const caches = checker.getRelationCacheSizes();
+            return {
+                strictSubtype: caches.strictSubtype,
+                subtype: caches.subtype,
+                identity: caches.identity,
+                assignability: caches.assignable,
+                typeCount: checker.getTypeCount(),
+                instantiation: checker.getInstantiationCount(),
+                symbol: checker.getSymbolCount()
+            };
         }
 
         function* iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
