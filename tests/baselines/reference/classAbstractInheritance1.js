@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts] ////
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance1.ts] ////
 
-//// [classAbstractInheritance.ts]
+//// [classAbstractInheritance1.ts]
 abstract class A {}
 
 abstract class B extends A {}
@@ -23,7 +23,7 @@ class FF extends CC {}
 
 abstract class GG extends CC {}
 
-//// [classAbstractInheritance.js]
+//// [classAbstractInheritance1.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
