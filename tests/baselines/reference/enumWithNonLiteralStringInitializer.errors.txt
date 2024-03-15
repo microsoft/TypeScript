@@ -3,18 +3,20 @@ bad.ts(3,8): error TS18055: A string member initializer in a enum declaration ca
 
 ==== ./helpers.ts (0 errors) ====
     export const foo = 2;
+    export const bar = "bar";
     
 ==== ./bad.ts (1 errors) ====
-    import { foo } from "./helpers";
+    import { bar } from "./helpers";
     enum A {
-       a = `${foo}`
-           ~~~~~~~~
+       a = bar,
+           ~~~
 !!! error TS18055: A string member initializer in a enum declaration can only use constant expressions when 'isolatedModules' is enabled.
     }
     
 ==== ./good.ts (0 errors) ====
+    import { foo } from "./helpers";
     enum A {
-       a = `${"foo"}`,
+       a = `${foo}`,
        b = "" + 2,
        c = 2 + "",
        d = ("foo"),

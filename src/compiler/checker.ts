@@ -719,6 +719,8 @@ import {
     isStringOrNumericLiteralLike,
     isSuperCall,
     isSuperProperty,
+    isSyntacticallyNumeric,
+    isSyntacticallyString,
     isTaggedTemplateExpression,
     isTemplateSpan,
     isThisContainerOrFunctionBlock,
@@ -45593,44 +45595,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
         }
         return value;
-    }
-
-    function isSyntacticallyNumeric(expr: Expression): boolean {
-        switch (expr.kind) {
-            case SyntaxKind.PrefixUnaryExpression:
-                return isSyntacticallyNumeric((expr as PrefixUnaryExpression).operand);
-            case SyntaxKind.BinaryExpression:
-                return isSyntacticallyNumeric((expr as BinaryExpression).left) && isSyntacticallyNumeric((expr as BinaryExpression).right);
-            case SyntaxKind.ParenthesizedExpression:
-                return isSyntacticallyNumeric((expr as ParenthesizedExpression).expression);
-            case SyntaxKind.NumericLiteral:
-                return true;
-        }
-        return false;
-    }
-
-    function isSyntacticallyString(expr: Expression): boolean {
-        switch (expr.kind) {
-            case SyntaxKind.BinaryExpression:
-                const left = (expr as BinaryExpression).left;
-                const right = (expr as BinaryExpression).right;
-                const leftIsNumeric = isSyntacticallyNumeric(left);
-                const rightIsNumeric = isSyntacticallyNumeric(right);
-                return (
-                    !(leftIsNumeric && rightIsNumeric) &&
-                    (isSyntacticallyString(left) || leftIsNumeric) &&
-                    (isSyntacticallyString(right) || rightIsNumeric) &&
-                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
-                );
-            case SyntaxKind.TemplateExpression:
-                return (expr as TemplateExpression).templateSpans.every(span => isSyntacticallyString(span.expression));
-            case SyntaxKind.ParenthesizedExpression:
-                return isSyntacticallyString((expr as ParenthesizedExpression).expression);
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return true;
-        }
-        return false;
     }
 
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined {

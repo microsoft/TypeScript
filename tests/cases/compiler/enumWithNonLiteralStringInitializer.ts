@@ -3,16 +3,18 @@
 
 // @filename: ./helpers.ts
 export const foo = 2;
+export const bar = "bar";
 
 // @filename: ./bad.ts
-import { foo } from "./helpers";
+import { bar } from "./helpers";
 enum A {
-   a = `${foo}`
+   a = bar,
 }
 
 // @filename: ./good.ts
+import { foo } from "./helpers";
 enum A {
-   a = `${"foo"}`,
+   a = `${foo}`,
    b = "" + 2,
    c = 2 + "",
    d = ("foo"),
