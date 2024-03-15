@@ -6458,7 +6458,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
             typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
-            expressionOrTypeToTypeNode: (type: Type, expr: Expression | JsxAttributeValue | undefined, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNode(context, expr, type, addUndefined)),
+            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNode(context, expr, type, addUndefined)),
             serializeTypeForDeclaration: (type: Type, symbol: Symbol, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, /*includePrivateSymbol*/ undefined, /*bundled*/ undefined, addUndefined)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
             signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
@@ -6527,7 +6527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             annotationType?: Type,
         ) {
             if (typeNodeIsEquivalentToType(existing, host, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
-                const result = serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
+                const result = tryReuseExistingTypeNodeHelper(context, existing, includePrivateSymbol, bundled);
                 if (result) {
                     return result;
                 }
@@ -8551,7 +8551,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 context.flags |= NodeBuilderFlags.AllowUniqueESSymbolType;
             }
 
-            const decl = symbol.valueDeclaration || symbol.declarations?.[0];
+            const decl = symbol.valueDeclaration ?? symbol.declarations?.[0];
             const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
             const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
@@ -8618,7 +8618,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * Do you mean to call this directly? You probably should use `tryReuseExistingTypeNode` instead,
          * which performs sanity checking on the type before doing this.
          */
-        function serializeExistingTypeNode(context: NodeBuilderContext, existing: TypeNode, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
+        function tryReuseExistingTypeNodeHelper(context: NodeBuilderContext, existing: TypeNode, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
             if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                 cancellationToken.throwIfCancellationRequested();
             }
@@ -48708,7 +48708,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Inferred type predicates
             return nodeBuilder.typePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
         }
-        return nodeBuilder.expressionOrTypeToTypeNode(getReturnTypeOfSignature(signature), getPossibleTypeNodeReuseExpression(signatureDeclaration), /*addUndefined*/ undefined, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        return nodeBuilder.expressionOrTypeToTypeNode(getPossibleTypeNodeReuseExpression(signatureDeclaration), getReturnTypeOfSignature(signature), /*addUndefined*/ undefined, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
     function createTypeOfExpression(exprIn: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
@@ -48717,7 +48717,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
         }
         const type = getWidenedType(getRegularTypeOfExpression(expr));
-        return nodeBuilder.expressionOrTypeToTypeNode(type, expr, /*addUndefined*/ undefined, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        return nodeBuilder.expressionOrTypeToTypeNode(expr, type, /*addUndefined*/ undefined, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
     function hasGlobalName(name: string): boolean {
