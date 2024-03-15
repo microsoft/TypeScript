@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 500 / 800 (nearest 100)
+Type Count: 1,100 / 1,200 (nearest 100)
+Instantiation count: 2,000 / 2,500 (nearest 500)
+Symbol count: 29,000 / 29,000 (nearest 500)
+
 === jsxComplexSignatureHasApplicabilityError.tsx ===
 /// <reference path="react16.d.ts" />
 

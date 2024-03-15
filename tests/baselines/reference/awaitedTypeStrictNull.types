@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
 
+=== Performance Stats ===
+Identity cache: 100 / 100 (nearest 100)
+Assignability cache: 200 / 200 (nearest 100)
+Type Count: 700 / 700 (nearest 100)
+Instantiation count: 25,500 / 25,500 (nearest 500)
+Symbol count: 30,500 / 30,500 (nearest 500)
+
 === awaitedTypeStrictNull.ts ===
 type T1 = Awaited<number>;
 >T1 : number

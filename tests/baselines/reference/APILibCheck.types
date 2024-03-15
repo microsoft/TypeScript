@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/APILibCheck.ts] ////
 
+=== Performance Stats ===
+Identity cache: 100 / 100 (nearest 100)
+Assignability cache: 9,300 / 9,300 (nearest 100)
+Type Count: 22,500 / 22,500 (nearest 100)
+Instantiation count: 7,000 / 7,000 (nearest 500)
+Symbol count: 58,500 / 58,500 (nearest 500)
+
 === index.ts ===
 import ts = require("typescript");
 >ts : typeof ts

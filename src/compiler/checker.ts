@@ -6456,6 +6456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createNodeBuilder() {
         return {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
+            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
             signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
             symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
@@ -7704,14 +7705,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let returnTypeNode: TypeNode | undefined;
             const typePredicate = getTypePredicateOfSignature(signature);
             if (typePredicate) {
-                const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                    factory.createToken(SyntaxKind.AssertsKeyword) :
-                    undefined;
-                const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                    setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-                    factory.createThisTypeNode();
-                const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
-                returnTypeNode = factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
+                returnTypeNode = typePredicateToTypePredicateNodeHelper(typePredicate, context);
             }
             else {
                 const returnType = getReturnTypeOfSignature(signature);
@@ -7788,6 +7782,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
             const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
             return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
+        }
+
+        function typePredicateToTypePredicateNodeHelper(typePredicate: TypePredicate, context: NodeBuilderContext): TypePredicateNode {
+            const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                factory.createToken(SyntaxKind.AssertsKeyword) :
+                undefined;
+            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                factory.createThisTypeNode();
+            const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
+            return factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
         }
 
         function getEffectiveParameterDeclaration(parameterSymbol: Symbol): ParameterDeclaration | JSDocParameterTag | undefined {
@@ -10301,11 +10306,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return writer ? typePredicateToStringWorker(writer).getText() : usingSingleLineStringWriter(typePredicateToStringWorker);
 
         function typePredicateToStringWorker(writer: EmitTextWriter) {
-            const predicate = factory.createTypePredicateNode(
-                typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createToken(SyntaxKind.AssertsKeyword) : undefined,
-                typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ? factory.createIdentifier(typePredicate.parameterName) : factory.createThisTypeNode(),
-                typePredicate.type && nodeBuilder.typeToTypeNode(typePredicate.type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName)!, // TODO: GH#18217
-            );
+            const nodeBuilderFlags = toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName;
+            const predicate = nodeBuilder.typePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, nodeBuilderFlags)!; // TODO: GH#18217
             const printer = createPrinterWithRemoveComments();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, predicate, /*sourceFile*/ sourceFile, writer);
@@ -15468,9 +15470,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
                     }
                 }
-                signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
-                    createTypePredicateFromTypePredicateNode(type, signature) :
-                    jsdocPredicate || noTypePredicate;
+                if (type || jsdocPredicate) {
+                    signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
+                        createTypePredicateFromTypePredicateNode(type, signature) :
+                        jsdocPredicate || noTypePredicate;
+                }
+                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.Boolean) && getParameterCount(signature) > 0) {
+                    const { declaration } = signature;
+                    signature.resolvedTypePredicate = noTypePredicate; // avoid infinite loop
+                    signature.resolvedTypePredicate = getTypePredicateFromBody(declaration) || noTypePredicate;
+                }
+                else {
+                    signature.resolvedTypePredicate = noTypePredicate;
+                }
             }
             Debug.assert(!!signature.resolvedTypePredicate);
         }
@@ -17975,6 +17987,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (contains(types, wildcardType)) {
             return wildcardType;
+        }
+        if (
+            texts.length === 2 && texts[0] === "" && texts[1] === ""
+            // literals (including string enums) are stringified below
+            && !(types[0].flags & TypeFlags.Literal)
+            // infer T extends StringLike can't be unwrapped eagerly
+            && !types[0].symbol?.declarations?.some(d => d.parent.kind === SyntaxKind.InferType)
+            && isTypeAssignableTo(types[0], stringType)
+        ) {
+            return types[0];
         }
         const newTypes: Type[] = [];
         const newTexts: string[] = [];
@@ -26769,11 +26791,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasMatchingArgument(expression: CallExpression | NewExpression, reference: Node) {
         if (expression.arguments) {
             for (const argument of expression.arguments) {
-                if (
-                    isOrContainsMatchingReference(reference, argument)
-                    || optionalChainContainsReference(argument, reference)
-                    || getCandidateDiscriminantPropertyAccess(argument, reference)
-                ) {
+                if (isOrContainsMatchingReference(reference, argument) || optionalChainContainsReference(argument, reference)) {
                     return true;
                 }
             }
@@ -26785,51 +26803,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
         return false;
-    }
-
-    function getCandidateDiscriminantPropertyAccess(expr: Expression, reference: Node) {
-        if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference) || isObjectLiteralMethod(reference)) {
-            // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
-            // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
-            // parameter declared in the same parameter list is a candidate.
-            if (isIdentifier(expr)) {
-                const symbol = getResolvedSymbol(expr);
-                const declaration = symbol.valueDeclaration;
-                if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
-                    return declaration;
-                }
-            }
-        }
-        else if (isAccessExpression(expr)) {
-            // An access expression is a candidate if the reference matches the left hand expression.
-            if (isMatchingReference(reference, expr.expression)) {
-                return expr;
-            }
-        }
-        else if (isIdentifier(expr)) {
-            const symbol = getResolvedSymbol(expr);
-            if (isConstantVariable(symbol)) {
-                const declaration = symbol.valueDeclaration!;
-                // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
-                if (
-                    isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer) &&
-                    isMatchingReference(reference, declaration.initializer.expression)
-                ) {
-                    return declaration.initializer;
-                }
-                // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
-                if (isBindingElement(declaration) && !declaration.initializer) {
-                    const parent = declaration.parent.parent;
-                    if (
-                        isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer)) &&
-                        isMatchingReference(reference, parent.initializer)
-                    ) {
-                        return declaration;
-                    }
-                }
-            }
-        }
-        return undefined;
     }
 
     function getFlowNodeId(flow: FlowNode): number {
@@ -28202,12 +28175,57 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
+        function getCandidateDiscriminantPropertyAccess(expr: Expression) {
+            if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference) || isObjectLiteralMethod(reference)) {
+                // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
+                // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
+                // parameter declared in the same parameter list is a candidate.
+                if (isIdentifier(expr)) {
+                    const symbol = getResolvedSymbol(expr);
+                    const declaration = symbol.valueDeclaration;
+                    if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
+                        return declaration;
+                    }
+                }
+            }
+            else if (isAccessExpression(expr)) {
+                // An access expression is a candidate if the reference matches the left hand expression.
+                if (isMatchingReference(reference, expr.expression)) {
+                    return expr;
+                }
+            }
+            else if (isIdentifier(expr)) {
+                const symbol = getResolvedSymbol(expr);
+                if (isConstantVariable(symbol)) {
+                    const declaration = symbol.valueDeclaration!;
+                    // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
+                    if (
+                        isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer) &&
+                        isMatchingReference(reference, declaration.initializer.expression)
+                    ) {
+                        return declaration.initializer;
+                    }
+                    // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
+                    if (isBindingElement(declaration) && !declaration.initializer) {
+                        const parent = declaration.parent.parent;
+                        if (
+                            isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer)) &&
+                            isMatchingReference(reference, parent.initializer)
+                        ) {
+                            return declaration;
+                        }
+                    }
+                }
+            }
+            return undefined;
+        }
+
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
             // As long as the computed type is a subset of the declared type, we use the full declared type to detect
             // a discriminant property. In cases where the computed type isn't a subset, e.g because of a preceding type
             // predicate narrowing, we use the actual computed type.
             if (declaredType.flags & TypeFlags.Union || computedType.flags & TypeFlags.Union) {
-                const access = getCandidateDiscriminantPropertyAccess(expr, reference);
+                const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
                     const name = getAccessedPropertyName(access);
                     if (name) {
@@ -37430,6 +37448,72 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             default:
                 return false;
         }
+    }
+
+    function getTypePredicateFromBody(func: FunctionLikeDeclaration): TypePredicate | undefined {
+        switch (func.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return undefined;
+        }
+        const functionFlags = getFunctionFlags(func);
+        if (functionFlags !== FunctionFlags.Normal) return undefined;
+
+        // Only attempt to infer a type predicate if there's exactly one return.
+        let singleReturn: Expression | undefined;
+        if (func.body && func.body.kind !== SyntaxKind.Block) {
+            singleReturn = func.body; // arrow function
+        }
+        else {
+            const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
+                if (singleReturn || !returnStatement.expression) return true;
+                singleReturn = returnStatement.expression;
+            });
+            if (bailedEarly || !singleReturn || functionHasImplicitReturn(func)) return undefined;
+        }
+        return checkIfExpressionRefinesAnyParameter(func, singleReturn);
+    }
+
+    function checkIfExpressionRefinesAnyParameter(func: FunctionLikeDeclaration, expr: Expression): TypePredicate | undefined {
+        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+        const returnType = checkExpressionCached(expr);
+        if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
+
+        return forEach(func.parameters, (param, i) => {
+            const initType = getTypeOfSymbol(param.symbol);
+            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
+                // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
+                return;
+            }
+            const trueType = checkIfExpressionRefinesParameter(func, expr, param, initType);
+            if (trueType) {
+                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
+            }
+        });
+    }
+
+    function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
+        const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+            expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
+            { flags: FlowFlags.Start };
+        const trueCondition: FlowCondition = {
+            flags: FlowFlags.TrueCondition,
+            node: expr,
+            antecedent,
+        };
+
+        const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
+        if (trueType === initType) return undefined;
+
+        // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
+        // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
+        const falseCondition: FlowCondition = {
+            ...trueCondition,
+            flags: FlowFlags.FalseCondition,
+        };
+        const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
+        return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }
 
     /**
@@ -48493,6 +48577,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
         }
         const signature = getSignatureFromDeclaration(signatureDeclaration);
+        const typePredicate = getTypePredicateOfSignature(signature);
+        if (typePredicate) {
+            // Inferred type predicates
+            return nodeBuilder.typePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        }
         return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 

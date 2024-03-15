@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 300 / 300 (nearest 100)
+Type Count: 1,200 / 1,400 (nearest 100)
+Instantiation count: 1,000 / 1,000 (nearest 500)
+Symbol count: 27,000 / 27,000 (nearest 500)
+
 === keyofAndIndexedAccess.ts ===
 class Shape {
 >Shape : Shape
