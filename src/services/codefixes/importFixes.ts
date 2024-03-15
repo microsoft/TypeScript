@@ -114,6 +114,7 @@ import {
     removeFileExtension,
     removeSuffix,
     RequireVariableStatement,
+    sameMap,
     ScriptTarget,
     SemanticMeaning,
     shouldUseUriStyleNodeCoreModules,
@@ -1477,6 +1478,7 @@ function doAddExistingFix(
         return;
     }
 
+    // promoteFromTypeOnly = true if we need to promote the entire original clause from type only
     const promoteFromTypeOnly = clause.isTypeOnly && some([defaultImport, ...namedImports], i => i?.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
     const existingSpecifiers = clause.namedBindings && tryCast(clause.namedBindings, isNamedImports)?.elements;
 
@@ -1506,8 +1508,13 @@ function doAddExistingFix(
 
         // changed to check if existing specifiers are sorted
         if (existingSpecifiers?.length && isSorted !== false) {
+            // if we're promoting the clause from type-only, we need to transform the existing imports before attempting to insert the new named imports
+            const transformedExistingSpecifiers = (promoteFromTypeOnly && existingSpecifiers) ? factory.updateNamedImports(
+                clause.namedBindings as NamedImports,
+                sameMap(existingSpecifiers, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ true, e.propertyName, e.name)),
+            ).elements : existingSpecifiers;
             for (const spec of newSpecifiers) {
-                const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, specifierComparer);
+                const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(transformedExistingSpecifiers, spec, specifierComparer);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
             }
         }
