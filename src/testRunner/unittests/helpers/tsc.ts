@@ -28,7 +28,7 @@ export type TscCompileSystem = fakes.System & {
     writtenFiles: Set<ts.Path>;
     baseLine(): { file: string; text: string; };
     dtsSignaures?: Map<ts.Path, Map<string, DtsSignatureData>>;
-    storeFilesChangingSignatureDuringEmit?: boolean;
+    storeSignatureInfo?: boolean;
 };
 
 export const noChangeRun: TestTscEdit = {
@@ -77,7 +77,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
 
     // Create system
     const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
-    sys.storeFilesChangingSignatureDuringEmit = true;
+    sys.storeSignatureInfo = true;
     sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;
     worker(sys);

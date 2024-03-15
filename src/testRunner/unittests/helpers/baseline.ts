@@ -91,14 +91,20 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
                 baseline.push("Shape signatures in builder refreshed for::");
                 internalState.hasCalledUpdateShapeSignature.forEach((path: ts.Path) => {
                     const info = state.fileInfos.get(path);
-                    if (info?.version === info?.signature || !info?.signature) {
-                        baseline.push(path + " (used version)");
-                    }
-                    else if (internalState.filesChangingSignature?.has(path)) {
-                        baseline.push(path + " (computed .d.ts during emit)");
-                    }
-                    else {
-                        baseline.push(path + " (computed .d.ts)");
+                    const signatureInfo = internalState.signatureInfo?.get(path)!;
+                    switch (signatureInfo) {
+                        case ts.SignatureInfo.ComputedDts:
+                            baseline.push(path + " (computed .d.ts)");
+                            break;
+                        case ts.SignatureInfo.StoredSignatureAtEmit:
+                            baseline.push(path + " (computed .d.ts during emit)");
+                            break;
+                        case ts.SignatureInfo.UsedVersion:
+                            ts.Debug.assert(info?.version === info?.signature || !info?.signature);
+                            baseline.push(path + " (used version)");
+                            break;
+                        default:
+                            ts.Debug.assertNever(signatureInfo);
                     }
                 });
             }

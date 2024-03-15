@@ -7799,7 +7799,7 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ getSymlinkCache?(): SymlinkCache;
 
     // For testing:
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;

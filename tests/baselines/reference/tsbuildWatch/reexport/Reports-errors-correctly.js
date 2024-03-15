@@ -459,8 +459,8 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/src/pure/index.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/reexport/src/pure/session.ts (used version)
-/user/username/projects/reexport/src/pure/index.ts (used version)
+/user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
+/user/username/projects/reexport/src/pure/index.ts (computed .d.ts)
 
 Program root files: [
   "/user/username/projects/reexport/src/main/index.ts"
@@ -646,7 +646,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
-/user/username/projects/reexport/src/pure/index.ts (used version)
+/user/username/projects/reexport/src/pure/index.ts (computed .d.ts)
 
 Program root files: [
   "/user/username/projects/reexport/src/main/index.ts"

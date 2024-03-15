@@ -52,6 +52,12 @@ export function getFileEmitOutput(
     }
 }
 /** @internal */
+export enum SignatureInfo {
+    ComputedDts,
+    StoredSignatureAtEmit,
+    UsedVersion,
+}
+/** @internal */
 export interface BuilderState {
     /**
      * Information of the file eg. its version, signature etc
@@ -98,6 +104,8 @@ export interface BuilderState {
      * Cache of all the file names
      */
     allFileNames?: readonly string[];
+    /** Information about the signature computation - test only */
+    signatureInfo?: Map<Path, SignatureInfo>;
 }
 /** @internal */
 export namespace BuilderState {
@@ -455,6 +463,7 @@ export namespace BuilderState {
         if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
             computeDtsSignature(programOfThisState, sourceFile, cancellationToken, host, (signature, sourceFiles) => {
                 latestSignature = signature;
+                if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.ComputedDts);
                 if (latestSignature !== prevSignature) {
                     updateExportedModules(state, sourceFile, sourceFiles[0].exportedModulesFromDeclarationEmit);
                 }
@@ -463,6 +472,7 @@ export namespace BuilderState {
         // Default is to use file version as signature
         if (latestSignature === undefined) {
             latestSignature = sourceFile.version;
+            if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(sourceFile.resolvedPath, SignatureInfo.UsedVersion);
             if (state.exportedModulesMap && latestSignature !== prevSignature) {
                 (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
                 // All the references in this file are exported

@@ -73,6 +73,7 @@ import {
     returnUndefined,
     sameMap,
     SemanticDiagnosticsBuilderProgram,
+    SignatureInfo,
     skipTypeChecking,
     SourceFile,
     sourceFileMayBeEmitted,
@@ -242,8 +243,6 @@ export interface BuilderProgramState extends BuilderState, ReusableBuilderProgra
      * Already seen emitted files
      */
     seenEmittedFiles: Map<Path, BuilderFileEmit> | undefined;
-    /** Stores list of files that change signature during emit - test only */
-    filesChangingSignature?: Set<Path>;
 }
 
 /** @internal */
@@ -1602,7 +1601,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
                             // With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
                             if (!data?.diagnostics?.length) emitSignature = signature;
                             if (signature !== file.version) { // Update it
-                                if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ??= new Set()).add(file.resolvedPath);
+                                if (host.storeSignatureInfo) (state.signatureInfo ??= new Map()).set(file.resolvedPath, SignatureInfo.StoredSignatureAtEmit);
                                 if (state.exportedModulesMap) BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
                                 if (state.affectedFiles) {
                                     // Keep old signature so we know what to undo if cancellation happens

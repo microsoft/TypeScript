@@ -418,9 +418,9 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/index.ts
 
 Shape signatures in builder refreshed for::
-/users/username/projects/project/a.ts (used version)
-/users/username/projects/project/index.ts (used version)
-/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/a.ts (computed .d.ts)
+/users/username/projects/project/index.ts (computed .d.ts)
+/users/username/projects/project/c.ts (computed .d.ts)
 /users/username/projects/project/b.ts (used version)
 
 exitCode:: ExitStatus.Success
