@@ -2892,7 +2892,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         cancellationToken: CancellationToken | undefined,
         nodesToCheck: Node[] | undefined,
     ): readonly Diagnostic[] {
-        // >> TODO: what the hell is `getProgramDiagnostics` doing??? it does something related to directives/comments...
         return concatenate(
             filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck), options),
             getProgramDiagnostics(sourceFile),
@@ -2904,7 +2903,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         cancellationToken: CancellationToken | undefined,
         nodesToCheck: Node[] | undefined,
     ): readonly Diagnostic[] {
-        // >> TODO: we might not want to cache if `nodesToCheck` is provided??
         if (nodesToCheck) {
             return getBindAndCheckDiagnosticsForFileNoCache(sourceFile, cancellationToken, nodesToCheck);
         }

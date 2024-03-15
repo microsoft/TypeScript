@@ -995,6 +995,9 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
+    // Maps a file name to duration in milliseconds of semantic checking
+    private semanticCheckPerformance: Map<string, number>;
+
     // >> TODO: for testing; remove later.
     private checkTime: [number, number] | undefined;
 
@@ -1008,6 +1011,7 @@ export class Session<TMessage = string> implements EventSender {
         this.canUseEvents = opts.canUseEvents;
         this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
         this.noGetErrOnBackgroundUpdate = opts.noGetErrOnBackgroundUpdate;
+        this.semanticCheckPerformance = new Map();
 
         const { throttleWaitMilliseconds } = opts;
 
@@ -1285,25 +1289,42 @@ export class Session<TMessage = string> implements EventSender {
         tracing?.pop();
     }
 
-    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]) {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): boolean {
         this.checkTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        // >> TODO: get adjusted ranges from the nodes we actually end up checking...
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSemanticDiagnostics(file, ranges), "regionSemanticDiag", ranges.map(createTextSpanFromRange));
+        let diagnosticsResult;
+        if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
+            tracing?.pop();
+            return false;
+        }
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsResult.ranges.map(createTextSpanFromRange));
         tracing?.pop();
+        return true;
+    }
+
+    // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
+    protected shouldDoRegionCheck(file: NormalizedPath): boolean {
+        const perf = this.semanticCheckPerformance.get(file);
+        // >> TODO: force this to be true when testing
+        return !!perf && perf > 1000;
     }
 
     private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            const perf = hrTimeToMilliseconds(this.hrtime(this.checkTime));
+            if (kind === "semanticDiag") {
+                this.semanticCheckPerformance?.set(file, perf);
+            }
             this.event<protocol.DiagnosticEventBody>(
                 {
                     file,
                     diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
                     spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
-                    perf: hrTimeToMilliseconds(this.hrtime(this.checkTime)).toFixed(4),
+                    // perf: perf.toFixed(4),
                 },
-                kind);
+                kind,
+            );
         }
         catch (err) {
             this.logError(err, kind);
@@ -1325,9 +1346,9 @@ export class Session<TMessage = string> implements EventSender {
         const seq = this.changeSeq;
         const followMs = Math.min(ms, 200);
 
-        const filesFullCheck: PendingErrorCheck[] = [];
+        const filesFullCheck: (PendingErrorCheck & { project: Project; })[] = [];
         let index = 0;
-        const goNext = () => {
+        const goNextAllCheck = () => {
             index++;
             if (checkList.length > index) {
                 return next.delay("checkOne", followMs, checkOne);
@@ -1337,11 +1358,27 @@ export class Session<TMessage = string> implements EventSender {
                 return next.delay("checkFullOne", followMs, checkFull);
             }
         };
-        const goNextFull = () => {
+        const goNextSemanticCheck = () => {
             index++;
             if (filesFullCheck.length > index) {
                 return next.delay("checkFullOne", followMs, checkFull);
             }
+        };
+
+        const doSemanticCheck = (fileName: NormalizedPath, project: Project, goToNext: () => void) => {
+            this.semanticCheck(fileName, project);
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            if (this.getPreferences(fileName).disableSuggestions) {
+                goToNext();
+                return;
+            }
+            next.immediate("suggestionCheck", () => {
+                this.suggestionCheck(fileName, project);
+                goToNext();
+            });
         };
 
         const checkOne = () => {
@@ -1367,33 +1404,24 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNext();
+                goNextAllCheck();
                 return;
             }
 
             if (ranges) {
                 return next.immediate("regionSemanticCheck", () => {
-                    this.regionSemanticCheck(fileName, project, ranges);
-                    filesFullCheck.push({ fileName, project });
-                    goNext();
+                    const didRegionCheck = this.regionSemanticCheck(fileName, project, ranges);
+                    if (didRegionCheck) {
+                        filesFullCheck.push({ fileName, project });
+                        goNextAllCheck();
+                    }
+                    else { // If we opted out of region check, do semantic check as normal
+                        doSemanticCheck(fileName, project, goNextAllCheck);
+                    }
                 });
             }
 
-            next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project);
-                if (this.changeSeq !== seq) {
-                    return;
-                }
-
-                if (this.getPreferences(fileName).disableSuggestions) {
-                    goNext();
-                    return;
-                }
-                next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project);
-                    goNext();
-                });
-            });
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project, goNextAllCheck));
         };
 
         const checkFull = () => {
@@ -1402,21 +1430,7 @@ export class Session<TMessage = string> implements EventSender {
             }
 
             const { fileName, project } = filesFullCheck[index];
-            next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project!);
-                if (this.changeSeq !== seq) {
-                    return;
-                }
-
-                if (this.getPreferences(fileName).disableSuggestions) {
-                    goNextFull();
-                    return;
-                }
-                next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project!);
-                    goNextFull();
-                });
-            });
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project, goNextSemanticCheck));
         };
 
         if (checkList.length > index && this.changeSeq === seq) {

@@ -46941,7 +46941,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         tracing?.pop();
     }
 
-    function checkSourceFile(node: SourceFile, nodesToCheck: Node[] | undefined) { // >> TODO: change here?
+    function checkSourceFile(node: SourceFile, nodesToCheck: Node[] | undefined) {
         tracing?.push(tracing.Phase.Check, nodesToCheck ? "checkSourceFileNodes" : "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
         const beforeMark = nodesToCheck ? "beforeCheckNodes" : "beforeCheck";
         const afterMark = nodesToCheck ? "afterCheckNodes" : "afterCheck";
@@ -47113,7 +47113,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (nodesToCheck) {
                 // No need to get global diagnostics;
                 // reset diagnostic collection.
-                // >> TODO: do we really need this?
                 diagnostics = createDiagnosticCollection();
                 return semanticDiagnostics;
             }

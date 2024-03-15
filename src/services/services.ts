@@ -40,6 +40,7 @@ import {
     CreateProgramOptions,
     createSourceFile,
     CreateSourceFileOptions,
+    createTextRangeFromNode,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
@@ -255,6 +256,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     Rename,
     RenameInfo,
     RenameInfoOptions,
@@ -1989,10 +1991,7 @@ export function createLanguageService(
      * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
      * If '-d' enabled, report both semantic and emitter errors
      */
-    function getSemanticDiagnostics(fileName: string, ranges?: TextRange[]): Diagnostic[] {
-        if (ranges) {
-            return getRegionSemanticDiagnostics(fileName, ranges);
-        }
+    function getSemanticDiagnostics(fileName: string): Diagnostic[] {
         synchronizeHostData();
 
         const targetSourceFile = getValidSourceFile(fileName);
@@ -2010,25 +2009,20 @@ export function createLanguageService(
         return [...semanticDiagnostics, ...declarationDiagnostics];
     }
 
-    // TODO:
-    // same as `getSemanticDiagnostics`. Maybe should be a single function that takes an optional ranges arg. We'll see.
-    function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): Diagnostic[] {
+    function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined {
         synchronizeHostData();
 
         const targetSourceFile = getValidSourceFile(fileName);
 
-        // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
-        // Therefore only get diagnostics for given file.
         const nodes = getNodesForRanges(targetSourceFile, ranges);
+        if (!nodes) {
+            return undefined;
+        }
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
-        // if (!getEmitDeclarations(program.getCompilerOptions())) {
-        return semanticDiagnostics.slice();
-        // }
-
-        // >> TODO: check if we need to update this too?
-        // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-        // const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-        // return [...semanticDiagnostics, ...declarationDiagnostics];
+        return {
+            diagnostics: semanticDiagnostics.slice(),
+            ranges: nodes.map(node => createTextRangeFromNode(node, targetSourceFile)), // >> TODO: return span, and normalize them
+        }
     }
 
     function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
@@ -2063,7 +2057,7 @@ export function createLanguageService(
             nodes.push(file.endOfFileToken);
         }
         return nodes;
-        
+
         function includeNodes(node: Node): true | undefined {
             if (!textRangeIntersectsWithTextSpan(node, span)) {
                 // TODO: if node is after span, we can quit the rest of the for each child calls
@@ -3188,6 +3182,7 @@ export function createLanguageService(
         cleanupSemanticCache,
         getSyntacticDiagnostics,
         getSemanticDiagnostics,
+        getRegionSemanticDiagnostics,
         getSuggestionDiagnostics,
         getCompilerOptionsDiagnostics,
         getSyntacticClassifications,
