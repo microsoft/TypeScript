@@ -31,12 +31,12 @@ class Three {
 declare const i: One & Two & Three;
 
 // "hello"
-i.prop1 = 42; // error
+i.prop1 = 42;
 i.prop1 = "hello";
 
 // 42
 i.prop2 = 42;
-i.prop2 = "hello"; // error
+i.prop2 = "hello";
 
 
 //// [divergentAccessorsTypes5.js]
@@ -88,8 +88,8 @@ var Three = /** @class */ (function () {
     return Three;
 }());
 // "hello"
-i.prop1 = 42; // error
+i.prop1 = 42;
 i.prop1 = "hello";
 // 42
 i.prop2 = 42;
-i.prop2 = "hello"; // error
+i.prop2 = "hello";

@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/-da/divergentAccessorsTypes-56894-a.ts] ////
+
+=== divergentAccessorsTypes-56894-a.ts ===
+declare const id:<T>()=>T
+>id : <T>() => T
+
+function f2(x: {f:((a:1|2)=>1|2)} | {f:((a:2|3)=>2|3)} ){
+>f2 : (x: { f: (a: 1 | 2) => 1 | 2; } | { f: (a: 2 | 3) => 2 | 3; }) => void
+>x : { f: (a: 1 | 2) => 1 | 2; } | { f: (a: 2 | 3) => 2 | 3; }
+>f : (a: 1 | 2) => 1 | 2
+>a : 1 | 2
+>f : (a: 2 | 3) => 2 | 3
+>a : 2 | 3
+
+    const r = x.f(id())
+>r : 1 | 2 | 3
+>x.f(id()) : 1 | 2 | 3
+>x.f : ((a: 1 | 2) => 1 | 2) | ((a: 2 | 3) => 2 | 3)
+>x : { f: (a: 1 | 2) => 1 | 2; } | { f: (a: 2 | 3) => 2 | 3; }
+>f : ((a: 1 | 2) => 1 | 2) | ((a: 2 | 3) => 2 | 3)
+>id() : 2
+>id : <T>() => T
+
+//                ^ const id: <2>() => 2,
+//        ^ const r: 1 | 2 | 3
+}
+
+function f3(f: ((a:1|2)=>1|2) | ((a:2|3)=>2|3) ){
+>f3 : (f: ((a: 1 | 2) => 1 | 2) | ((a: 2 | 3) => 2 | 3)) => void
+>f : ((a: 1 | 2) => 1 | 2) | ((a: 2 | 3) => 2 | 3)
+>a : 1 | 2
+>a : 2 | 3
+
+    const r = f(id())
+>r : 1 | 2 | 3
+>f(id()) : 1 | 2 | 3
+>f : ((a: 1 | 2) => 1 | 2) | ((a: 2 | 3) => 2 | 3)
+>id() : 2
+>id : <T>() => T
+
+//              ^ const id: <2>() => 2,
+//        ^ const r: 1 | 2 | 3
+}
+
+
+function f4(x: {set d(a:1|2); get r():1|2} | {set d(a:2|3); get r():2|3} ){
+>f4 : (x: { d: 1 | 2; readonly r: 1 | 2; } | { d: 2 | 3; readonly r: 2 | 3; }) => void
+>x : { d: 1 | 2; readonly r: 1 | 2; } | { d: 2 | 3; readonly r: 2 | 3; }
+>d : 1 | 2
+>a : 1 | 2
+>r : 1 | 2
+>d : 2 | 3
+>a : 2 | 3
+>r : 2 | 3
+
+//           ^ (parameter) x: { d: 1 | 2; readonly r: 1 | 2; } | { d: 2 | 3; readonly r: 2 | 3; }
+    x.d = id();
+>x.d = id() : 1 | 2 | 3
+>x.d : 1 | 2 | 3
+>x : { d: 1 | 2; readonly r: 1 | 2; } | { d: 2 | 3; readonly r: 2 | 3; }
+>d : 1 | 2 | 3
+>id() : 1 | 2 | 3
+>id : <T>() => T
+
+//        ^ const id: <1 | 2 | 3>() => 1 | 2 | 3      (5.3.2)
+//        ^ const id: <2>() => 2      (expecting, if a setter was treated as a function)
+    x.r;
+>x.r : 1 | 2 | 3
+>x : { d: 1 | 2; readonly r: 1 | 2; } | { d: 2 | 3; readonly r: 2 | 3; }
+>r : 1 | 2 | 3
+
+//    ^    (property) r: 1 | 2 | 3
+}

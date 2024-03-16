@@ -1,0 +1,188 @@
+//// [tests/cases/compiler/-da/divergentAccessorsTypes-56894-b.ts] ////
+
+=== divergentAccessorsTypes-56894-b.ts ===
+type T12 = {
+>T12 : { a: 1 | 2; gsa: 1 | 2; sb: 1 | 2; readonly gc: 1 | 2; }
+
+    a: 1|2;
+>a : 1 | 2
+
+    set gsa(x: 1|2);
+>gsa : 1 | 2
+>x : 1 | 2
+
+    get gsa(): 1|2;
+>gsa : 1 | 2
+
+    set sb(x: 1|2);
+>sb : 1 | 2
+>x : 1 | 2
+
+    get gc(): 1|2;
+>gc : 1 | 2
+
+};
+type T23 = {
+>T23 : { a: 2 | 3; gsa: 2 | 3; sb: 2 | 3; readonly gc: 2 | 3; }
+
+    a: 2|3;
+>a : 2 | 3
+
+    set gsa(x: 2|3);
+>gsa : 2 | 3
+>x : 2 | 3
+
+    get gsa(): 2|3;
+>gsa : 2 | 3
+
+    set sb(x: 2|3);
+>sb : 2 | 3
+>x : 2 | 3
+
+    get gc(): 2|3;
+>gc : 2 | 3
+
+};
+
+function fu(u:T12|T23) {
+>fu : (u: T12 | T23) => void
+>u : T12 | T23
+
+    u.a = 1;
+>u.a = 1 : 1
+>u.a : 1 | 2 | 3
+>u : T12 | T23
+>a : 1 | 2 | 3
+>1 : 1
+
+    u.sb = 1;
+>u.sb = 1 : 1
+>u.sb : 1 | 2 | 3
+>u : T12 | T23
+>sb : 1 | 2 | 3
+>1 : 1
+
+    u.gsa = 1;
+>u.gsa = 1 : 1
+>u.gsa : 1 | 2 | 3
+>u : T12 | T23
+>gsa : 1 | 2 | 3
+>1 : 1
+
+    u.a = 2;
+>u.a = 2 : 2
+>u.a : 1 | 2 | 3
+>u : T12 | T23
+>a : 1 | 2 | 3
+>2 : 2
+
+    u.sb = 2;
+>u.sb = 2 : 2
+>u.sb : 1 | 2 | 3
+>u : T12 | T23
+>sb : 1 | 2 | 3
+>2 : 2
+
+    u.gsa = 2;
+>u.gsa = 2 : 2
+>u.gsa : 1 | 2 | 3
+>u : T12 | T23
+>gsa : 1 | 2 | 3
+>2 : 2
+
+    u.a = 3;
+>u.a = 3 : 3
+>u.a : 1 | 2 | 3
+>u : T12 | T23
+>a : 1 | 2 | 3
+>3 : 3
+
+    u.sb = 3;
+>u.sb = 3 : 3
+>u.sb : 1 | 2 | 3
+>u : T12 | T23
+>sb : 1 | 2 | 3
+>3 : 3
+
+    u.gsa = 3;
+>u.gsa = 3 : 3
+>u.gsa : 1 | 2 | 3
+>u : T12 | T23
+>gsa : 1 | 2 | 3
+>3 : 3
+
+    if (u.gsa === 1) {
+>u.gsa === 1 : boolean
+>u.gsa : 3
+>u : T12 | T23
+>gsa : 3
+>1 : 1
+
+        u.gsa;
+>u.gsa : 1
+>u : T12
+>gsa : 1
+    }
+    if (u.gc === 1) {
+>u.gc === 1 : boolean
+>u.gc : 1 | 2 | 3
+>u : T12 | T23
+>gc : 1 | 2 | 3
+>1 : 1
+
+        u.gc;
+>u.gc : 1
+>u : T12
+>gc : 1
+    }
+}
+function fi(i:T12&T23) {
+>fi : (i: T12 & T23) => void
+>i : T12 & T23
+
+    i.a = 1; // error before & after
+>i.a = 1 : 1
+>i.a : 2
+>i : T12 & T23
+>a : 2
+>1 : 1
+
+    i.sb = 1; // error before & after
+>i.sb = 1 : 1
+>i.sb : 2
+>i : T12 & T23
+>sb : 2
+>1 : 1
+
+    i.gsa = 1; // error before & after
+>i.gsa = 1 : 1
+>i.gsa : 2
+>i : T12 & T23
+>gsa : 2
+>1 : 1
+
+    if (i.gsa === 1) { // error before & after
+>i.gsa === 1 : boolean
+>i.gsa : 2
+>i : T12 & T23
+>gsa : 2
+>1 : 1
+
+        i.gsa;
+>i.gsa : never
+>i : T12 & T23
+>gsa : never
+    }
+    if (i.gc === 1) { // error before & after
+>i.gc === 1 : boolean
+>i.gc : 2
+>i : T12 & T23
+>gc : 2
+>1 : 1
+
+        i.gc;
+>i.gc : never
+>i : T12 & T23
+>gc : never
+    }
+}

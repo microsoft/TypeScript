@@ -1,0 +1,64 @@
+divergentAccessorsTypes3.ts(33,1): error TS2322: Type 'number' is not assignable to type 'string'.
+divergentAccessorsTypes3.ts(36,1): error TS2322: Type 'number' is not assignable to type 'never'.
+divergentAccessorsTypes3.ts(37,1): error TS2322: Type 'string' is not assignable to type 'never'.
+divergentAccessorsTypes3.ts(38,1): error TS2322: Type 'boolean' is not assignable to type 'never'.
+divergentAccessorsTypes3.ts(40,1): error TS2322: Type 'number' is not assignable to type 'string'.
+divergentAccessorsTypes3.ts(42,1): error TS2322: Type 'boolean' is not assignable to type 'string'.
+
+
+==== divergentAccessorsTypes3.ts (6 errors) ====
+    class One {
+      get prop1(): string { return ""; }
+      set prop1(s: string | number) { }
+    
+      get prop2(): string { return ""; }
+      set prop2(s: string | number) { }
+    
+      prop3: number;
+    
+      get prop4(): string { return ""; }
+      set prop4(s: string | number) { }
+    }
+    
+    class Two {
+      get prop1(): string { return ""; }
+      set prop1(s: string | number) { }
+    
+      get prop2(): string { return ""; }
+      set prop2(s: string) { }
+    
+      get prop3(): string { return ""; }
+      set prop3(s: string | boolean) { }
+    
+      get prop4(): string { return ""; }
+      set prop4(s: string | boolean) { }
+    }
+    
+    declare const u1: One|Two;
+    
+    u1.prop1 = 42;
+    u1.prop1 = "hello";
+    
+    u1.prop2 = 42;
+    ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    u1.prop2 = "hello";
+    
+    u1.prop3 = 42;
+    ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'never'.
+    u1.prop3 = "hello";
+    ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
+    u1.prop3 = true;
+    ~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'never'.
+    
+    u1.prop4 = 42;
+    ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    u1.prop4 = "hello";
+    u1.prop4 = true;
+    ~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+    

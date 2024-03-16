@@ -45,7 +45,7 @@ i.prop1;
 >i : Symbol(i, Decl(divergentAccessorsTypes4.ts, 16, 13))
 >prop1 : Symbol(prop1, Decl(divergentAccessorsTypes4.ts, 0, 11), Decl(divergentAccessorsTypes4.ts, 1, 36), Decl(divergentAccessorsTypes4.ts, 7, 11), Decl(divergentAccessorsTypes4.ts, 8, 42))
 
-// number | "hello"
+// string | number
 i.prop1 = 42;
 >i.prop1 : Symbol(prop1, Decl(divergentAccessorsTypes4.ts, 0, 11), Decl(divergentAccessorsTypes4.ts, 1, 36), Decl(divergentAccessorsTypes4.ts, 7, 11), Decl(divergentAccessorsTypes4.ts, 8, 42))
 >i : Symbol(i, Decl(divergentAccessorsTypes4.ts, 16, 13))
@@ -62,13 +62,13 @@ i.prop2;
 >i : Symbol(i, Decl(divergentAccessorsTypes4.ts, 16, 13))
 >prop2 : Symbol(prop2, Decl(divergentAccessorsTypes4.ts, 2, 35), Decl(divergentAccessorsTypes4.ts, 9, 36), Decl(divergentAccessorsTypes4.ts, 11, 36))
 
-// 42
+// string | number
 i.prop2 = 42;
 >i.prop2 : Symbol(prop2, Decl(divergentAccessorsTypes4.ts, 2, 35), Decl(divergentAccessorsTypes4.ts, 9, 36), Decl(divergentAccessorsTypes4.ts, 11, 36))
 >i : Symbol(i, Decl(divergentAccessorsTypes4.ts, 16, 13))
 >prop2 : Symbol(prop2, Decl(divergentAccessorsTypes4.ts, 2, 35), Decl(divergentAccessorsTypes4.ts, 9, 36), Decl(divergentAccessorsTypes4.ts, 11, 36))
 
-i.prop2 = "hello"; // error
+i.prop2 = "hello";
 >i.prop2 : Symbol(prop2, Decl(divergentAccessorsTypes4.ts, 2, 35), Decl(divergentAccessorsTypes4.ts, 9, 36), Decl(divergentAccessorsTypes4.ts, 11, 36))
 >i : Symbol(i, Decl(divergentAccessorsTypes4.ts, 16, 13))
 >prop2 : Symbol(prop2, Decl(divergentAccessorsTypes4.ts, 2, 35), Decl(divergentAccessorsTypes4.ts, 9, 36), Decl(divergentAccessorsTypes4.ts, 11, 36))

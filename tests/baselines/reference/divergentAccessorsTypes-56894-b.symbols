@@ -1,0 +1,160 @@
+//// [tests/cases/compiler/-da/divergentAccessorsTypes-56894-b.ts] ////
+
+=== divergentAccessorsTypes-56894-b.ts ===
+type T12 = {
+>T12 : Symbol(T12, Decl(divergentAccessorsTypes-56894-b.ts, 0, 0))
+
+    a: 1|2;
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12))
+
+    set gsa(x: 1|2);
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-b.ts, 2, 12))
+
+    get gsa(): 1|2;
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20))
+
+    set sb(x: 1|2);
+>sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-b.ts, 4, 11))
+
+    get gc(): 1|2;
+>gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19))
+
+};
+type T23 = {
+>T23 : Symbol(T23, Decl(divergentAccessorsTypes-56894-b.ts, 6, 2))
+
+    a: 2|3;
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+
+    set gsa(x: 2|3);
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-b.ts, 9, 12))
+
+    get gsa(): 2|3;
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+    set sb(x: 2|3);
+>sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-b.ts, 11, 11))
+
+    get gc(): 2|3;
+>gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+
+};
+
+function fu(u:T12|T23) {
+>fu : Symbol(fu, Decl(divergentAccessorsTypes-56894-b.ts, 13, 2))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>T12 : Symbol(T12, Decl(divergentAccessorsTypes-56894-b.ts, 0, 0))
+>T23 : Symbol(T23, Decl(divergentAccessorsTypes-56894-b.ts, 6, 2))
+
+    u.a = 1;
+>u.a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+
+    u.sb = 1;
+>u.sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+
+    u.gsa = 1;
+>u.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+    u.a = 2;
+>u.a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+
+    u.sb = 2;
+>u.sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+
+    u.gsa = 2;
+>u.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+    u.a = 3;
+>u.a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+
+    u.sb = 3;
+>u.sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+
+    u.gsa = 3;
+>u.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+    if (u.gsa === 1) {
+>u.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+        u.gsa;
+>u.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20))
+    }
+    if (u.gc === 1) {
+>u.gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19), Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19), Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+
+        u.gc;
+>u.gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19))
+>u : Symbol(u, Decl(divergentAccessorsTypes-56894-b.ts, 15, 12))
+>gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19))
+    }
+}
+function fi(i:T12&T23) {
+>fi : Symbol(fi, Decl(divergentAccessorsTypes-56894-b.ts, 31, 1))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>T12 : Symbol(T12, Decl(divergentAccessorsTypes-56894-b.ts, 0, 0))
+>T23 : Symbol(T23, Decl(divergentAccessorsTypes-56894-b.ts, 6, 2))
+
+    i.a = 1; // error before & after
+>i.a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-b.ts, 0, 12), Decl(divergentAccessorsTypes-56894-b.ts, 7, 12))
+
+    i.sb = 1; // error before & after
+>i.sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>sb : Symbol(sb, Decl(divergentAccessorsTypes-56894-b.ts, 3, 19), Decl(divergentAccessorsTypes-56894-b.ts, 10, 19))
+
+    i.gsa = 1; // error before & after
+>i.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+    if (i.gsa === 1) { // error before & after
+>i.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+
+        i.gsa;
+>i.gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>gsa : Symbol(gsa, Decl(divergentAccessorsTypes-56894-b.ts, 1, 11), Decl(divergentAccessorsTypes-56894-b.ts, 2, 20), Decl(divergentAccessorsTypes-56894-b.ts, 8, 11), Decl(divergentAccessorsTypes-56894-b.ts, 9, 20))
+    }
+    if (i.gc === 1) { // error before & after
+>i.gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19), Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19), Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+
+        i.gc;
+>i.gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19), Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+>i : Symbol(i, Decl(divergentAccessorsTypes-56894-b.ts, 32, 12))
+>gc : Symbol(gc, Decl(divergentAccessorsTypes-56894-b.ts, 4, 19), Decl(divergentAccessorsTypes-56894-b.ts, 11, 19))
+    }
+}
