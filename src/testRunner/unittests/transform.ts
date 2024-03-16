@@ -751,4 +751,30 @@ function test () {
             },
         ).outputText;
     });
+
+    // https://github.com/microsoft/TypeScript/issues/54742
+    testBaseline("transformSyntheticCommentInClassDeclarationWithDecorator", () => {
+        const myTransformer = () => {
+            return (sf: any) => {
+                ts.setSyntheticLeadingComments(sf.statements[0], [
+                    { text: "from transformer", kind: ts.SyntaxKind.MultiLineCommentTrivia, pos: -1, end: -1 },
+                ]);
+                return sf;
+            };
+        };
+
+        return ts.transpileModule(` 
+@decorate()
+class Foo {}
+`, {
+            transformers: {
+                before: [myTransformer],
+            },
+            compilerOptions: {
+              experimentalDecorators: true,
+              module: ts.ModuleKind.CommonJS,
+              target: ts.ScriptTarget.ESNext,
+            },
+          }).outputText;
+    });
 });
