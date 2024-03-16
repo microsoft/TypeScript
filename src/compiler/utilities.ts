@@ -358,7 +358,6 @@ import {
     JSDocMemberName,
     JSDocOverloadTag,
     JSDocParameterTag,
-    JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
     JSDocSatisfiesTag,
     JSDocSignature,
@@ -10489,7 +10488,7 @@ export function canHaveExportModifier(node: Node): node is Extract<HasModifiers,
 }
 
 /** @internal */
-export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+export function isOptionalJSDocPropertyLikeTag(node: Node): boolean {
     if (!isJSDocPropertyLikeTag(node)) {
         return false;
     }
@@ -10518,7 +10517,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
         node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) => isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType)
+        || getJSDocParameterTags(node).some(isOptionalJSDocPropertyLikeTag)
     );
 }
 
@@ -10642,4 +10641,23 @@ export function replaceFirstStar(s: string, replacement: string): string {
 /** @internal */
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
+}
+
+/** @internal */
+export function isSyntacticallyString(expr: Expression): boolean {
+    expr = skipOuterExpressions(expr);
+    switch (expr.kind) {
+        case SyntaxKind.BinaryExpression:
+            const left = (expr as BinaryExpression).left;
+            const right = (expr as BinaryExpression).right;
+            return (
+                (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken &&
+                (isSyntacticallyString(left) || isSyntacticallyString(right))
+            );
+        case SyntaxKind.TemplateExpression:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return true;
+    }
+    return false;
 }

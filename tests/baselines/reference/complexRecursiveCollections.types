@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/complexRecursiveCollections.ts] ////
 
+=== Performance Stats ===
+Identity cache: 600 / 600 (nearest 100)
+Assignability cache: 7,600 / 7,600 (nearest 100)
+Type Count: 53,300 / 53,300 (nearest 100)
+Instantiation count: 178,000 / 178,000 (nearest 500)
+Symbol count: 134,500 / 134,500 (nearest 500)
+
 === complex.ts ===
 interface Ara<T> { t: T }
 >t : T

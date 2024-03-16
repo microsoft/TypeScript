@@ -144,6 +144,9 @@ export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), (
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -3509,7 +3512,8 @@ export function convertJsonOption(
                 convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
-            return convertJsonOptionOfCustomType(opt, value as string, errors, valueExpression, sourceFile);
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
         const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);
         return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);

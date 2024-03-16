@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/trackedSymbolsNoCrash.ts] ////
 
+=== Performance Stats ===
+Strict subtype cache: 100 / 100 (nearest 100)
+Assignability cache: 16,000 / 16,000 (nearest 100)
+Type Count: 700 / 700 (nearest 100)
+Instantiation count: 1,000 / 1,000 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === ast.ts ===
 export enum SyntaxKind { Node0, Node1, Node2, Node3, Node4, Node5, Node6, Node7, Node8, Node9, Node10, Node11, Node12, Node13, Node14, Node15, Node16, Node17, Node18, Node19, Node20, Node21, Node22, Node23, Node24, Node25, Node26, Node27, Node28, Node29, Node30, Node31, Node32, Node33, Node34, Node35, Node36, Node37, Node38, Node39, Node40, Node41, Node42, Node43, Node44, Node45, Node46, Node47, Node48, Node49, Node50, Node51, Node52, Node53, Node54, Node55, Node56, Node57, Node58, Node59, Node60, Node61, Node62, Node63, Node64, Node65, Node66, Node67, Node68, Node69, Node70, Node71, Node72, Node73, Node74, Node75, Node76, Node77, Node78, Node79, Node80, Node81, Node82, Node83, Node84, Node85, Node86, Node87, Node88, Node89, Node90, Node91, Node92, Node93, Node94, Node95, Node96, Node97, Node98, Node99 }
 >SyntaxKind : SyntaxKind

@@ -1,4 +1,4 @@
-classAbstractExtends.ts(9,7): error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
+classAbstractExtends.ts(9,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
 
 
 ==== classAbstractExtends.ts (1 errors) ====
@@ -12,8 +12,7 @@ classAbstractExtends.ts(9,7): error TS18052: Non-abstract class 'C' does not imp
     
     class C extends B { }
           ~
-!!! error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
-!!! related TS2515 classAbstractExtends.ts:6:14: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
     
     abstract class D extends B {}
     
