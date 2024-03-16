@@ -459,6 +459,8 @@ Projects::
 /user/username/projects/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/a/a.d.ts: DocumentPositionMapper1 *new*
     originalConfiguredProjects: 1 *changed*
         /user/username/projects/a/tsconfig.json *new*
 
@@ -478,7 +480,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/a/a.d.ts
     sourceInfos: 1
         /user/username/projects/a/a.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/a/a.ts *new*
     version: Text-1
@@ -488,3 +490,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/b/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

@@ -212,6 +212,13 @@ Info seq  [hh:mm:ss:mss] response:
       ]
     }
 After Request
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/bar/index.d.ts: identitySourceMapConsumer *new*
+
 ScriptInfos::
 /index.ts (Open)
     version: SVC-1-0

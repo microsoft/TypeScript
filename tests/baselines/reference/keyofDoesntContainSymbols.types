@@ -59,8 +59,8 @@ const valB = set(obj, 'num', '');
 // Expect type error
 // Argument of type '""' is not assignable to parameter of type 'number'.
 const valC = set(obj, sym, sym);
->valC : string | number
->set(obj, sym, sym) : string | number
+>valC : symbol
+>set(obj, sym, sym) : symbol
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 >sym : unique symbol
@@ -69,8 +69,8 @@ const valC = set(obj, sym, sym);
 // Expect type error
 // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
 const valD = set(obj, num, num);
->valD : string | number
->set(obj, num, num) : string | number
+>valD : 0
+>set(obj, num, num) : 0
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 >num : 0
@@ -79,7 +79,7 @@ const valD = set(obj, num, num);
 // Expect type error
 // Argument of type '0' is not assignable to parameter of type "str" | "num"
 type KeyofObj = keyof typeof obj;
->KeyofObj : "str" | "num"
+>KeyofObj : unique symbol | 0 | "str" | "num"
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 
 // "str" | "num"
@@ -87,6 +87,6 @@ type Values<T> = T[keyof T];
 >Values : Values<T>
 
 type ValuesOfObj = Values<typeof obj>;
->ValuesOfObj : string | number
+>ValuesOfObj : string | number | symbol
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 

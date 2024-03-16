@@ -1,5 +1,10 @@
 //// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 1,500 / 1,500 (nearest 100)
+Symbol count: 30,000 / 30,000 (nearest 500)
+
 === keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
 >f1 : (obj: {    a: number;    b: 0 | 1;    c: string;}, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void

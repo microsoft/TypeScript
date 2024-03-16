@@ -46,7 +46,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and when adding new file`, session);
         });
 
-        describe("with --out or --outFile setting", () => {
+        describe("with --outFile setting", () => {
             function verifyEventWithOutSettings(subScenario: string, compilerOptions: ts.CompilerOptions = {}) {
                 it(subScenario, () => {
                     const config: File = {
@@ -79,7 +79,6 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 });
             }
             verifyEventWithOutSettings("when both options are not set");
-            verifyEventWithOutSettings("when --out is set", { out: "/a/out.js" });
             verifyEventWithOutSettings("when --outFile is set", { outFile: "/a/out.js" });
         });
 

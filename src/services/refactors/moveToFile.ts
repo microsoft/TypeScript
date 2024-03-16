@@ -39,6 +39,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findIndex,
     findLast,
     firstDefined,
@@ -58,6 +59,7 @@ import {
     getRelativePathFromFile,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
+    getTokenAtPosition,
     getUniqueName,
     hasJSFileExtension,
     hasSyntacticModifier,
@@ -73,6 +75,7 @@ import {
     isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
+    isBlockLike,
     isDeclarationName,
     isExportDeclaration,
     isExportSpecifier,
@@ -164,6 +167,16 @@ registerRefactor(refactorNameForMoveToFile, {
         const statements = getStatementsToMove(context);
         if (!interactiveRefactorArguments) {
             return emptyArray;
+        }
+        /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
+         *  This condition is used in order to show less often the `Move to file` code action */
+        if (context.endPosition !== undefined) {
+            const file = context.file;
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+                return emptyArray;
+            }
         }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];

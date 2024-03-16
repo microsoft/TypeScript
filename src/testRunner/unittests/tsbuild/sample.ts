@@ -282,7 +282,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             fs: () => projFs,
             commandLineArgs: ["--b", "tests", "--verbose"],
             modifyFs: fs => {
-                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es3" } }));
+                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
                 replaceText(fs, "tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{

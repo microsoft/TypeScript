@@ -1484,9 +1484,11 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/core/tsconfig.json (Configured)
+/user/username/projects/myproject/core/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/core/src/file1.d.ts: identitySourceMapConsumer *new*
 /user/username/projects/myproject/coreRef1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

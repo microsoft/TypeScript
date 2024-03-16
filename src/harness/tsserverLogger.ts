@@ -54,11 +54,12 @@ export function createHasErrorMessageLogger(): Logger {
     logger.msg = (s, type) => ts.Debug.fail(`Error: ${s}, type: ${type}`);
     return logger;
 }
-function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, logText: (s: string) => void, sanitizeLibs: true | undefined): Logger {
+function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeLibs: true | undefined): Logger {
+    const originaPush = logger.logs!.push;
     logger.hasLevel = ts.returnTrue;
     logger.loggingEnabled = ts.returnTrue;
     logger.host = host;
-    if (host) logText(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+    if (host) logger.logs!.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
 
     let inGroup = false;
     let firstInGroup = false;
@@ -69,10 +70,12 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, logText: 
     logger.endGroup = () => inGroup = false;
     logger.info = s => msg(s, ts.server.Msg.Info, log);
     logger.log = log;
+    logger.logs!.push = log;
     return logger;
 
-    function log(s: string) {
-        logText((sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s)));
+    function log(...args: string[]) {
+        args.forEach(s => originaPush.call(logger.logs, (sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s))));
+        return 0;
     }
 
     function msg(s: string, type = ts.server.Msg.Err, write: (s: string) => void) {
@@ -103,7 +106,6 @@ export function createLoggerWritingToConsole(host: ts.server.ServerHost, sanitiz
     return handleLoggerGroup(
         logger,
         host,
-        s => console.log(s),
         sanitizeLibs,
     ) as LoggerWithInMemoryLogs;
 }
@@ -153,5 +155,5 @@ export interface LoggerWithInMemoryLogs extends Logger {
 export function createLoggerWithInMemoryLogs(host: ts.server.ServerHost, sanitizeLibs?: true): LoggerWithInMemoryLogs {
     const logger = createHasErrorMessageLogger();
     logger.logs = [];
-    return handleLoggerGroup(logger, host, s => logger.logs!.push(s), sanitizeLibs) as LoggerWithInMemoryLogs;
+    return handleLoggerGroup(logger, host, sanitizeLibs) as LoggerWithInMemoryLogs;
 }
