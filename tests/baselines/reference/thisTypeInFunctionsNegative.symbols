@@ -710,7 +710,7 @@ class Derived3 extends Base2 {
 
         super.polymorphic();
 >super.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
->super : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+>super : Symbol(Derived3, Decl(thisTypeInFunctionsNegative.ts, 177, 65))
 >polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
     }
 }

@@ -816,7 +816,7 @@ class Derived3 extends Base2 {
         super.polymorphic();
 >super.polymorphic() : number
 >super.polymorphic : (this: this) => number
->super : Base2
+>super : this
 >polymorphic : (this: this) => number
     }
 }

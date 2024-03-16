@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/superCallInMethodWithThisParameter.ts] ////
+
+=== superCallInMethodWithThisParameter.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/55155
+
+class Animal<T> {
+>Animal : Animal<T>
+
+  eat<T>(this: Animal<T>) {
+>eat : <T>(this: Animal<T>) => void
+>this : Animal<T>
+
+    throw new Error("This doesnt matter");
+>new Error("This doesnt matter") : Error
+>Error : ErrorConstructor
+>"This doesnt matter" : "This doesnt matter"
+  }
+}
+
+class Dog<T> extends Animal<T> {
+>Dog : Dog<T>
+>Animal : Animal<T>
+
+  eat<U>(this: Dog<U>) {
+>eat : <U>(this: Dog<U>) => void
+>this : Dog<U>
+
+    super.eat();
+>super.eat() : void
+>super.eat : <U>(this: Dog<U>) => void
+>super : Dog<U>
+>eat : <U>(this: Dog<U>) => void
+  }
+}
+
