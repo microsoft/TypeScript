@@ -3254,6 +3254,10 @@ export interface Statement extends Node, JSDocContainer {
     _statementBrand: any;
 }
 
+export interface StatementsContainer extends Node {
+    readonly statements: NodeArray<Statement>;
+}
+
 // Represents a statement that is elided as part of a transformation to emit comments on a
 // not-emitted node.
 export interface NotEmittedStatement extends Statement {
@@ -3297,9 +3301,8 @@ export type BlockLike =
     | ModuleBlock
     | CaseOrDefaultClause;
 
-export interface Block extends Statement, LocalsContainer {
+export interface Block extends Statement, LocalsContainer, StatementsContainer {
     readonly kind: SyntaxKind.Block;
-    readonly statements: NodeArray<Statement>;
     /** @internal */ multiLine?: boolean;
 }
 
@@ -3406,18 +3409,16 @@ export interface CaseBlock extends Node, LocalsContainer {
     readonly clauses: NodeArray<CaseOrDefaultClause>;
 }
 
-export interface CaseClause extends Node, JSDocContainer {
+export interface CaseClause extends StatementsContainer, JSDocContainer {
     readonly kind: SyntaxKind.CaseClause;
     readonly parent: CaseBlock;
     readonly expression: Expression;
-    readonly statements: NodeArray<Statement>;
     /** @internal */ fallthroughFlowNode?: FlowNode;
 }
 
-export interface DefaultClause extends Node {
+export interface DefaultClause extends StatementsContainer {
     readonly kind: SyntaxKind.DefaultClause;
     readonly parent: CaseBlock;
-    readonly statements: NodeArray<Statement>;
     /** @internal */ fallthroughFlowNode?: FlowNode;
 }
 
@@ -3582,10 +3583,9 @@ export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
     readonly body?: JSDocNamespaceBody;
 }
 
-export interface ModuleBlock extends Node, Statement {
+export interface ModuleBlock extends StatementsContainer, Statement {
     readonly kind: SyntaxKind.ModuleBlock;
     readonly parent: ModuleDeclaration;
-    readonly statements: NodeArray<Statement>;
 }
 
 export type ModuleReference =
@@ -4186,9 +4186,8 @@ export interface RedirectInfo {
 export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
 
 // Source files are declarations when they are external modules.
-export interface SourceFile extends Declaration, LocalsContainer {
+export interface SourceFile extends Declaration, LocalsContainer, StatementsContainer {
     readonly kind: SyntaxKind.SourceFile;
-    readonly statements: NodeArray<Statement>;
     readonly endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
     fileName: string;

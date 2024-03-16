@@ -215,6 +215,7 @@ import {
     isSpecialPropertyDeclaration,
     isStatement,
     isStatementButNotDeclaration,
+    isStatementsContainer,
     isStatic,
     isString,
     isStringLiteralLike,
@@ -3738,7 +3739,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 }
 
 function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
-    if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
+    if (isStatement(node) && isExecutableStatement(node) && isStatementsContainer(node.parent)) {
         const { statements } = node.parent;
         const slice = sliceAfter(statements, node);
         getRangesWhere(slice, isExecutableStatement, (start, afterEnd) => cb(slice[start], slice[afterEnd - 1]));

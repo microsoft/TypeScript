@@ -5174,6 +5174,9 @@ declare namespace ts {
     interface Statement extends Node, JSDocContainer {
         _statementBrand: any;
     }
+    interface StatementsContainer extends Node {
+        readonly statements: NodeArray<Statement>;
+    }
     interface NotEmittedStatement extends Statement {
         readonly kind: SyntaxKind.NotEmittedStatement;
     }
@@ -5195,9 +5198,8 @@ declare namespace ts {
         readonly name?: Identifier;
     }
     type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
-    interface Block extends Statement, LocalsContainer {
+    interface Block extends Statement, LocalsContainer, StatementsContainer {
         readonly kind: SyntaxKind.Block;
-        readonly statements: NodeArray<Statement>;
     }
     interface VariableStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.VariableStatement;
@@ -5273,16 +5275,14 @@ declare namespace ts {
         readonly parent: SwitchStatement;
         readonly clauses: NodeArray<CaseOrDefaultClause>;
     }
-    interface CaseClause extends Node, JSDocContainer {
+    interface CaseClause extends StatementsContainer, JSDocContainer {
         readonly kind: SyntaxKind.CaseClause;
         readonly parent: CaseBlock;
         readonly expression: Expression;
-        readonly statements: NodeArray<Statement>;
     }
-    interface DefaultClause extends Node {
+    interface DefaultClause extends StatementsContainer {
         readonly kind: SyntaxKind.DefaultClause;
         readonly parent: CaseBlock;
-        readonly statements: NodeArray<Statement>;
     }
     type CaseOrDefaultClause = CaseClause | DefaultClause;
     interface LabeledStatement extends Statement, FlowContainer {
@@ -5388,10 +5388,9 @@ declare namespace ts {
         readonly name: Identifier;
         readonly body?: JSDocNamespaceBody;
     }
-    interface ModuleBlock extends Node, Statement {
+    interface ModuleBlock extends StatementsContainer, Statement {
         readonly kind: SyntaxKind.ModuleBlock;
         readonly parent: ModuleDeclaration;
-        readonly statements: NodeArray<Statement>;
     }
     type ModuleReference = EntityName | ExternalModuleReference;
     /**
@@ -5856,9 +5855,8 @@ declare namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
     type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
-    interface SourceFile extends Declaration, LocalsContainer {
+    interface SourceFile extends Declaration, LocalsContainer, StatementsContainer {
         readonly kind: SyntaxKind.SourceFile;
-        readonly statements: NodeArray<Statement>;
         readonly endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
         fileName: string;
         text: string;
