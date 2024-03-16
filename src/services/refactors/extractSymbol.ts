@@ -163,6 +163,9 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+import {
+    isSameNode,
+} from "./isSameNode";
 
 const refactorName = "Extract Symbol";
 
@@ -700,14 +703,14 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                             forEachChild(n, check);
                         }
                     });
-                    // falls through
+                // falls through
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:
                     if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                         // You cannot extract global declarations
                         (errors ||= []).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
@@ -1382,6 +1385,9 @@ function extractConstantInScope(
 
     const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
+    // location starts at 1 because the declaration is index 0
+    let preferredRenameLocation = 1;
+
     if (isClassLike(scope)) {
         Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
         const modifiers: Modifier[] = [];
@@ -1399,24 +1405,39 @@ function extractConstantInScope(
             initializer,
         );
 
-        let localReference: Expression = factory.createPropertyAccessExpression(
-            rangeFacts & RangeFacts.InStaticRegion
-                ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
-                : factory.createThis(),
-            factory.createIdentifier(localNameText),
-        );
-
-        if (isInJSXContent(node)) {
-            localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
-        }
-
         // Declare
         const maxInsertionPos = node.pos;
         const nodeToInsertBefore = getNodeToInsertPropertyBefore(maxInsertionPos, scope);
         changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
         // Consume
-        changeTracker.replaceNode(context.file, node, localReference);
+        let location = preferredRenameLocation;
+        visitEachChild(scope, function visitor(potentialNode) {
+            if (!isSameNode(potentialNode, node)) {
+                return visitEachChild(potentialNode, visitor, nullTransformationContext);
+            }
+
+            let localReference: Expression = factory.createPropertyAccessExpression(
+                rangeFacts & RangeFacts.InStaticRegion
+                    ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
+                    : factory.createThis(),
+                factory.createIdentifier(localNameText),
+            );
+
+            if (isInJSXContent(potentialNode)) {
+                localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+            }
+
+            changeTracker.replaceNode(context.file, potentialNode, localReference);
+
+            if (potentialNode === node) {
+                preferredRenameLocation = location;
+            }
+
+            location++;
+
+            return potentialNode;
+        }, nullTransformationContext);
     }
     else {
         const newVariableDeclaration = factory.createVariableDeclaration(localNameText, /*exclamationToken*/ undefined, variableType, initializer);
@@ -1460,26 +1481,40 @@ function extractConstantInScope(
             }
 
             // Consume
-            if (node.parent.kind === SyntaxKind.ExpressionStatement) {
-                // If the parent is an expression statement, delete it.
-                changeTracker.delete(context.file, node.parent);
-            }
-            else {
-                let localReference: Expression = factory.createIdentifier(localNameText);
-                // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
-                // or it will become a plain text
-                if (isInJSXContent(node)) {
-                    localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+            let location = preferredRenameLocation;
+            visitEachChild(scope, function visitor(potentialNode) {
+                if (!isSameNode(potentialNode, node)) {
+                    return visitEachChild(potentialNode, visitor, nullTransformationContext);
                 }
-                changeTracker.replaceNode(context.file, node, localReference);
-            }
+
+                if (potentialNode === node) {
+                    preferredRenameLocation = location;
+                }
+
+                if (potentialNode.parent.kind === SyntaxKind.ExpressionStatement) {
+                    // If the parent is an expression statement, delete it.
+                    changeTracker.delete(context.file, potentialNode.parent);
+                }
+                else {
+                    let localReference: Expression = factory.createIdentifier(localNameText);
+                    // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
+                    // or it will become a plain text
+                    if (isInJSXContent(potentialNode)) {
+                        localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+                    }
+                    changeTracker.replaceNode(context.file, potentialNode, localReference);
+                    location++;
+                }
+
+                return potentialNode;
+            }, nullTransformationContext);
         }
     }
 
     const edits = changeTracker.getChanges();
 
     const renameFilename = node.getSourceFile().fileName;
-    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*preferLastLocation*/ true);
+    const renameLocation = getRenameLocation(edits, renameFilename, localNameText, preferredRenameLocation);
     return { renameFilename, renameLocation, edits };
 
     function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined; initializer: Expression; } {
