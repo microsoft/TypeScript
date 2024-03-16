@@ -219,3 +219,21 @@ type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) 
 function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
   return column[key];
 }
+
+// Repro from #54405
+
+type Root = Record<string, string | number>;
+
+declare function bug<T>(cb: () => number): void;
+
+function foo<T extends Root>(root: T, key: keyof T) {
+  const union = root[key];
+  bug(() => {
+    if (typeof union === "string") throw new Error();
+    return union;
+  });
+}
+
+declare function bar<F extends (...args: readonly any[]) => any>(f: F): F;
+
+const fx = bar(<T extends string | number>(x: T) => x);
