@@ -30638,7 +30638,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).links.type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
     }
 
-    function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
+    function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type): Type | undefined {
         return mapType(type, t => {
             if (isGenericMappedType(t) && !t.declaration.nameType) {
                 const constraint = getConstraintTypeFromMappedType(t);
@@ -30654,6 +30654,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));
                 }
                 if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
+                    if (t.target.hasRestElement) {
+                        const restElement = getTypeArguments(t)[t.target.fixedLength];
+                        if (restElement !== type) {
+                            const propType = getTypeOfPropertyOfContextualType(restElement, name);
+                            if (propType) {
+                                return propType;
+                            }
+                        }
+                    }
                     const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
                     if (restType) {
                         return restType;
