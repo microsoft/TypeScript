@@ -1,0 +1,56 @@
+abstractIntersectedClasses1.ts(17,7): error TS18052: Non-abstract class 'Foo1' does not implement all abstract members of 'A & B'
+abstractIntersectedClasses1.ts(18,7): error TS18052: Non-abstract class 'Foo2' does not implement all abstract members of 'A & B'
+abstractIntersectedClasses1.ts(34,7): error TS18052: Non-abstract class 'Bar1' does not implement all abstract members of 'A & A2'
+
+
+==== abstractIntersectedClasses1.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/56738
+    
+    abstract class A {
+      abstract a(): number;
+    }
+    
+    abstract class A2 {
+      abstract a(): number;
+    }
+    
+    abstract class B {
+      abstract b(): number;
+    }
+    
+    declare const Base: abstract new () => A & B;
+    
+    class Foo1 extends Base {} // error
+          ~~~~
+!!! error TS18052: Non-abstract class 'Foo1' does not implement all abstract members of 'A & B'
+!!! related TS2515 abstractIntersectedClasses1.ts:4:12: Non-abstract class 'Foo1' does not implement inherited abstract member 'a' from class 'A & B'.
+!!! related TS2515 abstractIntersectedClasses1.ts:12:12: Non-abstract class 'Foo1' does not implement inherited abstract member 'b' from class 'A & B'.
+    class Foo2 extends Base { // error
+          ~~~~
+!!! error TS18052: Non-abstract class 'Foo2' does not implement all abstract members of 'A & B'
+!!! related TS2515 abstractIntersectedClasses1.ts:12:12: Non-abstract class 'Foo2' does not implement inherited abstract member 'b' from class 'A & B'.
+      a() {
+        return 10;
+      }
+    }
+    class Foo3 extends Base { // ok
+      a() {
+        return 10;
+      }
+      b() {
+        return 42;
+      }
+    }
+    
+    declare const Base2: abstract new () => A & A2;
+    
+    class Bar1 extends Base2 {} // error
+          ~~~~
+!!! error TS18052: Non-abstract class 'Bar1' does not implement all abstract members of 'A & A2'
+!!! related TS2515 abstractIntersectedClasses1.ts:4:12: Non-abstract class 'Bar1' does not implement inherited abstract member 'a' from class 'A & A2'.
+    class Bar2 extends Base2 { // ok
+      a() {
+        return 100;
+      }
+    }
+    

@@ -7719,14 +7719,14 @@ export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false
         const flags = getCombinedModifierFlags(declaration);
         return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
     }
-    if (getCheckFlags(s) & CheckFlags.Synthetic) {
-        // NOTE: potentially unchecked cast to TransientSymbol
-        const checkFlags = (s as TransientSymbol).links.checkFlags;
+    const checkFlags = getCheckFlags(s);
+    if (checkFlags & CheckFlags.Synthetic) {
         const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
             checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
             ModifierFlags.Protected;
         const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
-        return accessModifier | staticModifier;
+        const abstractModifier = checkFlags & CheckFlags.ContainsAbstract ? ModifierFlags.Abstract : 0;
+        return accessModifier | staticModifier | abstractModifier;
     }
     if (s.flags & SymbolFlags.Prototype) {
         return ModifierFlags.Public | ModifierFlags.Static;
