@@ -1,0 +1,140 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples3.ts] ////
+
+=== variadicTuples3.ts ===
+// https://github.com/microsoft/TypeScript/issues/56970
+
+function partialCall1<T extends readonly any[], U extends readonly any[], R>(
+>partialCall1 : Symbol(partialCall1, Decl(variadicTuples3.ts, 0, 0))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 22))
+>U : Symbol(U, Decl(variadicTuples3.ts, 2, 47))
+>R : Symbol(R, Decl(variadicTuples3.ts, 2, 73))
+
+  f: (...args: [...U, ...T]) => R,
+>f : Symbol(f, Decl(variadicTuples3.ts, 2, 77))
+>args : Symbol(args, Decl(variadicTuples3.ts, 3, 6))
+>U : Symbol(U, Decl(variadicTuples3.ts, 2, 47))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 22))
+>R : Symbol(R, Decl(variadicTuples3.ts, 2, 73))
+
+  ...tailArgs: T
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 3, 34))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 22))
+
+) {
+  return (...headArgs: U) => f(...headArgs, ...tailArgs);
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 6, 10))
+>U : Symbol(U, Decl(variadicTuples3.ts, 2, 47))
+>f : Symbol(f, Decl(variadicTuples3.ts, 2, 77))
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 6, 10))
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 3, 34))
+}
+
+function source1(a: number, b: number, c: number): number {
+>source1 : Symbol(source1, Decl(variadicTuples3.ts, 7, 1))
+>a : Symbol(a, Decl(variadicTuples3.ts, 9, 17))
+>b : Symbol(b, Decl(variadicTuples3.ts, 9, 27))
+>c : Symbol(c, Decl(variadicTuples3.ts, 9, 38))
+
+  return a + b + c;
+>a : Symbol(a, Decl(variadicTuples3.ts, 9, 17))
+>b : Symbol(b, Decl(variadicTuples3.ts, 9, 27))
+>c : Symbol(c, Decl(variadicTuples3.ts, 9, 38))
+}
+
+const result1 = partialCall1(source1, 1);
+>result1 : Symbol(result1, Decl(variadicTuples3.ts, 13, 5))
+>partialCall1 : Symbol(partialCall1, Decl(variadicTuples3.ts, 0, 0))
+>source1 : Symbol(source1, Decl(variadicTuples3.ts, 7, 1))
+
+function partialCall2<T extends readonly any[], U extends readonly any[], R>(
+>partialCall2 : Symbol(partialCall2, Decl(variadicTuples3.ts, 13, 41))
+>T : Symbol(T, Decl(variadicTuples3.ts, 15, 22))
+>U : Symbol(U, Decl(variadicTuples3.ts, 15, 47))
+>R : Symbol(R, Decl(variadicTuples3.ts, 15, 73))
+
+  f: (...args: [number, ...U, ...T]) => R,
+>f : Symbol(f, Decl(variadicTuples3.ts, 15, 77))
+>args : Symbol(args, Decl(variadicTuples3.ts, 16, 6))
+>U : Symbol(U, Decl(variadicTuples3.ts, 15, 47))
+>T : Symbol(T, Decl(variadicTuples3.ts, 15, 22))
+>R : Symbol(R, Decl(variadicTuples3.ts, 15, 73))
+
+  ...tailArgs: T
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 16, 42))
+>T : Symbol(T, Decl(variadicTuples3.ts, 15, 22))
+
+) {
+  return (...headArgs: U) => f(0, ...headArgs, ...tailArgs);
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 19, 10))
+>U : Symbol(U, Decl(variadicTuples3.ts, 15, 47))
+>f : Symbol(f, Decl(variadicTuples3.ts, 15, 77))
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 19, 10))
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 16, 42))
+}
+
+function source2(a: number, b: number, c: number, d: number): number {
+>source2 : Symbol(source2, Decl(variadicTuples3.ts, 20, 1))
+>a : Symbol(a, Decl(variadicTuples3.ts, 22, 17))
+>b : Symbol(b, Decl(variadicTuples3.ts, 22, 27))
+>c : Symbol(c, Decl(variadicTuples3.ts, 22, 38))
+>d : Symbol(d, Decl(variadicTuples3.ts, 22, 49))
+
+  return a + b + c + d;
+>a : Symbol(a, Decl(variadicTuples3.ts, 22, 17))
+>b : Symbol(b, Decl(variadicTuples3.ts, 22, 27))
+>c : Symbol(c, Decl(variadicTuples3.ts, 22, 38))
+>d : Symbol(d, Decl(variadicTuples3.ts, 22, 49))
+}
+
+const result2 = partialCall2(source2, 1);
+>result2 : Symbol(result2, Decl(variadicTuples3.ts, 26, 5))
+>partialCall2 : Symbol(partialCall2, Decl(variadicTuples3.ts, 13, 41))
+>source2 : Symbol(source2, Decl(variadicTuples3.ts, 20, 1))
+
+function partialCall3<T extends readonly any[], U extends readonly any[], R>(
+>partialCall3 : Symbol(partialCall3, Decl(variadicTuples3.ts, 26, 41))
+>T : Symbol(T, Decl(variadicTuples3.ts, 28, 22))
+>U : Symbol(U, Decl(variadicTuples3.ts, 28, 47))
+>R : Symbol(R, Decl(variadicTuples3.ts, 28, 73))
+
+  f: (...args: [...U, ...T, number]) => R,
+>f : Symbol(f, Decl(variadicTuples3.ts, 28, 77))
+>args : Symbol(args, Decl(variadicTuples3.ts, 29, 6))
+>U : Symbol(U, Decl(variadicTuples3.ts, 28, 47))
+>T : Symbol(T, Decl(variadicTuples3.ts, 28, 22))
+>R : Symbol(R, Decl(variadicTuples3.ts, 28, 73))
+
+  ...tailArgs: T
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 29, 42))
+>T : Symbol(T, Decl(variadicTuples3.ts, 28, 22))
+
+) {
+  return (...headArgs: U) => f(...headArgs, ...tailArgs, 100);
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 32, 10))
+>U : Symbol(U, Decl(variadicTuples3.ts, 28, 47))
+>f : Symbol(f, Decl(variadicTuples3.ts, 28, 77))
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 32, 10))
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 29, 42))
+}
+
+function source3(a: number, b: number, c: number, d: number): number {
+>source3 : Symbol(source3, Decl(variadicTuples3.ts, 33, 1))
+>a : Symbol(a, Decl(variadicTuples3.ts, 35, 17))
+>b : Symbol(b, Decl(variadicTuples3.ts, 35, 27))
+>c : Symbol(c, Decl(variadicTuples3.ts, 35, 38))
+>d : Symbol(d, Decl(variadicTuples3.ts, 35, 49))
+
+  return a + b + c + d;
+>a : Symbol(a, Decl(variadicTuples3.ts, 35, 17))
+>b : Symbol(b, Decl(variadicTuples3.ts, 35, 27))
+>c : Symbol(c, Decl(variadicTuples3.ts, 35, 38))
+>d : Symbol(d, Decl(variadicTuples3.ts, 35, 49))
+}
+
+const result3 = partialCall3(source3, 1);
+>result3 : Symbol(result3, Decl(variadicTuples3.ts, 39, 5))
+>partialCall3 : Symbol(partialCall3, Decl(variadicTuples3.ts, 26, 41))
+>source3 : Symbol(source3, Decl(variadicTuples3.ts, 33, 1))
+
+export {}
+
