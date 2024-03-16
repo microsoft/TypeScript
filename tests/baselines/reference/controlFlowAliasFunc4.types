@@ -1,0 +1,90 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc4.ts ===
+declare interface Foo { 
+    readonly a?: { b: { readonly c: {"1":true, "2": true} }};
+>a : { b: {    readonly c: {        "1": true;        "2": true;    };}; }
+>b : { readonly c: {    "1": true;    "2": true;}; }
+>c : { "1": true; "2": true; }
+>"1" : true
+>true : true
+>"2" : true
+>true : true
+
+    readonly boo?: { readonly bop?: {foo:()=>"1"}};
+>boo : { readonly bop?: {    foo: () => "1";}; }
+>bop : { foo: () => "1"; }
+>foo : () => "1"
+
+    readonly bar?: { foo:()=>"2"};
+>bar : { foo: () => "2"; }
+>foo : () => "2"
+
+    foo:()=>number[];
+>foo : () => number[]
+}
+declare const obj:undefined|Foo;
+>obj : Foo
+
+const is1 = obj?.boo?.bop?.foo();
+>is1 : "1"
+>obj?.boo?.bop?.foo() : "1"
+>obj?.boo?.bop?.foo : () => "1"
+>obj?.boo?.bop : { foo: () => "1"; }
+>obj?.boo : { readonly bop?: { foo: () => "1"; }; }
+>obj : Foo
+>boo : { readonly bop?: { foo: () => "1"; }; }
+>bop : { foo: () => "1"; }
+>foo : () => "1"
+
+const is2 = obj?.bar?.foo();
+>is2 : "2"
+>obj?.bar?.foo() : "2"
+>obj?.bar?.foo : () => "2"
+>obj?.bar : { foo: () => "2"; }
+>obj : Foo
+>bar : { foo: () => "2"; }
+>foo : () => "2"
+
+const isn = obj?.foo();
+>isn : number[]
+>obj?.foo() : number[]
+>obj?.foo : () => number[]
+>obj : Foo
+>foo : () => number[]
+
+if (is1){
+>is1 : "1"
+
+    let x = obj.boo.bop.foo();
+>x : "1"
+>obj.boo.bop.foo() : "1"
+>obj.boo.bop.foo : () => "1"
+>obj.boo.bop : { foo: () => "1"; }
+>obj.boo : { readonly bop?: { foo: () => "1"; }; }
+>obj : Foo
+>boo : { readonly bop?: { foo: () => "1"; }; }
+>bop : { foo: () => "1"; }
+>foo : () => "1"
+}
+if (is2){
+>is2 : "2"
+
+    let x = obj.bar.foo();
+>x : "2"
+>obj.bar.foo() : "2"
+>obj.bar.foo : () => "2"
+>obj.bar : { foo: () => "2"; }
+>obj : Foo
+>bar : { foo: () => "2"; }
+>foo : () => "2"
+}
+if (isn){
+>isn : number[]
+
+    let x = obj.foo();
+>x : number[]
+>obj.foo() : number[]
+>obj.foo : () => number[]
+>obj : Foo
+>foo : () => number[]
+}
+
