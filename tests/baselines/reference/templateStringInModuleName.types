@@ -2,16 +2,10 @@
 
 === templateStringInModuleName.ts ===
 declare module `M1` {
->declare : any
->module `M1` : any
->module : any
 >`M1` : "M1"
 }
 
 declare module `M${2}` {
->declare : any
->module `M${2}` : any
->module : any
->`M${2}` : string
+>`M${2}` : "M2"
 >2 : 2
 }

@@ -7176,9 +7176,9 @@ namespace Parser {
                     if (scanner.hasPrecedingLineBreak()) {
                         return false;
                     }
-                    if (previousToken === SyntaxKind.DeclareKeyword && token() === SyntaxKind.TypeKeyword) {
+                    if (previousToken === SyntaxKind.DeclareKeyword && (token() === SyntaxKind.TypeKeyword || token() === SyntaxKind.ModuleKeyword || token() === SyntaxKind.NamespaceKeyword)) {
                         // If we see 'declare type', then commit to parsing a type alias. parseTypeAliasDeclaration will
-                        // report Line_break_not_permitted_here if needed.
+                        // report Line_break_not_permitted_here if needed. Do a similar thing for `declare module/namespace`
                         return true;
                     }
                     continue;
@@ -8283,9 +8283,15 @@ namespace Parser {
         }
         else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
             flags |= NodeFlags.Namespace;
+            if (scanner.hasPrecedingLineBreak()) {
+                parseErrorAtCurrentToken(Diagnostics.Line_break_not_permitted_here);
+            }
         }
         else {
             parseExpected(SyntaxKind.ModuleKeyword);
+            if (scanner.hasPrecedingLineBreak()) {
+                parseErrorAtCurrentToken(Diagnostics.Line_break_not_permitted_here);
+            }
             if (token() === SyntaxKind.StringLiteral) {
                 return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, modifiersIn);
             }

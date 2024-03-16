@@ -2,8 +2,7 @@
 
 === externModule.ts ===
 declare module {
->declare : any
->module : any
+> : typeof (Missing)
 
     export class XDate {
 >XDate : XDate
