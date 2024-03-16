@@ -1,0 +1,24 @@
+=== tests/cases/compiler/conditionalSubstitutionInferencesLowerPriority.ts ===
+type TestType<Keys extends string> = string extends Keys ? Record<Keys, string> : Record<Keys, string>
+>TestType : TestType<Keys>
+
+function inferHelper<Keys extends string>(data: TestType<Keys>) {
+>inferHelper : <Keys extends string>(data: TestType<Keys>) => TestType<Keys>
+>data : TestType<Keys>
+
+    return data;
+>data : TestType<Keys>
+}
+
+export const a = inferHelper({
+>a : Record<"key1", string>
+>inferHelper({    // key1 is inferred to be value1 here    key1: "value1"}) : Record<"key1", string>
+>inferHelper : <Keys extends string>(data: TestType<Keys>) => TestType<Keys>
+>{    // key1 is inferred to be value1 here    key1: "value1"} : { key1: string; }
+
+    // key1 is inferred to be value1 here
+    key1: "value1"
+>key1 : string
+>"value1" : "value1"
+
+})
