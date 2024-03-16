@@ -18819,6 +18819,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
             break;
         }
+        if (result.flags & TypeFlags.Substitution) {
+            const substitution = result as SubstitutionType;
+            result = getIntersectionType([substitution.baseType, substitution.constraint]);
+        }
         return extraTypes ? getUnionType(append(extraTypes, result)) : result;
         // We tail-recurse for generic conditional types that (a) have not already been evaluated and cached, and
         // (b) are non distributive, have a check type that is unaffected by instantiation, or have a non-union check
