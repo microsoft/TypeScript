@@ -1,13 +1,9 @@
-//// [tests/cases/compiler/reverseMappedTypeIntersectionConstraint.ts] ////
+// @strict: true
+// @lib: esnext
 
-//// [reverseMappedTypeIntersectionConstraint.ts]
 type StateConfig<TAction extends string> = {
   entry?: TAction
   states?: Record<string, StateConfig<TAction>>;
-};
-
-type StateSchema = {
-  states?: Record<string, StateSchema>;
 };
 
 declare function createMachine<
@@ -46,8 +42,6 @@ const checked = checkType<{x: number, y: string}>()({
   z: "z", // undesirable property z is *not* allowed
 });
 
-checked;
-
 // -----------------------------------------------------------------------------------------
 
 interface Stuff {
@@ -63,7 +57,7 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
     }
 }
 
-doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+const stuff1 = doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
 
 function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
     if(Math.random() > 0.5) {
@@ -73,7 +67,7 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
     }
 }
 
-doStuffWithStuffArr([
+const stuff2 = doStuffWithStuffArr([
     { field: 1, anotherField: 'a', extra: 123 },
 ])
 
@@ -81,26 +75,26 @@ doStuffWithStuffArr([
 
 type XNumber = { x: number }
 
-declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
+declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): T;
 
 function bar(props: {x: number, y: string}) {
   return foo(props); // no error because lack of excess property check by design
 }
 
-foo({x: 1, y: 'foo'});
+const foo1 = foo({x: 1, y: 'foo'});
 
-foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+const foo2 = foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 
 // -----------------------------------------------------------------------------------------
 
 type NoErrWithOptProps = { x: number, y?: string }
 
-declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): T;
 
-baz({x: 1});
-baz({x: 1, z: 123});
-baz({x: 1, y: 'foo'});
-baz({x: 1, y: 'foo', z: 123});
+const baz1 = baz({x: 1});
+const baz2 = baz({x: 1, z: 123});
+const baz3 = baz({x: 1, y: 'foo'});
+const baz4 = baz({x: 1, y: 'foo', z: 123});
 
 // -----------------------------------------------------------------------------------------
 
@@ -118,8 +112,6 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 // -----------------------------------------------------------------------------------------
 
 type IsLiteralString<T extends string> = string extends T ? false : true;
-
-type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
 
 interface ProvidedActor {
   src: string;
@@ -141,10 +133,6 @@ interface MachineConfig<TActor extends ProvidedActor> {
     : {
         src: string;
       };
-}
-
-type NoExtra<T> = {
-  [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
 }
 
 declare function createXMachine<
@@ -174,87 +162,71 @@ const config2 = createXMachine({
   extra: 10
 });
 
-
-//// [reverseMappedTypeIntersectionConstraint.js]
-"use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
+declare function fn1<T extends Record<string, number>>(obj: {
+  [K in keyof T & "a"]: T[K];
+}): T;
+const obj1 = {
+  a: 42,
+  b: true,
 };
-var inferredParams1 = createMachine({
-    entry: "foo",
-    states: {
-        a: {
-            entry: "bar",
-        },
-    },
-    extra: 12,
+const result1 = fn1(obj1);
+
+declare function fn2<T extends Record<string, number>>(obj: {
+  [K in (keyof T & "a") | "b"]: T[K];
+}): T;
+const obj2 = {
+  a: 42,
+  b: 100,
+  c: true,
+};
+const result2 = fn2(obj2);
+
+declare function fn3<T1, T2>(obj: {
+  [K in keyof T1 & keyof T2]: {
+    v1: T1[K];
+    v2: T2[K];
+  };
+}): [T1, T2];
+
+const result3 = fn3({
+  a: {
+    v1: "foo",
+    v2: 100,
+  },
+  b: {
+    v1: true,
+    v2: null,
+  },
 });
-var inferredParams2 = createMachine({
-    entry: "foo",
-    states: {
-        a: {
-            entry: "foo",
-        },
+
+declare function fn4<T, E extends Record<string, number>>(arg: {
+  [K in keyof T & keyof E]: {
+    data: T[K];
+    onSuccess: (data: T[K]) => void;
+    error: E[K];
+    onError: (data: E[K]) => void;
+  };
+}): [T, E];
+
+const result4 = fn4({
+  a: {
+    data: "foo",
+    onSuccess: (dataArg) => {
+      dataArg;
     },
-    extra: 12,
-});
-// -----------------------------------------------------------------------------------------
-var checkType = function () { return function (value) { return value; }; };
-var checked = checkType()({
-    x: 1,
-    y: "y",
-    z: "z", // undesirable property z is *not* allowed
-});
-checked;
-function doStuffWithStuff(s) {
-    if (Math.random() > 0.5) {
-        return s;
-    }
-    else {
-        return s;
-    }
-}
-doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 });
-function doStuffWithStuffArr(arr) {
-    if (Math.random() > 0.5) {
-        return arr;
-    }
-    else {
-        return arr;
-    }
-}
-doStuffWithStuffArr([
-    { field: 1, anotherField: 'a', extra: 123 },
-]);
-function bar(props) {
-    return foo(props); // no error because lack of excess property check by design
-}
-foo({ x: 1, y: 'foo' });
-foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
-baz({ x: 1 });
-baz({ x: 1, z: 123 });
-baz({ x: 1, y: 'foo' });
-baz({ x: 1, y: 'foo', z: 123 });
-var wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
-var child = function () { return Promise.resolve("foo"); };
-var config = createXMachine({
-    types: {},
-    invoke: {
-        src: "str",
+    error: 404,
+    onError: (errorArg) => {
+      errorArg;
     },
-    extra: 10
-});
-var config2 = createXMachine({
-    invoke: {
-        src: "whatever",
+  },
+  b: {
+    data: true,
+    onSuccess: (dataArg) => {
+      dataArg;
     },
-    extra: 10
+    error: 500,
+    onError: (errorArg) => {
+      errorArg;
+    },
+  },
 });

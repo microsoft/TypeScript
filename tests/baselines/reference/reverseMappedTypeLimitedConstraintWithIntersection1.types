@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/reverseMappedTypeIntersectionConstraint.ts] ////
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraintWithIntersection1.ts] ////
 
-=== reverseMappedTypeIntersectionConstraint.ts ===
+=== reverseMappedTypeLimitedConstraintWithIntersection1.ts ===
 type StateConfig<TAction extends string> = {
 >StateConfig : StateConfig<TAction>
 
@@ -9,14 +9,6 @@ type StateConfig<TAction extends string> = {
 
   states?: Record<string, StateConfig<TAction>>;
 >states : Record<string, StateConfig<TAction>> | undefined
-
-};
-
-type StateSchema = {
->StateSchema : { states?: Record<string, StateSchema> | undefined; }
-
-  states?: Record<string, StateSchema>;
->states : Record<string, StateSchema> | undefined
 
 };
 
@@ -122,9 +114,6 @@ const checked = checkType<{x: number, y: string}>()({
 
 });
 
-checked;
->checked : { x: number; y: "y"; }
-
 // -----------------------------------------------------------------------------------------
 
 interface Stuff {
@@ -157,7 +146,8 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
     }
 }
 
-doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+const stuff1 = doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+>stuff1 : { field: 1; anotherField: "a"; }
 >doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 }) : { field: 1; anotherField: "a"; }
 >doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K]; }) => T
 >{ field: 1, anotherField: 'a', extra: 123 } : { field: 1; anotherField: "a"; extra: number; }
@@ -190,7 +180,8 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
     }
 }
 
-doStuffWithStuffArr([
+const stuff2 = doStuffWithStuffArr([
+>stuff2 : { field: 1; anotherField: "a"; }[]
 >doStuffWithStuffArr([    { field: 1, anotherField: 'a', extra: 123 },]) : { field: 1; anotherField: "a"; }[]
 >doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K]; }[]) => T[]
 >[    { field: 1, anotherField: 'a', extra: 123 },] : { field: 1; anotherField: "a"; extra: number; }[]
@@ -212,34 +203,36 @@ type XNumber = { x: number }
 >XNumber : { x: number; }
 >x : number
 
-declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): T;
+>foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => T
 >props : { [K in keyof T & "x"]: T[K]; }
 
 function bar(props: {x: number, y: string}) {
->bar : (props: {    x: number;    y: string;}) => void
+>bar : (props: {    x: number;    y: string;}) => { x: number; }
 >props : { x: number; y: string; }
 >x : number
 >y : string
 
   return foo(props); // no error because lack of excess property check by design
->foo(props) : void
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+>foo(props) : { x: number; }
+>foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => T
 >props : { x: number; y: string; }
 }
 
-foo({x: 1, y: 'foo'});
->foo({x: 1, y: 'foo'}) : void
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+const foo1 = foo({x: 1, y: 'foo'});
+>foo1 : { x: 1; }
+>foo({x: 1, y: 'foo'}) : { x: 1; }
+>foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => T
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
 >x : 1
 >1 : 1
 >y : string
 >'foo' : "foo"
 
-foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
->foo({...{x: 1, y: 'foo'}}) : void
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+const foo2 = foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+>foo2 : { x: 1; }
+>foo({...{x: 1, y: 'foo'}}) : { x: 1; }
+>foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => T
 >{...{x: 1, y: 'foo'}} : { x: 1; y: string; }
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
 >x : 1
@@ -254,38 +247,42 @@ type NoErrWithOptProps = { x: number, y?: string }
 >x : number
 >y : string | undefined
 
-declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): T;
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => T
 >props : { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }
 
-baz({x: 1});
->baz({x: 1}) : void
->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+const baz1 = baz({x: 1});
+>baz1 : { x: 1; }
+>baz({x: 1}) : { x: 1; }
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => T
 >{x: 1} : { x: 1; }
 >x : 1
 >1 : 1
 
-baz({x: 1, z: 123});
->baz({x: 1, z: 123}) : void
->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+const baz2 = baz({x: 1, z: 123});
+>baz2 : { x: 1; }
+>baz({x: 1, z: 123}) : { x: 1; }
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => T
 >{x: 1, z: 123} : { x: 1; z: number; }
 >x : 1
 >1 : 1
 >z : number
 >123 : 123
 
-baz({x: 1, y: 'foo'});
->baz({x: 1, y: 'foo'}) : void
->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+const baz3 = baz({x: 1, y: 'foo'});
+>baz3 : { x: 1; y: "foo"; }
+>baz({x: 1, y: 'foo'}) : { x: 1; y: "foo"; }
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => T
 >{x: 1, y: 'foo'} : { x: 1; y: "foo"; }
 >x : 1
 >1 : 1
 >y : "foo"
 >'foo' : "foo"
 
-baz({x: 1, y: 'foo', z: 123});
->baz({x: 1, y: 'foo', z: 123}) : void
->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+const baz4 = baz({x: 1, y: 'foo', z: 123});
+>baz4 : { x: 1; y: "foo"; }
+>baz({x: 1, y: 'foo', z: 123}) : { x: 1; y: "foo"; }
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => T
 >{x: 1, y: 'foo', z: 123} : { x: 1; y: "foo"; z: number; }
 >x : 1
 >1 : 1
@@ -333,9 +330,6 @@ type IsLiteralString<T extends string> = string extends T ? false : true;
 >false : false
 >true : true
 
-type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
->DeepWritable : DeepWritable<T>
-
 interface ProvidedActor {
   src: string;
 >src : string
@@ -374,12 +368,6 @@ interface MachineConfig<TActor extends ProvidedActor> {
       };
 }
 
-type NoExtra<T> = {
->NoExtra : NoExtra<T>
-
-  [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
-}
-
 declare function createXMachine<
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: {    actors: ProvidedActor;}; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 
@@ -392,12 +380,12 @@ declare function createXMachine<
 >config : { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }
 
 const child = () => Promise.resolve("foo");
->child : () => any
->() => Promise.resolve("foo") : () => any
->Promise.resolve("foo") : any
->Promise.resolve : any
->Promise : any
->resolve : any
+>child : () => Promise<string>
+>() => Promise.resolve("foo") : () => Promise<string>
+>Promise.resolve("foo") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >"foo" : "foo"
 
 const config = createXMachine({
@@ -418,8 +406,8 @@ const config = createXMachine({
 >src : "str"
 
       logic: typeof child;
->logic : () => any
->child : () => any
+>logic : () => Promise<string>
+>child : () => Promise<string>
 
     };
   },
@@ -457,5 +445,198 @@ const config2 = createXMachine({
 >extra : number
 >10 : 10
 
+});
+
+declare function fn1<T extends Record<string, number>>(obj: {
+>fn1 : <T extends Record<string, number>>(obj: { [K in keyof T & "a"]: T[K]; }) => T
+>obj : { [K in keyof T & "a"]: T[K]; }
+
+  [K in keyof T & "a"]: T[K];
+}): T;
+const obj1 = {
+>obj1 : { a: number; b: boolean; }
+>{  a: 42,  b: true,} : { a: number; b: boolean; }
+
+  a: 42,
+>a : number
+>42 : 42
+
+  b: true,
+>b : boolean
+>true : true
+
+};
+const result1 = fn1(obj1);
+>result1 : { a: number; }
+>fn1(obj1) : { a: number; }
+>fn1 : <T extends Record<string, number>>(obj: { [K in keyof T & "a"]: T[K]; }) => T
+>obj1 : { a: number; b: boolean; }
+
+declare function fn2<T extends Record<string, number>>(obj: {
+>fn2 : <T extends Record<string, number>>(obj: { [K in "b" | (keyof T & "a")]: T[K]; }) => T
+>obj : { [K in "b" | (keyof T & "a")]: T[K]; }
+
+  [K in (keyof T & "a") | "b"]: T[K];
+}): T;
+const obj2 = {
+>obj2 : { a: number; b: number; c: boolean; }
+>{  a: 42,  b: 100,  c: true,} : { a: number; b: number; c: boolean; }
+
+  a: 42,
+>a : number
+>42 : 42
+
+  b: 100,
+>b : number
+>100 : 100
+
+  c: true,
+>c : boolean
+>true : true
+
+};
+const result2 = fn2(obj2);
+>result2 : { a: number; b: number; }
+>fn2(obj2) : { a: number; b: number; }
+>fn2 : <T extends Record<string, number>>(obj: { [K in "b" | (keyof T & "a")]: T[K]; }) => T
+>obj2 : { a: number; b: number; c: boolean; }
+
+declare function fn3<T1, T2>(obj: {
+>fn3 : <T1, T2>(obj: { [K in keyof T1 & keyof T2]: { v1: T1[K]; v2: T2[K]; }; }) => [T1, T2]
+>obj : { [K in keyof T1 & keyof T2]: { v1: T1[K]; v2: T2[K]; }; }
+
+  [K in keyof T1 & keyof T2]: {
+    v1: T1[K];
+>v1 : T1[K]
+
+    v2: T2[K];
+>v2 : T2[K]
+
+  };
+}): [T1, T2];
+
+const result3 = fn3({
+>result3 : [{ a: string; b: boolean; }, { a: number; b: null; }]
+>fn3({  a: {    v1: "foo",    v2: 100,  },  b: {    v1: true,    v2: null,  },}) : [{ a: string; b: boolean; }, { a: number; b: null; }]
+>fn3 : <T1, T2>(obj: { [K in keyof T1 & keyof T2]: { v1: T1[K]; v2: T2[K]; }; }) => [T1, T2]
+>{  a: {    v1: "foo",    v2: 100,  },  b: {    v1: true,    v2: null,  },} : { a: { v1: string; v2: number; }; b: { v1: true; v2: null; }; }
+
+  a: {
+>a : { v1: string; v2: number; }
+>{    v1: "foo",    v2: 100,  } : { v1: string; v2: number; }
+
+    v1: "foo",
+>v1 : string
+>"foo" : "foo"
+
+    v2: 100,
+>v2 : number
+>100 : 100
+
+  },
+  b: {
+>b : { v1: true; v2: null; }
+>{    v1: true,    v2: null,  } : { v1: true; v2: null; }
+
+    v1: true,
+>v1 : true
+>true : true
+
+    v2: null,
+>v2 : null
+
+  },
+});
+
+declare function fn4<T, E extends Record<string, number>>(arg: {
+>fn4 : <T, E extends Record<string, number>>(arg: { [K in keyof T & keyof E]: { data: T[K]; onSuccess: (data: T[K]) => void; error: E[K]; onError: (data: E[K]) => void; }; }) => [T, E]
+>arg : { [K in keyof T & keyof E]: { data: T[K]; onSuccess: (data: T[K]) => void; error: E[K]; onError: (data: E[K]) => void; }; }
+
+  [K in keyof T & keyof E]: {
+    data: T[K];
+>data : T[K]
+
+    onSuccess: (data: T[K]) => void;
+>onSuccess : (data: T[K]) => void
+>data : T[K]
+
+    error: E[K];
+>error : E[K]
+
+    onError: (data: E[K]) => void;
+>onError : (data: E[K]) => void
+>data : E[K]
+
+  };
+}): [T, E];
+
+const result4 = fn4({
+>result4 : [{ a: string; b: boolean; }, { a: 404; b: 500; }]
+>fn4({  a: {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  b: {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },}) : [{ a: string; b: boolean; }, { a: 404; b: 500; }]
+>fn4 : <T, E extends Record<string, number>>(arg: { [K in keyof T & keyof E]: { data: T[K]; onSuccess: (data: T[K]) => void; error: E[K]; onError: (data: E[K]) => void; }; }) => [T, E]
+>{  a: {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  b: {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },} : { a: { data: string; onSuccess: (dataArg: string) => void; error: 404; onError: (errorArg: 404) => void; }; b: { data: true; onSuccess: (dataArg: boolean) => void; error: 500; onError: (errorArg: 500) => void; }; }
+
+  a: {
+>a : { data: string; onSuccess: (dataArg: string) => void; error: 404; onError: (errorArg: 404) => void; }
+>{    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  } : { data: string; onSuccess: (dataArg: string) => void; error: 404; onError: (errorArg: 404) => void; }
+
+    data: "foo",
+>data : string
+>"foo" : "foo"
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: string) => void
+>(dataArg) => {      dataArg;    } : (dataArg: string) => void
+>dataArg : string
+
+      dataArg;
+>dataArg : string
+
+    },
+    error: 404,
+>error : 404
+>404 : 404
+
+    onError: (errorArg) => {
+>onError : (errorArg: 404) => void
+>(errorArg) => {      errorArg;    } : (errorArg: 404) => void
+>errorArg : 404
+
+      errorArg;
+>errorArg : 404
+
+    },
+  },
+  b: {
+>b : { data: true; onSuccess: (dataArg: boolean) => void; error: 500; onError: (errorArg: 500) => void; }
+>{    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  } : { data: true; onSuccess: (dataArg: boolean) => void; error: 500; onError: (errorArg: 500) => void; }
+
+    data: true,
+>data : true
+>true : true
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: boolean) => void
+>(dataArg) => {      dataArg;    } : (dataArg: boolean) => void
+>dataArg : boolean
+
+      dataArg;
+>dataArg : boolean
+
+    },
+    error: 500,
+>error : 500
+>500 : 500
+
+    onError: (errorArg) => {
+>onError : (errorArg: 500) => void
+>(errorArg) => {      errorArg;    } : (errorArg: 500) => void
+>errorArg : 500
+
+      errorArg;
+>errorArg : 500
+
+    },
+  },
 });
 
