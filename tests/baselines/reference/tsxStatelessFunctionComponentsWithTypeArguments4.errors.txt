@@ -1,7 +1,6 @@
 file.tsx(9,15): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
-    Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.
-      Property 'a' does not exist on type 'IntrinsicAttributes'.
+    Property 'a' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 3, '(attr: { b: unknown; a: string; "ignore-prop": boolean; }): Element', gave the following error.
     Type 'number' is not assignable to type 'string'.
   Overload 3 of 3, '(attr: { b: unknown; a: number; }): Element', gave the following error.
@@ -30,8 +29,7 @@ file.tsx(10,15): error TS2769: No overload matches this call.
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
-!!! error TS2769:     Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2769:       Property 'a' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2769:     Property 'a' does not exist on type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 3, '(attr: { b: unknown; a: string; "ignore-prop": boolean; }): Element', gave the following error.
 !!! error TS2769:     Type 'number' is not assignable to type 'string'.
 !!! error TS2769:   Overload 3 of 3, '(attr: { b: unknown; a: number; }): Element', gave the following error.

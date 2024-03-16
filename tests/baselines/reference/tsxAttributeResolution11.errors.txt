@@ -1,5 +1,4 @@
-file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
-  Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+file.tsx(11,22): error TS2339: Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
 
 
 ==== react.d.ts (0 errors) ====
@@ -28,7 +27,6 @@ file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type
     // Should be an OK
     var x = <MyComponent bar='world' />;
                          ~~~
-!!! error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
-!!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+!!! error TS2339: Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
     
     
