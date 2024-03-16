@@ -40,6 +40,7 @@ import {
     isString,
     isStringLiteral,
     isStringLiteralLike,
+    JSDocImportTag,
     jsxModeNeedsExplicitImport,
     LanguageServiceHost,
     length,
@@ -709,7 +710,7 @@ function detectModuleSpecifierCaseBySort(importDeclsByGroup: (readonly AnyImport
     return detectCaseSensitivityBySort(moduleSpecifiersByGroup, comparersToTest);
 }
 
-function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: OrganizeImportsTypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder: OrganizeImportsTypeOrder | undefined; isSorted: boolean; } | undefined {
+function detectNamedImportOrganizationBySort(originalGroups: readonly (ImportDeclaration | JSDocImportTag)[], comparersToTest: Comparer<string>[], typesToTest: OrganizeImportsTypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder: OrganizeImportsTypeOrder | undefined; isSorted: boolean; } | undefined {
     // Filter for import declarations with named imports. Will be a flat array of import declarations without separations by group
     let bothNamedImports = false;
     const importDeclsWithNamed = originalGroups.filter(i => {
@@ -884,7 +885,7 @@ function getNamedImportSpecifierComparer<T extends ImportOrExportSpecifier>(pref
 }
 
 /** @internal */
-export function getNamedImportSpecifierComparerWithDetection(importDecl: ImportDeclaration, preferences: UserPreferences, sourceFile?: SourceFile): { specifierComparer: Comparer<ImportSpecifier>; isSorted: boolean | undefined; } {
+export function getNamedImportSpecifierComparerWithDetection(importDecl: ImportDeclaration | JSDocImportTag, preferences: UserPreferences, sourceFile?: SourceFile): { specifierComparer: Comparer<ImportSpecifier>; isSorted: boolean | undefined; } {
     // sort case sensitivity:
     // - if the user preference is explicit, use that
     // - otherwise, if there are enough existing import specifiers in this import to detect unambiguously, use that
