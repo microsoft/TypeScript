@@ -1,0 +1,140 @@
+capturedLetConstInLoop1_ES6.ts(17,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(27,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(40,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(50,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(74,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(84,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(97,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1_ES6.ts(107,10): error TS2845: This condition will always return 'true'.
+
+
+==== capturedLetConstInLoop1_ES6.ts (8 errors) ====
+    //==== let
+    for (let x in {}) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (let x of []) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (let x = 0; x < 1; ++x) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        let x;
+        (function() { return x});
+        (() => x);
+    }
+    
+    do {
+        let x;
+        (function() { return x});
+        (() => x);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (let y = 0; y < 1; ++y) {
+        let x = 1;
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (let x = 0, y = 1; x < 1; ++x) {
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        let x, y;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    do {
+        let x, y;
+        (function() { return x + y});
+        (() => x + y);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (let y = 0; y < 1; ++y) {
+        let x = 1;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    //=========const
+    for (const x in {}) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (const x of []) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (const x = 0; x < 1;) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        const x = 1;
+        (function() { return x});
+        (() => x);
+    }
+    
+    do {
+        const x = 1;
+        (function() { return x});
+        (() => x);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (const y = 0; y < 1;) {
+        const x = 1;
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (const x = 0, y = 1; x < 1;) {
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        const x = 1, y = 1;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    do {
+        const x = 1, y = 1;
+        (function() { return x + y});
+        (() => x + y);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (const y = 0; y < 1;) {
+        const x = 1;
+        (function() { return x + y});
+        (() => x + y);
+    }

@@ -1,8 +1,10 @@
 templateStringInEqualityChecks.ts(1,9): error TS2367: This comparison appears to be unintentional because the types '"abc0abc"' and '"abc"' have no overlap.
 templateStringInEqualityChecks.ts(2,9): error TS2367: This comparison appears to be unintentional because the types '"abc"' and '"abc0abc"' have no overlap.
+templateStringInEqualityChecks.ts(3,9): error TS2845: This condition will always return 'true'.
+templateStringInEqualityChecks.ts(4,9): error TS2845: This condition will always return 'false'.
 
 
-==== templateStringInEqualityChecks.ts (2 errors) ====
+==== templateStringInEqualityChecks.ts (4 errors) ====
     var x = `abc${0}abc` === `abc` ||
             ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2367: This comparison appears to be unintentional because the types '"abc0abc"' and '"abc"' have no overlap.
@@ -10,4 +12,8 @@ templateStringInEqualityChecks.ts(2,9): error TS2367: This comparison appears to
             ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2367: This comparison appears to be unintentional because the types '"abc"' and '"abc0abc"' have no overlap.
             `abc${0}abc` == "abc0abc" &&
+            ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             "abc0abc" !== `abc${0}abc`;
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.

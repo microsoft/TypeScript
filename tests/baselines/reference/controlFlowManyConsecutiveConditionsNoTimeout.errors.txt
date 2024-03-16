@@ -1,0 +1,495 @@
+controlFlowManyConsecutiveConditionsNoTimeout.ts(9,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(10,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(11,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(12,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(13,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(14,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(15,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(16,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(17,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(18,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(19,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(20,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(21,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(22,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(23,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(24,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(25,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(26,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(27,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(28,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(29,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(30,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(31,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(32,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(33,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(34,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(35,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(36,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(37,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(38,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(39,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(40,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(41,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(42,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(43,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(44,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(45,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(46,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(47,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(48,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(49,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(50,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(51,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(52,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(53,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(54,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(55,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(56,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(57,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(58,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(59,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(60,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(61,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(62,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(63,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(64,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(65,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(66,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(67,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(68,5): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(71,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(72,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(73,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(74,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(75,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(76,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(77,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(78,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(79,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(80,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(81,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(82,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(83,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(84,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(85,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(86,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(87,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(88,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(89,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(90,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(91,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(92,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(93,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(94,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(95,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(96,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(97,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(98,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(99,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(100,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(101,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(102,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(103,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(104,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(105,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(106,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(107,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(108,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(109,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(110,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(111,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(112,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(113,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(114,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(115,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(116,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(117,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(118,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(119,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(120,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(121,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(122,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(123,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(124,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(125,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(126,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(127,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(128,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(129,9): error TS2845: This condition will always return 'true'.
+controlFlowManyConsecutiveConditionsNoTimeout.ts(130,9): error TS2845: This condition will always return 'true'.
+
+
+==== controlFlowManyConsecutiveConditionsNoTimeout.ts (120 errors) ====
+    export enum Choice {
+        One,
+        Two,
+    }
+    
+    const choice: Choice = Choice.One;
+    const choiceOne = Choice.One;
+    
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    if (choice === choiceOne) {} 
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    while (true) {
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {}
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        if (choice === choiceOne) {} 
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    }
+    

@@ -1,0 +1,18 @@
+voidAsOperator.ts(1,5): error TS2845: This condition will always return 'false'.
+voidAsOperator.ts(6,5): error TS2845: This condition will always return 'false'.
+
+
+==== voidAsOperator.ts (2 errors) ====
+    if (!void 0 !== true) {
+        ~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+     
+    }
+    
+    //CHECK#2
+    if (!null !== true) {
+        ~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'false'.
+     
+    }
+    

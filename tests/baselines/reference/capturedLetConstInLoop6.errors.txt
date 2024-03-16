@@ -1,10 +1,24 @@
+capturedLetConstInLoop6.ts(36,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(58,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(83,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(105,10): error TS2845: This condition will always return 'true'.
 capturedLetConstInLoop6.ts(147,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 capturedLetConstInLoop6.ts(150,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop6.ts(155,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(159,9): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(171,9): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(177,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(183,9): error TS2845: This condition will always return 'true'.
 capturedLetConstInLoop6.ts(194,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.
+capturedLetConstInLoop6.ts(202,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(206,9): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(218,9): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(224,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop6.ts(230,9): error TS2845: This condition will always return 'true'.
 
 
-==== capturedLetConstInLoop6.ts (4 errors) ====
+==== capturedLetConstInLoop6.ts (18 errors) ====
     // ====let
     for (let x of []) {
         (function() { return x});
@@ -41,6 +55,8 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
     }
     
     while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         let x;
         (function() { return x});
         (() => x);
@@ -63,6 +79,8 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
             continue;
         }
     } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
     
     for (let y = 0; y < 1; ++y) {
         let x = 1;
@@ -88,6 +106,8 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
     }
     
     while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         let x, y;
         (function() { return x + y});
         (() => x + y);
@@ -110,6 +130,8 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
             continue;
         }
     } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
     
     for (let y = 0; y < 1; ++y) {
         let x = 1;
@@ -164,10 +186,14 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
     }
     
     while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         const x = 1;
         (function() { return x});
         (() => x);
         if (x == 1) {
+            ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             break;
         }
         if (x == 2) {
@@ -180,18 +206,24 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
         (function() { return x});
         (() => x);
         if (x == 1) {
+            ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             break;
         }
         if (x == 2) {
             continue;
         }
     } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
     
     for (const y = 0; y < 1;) {
         const x = 1;
         (function() { return x});
         (() => x);
         if (x == 1) {
+            ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             break;
         }
         if (x == 2) {
@@ -215,10 +247,14 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
     }
     
     while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         const x = 1, y = 1;
         (function() { return x + y});
         (() => x + y);
         if (x == 1) {
+            ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             break;
         }
         if (x == 2) {
@@ -231,18 +267,24 @@ capturedLetConstInLoop6.ts(197,9): error TS2367: This comparison appears to be u
         (function() { return x + y});
         (() => x + y);
         if (x == 1) {
+            ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             break;
         }
         if (x == 2) {
             continue;
         }
     } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
     
     for (const y = 0; y < 1;) {
         const x = 1;
         (function() { return x + y});
         (() => x + y);
         if (x == 1) {
+            ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             break;
         }
         if (x == 2) {
