@@ -1,0 +1,4 @@
+=== tests/cases/compiler/sourceMap-TypeOnly.ts ===
+export type T = number;
+>T : number
+
