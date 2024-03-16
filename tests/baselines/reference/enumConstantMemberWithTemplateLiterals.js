@@ -45,6 +45,12 @@ declare enum T7 {
     c = "2" + `1`
 }
 
+declare enum T8 {
+  X = `${1}`,
+  Y = `${true}`,
+  Z = `pre${!false}middle${"foo" + true}`,
+}
+
 
 //// [enumConstantMemberWithTemplateLiterals.js]
 var T1;

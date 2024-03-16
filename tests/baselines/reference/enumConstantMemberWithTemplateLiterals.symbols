@@ -102,3 +102,16 @@ declare enum T7 {
 >c : Symbol(T7.c, Decl(enumConstantMemberWithTemplateLiterals.ts, 40, 18))
 }
 
+declare enum T8 {
+>T8 : Symbol(T8, Decl(enumConstantMemberWithTemplateLiterals.ts, 42, 1))
+
+  X = `${1}`,
+>X : Symbol(T8.X, Decl(enumConstantMemberWithTemplateLiterals.ts, 44, 17))
+
+  Y = `${true}`,
+>Y : Symbol(T8.Y, Decl(enumConstantMemberWithTemplateLiterals.ts, 45, 13))
+
+  Z = `pre${!false}middle${"foo" + true}`,
+>Z : Symbol(T8.Z, Decl(enumConstantMemberWithTemplateLiterals.ts, 46, 16))
+}
+
