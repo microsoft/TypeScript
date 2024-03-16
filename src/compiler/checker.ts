@@ -33183,6 +33183,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getFlowTypeOfProperty(node, prop);
         }
         propType = getNarrowableTypeForReference(propType, node, checkMode);
+        if (isElementAccessExpression(node) && !tryGetElementAccessExpressionName(node)) {
+            return propType;
+        }
         // If strict null checks and strict property initialization checks are enabled, if we have
         // a this.xxx property access, if the property is an instance property without an initializer,
         // and if we are in a constructor of the same class as the property declaration, assume that
