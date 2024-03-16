@@ -1,0 +1,42 @@
+=== tests/cases/compiler/getSignatureOfTypeCrash.ts ===
+declare interface Foo {
+    a(): boolean;
+>a : () => boolean
+
+    b(): void;
+>b : () => void
+
+    c(argument: boolean): void;
+>c : (argument: boolean) => void
+>argument : boolean
+
+    d(argument: number): void;
+>d : (argument: number) => void
+>argument : number
+}
+
+declare const Foo: Mapped<Foo>;
+>Foo : Mapped<Foo>
+
+type Mapped<T> = {
+>Mapped : Mapped<T>
+
+  [K in keyof T]: T[K] extends (...args: infer Args) => infer R
+>args : Args
+
+    ? (...args: Args) => R
+>args : Args
+
+    : never;
+};
+
+function foo(key: 'a' | 'b' | 'c' | 'd') {
+>foo : (key: 'a' | 'b' | 'c' | 'd') => void
+>key : "a" | "b" | "c" | "d"
+
+  Foo[key]();
+>Foo[key]() : boolean | void
+>Foo[key] : (() => boolean) | (() => void) | ((argument: boolean) => void) | ((argument: number) => void)
+>Foo : Mapped<Foo>
+>key : "a" | "b" | "c" | "d"
+}

@@ -1,0 +1,53 @@
+=== tests/cases/compiler/getSignatureOfTypeCrash.ts ===
+declare interface Foo {
+>Foo : Symbol(Foo, Decl(getSignatureOfTypeCrash.ts, 0, 0), Decl(getSignatureOfTypeCrash.ts, 7, 13))
+
+    a(): boolean;
+>a : Symbol(Foo.a, Decl(getSignatureOfTypeCrash.ts, 0, 23))
+
+    b(): void;
+>b : Symbol(Foo.b, Decl(getSignatureOfTypeCrash.ts, 1, 17))
+
+    c(argument: boolean): void;
+>c : Symbol(Foo.c, Decl(getSignatureOfTypeCrash.ts, 2, 14))
+>argument : Symbol(argument, Decl(getSignatureOfTypeCrash.ts, 3, 6))
+
+    d(argument: number): void;
+>d : Symbol(Foo.d, Decl(getSignatureOfTypeCrash.ts, 3, 31))
+>argument : Symbol(argument, Decl(getSignatureOfTypeCrash.ts, 4, 6))
+}
+
+declare const Foo: Mapped<Foo>;
+>Foo : Symbol(Foo, Decl(getSignatureOfTypeCrash.ts, 0, 0), Decl(getSignatureOfTypeCrash.ts, 7, 13))
+>Mapped : Symbol(Mapped, Decl(getSignatureOfTypeCrash.ts, 7, 31))
+>Foo : Symbol(Foo, Decl(getSignatureOfTypeCrash.ts, 0, 0), Decl(getSignatureOfTypeCrash.ts, 7, 13))
+
+type Mapped<T> = {
+>Mapped : Symbol(Mapped, Decl(getSignatureOfTypeCrash.ts, 7, 31))
+>T : Symbol(T, Decl(getSignatureOfTypeCrash.ts, 8, 12))
+
+  [K in keyof T]: T[K] extends (...args: infer Args) => infer R
+>K : Symbol(K, Decl(getSignatureOfTypeCrash.ts, 9, 3))
+>T : Symbol(T, Decl(getSignatureOfTypeCrash.ts, 8, 12))
+>T : Symbol(T, Decl(getSignatureOfTypeCrash.ts, 8, 12))
+>K : Symbol(K, Decl(getSignatureOfTypeCrash.ts, 9, 3))
+>args : Symbol(args, Decl(getSignatureOfTypeCrash.ts, 9, 32))
+>Args : Symbol(Args, Decl(getSignatureOfTypeCrash.ts, 9, 46))
+>R : Symbol(R, Decl(getSignatureOfTypeCrash.ts, 9, 61))
+
+    ? (...args: Args) => R
+>args : Symbol(args, Decl(getSignatureOfTypeCrash.ts, 10, 7))
+>Args : Symbol(Args, Decl(getSignatureOfTypeCrash.ts, 9, 46))
+>R : Symbol(R, Decl(getSignatureOfTypeCrash.ts, 9, 61))
+
+    : never;
+};
+
+function foo(key: 'a' | 'b' | 'c' | 'd') {
+>foo : Symbol(foo, Decl(getSignatureOfTypeCrash.ts, 12, 2))
+>key : Symbol(key, Decl(getSignatureOfTypeCrash.ts, 14, 13))
+
+  Foo[key]();
+>Foo : Symbol(Foo, Decl(getSignatureOfTypeCrash.ts, 0, 0), Decl(getSignatureOfTypeCrash.ts, 7, 13))
+>key : Symbol(key, Decl(getSignatureOfTypeCrash.ts, 14, 13))
+}
