@@ -88,9 +88,7 @@ plainJSGrammarErrors.js(154,5): error TS1113: A 'default' clause cannot appear m
 plainJSGrammarErrors.js(161,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
 plainJSGrammarErrors.js(167,12): error TS1197: Catch clause variable cannot have an initializer.
 plainJSGrammarErrors.js(170,5): error TS1114: Duplicate label 'label'.
-plainJSGrammarErrors.js(179,13): error TS1107: Jump target cannot cross function boundary.
 plainJSGrammarErrors.js(187,13): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-plainJSGrammarErrors.js(191,5): error TS1107: Jump target cannot cross function boundary.
 plainJSGrammarErrors.js(194,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 plainJSGrammarErrors.js(195,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 plainJSGrammarErrors.js(197,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
@@ -102,7 +100,7 @@ plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept
 plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
 
 
-==== plainJSGrammarErrors.js (102 errors) ====
+==== plainJSGrammarErrors.js (100 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -462,8 +460,6 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
         outer: for(;;) {
             function test() {
                 break outer
-                ~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
             }
             test()
         }
@@ -478,8 +474,6 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
     }
     function jumpToLabelOnly(x) {
         break jumpToLabelOnly
-        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
     }
     for (;;) {
         break toplevel
