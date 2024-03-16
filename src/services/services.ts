@@ -563,6 +563,7 @@ class TokenOrIdentifierObject implements Node {
         return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
     }
 
+    /** @deprecated use {@link pos} */
     public getFullStart(): number {
         return this.pos;
     }

@@ -369,7 +369,7 @@ function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: C
             return getLineStartPositionForPosition(JSDocComments[0].pos, sourceFile);
         }
     }
-    const fullStart = node.getFullStart();
+    const fullStart = node.pos;
     const start = node.getStart(sourceFile);
     if (fullStart === start) {
         return start;
@@ -1063,7 +1063,7 @@ export class ChangeTracker {
                 // ###b,
                 //   c,
                 const nextNode = containingList[index + 1];
-                const startPos = skipWhitespacesAndLineBreaks(sourceFile.text, nextNode.getFullStart());
+                const startPos = skipWhitespacesAndLineBreaks(sourceFile.text, nextNode.pos);
 
                 // write separator and leading trivia of the next element as suffix
                 const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, startPos)}`;

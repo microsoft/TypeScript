@@ -253,7 +253,7 @@ function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Pro
 }
 
 function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
-    const pos = startingToken.getFullStart();
+    const pos = startingToken.pos;
     // There's a possibility that `startingToken.parent` contains only `startingToken` and
     // missing nodes, none of which are valid to be returned by `findPrecedingToken`. In that
     // case, the preceding token we want is actually higher up the tree—almost definitely the
@@ -601,7 +601,7 @@ function getApplicableSpanForArguments(argumentsList: Node, sourceFile: SourceFi
     //
     // The applicable span is from the first bar to the second bar (inclusive,
     // but not including parentheses)
-    const applicableSpanStart = argumentsList.getFullStart();
+    const applicableSpanStart = argumentsList.pos;
     const applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
     return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 }

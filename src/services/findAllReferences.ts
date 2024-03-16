@@ -879,7 +879,7 @@ function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSp
         end -= 1;
     }
     if (endNode?.kind === SyntaxKind.CaseBlock) {
-        end = endNode.getFullStart();
+        end = endNode.pos;
     }
     return createTextSpanFromBounds(start, end);
 }
