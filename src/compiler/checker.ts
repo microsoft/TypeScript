@@ -139,6 +139,7 @@ import {
     DiagnosticAndArguments,
     DiagnosticArguments,
     DiagnosticCategory,
+    DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticRelatedInformation,
@@ -827,7 +828,6 @@ import {
     LiteralTypeNode,
     map,
     mapDefined,
-    MappedSymbol,
     MappedType,
     MappedTypeNode,
     MatchingKeys,
@@ -838,6 +838,7 @@ import {
     MethodSignature,
     minAndMax,
     MinusToken,
+    ModeAwareCacheKey,
     Modifier,
     ModifierFlags,
     modifiersToFlags,
@@ -865,10 +866,10 @@ import {
     NodeCheckFlags,
     NodeFlags,
     nodeHasName,
+    NodeId,
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,
-    NodeLinks,
     nodeStartsNewLexicalEnvironment,
     NodeWithTypeArguments,
     NonNullChain,
@@ -903,6 +904,7 @@ import {
     PatternAmbientModule,
     PlusToken,
     PostfixUnaryExpression,
+    prefixDiagnosticWithMessageChain,
     PrefixUnaryExpression,
     PrivateIdentifier,
     Program,
@@ -938,7 +940,6 @@ import {
     resolvingEmptyArray,
     RestTypeNode,
     ReturnStatement,
-    ReverseMappedSymbol,
     ReverseMappedType,
     sameMap,
     SatisfiesExpression,
@@ -990,7 +991,6 @@ import {
     SymbolFlags,
     SymbolFormatFlags,
     SymbolId,
-    SymbolLinks,
     symbolName,
     SymbolTable,
     SymbolTracker,
@@ -1014,9 +1014,6 @@ import {
     tokenToString,
     tracing,
     TracingNode,
-    TrackedSymbol,
-    TransientSymbol,
-    TransientSymbolLinks,
     tryAddToSet,
     tryCast,
     tryExtractTSExtension,
@@ -1375,12 +1372,410 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     NoInfer: IntrinsicTypeKind.NoInfer,
 }));
 
-const SymbolLinks = class implements SymbolLinks {
-    declare _symbolLinksBrand: any;
+/** @internal */
+export interface SpeculationHost {
+    getCurrentSpeculativeEpoch(): number;
+    getDiscardedSpeculativeEpochs(): Set<number>;
+}
+
+/**
+ * Marks an auto accessor as a cache whose value can be rewound by the checker speculation helper.
+ *
+ * This is implemented by keeping a record of the speculative "epoch" writes are performed at, and
+ * returning the result for the highest epoch that hasn't (yet) been marked as "discarded".
+ * Values stored in discarded epochs are lazily discarded when a read is later performed.
+ *
+ * This is designed to be compatible with both `experimentalDecorators` and the final decorators spec,
+ * so it can be used both in downlevel targets and natively.
+ */
+const SpeculatableCache = <T extends SpeculatableLinks, V>(
+    valueOrTarget: ClassAccessorDecoratorTarget<T, V> | any,
+    _contextOrPropertyKey: ClassAccessorDecoratorContext<T, V> | string,
+    descriptor?: PropertyDescriptor,
+): /*ClassAccessorDecoratorResult<T, V> | void*/ any => {
+    const baseGet = (descriptor ? descriptor.get! : (valueOrTarget as ClassAccessorDecoratorTarget<T, V>).get) as (this: T) => V;
+    const baseSet = (descriptor ? descriptor.set! : (valueOrTarget as ClassAccessorDecoratorTarget<T, V>).set) as (this: T, v: V) => V;
+
+    return {
+        ...descriptor,
+        get: readValue,
+        set: setValue,
+        init(this: T, v: V) {
+            const epoch = this.host.getCurrentSpeculativeEpoch();
+            // This array is going to end up sparse, but may at least start dense for high traffic caches
+            const values: V[] = [];
+            const writtenEpochs: number[] = [epoch];
+            values[epoch] = v;
+            return {
+                values,
+                writtenEpochs,
+            };
+        },
+    };
+
+    function readValue(this: T) {
+        const internals = baseGet.call(this);
+        if (!internals) return undefined!;
+        const {
+            values,
+            writtenEpochs,
+        } = internals;
+
+        const discardedSpeculativeEpochs = this.host.getDiscardedSpeculativeEpochs();
+
+        // When the epoch a symbol was made in is discarded, it no longer participates in speculative caching
+        // if it is kept around. This is a failsafe - ideally transient symbols which are made in a speculative
+        // context shouldn't escape it - but some may be inserted into non-speculative caches and kept around.
+        // Ideally, these locations should also become speculatable caches to avoid data leakage between speculative
+        // contexts.
+        const hostEpoch = this instanceof SymbolLinks ? this.symbolEpoch : 0;
+        const symbolDiscarded = discardedSpeculativeEpochs.has(hostEpoch);
+
+        for (let i = writtenEpochs.length - 1; i >= 0; i--) {
+            if (!symbolDiscarded && discardedSpeculativeEpochs.has(writtenEpochs[i])) {
+                // by discarding epochs on read like this, we make consecutive reads (very common)
+                // shortcut to basically an indirect lookup.
+                delete values[writtenEpochs[i]];
+                writtenEpochs.splice(i, 1);
+                continue;
+            }
+            return values[writtenEpochs[i]];
+        }
+        return undefined!;
+    }
+
+    function setValue(this: T, value: V | undefined) {
+        const internals = baseGet.call(this);
+        const currentSpeculativeEpoch = this.host.getCurrentSpeculativeEpoch();
+        if (!internals) {
+            const values = [];
+            const writtenEpochs = [];
+            writtenEpochs.push(currentSpeculativeEpoch);
+            values[currentSpeculativeEpoch] = value!;
+            baseSet.call(this, { values, writtenEpochs });
+            return value!;
+        }
+        const {
+            values,
+            writtenEpochs,
+        } = internals;
+        writtenEpochs.push(currentSpeculativeEpoch);
+        // Store the new value at the desired speculative depth
+        values[currentSpeculativeEpoch] = value!;
+        return value!;
+    }
 };
 
-function NodeLinks(this: NodeLinks) {
-    this.flags = NodeCheckFlags.None;
+/** @internal */
+export const enum EnumKind {
+    Numeric, // Numeric enum (each member has a TypeFlags.Enum type)
+    Literal, // Literal enum (each member has a TypeFlags.EnumLiteral type)
+}
+
+/** @internal */
+export class SpeculatableLinks {
+    constructor(public host: SpeculationHost) {}
+}
+
+// dprint-ignore
+/** @internal */
+export class SymbolLinks extends SpeculatableLinks {
+    declare private _symbolLinksBrand: any;
+    /** Type of value symbol */
+    @SpeculatableCache accessor type: Type | undefined = undefined;
+    /** Type of value symbol in write contexts */
+    @SpeculatableCache accessor writeType: Type | undefined = undefined;
+    /** Type associated with a late-bound symbol */
+    @SpeculatableCache accessor nameType: Type | undefined = undefined;
+    /** Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead. */
+    declare immediateTarget?: Symbol;
+    /** Resolved (non-alias) target of an alias */
+    declare aliasTarget?: Symbol;
+    /** Original version of an instantiated symbol */
+    declare target?: Symbol;
+    /** UniqueESSymbol type for a symbol */
+    declare uniqueESSymbolType?: Type;
+    /** Type of class, interface, enum, type alias, or type parameter */
+    declare declaredType?: Type;
+    /** Type parameters of type alias (undefined if non-generic) */
+    declare typeParameters?: TypeParameter[];
+    /** Outer type parameters of anonymous object type */
+    declare outerTypeParameters?: TypeParameter[];
+    /** Instantiations of generic type alias (undefined if non-generic) */
+    declare instantiations?: Map<string, Type>;
+    /** Alias associated with generic type alias instantiation */
+    declare aliasSymbol?: Symbol;
+    /** Alias type arguments (if any) */
+    declare aliasTypeArguments?: readonly Type[]
+    /** Symbol of an inferred ES5 constructor function */
+    declare inferredClassSymbol?: Map<SymbolId, TransientSymbol>;
+    /** Type mapper for instantiation alias */
+    declare mapper?: TypeMapper;
+    /** True if alias symbol has been referenced as a value that can be emitted */
+    declare referenced?: boolean;
+    /** True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false) */
+    declare constEnumReferenced?: boolean;
+    /** Containing union or intersection type for synthetic property */
+    declare containingType?: UnionOrIntersectionType;
+    /** Left source for synthetic spread property */
+    declare leftSpread?: Symbol;
+    /** Right source for synthetic spread property */
+    declare rightSpread?: Symbol;
+    /** For a property on a mapped or spread type, points back to the original property */
+    declare syntheticOrigin?: Symbol;
+    /** True if discriminant synthetic property */
+    declare isDiscriminantProperty?: boolean;
+    /** Resolved exports of module or combined early- and late-bound static members of a class. */
+    declare resolvedExports?: SymbolTable;
+    /** Combined early- and late-bound members of a symbol */
+    declare resolvedMembers?: SymbolTable;
+    /** True if exports of external module have been checked */
+    declare exportsChecked?: boolean;
+    /** True if type parameters of merged class and interface declarations have been checked. */
+    declare typeParametersChecked?: boolean;
+    /** True if symbol is block scoped redeclaration */
+    declare isDeclarationWithCollidingName?: boolean;
+    /** Binding element associated with property symbol */
+    declare bindingElement?: BindingElement;
+    /** True if module exports some value (not just types) */
+    declare exportsSomeValue?: boolean;
+    /** Enum declaration classification */
+    declare enumKind?: EnumKind;
+    /** Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol` */
+    declare originatingImport?: ImportDeclaration | ImportCall;
+    /** Late-bound symbol for a computed property */
+    declare lateSymbol?: Symbol;
+    /** For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings */
+    declare specifierCache?: Map<ModeAwareCacheKey, string>;
+    /** Containers (other than the parent) which this symbol is aliased in */
+    declare extendedContainers?: Symbol[];
+    /** Containers (other than the parent) which this symbol is aliased in */
+    declare extendedContainersByFile?: Map<NodeId, Symbol[]>;
+    /** Alias symbol type argument variance cache */
+    declare variances?: VarianceFlags[];
+    /** Calculated list of constituents for a deferred type */
+    declare deferralConstituents?: Type[];
+    /** Constituents of a deferred `writeType` */
+    declare deferralWriteConstituents?: Type[];
+    /** Source union/intersection of a deferred type */
+    declare deferralParent?: Type;
+    /** Version of the symbol with all non export= exports merged with the export= target */
+    declare cjsExportMerged?: Symbol;
+    /** First resolved alias declaration that makes the symbol only usable in type constructs */
+    declare typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false;
+    /** Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration */
+    declare typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }>;
+    /** Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name */
+    declare typeOnlyExportStarName?: __String;
+    /** Property declared through 'this.x = ...' assignment in constructor */
+    declare isConstructorDeclaredProperty?: boolean;
+    /** Declaration associated with the tuple's label */
+    declare tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration;
+    declare accessibleChainCache?: Map<string, Symbol[] | undefined>;
+    /** Symbol with applicable declarations */
+    declare filteredIndexSymbolCache?: Map<string, Symbol>;
+
+    constructor(
+        host: SpeculationHost,
+        /** speculative epoch the associated symbol was manufactured in */
+        public symbolEpoch = 0 // Assume lazily made links are for persistent epoch 0 symbols unless explicitly overridden
+    ) {
+        super(host);
+    }
+}
+
+/** @internal */
+export interface TransientSymbolLinks extends SymbolLinks {
+    checkFlags: CheckFlags;
+}
+
+/** @internal */
+export interface TransientSymbol extends Symbol {
+    links: TransientSymbolLinks;
+    epoch: number;
+}
+
+/** @internal */
+export interface MappedSymbolLinks extends TransientSymbolLinks {
+    mappedType: MappedType;
+    keyType: Type;
+}
+
+/** @internal */
+export interface MappedSymbol extends TransientSymbol {
+    links: MappedSymbolLinks;
+}
+
+/** @internal */
+export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
+    propertyType: Type;
+    mappedType: MappedType;
+    constraintType: IndexType;
+}
+
+/** @internal */
+export interface ReverseMappedSymbol extends TransientSymbol {
+    links: ReverseMappedSymbolLinks;
+}
+
+/** @internal */
+export type TrackedSymbol = [symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags];
+
+/** @internal */
+export interface SerializedTypeEntry {
+    node: TypeNode;
+    truncating?: boolean;
+    addedLength: number;
+    trackedSymbols: readonly TrackedSymbol[] | undefined;
+}
+
+// dprint-ignore
+/** @internal */
+export class NodeLinks extends SpeculatableLinks {
+    /** Set of flags specific to Node */
+    @SpeculatableCache accessor flags: NodeCheckFlags = NodeCheckFlags.None;
+    /** Cached type of type node */
+    @SpeculatableCache accessor resolvedType: Type | undefined = undefined;
+    /** Cached constraint type from enum jsdoc tag */
+    @SpeculatableCache accessor resolvedEnumType: Type | undefined = undefined;
+    /** Cached signature of signature node or call expression */
+    @SpeculatableCache accessor resolvedSignature: Signature | undefined = undefined;
+    /** Cached name resolution result */
+    @SpeculatableCache accessor resolvedSymbol: Symbol | undefined = undefined;
+    /** Cached indexing info resolution result */
+    @SpeculatableCache accessor resolvedIndexInfo: IndexInfo | undefined = undefined;
+    /** Signature with possible control flow effects */
+    @SpeculatableCache accessor effectsSignature: Signature | undefined = undefined;
+    /** Cached array of switch case expression types */
+    @SpeculatableCache accessor switchTypes: Type[] | undefined = undefined;
+    /** Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive */
+    @SpeculatableCache accessor contextFreeType: Type | undefined = undefined;
+    /** Cached type of the expression of a type assertion */
+    @SpeculatableCache accessor assertionExpressionType: Type | undefined = undefined;
+
+    /** Constant value of enum member */
+    declare enumMemberValue?: string | number;
+    /** Is this node visible */
+    declare isVisible?: boolean;
+    /** Whether a function-like declaration contains an 'arguments' reference */
+    declare containsArgumentsReference?: boolean;
+    /** Cache boolean if we report statements in ambient context */
+    declare hasReportedStatementInAmbientContext?: boolean;
+    /** flags for knowing what kind of element/attributes we're dealing with */
+    declare jsxFlags?: JsxFlags;
+    /** resolved element attributes type of a JSX openinglike element */
+    declare resolvedJsxElementAttributesType?: Type;
+    /** resolved all element attributes type of a JSX openinglike element */
+    declare resolvedJsxElementAllAttributesType?: Type;
+    /** Resolved type of a JSDoc type reference */
+    declare resolvedJSDocType?: Type;
+    /** Resolved jsx namespace symbol for this node */
+    declare jsxNamespace?: Symbol | false;
+    /** Resolved module symbol the implicit jsx import of this file should refer to */
+    declare jsxImplicitImportContainer?: Symbol | false;
+    /** Set of nodes whose checking has been deferred */
+    declare deferredNodes?: Set<Node>;
+    /** Block-scoped bindings captured beneath this part of an IterationStatement */
+    declare capturedBlockScopeBindings?: Symbol[];
+    /** Outer type parameters of anonymous object type */
+    declare outerTypeParameters?: TypeParameter[];
+    /** Is node an exhaustive switch statement (0 indicates in-process resolution) */
+    declare isExhaustive?: boolean | 0;
+    /** Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type */
+    declare skipDirectInference?: true;
+    /** Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter. */
+    declare declarationRequiresScopeChange?: boolean;
+    /** Collection of types serialized at this location */
+    declare serializedTypes?: Map<string, SerializedTypeEntry>;
+    /** Signature for decorator as if invoked by the runtime. */
+    declare decoratorSignature?: Signature;
+    /** Indices of first and last spread elements in array literal */
+    declare spreadIndices?: { first: number | undefined, last: number | undefined };
+    /** True if this is a parameter declaration whose type annotation contains "undefined". */
+    declare parameterInitializerContainsUndefined?: boolean;
+    /** If present, this is a fake scope injected into an enclosing declaration chain. */
+    declare fakeScopeForSignatureDeclaration?: "params" | "typeParams";
+}
+
+/**
+ * SpeculatableMap is like a Map, except it lazily follows the speculation state of the host
+ *
+ * Also, it doesn't support `.delete` or `.clear` - not because it couldn't, buit just because
+ * the use for this (relationship caches), doesn't use either feature of `Map`s.
+ */
+class SpeculatableMap<K, V> implements Map<K, V> {
+    private innerMap = new Map<K, [epoch: number, value: V][]>();
+    constructor(public host: SpeculationHost) {}
+
+    private getCurrentStateFromList(key: K, valueList: [epoch: number, value: V][]): [exists: boolean, value: V] {
+        const discarded = this.host.getDiscardedSpeculativeEpochs();
+        let unwrappedValue: V | undefined;
+        let exists = false;
+        for (let i = valueList.length - 1; i >= 0; i--) {
+            const [epoch, value] = valueList[i];
+            if (discarded.has(epoch)) {
+                valueList.splice(i, 1);
+                if (valueList.length === 0) {
+                    this.innerMap.delete(key);
+                    break;
+                }
+                continue;
+            }
+            unwrappedValue = value;
+            exists = true;
+            break;
+        }
+        return [exists, unwrappedValue!];
+    }
+
+    get(key: K): V | undefined {
+        const valueList = this.innerMap.get(key);
+        if (!valueList || !valueList.length) return undefined;
+        const [exists, unwrappedValue] = this.getCurrentStateFromList(key, valueList);
+        if (!exists) return undefined;
+        return unwrappedValue;
+    }
+    has(key: K): boolean {
+        const valueList = this.innerMap.get(key);
+        if (!valueList || !valueList.length) return false;
+        const [exists, _unwrappedValue] = this.getCurrentStateFromList(key, valueList);
+        return exists;
+    }
+    set(key: K, value: V): this {
+        const valueList = this.innerMap.get(key) || this.innerMap.set(key, []).get(key)!;
+        valueList.push([this.host.getCurrentSpeculativeEpoch(), value]);
+        return this;
+    }
+    /**
+     * Approximate - does not include lazy removals
+     */
+    get size(): number {
+        return this.innerMap.size;
+    }
+
+    // These methods are unimplemented mostly because they're thus-far unused.
+    declare clear: never;
+    declare delete: never;
+    declare entries: never;
+    declare values: never;
+    declare [globalThis.Symbol.iterator]: never;
+
+    // Implemented just to provide utlity when debugging
+    forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
+        return this.innerMap.forEach((valueList, k, _inner) => {
+            const [exists, unwrappedValue] = this.getCurrentStateFromList(k, valueList);
+            if (exists) {
+                return callbackfn.call(thisArg, unwrappedValue, k, this);
+            }
+        });
+    }
+
+    // Likewise, provided for debuggability
+    keys(): IterableIterator<K> {
+        return this.innerMap.keys();
+    }
+
+    [globalThis.Symbol.toStringTag] = SpeculatableMap.name;
 }
 
 /** @internal */
@@ -1414,7 +1809,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
-    var deferredDiagnosticsCallbacks: (() => void)[] = [];
+
+    // List of all caches whose state should be saved and potentially restored on completion of a speculative typechecking operation
+    var speculativeCaches: (any[] | Map<any, any> | Set<any> | DiagnosticCollection)[] = [];
+    /**
+     * The id of the current speculative execution environment - used by speculation helpers to avoid eagerly doing work.
+     *
+     * This is monotonically increasing, and basically represents a slice of execution time within the checker that we want to
+     * be able to uniquely refer to.
+     */
+    var currentSpeculativeEpoch = 0;
+    // The set of speculative environment ids whose contents have been discarded
+    var discardedSpeculativeEpochs = new Set<number>();
+    // The speculation host object used by symbol and node links to associate their speculation state with this checker's speculation state
+    var speculationHost: SpeculationHost = {
+        getCurrentSpeculativeEpoch() {
+            return currentSpeculativeEpoch;
+        },
+        getDiscardedSpeculativeEpochs() {
+            return discardedSpeculativeEpochs;
+        },
+    };
+
+    var deferredDiagnosticsCallbacks: (() => void)[] = registerSpeculativeCache([]);
 
     var addLazyDiagnostic = (arg: () => void) => {
         deferredDiagnosticsCallbacks.push(arg);
@@ -2226,12 +2643,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var mergedSymbols: Symbol[] = [];
     var symbolLinks: SymbolLinks[] = [];
     var nodeLinks: NodeLinks[] = [];
-    var flowLoopCaches: Map<string, Type>[] = [];
-    var flowLoopNodes: FlowNode[] = [];
-    var flowLoopKeys: string[] = [];
-    var flowLoopTypes: Type[][] = [];
-    var sharedFlowNodes: FlowNode[] = [];
-    var sharedFlowTypes: FlowType[] = [];
+    var flowLoopCaches: Map<string, Type>[] = registerSpeculativeCache([]);
+    var flowLoopNodes: FlowNode[] = registerSpeculativeCache([]);
+    var flowLoopKeys: string[] = registerSpeculativeCache([]);
+    var flowLoopTypes: Type[][] = registerSpeculativeCache([]);
+    var sharedFlowNodes: FlowNode[] = registerSpeculativeCache([]);
+    var sharedFlowTypes: FlowType[] = registerSpeculativeCache([]);
     var flowNodeReachable: (boolean | undefined)[] = [];
     var flowNodePostSuper: (boolean | undefined)[] = [];
     var potentialThisCollisions: Node[] = [];
@@ -2241,20 +2658,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var potentialUnusedRenamedBindingElementsInTypes: BindingElement[] = [];
     var awaitedTypeStack: number[] = [];
 
-    var diagnostics = createDiagnosticCollection();
-    var suggestionDiagnostics = createDiagnosticCollection();
+    var diagnostics = registerSpeculativeCache(createDiagnosticCollection());
+    var suggestionDiagnostics = registerSpeculativeCache(createDiagnosticCollection());
 
     var typeofType = createTypeofType();
 
     var _jsxNamespace: __String;
     var _jsxFactoryEntity: EntityName | undefined;
 
-    var subtypeRelation = new Map<string, RelationComparisonResult>();
-    var strictSubtypeRelation = new Map<string, RelationComparisonResult>();
-    var assignableRelation = new Map<string, RelationComparisonResult>();
-    var comparableRelation = new Map<string, RelationComparisonResult>();
-    var identityRelation = new Map<string, RelationComparisonResult>();
-    var enumRelation = new Map<string, RelationComparisonResult>();
+    // Relationship caches need to be speculative so we can un-upgrade "ErrorAndReported" results back down, since we're rewinding the error
+    // Otherwise, we think we've emitted lots of elaboration that we just swallow up in discarded speculative contexts
+    var subtypeRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var strictSubtypeRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var assignableRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var comparableRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var identityRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
+    var enumRelation = new SpeculatableMap<string, RelationComparisonResult>(speculationHost);
 
     // Extensions suggested for path imports when module resolution is node16 or higher.
     // The first element of each tuple is the extension a file has.
@@ -2472,7 +2891,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
         symbolCount++;
         const symbol = new Symbol(flags | SymbolFlags.Transient, name) as TransientSymbol;
-        symbol.links = new SymbolLinks() as TransientSymbolLinks;
+        symbol.epoch = currentSpeculativeEpoch;
+        symbol.links = new SymbolLinks(speculationHost, symbol.epoch) as TransientSymbolLinks;
         symbol.links.checkFlags = checkFlags || CheckFlags.None;
         return symbol;
     }
@@ -2737,12 +3157,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSymbolLinks(symbol: Symbol): SymbolLinks {
         if (symbol.flags & SymbolFlags.Transient) return (symbol as TransientSymbol).links;
         const id = getSymbolId(symbol);
-        return symbolLinks[id] ??= new SymbolLinks();
+        return symbolLinks[id] ??= new SymbolLinks(speculationHost);
     }
 
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
-        return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
+        return nodeLinks[nodeId] ??= new NodeLinks(speculationHost);
     }
 
     function isGlobalSourceFile(node: Node) {
@@ -19663,7 +20083,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.objectFlags & ObjectFlags.InstantiationExpressionType ? (type as InstantiationExpressionType).node :
             type.symbol.declarations![0];
         const links = getNodeLinks(declaration);
-        const target = type.objectFlags & ObjectFlags.Reference ? links.resolvedType! as DeferredTypeReference :
+        const target = type.objectFlags & ObjectFlags.Reference ? getTypeFromTypeNode(declaration as TupleTypeNode | ArrayTypeNode) as DeferredTypeReference :
             type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
         let typeParameters = links.outerTypeParameters;
         if (!typeParameters) {
@@ -32128,19 +32548,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
                 const intrinsicProp = getPropertyOfType(intrinsicElementsType, propName);
                 if (intrinsicProp) {
-                    links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
+                    links.jsxFlags! |= JsxFlags.IntrinsicNamedElement;
                     return links.resolvedSymbol = intrinsicProp;
                 }
 
                 // Intrinsic string indexer case
                 const indexSymbol = getApplicableIndexSymbol(intrinsicElementsType, getStringLiteralType(unescapeLeadingUnderscores(propName)));
                 if (indexSymbol) {
-                    links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
+                    links.jsxFlags! |= JsxFlags.IntrinsicIndexedElement;
                     return links.resolvedSymbol = indexSymbol;
                 }
 
                 if (getTypeOfPropertyOrIndexSignatureOfType(intrinsicElementsType, propName)) {
-                    links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
+                    links.jsxFlags! |= JsxFlags.IntrinsicIndexedElement;
                     return links.resolvedSymbol = intrinsicElementsType.symbol;
                 }
 
@@ -32369,10 +32789,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getNodeLinks(node);
         if (!links.resolvedJsxElementAttributesType) {
             const symbol = getIntrinsicTagSymbol(node);
-            if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
+            if (links.jsxFlags! & JsxFlags.IntrinsicNamedElement) {
                 return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol) || errorType;
             }
-            else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
+            else if (links.jsxFlags! & JsxFlags.IntrinsicIndexedElement) {
                 const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
                 return links.resolvedJsxElementAttributesType = getApplicableIndexInfoForName(getJsxType(JsxNames.IntrinsicElements, node), propName)?.type || errorType;
             }
@@ -34715,7 +35135,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For a decorator, no arguments are susceptible to contextual typing due to the fact
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-        let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
 
         // The following variables are captured and modified by calls to chooseOverload.
         // If overload resolution or type argument inference fails, we want to report the
@@ -34739,6 +35158,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //     foo<number>(0);
         //
         let candidatesForArgumentError: Signature[] | undefined;
+        let candidateArgumentErrors: (readonly Diagnostic[])[] | undefined;
         let candidateForArgumentArityError: Signature | undefined;
         let candidateForTypeArgumentError: Signature | undefined;
         let result: Signature | undefined;
@@ -34799,9 +35219,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
-                    const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                    const diags = candidateArgumentErrors![candidateArgumentErrors!.length - 1];
                     if (diags) {
-                        for (const d of diags) {
+                        for (let d of diags) {
+                            d = prefixDiagnosticWithMessageChain(d, chain);
                             if (last.declaration && candidatesForArgumentError.length > 3) {
                                 addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here));
                             }
@@ -34821,14 +35242,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let i = 0;
                     for (const c of candidatesForArgumentError) {
                         const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i + 1, candidates.length, signatureToString(c));
-                        const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
+                        const diags = candidateArgumentErrors![i];
                         if (diags) {
                             if (diags.length <= min) {
                                 min = diags.length;
                                 minIndex = i;
                             }
                             max = Math.max(max, diags.length);
-                            allDiagnostics.push(diags);
+                            allDiagnostics.push(map(diags, d => prefixDiagnosticWithMessageChain(d, chain())));
                         }
                         else {
                             Debug.fail("No error for 3 or fewer overload signatures");
@@ -34881,6 +35302,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
             const oldCandidatesForArgumentError = candidatesForArgumentError;
+            const oldCandidateArgumentErrors = candidateArgumentErrors;
             const oldCandidateForArgumentArityError = candidateForArgumentArityError;
             const oldCandidateForTypeArgumentError = candidateForTypeArgumentError;
 
@@ -34896,12 +35318,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             candidatesForArgumentError = oldCandidatesForArgumentError;
+            candidateArgumentErrors = oldCandidateArgumentErrors;
             candidateForArgumentArityError = oldCandidateForArgumentArityError;
             candidateForTypeArgumentError = oldCandidateForTypeArgumentError;
         }
 
         function chooseOverload(candidates: Signature[], relation: Map<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
             candidatesForArgumentError = undefined;
+            candidateArgumentErrors = undefined;
             candidateForArgumentArityError = undefined;
             candidateForTypeArgumentError = undefined;
 
@@ -34910,75 +35334,87 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     return undefined;
                 }
-                if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                let diags: readonly Diagnostic[] | undefined;
+                if (diags = getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ relation === assignableRelation, /*containingMessageChain*/ undefined)) {
                     candidatesForArgumentError = [candidate];
+                    candidateArgumentErrors = [diags];
                     return undefined;
                 }
                 return candidate;
             }
 
+            const initialCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
             for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                 const candidate = candidates[candidateIndex];
                 if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     continue;
                 }
+                const result = speculate(() => {
+                    let argCheckMode = initialCheckMode;
+                    let checkCandidate: Signature;
+                    let inferenceContext: InferenceContext | undefined;
 
-                let checkCandidate: Signature;
-                let inferenceContext: InferenceContext | undefined;
-
-                if (candidate.typeParameters) {
-                    let typeArgumentTypes: Type[] | undefined;
-                    if (some(typeArguments)) {
-                        typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
-                        if (!typeArgumentTypes) {
-                            candidateForTypeArgumentError = candidate;
-                            continue;
+                    if (candidate.typeParameters) {
+                        let typeArgumentTypes: Type[] | undefined;
+                        if (some(typeArguments)) {
+                            typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
+                            if (!typeArgumentTypes) {
+                                candidateForTypeArgumentError = candidate;
+                                return false;
+                            }
                         }
-                    }
-                    else {
-                        inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                        typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
-                        argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
-                    }
-                    checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
-                    // If the original signature has a generic rest type, instantiation may produce a
-                    // signature with different arity and we need to perform another arity check.
-                    if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
-                        candidateForArgumentArityError = checkCandidate;
-                        continue;
-                    }
-                }
-                else {
-                    checkCandidate = candidate;
-                }
-                if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
-                    // Give preference to error candidates that have no rest parameters (as they are more specific)
-                    (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                    continue;
-                }
-                if (argCheckMode) {
-                    // If one or more context sensitive arguments were excluded, we start including
-                    // them now (and keeping do so for any subsequent candidates) and perform a second
-                    // round of type inference and applicability checking for this particular candidate.
-                    argCheckMode = CheckMode.Normal;
-                    if (inferenceContext) {
-                        const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
-                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
+                        else {
+                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                            argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
+                        }
+                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
                         if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
                             candidateForArgumentArityError = checkCandidate;
-                            continue;
+                            return false;
                         }
                     }
-                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                    else {
+                        checkCandidate = candidate;
+                    }
+                    let diags: readonly Diagnostic[] | undefined;
+                    if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ relation === assignableRelation, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                        continue;
+                        (candidateArgumentErrors ||= []).push(diags);
+                        return false;
                     }
+                    if (argCheckMode) {
+                        // If one or more context sensitive arguments were excluded, we start including
+                        // them now (and keeping do so for any subsequent candidates) and perform a second
+                        // round of type inference and applicability checking for this particular candidate.
+                        argCheckMode = CheckMode.Normal;
+                        if (inferenceContext) {
+                            const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
+                            // If the original signature has a generic rest type, instantiation may produce a
+                            // signature with different arity and we need to perform another arity check.
+                            if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                                candidateForArgumentArityError = checkCandidate;
+                                return false;
+                            }
+                        }
+
+                        if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ relation === assignableRelation, /*containingMessageChain*/ undefined)) {
+                            // Give preference to error candidates that have no rest parameters (as they are more specific)
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                            (candidateArgumentErrors ||= []).push(diags);
+                            return false;
+                        }
+                    }
+                    candidates[candidateIndex] = checkCandidate;
+                    return checkCandidate;
+                });
+                if (result) {
+                    return result;
                 }
-                candidates[candidateIndex] = checkCandidate;
-                return checkCandidate;
             }
 
             return undefined;
@@ -48996,6 +49432,109 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
         return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile);
+    }
+
+    /**
+     * @param cb Speculation callback, operations performed within this context will be rewound and uncached unless the helper returns a truthy value
+     */
+    function speculate<T>(cb: () => T): T | undefined {
+        currentSpeculativeEpoch++;
+        const startEpoch = currentSpeculativeEpoch;
+        const initialState = snapshotCheckerState();
+        const result = cb();
+        const endEpoch = currentSpeculativeEpoch;
+        currentSpeculativeEpoch++; // success or fail, the end of a speculative context marks a new epoch
+        if (!result) {
+            for (let i = startEpoch; i <= endEpoch; i++) {
+                // Even if intermediate speculation calls worked out, we're discarding this one, so
+                // we need to mark all epochs that occured during this speculation call as discarded
+                discardedSpeculativeEpochs.add(i);
+            }
+            restoreCheckerState(initialState);
+            return undefined;
+        }
+        return result;
+    }
+
+    function registerSpeculativeCache<T extends (typeof speculativeCaches)[number]>(collection: T): T {
+        if (collection instanceof SpeculatableMap) {
+            return Debug.fail("Collection is already inherently speculatable, no need to globally register.");
+        }
+        speculativeCaches.push(collection);
+        return collection;
+    }
+
+    interface SavedCheckerState {
+        restores: (() => void)[];
+    }
+
+    function snapshotCheckerState(): SavedCheckerState {
+        const state: SavedCheckerState = { restores: map(speculativeCaches, save) };
+        return state;
+
+        // TODO: Override error reporting functions to just defer work until speculation
+        // helper is confirmed as locked-in, to avoid the work of building diagnostics until
+        // we know we're actually going to use them.
+
+        function save(cache: (typeof speculativeCaches)[number]): () => void {
+            if (Array.isArray(cache)) {
+                return saveArray(cache);
+            }
+            else if (cache instanceof Map) {
+                return saveMap(cache);
+            }
+            else if (cache instanceof Set) {
+                return saveSet(cache);
+            }
+            else if (cache.add! && cache.getDiagnostics!) { // eslint-disable-line @typescript-eslint/no-unnecessary-type-assertion
+                return saveDiagnosticCollection(cache);
+            }
+            return Debug.fail("Unknown speculative cache type");
+        }
+
+        // TODO: All these save/restore methods are as naive as you can get right now, which means speculation
+        // is insanely expensive, as it is eagerly saving off the checker state.
+        // Where possible, most things should be migrated to lazy caches, like the @SpeculatableCache decorator sets up.
+        function saveArray(cache: unknown[]) {
+            const original = cache.slice();
+            return () => {
+                cache.length = 0;
+                cache.push(...original);
+            };
+        }
+
+        function saveMap(cache: Map<any, unknown>) {
+            const original = arrayFrom(cache.entries());
+            return () => {
+                cache.clear();
+                for (const [k, v] of original) {
+                    cache.set(k, v);
+                }
+            };
+        }
+
+        function saveSet(cache: Set<unknown>) {
+            const original = arrayFrom(cache.entries());
+            return () => {
+                cache.clear();
+                for (const [_, v] of original) {
+                    cache.add(v);
+                }
+            };
+        }
+
+        function saveDiagnosticCollection(cache: DiagnosticCollection) {
+            const c = cache.checkpoint();
+            return () => {
+                cache.revert(c);
+            };
+        }
+    }
+
+    function restoreCheckerState(state: SavedCheckerState) {
+        for (const restore of state.restores) {
+            restore();
+        }
     }
 
     function initializeTypeChecker() {

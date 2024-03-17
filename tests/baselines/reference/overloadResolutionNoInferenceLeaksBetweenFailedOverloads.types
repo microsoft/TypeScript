@@ -1,0 +1,233 @@
+//// [tests/cases/compiler/overloadResolutionNoInferenceLeaksBetweenFailedOverloads.ts] ////
+
+=== 49820.ts ===
+type A1<T> = { type: "a1", v: T };
+>A1 : A1<T>
+>type : "a1"
+>v : T
+
+type B1<T> = { type: "b1", v: T };
+>B1 : B1<T>
+>type : "b1"
+>v : T
+
+type A2 = { a2: string };
+>A2 : { a2: string; }
+>a2 : string
+
+type B2 = { b2: string };
+>B2 : { b2: string; }
+>b2 : string
+
+function fn<T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void;
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>p1 : (pp1: 0) => A1<T>
+>pp1 : 0
+>p2 : (pp2: A2) => 0
+>pp2 : A2
+
+function fn<T>(p1: (pp1: 0) => B1<T>, p2: (pp2: B2) => 0): void;
+>fn : { <T_1>(p1: (pp1: 0) => A1<T_1>, p2: (pp2: A2) => 0): void; <T>(p1: (pp1: 0) => B1<T>, p2: (pp2: B2) => 0): void; }
+>p1 : (pp1: 0) => B1<T>
+>pp1 : 0
+>p2 : (pp2: B2) => 0
+>pp2 : B2
+
+function fn<T>(
+>fn : { <T_1>(p1: (pp1: 0) => A1<T_1>, p2: (pp2: A2) => 0): void; <T_2>(p1: (pp1: 0) => B1<T_2>, p2: (pp2: B2) => 0): void; }
+
+  p1:
+>p1 : ((pp1: 0) => A1<T>) | ((pp1: 0) => B1<T>)
+
+    | ((pp1: 0) => A1<T>)
+>pp1 : 0
+
+    | ((pp1: 0) => B1<T>),
+>pp1 : 0
+
+  p2:
+>p2 : ((pp2: A2) => 0) | ((pp2: B2) => 0)
+
+    | ((pp2: A2) => 0)
+>pp2 : A2
+
+    | ((pp2: B2) => 0)
+>pp2 : B2
+
+) {}
+
+const valA1: A1<string> = ({ type: "a1", v: "" });
+>valA1 : A1<string>
+>({ type: "a1", v: "" }) : { type: "a1"; v: string; }
+>{ type: "a1", v: "" } : { type: "a1"; v: string; }
+>type : "a1"
+>"a1" : "a1"
+>v : string
+>"" : ""
+
+const valB1: B1<string> = ({ type: "b1", v: "" });
+>valB1 : B1<string>
+>({ type: "b1", v: "" }) : { type: "b1"; v: string; }
+>{ type: "b1", v: "" } : { type: "b1"; v: string; }
+>type : "b1"
+>"b1" : "b1"
+>v : string
+>"" : ""
+
+// expect A
+fn((ap1) => valA1, (ap2) => 0);
+>fn((ap1) => valA1, (ap2) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(ap1) => valA1 : (ap1: 0) => A1<string>
+>ap1 : 0
+>valA1 : A1<string>
+>(ap2) => 0 : (ap2: A2) => 0
+>ap2 : A2
+>0 : 0
+
+fn((ap1) => valA1, (ap2: A2) => 0); 
+>fn((ap1) => valA1, (ap2: A2) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(ap1) => valA1 : (ap1: 0) => A1<string>
+>ap1 : 0
+>valA1 : A1<string>
+>(ap2: A2) => 0 : (ap2: A2) => 0
+>ap2 : A2
+>0 : 0
+
+fn((ap1) => valA1, (ap2: any) => 0);
+>fn((ap1) => valA1, (ap2: any) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(ap1) => valA1 : (ap1: 0) => A1<string>
+>ap1 : 0
+>valA1 : A1<string>
+>(ap2: any) => 0 : (ap2: any) => 0
+>ap2 : any
+>0 : 0
+
+fn((ap1) => valA1, (ap2: unknown) => 0);
+>fn((ap1) => valA1, (ap2: unknown) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(ap1) => valA1 : (ap1: 0) => A1<string>
+>ap1 : 0
+>valA1 : A1<string>
+>(ap2: unknown) => 0 : (ap2: unknown) => 0
+>ap2 : unknown
+>0 : 0
+
+fn((ap1: 0) => valA1, (ap2) => 0);
+>fn((ap1: 0) => valA1, (ap2) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(ap1: 0) => valA1 : (ap1: 0) => A1<string>
+>ap1 : 0
+>valA1 : A1<string>
+>(ap2) => 0 : (ap2: A2) => 0
+>ap2 : A2
+>0 : 0
+
+// expect B
+fn((bp1) => valB1, (bp2) => 0); // but it will be A, only this will result in an error
+>fn((bp1) => valB1, (bp2) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(bp1) => valB1 : (bp1: 0) => B1<string>
+>bp1 : 0
+>valB1 : B1<string>
+>(bp2) => 0 : (bp2: B2) => 0
+>bp2 : B2
+>0 : 0
+
+fn((bp1) => valB1, (bp2: B2) => 0); 
+>fn((bp1) => valB1, (bp2: B2) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(bp1) => valB1 : (bp1: 0) => B1<string>
+>bp1 : 0
+>valB1 : B1<string>
+>(bp2: B2) => 0 : (bp2: B2) => 0
+>bp2 : B2
+>0 : 0
+
+fn((bp1) => valB1, (bp2: any) => 0);
+>fn((bp1) => valB1, (bp2: any) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(bp1) => valB1 : (bp1: 0) => B1<string>
+>bp1 : 0
+>valB1 : B1<string>
+>(bp2: any) => 0 : (bp2: any) => 0
+>bp2 : any
+>0 : 0
+
+fn((bp1) => valB1, (bp2: unknown) => 0);
+>fn((bp1) => valB1, (bp2: unknown) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(bp1) => valB1 : (bp1: 0) => B1<string>
+>bp1 : 0
+>valB1 : B1<string>
+>(bp2: unknown) => 0 : (bp2: unknown) => 0
+>bp2 : unknown
+>0 : 0
+
+fn((bp1: 0) => valB1, (bp2) => 0);
+>fn((bp1: 0) => valB1, (bp2) => 0) : void
+>fn : { <T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void; <T_1>(p1: (pp1: 0) => B1<T_1>, p2: (pp2: B2) => 0): void; }
+>(bp1: 0) => valB1 : (bp1: 0) => B1<string>
+>bp1 : 0
+>valB1 : B1<string>
+>(bp2) => 0 : (bp2: B2) => 0
+>bp2 : B2
+>0 : 0
+
+=== 13430.ts ===
+declare function it(f: () => void): number;
+>it : { (f: () => void): number; (f: (x: string) => void): string; }
+>f : () => void
+
+declare function it(f: (x: string) => void): string;
+>it : { (f: () => void): number; (f: (x: string) => void): string; }
+>f : (x: string) => void
+>x : string
+
+let r = it((x) => {x});
+>r : string
+>it((x) => {x}) : string
+>it : { (f: () => void): number; (f: (x: string) => void): string; }
+>(x) => {x} : (x: string) => void
+>x : string
+>x : string
+
+=== 21525.ts ===
+interface TestFunction {
+    <T>(input: { [key: number]: T }, callback: (value: T, key: number, collection: { [key: number]: T }) => boolean): boolean;
+>input : { [key: number]: T; }
+>key : number
+>callback : (value: T, key: number, collection: { [key: number]: T; }) => boolean
+>value : T
+>key : number
+>collection : { [key: number]: T; }
+>key : number
+
+    <T extends object>(input: T, callback: (value: T[keyof T], key: string, collection: T) => boolean): boolean;
+>input : T
+>callback : (value: T[keyof T], key: string, collection: T) => boolean
+>value : T[keyof T]
+>key : string
+>collection : T
+}
+
+const fn: TestFunction = {} as any;
+>fn : TestFunction
+>{} as any : any
+>{} : {}
+
+fn({ a: "a", b: "b" }, (value, key) => true);
+>fn({ a: "a", b: "b" }, (value, key) => true) : boolean
+>fn : TestFunction
+>{ a: "a", b: "b" } : { a: string; b: string; }
+>a : string
+>"a" : "a"
+>b : string
+>"b" : "b"
+>(value, key) => true : (value: string, key: string) => true
+>value : string
+>key : string
+>true : true
+

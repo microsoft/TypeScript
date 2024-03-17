@@ -63,6 +63,8 @@ promisePermutations.ts(106,19): error TS2769: No overload matches this call.
 promisePermutations.ts(109,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+      Types of parameters 'cb' and 'value' are incompatible.
+        Type 'string' is not assignable to type '<T>(a: T) => T'.
 promisePermutations.ts(110,19): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
@@ -114,9 +116,12 @@ promisePermutations.ts(137,33): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+        Type 'string' is not assignable to type 'number'.
 promisePermutations.ts(144,35): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
+      Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+        Type 'string' is not assignable to type 'number'.
 promisePermutations.ts(152,36): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
@@ -130,6 +135,7 @@ promisePermutations.ts(158,21): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
       Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
+        Type 'number' is not assignable to type 'string'.
 promisePermutations.ts(159,21): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
@@ -350,6 +356,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2769:       Types of parameters 'cb' and 'value' are incompatible.
+!!! error TS2769:         Type 'string' is not assignable to type '<T>(a: T) => T'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
                       ~~~~~~~~~~~~~~
@@ -453,6 +461,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
 !!! error TS2769:       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
@@ -465,6 +474,8 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
+!!! error TS2769:       Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s10 = testFunction10P(x => x);
@@ -499,6 +510,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
 !!! error TS2769:       Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
+!!! error TS2769:         Type 'number' is not assignable to type 'string'.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
                         ~~~~~~~~~~~~~~~

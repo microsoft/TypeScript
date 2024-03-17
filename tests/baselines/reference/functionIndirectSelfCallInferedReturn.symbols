@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/functionIndirectSelfCallInferedReturn.ts] ////
+
+=== functionIndirectSelfCallInferedReturn.ts ===
+interface Type {
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+
+    flags: number;
+>flags : Symbol(Type.flags, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 16))
+
+    x: any;
+>x : Symbol(Type.x, Decl(functionIndirectSelfCallInferedReturn.ts, 1, 18))
+}
+
+declare function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
+>mapType : Symbol(mapType, Decl(functionIndirectSelfCallInferedReturn.ts, 3, 1), Decl(functionIndirectSelfCallInferedReturn.ts, 5, 94))
+>type : Symbol(type, Decl(functionIndirectSelfCallInferedReturn.ts, 5, 25))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+>mapper : Symbol(mapper, Decl(functionIndirectSelfCallInferedReturn.ts, 5, 36))
+>t : Symbol(t, Decl(functionIndirectSelfCallInferedReturn.ts, 5, 46))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+>noReductions : Symbol(noReductions, Decl(functionIndirectSelfCallInferedReturn.ts, 5, 63))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+
+declare function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+>mapType : Symbol(mapType, Decl(functionIndirectSelfCallInferedReturn.ts, 3, 1), Decl(functionIndirectSelfCallInferedReturn.ts, 5, 94))
+>type : Symbol(type, Decl(functionIndirectSelfCallInferedReturn.ts, 6, 25))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+>mapper : Symbol(mapper, Decl(functionIndirectSelfCallInferedReturn.ts, 6, 36))
+>t : Symbol(t, Decl(functionIndirectSelfCallInferedReturn.ts, 6, 46))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+>noReductions : Symbol(noReductions, Decl(functionIndirectSelfCallInferedReturn.ts, 6, 75))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+
+function unwrapAwaitedType(type: Type) {
+>unwrapAwaitedType : Symbol(unwrapAwaitedType, Decl(functionIndirectSelfCallInferedReturn.ts, 6, 118))
+>type : Symbol(type, Decl(functionIndirectSelfCallInferedReturn.ts, 8, 27))
+>Type : Symbol(Type, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 0))
+
+    return type.flags & 1 ? mapType(type, unwrapAwaitedType) :
+>type.flags : Symbol(Type.flags, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 16))
+>type : Symbol(type, Decl(functionIndirectSelfCallInferedReturn.ts, 8, 27))
+>flags : Symbol(Type.flags, Decl(functionIndirectSelfCallInferedReturn.ts, 0, 16))
+>mapType : Symbol(mapType, Decl(functionIndirectSelfCallInferedReturn.ts, 3, 1), Decl(functionIndirectSelfCallInferedReturn.ts, 5, 94))
+>type : Symbol(type, Decl(functionIndirectSelfCallInferedReturn.ts, 8, 27))
+>unwrapAwaitedType : Symbol(unwrapAwaitedType, Decl(functionIndirectSelfCallInferedReturn.ts, 6, 118))
+
+        type;
+>type : Symbol(type, Decl(functionIndirectSelfCallInferedReturn.ts, 8, 27))
+}

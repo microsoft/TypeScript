@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/functionOverloadInformsPriorArgumentType.ts] ////
+
+=== functionOverloadInformsPriorArgumentType.ts ===
+enum ModifierFlags {
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+
+    None = 0,
+>None : Symbol(ModifierFlags.None, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 20))
+
+    In = 1,
+>In : Symbol(ModifierFlags.In, Decl(functionOverloadInformsPriorArgumentType.ts, 1, 13))
+
+    Out = 2,
+>Out : Symbol(ModifierFlags.Out, Decl(functionOverloadInformsPriorArgumentType.ts, 2, 11))
+
+    Const = 4,
+>Const : Symbol(ModifierFlags.Const, Decl(functionOverloadInformsPriorArgumentType.ts, 3, 12))
+
+    Other = 8,
+>Other : Symbol(ModifierFlags.Other, Decl(functionOverloadInformsPriorArgumentType.ts, 4, 14))
+}
+
+interface Declaration {
+>Declaration : Symbol(Declaration, Decl(functionOverloadInformsPriorArgumentType.ts, 6, 1))
+
+    modifierFlags: ModifierFlags;
+>modifierFlags : Symbol(Declaration.modifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 8, 23))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+}
+
+declare function getEffectiveModifierFlags(d: Declaration): ModifierFlags;
+>getEffectiveModifierFlags : Symbol(getEffectiveModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 10, 1))
+>d : Symbol(d, Decl(functionOverloadInformsPriorArgumentType.ts, 12, 43))
+>Declaration : Symbol(Declaration, Decl(functionOverloadInformsPriorArgumentType.ts, 6, 1))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+
+declare function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+>reduceLeft : Symbol(reduceLeft, Decl(functionOverloadInformsPriorArgumentType.ts, 12, 74), Decl(functionOverloadInformsPriorArgumentType.ts, 14, 154))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 28))
+>U : Symbol(U, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 30))
+>array : Symbol(array, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 34))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 28))
+>f : Symbol(f, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 66))
+>memo : Symbol(memo, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 71))
+>U : Symbol(U, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 30))
+>value : Symbol(value, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 79))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 28))
+>i : Symbol(i, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 89))
+>U : Symbol(U, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 30))
+>initial : Symbol(initial, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 106))
+>U : Symbol(U, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 30))
+>start : Symbol(start, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 118))
+>count : Symbol(count, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 134))
+>U : Symbol(U, Decl(functionOverloadInformsPriorArgumentType.ts, 14, 30))
+
+// only has an issue when the 2nd overload is present, even though it has an arity mismatch
+declare function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
+>reduceLeft : Symbol(reduceLeft, Decl(functionOverloadInformsPriorArgumentType.ts, 12, 74), Decl(functionOverloadInformsPriorArgumentType.ts, 14, 154))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 28))
+>array : Symbol(array, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 31))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 28))
+>f : Symbol(f, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 51))
+>memo : Symbol(memo, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 56))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 28))
+>value : Symbol(value, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 64))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 28))
+>i : Symbol(i, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 74))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 28))
+>T : Symbol(T, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 28))
+
+function getTypeParameterModifiers(declarations: Declaration[]): ModifierFlags {
+>getTypeParameterModifiers : Symbol(getTypeParameterModifiers, Decl(functionOverloadInformsPriorArgumentType.ts, 16, 107))
+>declarations : Symbol(declarations, Decl(functionOverloadInformsPriorArgumentType.ts, 18, 35))
+>Declaration : Symbol(Declaration, Decl(functionOverloadInformsPriorArgumentType.ts, 6, 1))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+
+    return reduceLeft(declarations, (modifiers, d) => modifiers | getEffectiveModifierFlags(d), ModifierFlags.None) & (ModifierFlags.In | ModifierFlags.Out | ModifierFlags.Const);
+>reduceLeft : Symbol(reduceLeft, Decl(functionOverloadInformsPriorArgumentType.ts, 12, 74), Decl(functionOverloadInformsPriorArgumentType.ts, 14, 154))
+>declarations : Symbol(declarations, Decl(functionOverloadInformsPriorArgumentType.ts, 18, 35))
+>modifiers : Symbol(modifiers, Decl(functionOverloadInformsPriorArgumentType.ts, 19, 37))
+>d : Symbol(d, Decl(functionOverloadInformsPriorArgumentType.ts, 19, 47))
+>modifiers : Symbol(modifiers, Decl(functionOverloadInformsPriorArgumentType.ts, 19, 37))
+>getEffectiveModifierFlags : Symbol(getEffectiveModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 10, 1))
+>d : Symbol(d, Decl(functionOverloadInformsPriorArgumentType.ts, 19, 47))
+>ModifierFlags.None : Symbol(ModifierFlags.None, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 20))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+>None : Symbol(ModifierFlags.None, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 20))
+>ModifierFlags.In : Symbol(ModifierFlags.In, Decl(functionOverloadInformsPriorArgumentType.ts, 1, 13))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+>In : Symbol(ModifierFlags.In, Decl(functionOverloadInformsPriorArgumentType.ts, 1, 13))
+>ModifierFlags.Out : Symbol(ModifierFlags.Out, Decl(functionOverloadInformsPriorArgumentType.ts, 2, 11))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+>Out : Symbol(ModifierFlags.Out, Decl(functionOverloadInformsPriorArgumentType.ts, 2, 11))
+>ModifierFlags.Const : Symbol(ModifierFlags.Const, Decl(functionOverloadInformsPriorArgumentType.ts, 3, 12))
+>ModifierFlags : Symbol(ModifierFlags, Decl(functionOverloadInformsPriorArgumentType.ts, 0, 0))
+>Const : Symbol(ModifierFlags.Const, Decl(functionOverloadInformsPriorArgumentType.ts, 3, 12))
+}

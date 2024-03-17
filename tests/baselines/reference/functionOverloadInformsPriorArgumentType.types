@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/functionOverloadInformsPriorArgumentType.ts] ////
+
+=== functionOverloadInformsPriorArgumentType.ts ===
+enum ModifierFlags {
+>ModifierFlags : ModifierFlags
+
+    None = 0,
+>None : ModifierFlags.None
+>0 : 0
+
+    In = 1,
+>In : ModifierFlags.In
+>1 : 1
+
+    Out = 2,
+>Out : ModifierFlags.Out
+>2 : 2
+
+    Const = 4,
+>Const : ModifierFlags.Const
+>4 : 4
+
+    Other = 8,
+>Other : ModifierFlags.Other
+>8 : 8
+}
+
+interface Declaration {
+    modifierFlags: ModifierFlags;
+>modifierFlags : ModifierFlags
+}
+
+declare function getEffectiveModifierFlags(d: Declaration): ModifierFlags;
+>getEffectiveModifierFlags : (d: Declaration) => ModifierFlags
+>d : Declaration
+
+declare function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+>reduceLeft : { <T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U; <T_1>(array: readonly T_1[], f: (memo: T_1, value: T_1, i: number) => T_1): T_1 | undefined; }
+>array : readonly T[] | undefined
+>f : (memo: U, value: T, i: number) => U
+>memo : U
+>value : T
+>i : number
+>initial : U
+>start : number | undefined
+>count : number | undefined
+
+// only has an issue when the 2nd overload is present, even though it has an arity mismatch
+declare function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
+>reduceLeft : { <T_1, U>(array: readonly T_1[] | undefined, f: (memo: U, value: T_1, i: number) => U, initial: U, start?: number | undefined, count?: number | undefined): U; <T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined; }
+>array : readonly T[]
+>f : (memo: T, value: T, i: number) => T
+>memo : T
+>value : T
+>i : number
+
+function getTypeParameterModifiers(declarations: Declaration[]): ModifierFlags {
+>getTypeParameterModifiers : (declarations: Declaration[]) => ModifierFlags
+>declarations : Declaration[]
+
+    return reduceLeft(declarations, (modifiers, d) => modifiers | getEffectiveModifierFlags(d), ModifierFlags.None) & (ModifierFlags.In | ModifierFlags.Out | ModifierFlags.Const);
+>reduceLeft(declarations, (modifiers, d) => modifiers | getEffectiveModifierFlags(d), ModifierFlags.None) & (ModifierFlags.In | ModifierFlags.Out | ModifierFlags.Const) : number
+>reduceLeft(declarations, (modifiers, d) => modifiers | getEffectiveModifierFlags(d), ModifierFlags.None) : ModifierFlags
+>reduceLeft : { <T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number | undefined, count?: number | undefined): U; <T_1>(array: readonly T_1[], f: (memo: T_1, value: T_1, i: number) => T_1): T_1 | undefined; }
+>declarations : Declaration[]
+>(modifiers, d) => modifiers | getEffectiveModifierFlags(d) : (modifiers: ModifierFlags, d: Declaration) => number
+>modifiers : ModifierFlags
+>d : Declaration
+>modifiers | getEffectiveModifierFlags(d) : number
+>modifiers : ModifierFlags
+>getEffectiveModifierFlags(d) : ModifierFlags
+>getEffectiveModifierFlags : (d: Declaration) => ModifierFlags
+>d : Declaration
+>ModifierFlags.None : ModifierFlags.None
+>ModifierFlags : typeof ModifierFlags
+>None : ModifierFlags.None
+>(ModifierFlags.In | ModifierFlags.Out | ModifierFlags.Const) : number
+>ModifierFlags.In | ModifierFlags.Out | ModifierFlags.Const : number
+>ModifierFlags.In | ModifierFlags.Out : number
+>ModifierFlags.In : ModifierFlags.In
+>ModifierFlags : typeof ModifierFlags
+>In : ModifierFlags.In
+>ModifierFlags.Out : ModifierFlags.Out
+>ModifierFlags : typeof ModifierFlags
+>Out : ModifierFlags.Out
+>ModifierFlags.Const : ModifierFlags.Const
+>ModifierFlags : typeof ModifierFlags
+>Const : ModifierFlags.Const
+}
