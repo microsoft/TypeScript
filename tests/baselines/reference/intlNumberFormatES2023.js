@@ -28,6 +28,9 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
 new Intl.NumberFormat('en-GB').format('-12.3E-4');
 new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8');
 new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8');
+new Intl.NumberFormat('en-GB').format('Infinity');
+new Intl.NumberFormat('en-GB').format('-Infinity');
+new Intl.NumberFormat('en-GB').format('+Infinity');
 
 
 //// [intlNumberFormatES2023.js]
@@ -53,3 +56,6 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
 new Intl.NumberFormat('en-GB').format('-12.3E-4');
 new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8');
 new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8');
+new Intl.NumberFormat('en-GB').format('Infinity');
+new Intl.NumberFormat('en-GB').format('-Infinity');
+new Intl.NumberFormat('en-GB').format('+Infinity');
