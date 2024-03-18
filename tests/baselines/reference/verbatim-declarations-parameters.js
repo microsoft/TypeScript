@@ -61,8 +61,8 @@ type MapOrUndefined = Map | undefined | "dummy";
 export declare class Foo {
     reuseTypeNode?: Map | undefined;
     reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
-    resolveType?: Map;
-    constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map);
+    resolveType?: Map | undefined;
+    constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map | undefined);
 }
 export declare function foo1(reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: Map | undefined, requiredParam: number): void;
 export {};

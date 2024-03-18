@@ -6506,6 +6506,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const clone = tryReuseExistingNonParameterTypeNode(context, typeNode, type, host, includePrivateSymbol, bundled);
             if (clone) {
+                if (addUndefined && !someType(getTypeFromTypeNode(typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
+                    return factory.createUnionTypeNode([clone, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+                }
                 return clone;
             }
             if (addUndefined && originalType !== type) {
