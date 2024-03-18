@@ -265,7 +265,7 @@ export function transformDeclarations(context: TransformationContext) {
     let errorFallbackNode: Declaration | undefined;
 
     let currentSourceFile: SourceFile;
-    let rawReferencedFiles: Map<NodeId, SourceFile>;
+    let rawReferencedFiles: readonly [SourceFile, FileReference][];
     let rawTypeReferenceDirectives: readonly FileReference[];
     let rawLibReferenceDirectives: readonly FileReference[];
     const resolver = context.getEmitResolver();
@@ -403,7 +403,7 @@ export function transformDeclarations(context: TransformationContext) {
 
         if (node.kind === SyntaxKind.Bundle) {
             isBundledEmit = true;
-            rawReferencedFiles = new Map();
+            rawReferencedFiles = [];
             rawTypeReferenceDirectives = [];
             rawLibReferenceDirectives = [];
             let hasNoDefaultLib = false;
@@ -419,7 +419,7 @@ export function transformDeclarations(context: TransformationContext) {
                     getSymbolAccessibilityDiagnostic = throwDiagnostic;
                     needsScopeFixMarker = false;
                     resultHasScopeMarker = false;
-                    collectReferencedFiles(sourceFile, rawReferencedFiles);
+                    rawReferencedFiles = concatenate(rawReferencedFiles, map(sourceFile.referencedFiles, f => [sourceFile, f]));
                     rawTypeReferenceDirectives = concatenate(rawTypeReferenceDirectives, sourceFile.typeReferenceDirectives);
                     rawLibReferenceDirectives = concatenate(rawLibReferenceDirectives, sourceFile.libReferenceDirectives);
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
@@ -446,14 +446,11 @@ export function transformDeclarations(context: TransformationContext) {
                     return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                 }),
             );
-            bundle.syntheticFileReferences = [];
+            const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
+            bundle.syntheticFileReferences = getReferencedFiles(outputFilePath);
             bundle.syntheticTypeReferences = getTypeReferences();
             bundle.syntheticLibReferences = getLibReferences();
             bundle.hasNoDefaultLib = hasNoDefaultLib;
-            const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
-            // TODO(jakebailey): clean up
-            const referenceVisitor = mapReferencesIntoArray(bundle.syntheticFileReferences as FileReference[], outputFilePath);
-            rawReferencedFiles.forEach(referenceVisitor);
             return bundle;
         }
 
@@ -469,31 +466,24 @@ export function transformDeclarations(context: TransformationContext) {
         suppressNewDiagnosticContexts = false;
         lateMarkedStatements = undefined;
         lateStatementReplacementMap = new Map();
-        rawReferencedFiles = new Map();
+        rawReferencedFiles = map(currentSourceFile.referencedFiles, f => [currentSourceFile, f]);
         rawTypeReferenceDirectives = currentSourceFile.typeReferenceDirectives;
         rawLibReferenceDirectives = currentSourceFile.libReferenceDirectives;
-        collectReferencedFiles(currentSourceFile, rawReferencedFiles);
-        // TODO(jakebailey): simplify
-        const referencedFiles: FileReference[] = [];
-        const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
-        const referenceVisitor = mapReferencesIntoArray(referencedFiles, outputFilePath);
         let combinedStatements: NodeArray<Statement>;
         if (isSourceFileJS(currentSourceFile)) {
             combinedStatements = factory.createNodeArray(transformDeclarationsForJS(node));
-            rawReferencedFiles.forEach(referenceVisitor);
         }
         else {
             const statements = visitNodes(node.statements, visitDeclarationStatements, isStatement);
             combinedStatements = setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
-            rawReferencedFiles.forEach(referenceVisitor);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, referencedFiles, getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+        const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
+        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
 
         function getTypeReferences(): readonly FileReference[] {
-            // TODO(jakebailey): simplify
             return mapDefined(rawTypeReferenceDirectives, lib => {
                 if (!lib.preserve) return undefined;
                 // TODO(jakebailey): Do we want to keep `preserve` on the output?
@@ -502,7 +492,6 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         function getLibReferences(): readonly FileReference[] {
-            // TODO(jakebailey): simplify
             return mapDefined(rawLibReferenceDirectives, lib => {
                 if (!lib.preserve) return undefined;
                 // TODO(jakebailey): Do we want to keep `preserve`?
@@ -510,8 +499,15 @@ export function transformDeclarations(context: TransformationContext) {
             });
         }
 
-        function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
-            return file => {
+        function getReferencedFiles(outputFilePath: string): readonly FileReference[] {
+            return mapDefined(rawReferencedFiles, ([sourceFile, lib]) => {
+                if (!lib.preserve) return undefined;
+
+                const file = host.getSourceFileFromReference(sourceFile, lib);
+                if (!file) {
+                    return undefined;
+                }
+
                 let declFileName: string;
                 if (file.isDeclarationFile) { // Neither decl files or js should have their refs changed
                     declFileName = file.fileName;
@@ -522,56 +518,45 @@ export function transformDeclarations(context: TransformationContext) {
                     declFileName = paths.declarationFilePath || paths.jsFilePath || file.fileName;
                 }
 
-                if (declFileName) {
-                    // TODO(jakebailey): do we need to do any of this anymore?
+                if (!declFileName) return undefined;
 
-                    const specifier = moduleSpecifiers.getModuleSpecifier(
-                        options,
-                        currentSourceFile,
-                        getNormalizedAbsolutePath(outputFilePath, host.getCurrentDirectory()),
-                        getNormalizedAbsolutePath(declFileName, host.getCurrentDirectory()),
-                        host,
-                    );
-                    if (!pathIsRelative(specifier)) {
-                        // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
-                        // via a non-relative name, emit a type reference directive to that non-relative name, rather than
-                        // a relative path to the declaration file
-                        return;
-                    }
+                // TODO(jakebailey): do we need to do any of this anymore?
 
-                    let fileName = getRelativePathToDirectoryOrUrl(
-                        outputFilePath,
-                        declFileName,
-                        host.getCurrentDirectory(),
-                        host.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/ false,
-                    );
-                    if (startsWith(fileName, "./") && hasExtension(fileName)) {
-                        fileName = fileName.substring(2);
-                    }
-
-                    // omit references to files from node_modules (npm may disambiguate module
-                    // references when installing this package, making the path is unreliable).
-                    if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
-                        return;
-                    }
-
-                    // TODO(jakebailey): Do we want to keep `preserve`?
-                    references.push({ pos: -1, end: -1, fileName, preserve: true });
+                const specifier = moduleSpecifiers.getModuleSpecifier(
+                    options,
+                    currentSourceFile,
+                    getNormalizedAbsolutePath(outputFilePath, host.getCurrentDirectory()),
+                    getNormalizedAbsolutePath(declFileName, host.getCurrentDirectory()),
+                    host,
+                );
+                if (!pathIsRelative(specifier)) {
+                    // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
+                    // via a non-relative name, emit a type reference directive to that non-relative name, rather than
+                    // a relative path to the declaration file
+                    return;
                 }
-            };
-        }
-    }
 
-    function collectReferencedFiles(sourceFile: SourceFile, ret: Map<NodeId, SourceFile>) {
-        // TODO(jakebailey): simplify
-        forEach(sourceFile.referencedFiles, f => {
-            if (!f.preserve) return;
-            const elem = host.getSourceFileFromReference(sourceFile, f);
-            if (elem) {
-                ret.set(getOriginalNodeId(elem), elem);
-            }
-        });
+                let fileName = getRelativePathToDirectoryOrUrl(
+                    outputFilePath,
+                    declFileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false,
+                );
+                if (startsWith(fileName, "./") && hasExtension(fileName)) {
+                    fileName = fileName.substring(2);
+                }
+
+                // omit references to files from node_modules (npm may disambiguate module
+                // references when installing this package, making the path is unreliable).
+                if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
+                    return undefined;
+                }
+
+                // TODO(jakebailey): Do we want to keep `preserve` on the output?
+                return { fileName, pos: -1, end: -1, preserve: true };
+            });
+        }
     }
 
     function filterBindingPatternInitializers(name: BindingName) {
