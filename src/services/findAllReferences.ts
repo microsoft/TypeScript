@@ -757,7 +757,7 @@ interface PrefixAndSuffix {
     readonly suffixText?: string;
 }
 function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, quotePreference: QuotePreference): PrefixAndSuffix {
-    if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
+    if (entry.kind !== EntryKind.Span && (isIdentifier(originalNode) || isStringLiteralLike(originalNode))) {
         const { node, kind } = entry;
         const parent = node.parent;
         const name = originalNode.text;
