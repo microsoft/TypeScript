@@ -59,7 +59,6 @@ import {
     getFirstConstructorWithBody,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
-    getNormalizedAbsolutePath,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
@@ -73,7 +72,6 @@ import {
     getThisParameter,
     hasDynamicName,
     hasEffectiveModifier,
-    hasExtension,
     hasJSDocNodes,
     HasModifiers,
     hasSyntacticModifier,
@@ -166,8 +164,6 @@ import {
     orderedRemoveItem,
     ParameterDeclaration,
     parseNodeFactory,
-    pathContainsNodeModules,
-    pathIsRelative,
     PropertyDeclaration,
     PropertySignature,
     pushIfUnique,
@@ -181,7 +177,6 @@ import {
     setTextRange,
     some,
     SourceFile,
-    startsWith,
     Statement,
     StringLiteral,
     Symbol,
@@ -207,7 +202,6 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts";
-import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
@@ -520,38 +514,13 @@ export function transformDeclarations(context: TransformationContext) {
 
                 if (!declFileName) return undefined;
 
-                // TODO(jakebailey): do we need to do any of this anymore?
-
-                const specifier = moduleSpecifiers.getModuleSpecifier(
-                    options,
-                    currentSourceFile,
-                    getNormalizedAbsolutePath(outputFilePath, host.getCurrentDirectory()),
-                    getNormalizedAbsolutePath(declFileName, host.getCurrentDirectory()),
-                    host,
-                );
-                if (!pathIsRelative(specifier)) {
-                    // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
-                    // via a non-relative name, emit a type reference directive to that non-relative name, rather than
-                    // a relative path to the declaration file
-                    return;
-                }
-
-                let fileName = getRelativePathToDirectoryOrUrl(
+                const fileName = getRelativePathToDirectoryOrUrl(
                     outputFilePath,
                     declFileName,
                     host.getCurrentDirectory(),
                     host.getCanonicalFileName,
                     /*isAbsolutePathAnUrl*/ false,
                 );
-                if (startsWith(fileName, "./") && hasExtension(fileName)) {
-                    fileName = fileName.substring(2);
-                }
-
-                // omit references to files from node_modules (npm may disambiguate module
-                // references when installing this package, making the path is unreliable).
-                if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
-                    return undefined;
-                }
 
                 // TODO(jakebailey): Do we want to keep `preserve` on the output?
                 return { fileName, pos: -1, end: -1, preserve: true };
