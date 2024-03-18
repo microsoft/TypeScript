@@ -273,7 +273,7 @@ function f4() {
 }
 
 function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
->makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
+>makeRecord : <T, K extends string>(obj: {    [P in K]: T;}) => { [P in K]: T; }
 >obj : { [P in K]: T; }
 
     return obj;
@@ -323,7 +323,7 @@ function f5(s: string) {
 }
 
 function makeDictionary<T>(obj: { [x: string]: T }) {
->makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
+>makeDictionary : <T>(obj: {    [x: string]: T;}) => { [x: string]: T; }
 >obj : { [x: string]: T; }
 >x : string
 

@@ -52,6 +52,7 @@ export function f22() { } // trailing`,
 
         // Create system
         sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys.storeSignatureInfo = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);

@@ -3,8 +3,8 @@
 === esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
->IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
->({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+>IterableWeakMap_cleanup : ({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => void
+>({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : ({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => void
 >ref : WeakRef<object>
 >set : Set<WeakRef<object>>
 

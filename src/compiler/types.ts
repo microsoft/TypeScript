@@ -4336,7 +4336,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ localJsxFactory?: EntityName;
     /** @internal */ localJsxFragmentFactory?: EntityName;
 
-    /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 
     /** @internal */ jsDocParsingMode?: JSDocParsingMode;
@@ -4378,9 +4377,6 @@ export const enum CommentDirectiveType {
     ExpectError,
     Ignore,
 }
-
-/** @internal */
-export type ExportedModulesFromDeclarationEmit = readonly Symbol[];
 
 export interface Bundle extends Node {
     readonly kind: SyntaxKind.Bundle;
@@ -7812,7 +7808,7 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ getSymlinkCache?(): SymlinkCache;
 
     // For testing:
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;
