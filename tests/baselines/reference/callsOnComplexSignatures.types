@@ -53,13 +53,13 @@ function test2() {
 
     interface Messages {
         readonly foo: (options: { [key: string]: any, b: number }) => string;
->foo : (options: { [key: string]: any; b: number; }) => string
+>foo : (options: {    [key: string]: any;    b: number;}) => string
 >options : { [key: string]: any; b: number; }
 >key : string
 >b : number
 
         readonly bar: (options: { [key: string]: any, a: string }) => string;
->bar : (options: { [key: string]: any; a: string; }) => string
+>bar : (options: {    [key: string]: any;    a: string;}) => string
 >options : { [key: string]: any; a: string; }
 >key : string
 >a : string

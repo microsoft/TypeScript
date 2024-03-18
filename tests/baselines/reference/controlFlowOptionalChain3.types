@@ -58,7 +58,7 @@ function test2(foo: Foo | undefined) {
 }
 
 function Test3({ foo }: { foo: Foo | undefined }) {
->Test3 : ({ foo }: { foo: Foo | undefined; }) => JSX.Element
+>Test3 : ({ foo }: {    foo: Foo | undefined;}) => JSX.Element
 >foo : Foo | undefined
 >foo : Foo | undefined
 

@@ -60,7 +60,7 @@ var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s
 >3 : 3
 
 var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
->x6 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>x6 : { z: number; f: {    (n: number): string;    (s: string): number;}; }
 >z : number
 >f : { (n: number): string; (s: string): number; }
 >n : number
@@ -98,7 +98,7 @@ var x11:{z:I;x:boolean;}[][]=3;
 >3 : 3
 
 var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
->x12 : { z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }; }[][]
+>x12 : { z: I; x: boolean; y: (s: string) => boolean; w: {    z: I;    [s: string]: {        x: any;        y: any;    };    [n: number]: {        x: any;        y: any;    };    (): boolean;}; }[][]
 >z : I
 >x : boolean
 >y : (s: string) => boolean

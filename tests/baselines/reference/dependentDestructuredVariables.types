@@ -749,10 +749,10 @@ reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 // repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
 
 type FooMethod = {
->FooMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): void; }
+>FooMethod : { method(...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]): void; }
 
   method(...args:
->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
+>method : (...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]) => void
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -793,10 +793,10 @@ let fooM: FooMethod = {
 };
 
 type FooAsyncMethod = {
->FooAsyncMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): Promise<any>; }
+>FooAsyncMethod : { method(...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]): Promise<any>; }
 
   method(...args:
->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
+>method : (...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]) => Promise<any>
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -837,10 +837,10 @@ let fooAsyncM: FooAsyncMethod = {
 };
 
 type FooGenMethod = {
->FooGenMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): Generator<any, any, any>; }
+>FooGenMethod : { method(...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]): Generator<any, any, any>; }
 
   method(...args:
->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
+>method : (...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]) => Generator<any, any, any>
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -881,10 +881,10 @@ let fooGenM: FooGenMethod = {
 };
 
 type FooAsyncGenMethod = {
->FooAsyncGenMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): AsyncGenerator<any, any, any>; }
+>FooAsyncGenMethod : { method(...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]): AsyncGenerator<any, any, any>; }
 
   method(...args:
->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
+>method : (...args: [    type: "str",    cb: (e: string) => void] | [    type: "num",    cb: (e: number) => void]) => AsyncGenerator<any, any, any>
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 
     [type: "str", cb: (e: string) => void] |
