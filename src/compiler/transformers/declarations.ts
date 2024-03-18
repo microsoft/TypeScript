@@ -4,7 +4,6 @@ import {
     AllAccessorDeclarations,
     append,
     ArrayBindingElement,
-    arrayFrom,
     BindingElement,
     BindingName,
     BindingPattern,
@@ -267,8 +266,8 @@ export function transformDeclarations(context: TransformationContext) {
 
     let currentSourceFile: SourceFile;
     let rawReferencedFiles: Map<NodeId, SourceFile>;
-    let rawTypeReferenceDirectives: Map<string, boolean>;
-    let rawLibReferenceDirectives: Map<string, boolean>;
+    let rawTypeReferenceDirectives: readonly FileReference[];
+    let rawLibReferenceDirectives: readonly FileReference[];
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
     const { stripInternal } = options;
@@ -405,8 +404,8 @@ export function transformDeclarations(context: TransformationContext) {
         if (node.kind === SyntaxKind.Bundle) {
             isBundledEmit = true;
             rawReferencedFiles = new Map();
-            rawTypeReferenceDirectives = new Map();
-            rawLibReferenceDirectives = new Map();
+            rawTypeReferenceDirectives = [];
+            rawLibReferenceDirectives = [];
             let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
@@ -421,8 +420,8 @@ export function transformDeclarations(context: TransformationContext) {
                     needsScopeFixMarker = false;
                     resultHasScopeMarker = false;
                     collectReferencedFiles(sourceFile, rawReferencedFiles);
-                    collectTypeReferenceDirectives(sourceFile, rawTypeReferenceDirectives);
-                    collectLibReferenceDirectives(sourceFile, rawLibReferenceDirectives);
+                    rawTypeReferenceDirectives = concatenate(rawTypeReferenceDirectives, sourceFile.typeReferenceDirectives);
+                    rawLibReferenceDirectives = concatenate(rawLibReferenceDirectives, sourceFile.libReferenceDirectives);
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                         resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                         needsDeclare = false;
@@ -471,11 +470,9 @@ export function transformDeclarations(context: TransformationContext) {
         lateMarkedStatements = undefined;
         lateStatementReplacementMap = new Map();
         rawReferencedFiles = new Map();
-        rawTypeReferenceDirectives = new Map();
-        rawLibReferenceDirectives = new Map();
+        rawTypeReferenceDirectives = currentSourceFile.typeReferenceDirectives;
+        rawLibReferenceDirectives = currentSourceFile.libReferenceDirectives;
         collectReferencedFiles(currentSourceFile, rawReferencedFiles);
-        collectTypeReferenceDirectives(currentSourceFile, rawTypeReferenceDirectives);
-        collectLibReferenceDirectives(currentSourceFile, rawLibReferenceDirectives);
         // TODO(jakebailey): simplify
         const referencedFiles: FileReference[] = [];
         const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
@@ -497,14 +494,20 @@ export function transformDeclarations(context: TransformationContext) {
 
         function getTypeReferences(): readonly FileReference[] {
             // TODO(jakebailey): simplify
-            // TODO(jakebailey): Do we want to keep `preserve`?
-            return arrayFrom(rawTypeReferenceDirectives.keys(), lib => ({ fileName: lib, pos: -1, end: -1, preserve: true }));
+            return mapDefined(rawTypeReferenceDirectives, lib => {
+                if (!lib.preserve) return undefined;
+                // TODO(jakebailey): Do we want to keep `preserve` on the output?
+                return { fileName: lib.fileName, pos: -1, end: -1, resolutionMode: lib.resolutionMode, preserve: true };
+            });
         }
 
         function getLibReferences(): readonly FileReference[] {
             // TODO(jakebailey): simplify
-            // TODO(jakebailey): Do we want to keep `preserve`?
-            return arrayFrom(rawLibReferenceDirectives.keys(), lib => ({ fileName: lib, pos: -1, end: -1, preserve: true }));
+            return mapDefined(rawLibReferenceDirectives, lib => {
+                if (!lib.preserve) return undefined;
+                // TODO(jakebailey): Do we want to keep `preserve`?
+                return { fileName: lib.fileName, pos: -1, end: -1, preserve: true };
+            });
         }
 
         function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
@@ -568,22 +571,6 @@ export function transformDeclarations(context: TransformationContext) {
             if (elem) {
                 ret.set(getOriginalNodeId(elem), elem);
             }
-        });
-    }
-
-    function collectTypeReferenceDirectives(sourceFile: SourceFile, ret: Map<string, boolean>) {
-        // TODO(jakebailey): simplify
-        forEach(sourceFile.typeReferenceDirectives, ref => {
-            if (!ref.preserve) return;
-            ret.set(ref.fileName, true);
-        });
-    }
-
-    function collectLibReferenceDirectives(sourceFile: SourceFile, ret: Map<string, boolean>) {
-        // TODO(jakebailey): simplify
-        forEach(sourceFile.libReferenceDirectives, ref => {
-            if (!ref.preserve) return;
-            ret.set(ref.fileName, true);
         });
     }
 

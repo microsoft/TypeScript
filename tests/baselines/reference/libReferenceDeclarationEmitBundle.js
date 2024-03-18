@@ -23,6 +23,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 //// [bundle.d.ts]
 /// <reference lib="dom" preserve="true" />
+/// <reference lib="dom" preserve="true" />
 declare module "file1" {
     export const elem: HTMLElement;
 }
