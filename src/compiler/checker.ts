@@ -22486,7 +22486,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 /*stringsOnly*/ false,
                 t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(targetType.mapper, getTypeParameterFromMappedType(targetType), t))),
             );
-            return getUnionType(mappedKeys);
+            return mappedKeys.length ? getUnionType(mappedKeys) : stringNumberSymbolType;
         }
 
         function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {

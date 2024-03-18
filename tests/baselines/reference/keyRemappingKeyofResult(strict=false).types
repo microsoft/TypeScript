@@ -172,4 +172,24 @@ function g<T>() {
 >"str" : "str"
 }
 
+// https://github.com/microsoft/TypeScript/issues/57827
+
+type StringKeys<T> = Extract<
+>StringKeys : StringKeys<T>
+
+  keyof {
+    [P in keyof T as T[P] extends string ? P : never]: any;
+  },
+  string
+>;
+
+function test_57827<T>(z: StringKeys<T>) {
+>test_57827 : <T>(z: StringKeys<T>) => void
+>z : Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>
+
+  const f: string = z;
+>f : string
+>z : Extract<keyof { [P in keyof T as T[P] extends string ? P : never]: any; }, string>
+}
+
 export {};
