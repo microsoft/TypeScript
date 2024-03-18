@@ -105,7 +105,7 @@ export interface PointWrapper extends Point {
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPoint = void 0;
+exports.getPoint = getPoint;
 function getPoint() {
     return {
         name: "test",
@@ -115,7 +115,6 @@ function getPoint() {
         }
     };
 }
-exports.getPoint = getPoint;
 ;
 
 
@@ -240,7 +239,7 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -260,6 +259,7 @@ export interface Coords {
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
 
 Program root files: [
@@ -288,12 +288,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
 
@@ -320,7 +322,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -337,7 +339,7 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:01:36 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:42 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -357,6 +359,7 @@ export interface Coords {
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
 
 Program root files: [
@@ -385,12 +388,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
 
@@ -417,9 +422,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:08 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -439,6 +444,7 @@ export interface Coords {
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
 
 Program root files: [
@@ -467,11 +473,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined

@@ -1,8 +1,6 @@
-error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 m1.ts(5,5): error TS1005: ',' expected.
 
 
-!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 ==== m1.ts (1 errors) ====
     var R: any
     export default R = {

@@ -99,14 +99,13 @@ Output::
 //// [/a/b/file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.two = void 0;
+exports.two = two;
 function one() { }
 function two() {
     return function three() {
         one();
     };
 }
-exports.two = two;
 
 
 

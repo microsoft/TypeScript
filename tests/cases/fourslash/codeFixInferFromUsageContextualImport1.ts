@@ -20,7 +20,7 @@ goTo.file("/b.ts");
 verify.codeFix({
   description: "Infer parameter types from usage",
   newFileContent:
-`import { User, getEmail } from "./a";
+`import { getEmail, User } from "./a";
 
 export function f(user: User) {
     getEmail(user);

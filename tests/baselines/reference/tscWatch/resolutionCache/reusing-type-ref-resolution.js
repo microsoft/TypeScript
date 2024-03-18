@@ -211,7 +211,7 @@ export {};
 
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2],[4]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"../filewithimports.ts","start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,4],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2],[4]],"referencedMap":[[3,1],[5,2]],"semanticDiagnosticsPerFile":[1,[3,[{"file":"../filewithimports.ts","start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,4],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -306,7 +306,6 @@ export {};
         "../node_modules/pkg2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       [
@@ -341,7 +340,7 @@ export {};
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1722
+  "size": 1698
 }
 
 
@@ -577,7 +576,7 @@ fileWithTypeRefs.ts
 
 //// [/users/username/projects/project/outDir/fileWithImports.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[6,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5]],"referencedMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,4,[6,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -684,7 +683,6 @@ fileWithTypeRefs.ts
         "../node_modules/pkg2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../filewithimports.ts",
@@ -708,7 +706,7 @@ fileWithTypeRefs.ts
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1666
+  "size": 1642
 }
 
 
@@ -956,7 +954,7 @@ fileWithTypeRefs.ts
 
 //// [/users/username/projects/project/outDir/fileWithTypeRefs.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124648610-export interface Import3 {}","impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5,6]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[7,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5,6],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124648610-export interface Import3 {}","impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5,6]],"referencedMap":[[4,1],[7,2]],"semanticDiagnosticsPerFile":[1,4,[7,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5,6],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1075,7 +1073,6 @@ fileWithTypeRefs.ts
         "../node_modules/pkg3/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../filewithimports.ts",
@@ -1100,7 +1097,7 @@ fileWithTypeRefs.ts
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1776
+  "size": 1752
 }
 
 

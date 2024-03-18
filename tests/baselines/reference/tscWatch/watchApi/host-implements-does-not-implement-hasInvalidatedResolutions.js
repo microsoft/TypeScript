@@ -370,9 +370,8 @@ File '/package.json' does not exist.
 //// [/user/username/projects/myproject/other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
+function foo() { }
 
 
 

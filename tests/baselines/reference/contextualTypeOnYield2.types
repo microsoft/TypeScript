@@ -2,7 +2,7 @@
 
 === contextualTypeOnYield2.ts ===
 type OrGen = () => (number | Generator<string, (arg: number) => void, undefined>);
->OrGen : () => number | Generator<string, (arg: number) => void, undefined>
+>OrGen : () => (number | Generator<string, (arg: number) => void, undefined>)
 >arg : number
 
 const g: OrGen = function* () {
