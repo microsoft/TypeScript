@@ -493,9 +493,7 @@ export function transformDeclarations(context: TransformationContext) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, referencedFiles, getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
-        updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
-        return updated;
+        return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, referencedFiles, getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
 
         function getTypeReferences(): readonly FileReference[] {
             // TODO(jakebailey): simplify

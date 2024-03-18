@@ -4327,7 +4327,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ localJsxFactory?: EntityName;
     /** @internal */ localJsxFragmentFactory?: EntityName;
 
-    /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 
     /** @internal */ jsDocParsingMode?: JSDocParsingMode;
@@ -4369,9 +4368,6 @@ export const enum CommentDirectiveType {
     ExpectError,
     Ignore,
 }
-
-/** @internal */
-export type ExportedModulesFromDeclarationEmit = readonly Symbol[];
 
 export interface Bundle extends Node {
     readonly kind: SyntaxKind.Bundle;
@@ -7798,7 +7794,7 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ getSymlinkCache?(): SymlinkCache;
 
     // For testing:
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;
@@ -10028,7 +10024,7 @@ export interface UserPreferences {
      *
      * Default: `last`
      */
-    readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
     /**
      * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
      */
@@ -10038,6 +10034,8 @@ export interface UserPreferences {
     readonly generateReturnInDocTemplate?: boolean;
     readonly disableLineTextInReferences?: boolean;
 }
+
+export type OrganizeImportsTypeOrder = "last" | "inline" | "first";
 
 /** Represents a bigint literal value without requiring bigint support */
 export interface PseudoBigInt {
