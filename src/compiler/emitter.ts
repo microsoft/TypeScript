@@ -4183,25 +4183,21 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 writeLine();
             }
         }
-        // TODO(jakebailey): clean up preserve duplication
-        for (const directive of files) {
-            const preserve = directive.preserve ? `preserve="true" ` : "";
-            writeComment(`/// <reference path="${directive.fileName}" ${preserve}/>`);
-            writeLine();
+
+        function writeDirectives(kind: "path" | "types" | "lib", directives: readonly FileReference[]) {
+            for (const directive of directives) {
+                const preserve = directive.preserve ? `preserve="true" ` : "";
+                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+                    ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
+                    : "";
+                writeComment(`/// <reference ${kind}="${directive.fileName}" ${resolutionMode}${preserve}/>`);
+                writeLine();
+            }
         }
-        for (const directive of types) {
-            const preserve = directive.preserve ? `preserve="true" ` : "";
-            const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
-                ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
-                : "";
-            writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}${preserve}/>`);
-            writeLine();
-        }
-        for (const directive of libs) {
-            const preserve = directive.preserve ? `preserve="true" ` : "";
-            writeComment(`/// <reference lib="${directive.fileName}" ${preserve}/>`);
-            writeLine();
-        }
+
+        writeDirectives("path", files);
+        writeDirectives("types", types);
+        writeDirectives("lib", libs);
     }
 
     function emitSourceFileWorker(node: SourceFile) {
