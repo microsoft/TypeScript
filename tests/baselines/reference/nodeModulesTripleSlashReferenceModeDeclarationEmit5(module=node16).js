@@ -33,6 +33,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 //// [index.d.ts]
 /// <reference types="pkg" resolution-mode="import"/>
-/// <reference types="pkg" />
+/// <reference types="pkg" resolution-mode="require"/>
 export interface LocalInterface extends ImportInterface, RequireInterface {
 }

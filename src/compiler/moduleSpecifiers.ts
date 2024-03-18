@@ -36,7 +36,6 @@ import {
     GetCanonicalFileName,
     getConditions,
     getDirectoryPath,
-    getEmitModuleFormatOfFile,
     getEmitModuleResolutionKind,
     getModeForResolutionAtIndex,
     getModuleNameStringLiteralAt,
@@ -392,8 +391,8 @@ function computeModuleSpecifiers(
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
                 const existingMode = getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions);
-                const targetMode = options.overrideImportMode ?? getEmitModuleFormatOfFile(importingSourceFile, compilerOptions) < ModuleKind.ES2015 ? ModuleKind.CommonJS : ModuleKind.ESNext;
-                if (existingMode !== targetMode) {
+                const targetMode = options.overrideImportMode ?? impliedNodeFormatForModuleResolution(importingSourceFile, compilerOptions);
+                if (existingMode !== targetMode && existingMode !== undefined && targetMode !== undefined) {
                     return undefined;
                 }
                 const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;

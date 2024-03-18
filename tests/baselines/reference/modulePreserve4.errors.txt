@@ -10,7 +10,6 @@
 /main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
 /main3.cjs(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
 /main3.cjs(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-/main3.cjs(12,8): error TS1192: Module '"/e"' has no default export.
 
 
 ==== /a.js (1 errors) ====
@@ -113,7 +112,7 @@
     import g1 from "./g"; // { default: 0 }
     import g2 = require("./g"); // { default: 0 }
     
-==== /main3.cjs (3 errors) ====
+==== /main3.cjs (2 errors) ====
     import { x, y } from "./a"; // No y
                 ~
 !!! error TS2305: Module '"./a"' has no exported member 'y'.
@@ -130,8 +129,6 @@
     import d1 from "./d"; // [Function: default]
     const d2 = require("./d"); // [Function: default]
     import e1 from "./e.mjs"; // 0
-           ~~
-!!! error TS1192: Module '"/e"' has no default export.
     const e2 = require("./e.mjs"); // 0
     import f1 from "./f.cjs"; // 0
     const f2 = require("./f.cjs"); // { default: 0 }

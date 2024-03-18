@@ -137,8 +137,6 @@ import {
     getPositionOfLineAndCharacter,
     getPropertyArrayElementValue,
     getResolveJsonModule,
-    getResolvePackageJsonExports,
-    getResolvePackageJsonImports,
     getRootLength,
     getSetExternalModuleIndicator,
     getSourceFileOfNode,
@@ -167,6 +165,7 @@ import {
     HeritageClause,
     Identifier,
     identity,
+    impliedNodeFormatAffectsModuleResolution,
     impliedNodeFormatForModuleResolution,
     ImportAttributes,
     ImportClause,
@@ -327,7 +326,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
-    impliedNodeFormatAffectsModuleResolution,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 

@@ -3,7 +3,7 @@
     "File '/package.json' does not exist.",
     "======== Resolving module '../lib' from '/app/test.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
-    "Resolving in CJS mode with conditions 'import', 'types'.",
+    "Resolving in CJS mode with conditions 'require', 'types'.",
     "Loading module as file / folder, candidate module location '/lib', target file types: TypeScript, JavaScript, Declaration, JSON.",
     "File '/lib.ts' does not exist.",
     "File '/lib.tsx' does not exist.",

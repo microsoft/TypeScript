@@ -8607,8 +8607,8 @@ export function impliedNodeFormatAffectsModuleResolution(options: CompilerOption
 }
 
 /** @internal */
-export function impliedNodeFormatForModuleResolution(sourceFile: { impliedNodeFormat?: ResolutionMode; }, options: CompilerOptions): ResolutionMode {
-    return impliedNodeFormatAffectsModuleResolution(options) ? sourceFile.impliedNodeFormat : undefined;
+export function impliedNodeFormatForModuleResolution(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
+    return impliedNodeFormatAffectsModuleResolution(options) ? impliedNodeFormatForEmit(sourceFile, options) : undefined;
 }
 
 /** @internal */

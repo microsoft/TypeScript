@@ -271,7 +271,7 @@ const d2 = require("./d"); // [Function: default]
 >"./d" : "./d"
 
 import e1 from "./e.mjs"; // 0
->e1 : any
+>e1 : 0
 
 const e2 = require("./e.mjs"); // 0
 >e2 : 0
@@ -280,11 +280,11 @@ const e2 = require("./e.mjs"); // 0
 >"./e.mjs" : "./e.mjs"
 
 import f1 from "./f.cjs"; // 0
->f1 : typeof f1
+>f1 : 0
 
 const f2 = require("./f.cjs"); // { default: 0 }
->f2 : typeof f1
->require("./f.cjs") : typeof f1
+>f2 : typeof f2
+>require("./f.cjs") : typeof f2
 >require : any
 >"./f.cjs" : "./f.cjs"
 
