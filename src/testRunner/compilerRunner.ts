@@ -331,10 +331,6 @@ class CompilerTest {
     }
 
     public verifyTypesAndSymbols() {
-        if (this.fileName.includes("APISample")) {
-            return;
-        }
-
         const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols &&
             this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
         if (noTypesAndSymbols) {
