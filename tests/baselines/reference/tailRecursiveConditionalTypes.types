@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/tailRecursiveConditionalTypes.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 200 / 200 (nearest 100)
+Type Count: 22,400 / 22,400 (nearest 100)
+Instantiation count: 27,500 / 27,500 (nearest 500)
+Symbol count: 74,000 / 74,000 (nearest 500)
+
 === tailRecursiveConditionalTypes.ts ===
 type Trim<S extends string> =
 >Trim : Trim<S>

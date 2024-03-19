@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx] ////
 
+=== Performance Stats ===
+Subtype cache: 100 / 100 (nearest 100)
+Assignability cache: 3,600 / 3,600 (nearest 100)
+Type Count: 7,800 / 7,800 (nearest 100)
+Instantiation count: 75,500 / 75,500 (nearest 500)
+Symbol count: 66,500 / 66,500 (nearest 500)
+
 === jsxCallElaborationCheckNoCrash1.tsx ===
 /// <reference path="react16.d.ts" />
 

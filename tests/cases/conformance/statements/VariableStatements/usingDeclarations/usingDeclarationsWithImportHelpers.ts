@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2022
 // @module: esnext
 // @lib: esnext
 // @importHelpers: true

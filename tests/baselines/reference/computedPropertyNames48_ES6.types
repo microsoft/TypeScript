@@ -2,7 +2,7 @@
 
 === computedPropertyNames48_ES6.ts ===
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
->extractIndexer : <T>(p: { [n: number]: T; }) => T
+>extractIndexer : <T>(p: {    [n: number]: T;}) => T
 >p : { [n: number]: T; }
 >n : number
 

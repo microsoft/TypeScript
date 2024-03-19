@@ -1,8 +1,6 @@
 name: Create cherry pick PR
 
 on:
-  repository_dispatch:
-    types: [create-cherry-pick-pr]
   workflow_dispatch:
     inputs:
       pr:
@@ -13,10 +11,26 @@ on:
         description: Target branch to cherry-pick to
         required: true
         type: string
+
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
       requesting_user:
-        description: User who requested the cherry-pick
-        required: true
-        type: string
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}
 
 permissions:
   contents: read
@@ -40,15 +54,27 @@ jobs:
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
 
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        id: open-pr
         env:
-          PR: ${{ inputs.pr || github.event.client_payload.pr }}
-          TARGET_BRANCH: ${{ inputs.target_branch || github.event.client_payload.target_branch }}
-          REQUESTING_USER: ${{ inputs.requesting_user || github.event.client_payload.requesting_user }}
+          PR: ${{ inputs.pr }}
+          TARGET_BRANCH: ${{ inputs.target_branch }}
+          DISTINCT_ID: ${{ inputs.distinct_id }}
+          SOURCE_ISSUE: ${{ inputs.source_issue }}
+          REQUESTING_USER: ${{ inputs.requesting_user }}
+          STATUS_COMMENT: ${{ inputs.status_comment }}
         with:
           retries: 3
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          result-encoding: string
           script: |
-            const { PR, TARGET_BRANCH, REQUESTING_USER } = process.env;
+            const {
+              PR,
+              TARGET_BRANCH,
+              DISTINCT_ID,
+              SOURCE_ISSUE,
+              REQUESTING_USER,
+              STATUS_COMMENT,
+            } = process.env;
 
             const pr = await github.rest.pulls.get({
               owner: context.repo.owner,
@@ -75,6 +101,8 @@ jobs:
               head: `${context.repo.owner}:${pickBranch}`,
             });
 
+            let commentBody;
+
             if (existingPulls.data.length === 0) {
               console.log(`No existing PRs found for ${pickBranch}`);
 
@@ -91,12 +119,7 @@ jobs:
                 reviewers: ["DanielRosenwasser", REQUESTING_USER],
               });
 
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: +PR,
-                body: `Hey @${REQUESTING_USER}, I've created #${newPr.data.number} for you.`,
-              });
+              commentBody = `I've created #${newPr.data.number} for you.`;
             }
             else {
               const existing = existingPulls.data[0];
@@ -109,23 +132,18 @@ jobs:
                 title,
               });
 
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: +PR,
-                body: `Hey @${REQUESTING_USER}, I've updated #${existing.number} for you.`,
-              });
+              commentBody = `I've updated #${existing.number} for you.`;
             }
 
-      - run: |
-          MESSAGE="Hey @$REQUESTING_USER, I was unable to cherry-pick this PR."
-          MESSAGE+=$'\n\n'
-          MESSAGE+="Check the logs at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            return commentBody;
 
-          gh pr comment "$PR" --repo ${{ github.repository }} --body "$MESSAGE"
-        if: ${{ failure() }}
-        env:
-          PR: ${{ inputs.pr || github.event.client_payload.pr }}
-          TARGET_BRANCH: ${{ inputs.target_branch || github.event.client_payload.target_branch }}
-          REQUESTING_USER: ${{ inputs.requesting_user || github.event.client_payload.requesting_user }}
-          GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
+        if: ${{ !cancelled() && inputs.distinct_id }}
+        with:
+          success_comment: ${{ steps.open-pr.outputs.result }}
+          failure_comment: 'I was unable to cherry-pick this PR.'
+          github_token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          distinct_id: ${{ inputs.distinct_id }}
+          source_issue: ${{ inputs.source_issue }}
+          requesting_user: ${{ inputs.requesting_user }}
+          status_comment: ${{ inputs.status_comment }}

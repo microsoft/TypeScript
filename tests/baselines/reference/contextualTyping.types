@@ -327,7 +327,7 @@ interface IPlaceHolder {
     }
 
 var objc8: {
->objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: (n: number, s: string) => number; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: ((n: number, s: string) => string)[]; t12: IBar; t13: IFoo; t14: IFoo; }
+>objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: {    (n: number, s: string): number;}; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: {    (n: number, s: string): string;}[]; t12: IBar; t13: IFoo; t14: IFoo; }
 
     t1: (s: string) => string;
 >t1 : (s: string) => string

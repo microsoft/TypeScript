@@ -57,7 +57,7 @@ Info seq  [hh:mm:ss:mss] Excluded '/a/b/bliss.js' because it matched bliss from 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/foo.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: project WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'project' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/foo.js Text-1 ""
@@ -76,6 +76,17 @@ PolledWatches::
 FsWatches::
 /a/b/foo.js: *new*
   {}
+
+Projects::
+project (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/foo.js *new*
+    version: Text-1
+    containingProjects: 1
+        project
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -233,6 +244,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -255,3 +271,8 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Projects::
+project (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*

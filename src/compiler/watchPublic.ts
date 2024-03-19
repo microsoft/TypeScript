@@ -123,7 +123,7 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
-    host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
+    host.storeSignatureInfo = system.storeSignatureInfo;
     setGetSourceFileAsHashVersioned(host);
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
     return host;
@@ -258,18 +258,18 @@ export interface ProgramHost<T extends BuilderProgram> {
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;
-}
-/**
- * Internal interface used to wire emit through same host
- *
- * @internal
- */
-export interface ProgramHost<T extends BuilderProgram> {
+
+    // Internal interface used to wire emit through same host
+
     // TODO: GH#18217 Optional methods are frequently asserted
+    /** @internal */
     createDirectory?(path: string): void;
+    /** @internal */
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
     // For testing
-    storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */
+    storeSignatureInfo?: boolean;
+    /** @internal */
     now?(): Date;
 }
 
