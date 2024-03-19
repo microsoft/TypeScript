@@ -9,7 +9,14 @@ ts.Debug.loggingHost = {
     },
 };
 
-let v8: typeof import("v8") | undefined;
+interface V8 {
+    startupSnapshot?: {
+        isBuildingSnapshot(): boolean;
+        setDeserializeMainFunction(fn: () => void): void;
+    };
+}
+
+let v8: V8 | undefined;
 try {
     if (!process.versions.bun) {
         v8 = require("v8");
@@ -35,10 +42,9 @@ function main() {
     ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
 }
 
-if ((v8 as any)?.startupSnapshot?.isBuildingSnapshot()) {
-    (v8 as any).startupSnapshot.setDeserializeMainFunction(() => {
+if (v8?.startupSnapshot?.isBuildingSnapshot()) {
+    v8.startupSnapshot.setDeserializeMainFunction(() => {
         // When we're executed as a snapshot, argv won't contain the js file anymore.
-        // TODO(jakebailey): if we need to fork TS, we probably need to know the snapshot name and exec that...
         process.argv.splice(1, 0, __filename);
         ts.setSys(ts.createSystem());
         main();
