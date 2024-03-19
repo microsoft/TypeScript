@@ -27,7 +27,7 @@ interface ExecutionContext {
 }
 
 type CoercedVariableValues =
->CoercedVariableValues : { errors: ReadonlyArray<GraphQLError>; coerced?: undefined; } | { coerced: { [variable: string]: unknown; }; errors?: undefined; }
+>CoercedVariableValues : { errors: ReadonlyArray<GraphQLError>; coerced?: undefined; } | { coerced: {    [variable: string]: unknown;}; errors?: undefined; }
 
   | { errors: ReadonlyArray<GraphQLError>; coerced?: never }
 >errors : readonly GraphQLError[]
@@ -39,7 +39,7 @@ type CoercedVariableValues =
 >errors : undefined
 
 declare function getVariableValues(inputs: {
->getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
+>getVariableValues : (inputs: {    readonly [variable: string]: unknown;}) => CoercedVariableValues
 >inputs : { readonly [variable: string]: unknown; }
 
   readonly [variable: string]: unknown;

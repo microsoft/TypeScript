@@ -1,4 +1,4 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var IFoo = Namespace.IFoo;
 //# sourceMappingURL=file.js.map

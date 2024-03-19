@@ -1,0 +1,21 @@
+classAbstractInheritance2.ts(10,7): error TS2655: Non-abstract class 'B' is missing implementations for the following members of 'A': 'm1', 'm2', 'm3', 'm4' and 2 more.
+classAbstractInheritance2.ts(11,11): error TS2650: Non-abstract class expression is missing implementations for the following members of 'A': 'm1', 'm2', 'm3', 'm4' and 2 more.
+
+
+==== classAbstractInheritance2.ts (2 errors) ====
+    abstract class A {
+        abstract m1(): number;
+        abstract m2(): number;
+        abstract m3(): number;
+        abstract m4(): number;
+        abstract m5(): number;
+        abstract m6(): number;
+    }
+    
+    class B extends A { }
+          ~
+!!! error TS2655: Non-abstract class 'B' is missing implementations for the following members of 'A': 'm1', 'm2', 'm3', 'm4' and 2 more.
+    const C = class extends A {}
+              ~~~~~
+!!! error TS2650: Non-abstract class expression is missing implementations for the following members of 'A': 'm1', 'm2', 'm3', 'm4' and 2 more.
+    

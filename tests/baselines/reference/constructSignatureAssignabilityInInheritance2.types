@@ -134,7 +134,7 @@ interface A { // T
 
     };
     a18: {
->a18 : { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }
+>a18 : { new (x: {    new (a: number): number;    new (a: string): string;}): any[]; new (x: {    new (a: boolean): boolean;    new (a: Date): Date;}): any[]; }
 
         new (x: {
 >x : { new (a: number): number; new (a: string): string; }

@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/types/literal/stringMappingReduction.ts] ////
+
+=== stringMappingReduction.ts ===
+type T00 = "prop" | `p${Lowercase<string>}p`;  // `p${Lowercase<string>}p`
+>T00 : Symbol(T00, Decl(stringMappingReduction.ts, 0, 0))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type T01 = "prop" | Lowercase<string>;  // Lowercase<string>
+>T01 : Symbol(T01, Decl(stringMappingReduction.ts, 0, 45))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type T02 = "PROP" | Lowercase<string>;  // "PROP" | Lowercase<string>
+>T02 : Symbol(T02, Decl(stringMappingReduction.ts, 1, 38))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type T10 = "prop" & `p${Lowercase<string>}p`;  // "prop"
+>T10 : Symbol(T10, Decl(stringMappingReduction.ts, 2, 38))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type T11 = "prop" & Lowercase<string>;  // "prop"
+>T11 : Symbol(T11, Decl(stringMappingReduction.ts, 4, 45))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type T12 = "PROP" & Lowercase<string>;  // never
+>T12 : Symbol(T12, Decl(stringMappingReduction.ts, 5, 38))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+type T20 = "prop" | Capitalize<string>;  // "prop" | Capitalize<string>
+>T20 : Symbol(T20, Decl(stringMappingReduction.ts, 6, 38))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type T21 = "Prop" | Capitalize<string>;  // Capitalize<string>
+>T21 : Symbol(T21, Decl(stringMappingReduction.ts, 8, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type T22 = "PROP" | Capitalize<string>;  // Capitalize<string>
+>T22 : Symbol(T22, Decl(stringMappingReduction.ts, 9, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type T30 = "prop" & Capitalize<string>;  // never
+>T30 : Symbol(T30, Decl(stringMappingReduction.ts, 10, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type T31 = "Prop" & Capitalize<string>;  // "Prop"
+>T31 : Symbol(T31, Decl(stringMappingReduction.ts, 12, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+type T32 = "PROP" & Capitalize<string>;  // "PROP"
+>T32 : Symbol(T32, Decl(stringMappingReduction.ts, 13, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+// Repro from #57117
+
+type EMap = { event: {} }
+>EMap : Symbol(EMap, Decl(stringMappingReduction.ts, 14, 39))
+>event : Symbol(event, Decl(stringMappingReduction.ts, 18, 13))
+
+type Keys = keyof EMap
+>Keys : Symbol(Keys, Decl(stringMappingReduction.ts, 18, 25))
+>EMap : Symbol(EMap, Decl(stringMappingReduction.ts, 14, 39))
+
+type EPlusFallback<C> = C extends Keys ? EMap[C] : "unrecognised event";
+>EPlusFallback : Symbol(EPlusFallback, Decl(stringMappingReduction.ts, 19, 22))
+>C : Symbol(C, Decl(stringMappingReduction.ts, 20, 19))
+>C : Symbol(C, Decl(stringMappingReduction.ts, 20, 19))
+>Keys : Symbol(Keys, Decl(stringMappingReduction.ts, 18, 25))
+>EMap : Symbol(EMap, Decl(stringMappingReduction.ts, 14, 39))
+>C : Symbol(C, Decl(stringMappingReduction.ts, 20, 19))
+
+type VirtualEvent<T extends string> = { bivarianceHack(event: EPlusFallback<Lowercase<T>>): any; }['bivarianceHack'];
+>VirtualEvent : Symbol(VirtualEvent, Decl(stringMappingReduction.ts, 20, 72))
+>T : Symbol(T, Decl(stringMappingReduction.ts, 21, 18))
+>bivarianceHack : Symbol(bivarianceHack, Decl(stringMappingReduction.ts, 21, 39))
+>event : Symbol(event, Decl(stringMappingReduction.ts, 21, 55))
+>EPlusFallback : Symbol(EPlusFallback, Decl(stringMappingReduction.ts, 19, 22))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(stringMappingReduction.ts, 21, 18))
+
+declare const _virtualOn: (eventQrl: VirtualEvent<Keys>) => void;
+>_virtualOn : Symbol(_virtualOn, Decl(stringMappingReduction.ts, 22, 13))
+>eventQrl : Symbol(eventQrl, Decl(stringMappingReduction.ts, 22, 27))
+>VirtualEvent : Symbol(VirtualEvent, Decl(stringMappingReduction.ts, 20, 72))
+>Keys : Symbol(Keys, Decl(stringMappingReduction.ts, 18, 25))
+
+export const virtualOn = <T extends string>(eventQrl: VirtualEvent<T>) => {
+>virtualOn : Symbol(virtualOn, Decl(stringMappingReduction.ts, 23, 12))
+>T : Symbol(T, Decl(stringMappingReduction.ts, 23, 26))
+>eventQrl : Symbol(eventQrl, Decl(stringMappingReduction.ts, 23, 44))
+>VirtualEvent : Symbol(VirtualEvent, Decl(stringMappingReduction.ts, 20, 72))
+>T : Symbol(T, Decl(stringMappingReduction.ts, 23, 26))
+
+    _virtualOn(eventQrl);
+>_virtualOn : Symbol(_virtualOn, Decl(stringMappingReduction.ts, 22, 13))
+>eventQrl : Symbol(eventQrl, Decl(stringMappingReduction.ts, 23, 44))
+
+};
+

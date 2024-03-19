@@ -1144,8 +1144,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             },
         };
         session.executeCommandSeq(openRequest);
-        const projectService = session.getProjectService();
-        const proj = projectService.inferredProjects[0];
+        const proj = session.getProjectService().inferredProjects[0];
         const version1 = proj.lastCachedUnresolvedImportsList;
 
         // make a change that should not affect the structure of the program
@@ -1668,6 +1667,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         const log = loggerToTypingsInstallerLog(logger);
         const testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(host),
+            /*session*/ undefined,
             logger,
         );
         testhost.baselineHost("");

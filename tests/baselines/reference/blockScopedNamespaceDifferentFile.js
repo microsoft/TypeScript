@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/blockScopedNamespaceDifferentFile.ts] ////
 
 //// [test.ts]
-// #15734 failed when test.ts comes before typings.d.ts
 namespace C {
     export class Name {
         static funcData = A.AA.func();
@@ -21,7 +20,6 @@ declare namespace A {
 
 
 //// [out.js]
-// #15734 failed when test.ts comes before typings.d.ts
 var C;
 (function (C) {
     var Name = /** @class */ (function () {

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/enumAssignmentCompat6.ts] ////
 
-=== f.ts ===
-// @filename a.ts
+=== a.ts ===
 namespace numerics {
 >numerics : typeof numerics
 
@@ -154,6 +153,7 @@ function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
 >x : strings.DiagnosticCategory
 }
 
+=== f.ts ===
 export enum DiagnosticCategory {
 >DiagnosticCategory : DiagnosticCategory
 
