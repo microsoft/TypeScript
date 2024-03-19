@@ -39,9 +39,3 @@ var bar = function (thing) {
     return thing.arg;
 };
 exports.bar = bar;
-
-
-//// [index.d.ts]
-import { SomeType } from "some-dep";
-export declare const foo: (thing: SomeType) => import("some-dep").SomeType;
-export declare const bar: (thing: SomeType) => import("some-dep").OtherType;
