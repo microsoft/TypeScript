@@ -41,7 +41,7 @@ jobs:
           - { os: macos-14, runtime: { name: bun, version: 'latest' }, bundle: true }
         exclude:
           # No Node 14 on ARM macOS
-          - { os: macos-14, runtime: { name: node, version: 14 }, bundle: false }
+          - { os: macos-14, runtime: { name: node, version: 14 }, bundle: true }
 
     runs-on: ${{ matrix.os }}
     name: Test ${{ matrix.runtime.name }} ${{ matrix.runtime.version }} on ${{ matrix.os }} with --bundle=${{ matrix.bundle }}
