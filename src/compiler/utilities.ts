@@ -10737,7 +10737,7 @@ export function isSourceElement(node: Node): boolean {
         case SyntaxKind.MissingDeclaration:
             return true;
     }
-   return false;
+    return false;
 }
 
 /** @internal */

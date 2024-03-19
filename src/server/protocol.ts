@@ -2517,8 +2517,10 @@ export interface DiagnosticEventBody {
      */
     spans?: TextSpan[];
 
-    // >> TODO: remove this; testing only
-    perf?: string;
+    /**
+     * Time spent computing the diagnostics, in milliseconds.
+     */
+    duration?: number;
 }
 
 export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";

@@ -40,7 +40,6 @@ import {
     CreateProgramOptions,
     createSourceFile,
     CreateSourceFileOptions,
-    createTextRangeFromNode,
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
@@ -185,6 +184,7 @@ import {
     isRightSideOfQualifiedName,
     isSetAccessor,
     isSourceElement,
+    isSourceFile,
     isStringOrNumericLiteralLike,
     isTagName,
     isTextWhiteSpaceLike,
@@ -281,6 +281,7 @@ import {
     SignatureKind,
     singleElementArray,
     SmartSelectionRange,
+    some,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -2057,6 +2058,11 @@ export function createLanguageService(
         if (file.end === span.start + span.length) {
             nodes.push(file.endOfFileToken);
         }
+
+        if (some(nodes, isSourceFile)) {
+            return undefined;
+        }
+
         return nodes;
 
         function includeNodes(node: Node): true | undefined {
@@ -2079,7 +2085,7 @@ export function createLanguageService(
         }
 
         function includeNode(node: Node): void {
-            while (!isSourceElement(node)) {
+            while (node.parent && !isSourceElement(node)) {
                 node = node.parent;
             }
             nodes.push(node);

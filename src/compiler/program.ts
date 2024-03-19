@@ -2801,7 +2801,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): readonly Diagnostic[] {
         return getDiagnosticsHelper(
             sourceFile,
-            (sourceFile, cancellationToken) => getSemanticDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck), // >> TODO: this is slightly sketchy because relies on this function only being called with the same sourcefile that originated the nodesToCheck
+            (sourceFile, cancellationToken) => getSemanticDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck),
             cancellationToken,
         );
     }

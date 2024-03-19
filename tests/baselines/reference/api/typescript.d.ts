@@ -1913,7 +1913,10 @@ declare namespace ts {
                  * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
                  */
                 spans?: TextSpan[];
-                perf?: string;
+                /**
+                 * Time spent computing the diagnostics, in milliseconds.
+                 */
+                duration?: number;
             }
             export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
@@ -3372,6 +3375,7 @@ declare namespace ts {
             serverMode?: LanguageServiceMode;
             throttleWaitMilliseconds?: number;
             noGetErrOnBackgroundUpdate?: boolean;
+            includeDiagnosticsDuration?: boolean;
             globalPlugins?: readonly string[];
             pluginProbeLocations?: readonly string[];
             allowLocalPluginLoads?: boolean;
@@ -3394,8 +3398,9 @@ declare namespace ts {
             private suppressDiagnosticEvents?;
             private eventHandler;
             private readonly noGetErrOnBackgroundUpdate?;
+            private includeDiagnosticsDuration;
             private semanticCheckPerformance;
-            private checkTime;
+            private diagnosticsTime;
             constructor(opts: SessionOptions);
             private sendRequestCompletedEvent;
             private addPerformanceData;
@@ -9961,7 +9966,7 @@ declare namespace ts {
          */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         /**
-         * >> TODO: description
+         * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
          */
         getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
         /**

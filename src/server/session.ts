@@ -23,7 +23,6 @@ import {
     createSet,
     createTextSpan,
     createTextSpanFromBounds,
-    createTextSpanFromRange,
     Debug,
     decodedTextSpanIntersectsWith,
     deduplicate,
@@ -964,6 +963,7 @@ export interface SessionOptions {
     serverMode?: LanguageServiceMode;
     throttleWaitMilliseconds?: number;
     noGetErrOnBackgroundUpdate?: boolean;
+    includeDiagnosticsDuration?: boolean;
 
     globalPlugins?: readonly string[];
     pluginProbeLocations?: readonly string[];
@@ -993,12 +993,12 @@ export class Session<TMessage = string> implements EventSender {
     private suppressDiagnosticEvents?: boolean;
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
+    private includeDiagnosticsDuration: boolean;
 
     // Maps a file name to duration in milliseconds of semantic checking
     private semanticCheckPerformance: Map<string, number>;
 
-    // >> TODO: for testing; remove later.
-    private checkTime: [number, number] | undefined;
+    private diagnosticsTime: [number, number] | undefined;
 
     constructor(opts: SessionOptions) {
         this.host = opts.host;
@@ -1010,6 +1010,7 @@ export class Session<TMessage = string> implements EventSender {
         this.canUseEvents = opts.canUseEvents;
         this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
         this.noGetErrOnBackgroundUpdate = opts.noGetErrOnBackgroundUpdate;
+        this.includeDiagnosticsDuration = opts.includeDiagnosticsDuration ?? true;
         this.semanticCheckPerformance = new Map();
 
         const { throttleWaitMilliseconds } = opts;
@@ -1265,7 +1266,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
-        this.checkTime = this.hrtime();
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
@@ -1275,21 +1276,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
-        this.checkTime = this.hrtime();
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
-        this.checkTime = this.hrtime();
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         tracing?.pop();
     }
 
     private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): boolean {
-        this.checkTime = this.hrtime();
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         let diagnosticsResult;
         if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
@@ -1304,24 +1305,27 @@ export class Session<TMessage = string> implements EventSender {
     // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
     protected shouldDoRegionCheck(file: NormalizedPath): boolean {
         const perf = this.semanticCheckPerformance.get(file);
-        // >> TODO: force this to be true when testing
         return !!perf && perf > 1000;
     }
 
     private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-            const perf = hrTimeToMilliseconds(this.hrtime(this.checkTime));
+            const duration = hrTimeToMilliseconds(this.hrtime(this.diagnosticsTime));
             if (kind === "semanticDiag") {
-                this.semanticCheckPerformance?.set(file, perf);
+                this.semanticCheckPerformance?.set(file, duration);
+            }
+
+            const body: protocol.DiagnosticEventBody = {
+                file,
+                diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
+                spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+            };
+            if (this.includeDiagnosticsDuration) {
+                body.duration = duration;
             }
             this.event<protocol.DiagnosticEventBody>(
-                {
-                    file,
-                    diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
-                    spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
-                    // perf: perf.toFixed(4),
-                },
+                body,
                 kind,
             );
         }
