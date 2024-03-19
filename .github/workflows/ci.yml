@@ -33,15 +33,16 @@ jobs:
           - { name: node, version: 18 }
           - { name: node, version: 16 }
           - { name: node, version: 14 }
+          - { name: bun, version: 'latest' }
         bundle:
           - true
         include:
           - { os: linux, runtime: { name: node, version: 20 }, bundle: false }
-          - { os: linux, runtime: { name: bun, version: 'latest' }, bundle: true }
-          - { os: macos-14, runtime: { name: bun, version: 'latest' }, bundle: true }
         exclude:
           # No Node 14 on ARM macOS
           - { os: macos-14, runtime: { name: node, version: 14 }, bundle: true }
+          # No bun on Windows
+          - { os: windows-latest, runtime: { name: bun, version: 'latest' }, bundle: true }
 
     runs-on: ${{ matrix.os }}
     name: Test ${{ matrix.runtime.name }} ${{ matrix.runtime.version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
