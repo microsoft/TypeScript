@@ -477,27 +477,32 @@ export function transformDeclarations(context: TransformationContext) {
         const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
         return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
 
+        function copyFileReferenceAsSynthetic(ref: FileReference): FileReference {
+            const newRef: FileReference = { ...ref };
+            newRef.pos = -1;
+            newRef.end = -1;
+            return newRef;
+        }
+
         function getTypeReferences(): readonly FileReference[] {
-            return mapDefined(rawTypeReferenceDirectives, lib => {
-                if (!lib.preserve) return undefined;
-                // TODO(jakebailey): Do we want to keep `preserve` on the output?
-                return { fileName: lib.fileName, pos: -1, end: -1, resolutionMode: lib.resolutionMode, preserve: true };
+            return mapDefined(rawTypeReferenceDirectives, ref => {
+                if (!ref.preserve) return undefined;
+                return copyFileReferenceAsSynthetic(ref);
             });
         }
 
         function getLibReferences(): readonly FileReference[] {
-            return mapDefined(rawLibReferenceDirectives, lib => {
-                if (!lib.preserve) return undefined;
-                // TODO(jakebailey): Do we want to keep `preserve`?
-                return { fileName: lib.fileName, pos: -1, end: -1, preserve: true };
+            return mapDefined(rawLibReferenceDirectives, ref => {
+                if (!ref.preserve) return undefined;
+                return copyFileReferenceAsSynthetic(ref);
             });
         }
 
         function getReferencedFiles(outputFilePath: string): readonly FileReference[] {
-            return mapDefined(rawReferencedFiles, ([sourceFile, lib]) => {
-                if (!lib.preserve) return undefined;
+            return mapDefined(rawReferencedFiles, ([sourceFile, ref]) => {
+                if (!ref.preserve) return undefined;
 
-                const file = host.getSourceFileFromReference(sourceFile, lib);
+                const file = host.getSourceFileFromReference(sourceFile, ref);
                 if (!file) {
                     return undefined;
                 }
@@ -522,8 +527,9 @@ export function transformDeclarations(context: TransformationContext) {
                     /*isAbsolutePathAnUrl*/ false,
                 );
 
-                // TODO(jakebailey): Do we want to keep `preserve` on the output?
-                return { fileName, pos: -1, end: -1, preserve: true };
+                const newRef = copyFileReferenceAsSynthetic(ref);
+                newRef.fileName = fileName;
+                return newRef;
             });
         }
     }
