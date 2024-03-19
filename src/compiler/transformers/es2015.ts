@@ -156,7 +156,6 @@ import {
     NodeCheckFlags,
     NodeFlags,
     nodeIsSynthesized,
-    nullTransformationContext,
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -1642,12 +1641,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PropertyDeclaration: {
                 const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
                 if (isComputedPropertyName(named.name)) {
-                    return factory.replacePropertyName(named, visitEachChild(named.name, elideUnusedThisCaptureWorker, nullTransformationContext));
+                    return factory.replacePropertyName(named, visitEachChild(named.name, elideUnusedThisCaptureWorker, /*context*/ undefined));
                 }
                 return node;
             }
         }
-        return visitEachChild(node, elideUnusedThisCaptureWorker, nullTransformationContext);
+        return visitEachChild(node, elideUnusedThisCaptureWorker, /*context*/ undefined);
     }
 
     /**
@@ -1728,12 +1727,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PropertyDeclaration: {
                 const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
                 if (isComputedPropertyName(named.name)) {
-                    return factory.replacePropertyName(named, visitEachChild(named.name, injectSuperPresenceCheckWorker, nullTransformationContext));
+                    return factory.replacePropertyName(named, visitEachChild(named.name, injectSuperPresenceCheckWorker, /*context*/ undefined));
                 }
                 return node;
             }
         }
-        return visitEachChild(node, injectSuperPresenceCheckWorker, nullTransformationContext);
+        return visitEachChild(node, injectSuperPresenceCheckWorker, /*context*/ undefined);
     }
 
     /**

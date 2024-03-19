@@ -144,6 +144,9 @@ export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), (
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -217,8 +220,9 @@ const libEntries: [string, string][] = [
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["es2023.array", "lib.es2023.array.d.ts"],
     ["es2023.collection", "lib.es2023.collection.d.ts"],
+    ["es2023.intl", "lib.es2023.intl.d.ts"],
     ["esnext.array", "lib.es2023.array.d.ts"],
-    ["esnext.collection", "lib.es2023.collection.d.ts"],
+    ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
@@ -228,6 +232,9 @@ const libEntries: [string, string][] = [
     ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
+    ["esnext.object", "lib.esnext.object.d.ts"],
+    ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.regexp", "lib.esnext.regexp.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -558,6 +565,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         esnext: ModuleKind.ESNext,
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
+        preserve: ModuleKind.Preserve,
     })),
     affectsSourceFile: true,
     affectsModuleResolution: true,
@@ -787,7 +795,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
-        category: Diagnostics.Emit,
+        category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types,
         defaultValueDescription: ImportsNotUsedAsValues.Remove,
     },
@@ -811,6 +819,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "verbatimModuleSyntax",
         type: "boolean",
+        affectsEmit: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
@@ -1517,7 +1528,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
-        category: Diagnostics.Emit,
+        category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
         defaultValueDescription: false,
     },
@@ -3503,6 +3514,7 @@ export function convertJsonOption(
                 convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
         const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);

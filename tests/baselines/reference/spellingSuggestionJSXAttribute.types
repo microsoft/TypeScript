@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,100 / 2,200 (nearest 100)
+Type Count: 6,900 / 6,900 (nearest 100)
+Instantiation count: 73,500 / 73,500 (nearest 500)
+Symbol count: 67,000 / 67,000 (nearest 500)
+
 === spellingSuggestionJSXAttribute.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";

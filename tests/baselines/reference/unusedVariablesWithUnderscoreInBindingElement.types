@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts] ////
 
+=== Performance Stats ===
+Type Count: 200 / 1,000 (nearest 100)
+Symbol count: 26,000 / 27,000 (nearest 500)
+
 === unusedVariablesWithUnderscoreInBindingElement.ts ===
 function t1() {
 >t1 : () => void

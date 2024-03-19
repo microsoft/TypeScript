@@ -5,7 +5,7 @@ declare const foo: ["a", string, number] | ["b", string, boolean];
 >foo : ["a", string, number] | ["b", string, boolean]
 
 export function test(arg: { index?: number }) {
->test : (arg: { index?: number | undefined; }) => void
+>test : (arg: {    index?: number;}) => void
 >arg : { index?: number | undefined; }
 >index : number | undefined
 

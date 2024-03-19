@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatCommonjs.ts] ////
 
 === ref/a.ts ===
-// This should be an error
-
 export class A { }
 >A : Symbol(A, Decl(a.ts, 0, 0))
 

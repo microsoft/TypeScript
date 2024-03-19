@@ -24,8 +24,6 @@ y = x;
 >x : MyClass
 
 === /src/library-a/index.ts ===
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
-
 export class MyClass { private x: number; }
 >MyClass : MyClass
 >x : number
