@@ -13,3 +13,5 @@ class Board {
         return this.ships.every(function (val) { return val.isSunk; });
     }    
 }
+
+console.log("revert me");
