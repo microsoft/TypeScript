@@ -141,14 +141,14 @@ import e2 = require("./e.mjs"); // 0
 >e2 : 0
 
 import f1 from "./f.cjs"; // 0
->f1 : typeof f1
+>f1 : 0
 
 import f2 = require("./f.cjs"); // { default: 0 }
->f2 : typeof f1
+>f2 : typeof f2
 
 f2.default;
 >f2.default : 0
->f2 : typeof f1
+>f2 : typeof f2
 >default : 0
 
 import g1 from "./g"; // { default: 0 }
@@ -218,10 +218,10 @@ import e2 = require("./e.mjs"); // 0
 >e2 : 0
 
 import f1 from "./f.cjs"; // 0
->f1 : typeof f1
+>f1 : 0
 
 import f2 = require("./f.cjs"); // { default: 0 }
->f2 : typeof f1
+>f2 : typeof f2
 
 import g1 from "./g"; // { default: 0 }
 >g1 : typeof g1

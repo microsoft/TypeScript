@@ -4093,11 +4093,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const usageMode = file && getEmitSyntaxForModuleSpecifierExpression(usage);
         if (file && usageMode !== undefined) {
             const targetMode = impliedNodeFormatForEmit(file, compilerOptions);
-            const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, targetMode);
-            if (usageMode === ModuleKind.ESNext && targetMode !== undefined || result) {
-                return result;
+            if (usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS && ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
+                // In Node.js, CommonJS modules always have a synthetic default when imported into ESM
+                return true;
             }
-            // fallthrough on cjs usages so we imply defaults for interop'd imports, too
+            if (usageMode === ModuleKind.ESNext && targetMode === ModuleKind.ESNext) {
+                // No matter what the `module` setting is, if we're confident that both files
+                // are ESM, there cannot be a synthetic default.
+                return false;
+            }
         }
         if (!allowSyntheticDefaultImports) {
             return false;
