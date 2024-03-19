@@ -58,7 +58,6 @@ import {
     getRelativePathFromFile,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
-    getTargetFileImportsAndAddExportInOldFile,
     getTokenAtPosition,
     getUniqueName,
     hasJSFileExtension,
@@ -151,6 +150,9 @@ import {
 import {
     registerRefactor,
 } from "../refactorProvider";
+import {
+    getTargetFileImportsAndAddExportInOldFile,
+} from "./helpers";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -490,13 +492,34 @@ export function makeImportOrRequire(
     host: LanguageServiceHost,
     useEs6Imports: boolean,
     quotePreference: QuotePreference,
+    unexportedSymbols?: Symbol[],
+    importAdder?: codefix.ImportAdder,
 ): AnyImportOrRequireStatement | undefined {
     const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
     const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
 
     if (useEs6Imports) {
         const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
-        return makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
+        const newImports = makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
+        // To check if we need to add imports to an existing import statement in the target file
+        let addToExistingImports = false;
+        for (const statement of sourceFile.statements) {
+            forEachImportInStatement(statement, i => {
+                if (moduleSpecifierFromImport(i).text === pathToTargetFileWithCorrectExtension) {
+                    addToExistingImports = true;
+                }
+            });
+        }
+        if (addToExistingImports && importAdder && !defaultImport && unexportedSymbols) {
+            for (const symbol of unexportedSymbols) {
+                if (newImports && importAdder) {
+                    importAdder.addImportFromSymbol(symbol, /*isValidTypeOnlyUseSite*/ false, pathToTargetFileWithCorrectExtension);
+                }
+            }
+        }
+        else {
+            return newImports;
+        }
     }
     else {
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.

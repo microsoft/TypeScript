@@ -131,6 +131,7 @@ import {
     SymbolExportInfo,
     SymbolFlags,
     SymbolId,
+    SymbolInfo,
     SyntaxKind,
     textChanges,
     toPath,
@@ -207,7 +208,7 @@ registerCodeFix({
 export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
-    addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
+    addImportFromSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, targetFilePath?: string) => void;
     addImportForUnresolvedIdentifier: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
     writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
 }
@@ -234,9 +235,9 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
     type NewImportsKey = `${0 | 1}|${string}`;
     /** Use `getNewImportEntry` for access */
     const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean; }>>();
-    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier: addImportsForUnknownSymbols };
+    return { addImportFromDiagnostic, addImportFromSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier };
 
-    function addImportsForUnknownSymbols(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) {
+    function addImportForUnresolvedIdentifier(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) {
         const info = getFixInfosWithoutDiagnostic(context, symbolToken, useAutoImportProvider);
         if (!info || !info.length) return;
         addImport(first(info));
@@ -248,16 +249,24 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
         addImport(first(info));
     }
 
-    function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) {
-        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
-        const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
-        const checker = program.getTypeChecker();
-        const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
-        const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
-        const useRequire = shouldUseRequire(sourceFile, program);
-        const fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
-        if (fix) {
-            addImport({ fix, symbolName, errorIdentifierText: undefined });
+    function addImportFromSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, targetFilePath?: string) {
+        if (!exportedSymbol.parent && targetFilePath) {
+            const fix = getImportFixForNonEportedSymbol(sourceFile, exportedSymbol, ImportKind.Named, program, !!isValidTypeOnlyUseSite, targetFilePath);
+            if (fix?.kind === ImportFixKind.AddToExisting) {
+                addImport({ fix, symbolName: exportedSymbol.name, errorIdentifierText: undefined });
+            }
+        }
+        else {
+            const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
+            const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
+            const checker = program.getTypeChecker();
+            const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
+            const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
+            const useRequire = shouldUseRequire(sourceFile, program);
+            const fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
+            if (fix) {
+                addImport({ fix, symbolName, errorIdentifierText: undefined });
+            }
         }
     }
 
@@ -595,6 +604,14 @@ function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly Sym
     return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
 }
 
+function getImportFixForNonEportedSymbol(sourceFile: SourceFile, symbol: Symbol, importKind: ImportKind, program: Program, isValidTypeOnlyUseSite: boolean, targetFilePath: string) {
+    const fix = getImportFixesForNonExportedSymbols(sourceFile, symbol, importKind, program, isValidTypeOnlyUseSite, targetFilePath);
+    if (fix.fixes[0] === undefined) return; // Not adding an import to an existing import
+    if (fix.fixes[0].kind === ImportFixKind.AddToExisting) {
+        return fix.fixes[0];
+    }
+}
+
 function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
     return { description, changes, commands };
 }
@@ -628,6 +645,30 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
             return { symbol: named, moduleSymbol, moduleFileName: undefined, exportKind: ExportKind.Named, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
     }
+}
+
+export function getImportFixesForNonExportedSymbols(
+    sourceFile: SourceFile,
+    symbol: Symbol,
+    importKind: ImportKind,
+    program: Program,
+    isValidTypeOnlyUseSite: boolean,
+    targetFilePath: string,
+    importMap = createExistingImportMap(program.getTypeChecker(), sourceFile, program.getCompilerOptions()),
+): { computedWithoutCacheCount: number; fixes: readonly ImportFixWithModuleSpecifier[]; } {
+    const checker = program.getTypeChecker();
+    const symbolInfo = [{
+        symbol,
+        targetFlags: SymbolFlags.Value,
+        importKind,
+        targetFilePath,
+    }];
+    const existingImports = flatMap(symbolInfo, importMap.getImportsForNonExportedSymbols);
+    const addToExisting = tryAddToExistingImport(existingImports, isValidTypeOnlyUseSite, checker, program.getCompilerOptions());
+    return {
+        computedWithoutCacheCount: 0,
+        fixes: [addToExisting!],
+    };
 }
 
 function getImportFixes(
@@ -829,6 +870,23 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
             if (!matchingDeclarations) return emptyArray;
             const importKind = getImportKind(importingFile, exportKind, compilerOptions);
             return matchingDeclarations.map(declaration => ({ declaration, importKind, symbol, targetFlags }));
+        },
+        getImportsForNonExportedSymbols: ({ symbol, importKind, targetFlags, targetFilePath }: SymbolInfo): readonly FixAddToExistingImportInfo[] => {
+            let fix: FixAddToExistingImportInfo[] = [];
+            const values = importMap?.values();
+            Debug.assertIsDefined(values);
+            for (const value of values) {
+                value.forEach(v => {
+                    if (v.kind === SyntaxKind.ImportDeclaration && cast(v.moduleSpecifier, isStringLiteral).text === targetFilePath) {
+                        fix = [{ declaration: v, importKind, targetFlags, symbol }];
+                        return fix;
+                    }
+                    else {
+                        return emptyArray;
+                    }
+                });
+            }
+            return fix;
         },
     };
 }
@@ -1473,7 +1531,7 @@ function promoteFromTypeOnly(
     }
 }
 
-function doAddExistingFix(
+export function doAddExistingFix(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
     clause: ImportClause | ObjectBindingPattern,

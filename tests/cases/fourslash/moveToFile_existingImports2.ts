@@ -9,8 +9,8 @@
 ////[|export const b = x;|]
 
 // @filename: /b.ts
-////import { x } from "./common";
-////export const a = x;
+////import { y } from "./common";
+////export const a = y;
 
 verify.moveToFile({
     newFileContents: {
@@ -19,8 +19,8 @@ verify.moveToFile({
 export const a = x;
 `,
         "/b.ts":
-`import { x } from "./common";
-export const a = x;
+`import { x, y } from "./common";
+export const a = y;
 export const b = x;
 `,
     },
