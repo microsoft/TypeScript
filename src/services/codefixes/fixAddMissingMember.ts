@@ -187,7 +187,7 @@ registerCodeFix({
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
                 const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
-                if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
+                if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text))) {
                     return;
                 }
                 if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
@@ -273,7 +273,8 @@ interface FunctionInfo {
 
 interface ObjectLiteralInfo {
     readonly kind: InfoKind.ObjectLiteral;
-    readonly token: Identifier;
+    readonly token: Node;
+    readonly identifier: string;
     readonly properties: Symbol[];
     readonly parentDeclaration: ObjectLiteralExpression;
     readonly indentation?: number;
@@ -315,7 +316,18 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
-        return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
+        return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
+    }
+
+    if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
+        const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        if (!length(properties)) return undefined;
+
+        // no identifier needed because the whole parentDeclaration has the error
+        const identifier = "";
+
+        return { kind: InfoKind.ObjectLiteral, token: parent, identifier, properties, parentDeclaration: parent };
     }
 
     if (!isMemberName(token)) return undefined;
@@ -325,7 +337,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
-        return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
+        return { kind: InfoKind.ObjectLiteral, token, identifier: token.text, properties, parentDeclaration: parent.initializer };
     }
 
     if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {

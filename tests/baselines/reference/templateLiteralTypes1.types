@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 900 / 900 (nearest 100)
+Type Count: 15,000 / 15,000 (nearest 100)
+Instantiation count: 3,500 / 3,500 (nearest 500)
+Symbol count: 27,000 / 27,500 (nearest 500)
+
 === templateLiteralTypes1.ts ===
 // Template types example from #12754
 

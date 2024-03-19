@@ -206,7 +206,6 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 });
 
                 assert.equal(ts.arrayFrom(state.referencedMap!.keys()).length, 0);
-                assert.equal(ts.arrayFrom(state.exportedModulesMap!.keys()).length, 0);
 
                 assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
                 assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as ts.Path), ts.emptyArray);
