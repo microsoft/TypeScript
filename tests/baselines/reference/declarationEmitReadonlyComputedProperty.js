@@ -23,7 +23,8 @@ export const spread = {
 //// [bug.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createInstance = exports.SYMBOL = void 0;
+exports.SYMBOL = void 0;
+exports.createInstance = createInstance;
 exports.SYMBOL = Symbol();
 function createInstance() {
     var _a;
@@ -31,7 +32,6 @@ function createInstance() {
         _a[exports.SYMBOL] = '',
         _a;
 }
-exports.createInstance = createInstance;
 //// [index.js]
 "use strict";
 var __assign = (this && this.__assign) || function () {

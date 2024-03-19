@@ -1,5 +1,10 @@
 //// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 1,900 / 2,600 (nearest 100)
+Symbol count: 29,500 / 29,500 (nearest 500)
+
 === resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
 module rionegrensis {
 >rionegrensis : typeof rionegrensis

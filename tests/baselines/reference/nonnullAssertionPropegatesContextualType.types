@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/nonnullAssertionPropegatesContextualType.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,200 / 1,200 (nearest 100)
+Symbol count: 25,500 / 25,500 (nearest 500)
+
 === nonnullAssertionPropegatesContextualType.ts ===
 let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error: Element
 >rect2 : SVGRectElement

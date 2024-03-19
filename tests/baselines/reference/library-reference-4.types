@@ -6,8 +6,6 @@
 /// <reference types="bar" />
 
 === /node_modules/foo/index.d.ts ===
-// Secondary references may be duplicated if they agree in content
-
 /// <reference types="alpha" />
 declare var foo: any;
 >foo : any

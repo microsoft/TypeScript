@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
 
 === ThingA.ts ===
-// https://github.com/Microsoft/TypeScript/issues/8612
 export class ThingA { } 
 >ThingA : Symbol(ThingA, Decl(ThingA.ts, 0, 0))
 

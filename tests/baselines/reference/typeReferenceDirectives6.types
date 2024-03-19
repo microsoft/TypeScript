@@ -14,8 +14,6 @@ let y = () => x
 
 
 === /ref.d.ts ===
-// $ comes from type declaration file - type reference directive should be added
-
 declare let $: { x: number }
 >$ : { x: number; }
 >x : number

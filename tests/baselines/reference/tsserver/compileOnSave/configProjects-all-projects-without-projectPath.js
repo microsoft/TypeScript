@@ -54,7 +54,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/file1.ts SVC-1-0 "export var t = 10;"
@@ -202,6 +202,21 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -247,6 +262,17 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+ScriptInfos::
+/a/b/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/file2.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -284,7 +310,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/c 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/c 1 undefined Config: /a/c/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/file1.ts SVC-1-0 "export var t = 10;"
@@ -440,6 +466,29 @@ FsWatchesRecursive::
   {}
 /a/c: *new*
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /a/b/tsconfig.json *default*
+        /a/c/tsconfig.json *new*
+/a/b/file2.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/c/file2.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json *default*
 
 Before request
 

@@ -6,7 +6,7 @@ declare function useState1<S>(initialState: (S extends (() => any) ? never : S) 
 >initialState : (S extends () => any ? never : S) | (() => S)
 
 declare function useState2<S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)): S; // Any args
->useState2 : <S>(initialState: (S extends (...args: any[]) => any ? never : S) | (() => S)) => S
+>useState2 : <S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)) => S
 >initialState : (S extends (...args: any[]) => any ? never : S) | (() => S)
 >args : any[]
 
@@ -31,7 +31,7 @@ declare function useState3<S, T extends S>(initialState: (T extends (() => any) 
 >initialState : (T extends () => any ? never : T) | (() => S)
 
 declare function useState4<S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)): S; // Any args
->useState4 : <S, T extends S>(initialState: (T extends (...args: any[]) => any ? never : T) | (() => S)) => S
+>useState4 : <S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)) => S
 >initialState : (T extends (...args: any[]) => any ? never : T) | (() => S)
 >args : any[]
 

@@ -10,6 +10,7 @@ function foo() {
     };
 }
 
+
 //// [out.js]
 function foo() {
     var a = 10;

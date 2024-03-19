@@ -40,7 +40,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/app.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/proj.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -96,6 +96,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -108,6 +113,21 @@ FsWatches::
   {}
 /a/largefile.js: *new*
   {}
+
+Projects::
+/a/proj.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/proj.csproj
+/a/largefile.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/proj.csproj
 
 Before request
 
@@ -138,7 +158,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/proj.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/proj.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj.csproj Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.js Text-1 "var x = 1"
@@ -159,6 +179,21 @@ FsWatches::
   {}
 /a/largefile.js:
   {}
+
+Projects::
+/a/proj.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js
+    version: Text-1
+    containingProjects: 1
+        /a/proj.csproj
+/a/largefile.js *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/proj.csproj *deleted*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -261,6 +296,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -281,6 +321,11 @@ FsWatches::
   {}
 /a/largefile.js:
   {}
+
+Projects::
+/a/proj.csproj (External) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
 
 Before request
 
@@ -315,13 +360,18 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/proj.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/proj.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj.csproj Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/proj.csproj projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -344,3 +394,18 @@ FsWatches::
   {}
 /a/largefile.js:
   {}
+
+Projects::
+/a/proj.csproj (External) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 3 *changed*
+
+ScriptInfos::
+/a/app.js
+    version: Text-1
+    containingProjects: 1
+        /a/proj.csproj
+/a/largefile.js *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /a/proj.csproj *new*

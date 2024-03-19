@@ -38,7 +38,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1.js 500 unde
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: project1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'project1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/file1.js Text-1 "let x =1;"
@@ -62,6 +62,21 @@ FsWatches::
   {}
 /a/b/file2.d.ts: *new*
   {}
+
+Projects::
+project1 (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/file1.js *new*
+    version: Text-1
+    containingProjects: 1
+        project1
+/a/b/file2.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        project1
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -213,6 +228,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'project1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -237,6 +257,11 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Projects::
+project1 (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 Before request
 

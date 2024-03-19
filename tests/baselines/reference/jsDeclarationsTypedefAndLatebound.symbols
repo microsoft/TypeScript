@@ -1,23 +1,21 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndLatebound.ts] ////
 
 === index.js ===
-// from #53967, based on webpack/webpack#16957
-
 const LazySet = require("./LazySet");
->LazySet : Symbol(LazySet, Decl(index.js, 2, 5))
+>LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
 >require : Symbol(require)
 >"./LazySet" : Symbol("LazySet", Decl(LazySet.js, 0, 0))
 
 /** @type {LazySet} */
 const stringSet = undefined;
->stringSet : Symbol(stringSet, Decl(index.js, 5, 5))
+>stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
 >undefined : Symbol(undefined)
 
 stringSet.addAll(stringSet);
 >stringSet.addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
->stringSet : Symbol(stringSet, Decl(index.js, 5, 5))
+>stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
 >addAll : Symbol(LazySet.addAll, Decl(LazySet.js, 4, 15))
->stringSet : Symbol(stringSet, Decl(index.js, 5, 5))
+>stringSet : Symbol(stringSet, Decl(index.js, 3, 5))
 
 
 === LazySet.js ===

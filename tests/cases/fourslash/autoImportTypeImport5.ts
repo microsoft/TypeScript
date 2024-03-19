@@ -35,8 +35,8 @@
 // addition of correctly sorted regular imports should not affect correctly sorted type imports
 goTo.marker("0");
 verify.importFixAtPosition([
-    `import { type X, type Y, type Z, type x } from "./exports1";\nconst foo: x;\nconst bar: y;`,
-    `import { type X, type Y, type Z, type y } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { type x, type X, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { type X, type y, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
@@ -47,8 +47,8 @@ verify.importFixAtPosition([
     /*errorCode*/ undefined,
     { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "last" });
 verify.importFixAtPosition([
-    `import { type X, type Y, type Z, type x } from "./exports1";\nconst foo: x;\nconst bar: y;`,
-    `import { type X, type Y, type Z, type y } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { type x, type X, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { type X, type y, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "inline" });
@@ -59,8 +59,8 @@ verify.importFixAtPosition([
     /*errorCode*/ undefined,
     { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "inline" });    
 verify.importFixAtPosition([
-    `import { type X, type Y, type Z, type x } from "./exports1";\nconst foo: x;\nconst bar: y;`,
-    `import { type X, type Y, type Z, type y } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { type x, type X, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { type X, type y, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "first" });
@@ -73,8 +73,8 @@ verify.importFixAtPosition([
 
 goTo.marker("1");
 verify.importFixAtPosition([
-    `import { A, B, type X, type Y, type Z, type x } from "./exports1";\nconst foo: x;\nconst bar: y;`,
-    `import { A, B, type X, type Y, type Z, type y } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { A, B, type x, type X, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
+    `import { A, B, type X, type y, type Y, type Z } from "./exports1";\nconst foo: x;\nconst bar: y;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });

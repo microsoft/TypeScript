@@ -267,8 +267,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -377,7 +379,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -448,16 +450,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
         "./node_modules/foo2/index.d.ts",
         "./node_modules/@types/bar2/index.d.ts"
       ]
-    },
-    "exportedModulesMap": {
-      "./index.mts": [
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
     }
   },
   "version": "FakeTSVersion",
-  "size": 1118
+  "size": 1089
 }
 
 
@@ -567,8 +563,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -800,8 +798,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -1035,8 +1035,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -1244,8 +1246,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -1530,7 +1534,7 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1614,11 +1618,10 @@ Shape signatures in builder refreshed for::
         "./node_modules/foo2/index.d.ts",
         "./node_modules/@types/bar2/index.d.ts"
       ]
-    },
-    "exportedModulesMap": {}
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1271
+  "size": 1247
 }
 
 
@@ -1782,7 +1785,7 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"fileIdsList":[[2,3,4,5]],"referencedMap":[[6,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"fileIdsList":[[2,3,4,5]],"referencedMap":[[6,1]]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1878,11 +1881,10 @@ Shape signatures in builder refreshed for::
         "./node_modules/foo2/index.d.ts",
         "./node_modules/@types/bar2/index.d.ts"
       ]
-    },
-    "exportedModulesMap": {}
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1383
+  "size": 1359
 }
 
 
@@ -2022,8 +2024,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2079,7 +2083,7 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2163,11 +2167,10 @@ Shape signatures in builder refreshed for::
         "./node_modules/@types/bar/index.d.ts",
         "./node_modules/foo2/index.d.ts"
       ]
-    },
-    "exportedModulesMap": {}
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1262
+  "size": 1238
 }
 
 
@@ -2338,8 +2341,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2393,7 +2398,7 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]]},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2465,11 +2470,10 @@ Shape signatures in builder refreshed for::
         "./node_modules/foo/index.d.ts",
         "./node_modules/@types/bar/index.d.ts"
       ]
-    },
-    "exportedModulesMap": {}
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1148
+  "size": 1124
 }
 
 
@@ -2627,8 +2631,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2860,8 +2866,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -3095,8 +3103,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -3304,8 +3314,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.

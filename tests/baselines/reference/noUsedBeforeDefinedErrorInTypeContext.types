@@ -10,7 +10,7 @@ interface IThing<T> {
 
 var foo = {
 >foo : any
->{    one: {} as IThing<typeof foo>,} : { one: IThing<any>; }
+>{    one: {} as IThing<typeof foo>,} : { one: IThing<typeof foo>; }
 
     one: {} as IThing<typeof foo>,
 >one : IThing<any>
@@ -20,8 +20,8 @@ var foo = {
 }
 
 let baz = {
->baz : { two: IThing<any>; }
->{    two: {} as IThing<typeof bar>,} : { two: IThing<any>; }
+>baz : { two: IThing<typeof bar>; }
+>{    two: {} as IThing<typeof bar>,} : { two: IThing<typeof bar>; }
 
     two: {} as IThing<typeof bar>,
 >two : IThing<any>
@@ -32,7 +32,7 @@ let baz = {
 
 let bar = {
 >bar : any
->{    three: {} as IThing<typeof bar>,} : { three: IThing<any>; }
+>{    three: {} as IThing<typeof bar>,} : { three: IThing<typeof bar>; }
 
     three: {} as IThing<typeof bar>,
 >three : IThing<any>
@@ -43,7 +43,7 @@ let bar = {
 
 const qwe = {
 >qwe : any
->{    four: {} as IThing<typeof qwe>,} : { four: IThing<any>; }
+>{    four: {} as IThing<typeof qwe>,} : { four: IThing<typeof qwe>; }
 
     four: {} as IThing<typeof qwe>,
 >four : IThing<any>

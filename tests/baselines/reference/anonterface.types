@@ -8,7 +8,7 @@ module M {
 >C : C
 
         m(fn:{ (n:number):string; },n2:number):string {
->m : (fn: (n: number) => string, n2: number) => string
+>m : (fn: {    (n: number): string;}, n2: number) => string
 >fn : (n: number) => string
 >n : number
 >n2 : number

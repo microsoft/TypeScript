@@ -1,5 +1,10 @@
 //// [tests/cases/compiler/hugeDeclarationOutputGetsTruncatedWithError.ts] ////
 
+=== Performance Stats ===
+Type Count: 101,100 / 101,100 (nearest 100)
+Instantiation count: 400,000 / 400,000 (nearest 500)
+Symbol count: 127,000 / 127,000 (nearest 500)
+
 === hugeDeclarationOutputGetsTruncatedWithError.ts ===
 type props = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
 >props : "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"

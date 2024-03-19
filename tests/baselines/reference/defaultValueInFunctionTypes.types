@@ -2,7 +2,7 @@
 
 === defaultValueInFunctionTypes.ts ===
 type Foo = ({ first = 0 }: { first?: number }) => unknown;
->Foo : ({ first }: { first?: number; }) => unknown
+>Foo : ({ first }: {    first?: number;}) => unknown
 >first : number
 >0 : 0
 >first : number

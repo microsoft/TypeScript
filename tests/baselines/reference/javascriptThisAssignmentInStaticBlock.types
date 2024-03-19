@@ -33,27 +33,27 @@ class ElementsArray extends Array {
 >isArray : (arg: any) => arg is any[]
 
         const customIsArray = (arg)=> superisArray(arg);
->customIsArray : (arg: any) => boolean
->(arg)=> superisArray(arg) : (arg: any) => boolean
+>customIsArray : (arg: any) => arg is any[]
+>(arg)=> superisArray(arg) : (arg: any) => arg is any[]
 >arg : any
 >superisArray(arg) : boolean
 >superisArray : (arg: any) => arg is any[]
 >arg : any
 
         this.isArray = customIsArray;
->this.isArray = customIsArray : (arg: any) => boolean
->this.isArray : (arg: any) => boolean
+>this.isArray = customIsArray : (arg: any) => arg is any[]
+>this.isArray : (arg: any) => arg is any[]
 >this : typeof ElementsArray
->isArray : (arg: any) => boolean
->customIsArray : (arg: any) => boolean
+>isArray : (arg: any) => arg is any[]
+>customIsArray : (arg: any) => arg is any[]
     }
 }
 
 ElementsArray.isArray(new ElementsArray());
 >ElementsArray.isArray(new ElementsArray()) : boolean
->ElementsArray.isArray : (arg: any) => boolean
+>ElementsArray.isArray : (arg: any) => arg is any[]
 >ElementsArray : typeof ElementsArray
->isArray : (arg: any) => boolean
+>isArray : (arg: any) => arg is any[]
 >new ElementsArray() : ElementsArray
 >ElementsArray : typeof ElementsArray
 

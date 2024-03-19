@@ -1,6 +1,6 @@
 // @allowJs: true
 // @filename: returns.js
-// @out: dummy.js
+// @outFile: dummy.js
 /**
  * @returns {string} This comment is not currently exposed
  */

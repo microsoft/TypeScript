@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 1,300 / 1,300 (nearest 100)
+Type Count: 5,900 / 5,900 (nearest 100)
+Instantiation count: 76,500 / 76,500 (nearest 500)
+Symbol count: 67,500 / 67,500 (nearest 500)
+
 === conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===
 /// <reference path="react16.d.ts" />
 

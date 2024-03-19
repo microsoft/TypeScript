@@ -52,7 +52,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProgram = void 0;
+exports.createProgram = createProgram;
 var ts = require("typescript");
 function printError(error) {
     if (!error) {
@@ -77,4 +77,3 @@ function createProgram(rootFiles, compilerOptionsJson) {
     }
     return ts.createProgram(rootFiles, settings.options);
 }
-exports.createProgram = createProgram;

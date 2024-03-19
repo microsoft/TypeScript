@@ -40,10 +40,9 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = void 0;
+    exports.foo = foo;
     exports.default = "hello";
     function foo() { }
-    exports.foo = foo;
 });
 //// [t3.js]
 define(["require", "exports"], function (require, exports) {

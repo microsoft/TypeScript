@@ -62,7 +62,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -86,6 +86,21 @@ FsWatches::
 FsWatchesRecursive::
 /a/b: *new*
   {}
+
+Projects::
+/a/b/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/file1.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/jsconfig.json *default*
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/jsconfig.json
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -299,6 +314,11 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/jsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 Before request
 

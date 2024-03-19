@@ -17,3 +17,23 @@ type Constrain<T extends C, C> = unknown;
 type Foo<A> = A extends Constrain<infer X, A> ? X : never;
 
 type T0 = Foo<string>;  // string
+
+// https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
+
+class BaseClass<V> {
+  protected fake(): V {
+    throw new Error("");
+  }
+}
+
+class Klass<V> extends BaseClass<V> {
+  child = true;
+}
+
+type Constructor<V, P extends BaseClass<V>> = new () => P;
+type inferTest<V, T> = T extends Constructor<V, infer P> ? P : never;
+
+type U = inferTest<number, Constructor<number, Klass<number>>>;
+
+declare let m: U;
+m.child; // ok

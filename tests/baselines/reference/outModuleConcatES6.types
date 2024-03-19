@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatES6.ts] ////
 
 === ref/a.ts ===
-// This should be an error
-
 export class A { }
 >A : A
 

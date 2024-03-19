@@ -1,0 +1,77 @@
+//// [tests/cases/conformance/es2020/intlNumberFormatES2020.ts] ////
+
+=== intlNumberFormatES2020.ts ===
+// New/updated resolved options in ES2020
+const { notation, style, signDisplay } = new Intl.NumberFormat('en-NZ').resolvedOptions();
+>notation : Symbol(notation, Decl(intlNumberFormatES2020.ts, 1, 7))
+>style : Symbol(style, Decl(intlNumberFormatES2020.ts, 1, 17))
+>signDisplay : Symbol(signDisplay, Decl(intlNumberFormatES2020.ts, 1, 24))
+>new Intl.NumberFormat('en-NZ').resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+
+// Empty options
+new Intl.NumberFormat('en-NZ', {});
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+// Override numbering system
+new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' });
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>numberingSystem : Symbol(numberingSystem, Decl(intlNumberFormatES2020.ts, 7, 32))
+
+// Currency
+const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+>currency : Symbol(currency, Decl(intlNumberFormatES2020.ts, 10, 7))
+>currencySign : Symbol(currencySign, Decl(intlNumberFormatES2020.ts, 10, 17))
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>style : Symbol(style, Decl(intlNumberFormatES2020.ts, 10, 67))
+>currency : Symbol(currency, Decl(intlNumberFormatES2020.ts, 10, 86))
+>currencySign : Symbol(currencySign, Decl(intlNumberFormatES2020.ts, 10, 103))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+
+// Units
+const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
+>unit : Symbol(unit, Decl(intlNumberFormatES2020.ts, 13, 7))
+>unitDisplay : Symbol(unitDisplay, Decl(intlNumberFormatES2020.ts, 13, 13))
+>new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>style : Symbol(style, Decl(intlNumberFormatES2020.ts, 13, 62))
+>unit : Symbol(unit, Decl(intlNumberFormatES2020.ts, 13, 77))
+>unitDisplay : Symbol(unitDisplay, Decl(intlNumberFormatES2020.ts, 13, 95))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+
+// Compact
+const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
+>compactDisplay : Symbol(compactDisplay, Decl(intlNumberFormatES2020.ts, 16, 7))
+>new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>notation : Symbol(notation, Decl(intlNumberFormatES2020.ts, 16, 59))
+>compactDisplay : Symbol(compactDisplay, Decl(intlNumberFormatES2020.ts, 16, 80))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+
+// Sign display
+new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>signDisplay : Symbol(signDisplay, Decl(intlNumberFormatES2020.ts, 19, 32))
+
+// New additions to NumberFormatPartTypes
+const types: Intl.NumberFormatPartTypes[] = [ 'compact', 'unit', 'unknown' ];
+>types : Symbol(types, Decl(intlNumberFormatES2020.ts, 22, 5))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormatPartTypes : Symbol(Intl.NumberFormatPartTypes, Decl(lib.es2018.intl.d.ts, --, --))
+

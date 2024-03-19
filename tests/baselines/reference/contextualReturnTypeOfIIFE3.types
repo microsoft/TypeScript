@@ -5,7 +5,7 @@ declare namespace app {
 >app : typeof app
 
   var foo: {
->foo : { bar: { someFun: (arg: number) => void; }; }
+>foo : { bar: {    someFun: (arg: number) => void;}; }
 
     bar: {
 >bar : { someFun: (arg: number) => void; }

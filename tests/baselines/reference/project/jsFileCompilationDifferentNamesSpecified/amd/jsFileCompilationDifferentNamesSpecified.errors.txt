@@ -1,21 +1,17 @@
 error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Part of 'files' list in tsconfig.json
-DifferentNamesSpecified/tsconfig.json(2,24): error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
 
 
 !!! error TS6504: File 'DifferentNamesSpecified/b.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 !!! error TS6504:   The file is in the program because:
 !!! error TS6504:     Part of 'files' list in tsconfig.json
 !!! related TS1410 DifferentNamesSpecified/tsconfig.json:3:22: File is matched by 'files' list specified here.
-==== DifferentNamesSpecified/tsconfig.json (1 errors) ====
+==== DifferentNamesSpecified/tsconfig.json (0 errors) ====
     {
-      "compilerOptions": { "out": "test.js" },
-                           ~~~~~
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
+      "compilerOptions": { "outFile": "test.js" },
       "files": [ "a.ts", "b.js" ]
     }
+    
 ==== DifferentNamesSpecified/a.ts (0 errors) ====
     var test = 10;

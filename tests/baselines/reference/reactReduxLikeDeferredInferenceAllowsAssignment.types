@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 300 / 300 (nearest 100)
+Type Count: 800 / 800 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
 declare class Component<P> {
 >Component : Component<P>

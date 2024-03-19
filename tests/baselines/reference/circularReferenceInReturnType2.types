@@ -79,8 +79,9 @@ type Something = { foo: number };
 >Something : { foo: number; }
 >foo : number
 
+// inference fails here, but ideally should not
 const A = object<Something>()({
->A : ObjectType<Something>
+>A : any
 >object<Something>()({  name: "A",  fields: () => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }),}) : ObjectType<Something>
 >object<Something>() : <Fields extends { [Key in keyof Fields]: Field<Something, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Something>
 >object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
@@ -100,11 +101,11 @@ const A = object<Something>()({
 >a : Field<Something, "a">
 >field({      type: A,      resolve() {        return {          foo: 100,        };      },    }) : Field<Something, "a">
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
->{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: ObjectType<Something>; resolve(): { foo: number; }; }
+>{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: any; resolve(): { foo: number; }; }
 
       type: A,
->type : ObjectType<Something>
->A : ObjectType<Something>
+>type : any
+>A : any
 
       resolve() {
 >resolve : () => { foo: number; }

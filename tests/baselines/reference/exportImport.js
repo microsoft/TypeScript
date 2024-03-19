@@ -35,11 +35,10 @@ define(["require", "exports", "./w1"], function (require, exports, w) {
 define(["require", "exports", "./exporter"], function (require, exports, e) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.w = void 0;
+    exports.w = w;
     function w() {
         return new e.w();
     }
-    exports.w = w;
 });
 
 

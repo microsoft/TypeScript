@@ -4,7 +4,7 @@
 // Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
 
 function foo<T, U>(arg: { cb: new(t: T) => U }) {
->foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
+>foo : <T, U>(arg: {    cb: new (t: T) => U;}) => U
 >arg : { cb: new (t: T) => U; }
 >cb : new (t: T) => U
 >t : T
@@ -53,7 +53,7 @@ var r3 = foo(arg3); // error
 >arg3 : { cb: new (x: string, y: number) => string; }
 
 function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
->foo2 : <T, U>(arg: { cb: new (t: T, t2: T) => U; }) => U
+>foo2 : <T, U>(arg: {    cb: new (t: T, t2: T) => U;}) => U
 >arg : { cb: new (t: T, t2: T) => U; }
 >cb : new (t: T, t2: T) => U
 >t : T

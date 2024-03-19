@@ -592,13 +592,13 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
-        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3), [transformSourceFile]);
+        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);
         host.getSourceFile = () => transformedSourceFile;
         const program = ts.createProgram(["source.ts"], {
-            target: ts.ScriptTarget.ES3,
+            target: ts.ScriptTarget.ES5,
             module: ts.ModuleKind.None,
             noLib: true,
         }, host);

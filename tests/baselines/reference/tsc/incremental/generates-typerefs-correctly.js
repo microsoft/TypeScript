@@ -124,7 +124,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../src/box.ts","../src/wrap.ts","../src/bug.js"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14267342128-export interface Box<T> {\n    unbox(): T\n}\n","signature":"-15554117365-export interface Box<T> {\n    unbox(): T;\n}\n"},{"version":"-7208318765-export type Wrap<C> = {\n    [K in keyof C]: { wrapped: C[K] }\n}\n","signature":"-7604652776-export type Wrap<C> = {\n    [K in keyof C]: {\n        wrapped: C[K];\n    };\n};\n"},{"version":"-27771690375-import * as B from \"./box.js\"\nimport * as W from \"./wrap.js\"\n\n/**\n * @template {object} C\n * @param {C} source\n * @returns {W.Wrap<C>}\n */\nconst wrap = source => {\nthrow source\n}\n\n/**\n * @returns {B.Box<number>}\n */\nconst box = (n = 0) => ({ unbox: () => n })\n\nexport const bug = wrap({ n: box(1) });\n","signature":"-2569667161-export const bug: W.Wrap<{\n    n: B.Box<number>;\n}>;\nimport * as B from \"./box.js\";\nimport * as W from \"./wrap.js\";\n"}],"root":[[2,4]],"options":{"checkJs":true,"composite":true,"outDir":"./"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./src/bug.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../src/box.ts","../src/wrap.ts","../src/bug.js"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14267342128-export interface Box<T> {\n    unbox(): T\n}\n","signature":"-15554117365-export interface Box<T> {\n    unbox(): T;\n}\n"},{"version":"-7208318765-export type Wrap<C> = {\n    [K in keyof C]: { wrapped: C[K] }\n}\n","signature":"-7604652776-export type Wrap<C> = {\n    [K in keyof C]: {\n        wrapped: C[K];\n    };\n};\n"},{"version":"-27771690375-import * as B from \"./box.js\"\nimport * as W from \"./wrap.js\"\n\n/**\n * @template {object} C\n * @param {C} source\n * @returns {W.Wrap<C>}\n */\nconst wrap = source => {\nthrow source\n}\n\n/**\n * @returns {B.Box<number>}\n */\nconst box = (n = 0) => ({ unbox: () => n })\n\nexport const bug = wrap({ n: box(1) });\n","signature":"-2569667161-export const bug: W.Wrap<{\n    n: B.Box<number>;\n}>;\nimport * as B from \"./box.js\";\nimport * as W from \"./wrap.js\";\n"}],"root":[[2,4]],"options":{"checkJs":true,"composite":true,"outDir":"./"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./src/bug.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -200,7 +200,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
         "../src/wrap.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../src/box.ts",
@@ -210,7 +209,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
     "latestChangedDtsFile": "./src/bug.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1698
+  "size": 1674
 }
 
 
@@ -280,7 +279,7 @@ exports.something = 1;
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../src/box.ts","../src/wrap.ts","../src/bug.js"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14267342128-export interface Box<T> {\n    unbox(): T\n}\n","signature":"-15554117365-export interface Box<T> {\n    unbox(): T;\n}\n"},{"version":"-7208318765-export type Wrap<C> = {\n    [K in keyof C]: { wrapped: C[K] }\n}\n","signature":"-7604652776-export type Wrap<C> = {\n    [K in keyof C]: {\n        wrapped: C[K];\n    };\n};\n"},{"version":"-25729561895-import * as B from \"./box.js\"\nimport * as W from \"./wrap.js\"\n\n/**\n * @template {object} C\n * @param {C} source\n * @returns {W.Wrap<C>}\n */\nconst wrap = source => {\nthrow source\n}\n\n/**\n * @returns {B.Box<number>}\n */\nconst box = (n = 0) => ({ unbox: () => n })\n\nexport const bug = wrap({ n: box(1) });\nexport const something = 1;","signature":"-7681488146-export const bug: W.Wrap<{\n    n: B.Box<number>;\n}>;\nexport const something: 1;\nimport * as B from \"./box.js\";\nimport * as W from \"./wrap.js\";\n"}],"root":[[2,4]],"options":{"checkJs":true,"composite":true,"outDir":"./"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./src/bug.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../src/box.ts","../src/wrap.ts","../src/bug.js"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14267342128-export interface Box<T> {\n    unbox(): T\n}\n","signature":"-15554117365-export interface Box<T> {\n    unbox(): T;\n}\n"},{"version":"-7208318765-export type Wrap<C> = {\n    [K in keyof C]: { wrapped: C[K] }\n}\n","signature":"-7604652776-export type Wrap<C> = {\n    [K in keyof C]: {\n        wrapped: C[K];\n    };\n};\n"},{"version":"-25729561895-import * as B from \"./box.js\"\nimport * as W from \"./wrap.js\"\n\n/**\n * @template {object} C\n * @param {C} source\n * @returns {W.Wrap<C>}\n */\nconst wrap = source => {\nthrow source\n}\n\n/**\n * @returns {B.Box<number>}\n */\nconst box = (n = 0) => ({ unbox: () => n })\n\nexport const bug = wrap({ n: box(1) });\nexport const something = 1;","signature":"-7681488146-export const bug: W.Wrap<{\n    n: B.Box<number>;\n}>;\nexport const something: 1;\nimport * as B from \"./box.js\";\nimport * as W from \"./wrap.js\";\n"}],"root":[[2,4]],"options":{"checkJs":true,"composite":true,"outDir":"./"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./src/bug.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -356,7 +355,6 @@ exports.something = 1;
         "../src/wrap.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../src/box.ts",
@@ -366,6 +364,6 @@ exports.something = 1;
     "latestChangedDtsFile": "./src/bug.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1753
+  "size": 1729
 }
 

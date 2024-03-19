@@ -16,6 +16,8 @@
 //// new SomePig/**/
 
 goTo.marker("");
+
+// since we cannot detect a type order from the original file, type order defaults to last
 verify.importFixAtPosition([
 `import {
     SomePig,

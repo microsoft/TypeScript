@@ -24,7 +24,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ES2015"
+          "target": "es2015"
         }
       },
       "seq": 1,

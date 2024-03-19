@@ -50,6 +50,12 @@
             "rules": {
                 "local/prefer-direct-import": "off"
             }
+        },
+        {
+            "files": ["tsserver/**", "typingsInstaller/**"],
+            "rules": {
+                "local/prefer-direct-import": "off"
+            }
         }
     ]
 }

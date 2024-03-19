@@ -11,9 +11,8 @@ export const instance = getSomething();
 //// [root.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSomething = void 0;
-function getSomething() { return null; }
 exports.getSomething = getSomething;
+function getSomething() { return null; }
 var Something = /** @class */ (function () {
     function Something() {
     }

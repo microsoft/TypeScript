@@ -104,9 +104,8 @@ Output::
 //// [/users/username/projects/project/moduleFile.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 
 
 

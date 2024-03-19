@@ -24,10 +24,10 @@ declare const itNum: Iterable<number>
 
 ;(function(a, ...rest) {})('', true, ...itNum)
 >(function(a, ...rest) {})('', true, ...itNum) : void
->(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest_1: any[]) => void
->function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest_1: any[]) => void
+>(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest_1: Iterable<number>[]) => void
+>function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest_1: Iterable<number>[]) => void
 >a : string
->rest : [boolean, ...any[]]
+>rest : [boolean, ...Iterable<number>[]]
 >'' : ""
 >true : true
 >...itNum : Iterable<number>
@@ -60,8 +60,8 @@ const res3 = fn1(true, ..."hello");
 >"hello" : "hello"
 
 const res4 = fn1(true, ...itNum);
->res4 : readonly [true, ...any[]]
->fn1(true, ...itNum) : readonly [true, ...any[]]
+>res4 : readonly [true, ...Iterable<number>[]]
+>fn1(true, ...itNum) : readonly [true, ...Iterable<number>[]]
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
 >true : true
 >...itNum : Iterable<number>
@@ -95,8 +95,8 @@ const p3 = foo(true, ..."hello");
 >"hello" : "hello"
 
 const p4 = foo(true, ...itNum);
->p4 : [boolean, ...any[]]
->foo(true, ...itNum) : [boolean, ...any[]]
+>p4 : [boolean, ...Iterable<number>[]]
+>foo(true, ...itNum) : [boolean, ...Iterable<number>[]]
 >foo : <T extends unknown[]>(...args: T) => T
 >true : true
 >...itNum : Iterable<number>

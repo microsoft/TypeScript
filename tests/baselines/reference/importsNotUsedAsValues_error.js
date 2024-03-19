@@ -83,14 +83,12 @@ exports.A = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./a"); // Error
 var a;
 var b;
 console.log(a, b);
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./a"); // Error
 var a;
 var b;
 console.log(a, b);
@@ -104,11 +102,9 @@ console.log(a, b);
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./a"); // noUnusedLocals error only
 //// [f.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./a");
 0 /* C.One */;
 var c = 1 /* C.Two */;
 var d = 1 /* C.Two */;
@@ -116,7 +112,6 @@ console.log(c, d);
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./a");
 var c;
 var d;
 console.log(c, d);

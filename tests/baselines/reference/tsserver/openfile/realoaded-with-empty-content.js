@@ -23,7 +23,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalProject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: externalProject WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalProject Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalProject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'externalProject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts Text-1 "let x = 1"
@@ -70,6 +70,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'externalProject' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -85,6 +90,17 @@ FsWatches::
 /a/b/app.ts: *new*
   {}
 
+Projects::
+externalProject (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        externalProject
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -99,7 +115,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalProject
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalProject Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalProject projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'externalProject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts SVC-2-0 ""
@@ -125,3 +141,15 @@ PolledWatches::
 FsWatches *deleted*::
 /a/b/app.ts:
   {}
+
+Projects::
+externalProject (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-2-0 *changed*
+    containingProjects: 1
+        externalProject *default*

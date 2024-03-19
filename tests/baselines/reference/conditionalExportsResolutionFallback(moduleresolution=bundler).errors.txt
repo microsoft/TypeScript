@@ -3,8 +3,6 @@ error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserv
 
 !!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 ==== /node_modules/dep/package.json (0 errors) ====
-    // This documents bug https://github.com/microsoft/TypeScript/issues/50762.
-    
     {
       "name": "dep",
       "version": "1.0.0",

@@ -1,0 +1,23 @@
+esDecorators-decoratorExpression.3.ts(5,5): error TS1146: Declaration expected.
+esDecorators-decoratorExpression.3.ts(5,5): error TS2352: Conversion of type 'typeof C' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+esDecorators-decoratorExpression.3.ts(7,7): error TS1146: Declaration expected.
+esDecorators-decoratorExpression.3.ts(7,7): error TS2352: Conversion of type 'typeof C' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== esDecorators-decoratorExpression.3.ts (4 errors) ====
+    declare let g: <T>(...args: any) => any;
+    
+    // existing errors
+    
+    { @g<number> class C {} }
+        
+!!! error TS1146: Declaration expected.
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'typeof C' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    
+    { @g()<number> class C {} }
+          
+!!! error TS1146: Declaration expected.
+          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'typeof C' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    

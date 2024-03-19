@@ -7,6 +7,7 @@ class c {
     }
 }
 
+
 //// [out.js]
 var c = /** @class */ (function () {
     function c() {

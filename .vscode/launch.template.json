@@ -38,7 +38,7 @@
                 "0"
             ],
             "env": {
-                "NODE_ENV": "testing"
+                "NODE_ENV": "development"
             },
             "outFiles": [
                 "${workspaceFolder}/built/**/*.js",

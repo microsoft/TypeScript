@@ -64,7 +64,8 @@ export var eVar3 = 10, eVar4, eVar5;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.eVar5 = exports.eVar4 = exports.eVar3 = exports.eVar2 = exports.eVar1 = exports.m3 = exports.exportedFunction = exports.exportedArrayVar = exports.exportedWithComplicatedValue = exports.exportedVarWithInitialValue = exports.exportedSimpleVar = void 0;
+    exports.eVar5 = exports.eVar4 = exports.eVar3 = exports.eVar2 = exports.eVar1 = exports.m3 = exports.exportedArrayVar = exports.exportedWithComplicatedValue = exports.exportedVarWithInitialValue = exports.exportedSimpleVar = void 0;
+    exports.exportedFunction = exportedFunction;
     var simpleVar;
     var anotherVar;
     var varWithSimpleType;
@@ -85,7 +86,6 @@ define(["require", "exports"], function (require, exports) {
     function exportedFunction() {
         return simpleFunction();
     }
-    exports.exportedFunction = exportedFunction;
     var m1;
     (function (m1) {
         function foo() {

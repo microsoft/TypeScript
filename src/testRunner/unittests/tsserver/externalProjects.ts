@@ -7,15 +7,12 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    logConfiguredProjectsHasOpenRefStatus,
-    logInferredProjectsOrphanStatus,
     openExternalProjectForSession,
     openExternalProjectsForSession,
     openFilesForSession,
     TestSession,
     toExternalFile,
     toExternalFiles,
-    verifyDynamic,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -177,8 +174,6 @@ describe("unittests:: tsserver:: externalProjects", () => {
             projectFileName,
         }, session);
 
-        verifyDynamic(session, "/^scriptdocument1 file1.ts");
-
         externalFiles[0].content = "let x =1;";
         session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
             command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
@@ -253,23 +248,16 @@ describe("unittests:: tsserver:: externalProjects", () => {
 
         // open client file - should not lead to creation of inferred project
         openFilesForSession([file1], session);
-        logInferredProjectsOrphanStatus(session);
-
         openFilesForSession([file3], session);
-        logInferredProjectsOrphanStatus(session);
 
         session.executeCommandSeq<ts.server.protocol.CloseExternalProjectRequest>({
             command: ts.server.protocol.CommandTypes.CloseExternalProject,
             arguments: { projectFileName },
         });
-        logInferredProjectsOrphanStatus(session);
         // open file 'file1' from configured project keeps project alive
 
         closeFilesForSession([file3], session);
-        logInferredProjectsOrphanStatus(session);
-
         closeFilesForSession([file1], session);
-        logInferredProjectsOrphanStatus(session);
 
         openFilesForSession([file2], session);
         baselineTsserverLogs("externalProjects", "external project that included config files", session);
@@ -715,12 +703,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
         const host = createServerHost([f, config]);
         const session = new TestSession(host);
         openFilesForSession([f], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
         closeFilesForSession([f], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
 
         openFilesForSession([f], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
         baselineTsserverLogs("externalProjects", "should handle non-existing directories in config file", session);
     });
 
@@ -815,7 +800,6 @@ describe("unittests:: tsserver:: externalProjects", () => {
             rootFiles: [{ fileName: jsConfig.path }, { fileName: tsconfig.path }, { fileName: jsFilePath }],
             options: { allowJs: false },
         }], session);
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("externalProjects", "handles creation of external project with jsconfig before jsconfig creation watcher is invoked", session);
     });
 

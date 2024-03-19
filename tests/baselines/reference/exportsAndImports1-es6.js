@@ -40,7 +40,6 @@ exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 var v = 1;
 exports.v = v;
 function f() { }
-exports.f = f;
 class C {
 }
 exports.C = C;

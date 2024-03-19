@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/correlatedUnions.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 500 / 500 (nearest 100)
+Type Count: 1,000 / 1,000 (nearest 100)
+Instantiation count: 1,000 / 1,000 (nearest 500)
+Symbol count: 26,500 / 26,500 (nearest 500)
+
 === correlatedUnions.ts ===
 // Various repros from #30581
 

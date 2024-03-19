@@ -139,7 +139,8 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SpecializedWidget = exports.createWidget1 = exports.Widget1 = void 0;
+exports.SpecializedWidget = exports.Widget1 = void 0;
+exports.createWidget1 = createWidget1;
 var Widget1 = /** @class */ (function () {
     function Widget1() {
         this.name = 'one';
@@ -150,7 +151,6 @@ exports.Widget1 = Widget1;
 function createWidget1() {
     return new Widget1();
 }
-exports.createWidget1 = createWidget1;
 var SpecializedWidget;
 (function (SpecializedWidget) {
     var Widget2 = /** @class */ (function () {
@@ -168,26 +168,25 @@ var SpecializedWidget;
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createExportedWidget4 = exports.createExportedWidget3 = exports.createExportedWidget2 = exports.createExportedWidget1 = void 0;
+exports.createExportedWidget1 = createExportedWidget1;
+exports.createExportedWidget2 = createExportedWidget2;
+exports.createExportedWidget3 = createExportedWidget3;
+exports.createExportedWidget4 = createExportedWidget4;
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
 }
-exports.createExportedWidget1 = createExportedWidget1;
 function createExportedWidget2() {
     return Widgets.SpecializedWidget.createWidget2();
 }
-exports.createExportedWidget2 = createExportedWidget2;
 function createExportedWidget3() {
     return Widgets1.createWidget3();
 }
-exports.createExportedWidget3 = createExportedWidget3;
 function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 }
-exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameAccessorDeclFile_consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

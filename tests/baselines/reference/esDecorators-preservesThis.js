@@ -26,7 +26,7 @@ class C {
 class D extends DecoratorProvider {
     m() {
         class C {
-            @super.decorate
+            @(super.decorate)
             method1() { }
 
             @(super["decorate"])
@@ -114,7 +114,7 @@ class D extends DecoratorProvider {
             return class C {
                 static {
                     const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                    _method1_decorators = [super.decorate.bind(_outerThis)];
+                    _method1_decorators = [(super.decorate.bind(_outerThis))];
                     _method2_decorators = [(super["decorate"].bind(_outerThis))];
                     _method3_decorators = [((super.decorate.bind(_outerThis)))];
                     __esDecorate(this, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 }, metadata: _metadata }, null, _instanceExtraInitializers);

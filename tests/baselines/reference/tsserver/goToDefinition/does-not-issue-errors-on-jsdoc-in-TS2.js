@@ -79,7 +79,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/babel-l
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/babel-loader/src 1 undefined Config: /packages/babel-loader/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/packages/babel-loader/src/index.ts SVC-1-0 "\ndeclare class Stuff {\n  /**\n   * Register a function to be run on mod initialization...\n   *\n   * {@link https://lua-api.factorio.com/latest/LuaBootstrap.html#LuaBootstrap.on_init View documentation}\n   * @param f The handler for this event. Passing nil will unregister it.\n   * @remarks For more context, refer to the {@link https://lua-api.factorio.com/latest/Data-Lifecycle.html Data Lifecycle} page.\n   * @example Initialize a players table in global for later use.\n   *\n   */\n  on_init(f: (() => void) | undefined): void\n}\n"
@@ -238,6 +238,17 @@ FsWatches::
 FsWatchesRecursive::
 /packages/babel-loader/src: *new*
   {}
+
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
 
 Before request
 

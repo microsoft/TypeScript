@@ -1,6 +1,6 @@
 // @module: amd
 // @declaration: true
-// @out: outputfile.js
+// @outFile: outputfile.js
 
 // @filename: folder/test.ts
 export {};

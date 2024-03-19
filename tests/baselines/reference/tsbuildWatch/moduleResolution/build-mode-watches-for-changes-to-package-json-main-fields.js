@@ -100,9 +100,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' exists - use it as a name resolution result.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has an unsupported extension, so skipping it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
@@ -150,7 +147,7 @@ export type TheStr = string;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -223,11 +220,6 @@ export type TheStr = string;
         "../const.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../../../../a/lib/lib.d.ts",
       "../const.ts",
@@ -237,7 +229,7 @@ export type TheStr = string;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1111
+  "size": 1082
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -372,9 +364,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/other.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/other.js'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.js' exists - use it as a name resolution result.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has an unsupported extension, so skipping it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/other.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does not exist.
@@ -457,9 +446,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' exists - use it as a name resolution result.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has an unsupported extension, so skipping it.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.

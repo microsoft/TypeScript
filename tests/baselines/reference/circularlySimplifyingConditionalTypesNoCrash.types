@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 300 / 300 (nearest 100)
+Type Count: 600 / 600 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 25,500 / 25,500 (nearest 500)
+
 === circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>

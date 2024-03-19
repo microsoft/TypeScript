@@ -1,10 +1,6 @@
 //// [tests/cases/compiler/typeofImportInstantiationExpression.ts] ////
 
 === input.ts ===
-// @strict
-
-// Repro from #52248
-
 interface Arg<T = any, Params extends Record<string, any> = Record<string, any>> {
     "__is_argument__"?: true;
 >"__is_argument__" : true

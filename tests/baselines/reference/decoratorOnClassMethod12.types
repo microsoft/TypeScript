@@ -16,7 +16,8 @@ module M {
 >C : C
 >S : S
 
-        @super.decorator
+        @(super.decorator)
+>(super.decorator) : any
 >super.decorator : any
 >super : any
 >decorator : any

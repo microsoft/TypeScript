@@ -1,5 +1,13 @@
 //// [tests/cases/compiler/intersectionsOfLargeUnions2.ts] ////
 
+=== Performance Stats ===
+Strict subtype cache: 1,000 / 1,000 (nearest 100)
+Subtype cache: 1,300 / 1,300 (nearest 100)
+Assignability cache: 1,200 / 1,200 (nearest 100)
+Type Count: 3,400 / 3,400 (nearest 100)
+Instantiation count: 1,500 / 1,500 (nearest 500)
+Symbol count: 27,000 / 27,000 (nearest 500)
+
 === intersectionsOfLargeUnions2.ts ===
 // Repro from #24233
 

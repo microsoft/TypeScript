@@ -63,7 +63,7 @@ const b12 = <MainButton data-format="Hello world" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.MainButton = void 0;
+    exports.MainButton = MainButton;
     var obj = {
         children: "hi",
         to: "boo"
@@ -79,7 +79,6 @@ define(["require", "exports", "react"], function (require, exports, React) {
         }
         return this._buildMainButton(props);
     }
-    exports.MainButton = MainButton;
     // OK
     var b0 = <MainButton to='/some/path'>GO</MainButton>;
     var b1 = <MainButton onClick={function (e) { }}>Hello world</MainButton>;

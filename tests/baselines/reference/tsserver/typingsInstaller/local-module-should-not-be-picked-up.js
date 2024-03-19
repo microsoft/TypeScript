@@ -63,7 +63,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/config.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/config.js Text-1 "export let x = 1"
@@ -92,6 +92,21 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/jsconfig.json *default*
+/a/config.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
 
 TI:: [hh:mm:ss:mss] Global cache location '/cache', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/cache'
@@ -379,6 +394,11 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 Before running PendingInstalls callback:: count: 0
 

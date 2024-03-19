@@ -14,8 +14,6 @@ x + y;
 >y : 0
 
 === /node_modules/foo/index.ts ===
-// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
-
 export const x = 0;
 >x : 0
 >0 : 0

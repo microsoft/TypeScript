@@ -40,7 +40,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f1.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: proj1
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -96,6 +96,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -108,6 +113,21 @@ FsWatches::
   {}
 /a/b/f2.js: *new*
   {}
+
+Projects::
+proj1 (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.js *new*
+    version: Text-1
+    containingProjects: 1
+        proj1
+/a/b/f2.js *new*
+    version: Text-1
+    containingProjects: 1
+        proj1
 
 Before request
 
@@ -141,3 +161,14 @@ FsWatches::
 FsWatches *deleted*::
 /a/b/f2.js:
   {}
+
+ScriptInfos::
+/a/b/f1.js
+    version: Text-1
+    containingProjects: 1
+        proj1
+/a/b/f2.js (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        proj1 *default*

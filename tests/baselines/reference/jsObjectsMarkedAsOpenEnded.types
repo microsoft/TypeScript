@@ -29,7 +29,7 @@ class C {
 
         this.member.a = 0;
 >this.member.a = 0 : 0
->this.member.a : any
+>this.member.a : error
 >this.member : {}
 >this : this
 >member : {}
@@ -50,7 +50,7 @@ var obj = {
 
 obj.property.a = 0;
 >obj.property.a = 0 : 0
->obj.property.a : any
+>obj.property.a : error
 >obj.property : {}
 >obj : { property: {}; }
 >property : {}

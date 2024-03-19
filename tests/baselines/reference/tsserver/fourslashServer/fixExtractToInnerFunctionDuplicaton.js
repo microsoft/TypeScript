@@ -38,7 +38,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/four
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -87,6 +87,29 @@ watchedDirectoriesRecursive::
 /tests/cases/fourslash/server/node_modules/@types: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/fixExtractToInnerFunctionDuplicaton.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -133,12 +156,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to inner function in function 'foo'",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to function in global scope",
               "name": "function_scope_1",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         },
@@ -149,12 +192,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to constant in global scope",
               "name": "constant_scope_1",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         }
@@ -223,12 +286,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to inner function in function 'foo'",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to function in global scope",
               "name": "function_scope_1",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         },
@@ -239,12 +322,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to constant in global scope",
               "name": "constant_scope_1",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         }
@@ -313,12 +416,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to inner function in function 'foo'",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to function in global scope",
               "name": "function_scope_1",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         },
@@ -329,12 +452,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to constant in global scope",
               "name": "constant_scope_1",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         }
@@ -403,12 +546,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to inner function in function 'foo'",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to function in global scope",
               "name": "function_scope_1",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         },
@@ -419,12 +582,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to constant in global scope",
               "name": "constant_scope_1",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         }
@@ -493,12 +676,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to inner function in function 'foo'",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to function in global scope",
               "name": "function_scope_1",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         },
@@ -509,12 +712,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to constant in global scope",
               "name": "constant_scope_1",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         }
@@ -583,12 +806,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to inner function in function 'foo'",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to function in global scope",
               "name": "function_scope_1",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         },
@@ -599,12 +842,32 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             },
             {
               "description": "Extract to constant in global scope",
               "name": "constant_scope_1",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 24
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 41
+                }
+              }
             }
           ]
         }

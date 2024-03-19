@@ -63,7 +63,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/file3.d.ts 500 unde
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib.es6.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/file1.d.ts SVC-1-0 "class C {}"
@@ -215,6 +215,29 @@ FsWatches::
   {}
 /tsconfig.json: *new*
   {}
+
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/file3.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/a/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/a/lib.es6.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/file1.d.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
 
 Before request
 

@@ -41,6 +41,7 @@ let a: A;
 let b = a.getB().x.toFixed();
 let c = a.getCls().y.toLowerCase();
 
+
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";

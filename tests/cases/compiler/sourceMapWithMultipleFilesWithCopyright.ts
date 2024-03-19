@@ -1,4 +1,4 @@
-// @out: a.js
+// @outFile: a.js
 // @sourcemap: true
 // @declaration: true
 // @Filename: a.ts

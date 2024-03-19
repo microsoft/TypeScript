@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/extendsUntypedModule.ts] ////
 
 //// [index.js]
-// Test that extending an untyped module is an error, unlike extending unknownSymbol.
-
 This file is not read.
 
 //// [index.js]

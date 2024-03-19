@@ -7,7 +7,6 @@ const parsed = minimist(process.argv.slice(2), {
     boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle", "typecheck", "lint", "coverage"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
-        /* eslint-disable quote-props */
         b: "browser",
         i: ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
         t: ["tests", "test"],
@@ -17,7 +16,6 @@ const parsed = minimist(process.argv.slice(2), {
         skippercent: "skipPercent",
         w: "workers",
         f: "fix",
-        /* eslint-enable quote-props */
     },
     default: {
         soft: false,

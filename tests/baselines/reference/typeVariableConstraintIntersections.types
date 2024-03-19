@@ -233,7 +233,7 @@ const optionHandlers: OptionHandlers = {
 };
 
 function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {
->handleOption : <K extends "one" | "two">(option: Options & { kind: K; }) => string
+>handleOption : <K extends "one" | "two">(option: Options & {    kind: K;}) => string
 >option : Options & { kind: K; }
 >kind : K
 

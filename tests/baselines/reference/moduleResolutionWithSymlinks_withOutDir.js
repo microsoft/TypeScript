@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleResolutionWithSymlinks_withOutDir.ts] ////
 
 //// [index.ts]
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
-
 export class MyClass { private x: number; }
 
 //// [index.ts]
@@ -21,7 +19,6 @@ y = x;
 
 //// [/src/bin/library-a/index.js]
 "use strict";
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
 var MyClass = /** @class */ (function () {

@@ -1,8 +1,8 @@
-// @target: ES3
+// @target: ES5
 // @sourcemap: true
 // @maproot: file:///folder
 // @sourceroot: file:///folder
-// @out: outfile.js
+// @outFile: outfile.js
 // @inlinesourcemap: true
 
 // configuration errors

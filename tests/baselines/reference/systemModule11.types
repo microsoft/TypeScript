@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/systemModule11.ts] ////
 
 === file1.ts ===
-// set of tests cases that checks generation of local storage for exported names
-
-
 export var x;
 >x : any
 

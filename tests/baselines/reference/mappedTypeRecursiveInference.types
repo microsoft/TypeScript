@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/mappedTypeRecursiveInference.ts] ////
 
+=== Performance Stats ===
+Strict subtype cache: 300 / 300 (nearest 100)
+Assignability cache: 5,000 / 5,000 (nearest 100)
+Type Count: 15,000 / 15,000 (nearest 100)
+Instantiation count: 486,000 / 503,500 (nearest 500)
+Symbol count: 174,500 / 177,000 (nearest 500)
+
 === mappedTypeRecursiveInference.ts ===
 interface A { a: A }
 >a : A

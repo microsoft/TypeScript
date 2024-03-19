@@ -3,7 +3,7 @@
 === indexerReturningTypeParameter1.ts ===
 interface f {
     groupBy<T>(): { [key: string]: T[]; };
->groupBy : <T>() => { [key: string]: T[]; }
+>groupBy : <T>() => {    [key: string]: T[];}
 >key : string
 }
 var a: f;
@@ -20,7 +20,7 @@ class c {
 >c : c
 
     groupBy<T>(): { [key: string]: T[]; } {
->groupBy : <T>() => { [key: string]: T[]; }
+>groupBy : <T>() => {    [key: string]: T[];}
 >key : string
 
         return null;

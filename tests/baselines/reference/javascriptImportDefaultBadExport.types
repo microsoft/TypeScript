@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/javascriptImportDefaultBadExport.ts] ////
 
 === /a.js ===
-// https://github.com/microsoft/TypeScript/issues/34481
-
-
 const alias = {};
 >alias : {}
 >{} : {}

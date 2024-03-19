@@ -422,6 +422,8 @@ type U3 = [...[string, number], boolean];
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 
+type AnyArr = [...any];
+
 
 //// [variadicTuples1.js]
 "use strict";
@@ -830,3 +832,4 @@ type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+type AnyArr = [...any];

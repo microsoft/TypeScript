@@ -1,5 +1,5 @@
 // @allowJs: true
-// @out: out_1.js
+// @outFile: out_1.js
 // @filename: jsDocOptionality.js
 function MyClass() {
   this.prop = null;

@@ -97,7 +97,7 @@ export const api = ky.extend({});
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"composite":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"emitDiagnosticsPerFile":[[3,[{"file":"./index.ts","start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/node_modules/ky/distribution/index\" but cannot be named.","category":1,"code":4023}]]],"emitSignatures":[3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"composite":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"emitDiagnosticsPerFile":[[3,[{"file":"./index.ts","start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/node_modules/ky/distribution/index\" but cannot be named.","category":1,"code":4023}]]],"emitSignatures":[3]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -160,11 +160,6 @@ export const api = ky.extend({});
         "./node_modules/ky/distribution/index.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "./node_modules/ky/distribution/index.d.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.esnext.full.d.ts",
       "./index.ts",
@@ -190,7 +185,7 @@ export const api = ky.extend({});
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1440
+  "size": 1411
 }
 
 

@@ -15,15 +15,15 @@ const { ___, ___hello, _hi } = R;
 
 //// [m1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var R;
-exports["default"] = R = {
+exports.default = R = {
     "___": 30,
     "___hello": 21,
-    "_hi": 40
+    "_hi": 40,
 };
 //// [m2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("./m1");
-var ___ = m1_1["default"].___, ___hello = m1_1["default"].___hello, _hi = m1_1["default"]._hi;
+var ___ = m1_1.default.___, ___hello = m1_1.default.___hello, _hi = m1_1.default._hi;

@@ -68,7 +68,7 @@ enum E2 { X }
 // Check that we infer from both a.r and b before fixing T in a.w
 
 declare function f1<T, U>(a: { w: (x: T) => U; r: () => T; }, b: T): U;
->f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>f1 : <T, U>(a: {    w: (x: T) => U;    r: () => T;}, b: T) => U
 >a : { w: (x: T) => U; r: () => T; }
 >w : (x: T) => U
 >x : T

@@ -110,8 +110,8 @@ module Errors {
 >a2 : any
 
     declare function foo16(a2: {
->foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
->a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>foo16 : { (a2: {    new (x: {        new (a: number): number;        new (a?: number): number;    }): number[];    new (x: {        new (a: boolean): boolean;        new (a?: boolean): boolean;    }): boolean[];}): { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }; (a2: any): any; }
+>a2 : { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }
 
         // type of parameter is overload set which means we can't do inference based on this type
         new (x: {

@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/ramdaToolsNoInfinite2.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 4,800 / 4,800 (nearest 100)
+Type Count: 7,600 / 7,800 (nearest 100)
+Instantiation count: 34,500 / 34,500 (nearest 500)
+Symbol count: 31,000 / 31,500 (nearest 500)
+
 === ramdaToolsNoInfinite2.ts ===
 declare module "Any/Kind" {
 >"Any/Kind" : typeof import("Any/Kind")

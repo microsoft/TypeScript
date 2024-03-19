@@ -83,14 +83,14 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 }
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
->Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U_1>(l: { func: (arg1: U_1, arg2: string) => void; }): JSX.Element; }
+>Link : { <U>(l: {    func: (arg: U) => void;}): JSX.Element; <U_1>(l: { func: (arg1: U_1, arg2: string) => void; }): JSX.Element; }
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
 >JSX : any
 
 declare function Link<U>(l: {func: (arg1:U, arg2: string)=>void}): JSX.Element;
->Link : { <U_1>(l: { func: (arg: U_1) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
+>Link : { <U_1>(l: { func: (arg: U_1) => void; }): JSX.Element; <U>(l: {    func: (arg1: U, arg2: string) => void;}): JSX.Element; }
 >l : { func: (arg1: U, arg2: string) => void; }
 >func : (arg1: U, arg2: string) => void
 >arg1 : U

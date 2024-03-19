@@ -50,7 +50,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1.ts 500 unde
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/externalproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/externalproject Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/externalproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/externalproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -106,6 +106,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/b/externalproject' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -120,6 +125,25 @@ FsWatches::
   {}
 /a/lib/lib.d.ts: *new*
   {}
+
+Projects::
+/a/b/externalproject (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/externalproject
+/a/b/file2.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/externalproject
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/externalproject
 
 Before request
 

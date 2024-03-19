@@ -1,21 +1,17 @@
-DifferentNamesSpecifiedWithAllowJs/tsconfig.json(3,5): error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-DifferentNamesSpecifiedWithAllowJs/tsconfig.json(3,5): error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+DifferentNamesSpecifiedWithAllowJs/tsconfig.json(3,5): error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-==== DifferentNamesSpecifiedWithAllowJs/tsconfig.json (2 errors) ====
+==== DifferentNamesSpecifiedWithAllowJs/tsconfig.json (1 errors) ====
     {
       "compilerOptions": {
-        "out": "test.js",
-        ~~~~~
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-        ~~~~~
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+        "outFile": "test.js",
+        ~~~~~~~~~
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
         "allowJs": true
       },
       "files": [ "a.ts", "b.js" ]
     }
+    
 ==== DifferentNamesSpecifiedWithAllowJs/a.ts (0 errors) ====
     var test = 10;
 ==== DifferentNamesSpecifiedWithAllowJs/b.js (0 errors) ====

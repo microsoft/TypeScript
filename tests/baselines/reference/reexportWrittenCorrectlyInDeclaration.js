@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
 
 //// [ThingA.ts]
-// https://github.com/Microsoft/TypeScript/issues/8612
 export class ThingA { } 
 
 //// [ThingB.ts]
@@ -22,7 +21,6 @@ export class Test {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThingA = void 0;
-// https://github.com/Microsoft/TypeScript/issues/8612
 var ThingA = /** @class */ (function () {
     function ThingA() {
     }

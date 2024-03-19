@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/verbatim-declarations-parameters.ts] ////
+
+=== verbatim-declarations-parameters.ts ===
+type Map = {} & { [P in string]: any }
+>Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+>P : Symbol(P, Decl(verbatim-declarations-parameters.ts, 0, 19))
+
+type MapOrUndefined = Map | undefined | "dummy"
+>MapOrUndefined : Symbol(MapOrUndefined, Decl(verbatim-declarations-parameters.ts, 0, 38))
+>Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(verbatim-declarations-parameters.ts, 1, 47))
+
+  constructor(
+    // Type node is accurate, preserve
+    public reuseTypeNode?: Map | undefined,
+>reuseTypeNode : Symbol(Foo.reuseTypeNode, Decl(verbatim-declarations-parameters.ts, 3, 14))
+>Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+
+    public reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">,
+>reuseTypeNode2 : Symbol(Foo.reuseTypeNode2, Decl(verbatim-declarations-parameters.ts, 5, 43))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>MapOrUndefined : Symbol(MapOrUndefined, Decl(verbatim-declarations-parameters.ts, 0, 38))
+
+    // Resolve type node, requires adding | undefined
+    public resolveType?: Map,
+>resolveType : Symbol(Foo.resolveType, Decl(verbatim-declarations-parameters.ts, 6, 61))
+>Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+
+  ) { }
+}
+
+export function foo1(
+>foo1 : Symbol(foo1, Decl(verbatim-declarations-parameters.ts, 10, 1))
+
+    // Type node is accurate, preserve
+    reuseTypeNode: Map | undefined = {},
+>reuseTypeNode : Symbol(reuseTypeNode, Decl(verbatim-declarations-parameters.ts, 12, 21))
+>Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+
+    reuseTypeNode2: Exclude<MapOrUndefined, "dummy">  = {},
+>reuseTypeNode2 : Symbol(reuseTypeNode2, Decl(verbatim-declarations-parameters.ts, 14, 40))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>MapOrUndefined : Symbol(MapOrUndefined, Decl(verbatim-declarations-parameters.ts, 0, 38))
+
+    // Resolve type node, requires adding | undefined
+    resolveType: Map = {}, 
+>resolveType : Symbol(resolveType, Decl(verbatim-declarations-parameters.ts, 15, 59))
+>Map : Symbol(Map, Decl(verbatim-declarations-parameters.ts, 0, 0))
+
+    requiredParam: number) {
+>requiredParam : Symbol(requiredParam, Decl(verbatim-declarations-parameters.ts, 17, 26))
+
+}
+

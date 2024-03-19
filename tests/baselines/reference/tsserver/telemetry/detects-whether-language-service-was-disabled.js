@@ -69,7 +69,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.js SVC-1-0 ""
@@ -212,3 +212,14 @@ PolledWatches::
 FsWatches::
 /jsconfig.json: *new*
   {}
+
+Projects::
+/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /jsconfig.json *default*

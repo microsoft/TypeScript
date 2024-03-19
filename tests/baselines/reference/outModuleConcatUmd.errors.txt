@@ -3,8 +3,6 @@ error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 !!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== ref/a.ts (0 errors) ====
-    // This should error
-    
     export class A { }
     
 ==== b.ts (0 errors) ====

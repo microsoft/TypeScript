@@ -734,7 +734,6 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         }
         test("compileOnSaveAffectedFileList projectUsesOutFile should not be returned if not set", {});
         test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", { outFile: "/a/out.js" });
-        test("compileOnSaveAffectedFileList projectUsesOutFile should be true if out is set", { out: "/a/out.js" });
     });
 });
 
@@ -1023,11 +1022,6 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
         });
     }
 
-    function logDirtyOfProjects(session: TestSession) {
-        session.logger.log(`Project1 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app1/tsconfig.json`)!.dirty}`);
-        session.logger.log(`Project2 is dirty: ${session.getProjectService().configuredProjects.get(`/user/username/projects/myproject/app2/tsconfig.json`)!.dirty}`);
-    }
-
     function verify(subScenario: string, commandArgs: ts.server.protocol.FileRequestArgs) {
         it(subScenario, () => {
             const core: File = {
@@ -1064,12 +1058,10 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
             openFilesForSession([app1, app2, core], session);
             insertString(session, app1);
             insertString(session, app2);
-            logDirtyOfProjects(session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: commandArgs,
             });
-            logDirtyOfProjects(session);
             baselineTsserverLogs("compileOnSave", subScenario, session);
         });
     }

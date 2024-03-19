@@ -4,7 +4,7 @@ module M {
     class C {
         decorator(target: Object, key: string): void { }
 
-        @this.decorator
+        @(this.decorator)
         method() { }
     }
 }

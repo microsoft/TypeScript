@@ -124,7 +124,6 @@ import {
     NodeArray,
     NodeFlags,
     ObjectLiteralElementLike,
-    outFile,
     ParameterDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
@@ -226,7 +225,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             node.isDeclarationFile ||
             !(isEffectiveExternalModule(node, compilerOptions) ||
                 node.transformFlags & TransformFlags.ContainsDynamicImport ||
-                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && outFile(compilerOptions)))
+                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && compilerOptions.outFile))
         ) {
             return node;
         }
@@ -260,25 +259,30 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (some(currentModuleInfo.exportedNames)) {
             const chunkSize = 50;
-            for (let i = 0; i < currentModuleInfo.exportedNames!.length; i += chunkSize) {
+            for (let i = 0; i < currentModuleInfo.exportedNames.length; i += chunkSize) {
                 append(
                     statements,
                     factory.createExpressionStatement(
                         reduceLeft(
-                            currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
+                            currentModuleInfo.exportedNames.slice(i, i + chunkSize),
                             (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
                             factory.createVoidZero() as Expression,
                         ),
                     ),
                 );
+            }
+        }
+        if (some(currentModuleInfo.exportedFunctions)) {
+            for (const f of currentModuleInfo.exportedFunctions) {
+                appendExportsOfHoistedDeclaration(statements, f);
             }
         }
 
@@ -598,13 +602,18 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, topLevelVisitor);
+        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ true, topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (some(currentModuleInfo.exportedNames)) {
             append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+        }
+        if (some(currentModuleInfo.exportedFunctions)) {
+            for (const f of currentModuleInfo.exportedFunctions) {
+                appendExportsOfHoistedDeclaration(statements, f);
+            }
         }
 
         // Visit each statement of the module body.
@@ -1599,39 +1608,24 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
             for (const specifier of node.exportClause.elements) {
-                if (languageVersion === ScriptTarget.ES3) {
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined),
-                                ),
-                                specifier,
+                const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
+                    !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
+                    idText(specifier.propertyName || specifier.name) === "default";
+                const exportedValue = factory.createPropertyAccessExpression(
+                    exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
+                    specifier.propertyName || specifier.name,
+                );
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            factory.createExpressionStatement(
+                                createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
                             ),
                             specifier,
                         ),
-                    );
-                }
-                else {
-                    const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
-                        !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                        idText(specifier.propertyName || specifier.name) === "default";
-                    const exportedValue = factory.createPropertyAccessExpression(
-                        exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                        specifier.propertyName || specifier.name,
-                    );
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
-                                ),
-                                specifier,
-                            ),
-                            specifier,
-                        ),
-                    );
-                }
+                        specifier,
+                    ),
+                );
             }
 
             return singleOrMany(statements);
@@ -1721,7 +1715,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        statements = appendExportsOfHoistedDeclaration(statements, node);
+        // NOTE: CommonJS/AMD/UMD exports are hoisted to the top of the module body and do not need to be added here.
         return singleOrMany(statements);
     }
 
@@ -2086,30 +2080,19 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function createUnderscoreUnderscoreESModule() {
-        let statement: Statement;
-        if (languageVersion === ScriptTarget.ES3) {
-            statement = factory.createExpressionStatement(
-                createExportExpression(
-                    factory.createIdentifier("__esModule"),
-                    factory.createTrue(),
-                ),
-            );
-        }
-        else {
-            statement = factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
-                    /*typeArguments*/ undefined,
-                    [
-                        factory.createIdentifier("exports"),
-                        factory.createStringLiteral("__esModule"),
-                        factory.createObjectLiteralExpression([
-                            factory.createPropertyAssignment("value", factory.createTrue()),
-                        ]),
-                    ],
-                ),
-            );
-        }
+        const statement = factory.createExpressionStatement(
+            factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
+                /*typeArguments*/ undefined,
+                [
+                    factory.createIdentifier("exports"),
+                    factory.createStringLiteral("__esModule"),
+                    factory.createObjectLiteralExpression([
+                        factory.createPropertyAssignment("value", factory.createTrue()),
+                    ]),
+                ],
+            ),
+        );
         setEmitFlags(statement, EmitFlags.CustomPrologue);
         return statement;
     }
@@ -2141,7 +2124,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
         return setTextRange(
-            liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
+            liveBinding ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                     factory.createIdentifier("Object"),
                     "defineProperty",

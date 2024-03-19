@@ -8,6 +8,7 @@ console.log(a);
 var b = 0;
 console.log(b);
 
+
 //// [out.js]
 var a = 0;
 console.log(a);

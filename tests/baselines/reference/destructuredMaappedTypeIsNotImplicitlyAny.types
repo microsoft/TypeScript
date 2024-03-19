@@ -2,7 +2,7 @@
 
 === destructuredMaappedTypeIsNotImplicitlyAny.ts ===
 function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
->foo : <T extends string>(key: T, obj: { [_ in T]: number; }) => void
+>foo : <T extends string>(key: T, obj: {    [_ in T]: number;}) => void
 >key : T
 >obj : { [_ in T]: number; }
 

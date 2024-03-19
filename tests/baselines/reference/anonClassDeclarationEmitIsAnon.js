@@ -52,7 +52,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Timestamped = exports.wrapClass = void 0;
+exports.wrapClass = wrapClass;
+exports.Timestamped = Timestamped;
 function wrapClass(param) {
     return /** @class */ (function () {
         function Wrapped() {
@@ -63,7 +64,6 @@ function wrapClass(param) {
         return Wrapped;
     }());
 }
-exports.wrapClass = wrapClass;
 function Timestamped(Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
@@ -75,7 +75,6 @@ function Timestamped(Base) {
         return class_1;
     }(Base));
 }
-exports.Timestamped = Timestamped;
 //// [index.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {

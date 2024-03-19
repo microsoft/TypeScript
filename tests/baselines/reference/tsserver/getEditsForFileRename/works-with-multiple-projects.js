@@ -57,7 +57,7 @@ Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/old.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/old.ts Text-1 "export const x = 0;"
@@ -201,6 +201,21 @@ FsWatches::
 /a/tsconfig.json: *new*
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/old.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/user.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -238,7 +253,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/old.ts Text-1 "export const x = 0;"
@@ -392,6 +407,29 @@ FsWatches::
 FsWatchesRecursive::
 /b: *new*
   {}
+
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/old.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /a/tsconfig.json
+        /b/tsconfig.json *new*
+/a/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+/b/user.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json *default*
 
 Before request
 

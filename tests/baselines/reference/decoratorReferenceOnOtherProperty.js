@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/decoratorReferenceOnOtherProperty.ts] ////
 
 //// [yoha.ts]
-// https://github.com/Microsoft/TypeScript/issues/19799
 export class Yoha {}
 
 //// [index.ts]
@@ -28,7 +27,6 @@ class Bar {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Yoha = void 0;
-// https://github.com/Microsoft/TypeScript/issues/19799
 var Yoha = /** @class */ (function () {
     function Yoha() {
     }

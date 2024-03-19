@@ -68,7 +68,7 @@ exports.y = "world";
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./file2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./file2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -119,7 +119,6 @@ exports.y = "world";
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./file1.ts",
@@ -128,7 +127,7 @@ exports.y = "world";
     "latestChangedDtsFile": "./file2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 988
+  "size": 964
 }
 
 
@@ -153,7 +152,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./file2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./file2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -191,7 +190,6 @@ exitCode:: ExitStatus.Success
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./file2.ts"
@@ -199,6 +197,6 @@ exitCode:: ExitStatus.Success
     "latestChangedDtsFile": "./file2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 852
+  "size": 828
 }
 

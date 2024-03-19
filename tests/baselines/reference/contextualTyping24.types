@@ -2,7 +2,7 @@
 
 === contextualTyping24.ts ===
 var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void, a:string){return 5};
->foo : (a: { (): number; (i: number): number; }) => number
+>foo : (a: {    (): number;    (i: number): number;}) => number
 >a : { (): number; (i: number): number; }
 >i : number
 >foo = function(this: void, a:string){return 5} : (this: void, a: string) => number

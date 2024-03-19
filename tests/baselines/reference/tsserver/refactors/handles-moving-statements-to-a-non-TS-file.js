@@ -44,7 +44,7 @@ Info seq  [hh:mm:ss:mss] Config: /Foo/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Foo/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /Foo/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Foo/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Foo/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Foo/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/Foo/a.ts SVC-1-0 "const x = 0;"
@@ -181,6 +181,17 @@ PolledWatches::
 FsWatches::
 /Foo/tsconfig.json: *new*
   {}
+
+Projects::
+/Foo/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/Foo/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /Foo/tsconfig.json *default*
 
 Before request
 

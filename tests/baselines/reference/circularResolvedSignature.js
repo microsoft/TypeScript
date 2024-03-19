@@ -21,7 +21,7 @@ export function Component() {
 //// [circularResolvedSignature.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Component = void 0;
+exports.Component = Component;
 function Component() {
     var _a = useState(function () { return ({
         value: "string", // this should be a number
@@ -29,4 +29,3 @@ function Component() {
         bar: function (arg) { return setState(arg); },
     }); }), state = _a[0], setState = _a[1];
 }
-exports.Component = Component;

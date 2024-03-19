@@ -7,13 +7,10 @@
 /new.ts(1,21): error TS2307: Cannot find module 'unkown' or its corresponding type declarations.
 /super.ts(1,22): error TS2307: Cannot find module 'unknown' or its corresponding type declarations.
 /super.ts(8,17): error TS2304: Cannot find name 'InvalidReference'.
-/typeReference.ts(6,17): error TS2315: Type 'U' is not generic.
+/typeReference.ts(3,17): error TS2315: Type 'U' is not generic.
 
 
 ==== /typeReference.ts (1 errors) ====
-    // Tests that types are marked as used, even if used in places that don't accept type arguments.
-    
-    
     type N = number;
     type U = number;
     export type Z = U<N>;

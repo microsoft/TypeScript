@@ -26,3 +26,44 @@ type Foo<A> = A extends Constrain<infer X, A> ? X : never;
 type T0 = Foo<string>;  // string
 >T0 : string
 
+// https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
+
+class BaseClass<V> {
+>BaseClass : BaseClass<V>
+
+  protected fake(): V {
+>fake : () => V
+
+    throw new Error("");
+>new Error("") : Error
+>Error : ErrorConstructor
+>"" : ""
+  }
+}
+
+class Klass<V> extends BaseClass<V> {
+>Klass : Klass<V>
+>BaseClass : BaseClass<V>
+
+  child = true;
+>child : boolean
+>true : true
+}
+
+type Constructor<V, P extends BaseClass<V>> = new () => P;
+>Constructor : Constructor<V, P>
+
+type inferTest<V, T> = T extends Constructor<V, infer P> ? P : never;
+>inferTest : inferTest<V, T>
+
+type U = inferTest<number, Constructor<number, Klass<number>>>;
+>U : Klass<number>
+
+declare let m: U;
+>m : Klass<number>
+
+m.child; // ok
+>m.child : boolean
+>m : Klass<number>
+>child : boolean
+

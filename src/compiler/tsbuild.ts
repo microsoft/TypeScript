@@ -16,13 +16,6 @@ export enum UpToDateStatusType {
      * This means we can Pseudo-build (just touch timestamps), as if we had actually built this project.
      */
     UpToDateWithUpstreamTypes,
-    /**
-     * @deprecated
-     * The project appears out of date because its upstream inputs are newer than its outputs,
-     * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
-     * This means we can Pseudo-build (just manipulate outputs), as if we had actually built this project.
-     */
-    OutOfDateWithPrepend,
     OutputMissing,
     ErrorReadingFile,
     OutOfDateWithSelf,
@@ -47,7 +40,6 @@ export enum UpToDateStatusType {
 export type UpToDateStatus =
     | Status.Unbuildable
     | Status.UpToDate
-    | Status.OutOfDateWithPrepend
     | Status.OutputMissing
     | Status.ErrorReadingFile
     | Status.OutOfDateWithSelf
@@ -88,16 +80,6 @@ export namespace Status {
         newestInputFileTime?: Date;
         newestInputFileName?: string;
         oldestOutputFileName: string;
-    }
-
-    /**
-     * @deprecated
-     * The project is up to date with respect to its inputs except for prepend output changed (no declaration file change in prepend).
-     */
-    export interface OutOfDateWithPrepend {
-        type: UpToDateStatusType.OutOfDateWithPrepend;
-        outOfDateOutputFileName: string;
-        newerProjectName: string;
     }
 
     /**

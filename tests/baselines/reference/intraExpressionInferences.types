@@ -4,7 +4,7 @@
 // Repros from #47599
 
 declare function callIt<T>(obj: {
->callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>callIt : <T>(obj: {    produce: (n: number) => T;    consume: (x: T) => void;}) => void
 >obj : { produce: (n: number) => T; consume: (x: T) => void; }
 
     produce: (n: number) => T,
@@ -160,7 +160,7 @@ const myGeneric = inferTypeFn({
 // Repro #38623
 
 function make<M>(o: { mutations: M,  action: (m: M) => void }) { }
->make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
+>make : <M>(o: {    mutations: M;    action: (m: M) => void;}) => void
 >o : { mutations: M; action: (m: M) => void; }
 >mutations : M
 >action : (m: M) => void
@@ -193,7 +193,7 @@ make({
 // Repro from #38845
 
 declare function foo<A>(options: { a: A, b: (a: A) => void }): void;
->foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>foo : <A>(options: {    a: A;    b: (a: A) => void;}) => void
 >options : { a: A; b: (a: A) => void; }
 >a : A
 >b : (a: A) => void
@@ -425,14 +425,14 @@ createMappingComponent({
 // Repro from #48279
 
 function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
->simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
+>simplified : <T>(props: {    generator: () => T;    receiver: (t: T) => any;}) => void
 >props : { generator: () => T; receiver: (t: T) => any; }
 >generator : () => T
 >receiver : (t: T) => any
 >t : T
 
 function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
->whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
+>whatIWant : <T>(props: {    generator: (bob: any) => T;    receiver: (t: T) => any;}) => void
 >props : { generator: (bob: any) => T; receiver: (t: T) => any; }
 >generator : (bob: any) => T
 >bob : any
@@ -705,8 +705,8 @@ Foo({
 });
 
 declare function nested<T>(arg: {
->nested : <T>(arg: { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }) => T
->arg : { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }
+>nested : <T>(arg: {    prop: {        produce: (arg1: number) => T;        consume: (arg2: T) => void;    };}) => T
+>arg : { prop: {    produce: (arg1: number) => T;    consume: (arg2: T) => void;}; }
 
   prop: {
 >prop : { produce: (arg1: number) => T; consume: (arg2: T) => void; }
@@ -753,7 +753,7 @@ const resNested = nested({
 });
 
 declare function twoConsumers<T>(arg: {
->twoConsumers : <T>(arg: { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }) => T
+>twoConsumers : <T>(arg: {    a: (arg: string) => T;    consume1: (arg1: T) => void;    consume2: (arg2: T) => void;}) => T
 >arg : { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }
 
   a: (arg: string) => T;
@@ -796,7 +796,7 @@ const resTwoConsumers = twoConsumers({
 });
 
 declare function multipleProducersBeforeConsumers<T, T2>(arg: {
->multipleProducersBeforeConsumers : <T, T2>(arg: { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }) => [T, T2]
+>multipleProducersBeforeConsumers : <T, T2>(arg: {    a: (arg: string) => T;    b: (arg: string) => T2;    consume1: (arg1: T) => void;    consume2: (arg2: T2) => void;}) => [T, T2]
 >arg : { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }
 
   a: (arg: string) => T;
@@ -851,7 +851,7 @@ const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 });
 
 declare function withConditionalExpression<T, T2, T3>(arg: {
->withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
+>withConditionalExpression : <T, T2, T3>(arg: {    a: (arg1: string) => T;    b: (arg2: T) => T2;    c: (arg2: T2) => T3;}) => [T, T2, T3]
 >arg : { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }
 
   a: (arg1: string) => T;
@@ -908,15 +908,15 @@ const resWithConditionalExpression = withConditionalExpression({
 });
 
 declare function onion<T, T2, T3>(arg: {
->onion : <T, T2, T3>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }) => [T, T2, T3]
->arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }
+>onion : <T, T2, T3>(arg: {    a: (arg1: string) => T;    nested: {        b: (arg2: T) => T2;        nested2: {            c: (arg2: T2) => T3;        };    };}) => [T, T2, T3]
+>arg : { a: (arg1: string) => T; nested: {    b: (arg2: T) => T2;    nested2: {        c: (arg2: T2) => T3;    };}; }
 
   a: (arg1: string) => T;
 >a : (arg1: string) => T
 >arg1 : string
 
   nested: {
->nested : { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }
+>nested : { b: (arg2: T) => T2; nested2: {    c: (arg2: T2) => T3;}; }
 
     b: (arg2: T) => T2;
 >b : (arg2: T) => T2
@@ -977,15 +977,15 @@ const resOnion = onion({
 });
 
 declare function onion2<T, T2, T3, T4>(arg: {
->onion2 : <T, T2, T3, T4>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }) => [T, T2, T3, T4]
->arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }
+>onion2 : <T, T2, T3, T4>(arg: {    a: (arg1: string) => T;    nested: {        b: (arg2: T) => T2;        c: (arg3: T) => T3;        nested2: {            d: (arg4: T3) => T4;        };    };}) => [T, T2, T3, T4]
+>arg : { a: (arg1: string) => T; nested: {    b: (arg2: T) => T2;    c: (arg3: T) => T3;    nested2: {        d: (arg4: T3) => T4;    };}; }
 
   a: (arg1: string) => T;
 >a : (arg1: string) => T
 >arg1 : string
 
   nested: {
->nested : { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }
+>nested : { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: {    d: (arg4: T3) => T4;}; }
 
     b: (arg2: T) => T2;
 >b : (arg2: T) => T2
@@ -1058,14 +1058,14 @@ const resOnion2 = onion2({
 });
 
 declare function distant<T>(args: {
->distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
->args : { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }
+>distant : <T>(args: {    foo: {        bar: {            baz: {                producer: (arg: string) => T;            };        };    };    consumer: (val: T) => unknown;}) => T
+>args : { foo: {    bar: {        baz: {            producer: (arg: string) => T;        };    };}; consumer: (val: T) => unknown; }
 
   foo: {
->foo : { bar: { baz: { producer: (arg: string) => T; }; }; }
+>foo : { bar: {    baz: {        producer: (arg: string) => T;    };}; }
 
     bar: {
->bar : { baz: { producer: (arg: string) => T; }; }
+>bar : { baz: {    producer: (arg: string) => T;}; }
 
       baz: {
 >baz : { producer: (arg: string) => T; }

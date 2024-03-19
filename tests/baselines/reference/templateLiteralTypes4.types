@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 1,400 / 1,400 (nearest 100)
+Type Count: 900 / 900 (nearest 100)
+Instantiation count: 1,000 / 1,500 (nearest 500)
+Symbol count: 29,500 / 29,500 (nearest 500)
+
 === templateLiteralTypes4.ts ===
 // infer from number
 type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100

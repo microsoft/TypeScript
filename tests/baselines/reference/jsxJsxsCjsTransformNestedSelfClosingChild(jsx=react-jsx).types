@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,200 / 2,200 (nearest 100)
+Type Count: 7,700 / 7,700 (nearest 100)
+Instantiation count: 90,000 / 90,000 (nearest 500)
+Symbol count: 67,000 / 67,000 (nearest 500)
+
 === jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
 /// <reference path="react16.d.ts" />
 import type * as React from 'react';

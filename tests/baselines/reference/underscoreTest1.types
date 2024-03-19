@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/underscoreTest1.ts] ////
 
+=== Performance Stats ===
+Subtype cache: 100 / 100 (nearest 100)
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 1,400 / 1,700 (nearest 100)
+Instantiation count: 1,000 / 1,000 (nearest 500)
+Symbol count: 30,000 / 30,000 (nearest 500)
+
 === underscoreTest1_underscoreTests.ts ===
 /// <reference path="underscoreTest1_underscore.ts" />
 

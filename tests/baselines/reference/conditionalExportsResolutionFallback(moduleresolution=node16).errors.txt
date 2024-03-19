@@ -3,8 +3,6 @@ error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolut
 
 !!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 ==== /node_modules/dep/package.json (0 errors) ====
-    // This documents bug https://github.com/microsoft/TypeScript/issues/50762.
-    
     {
       "name": "dep",
       "version": "1.0.0",

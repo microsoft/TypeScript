@@ -68,8 +68,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
@@ -207,8 +205,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/other.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/other.js'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/other.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does not exist.
@@ -339,8 +335,6 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.

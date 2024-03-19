@@ -64,6 +64,7 @@ export * from "../codefixes/useDefaultImport";
 export * from "../codefixes/useBigintLiteral";
 export * from "../codefixes/fixAddModuleReferTypeMissingTypeof";
 export * from "../codefixes/wrapJsxInFragment";
+export * from "../codefixes/wrapDecoratorInParentheses";
 export * from "../codefixes/convertToMappedObjectType";
 export * from "../codefixes/removeAccidentalCallParentheses";
 export * from "../codefixes/removeUnnecessaryAwait";

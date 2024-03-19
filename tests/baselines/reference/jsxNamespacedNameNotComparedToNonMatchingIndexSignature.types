@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,700 / 2,700 (nearest 100)
+Type Count: 6,900 / 6,900 (nearest 100)
+Instantiation count: 74,000 / 74,000 (nearest 500)
+Symbol count: 70,000 / 70,000 (nearest 500)
+
 === jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
 /// <reference path="react16.d.ts" />
 

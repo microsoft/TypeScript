@@ -281,8 +281,8 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string, actionDescription?: string): void;
-        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
+        refactorAvailable(name: string, actionName?: string, actionDescription?: string, kind?: string, preferences?: {}, includeInteractiveActions?: boolean): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string, actionDescription?: string, kind?: string, preferences?: {}, includeInteractiveActions?: boolean): void;
         refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
     class verify extends verifyNegatable {

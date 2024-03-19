@@ -10,8 +10,7 @@ export function f() {
 //// [nonMergedOverloads.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 var f = 10;
 function f() {
 }
-exports.f = f;

@@ -27,11 +27,10 @@ export const NotificationScenario = test(
 //// [NotificationAPIUtils.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNotification = void 0;
+exports.getNotification = getNotification;
 function getNotification() {
     return {};
 }
-exports.getNotification = getNotification;
 //// [NotificationStore.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

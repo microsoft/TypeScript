@@ -1,4 +1,4 @@
-//@target: es3
+//@target: es5
 
 // Originated from #38558
 

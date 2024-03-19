@@ -29,7 +29,6 @@ exports.v = v;
 function bar() {
     return v;
 }
-exports.bar = bar;
 
 
 //// [0.d.ts]

@@ -49,7 +49,7 @@ export function fooToBar(
 //// [emptyObjectNotSubtypeOfIndexSignatureContainingObject2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooToBar = void 0;
+exports.fooToBar = fooToBar;
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues(obj, callback) {
     return null;
@@ -60,4 +60,3 @@ function fooToBar(foos) {
     // This line _should_ fail, because `result` is not the right type.
     return result;
 }
-exports.fooToBar = fooToBar;

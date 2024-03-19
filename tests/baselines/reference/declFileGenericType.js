@@ -59,7 +59,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.j = exports.h = exports.g = exports.f = exports.x = exports.e = exports.d = exports.c = exports.b = exports.a = exports.C = void 0;
+exports.j = exports.h = exports.g = exports.x = exports.e = exports.d = exports.c = exports.b = exports.a = exports.C = void 0;
+exports.f = f;
 var C;
 (function (C) {
     var A = /** @class */ (function () {
@@ -100,7 +101,6 @@ exports.d = C.F3;
 exports.e = C.F4;
 exports.x = (new C.D(new C.A())).val;
 function f() { }
-exports.f = f;
 exports.g = C.F5();
 var h = /** @class */ (function (_super) {
     __extends(h, _super);

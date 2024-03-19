@@ -35,9 +35,9 @@ let a;
 >a : any
 
 function foo3(y = { x: <typeof z>a }, z = 1) {
->foo3 : (y?: { x: number; }, z?: number) => void
->y : { x: number; }
->{ x: <typeof z>a } : { x: number; }
+>foo3 : (y?: { x: typeof z; }, z?: number) => void
+>y : { x: typeof z; }
+>{ x: <typeof z>a } : { x: typeof z; }
 >x : number
 ><typeof z>a : number
 >z : number

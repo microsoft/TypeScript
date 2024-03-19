@@ -1,5 +1,9 @@
 //// [tests/cases/conformance/fixSignatureCaching.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,300 / 1,300 (nearest 100)
+Symbol count: 26,500 / 27,000 (nearest 500)
+
 === fixSignatureCaching.ts ===
 // Repro from #10697
 

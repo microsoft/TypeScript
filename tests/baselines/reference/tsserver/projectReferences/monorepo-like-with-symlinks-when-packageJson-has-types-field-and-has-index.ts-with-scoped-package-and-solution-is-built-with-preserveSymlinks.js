@@ -68,9 +68,8 @@ export function bar() { }
 //// [/user/username/projects/myproject/packages/B/lib/bar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 
 
 //// [/user/username/projects/myproject/packages/B/lib/bar.d.ts]
@@ -80,9 +79,8 @@ export declare function bar(): void;
 //// [/user/username/projects/myproject/packages/B/lib/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
+function foo() { }
 
 
 //// [/user/username/projects/myproject/packages/B/lib/index.d.ts]
@@ -90,7 +88,7 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"},{"version":"4646078106-export function foo() { }","signature":"-5677608893-export declare function foo(): void;\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"},{"version":"4646078106-export function foo() { }","signature":"-5677608893-export declare function foo(): void;\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -143,7 +141,6 @@ export declare function foo(): void;
       "rootDir": "./src"
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "./src/bar.ts",
@@ -152,7 +149,7 @@ export declare function foo(): void;
     "latestChangedDtsFile": "./lib/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 964
+  "size": 940
 }
 
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
@@ -169,7 +166,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../node_modules/@issue/b/lib/index.d.ts","../../node_modules/@issue/b/lib/bar.d.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n",{"version":"8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../node_modules/@issue/b/lib/index.d.ts","../../node_modules/@issue/b/lib/bar.d.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n",{"version":"8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -230,7 +227,6 @@ export {};
         "../../node_modules/@issue/b/lib/bar.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../node_modules/@issue/b/lib/bar.d.ts",
@@ -240,7 +236,7 @@ export {};
     "latestChangedDtsFile": "./lib/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1093
+  "size": 1069
 }
 
 
@@ -324,7 +320,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -460,6 +456,29 @@ FsWatchesRecursive::
 /user/username/projects/myproject/packages/B/src: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/packages/A/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json
+/user/username/projects/myproject/packages/A/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json *default*
+/user/username/projects/myproject/packages/B/src/bar.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json
+/user/username/projects/myproject/packages/B/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -578,6 +597,30 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/user/username/projects/myproject/packages/A/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json
+/user/username/projects/myproject/packages/A/src/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json *default*
+/user/username/projects/myproject/packages/B/src/bar.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json
+/user/username/projects/myproject/packages/B/src/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/packages/A/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -605,7 +648,7 @@ Before running Timeout callback:: count: 1
 2: checkOne
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -628,6 +671,12 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
+
+Projects::
+/user/username/projects/myproject/packages/A/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck

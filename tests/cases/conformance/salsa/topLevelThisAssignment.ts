@@ -1,4 +1,4 @@
-// @out: output.js
+// @outFile: output.js
 // @allowJs: true
 // @checkJs: true
 // @Filename: a.js

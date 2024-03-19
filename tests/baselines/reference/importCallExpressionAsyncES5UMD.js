@@ -79,7 +79,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
+    exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
+    exports.fn = fn;
     function fn() {
         return __awaiter(this, void 0, void 0, function () {
             var req;
@@ -94,7 +95,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         });
     }
-    exports.fn = fn;
     var cl1 = /** @class */ (function () {
         function cl1() {
         }

@@ -13,9 +13,8 @@ export const bar = foo();
 //// [mod1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo() { return { x: 1 }; }
 exports.foo = foo;
+function foo() { return { x: 1 }; }
 //// [mod2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

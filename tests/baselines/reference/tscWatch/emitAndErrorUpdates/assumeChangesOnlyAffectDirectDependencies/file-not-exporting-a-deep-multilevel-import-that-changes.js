@@ -88,7 +88,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPoint = void 0;
+exports.getPoint = getPoint;
 function getPoint() {
     return {
         name: "test",
@@ -98,7 +98,6 @@ function getPoint() {
         }
     };
 }
-exports.getPoint = getPoint;
 ;
 
 

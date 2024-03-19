@@ -54,7 +54,6 @@ import {
     transformECMAScriptModule,
     Transformer,
     TransformerFactory,
-    transformES5,
     transformES2015,
     transformES2016,
     transformES2017,
@@ -178,12 +177,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     }
 
     transformers.push(getModuleTransformer(moduleKind));
-
-    // The ES5 transformer is last so that it can substitute expressions like `exports.default`
-    // for ES3.
-    if (languageVersion < ScriptTarget.ES5) {
-        transformers.push(transformES5);
-    }
 
     addRange(transformers, customTransformers && map(customTransformers.after, wrapScriptTransformerFactory));
     return transformers;

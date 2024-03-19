@@ -86,7 +86,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-var mod = __importStar(require("inner"));
+const mod = __importStar(require("inner"));
 mod.correctVersionApplied;
 
 

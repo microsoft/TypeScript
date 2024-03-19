@@ -8,7 +8,7 @@ import fooBar from "foobar";
 import X = fooBar.X;
 >X : Symbol(X, Decl(index.ts, 1, 28))
 >fooBar : Symbol(fooBar, Decl(index.ts, 1, 6))
->X : Symbol(fooBar.X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+>X : Symbol(fooBar.X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
 
 import X2 from "foobarx";
 >X2 : Symbol(X2, Decl(index.ts, 3, 6))
@@ -41,37 +41,35 @@ fooLength + 1;
 >fooLength : Symbol(fooLength, Decl(index.ts, 10, 6))
 
 === declarations.d.ts ===
-// This test is just like exportEqualsProperty, but with `export default`.
-
 declare namespace foo.bar {
 >foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
->bar : Symbol(bar, Decl(declarations.d.ts, 2, 22))
+>bar : Symbol(bar, Decl(declarations.d.ts, 0, 22))
 
     export type X = number;
->X : Symbol(X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+>X : Symbol(X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
 
     export const X: number;
->X : Symbol(X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+>X : Symbol(X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
 }
 
 declare module "foobar" {
->"foobar" : Symbol("foobar", Decl(declarations.d.ts, 5, 1))
+>"foobar" : Symbol("foobar", Decl(declarations.d.ts, 3, 1))
 
     export default foo.bar;
->foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+>foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
 >foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
->bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+>bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
 }
 
 declare module "foobarx" {
->"foobarx" : Symbol("foobarx", Decl(declarations.d.ts, 9, 1))
+>"foobarx" : Symbol("foobarx", Decl(declarations.d.ts, 7, 1))
 
     export default foo.bar.X;
->foo.bar.X : Symbol(foo.bar.X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
->foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
+>foo.bar.X : Symbol(foo.bar.X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
+>foo.bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
 >foo : Symbol(foo, Decl(declarations.d.ts, 0, 0))
->bar : Symbol(foo.bar, Decl(declarations.d.ts, 2, 22))
->X : Symbol(foo.bar.X, Decl(declarations.d.ts, 2, 27), Decl(declarations.d.ts, 4, 16))
+>bar : Symbol(foo.bar, Decl(declarations.d.ts, 0, 22))
+>X : Symbol(foo.bar.X, Decl(declarations.d.ts, 0, 27), Decl(declarations.d.ts, 2, 16))
 }
 
 === a.ts ===

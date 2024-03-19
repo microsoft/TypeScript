@@ -28,11 +28,10 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.w = void 0;
+    exports.w = w;
     function w() {
         return { name: 'value' };
     }
-    exports.w = w;
 });
 
 

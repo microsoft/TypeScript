@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit8.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,100 / 2,100 (nearest 100)
+Type Count: 6,800 / 6,800 (nearest 100)
+Instantiation count: 73,000 / 73,000 (nearest 500)
+Symbol count: 70,500 / 70,500 (nearest 500)
+
 === tsxReactEmit8.tsx ===
 /// <reference path="react16.d.ts" />
 

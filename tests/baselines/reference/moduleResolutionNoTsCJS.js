@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleResolutionNoTsCJS.ts] ////
 
 //// [x.ts]
-// CommonJS output
-
 export default 0;
 
 //// [y.tsx]
@@ -25,7 +23,6 @@ import z2 from "./z";
 
 //// [x.js]
 "use strict";
-// CommonJS output
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 0;
 //// [y.jsx]

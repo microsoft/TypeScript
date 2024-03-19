@@ -5,9 +5,6 @@ astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstra
 
 
 ==== extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
-    // Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
-    // Astral characters should be accepted in ES2015
-    
     // U+102A7 CARIAN LETTER A2
     var 𐊧: string;
     var \u{102A7}: string;

@@ -1,7 +1,6 @@
 import {
     __String,
     ArrayLiteralExpression,
-    arrayToMap,
     BindingOrAssignmentElement,
     Block,
     compareValues,
@@ -130,7 +129,6 @@ export interface EmitHelperFactory {
     // ES2015 Generator Helpers
     createGeneratorHelper(body: FunctionExpression): Expression;
     // ES Module Helpers
-    createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined): Expression;
     createImportStarHelper(expression: Expression): Expression;
     createImportStarCallbackHelper(): Expression;
     createImportDefaultHelper(expression: Expression): Expression;
@@ -181,7 +179,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // ES2015 Generator Helpers
         createGeneratorHelper,
         // ES Module Helpers
-        createCreateBindingHelper,
         createImportStarHelper,
         createImportStarCallbackHelper,
         createImportDefaultHelper,
@@ -608,15 +605,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     // ES Module Helpers
-
-    function createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined) {
-        context.requestEmitHelper(createBindingHelper);
-        return factory.createCallExpression(
-            getUnscopedHelperName("__createBinding"),
-            /*typeArguments*/ undefined,
-            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])],
-        );
-    }
 
     function createImportStarHelper(expression: Expression) {
         context.requestEmitHelper(importStarHelper);
@@ -1461,44 +1449,6 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
         });`,
 };
-
-let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
-
-/** @internal */
-export function getAllUnscopedEmitHelpers() {
-    return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
-        decorateHelper,
-        metadataHelper,
-        paramHelper,
-        esDecorateHelper,
-        runInitializersHelper,
-        assignHelper,
-        awaitHelper,
-        asyncGeneratorHelper,
-        asyncDelegator,
-        asyncValues,
-        restHelper,
-        awaiterHelper,
-        extendsHelper,
-        templateObjectHelper,
-        spreadArrayHelper,
-        valuesHelper,
-        readHelper,
-        propKeyHelper,
-        setFunctionNameHelper,
-        generatorHelper,
-        importStarHelper,
-        importDefaultHelper,
-        exportStarHelper,
-        classPrivateFieldGetHelper,
-        classPrivateFieldSetHelper,
-        classPrivateFieldInHelper,
-        createBindingHelper,
-        setModuleDefaultHelper,
-        addDisposableResourceHelper,
-        disposeResourcesHelper,
-    ], helper => helper.name));
-}
 
 /** @internal */
 export const asyncSuperHelper: EmitHelper = {

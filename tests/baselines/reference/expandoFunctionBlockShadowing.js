@@ -24,15 +24,14 @@ if (Math.random()) {
 "use strict";
 // https://github.com/microsoft/TypeScript/issues/56538
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Y = exports.X = void 0;
-function X() { }
 exports.X = X;
+exports.Y = Y;
+function X() { }
 if (Math.random()) {
     var X_1 = {};
     X_1.test = 1;
 }
 function Y() { }
-exports.Y = Y;
 Y.test = "foo";
 var aliasTopY = Y;
 if (Math.random()) {

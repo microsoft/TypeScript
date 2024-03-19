@@ -21,6 +21,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -116,6 +117,7 @@ import {
     tokenToString,
     TupleTypeReference,
     Type,
+    TypeFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -260,7 +262,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
+            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+        ) {
             return;
         }
 
@@ -351,7 +356,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 

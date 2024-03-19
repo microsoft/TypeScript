@@ -17,9 +17,6 @@ if (a) {
 >1 : 1
 }
 === /foo.d.ts ===
-// Regresion test for GH#41957
-
-
 export const a: number | null;
 >a : number | null
 

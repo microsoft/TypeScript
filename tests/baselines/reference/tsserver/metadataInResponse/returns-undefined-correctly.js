@@ -59,7 +59,7 @@ Info seq  [hh:mm:ss:mss] Loading myplugin from /a/lib/tsc.js/../../.. (resolved 
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.ts SVC-1-0 "class c { prop = \"hello\"; foo() { const x = 0; } }"
@@ -204,6 +204,17 @@ FsWatches::
 FsWatchesRecursive::
 /: *new*
   {}
+
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
 
 Before request
 

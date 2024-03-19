@@ -148,7 +148,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/users/username/projects/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
@@ -319,3 +319,26 @@ FsWatchesRecursive::
   {}
 /users/username/projects/node_modules: *new*
   {}
+
+Projects::
+/users/username/projects/app/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/users/username/projects/app/appA.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/app/tsconfig.json
+/users/username/projects/app/appB.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/app/tsconfig.json *default*
+/users/username/projects/common/moduleB.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/app/tsconfig.json
+/users/username/projects/node_modules/moduleX/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/app/tsconfig.json

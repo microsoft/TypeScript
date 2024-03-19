@@ -49,7 +49,7 @@ exports.x = 1;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./test.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12038591281-export const x = 1;"],"root":[2],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./test.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12038591281-export const x = 1;"],"root":[2],"referencedMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -80,14 +80,13 @@ exports.x = 1;
       ]
     ],
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./test.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 700
+  "size": 676
 }
 
 

@@ -4,7 +4,7 @@
 // repro from https://github.com/Microsoft/TypeScript/issues/25675
 // The type of `arg` blocks inference but simplifies to T.
 function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]): T {
->logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
+>logLength : <T extends string, U extends string>(arg: {    [K in U]: T;}[U]) => T
 >arg : { [K in U]: T; }[U]
 
     console.log(arg.length);
@@ -35,7 +35,7 @@ z = logLength(42);  // no error; T is inferred as `any`
 >42 : 42
 
 function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T }[U]): T {
->logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
+>logFirstLength : <T extends string[], U extends string>(arg: {    [K in U]: T;}[U]) => T
 >arg : { [K in U]: T; }[U]
 
     console.log(arg[0].length);

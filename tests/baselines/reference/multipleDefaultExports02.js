@@ -17,12 +17,12 @@ Entity();
 //// [m1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = foo;
+exports.default = bar;
 function foo() {
 }
-exports.default = foo;
 function bar() {
 }
-exports.default = bar;
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

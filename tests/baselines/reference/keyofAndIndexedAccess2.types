@@ -1,5 +1,10 @@
 //// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 1,500 / 1,500 (nearest 100)
+Symbol count: 30,000 / 30,000 (nearest 500)
+
 === keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
 >f1 : (obj: {    a: number;    b: 0 | 1;    c: string;}, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
@@ -76,7 +81,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 }
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
->f2 : <T extends { [key: string]: number; }>(a: {    x: number;    y: number;}, b: { [key: string]: number; }, c: T, k: keyof T) => void
+>f2 : <T extends { [key: string]: number; }>(a: {    x: number;    y: number;}, b: {    [key: string]: number;}, c: T, k: keyof T) => void
 >key : string
 >a : { x: number; y: number; }
 >x : number
@@ -166,7 +171,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 }
 
 function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
->f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
+>f3 : <K extends string>(a: {    [P in K]: number;}, b: {    [key: string]: number;}, k: K) => void
 >a : { [P in K]: number; }
 >b : { [key: string]: number; }
 >key : string
@@ -196,7 +201,7 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 }
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
->f3b : <K extends string>(a: { [P in K]: number; }, b: { [x: string]: number; }, k: K) => void
+>f3b : <K extends string>(a: {    [P in K]: number;}, b: {    [P_1 in string]: number;}, k: K) => void
 >a : { [P in K]: number; }
 >b : { [x: string]: number; }
 >k : K
@@ -213,7 +218,7 @@ function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: numb
 }
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
->f4 : <K extends string>(a: number, b: number) => void
+>f4 : <K extends string>(a: {    [key: string]: number;}[K], b: number) => void
 >a : number
 >key : string
 >b : number

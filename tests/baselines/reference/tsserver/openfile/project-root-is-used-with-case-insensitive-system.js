@@ -52,7 +52,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/lib/module2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/lib/module2.ts Text-1 "let z = 10;"
@@ -199,6 +199,21 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/lib/module2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -237,6 +252,23 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 
@@ -284,6 +316,23 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -322,6 +371,23 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 
@@ -369,6 +435,23 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -407,6 +490,23 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 
@@ -454,6 +554,23 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/src/app.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -492,6 +609,23 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 
@@ -539,6 +673,23 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/src/app.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -577,6 +728,23 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 
@@ -624,6 +792,23 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/src/app.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -662,3 +847,20 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/b/lib/module2.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json

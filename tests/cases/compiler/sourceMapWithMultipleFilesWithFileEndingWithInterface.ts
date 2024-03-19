@@ -1,4 +1,4 @@
-// @out: fooResult.js
+// @outFile: fooResult.js
 // @sourcemap: true
 // @Filename: a.ts
 module M {

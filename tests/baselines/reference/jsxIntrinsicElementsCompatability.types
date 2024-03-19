@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,300 / 2,300 (nearest 100)
+Type Count: 7,700 / 7,700 (nearest 100)
+Instantiation count: 94,000 / 94,000 (nearest 500)
+Symbol count: 68,000 / 68,000 (nearest 500)
+
 === jsxIntrinsicElementsCompatability.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";

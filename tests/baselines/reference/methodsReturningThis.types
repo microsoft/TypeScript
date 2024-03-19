@@ -15,7 +15,7 @@ Class.prototype.containsError = function () { return this.notPresent; };
 >prototype : any
 >containsError : any
 >function () { return this.notPresent; } : () => any
->this.notPresent : any
+>this.notPresent : error
 >this : this
 >notPresent : any
 

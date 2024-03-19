@@ -19,7 +19,6 @@ console.log(value)
 >value : error
 
 === mod.js ===
-// @declaration
 module.exports = {
 >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
 >module.exports : { x: { y: string; }; }

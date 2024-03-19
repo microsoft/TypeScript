@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 500 / 600 (nearest 100)
+Type Count: 800 / 1,100 (nearest 100)
+Instantiation count: 1,000 / 2,000 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === mappedTypeAsClauses.ts ===
 // Mapped type 'as N' clauses
 

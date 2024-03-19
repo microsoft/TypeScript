@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 200 / 200 (nearest 100)
+Type Count: 1,300 / 1,300 (nearest 100)
+Instantiation count: 500 / 500 (nearest 500)
+Symbol count: 28,000 / 28,000 (nearest 500)
+
 === parserRealSource11.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.

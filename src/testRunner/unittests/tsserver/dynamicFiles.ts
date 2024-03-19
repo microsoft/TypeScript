@@ -7,7 +7,6 @@ import {
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
-    verifyDynamic,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -26,8 +25,6 @@ var x = 10;`,
         const host = createServerHost([libFile]);
         const session = new TestSession(host);
         openFilesForSession([{ file, content: file.content }], session);
-        verifyDynamic(session, session.getProjectService().toPath(file.path));
-
         baselineTsserverLogs("dynamicFiles", subscenario, session);
     });
 }
@@ -51,7 +48,6 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
                 projectRootPath: "/proj",
             },
         });
-        verifyDynamic(session, `/proj/untitled:^untitled-1`);
         session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
             command: ts.server.protocol.CommandTypes.GetCodeFixes,
             arguments: {
@@ -78,7 +74,6 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             content: "const x = 10;",
             projectRootPath: "/user/username/projects/myproject",
         }], session);
-        verifyDynamic(session, `/user/username/projects/myproject/${untitledFile}`);
 
         const untitled: File = {
             path: `/user/username/projects/myproject/Untitled-1.ts`,
@@ -98,7 +93,6 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             content: "const x = 10;",
             projectRootPath: "/user/username/projects/myproject",
         }], session);
-        verifyDynamic(session, `/user/username/projects/myproject/${untitledFile}`);
         baselineTsserverLogs("dynamicFiles", "opening untitled files", session);
     });
 
@@ -118,7 +112,6 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             content: "const x = 10;",
             projectRootPath: "/user/username/projects/myproject",
         }], session);
-        verifyDynamic(session, `/user/username/projects/myproject/${untitledFile}`);
 
         // Close untitled file
         closeFilesForSession([untitledFile], session);
@@ -174,8 +167,6 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
         }, session);
         openFilesForSession([{ file: file.path, content: "var x = 10;" }], session);
 
-        verifyDynamic(session, `/${file.path}`);
-
         session.executeCommandSeq<ts.server.protocol.QuickInfoRequest>({
             command: ts.server.protocol.CommandTypes.Quickinfo,
             arguments: protocolFileLocationFromSubstring(file, "x"),
@@ -202,8 +193,6 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             openFilesForSession([{ file: file.path, projectRootPath: "/user/username/projects/myproject" }], session);
-
-            verifyDynamic(session, `/user/username/projects/myproject/${file.path}`);
 
             session.executeCommandSeq<ts.server.protocol.OutliningSpansRequest>({
                 command: ts.server.protocol.CommandTypes.GetOutliningSpans,

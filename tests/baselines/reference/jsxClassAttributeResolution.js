@@ -27,10 +27,7 @@ import './';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-var jsx_runtime_1 = require("react/jsx-runtime");
-var App = /** @class */ (function () {
-    function App() {
-    }
-    return App;
-}());
+const jsx_runtime_1 = require("react/jsx-runtime");
+class App {
+}
 exports.a = (0, jsx_runtime_1.jsx)(App, {});

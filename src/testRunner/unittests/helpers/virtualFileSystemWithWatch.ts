@@ -352,11 +352,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private readonly currentDirectory: string;
     require?: (initialPath: string, moduleName: string) => ModuleImportResult;
     importPlugin?: (root: string, moduleName: string) => Promise<ModuleImportResult>;
-    public storeFilesChangingSignatureDuringEmit = true;
+    public storeSignatureInfo = true;
     watchFile: HostWatchFile;
     private inodeWatching: boolean | undefined;
     private readonly inodes?: Map<Path, number>;
     watchDirectory: HostWatchDirectory;
+    service?: server.ProjectService;
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
@@ -1039,6 +1040,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.timeoutCallbacks.serialize(baseline);
         this.immediateCallbacks.serialize(baseline);
         this.pendingInstalls.serialize(baseline);
+        this.service?.baseline();
     }
 
     writtenFiles?: Map<Path, number>;

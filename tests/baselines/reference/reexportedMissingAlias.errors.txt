@@ -1,9 +1,8 @@
-second.d.ts(2,27): error TS2304: Cannot find name 'CompletelyMissing'.
-second.d.ts(2,27): error TS2503: Cannot find namespace 'CompletelyMissing'.
+second.d.ts(1,27): error TS2304: Cannot find name 'CompletelyMissing'.
+second.d.ts(1,27): error TS2503: Cannot find namespace 'CompletelyMissing'.
 
 
 ==== second.d.ts (2 errors) ====
-    // Fixes #15094
     export import Component = CompletelyMissing;
                               ~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'CompletelyMissing'.

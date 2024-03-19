@@ -15,16 +15,16 @@ export default function f2() {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = f1;
     function f1() {
     }
-    exports.default = f1;
 });
 //// [m2.js]
 define(["require", "exports", "./m1"], function (require, exports, m1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = f2;
     function f2() {
         (0, m1_1.default)();
     }
-    exports.default = f2;
 });

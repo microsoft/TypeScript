@@ -118,8 +118,6 @@ File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.d.ts'
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/commonjs/index.js' that references '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js'.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.tsx' does not exist.

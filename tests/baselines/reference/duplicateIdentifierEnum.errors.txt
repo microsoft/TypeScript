@@ -1,17 +1,16 @@
-duplicateIdentifierEnum_A.ts(2,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(5,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(9,11): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(12,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(16,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(19,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(23,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-duplicateIdentifierEnum_A.ts(26,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(1,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(4,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(8,11): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(11,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(15,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(18,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(22,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(25,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_B.ts(1,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
 ==== duplicateIdentifierEnum_A.ts (8 errors) ====
-    // Test the error message when attempting to merge an enum with a class, an interface, or a function.
     enum A {
          ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -62,12 +61,12 @@ duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum declarations can only merg
     function D() {
              ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-!!! related TS6203 duplicateIdentifierEnum_A.ts:23:6: 'D' was also declared here.
+!!! related TS6203 duplicateIdentifierEnum_A.ts:22:6: 'D' was also declared here.
         return 0;
     }
     enum E {
          ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-!!! related TS6203 duplicateIdentifierEnum_A.ts:26:7: 'E' was also declared here.
+!!! related TS6203 duplicateIdentifierEnum_A.ts:25:7: 'E' was also declared here.
         bar
     }

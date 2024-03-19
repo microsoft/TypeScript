@@ -2,8 +2,6 @@
 
 === x.ts ===
 
-// CommonJS output
-
 export default 0;
 
 === y.tsx ===

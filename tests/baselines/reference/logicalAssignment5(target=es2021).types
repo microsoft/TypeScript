@@ -2,7 +2,7 @@
 
 === logicalAssignment5.ts ===
 function foo1 (f?: (a: number) => void) {
->foo1 : (f?: ((a: number) => void) | undefined) => void
+>foo1 : (f?: (a: number) => void) => void
 >f : ((a: number) => void) | undefined
 >a : number
 
@@ -21,7 +21,7 @@ function foo1 (f?: (a: number) => void) {
 }
 
 function foo2 (f?: (a: number) => void) {
->foo2 : (f?: ((a: number) => void) | undefined) => void
+>foo2 : (f?: (a: number) => void) => void
 >f : ((a: number) => void) | undefined
 >a : number
 
@@ -40,7 +40,7 @@ function foo2 (f?: (a: number) => void) {
 }
 
 function foo3 (f?: (a: number) => void) {
->foo3 : (f?: ((a: number) => void) | undefined) => void
+>foo3 : (f?: (a: number) => void) => void
 >f : ((a: number) => void) | undefined
 >a : number
 
@@ -59,7 +59,7 @@ function foo3 (f?: (a: number) => void) {
 }
 
 function bar1 (f?: (a: number) => void) {
->bar1 : (f?: ((a: number) => void) | undefined) => void
+>bar1 : (f?: (a: number) => void) => void
 >f : ((a: number) => void) | undefined
 >a : number
 
@@ -84,7 +84,7 @@ function bar1 (f?: (a: number) => void) {
 }
 
 function bar2 (f?: (a: number) => void) {
->bar2 : (f?: ((a: number) => void) | undefined) => void
+>bar2 : (f?: (a: number) => void) => void
 >f : ((a: number) => void) | undefined
 >a : number
 
@@ -109,7 +109,7 @@ function bar2 (f?: (a: number) => void) {
 }
 
 function bar3 (f?: (a: number) => void) {
->bar3 : (f?: ((a: number) => void) | undefined) => void
+>bar3 : (f?: (a: number) => void) => void
 >f : ((a: number) => void) | undefined
 >a : number
 

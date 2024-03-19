@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 300 / 300 (nearest 100)
+Type Count: 900 / 900 (nearest 100)
+Instantiation count: 1,500 / 1,500 (nearest 500)
+Symbol count: 26,000 / 26,500 (nearest 500)
+
 === conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
 >T00 : "b" | "d"

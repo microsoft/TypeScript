@@ -81,7 +81,7 @@ module Errors {
 >b : number
 
         var a16: {
->a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
+>a16 : { (x: {    (a: number): number;    (a?: number): number;}): number[]; (x: {    (a: boolean): boolean;    (a?: boolean): boolean;}): boolean[]; }
 
                 (x: {
 >x : { (a: number): number; (a?: number): number; }

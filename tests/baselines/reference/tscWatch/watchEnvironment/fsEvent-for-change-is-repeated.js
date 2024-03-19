@@ -210,7 +210,7 @@ Semantic diagnostics in builder refreshed for::
 main.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/project/main.ts (used version)
+/user/username/projects/project/main.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 

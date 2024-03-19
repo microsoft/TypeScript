@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
 
 === constants.ts ===
-// @strict
-
 export const COFFEE = 0;
 >COFFEE : 0
 >0 : 0

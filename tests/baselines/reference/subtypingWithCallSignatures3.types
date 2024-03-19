@@ -110,8 +110,8 @@ module Errors {
 >a2 : any
 
     declare function foo16(a2: {
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
->a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
+>foo16 : { (a2: {    (x: {        (a: number): number;        (a?: number): number;    }): number[];    (x: {        (a: boolean): boolean;        (a?: boolean): boolean;    }): boolean[];}): { (x: {    (a: number): number;    (a?: number): number;}): number[]; (x: {    (a: boolean): boolean;    (a?: boolean): boolean;}): boolean[]; }; (a2: any): any; }
+>a2 : { (x: {    (a: number): number;    (a?: number): number;}): number[]; (x: {    (a: boolean): boolean;    (a?: boolean): boolean;}): boolean[]; }
 
         // type of parameter is overload set which means we can't do inference based on this type
         (x: {

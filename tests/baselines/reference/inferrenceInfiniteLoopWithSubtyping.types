@@ -15,7 +15,7 @@ export class EnumTypeComposer {
 >EnumTypeComposer : EnumTypeComposer
 
   public setFields(fields: { [name: string]: { [key: string]: any } }): this;
->setFields : (fields: { [name: string]: { [key: string]: any; }; }) => this
+>setFields : (fields: {    [name: string]: {        [key: string]: any;    };}) => this
 >fields : { [name: string]: { [key: string]: any; }; }
 >name : string
 >key : string
@@ -38,10 +38,10 @@ export class Resolver {
 >Resolver : Resolver
 
   public wrapArgs<NewContext>(
->wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
+>wrapArgs : <NewContext>(cb: () => {    [argName: string]: Thunk<Readonly<EnumTypeComposer>>;}) => void
 
     cb: () => {
->cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
+>cb : () => {    [argName: string]: Thunk<Readonly<EnumTypeComposer>>;}
 
       [argName: string]: Thunk<Readonly<EnumTypeComposer>>;
 >argName : string

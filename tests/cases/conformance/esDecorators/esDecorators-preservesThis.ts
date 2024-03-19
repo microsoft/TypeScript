@@ -24,7 +24,7 @@ class C {
 class D extends DecoratorProvider {
     m() {
         class C {
-            @super.decorate
+            @(super.decorate)
             method1() { }
 
             @(super["decorate"])

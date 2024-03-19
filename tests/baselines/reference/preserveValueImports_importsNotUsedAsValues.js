@@ -15,6 +15,6 @@ export { type A, type B, type C } from "./mod.js";
 //// [mod.js]
 export {};
 //// [index.js]
-import {} from "./mod.js";
+export {};
 //// [reexport.js]
-export {} from "./mod.js";
+export {};

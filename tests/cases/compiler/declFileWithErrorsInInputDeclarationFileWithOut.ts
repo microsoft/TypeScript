@@ -1,5 +1,5 @@
 // @declaration: true
-// @out: out.js
+// @outFile: out.js
 
 // @Filename: declFile.d.ts
 declare module M {

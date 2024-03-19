@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/namespaceNotMergedWithFunctionDefaultExport.ts] ////
 
 === replace-in-file/types/index.d.ts ===
-// repro from https://github.com/microsoft/TypeScript/issues/54342
-
 declare module 'replace-in-file' {
 >'replace-in-file' : typeof import("replace-in-file")
 

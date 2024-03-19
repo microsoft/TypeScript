@@ -8,11 +8,12 @@ declare function y(...args: any[]): any;
 type T = number;
 >T : number
 
-@y(1 as T, C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
->y(1 as T, C) : any
+@y(1 as T, () => C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
+>y(1 as T, () => C) : any
 >y : (...args: any[]) => any
 >1 as T : number
 >1 : 1
+>() => C : () => typeof C
 >C : typeof C
 
 class C<T> {

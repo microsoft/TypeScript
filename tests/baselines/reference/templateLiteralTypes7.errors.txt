@@ -1,0 +1,34 @@
+templateLiteralTypes7.ts(16,7): error TS2322: Type '<T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]' is not assignable to type 'G2'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type '`${T}`' is not assignable to type '"1" | "2" | "3"'.
+      Type '"1" | "2" | "3" | "4"' is not assignable to type '"1" | "2" | "3"'.
+        Type '"4"' is not assignable to type '"1" | "2" | "3"'.
+
+
+==== templateLiteralTypes7.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/57807
+    
+    interface NMap {
+      1: 'A'
+      2: 'B'
+      3: 'C'
+      4: 'D'
+    }
+    
+    declare const g: <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+    
+    type G1 = <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+    const g1: G1 = g; // ok
+    
+    type G2 = <T extends 1 | 2 | 3 | 4>(x: `${T}`) => NMap[T]
+    const g2: G2 = g; // error
+          ~~
+!!! error TS2322: Type '<T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]' is not assignable to type 'G2'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type '`${T}`' is not assignable to type '"1" | "2" | "3"'.
+!!! error TS2322:       Type '"1" | "2" | "3" | "4"' is not assignable to type '"1" | "2" | "3"'.
+!!! error TS2322:         Type '"4"' is not assignable to type '"1" | "2" | "3"'.
+    
+    type G3 = <T extends 1 | 2>(x: `${T}`) => NMap[T]
+    const g3: G3 = g; // ok
+    

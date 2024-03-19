@@ -1,5 +1,13 @@
 //// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx] ////
 
+=== Performance Stats ===
+Subtype cache: 800 / 800 (nearest 100)
+Identity cache: 200 / 200 (nearest 100)
+Assignability cache: 2,600 / 2,600 (nearest 100)
+Type Count: 9,200 / 9,200 (nearest 100)
+Instantiation count: 150,500 / 150,500 (nearest 500)
+Symbol count: 88,500 / 88,500 (nearest 500)
+
 === reactTagNameComponentWithPropsNoOOM.tsx ===
 /// <reference path="react16.d.ts" />
 

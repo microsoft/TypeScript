@@ -66,7 +66,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer1.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -174,6 +174,29 @@ FsWatches::
 FsWatchesRecursive::
 /a/b: *new*
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1Consumer1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/file1Consumer2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 

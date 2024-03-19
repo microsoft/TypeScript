@@ -12,7 +12,6 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    logInferredProjectsOrphanStatus,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
@@ -108,7 +107,6 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             moduleResolution: ts.server.protocol.ModuleResolutionKind.Classic,
         }, session);
         host.runQueuedTimeoutCallbacks();
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("inferredProjects", "project settings for inferred projects", session);
     });
 

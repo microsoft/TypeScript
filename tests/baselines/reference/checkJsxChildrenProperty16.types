@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty16.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,200 / 2,200 (nearest 100)
+Type Count: 7,600 / 7,600 (nearest 100)
+Instantiation count: 89,500 / 89,500 (nearest 500)
+Symbol count: 66,000 / 66,000 (nearest 500)
+
 === checkJsxChildrenProperty16.tsx ===
 /// <reference path="react16.d.ts" />
 

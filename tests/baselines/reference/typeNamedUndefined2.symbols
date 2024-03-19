@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/typeNamedUndefined2.ts] ////
+
+=== typeNamedUndefined2.ts ===
+export namespace ns {
+>ns : Symbol(ns, Decl(typeNamedUndefined2.ts, 0, 0))
+
+    export namespace undefined {
+>undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 0, 21))
+
+        export const s = Symbol();
+>s : Symbol(s, Decl(typeNamedUndefined2.ts, 2, 20))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+        export type undefined = typeof s;
+>undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 2, 34))
+>s : Symbol(s, Decl(typeNamedUndefined2.ts, 2, 20))
+
+    };
+    export function x(p: undefined): undefined {
+>x : Symbol(x, Decl(typeNamedUndefined2.ts, 4, 6))
+>p : Symbol(p, Decl(typeNamedUndefined2.ts, 5, 22))
+
+        return p;
+>p : Symbol(p, Decl(typeNamedUndefined2.ts, 5, 22))
+    }
+}
+
+export function x(p: ns.undefined.undefined) {
+>x : Symbol(x, Decl(typeNamedUndefined2.ts, 8, 1))
+>p : Symbol(p, Decl(typeNamedUndefined2.ts, 10, 18))
+>ns : Symbol(ns, Decl(typeNamedUndefined2.ts, 0, 0))
+>undefined : Symbol(ns.undefined, Decl(typeNamedUndefined2.ts, 0, 21))
+>undefined : Symbol(ns.undefined.undefined, Decl(typeNamedUndefined2.ts, 2, 34))
+
+    return p;
+>p : Symbol(p, Decl(typeNamedUndefined2.ts, 10, 18))
+}
+
+export namespace undefined {
+>undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 12, 1))
+
+    export const s = Symbol();
+>s : Symbol(s, Decl(typeNamedUndefined2.ts, 15, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    export type undefined = typeof s;
+>undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 15, 30))
+>s : Symbol(s, Decl(typeNamedUndefined2.ts, 15, 16))
+
+};
+

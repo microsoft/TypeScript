@@ -4,8 +4,6 @@ user.ts(3,15): error TS2846: A declaration file cannot be imported without 'impo
 
 
 ==== x.ts (0 errors) ====
-    // ESM output
-    
     export default 0;
     
 ==== y.tsx (0 errors) ====

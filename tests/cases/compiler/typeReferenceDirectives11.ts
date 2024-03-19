@@ -3,7 +3,7 @@
 // @typeRoots: /types
 // @traceResolution: true
 // @types: lib
-// @out: output.js
+// @outFile: output.js
 
 // @currentDirectory: /
 

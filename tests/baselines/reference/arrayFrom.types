@@ -31,7 +31,7 @@ const inputALike: ArrayLike<A> = { length: 0 };
 const inputARand = getEither(inputA, inputALike);
 >inputARand : ArrayLike<A> | Iterable<A>
 >getEither(inputA, inputALike) : ArrayLike<A> | Iterable<A>
->getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => Iterable<T> | ArrayLike<T>
+>getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
 >inputA : A[]
 >inputALike : ArrayLike<A>
 
@@ -163,12 +163,12 @@ const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 // the ?: as always taking the false branch, narrowing to ArrayLike<T>,
 // even when the type is written as : Iterable<T>|ArrayLike<T>
 function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
->getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => Iterable<T> | ArrayLike<T>
+>getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
 >in1 : Iterable<T>
 >in2 : ArrayLike<T>
 
   return Math.random() > 0.5 ? in1 : in2;
->Math.random() > 0.5 ? in1 : in2 : Iterable<T> | ArrayLike<T>
+>Math.random() > 0.5 ? in1 : in2 : ArrayLike<T> | Iterable<T>
 >Math.random() > 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number

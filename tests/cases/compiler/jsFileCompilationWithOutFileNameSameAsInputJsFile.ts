@@ -1,5 +1,5 @@
 // @allowJs: true
-// @out: /b.js
+// @outFile: /b.js
 // @filename: /a.ts
 class c {
 }

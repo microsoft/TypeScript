@@ -2,13 +2,13 @@
 
 === indexSignaturesInferentialTyping.ts ===
 function foo<T>(items: { [index: number]: T }): T { return undefined; }
->foo : <T>(items: { [index: number]: T; }) => T
+>foo : <T>(items: {    [index: number]: T;}) => T
 >items : { [index: number]: T; }
 >index : number
 >undefined : undefined
 
 function bar<T>(items: { [index: string]: T }): T { return undefined; }
->bar : <T>(items: { [index: string]: T; }) => T
+>bar : <T>(items: {    [index: string]: T;}) => T
 >items : { [index: string]: T; }
 >index : string
 >undefined : undefined

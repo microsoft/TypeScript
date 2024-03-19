@@ -2,9 +2,9 @@
 
 === generatorTypeCheck45.ts ===
 declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T): T;
->foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U, any, undefined>, fun2: (y: U) => T) => T
+>foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T
 >x : T
->fun : () => Iterator<(x: T) => U, any, undefined>
+>fun : () => Iterator<(x: T) => U>
 >x : T
 >fun2 : (y: U) => T
 >y : U

@@ -48,9 +48,8 @@ Output::
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -163,9 +162,9 @@ Output::
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
+exports.T = void 0;
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 

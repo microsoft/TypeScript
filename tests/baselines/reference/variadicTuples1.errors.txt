@@ -541,3 +541,5 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
     type ToStringLength1<T extends any[]> = `${T['length']}`;
     type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
     
+    type AnyArr = [...any];
+    

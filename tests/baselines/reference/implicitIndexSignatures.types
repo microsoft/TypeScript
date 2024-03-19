@@ -58,12 +58,12 @@ map = names2;
 >names2 : { a: string; b: string; }
 
 declare function getStringIndexValue<T>(map: { [x: string]: T }): T;
->getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>getStringIndexValue : <T>(map: {    [x: string]: T;}) => T
 >map : { [x: string]: T; }
 >x : string
 
 declare function getNumberIndexValue<T>(map: { [x: number]: T }): T;
->getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>getNumberIndexValue : <T>(map: {    [x: number]: T;}) => T
 >map : { [x: number]: T; }
 >x : number
 

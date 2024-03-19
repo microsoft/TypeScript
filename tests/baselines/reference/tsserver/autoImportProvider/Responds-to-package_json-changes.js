@@ -53,7 +53,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Conf
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/index.ts SVC-1-0 ""
@@ -200,13 +200,31 @@ FsWatchesRecursive::
 /: *new*
   {}
 
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+
+After getAutoImportProvider
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /package.json 1:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Before getAutoImportProvider
+//// [/package.json]
+{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }
+
+
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/node_modules/@angular/forms/forms.d.ts Text-1 "export declare class PatternValidator {}"
@@ -216,3 +234,39 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+After getAutoImportProvider
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/package.json:
+  {}
+/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
+/node_modules: *new*
+  {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1* *changed*
+
+ScriptInfos::
+/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/node_modules/@angular/forms/forms.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*

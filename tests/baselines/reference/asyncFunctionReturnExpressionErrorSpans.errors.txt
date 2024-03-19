@@ -1,4 +1,4 @@
-asyncFunctionReturnExpressionErrorSpans.ts(11,28): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+asyncFunctionReturnExpressionErrorSpans.ts(11,28): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 asyncFunctionReturnExpressionErrorSpans.ts(16,21): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
@@ -15,7 +15,7 @@ asyncFunctionReturnExpressionErrorSpans.ts(16,21): error TS2322: Type 'number' i
     
     async function asyncFoo(): Promise<Foo> {
                                ~~~~~~~~~~~~
-!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
         return {
             bar: {
                 baz: {

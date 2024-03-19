@@ -17,10 +17,10 @@ foo();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
-function f() {
-}
 exports.default = f;
 exports.f = f;
+function f() {
+}
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

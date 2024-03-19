@@ -20,17 +20,15 @@ console.log(a, b, A, B);`,
 
 edit.replaceLine(0, 'import { type A, type a, b, B } from "foo2";');
 verify.organizeImports(
-`import { B, b, type A, type a } from "foo2";
+`import { b, B, type A, type a } from "foo2";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "last" }
 );
 
-// default behavior is { organizeImportsTypeOrder: "last" }
-
 edit.replaceLine(0, 'import { type A, type a, b, B } from "foo3";');
 verify.organizeImports(
-`import { B, b, type A, type a } from "foo3";
+`import { type A, type a, b, B } from "foo3";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: "auto" }
@@ -38,7 +36,7 @@ console.log(a, b, A, B);`,
 
 edit.replaceLine(0, 'import { type A, type a, b, B } from "foo4";');
 verify.organizeImports(
-`import { b, B, type A, type a } from "foo4";
+`import { type A, type a, b, B } from "foo4";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: true }
@@ -46,7 +44,7 @@ console.log(a, b, A, B);`,
 
 edit.replaceLine(0, 'import { type A, type a, b, B } from "foo5";');
 verify.organizeImports(
-`import { B, b, type A, type a } from "foo5";
+`import { type A, B, type a, b } from "foo5";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: false }

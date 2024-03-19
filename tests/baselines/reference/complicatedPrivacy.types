@@ -52,7 +52,7 @@ module m1 {
     }
 
     export function f3(): {
->f3 : () => (a: number) => C1
+>f3 : () => {    (a: number): C1;}
 
         (a: number) : C1;
 >a : number
@@ -74,7 +74,7 @@ module m1 {
 
 
     export function f5(arg2: {
->f5 : (arg2: new (arg1: C1) => C1) => void
+>f5 : (arg2: {    new (arg1: C1): C1;}) => void
 >arg2 : new (arg1: C1) => C1
 
         new (arg1: C1) : C1

@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/untypedModuleImport_allowJs.ts] ////
 
 //// [index.js]
-// Same as untypedModuleImport.ts but with --allowJs, so the package will actually be typed.
-
 exports.default = { bar() { return 0; } }
 
 //// [a.ts]

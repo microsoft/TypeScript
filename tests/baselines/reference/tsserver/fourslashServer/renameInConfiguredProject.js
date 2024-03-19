@@ -64,7 +64,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/four
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tests/cases/fourslash/server/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tests/cases/fourslash/server/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tests/cases/fourslash/server/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -135,6 +135,33 @@ watchedDirectoriesRecursive::
   {}
 /tests/cases/fourslash/server/node_modules/@types: *new*
   {}
+
+Projects::
+/tests/cases/fourslash/server/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json
+/tests/cases/fourslash/server/referencesForGlobals_1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json *default*
+/tests/cases/fourslash/server/referencesForGlobals_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {

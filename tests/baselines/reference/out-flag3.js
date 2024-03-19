@@ -1,16 +1,13 @@
 //// [tests/cases/compiler/out-flag3.ts] ////
 
 //// [a.ts]
-// --out and --outFile error
-
 class A { }
 
 //// [b.ts]
 class B { }
 
 
-//// [c.js]
-// --out and --outFile error
+//// [d.js]
 var A = /** @class */ (function () {
     function A() {
     }
@@ -21,9 +18,9 @@ var B = /** @class */ (function () {
     }
     return B;
 }());
-//# sourceMappingURL=c.js.map
+//# sourceMappingURL=d.js.map
 
-//// [c.d.ts]
+//// [d.d.ts]
 declare class A {
 }
 declare class B {

@@ -1,5 +1,5 @@
 // @allowJs: true
-// @out: out.js
+// @outFile: out.js
 
 // @FileName: a.js
 function foo(a) {

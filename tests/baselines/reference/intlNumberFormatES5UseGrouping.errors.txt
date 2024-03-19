@@ -1,0 +1,15 @@
+intlNumberFormatES5UseGrouping.ts(2,34): error TS2322: Type 'string' is not assignable to type 'boolean | undefined'.
+intlNumberFormatES5UseGrouping.ts(3,34): error TS2322: Type 'string' is not assignable to type 'boolean | undefined'.
+
+
+==== intlNumberFormatES5UseGrouping.ts (2 errors) ====
+    new Intl.NumberFormat('en-GB', { useGrouping: true });
+    new Intl.NumberFormat('en-GB', { useGrouping: 'true' }); // expect error
+                                     ~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean | undefined'.
+    new Intl.NumberFormat('en-GB', { useGrouping: 'always' }); // expect error
+                                     ~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean | undefined'.
+    
+    const { useGrouping } = new Intl.NumberFormat('en-GB').resolvedOptions();
+    
