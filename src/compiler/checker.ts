@@ -26611,7 +26611,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isElementAccessExpression(source) && isElementAccessExpression(target) && isIdentifier(source.argumentExpression) && isIdentifier(target.argumentExpression)) {
                     const symbol = getResolvedSymbol(source.argumentExpression);
                     if (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol)) {
-                        return symbol === getResolvedSymbol(target.argumentExpression);
+                        return symbol === getResolvedSymbol(target.argumentExpression) && isMatchingReference(source.expression, target.expression);
                     }
                 }
                 break;
