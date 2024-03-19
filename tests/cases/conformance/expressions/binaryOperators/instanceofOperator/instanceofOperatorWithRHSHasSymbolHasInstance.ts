@@ -116,3 +116,19 @@ if (obj instanceof A) {
 if (obj instanceof B) {
     obj; // B
 }
+
+// intersections
+// https://github.com/microsoft/TypeScript/issues/56536
+
+interface HasInstanceOf { [Symbol.hasInstance](x: unknown): boolean }
+type Rhs14 = HasInstanceOf & object;
+declare const rhs14: Rhs14;
+lhs0 instanceof rhs14 && lhs0;
+
+// unions
+
+interface HasInstanceOf1 { [Symbol.hasInstance](x: unknown): x is Point }
+interface HasInstanceOf2 { [Symbol.hasInstance](x: unknown): x is Line }
+type Rhs15 = HasInstanceOf1 | HasInstanceOf2;
+declare const rhs15: Rhs15;
+lhs0 instanceof rhs15 && lhs0;

@@ -26,8 +26,14 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [
-    Diagnostics.Non_abstract_class_0_does_not_implement_all_abstract_members_of_1.code,
+    Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
+    Diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2.code,
+    Diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2_and_3_more.code,
+    Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
+    Diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1.code,
+    Diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1_and_2_more.code,
 ];
+
 const fixId = "fixClassDoesntImplementInheritedAbstractMember";
 registerCodeFix({
     errorCodes,

@@ -1,11 +1,7 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== m1.ts (0 errors) ====
     export var m1_a1 = 10;
     export class m1_c1 {

@@ -2,7 +2,7 @@
 
 === unionTypeReduction2.ts ===
 function f1(x: { f(): void }, y: { f(x?: string): void }) {
->f1 : (x: {    f(): void;}, y: { f(x?: string): void; }) => void
+>f1 : (x: {    f(): void;}, y: {    f(x?: string): void;}) => void
 >x : { f(): void; }
 >f : () => void
 >y : { f(x?: string): void; }
@@ -33,7 +33,7 @@ function f1(x: { f(): void }, y: { f(x?: string): void }) {
 }
 
 function f2(x: { f(x: string | undefined): void }, y: { f(x?: string): void }) {
->f2 : (x: { f(x: string | undefined): void; }, y: { f(x?: string): void; }) => void
+>f2 : (x: {    f(x: string | undefined): void;}, y: {    f(x?: string): void;}) => void
 >x : { f(x: string | undefined): void; }
 >f : (x: string | undefined) => void
 >x : string | undefined
@@ -229,7 +229,7 @@ declare const val: ReturnVal;
 >val : ReturnVal
 
 function run(options: { something?(b?: string): void }) {
->run : (options: { something?(b?: string): void; }) => void
+>run : (options: {    something?(b?: string): void;}) => void
 >options : { something?(b?: string): void; }
 >something : ((b?: string) => void) | undefined
 >b : string | undefined

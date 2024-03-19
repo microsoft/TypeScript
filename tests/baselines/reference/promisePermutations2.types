@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/promisePermutations2.ts] ////
 
+=== Performance Stats ===
+Subtype cache: 200 / 200 (nearest 100)
+Assignability cache: 200 / 200 (nearest 100)
+Type Count: 800 / 900 (nearest 100)
+Instantiation count: 2,500 / 2,500 (nearest 500)
+Symbol count: 27,000 / 27,000 (nearest 500)
+
 === promisePermutations2.ts ===
 // same as promisePermutations but without the same overloads in Promise<T>
 
