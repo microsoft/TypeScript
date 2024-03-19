@@ -22,8 +22,6 @@ function run(configuration: commands.IConfiguration) {
 >server : import("visibilityOfCrossModuleTypeUsage_server").IServer
 }
 === visibilityOfCrossModuleTypeUsage_commands.ts ===
-//visibilityOfCrossModuleTypeUsage
-
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
 >fs : typeof fs
 

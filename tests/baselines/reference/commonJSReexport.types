@@ -13,8 +13,6 @@ hardline
 >hardline : { type: string; }
 
 === first.js ===
-// #41422, based on prettier's exports
-
 const hardline = { type: "hard" }
 >hardline : { type: string; }
 >{ type: "hard" } : { type: string; }

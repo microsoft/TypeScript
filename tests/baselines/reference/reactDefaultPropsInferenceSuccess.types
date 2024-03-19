@@ -1,5 +1,13 @@
 //// [tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx] ////
 
+=== Performance Stats ===
+Subtype cache: 100 / 100 (nearest 100)
+Identity cache: 200 / 200 (nearest 100)
+Assignability cache: 2,500 / 2,500 (nearest 100)
+Type Count: 8,600 / 8,600 (nearest 100)
+Instantiation count: 93,000 / 93,000 (nearest 500)
+Symbol count: 67,500 / 67,500 (nearest 500)
+
 === reactDefaultPropsInferenceSuccess.tsx ===
 /// <reference path="react16.d.ts" />
 

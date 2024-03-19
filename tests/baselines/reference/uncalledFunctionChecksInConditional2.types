@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000 / 1,000 (nearest 100)
+Symbol count: 28,500 / 28,500 (nearest 500)
+
 === uncalledFunctionChecksInConditional2.ts ===
 {
   const perf = window.performance

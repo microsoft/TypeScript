@@ -104,7 +104,7 @@ h(async v => v ? (def) => { } : Promise.reject());
 
 // repro from #29196
 const increment: (
->increment : (num: number, str: string) => string | Promise<string | ((s: string) => any)>
+>increment : (num: number, str: string) => Promise<((s: string) => any) | string> | string
 
   num: number,
 >num : number
@@ -130,7 +130,7 @@ const increment: (
 }
 
 const increment2: (
->increment2 : (num: number, str: string) => Promise<string | ((s: string) => any)>
+>increment2 : (num: number, str: string) => Promise<((s: string) => any) | string>
 
   num: number,
 >num : number

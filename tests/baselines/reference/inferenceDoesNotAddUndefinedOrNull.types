@@ -5,7 +5,7 @@ interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
 
 interface Node {
     forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined
 >cbNode : (node: Node) => T | undefined
 >node : Node
 >cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
