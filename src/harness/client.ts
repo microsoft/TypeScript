@@ -50,6 +50,7 @@ import {
     OrganizeImportsArgs,
     OutliningSpan,
     PasteEdits,
+    PasteEditsArgs,
     PatternMatchKind,
     Program,
     QuickInfo,
@@ -1011,16 +1012,14 @@ export class SessionClient implements LanguageService {
     }
 
     getPasteEdits(
-        targetFile: string,
-        copies: { text: string; copyRange?: { file: string; range: TextRange; }; }[],
-        pastes: TextRange[],
-        _preferences: UserPreferences,
+        { targetFile, pastedText, pasteLocations, copiedFrom }: PasteEditsArgs,
         _formatOptions: FormatCodeSettings,
     ): PasteEdits {
         const args: protocol.GetPasteEditsRequestArgs = {
             file: targetFile,
-            copies: copies.map(copy => ({ text: copy.text, range: copy.copyRange ? { file: copy.copyRange.file, start: this.positionToOneBasedLineOffset(copy.copyRange.file, copy.copyRange.range.pos), end: this.positionToOneBasedLineOffset(copy.copyRange.file, copy.copyRange.range.end) } : undefined })),
-            pastes: pastes.map(paste => ({ start: this.positionToOneBasedLineOffset(targetFile, paste.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.end) })),
+            pastedText,
+            pasteLocations: pasteLocations.map(range => ({ start: this.positionToOneBasedLineOffset(targetFile, range.pos), end: this.positionToOneBasedLineOffset(targetFile, range.end) })),
+            copiedFrom: copiedFrom ? { file: copiedFrom.file, range: copiedFrom.range.map(range => ({ start: this.positionToOneBasedLineOffset(copiedFrom.file, range.pos), end: this.positionToOneBasedLineOffset(copiedFrom.file, range.end) })) } : undefined,
         };
         const request = this.processRequest<protocol.GetPasteEditsRequest>(protocol.CommandTypes.GetPasteEdits, args);
         const response = this.processResponse<protocol.GetPasteEditsResponse>(request);
@@ -1028,7 +1027,7 @@ export class SessionClient implements LanguageService {
             return { edits: [] };
         }
         const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
-        return { edits };
+        return { edits, fixId: response.body.fixId };
     }
 
     getProgram(): Program {

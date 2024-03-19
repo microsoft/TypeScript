@@ -17,15 +17,15 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
-    copies: [{ 
-        text: `interface Testing {
+    args: {
+        pastedText: [ `interface Testing {
             test1: Test1;
             test2: Test2;
             test3: Test3;
             test4: Test4;
-        }`,
-    }],
-    pastes: [range[0]],
+        }`],
+    pasteLocations: [range[0]],
+    },
     newFileContents: {
         "/file2.ts":
 `import { Test1, Test2, Test3, Test4 } from "./file1";
@@ -38,5 +38,6 @@ interface Testing {
             test3: Test3;
             test4: Test4;
         }const c = 10;`
-    }
+    },
+    fixId: "providePostPasteEdits"
 });

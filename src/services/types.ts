@@ -685,10 +685,7 @@ export interface LanguageService {
 
     dispose(): void;
     getPasteEdits(
-        targetFile: string,
-        copies: { text: string; range?: { file: string; range: TextRange; }; }[],
-        pastes: TextRange[],
-        preferences: UserPreferences,
+        args: PasteEditsArgs,
         formatOptions: FormatCodeSettings,
     ): PasteEdits;
 }
@@ -715,6 +712,15 @@ export const enum OrganizeImportsMode {
 
 export interface PasteEdits {
     edits: readonly FileTextChanges[];
+    fixId?: {};
+}
+
+export interface PasteEditsArgs {
+    targetFile: string;
+    pastedText: string[];
+    pasteLocations: TextRange[];
+    copiedFrom: { file: string; range: TextRange[]; } | undefined;
+    preferences: UserPreferences;
 }
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {

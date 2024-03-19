@@ -1,7 +1,8 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /target.ts
-//// const a = 1;
+//// import { r } from "./file1";
+//// const a = r;
 //// [|const b = 2;|]
 //// const c = 3;
 //// [||]
@@ -10,9 +11,11 @@
 // @Filename: /file1.ts
 //// import { aa, bb } from "./other";
 //// export const r = 10;
-//// export const s = 12;
+//// const s = 12;
+//// export const m = 10;
 //// [|export const t = aa + bb + r + s;
 //// const u = 1;|]
+//// [|export const k = r + m;|]
 
 // @Filename: /other.ts
 //// export const aa = 1;
@@ -26,22 +29,27 @@ format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
     args: {
         pastedText: [ `export const t = aa + bb + r + s;
-const u = 1;`,],
+const u = 1;`, `export const k = r + m;`],
     pasteLocations: [range[0], range[1]],
-    copiedFrom: { file: "file1.ts", range: [range[2]] },
+    copiedFrom: { file: "file1.ts", range: [range[2], range[3]] },
     },
     newFileContents: {
+        "/file1.ts":`import { aa, bb } from "./other";
+export const r = 10;
+export const s = 12;
+export const m = 10;
+export const t = aa + bb + r + s;
+const u = 1;
+export const k = r + m;`,
         "/target.ts":
-`import { r, s } from "./file1";
-
+`import { m, r, s } from "./file1";
 import { aa, bb } from "./other";
-
-const a = 1;
+const a = r;
 export const t = aa + bb + r + s;
 const u = 1;
 const c = 3;
-export const t = aa + bb + r + s;
-const u = 1;
+export const k = r + m;
 const d = 4;`
     },
+    fixId: "providePostPasteEdits"
 });

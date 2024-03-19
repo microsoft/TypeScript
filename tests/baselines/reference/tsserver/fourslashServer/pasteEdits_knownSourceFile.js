@@ -212,23 +212,10 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "copies": [
-          {
-            "text": "const c = a + b;\nconst t = 9;",
-            "range": {
-              "file": "file2.ts",
-              "start": {
-                "line": 3,
-                "offset": 1
-              },
-              "end": {
-                "line": 4,
-                "offset": 13
-              }
-            }
-          }
+        "pastedText": [
+          "const c = a + b;\nconst t = 9;"
         ],
-        "pastes": [
+        "pasteLocations": [
           {
             "start": {
               "line": 2,
@@ -239,9 +226,24 @@ Info seq  [hh:mm:ss:mss] request:
               "offset": 14
             }
           }
-        ]
+        ],
+        "copiedFrom": {
+          "file": "file2.ts",
+          "range": [
+            {
+              "start": {
+                "line": 3,
+                "offset": 1
+              },
+              "end": {
+                "line": 4,
+                "offset": 13
+              }
+            }
+          ]
+        }
       },
-      "command": "GetPasteEdits"
+      "command": "getPasteEdits"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -261,7 +263,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
       "type": "response",
-      "command": "GetPasteEdits",
+      "command": "getPasteEdits",
       "request_seq": 2,
       "success": true,
       "performanceData": {
@@ -323,7 +325,8 @@ Info seq  [hh:mm:ss:mss] response:
               }
             ]
           }
-        ]
+        ],
+        "fixId": "providePostPasteEdits"
       }
     }
 After Request

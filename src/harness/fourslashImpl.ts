@@ -3563,8 +3563,8 @@ export class TestState {
     }
 
     public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
-        const editInfo = this.languageService.getPasteEdits(this.activeFile.fileName, options.copies, options.pastes, options.preferences, this.formatCodeSettings);
-        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
+        const editInfo = this.languageService.getPasteEdits({ targetFile: this.activeFile.fileName, pastedText: options.args.pastedText, pasteLocations: options.args.pasteLocations, copiedFrom: options.args.copiedFrom, preferences: options.args.preferences }, this.formatCodeSettings);
+        (options.fixId === editInfo.fixId) ? this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits) : this.raiseError(`Expected to find a fix ${editInfo.fixId}, but none exists`);
     }
 
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {

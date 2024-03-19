@@ -240,6 +240,7 @@ import {
     parseJsonSourceFileConfigFileContent,
     PasteEdits,
     pasteEdits,
+    PasteEditsArgs,
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
@@ -2094,19 +2095,17 @@ export function createLanguageService(
     }
 
     function getPasteEdits(
-        targetFile: string,
-        copies: { text: string; copyRange?: { file: string; range: TextRange; }; }[],
-        pastes: TextRange[],
-        preferences: UserPreferences,
+        args: PasteEditsArgs,
         formatOptions: FormatCodeSettings,
     ): PasteEdits {
         synchronizeHostData();
         return pasteEdits.pasteEditsProvider(
-            getValidSourceFile(targetFile),
-            copies.map(({ text, copyRange }) => ({ text, copyRange: copyRange ? { file: getValidSourceFile(copyRange.file), range: copyRange.range } : undefined })),
-            pastes,
+            getValidSourceFile(args.targetFile),
+            args.pastedText,
+            args.pasteLocations,
+            args.copiedFrom ? { file: getValidSourceFile(args.copiedFrom.file), range: args.copiedFrom.range } : undefined,
             host,
-            preferences,
+            args.preferences,
             formatting.getFormatContext(formatOptions, host),
             cancellationToken,
         );

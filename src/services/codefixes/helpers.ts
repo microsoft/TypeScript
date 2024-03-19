@@ -925,7 +925,7 @@ function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Ide
 
 /** @internal */
 export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
-    symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
+    symbols.forEach(s => importAdder.addImportFromSymbol(s, /*isValidTypeOnlyUseSite*/ true));
 }
 
 /** @internal */

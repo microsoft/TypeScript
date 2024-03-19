@@ -216,23 +216,10 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "copies": [
-          {
-            "text": "export const t = aa + bb + r + s;\nconst u = 1;",
-            "range": {
-              "file": "file1.ts",
-              "start": {
-                "line": 4,
-                "offset": 1
-              },
-              "end": {
-                "line": 5,
-                "offset": 13
-              }
-            }
-          }
+        "pastedText": [
+          "export const t = aa + bb + r + s;\nconst u = 1;"
         ],
-        "pastes": [
+        "pasteLocations": [
           {
             "start": {
               "line": 2,
@@ -253,9 +240,24 @@ Info seq  [hh:mm:ss:mss] request:
               "offset": 1
             }
           }
-        ]
+        ],
+        "copiedFrom": {
+          "file": "file1.ts",
+          "range": [
+            {
+              "start": {
+                "line": 4,
+                "offset": 1
+              },
+              "end": {
+                "line": 5,
+                "offset": 13
+              }
+            }
+          ]
+        }
       },
-      "command": "GetPasteEdits"
+      "command": "getPasteEdits"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -266,7 +268,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/other.ts Text-1 "export const aa = 1;\nexport const bb = 2;"
 	/file1.ts Text-1 "import { aa, bb } from \"./other\";\nexport const r = 10;\nexport const s = 12;\nexport const t = aa + bb + r + s;\nconst u = 1;"
-	/target.ts SVC-1-1 "const a = 1;\nexport const t = aa + bb + r + s;\nconst u = 1;\nconst c = 3;\n\nconst d = 4;"
+	/target.ts SVC-1-1 "const a = 1;\nexport const t = aa + bb + r + s;\nconst u = 1;\nconst c = 3;\nundefined\nconst d = 4;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
@@ -276,7 +278,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
       "type": "response",
-      "command": "GetPasteEdits",
+      "command": "getPasteEdits",
       "request_seq": 2,
       "success": true,
       "performanceData": {
@@ -333,7 +335,8 @@ Info seq  [hh:mm:ss:mss] response:
               }
             ]
           }
-        ]
+        ],
+        "fixId": "providePostPasteEdits"
       }
     }
 After Request

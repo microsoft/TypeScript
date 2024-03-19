@@ -11,15 +11,15 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
-    copies: [{
-        text: `/**
+    args: {
+        pastedText: [ `/**
 * Testing comment line 1
 * line 2
 * line 3
 * line 4
-*/`
-    }],
-    pastes: [range[0]],
+*/`],
+    pasteLocations: [range[0]],
+    },
     newFileContents: {
         "/target.ts":
 `const a = 10;
@@ -30,5 +30,6 @@ const b = 10;/**
 * line 4
 */
 const c = 10;`
-    }
+    },
+    fixId: "providePostPasteEdits"
 });

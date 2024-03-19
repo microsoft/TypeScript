@@ -2798,16 +2798,17 @@ export class Session<TMessage = string> implements EventSender {
 
     private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
         const { file, project } = this.getFileAndProject(args);
-        const copyFile = args.copies[0].range ? args.copies[0].range.file : undefined;
+        const copyFile = args.copiedFrom ? args.copiedFrom.file : undefined;
         const result = project.getLanguageService().getPasteEdits(
-            file,
-            args.copies.map(copy => ({
-                text: copy.text,
-                copyRange: copy.range && copyFile
-                    ? { file: copy.range.file, range: this.getRange({ file: copyFile, startLine: copy.range.start.line, startOffset: copy.range.start.offset, endLine: copy.range.end.line, endOffset: copy.range.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(copyFile))!) } : undefined,
-            })),
-            args.pastes.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!)),
-            this.getPreferences(file),
+            {
+                targetFile: file,
+                pastedText: args.pastedText,
+                pasteLocations: args.pasteLocations.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!)),
+                copiedFrom: args.copiedFrom && copyFile
+                    ? { file: args.copiedFrom.file, range: args.copiedFrom.range.map(copies => this.getRange({ file: copyFile, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(copyFile))!)) }
+                    : undefined,
+                preferences: this.getPreferences(file),
+            },
             this.getFormatOptions(file),
         );
         if (result === undefined) {
@@ -2948,8 +2949,8 @@ export class Session<TMessage = string> implements EventSender {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
     }
 
-    private mapPasteEditsAction({ edits }: PasteEdits): protocol.PasteEditsAction {
-        return { edits: this.mapTextChangesToCodeEdits(edits) };
+    private mapPasteEditsAction({ edits, fixId }: PasteEdits): protocol.PasteEditsAction {
+        return { edits: this.mapTextChangesToCodeEdits(edits), fixId };
     }
 
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {

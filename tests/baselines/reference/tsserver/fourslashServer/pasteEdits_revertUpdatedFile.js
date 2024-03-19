@@ -212,12 +212,10 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "copies": [
-          {
-            "text": "const m = t2 + 1;"
-          }
+        "pastedText": [
+          "const m = t2 + 1;"
         ],
-        "pastes": [
+        "pasteLocations": [
           {
             "start": {
               "line": 3,
@@ -230,7 +228,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "command": "GetPasteEdits"
+      "command": "getPasteEdits"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -248,7 +246,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
       "type": "response",
-      "command": "GetPasteEdits",
+      "command": "getPasteEdits",
       "request_seq": 2,
       "success": true,
       "performanceData": {
@@ -283,7 +281,8 @@ Info seq  [hh:mm:ss:mss] response:
               }
             ]
           }
-        ]
+        ],
+        "fixId": "providePostPasteEdits"
       }
     }
 After Request

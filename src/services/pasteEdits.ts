@@ -14,15 +14,18 @@ import {
 } from "../compiler/utilities";
 import {
     codefix,
+    Debug,
     fileShouldUseJavaScriptRequire,
     forEachChild,
     formatting,
     getQuotePreference,
-    getTargetFileImportsAndAddExportInOldFile,
     insertImports,
     isIdentifier,
     textChanges,
 } from "./_namespaces/ts";
+import {
+    getTargetFileImportsAndAddExportInOldFile,
+} from "./refactors/helpers";
 import {
     getExistingLocals,
     getUsageInfo,
@@ -34,44 +37,59 @@ import {
     PasteEdits,
 } from "./types";
 
+const fixId = "providePostPasteEdits";
 /** @internal */
 export function pasteEditsProvider(
     targetFile: SourceFile,
-    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange; }; }[],
-    pastes: TextRange[],
+    pastedText: string[],
+    pasteLocations: TextRange[],
+    copiedFrom: { file: SourceFile; range: TextRange[]; } | undefined,
     host: LanguageServiceHost,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
 ): PasteEdits {
-    const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => pasteEdits(targetFile, copies, pastes, host, preferences, formatContext, cancellationToken, changeTracker));
-    return { edits: changes };
+    const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => pasteEdits(targetFile, pastedText, pasteLocations, copiedFrom, host, preferences, formatContext, cancellationToken, changeTracker));
+    return { edits: changes, fixId };
 }
 
 function pasteEdits(
     targetFile: SourceFile,
-    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange; }; }[],
-    pastes: TextRange[],
+    pastedText: string[],
+    pasteLocations: TextRange[],
+    copiedFrom: { file: SourceFile; range: TextRange[]; } | undefined,
     host: LanguageServiceHost,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
     changes: textChanges.ChangeTracker,
 ) {
-    const copy = copies[0];
     const statements: Statement[] = [];
 
-    host.runWithTemporaryFileUpdate?.(targetFile.fileName, targetFile.getText().slice(0, pastes[0].pos) + copy.text + targetFile.getText().slice(pastes[0].end), (updatedProgram, originalProgram, updatedFile) => {
-        if (copy.copyRange) {
-            addRange(statements, copy.copyRange.file.statements, getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.pos), getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.end) + 1);
-            const usage = getUsageInfo(copy.copyRange.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
+    let start = 0;
+    let newText = "";
+    pasteLocations.forEach((location, i) => {
+        if (i === pasteLocations.length - 1) {
+            newText += targetFile.getText().slice(start, location.pos) + pastedText[i] + targetFile.getText().slice(location.end);
+        }
+        else {
+            newText += targetFile.getText().slice(start, location.pos) + pastedText[i];
+            start = location.end;
+        }
+    });
+    host.runWithTemporaryFileUpdate?.(targetFile.fileName, newText, (updatedProgram, originalProgram, updatedFile) => {
+        if (copiedFrom?.range) {
+            Debug.assert(copiedFrom.range.length === pastedText.length);
+            copiedFrom.range.forEach(copy => {
+                addRange(statements, copiedFrom.file.statements, getLineOfLocalPosition(copiedFrom.file, copy.pos), getLineOfLocalPosition(copiedFrom.file, copy.end) + 1);
+            });
+            const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
             const importAdder = codefix.createImportAdder(updatedFile, updatedProgram!, preferences, host);
-
-            const imports = getTargetFileImportsAndAddExportInOldFile(copy.copyRange.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copy.copyRange.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
+            const imports = getTargetFileImportsAndAddExportInOldFile(copiedFrom.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copiedFrom.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
             if (imports.length > 0) {
                 insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
             }
-            importAdder.writeFixes(changes, getQuotePreference(copy.copyRange.file, preferences));
+            importAdder.writeFixes(changes, getQuotePreference(copiedFrom.file, preferences));
         }
         else {
             const context: CodeFixContextBase = {
@@ -97,7 +115,16 @@ function pasteEdits(
             importAdder.writeFixes(changes, getQuotePreference(targetFile, preferences));
         }
     });
-    pastes.forEach(paste => {
-        changes.replaceRangeWithText(targetFile, { pos: paste.pos, end: paste.end }, copy.text);
+
+    if (pastedText.length !== 1) {
+        Debug.assert(pastedText.length === pasteLocations.length);
+    }
+    pasteLocations.forEach((paste, i) => {
+        changes.replaceRangeWithText(
+            targetFile,
+            { pos: paste.pos, end: paste.end },
+            pastedText.length === 1 ?
+                pastedText[0] : pastedText[i],
+        );
     });
 }

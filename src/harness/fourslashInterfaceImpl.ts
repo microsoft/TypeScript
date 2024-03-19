@@ -1929,9 +1929,8 @@ export interface MoveToFileOptions {
 
 export interface PasteEditsOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
-    readonly copies: { text: string; copyRange?: { file: string; range: ts.TextRange; }; }[];
-    readonly pastes: ts.TextRange[];
-    readonly preferences: ts.UserPreferences;
+    args: ts.PasteEditsArgs;
+    readonly fixId: string;
 }
 
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

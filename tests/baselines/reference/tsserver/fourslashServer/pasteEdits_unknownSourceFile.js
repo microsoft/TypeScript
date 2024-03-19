@@ -197,12 +197,10 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/file2.ts",
-        "copies": [
-          {
-            "text": "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }"
-          }
+        "pastedText": [
+          "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }"
         ],
-        "pastes": [
+        "pasteLocations": [
           {
             "start": {
               "line": 3,
@@ -215,7 +213,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "command": "GetPasteEdits"
+      "command": "getPasteEdits"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -232,7 +230,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
       "type": "response",
-      "command": "GetPasteEdits",
+      "command": "getPasteEdits",
       "request_seq": 2,
       "success": true,
       "performanceData": {
@@ -267,7 +265,8 @@ Info seq  [hh:mm:ss:mss] response:
               }
             ]
           }
-        ]
+        ],
+        "fixId": "providePostPasteEdits"
       }
     }
 After Request

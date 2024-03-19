@@ -213,12 +213,10 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "copies": [
-          {
-            "text": "const g = p + q;\nfunction e();\nconst f = r + s;"
-          }
+        "pastedText": [
+          "const g = p + q;\nfunction e();\nconst f = r + s;"
         ],
-        "pastes": [
+        "pasteLocations": [
           {
             "start": {
               "line": 2,
@@ -241,7 +239,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "command": "GetPasteEdits"
+      "command": "getPasteEdits"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -251,7 +249,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/file1.ts Text-1 "export const p = 10;\nexport const q = 12;"
-	/target.ts SVC-1-1 "const a = 1;\nconst g = p + q;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;\n\nconst d = 4;"
+	/target.ts SVC-1-1 "const a = 1;\nconst g = p + q;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;\nundefined\nconst d = 4;"
 	/file3.ts Text-1 "export const r = 10;\nexport const s = 12;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -259,7 +257,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
       "type": "response",
-      "command": "GetPasteEdits",
+      "command": "getPasteEdits",
       "request_seq": 2,
       "success": true,
       "performanceData": {
@@ -305,7 +303,8 @@ Info seq  [hh:mm:ss:mss] response:
               }
             ]
           }
-        ]
+        ],
+        "fixId": "providePostPasteEdits"
       }
     }
 After Request
