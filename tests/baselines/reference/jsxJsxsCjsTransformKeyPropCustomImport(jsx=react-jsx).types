@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyPropCustomImport.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,100 / 2,200 (nearest 100)
+Type Count: 7,600 / 7,600 (nearest 100)
+Instantiation count: 89,500 / 89,500 (nearest 500)
+Symbol count: 66,500 / 66,500 (nearest 500)
+
 === jsxJsxsCjsTransformKeyPropCustomImport.tsx ===
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 }

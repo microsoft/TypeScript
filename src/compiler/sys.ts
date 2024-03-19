@@ -1458,7 +1458,7 @@ export interface System {
 
     // For testing
     /** @internal */ now?(): Date;
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
 }
 
 export interface FileWatcher {

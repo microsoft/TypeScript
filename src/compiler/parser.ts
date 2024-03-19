@@ -8760,7 +8760,7 @@ namespace Parser {
                 if (!jsDocDiagnostics) {
                     jsDocDiagnostics = [];
                 }
-                jsDocDiagnostics.push(...parseDiagnostics);
+                addRange(jsDocDiagnostics, parseDiagnostics, saveParseDiagnosticsLength);
             }
             currentToken = saveToken;
             parseDiagnostics.length = saveParseDiagnosticsLength;
@@ -10511,7 +10511,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                     const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
-                    if (arg.arguments["no-default-lib"]) {
+                    if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {

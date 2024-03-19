@@ -2,7 +2,7 @@
 
 === taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
->f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
+>f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
 >strs : TemplateStringsArray
 >callbacks : ((x: T) => any)[]
 >x : T

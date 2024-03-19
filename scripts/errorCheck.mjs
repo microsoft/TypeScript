@@ -20,19 +20,17 @@ async function checkErrorBaselines() {
 
     const files = (await fsPromises.readdir(baseDir)).filter(f => f.endsWith(".errors.txt"));
 
-    files.forEach(f => {
-        fs.readFile(baseDir + f, "utf-8", (err, baseline) => {
-            if (err) throw err;
+    for (const f of files) {
+        const baseline = fs.readFileSync(baseDir + f, "utf-8");
 
-            let g;
-            while (g = errRegex.exec(baseline)) {
-                const errCode = +g[1];
-                const msg = keys.find(k => messages[k].code === errCode);
+        let g;
+        while (g = errRegex.exec(baseline)) {
+            const errCode = +g[1];
+            const msg = keys.find(k => messages[k].code === errCode);
                 assert(msg);
-                messages[msg].seen = true;
-            }
-        });
-    });
+            messages[msg].seen = true;
+        }
+    }
 
     console.log("== List of errors not present in baselines ==");
     let count = 0;

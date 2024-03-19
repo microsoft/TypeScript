@@ -580,7 +580,7 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
 // Narrowing by aliased discriminant property access
 
 function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f30 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>f30 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
@@ -612,7 +612,7 @@ function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 }
 
 function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f31 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>f31 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
@@ -673,7 +673,7 @@ function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 }
 
 function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f33 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>f33 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
@@ -809,7 +809,7 @@ class C11 {
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
->f40 : (obj: { kind: 'foo'; foo?: string | undefined; } | { kind: 'bar'; bar?: number | undefined; }) => void
+>f40 : (obj: {    kind: 'foo';    foo?: string;} | {    kind: 'bar';    bar?: number;}) => void
 >obj : { kind: 'foo'; foo?: string | undefined; } | { kind: 'bar'; bar?: number | undefined; }
 >kind : "foo"
 >foo : string | undefined

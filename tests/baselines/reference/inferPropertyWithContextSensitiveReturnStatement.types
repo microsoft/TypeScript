@@ -4,7 +4,7 @@
 // repro #50687
 
 declare function repro<T>(config: {
->repro : <T>(config: { params: T; callback: () => (params: T) => number; }) => void
+>repro : <T>(config: {    params: T;    callback: () => (params: T) => number;}) => void
 >config : { params: T; callback: () => (params: T) => number; }
 
   params: T;

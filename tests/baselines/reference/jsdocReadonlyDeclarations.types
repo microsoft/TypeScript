@@ -57,3 +57,4 @@ class D {
     constructor(/** @readonly */ x) {}
 >x : any
 }
+

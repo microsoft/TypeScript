@@ -25,6 +25,7 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    orderedRemoveItem,
     Path,
     ScriptKind,
     ScriptSnapshot,
@@ -32,7 +33,6 @@ import {
     SourceFile,
     SourceFileLike,
     TextSpan,
-    unorderedRemoveItem,
 } from "./_namespaces/ts";
 import {
     AbsolutePositionAndLineText,
@@ -93,7 +93,7 @@ export class TextStorage {
     /**
      * True when reloading contents of file from the disk is pending
      */
-    private pendingReloadFromDisk = false;
+    pendingReloadFromDisk = false;
 
     constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: number) {
         this.version = initialVersion || 0;
@@ -534,7 +534,8 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                // We use first configured project as default so we shouldnt change the order of the containing projects
+                if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;
