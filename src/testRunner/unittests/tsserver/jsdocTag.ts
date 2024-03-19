@@ -2,9 +2,8 @@ import * as ts from "../../_namespaces/ts";
 
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -30,7 +29,7 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
         it(subScenario, () => {
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([file, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { displayPartsForJSDoc } },
@@ -117,7 +116,7 @@ x(1)`,
 
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([linkInParamTag, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { displayPartsForJSDoc } },
@@ -170,7 +169,7 @@ foo`,
             };
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([linkInParamJSDoc, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { displayPartsForJSDoc } },

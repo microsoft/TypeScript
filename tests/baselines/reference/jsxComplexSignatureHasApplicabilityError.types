@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 500 / 800 (nearest 100)
+Type Count: 1,100 / 1,200 (nearest 100)
+Instantiation count: 2,000 / 2,500 (nearest 500)
+Symbol count: 29,000 / 29,000 (nearest 500)
+
 === jsxComplexSignatureHasApplicabilityError.tsx ===
 /// <reference path="react16.d.ts" />
 
@@ -41,8 +47,8 @@ export function createReactSingleSelect<
 >React : any
 
     return (props) => {
->(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }) => JSX.Element
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }) => JSX.Element
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 
         return (
 >(            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        ) : JSX.Element
@@ -52,7 +58,7 @@ export function createReactSingleSelect<
 >ReactSelectClass : typeof ReactSelectClass
 
                 {...props}
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 
                 multi={false}
 >multi : false
@@ -65,7 +71,7 @@ export function createReactSingleSelect<
                 value={props.value}
 >value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
 >props.value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
 
                 onChange={(value) => {
@@ -75,13 +81,13 @@ export function createReactSingleSelect<
 
                     if (props.onChange) {
 >props.onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
 
                         props.onChange(value === null ? undefined : value);
 >props.onChange(value === null ? undefined : value) : void
 >props.onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
->props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
+>props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
 >value === null ? undefined : value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | undefined
 >value === null : boolean
@@ -159,7 +165,7 @@ export type FilterOptionsHandler<TValue = OptionValues> = (options: Options<TVal
 >currentValues : Options<TValue>
 
 export type InputRendererHandler = (props: { [key: string]: any }) => HandlerRendererResult;
->InputRendererHandler : (props: { [key: string]: any; }) => HandlerRendererResult
+>InputRendererHandler : (props: {    [key: string]: any;}) => HandlerRendererResult
 >props : { [key: string]: any; }
 >key : string
 

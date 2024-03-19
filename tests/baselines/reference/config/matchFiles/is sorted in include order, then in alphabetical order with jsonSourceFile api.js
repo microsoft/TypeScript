@@ -1,9 +1,9 @@
 config:
 {
- "include": [
-  "z/*.ts",
-  "x/*.ts"
- ]
+  "include": [
+    "z/*.ts",
+    "x/*.ts"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -79,36 +79,36 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/z/a.ts",
-  "c:/dev/z/aba.ts",
-  "c:/dev/z/abz.ts",
-  "c:/dev/z/b.ts",
-  "c:/dev/z/bba.ts",
-  "c:/dev/z/bbz.ts",
-  "c:/dev/x/a.ts",
-  "c:/dev/x/aa.ts",
-  "c:/dev/x/b.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "z/*.ts",
-   "x/*.ts"
-  ]
- },
- "wildcardDirectories": {
-  "c:/dev/z": "WatchDirectoryFlags.None",
-  "c:/dev/x": "WatchDirectoryFlags.None"
- },
- "compileOnSave": false
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/z/a.ts",
+    "c:/dev/z/aba.ts",
+    "c:/dev/z/abz.ts",
+    "c:/dev/z/b.ts",
+    "c:/dev/z/bba.ts",
+    "c:/dev/z/bbz.ts",
+    "c:/dev/x/a.ts",
+    "c:/dev/x/aa.ts",
+    "c:/dev/x/b.ts"
+  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "z/*.ts",
+      "x/*.ts"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/dev/z": "WatchDirectoryFlags.None",
+    "c:/dev/x": "WatchDirectoryFlags.None"
+  },
+  "compileOnSave": false
 }
 Errors::
 

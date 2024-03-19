@@ -25,35 +25,17 @@ export {}; declare module "classnames" { interface Result { foo } }
 import classNames from "classnames"; classNames().foo;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","incremental":true}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "incremental": true
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/classnames/index.d.ts (used version)
-/users/username/projects/project/src/index.ts (used version)
-/users/username/projects/project/src/types/classnames.d.ts (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/src/index.js]
 "use strict";
@@ -63,7 +45,7 @@ var classnames_1 = require("classnames");
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;","-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;","-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -128,15 +110,6 @@ var classnames_1 = require("classnames");
         "./node_modules/classnames/index.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./src/index.ts": [
-        "./node_modules/classnames/index.d.ts",
-        "./src/types/classnames.d.ts"
-      ],
-      "./src/types/classnames.d.ts": [
-        "./node_modules/classnames/index.d.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./node_modules/classnames/index.d.ts",
@@ -145,9 +118,39 @@ var classnames_1 = require("classnames");
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1069
+  "size": 1034
 }
 
+
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/classnames/index.d.ts (used version)
+/users/username/projects/project/src/index.ts (used version)
+/users/username/projects/project/src/types/classnames.d.ts (used version)
+
+exitCode:: ExitStatus.Success
 
 Change::
 
@@ -167,28 +170,9 @@ Found 1 error in src/index.ts[90m:1[0m
 
 
 
-Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/classnames/index.d.ts
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/src/index.ts
-/users/username/projects/project/src/types/classnames.d.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/src/types/classnames.d.ts (used version)
-/users/username/projects/project/src/index.ts (computed .d.ts)
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
 //// [/users/username/projects/project/src/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;",{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","signature":"-3531856636-export {};\n"},"-14890340642-export {}; declare module \"classnames\" { interface Result {} }"],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./src/index.ts","start":50,"length":3,"code":2339,"category":1,"messageText":"Property 'foo' does not exist on type 'Result'."}]],4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;",{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","signature":"-3531856636-export {};\n"},"-14890340642-export {}; declare module \"classnames\" { interface Result {} }"],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./src/index.ts","start":50,"length":3,"code":2339,"category":1,"messageText":"Property 'foo' does not exist on type 'Result'."}]],4]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -257,11 +241,6 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
         "./node_modules/classnames/index.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./src/types/classnames.d.ts": [
-        "./node_modules/classnames/index.d.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./node_modules/classnames/index.d.ts",
@@ -282,6 +261,32 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1250
+  "size": 1221
 }
 
+
+Program root files: [
+  "/users/username/projects/project/src/index.ts",
+  "/users/username/projects/project/src/types/classnames.d.ts"
+]
+Program options: {
+  "module": 1,
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/classnames/index.d.ts
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/src/index.ts
+/users/username/projects/project/src/types/classnames.d.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/src/types/classnames.d.ts (used version)
+/users/username/projects/project/src/index.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -1,6 +1,9 @@
 import * as Utils from "../../_namespaces/Utils";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -101,7 +104,7 @@ describe("unittests:: tsc:: composite::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "const x = 10;",
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,

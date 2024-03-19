@@ -1,17 +1,17 @@
 import * as vfs from "../../_namespaces/vfs";
 
 import {
+    getFsForNoEmitOnError,
+} from "../helpers/noEmitOnError";
+import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
-import {
-    loadProjectFromDisk,
-} from "../helpers/vfs";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
+        projFs = getFsForNoEmitOnError();
     });
     after(() => {
         projFs = undefined!;
@@ -21,14 +21,14 @@ describe("unittests:: tsbuild - with noEmitOnError", () => {
         scenario: "noEmitOnError",
         subScenario: "syntax errors",
         fs: () => projFs,
-        commandLineArgs: ["--b", "/src/tsconfig.json"],
+        commandLineArgs: ["--b"],
         edits: [
             noChangeRun,
             {
                 caption: "Fix error",
                 edit: fs =>
                     fs.writeFileSync(
-                        "/src/src/main.ts",
+                        "src/main.ts",
                         `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
@@ -45,14 +45,14 @@ const a = {
         scenario: "noEmitOnError",
         subScenario: "syntax errors with incremental",
         fs: () => projFs,
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
+        commandLineArgs: ["--b", "--incremental"],
         edits: [
             noChangeRun,
             {
                 caption: "Fix error",
                 edit: fs =>
                     fs.writeFileSync(
-                        "/src/src/main.ts",
+                        "src/main.ts",
                         `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
@@ -71,19 +71,19 @@ const a = {
         fs: () => projFs,
         modifyFs: fs =>
             fs.writeFileSync(
-                "/src/src/main.ts",
+                "src/main.ts",
                 `import { A } from "../shared/types/db";
 const a: string = 10;`,
                 "utf-8",
             ),
-        commandLineArgs: ["--b", "/src/tsconfig.json"],
+        commandLineArgs: ["--b"],
         edits: [
             noChangeRun,
             {
                 caption: "Fix error",
                 edit: fs =>
                     fs.writeFileSync(
-                        "/src/src/main.ts",
+                        "src/main.ts",
                         `import { A } from "../shared/types/db";
 const a: string = "hello";`,
                         "utf-8",
@@ -100,19 +100,19 @@ const a: string = "hello";`,
         fs: () => projFs,
         modifyFs: fs =>
             fs.writeFileSync(
-                "/src/src/main.ts",
+                "src/main.ts",
                 `import { A } from "../shared/types/db";
 const a: string = 10;`,
                 "utf-8",
             ),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
+        commandLineArgs: ["--b", "--incremental"],
         edits: [
             noChangeRun,
             {
                 caption: "Fix error",
                 edit: fs =>
                     fs.writeFileSync(
-                        "/src/src/main.ts",
+                        "src/main.ts",
                         `import { A } from "../shared/types/db";
 const a: string = "hello";`,
                         "utf-8",

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/app.ts]
 import {x} from "./module";
@@ -17,7 +17,10 @@ export const y = 10;
 
 
 //// [/user/username/projects/myproject/node_modules/module3/package.json]
-{"name":"module3","version":"1.0.0"}
+{
+  "name": "module3",
+  "version": "1.0.0"
+}
 
 //// [/user/username/projects/myproject/node_modules/module3/index.d.ts]
 export const a = 10;
@@ -66,7 +69,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -127,6 +130,33 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/myproject/module.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/module2.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module3/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -182,6 +212,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/app.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/user/username/projects/myproject/module.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/module2.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module3/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -203,82 +263,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/module3/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: Creating typing installer
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/module2.d.ts:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/module.d.ts:
-  {}
-/user/username/projects/myproject/node_modules/module3/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
-
-TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
-TI:: [hh:mm:ss:mss] Updating types-registry npm package...
-TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
-TI:: typing installer creation complete
-//// [/a/data/package.json]
-{ "private": true }
-
-//// [/a/data/node_modules/types-registry/index.json]
-{
- "entries": {}
-}
-
-
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":[],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/user/username/projects/myproject","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
-TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/myproject/node_modules; all files: ["/user/username/projects/myproject/node_modules/module3/package.json"]
-TI:: [hh:mm:ss:mss]     Found package names: ["module3"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["module3"],"filesToWatch":["/user/username/projects/myproject/bower_components","/user/username/projects/myproject/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["module3"],"filesToWatch":["/user/username/projects/myproject/bower_components","/user/username/projects/myproject/node_modules"]}
-TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/user/username/projects/myproject/bower_components","/user/username/projects/myproject/node_modules"]}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-TI:: [hh:mm:ss:mss] Installing typings ["module3"]
-TI:: [hh:mm:ss:mss] 'module3':: Entry for package 'module3' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
-TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -287,7 +278,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/module3/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -306,23 +297,189 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/user/username/projects/myproject/module2.d.ts","/user/username/projects/myproject/module.d.ts"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/user/username/projects/myproject","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: Creating typing installer
+
+PolledWatches::
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
+  {} *new*
+/user/username/projects/myproject/app.ts:
+  {}
+/user/username/projects/myproject/module2.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/module3/package.json:
+  {} *new*
+
+FsWatches *deleted*::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/module.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/module3/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules:
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/app.ts
+    version: SVC-1-0
+    containingProjects: 0
+/user/username/projects/myproject/module.d.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/myproject/module2.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module3/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+{
+  "entries": {}
+}
+
+
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/user/username/projects/myproject/module2.d.ts",
+        "/user/username/projects/myproject/module.d.ts"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/user/username/projects/myproject",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/myproject/node_modules; all files: ["/user/username/projects/myproject/node_modules/module3/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["module3"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["module3"],"filesToWatch":["/user/username/projects/myproject/bower_components","/user/username/projects/myproject/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["module3"],"filesToWatch":["/user/username/projects/myproject/bower_components","/user/username/projects/myproject/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "module3"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/myproject/bower_components",
+        "/user/username/projects/myproject/node_modules"
+      ]
+    }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["module3"]
 TI:: [hh:mm:ss:mss] 'module3':: Entry for package 'module3' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -340,11 +497,11 @@ After request
 PolledWatches::
 /user/username/projects/myproject/bower_components: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/tsconfig.json: *new*
+/user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -352,11 +509,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject: *new*
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/module2.d.ts:
   {}
-/user/username/projects/myproject/node_modules/module3/package.json: *new*
+/user/username/projects/myproject/node_modules/module3/package.json:
   {}
 
 FsWatches *deleted*::
@@ -366,3 +523,29 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/app.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
+/user/username/projects/myproject/module.d.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/myproject/module2.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module3/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*

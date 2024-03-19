@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/jsdocImportTypeNodeNamespace.ts] ////
 
 === GeometryType.d.ts ===
-// #40767
-
 declare namespace _default {
 >_default : typeof _default
 

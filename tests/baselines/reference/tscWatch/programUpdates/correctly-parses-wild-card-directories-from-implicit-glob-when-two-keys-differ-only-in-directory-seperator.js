@@ -20,7 +20,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["./","./**/*.json"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./",
+    "./**/*.json"
+  ]
+}
 
 
 /a/lib/tsc.js -w --extendedDiagnostics
@@ -46,46 +54,6 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/f1.ts
-/user/username/projects/myproject/f2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/f1.ts
-/user/username/projects/myproject/f2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/f1.ts (computed .d.ts during emit)
-/user/username/projects/myproject/f2.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/f1.ts: *new*
-  {}
-/user/username/projects/myproject/f2.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -109,7 +77,7 @@ export declare const y = 1;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./f2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./f2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -160,7 +128,6 @@ export declare const y = 1;
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./f1.ts",
@@ -169,9 +136,57 @@ export declare const y = 1;
     "latestChangedDtsFile": "./f2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 876
+  "size": 852
 }
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/f1.ts: *new*
+  {}
+/user/username/projects/myproject/f2.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/f1.ts
+/user/username/projects/myproject/f2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/f1.ts
+/user/username/projects/myproject/f2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/f1.ts (computed .d.ts during emit)
+/user/username/projects/myproject/f2.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Add new file
 
@@ -180,13 +195,20 @@ Input::
 export const z = 1;
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -205,47 +227,8 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/f1.ts
-/user/username/projects/myproject/f2.ts
-/user/username/projects/myproject/new-file.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/new-file.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/new-file.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/f1.ts:
-  {}
-/user/username/projects/myproject/f2.ts:
-  {}
-/user/username/projects/myproject/new-file.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"}],"root":[[2,4]],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"}],"root":[[2,4]],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -308,7 +291,6 @@ exitCode:: ExitStatus.undefined
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./f1.ts",
@@ -318,7 +300,7 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./new-file.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1005
+  "size": 981
 }
 
 //// [/user/username/projects/myproject/new-file.js]
@@ -333,6 +315,55 @@ export declare const z = 1;
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/f1.ts:
+  {}
+/user/username/projects/myproject/f2.ts:
+  {}
+/user/username/projects/myproject/new-file.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/new-file.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/f1.ts
+/user/username/projects/myproject/f2.ts
+/user/username/projects/myproject/new-file.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/new-file.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/new-file.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Import new file
 
 Input::
@@ -340,13 +371,20 @@ Input::
 import { z } from "./new-file";export const x = 1
 
 
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
@@ -357,26 +395,9 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/new-file.ts
-/user/username/projects/myproject/f1.ts
-/user/username/projects/myproject/f2.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/f1.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/f1.ts (computed .d.ts)
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/f1.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -448,7 +469,6 @@ exitCode:: ExitStatus.undefined
         "./new-file.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./f1.ts",
@@ -458,6 +478,33 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./new-file.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1061
+  "size": 1037
 }
 
+
+
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/new-file.ts"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/new-file.ts
+/user/username/projects/myproject/f1.ts
+/user/username/projects/myproject/f2.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/f1.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/f1.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

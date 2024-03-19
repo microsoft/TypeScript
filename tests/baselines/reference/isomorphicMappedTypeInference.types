@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 600 / 700 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === isomorphicMappedTypeInference.ts ===
 type Box<T> = {
 >Box : Box<T>
@@ -53,7 +59,7 @@ function boxify<T>(obj: T): Boxified<T> {
 >result : Boxified<T>
 >k : Extract<keyof T, string>
 >box(obj[k]) : Box<T[Extract<keyof T, string>]>
->box : <T>(x: T) => Box<T>
+>box : <T_1>(x: T_1) => Box<T_1>
 >obj[k] : T[Extract<keyof T, string>]
 >obj : T
 >k : Extract<keyof T, string>
@@ -81,7 +87,7 @@ function unboxify<T extends object>(obj: Boxified<T>): T {
 >result : T
 >k : Extract<keyof T, string>
 >unbox(obj[k]) : T[Extract<keyof T, string>]
->unbox : <T>(x: Box<T>) => T
+>unbox : <T_1>(x: Box<T_1>) => T_1
 >obj[k] : Boxified<T>[Extract<keyof T, string>]
 >obj : Boxified<T>
 >k : Extract<keyof T, string>
@@ -267,7 +273,7 @@ function f4() {
 }
 
 function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
->makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
+>makeRecord : <T, K extends string>(obj: {    [P in K]: T;}) => { [P in K]: T; }
 >obj : { [P in K]: T; }
 
     return obj;
@@ -317,7 +323,7 @@ function f5(s: string) {
 }
 
 function makeDictionary<T>(obj: { [x: string]: T }) {
->makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
+>makeDictionary : <T>(obj: {    [x: string]: T;}) => { [x: string]: T; }
 >obj : { [x: string]: T; }
 >x : string
 

@@ -29,4 +29,4 @@ import './';
 
 //// [file.js]
 import { jsx as _jsx } from "react/jsx-runtime";
-export var a = _jsx("div", {});
+export const a = _jsx("div", {});

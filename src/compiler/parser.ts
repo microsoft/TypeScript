@@ -84,7 +84,6 @@ import {
     Extension,
     ExternalModuleReference,
     fileExtensionIs,
-    fileExtensionIsOneOf,
     findIndex,
     firstOrUndefined,
     forEach,
@@ -98,6 +97,7 @@ import {
     FunctionOrConstructorTypeNode,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    getAnyExtensionFromPath,
     getBaseFileName,
     getBinaryOperatorPrecedence,
     getFullWidth,
@@ -1972,8 +1972,9 @@ namespace Parser {
 
         // If we parsed this as an external module, it may contain top-level await
         if (!isDeclarationFile && isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
+            const oldSourceFile = sourceFile;
             sourceFile = reparseTopLevelAwait(sourceFile);
-            setFields(sourceFile);
+            if (oldSourceFile !== sourceFile) setFields(sourceFile);
         }
 
         return sourceFile;
@@ -3845,8 +3846,7 @@ namespace Parser {
     function parseJSDocFunctionType(): JSDocFunctionType | TypeReferenceNode {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        if (lookAhead(nextTokenIsOpenParen)) {
-            nextToken();
+        if (tryParse(nextTokenIsOpenParen)) {
             const parameters = parseParameters(SignatureFlags.Type | SignatureFlags.JSDoc);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             return withJSDoc(finishNode(factory.createJSDocFunctionType(parameters, type), pos), hasJSDoc);
@@ -6893,7 +6893,8 @@ namespace Parser {
             if (
                 token() === SyntaxKind.VarKeyword || token() === SyntaxKind.LetKeyword || token() === SyntaxKind.ConstKeyword ||
                 token() === SyntaxKind.UsingKeyword && lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLineDisallowOf) ||
-                token() === SyntaxKind.AwaitKeyword && lookAhead(nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLineDisallowOf)
+                // this one is meant to allow of
+                token() === SyntaxKind.AwaitKeyword && lookAhead(nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine)
             ) {
                 initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
             }
@@ -7309,10 +7310,6 @@ namespace Parser {
         return lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine);
     }
 
-    function nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLineDisallowOf() {
-        return nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine(/*disallowOf*/ true);
-    }
-
     function nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine(disallowOf?: boolean) {
         if (nextToken() === SyntaxKind.UsingKeyword) {
             return nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf);
@@ -7500,6 +7497,12 @@ namespace Parser {
     function nextTokenIsStringLiteral() {
         return nextToken() === SyntaxKind.StringLiteral;
     }
+
+    function nextTokenIsFromKeywordOrEqualsToken() {
+        nextToken();
+        return token() === SyntaxKind.FromKeyword || token() === SyntaxKind.EqualsToken;
+    }
+
     function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
         nextToken();
         return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
@@ -8332,8 +8335,8 @@ namespace Parser {
 
         let isTypeOnly = false;
         if (
-            token() !== SyntaxKind.FromKeyword &&
             identifier?.escapedText === "type" &&
+            (token() !== SyntaxKind.FromKeyword || isIdentifier() && lookAhead(nextTokenIsFromKeywordOrEqualsToken)) &&
             (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
         ) {
             isTypeOnly = true;
@@ -8758,7 +8761,7 @@ namespace Parser {
                 if (!jsDocDiagnostics) {
                     jsDocDiagnostics = [];
                 }
-                jsDocDiagnostics.push(...parseDiagnostics);
+                addRange(jsDocDiagnostics, parseDiagnostics, saveParseDiagnosticsLength);
             }
             currentToken = saveToken;
             parseDiagnostics.length = saveParseDiagnosticsLength;
@@ -9207,18 +9210,7 @@ namespace Parser {
                 }
                 nextTokenJSDoc(); // start at token after link, then skip any whitespace
                 skipWhitespace();
-                // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
-                const p2 = getNodePos();
-                let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
-                    ? parseEntityName(/*allowReservedWords*/ true)
-                    : undefined;
-                if (name) {
-                    while (token() === SyntaxKind.PrivateIdentifier) {
-                        reScanHashToken(); // rescan #id as # id
-                        nextTokenJSDoc(); // then skip the #
-                        name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), p2);
-                    }
-                }
+                const name = parseJSDocLinkName();
                 const text = [];
                 while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
                     text.push(scanner.getTokenText());
@@ -9228,6 +9220,24 @@ namespace Parser {
                     : linkType === "linkcode" ? factory.createJSDocLinkCode
                     : factory.createJSDocLinkPlain;
                 return finishNode(create(name, text.join("")), start, scanner.getTokenEnd());
+            }
+
+            function parseJSDocLinkName() {
+                if (tokenIsIdentifierOrKeyword(token())) {
+                    const pos = getNodePos();
+
+                    let name: EntityName | JSDocMemberName = parseIdentifierName();
+                    while (parseOptional(SyntaxKind.DotToken)) {
+                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifier()), pos);
+                    }
+                    while (token() === SyntaxKind.PrivateIdentifier) {
+                        reScanHashToken();
+                        nextTokenJSDoc();
+                        name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), pos);
+                    }
+                    return name;
+                }
+                return undefined;
             }
 
             function parseJSDocLinkPrefix() {
@@ -9333,7 +9343,7 @@ namespace Parser {
             function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression | undefined, name: EntityName, target: PropertyLikeParse, indent: number) {
                 if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                     const pos = getNodePos();
-                    let child: JSDocPropertyLikeTag | JSDocTypeTag | JSDocTemplateTag | false;
+                    let child: JSDocPropertyLikeTag | JSDocTypeTag | JSDocTemplateTag | JSDocThisTag | false;
                     let children: JSDocPropertyLikeTag[] | undefined;
                     while (child = tryParse(() => parseChildParameterOrPropertyTag(target, indent, name))) {
                         if (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) {
@@ -9625,7 +9635,7 @@ namespace Parser {
                 return parseChildParameterOrPropertyTag(PropertyLikeParse.Property, indent) as JSDocTypeTag | JSDocPropertyTag | JSDocTemplateTag | false;
             }
 
-            function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | JSDocTemplateTag | false {
+            function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | JSDocTemplateTag | JSDocThisTag | false {
                 let canParseTag = true;
                 let seenAsterisk = false;
                 while (true) {
@@ -9662,7 +9672,7 @@ namespace Parser {
                 }
             }
 
-            function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | JSDocTemplateTag | false {
+            function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | JSDocTemplateTag | JSDocThisTag | false {
                 Debug.assert(token() === SyntaxKind.AtToken);
                 const start = scanner.getTokenFullStart();
                 nextTokenJSDoc();
@@ -9684,6 +9694,8 @@ namespace Parser {
                         break;
                     case "template":
                         return parseTemplateTag(start, tagName, indent, indentText);
+                    case "this":
+                        return parseThisTag(start, tagName, indent, indentText);
                     default:
                         return false;
                 }
@@ -9699,8 +9711,9 @@ namespace Parser {
                 if (isBracketed) {
                     skipWhitespace();
                 }
-                const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
 
+                const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
+                const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                 let defaultType: TypeNode | undefined;
                 if (isBracketed) {
                     skipWhitespace();
@@ -9712,7 +9725,7 @@ namespace Parser {
                 if (nodeIsMissing(name)) {
                     return undefined;
                 }
-                return finishNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, /*constraint*/ undefined, defaultType), typeParameterPos);
+                return finishNode(factory.createTypeParameterDeclaration(modifiers, name, /*constraint*/ undefined, defaultType), typeParameterPos);
             }
 
             function parseTemplateTagTypeParameters() {
@@ -10421,7 +10434,22 @@ namespace IncrementalParser {
 
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
-    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && getBaseFileName(fileName).includes(".d."));
+    return getDeclarationFileExtension(fileName) !== undefined;
+}
+
+/** @internal */
+export function getDeclarationFileExtension(fileName: string): string | undefined {
+    const standardExtension = getAnyExtensionFromPath(fileName, supportedDeclarationExtensions, /*ignoreCase*/ false);
+    if (standardExtension) {
+        return standardExtension;
+    }
+    if (fileExtensionIs(fileName, Extension.Ts)) {
+        const index = getBaseFileName(fileName).lastIndexOf(".d.");
+        if (index >= 0) {
+            return fileName.substring(index);
+        }
+    }
+    return undefined;
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
@@ -10484,7 +10512,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                     const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
-                    if (arg.arguments["no-default-lib"]) {
+                    if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {

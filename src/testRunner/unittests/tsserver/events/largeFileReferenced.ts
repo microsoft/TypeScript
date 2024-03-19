@@ -1,10 +1,12 @@
 import * as ts from "../../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../../helpers/tsserver";
 import {
     createServerHost,
@@ -28,8 +30,7 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
         };
         files.push(largeFile);
         const host = createServerHost(files);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-
+        const session = new TestSession(host);
         return session;
     }
 
@@ -41,7 +42,7 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
             };
             const tsconfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } }),
+                content: jsonToReadableText({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } }),
             };
             const files = [file, libFile, tsconfig];
             const session = createSessionWithEventHandler(files, useLargeTsFile);

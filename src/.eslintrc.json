@@ -46,7 +46,7 @@
             }
         },
         {
-            "files": ["harness/**", "testRunner/**"],
+            "files": ["harness/**", "testRunner/**", "tsserver/**", "typingsInstaller/**"],
             "rules": {
                 "local/prefer-direct-import": "off"
             }

@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/importAttributes/importAttributes9.ts] ////
+
+=== ./a.ts ===
+
+export default {};
+
+=== ./b.ts ===
+declare global {
+>global : Symbol(global, Decl(b.ts, 0, 0))
+
+    interface  ImportAttributes {
+>ImportAttributes : Symbol(ImportAttributes, Decl(lib.es5.d.ts, --, --), Decl(b.ts, 0, 16))
+
+        type: "json"
+>type : Symbol(ImportAttributes.type, Decl(b.ts, 1, 33))
+    }
+}
+
+import * as ns from "./a" with { type: "not-json" };
+>ns : Symbol(ns, Decl(b.ts, 6, 6))
+
+void ns;
+>ns : Symbol(ns, Decl(b.ts, 6, 6))
+
+async function f() {
+>f : Symbol(f, Decl(b.ts, 7, 8))
+
+    await import("./a", {
+>"./a" : Symbol(ns, Decl(a.ts, 0, 0))
+
+        with: {
+>with : Symbol(with, Decl(b.ts, 10, 25))
+
+            type: "not-json",
+>type : Symbol(type, Decl(b.ts, 11, 15))
+
+        },
+    });
+}
+

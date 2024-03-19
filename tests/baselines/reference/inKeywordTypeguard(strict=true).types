@@ -1,5 +1,10 @@
 //// [tests/cases/compiler/inKeywordTypeguard.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 1,200 / 1,300 (nearest 100)
+Symbol count: 27,500 / 27,500 (nearest 500)
+
 === inKeywordTypeguard.ts ===
 class A { a: string; }
 >A : A
@@ -1078,12 +1083,12 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->a : P & {}
+>a : P
 
     "foo" in a;
 >"foo" in a : boolean
 >"foo" : "foo"
->a : P & {}
+>a : P
 
 };
 

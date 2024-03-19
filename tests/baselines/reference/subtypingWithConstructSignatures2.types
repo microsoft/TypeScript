@@ -184,7 +184,7 @@ declare function foo14(a: any): any;
 >a : any
 
 declare function foo15(a: { 
->foo15 : { (a: { new (x: number): number[]; new (x: string): string[]; }): typeof a; (a: any): any; }
+>foo15 : { (a: {    new (x: number): number[];    new (x: string): string[];}): typeof a; (a: any): any; }
 >a : { new (x: number): number[]; new (x: string): string[]; }
 
     new (x: number): number[];
@@ -218,7 +218,7 @@ declare function foo16(a: any): any;
 >a : any
 
 declare function foo17(a: {
->foo17 : { (a: { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }): typeof a; (a: any): any; }
+>foo17 : { (a: {    new (x: (a: number) => number): number[];    new (x: (a: string) => string): string[];}): typeof a; (a: any): any; }
 >a : { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }
 
     new (x: (a: number) => number): number[];
@@ -237,8 +237,8 @@ declare function foo17(a: any): any;
 >a : any
 
 declare function foo18(a: {
->foo18 : { (a: { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }): typeof a; (a: any): any; }
->a : { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }
+>foo18 : { (a: {    new (x: {        new (a: number): number;        new (a: string): string;    }): any[];    new (x: {        new (a: boolean): boolean;        new (a: Date): Date;    }): any[];}): typeof a; (a: any): any; }
+>a : { new (x: {    new (a: number): number;    new (a: string): string;}): any[]; new (x: {    new (a: boolean): boolean;    new (a: Date): Date;}): any[]; }
 
     new (x: {
 >x : { new (a: number): number; new (a: string): string; }
@@ -643,7 +643,7 @@ var r13b = [r13arg2, r13arg1];
 >r13arg1 : new <T extends Derived[]>(x: Base[], y: T) => T
 
 var r14arg1: new <T>(x: { a: T; b: T }) => T;
->r14arg1 : new <T>(x: { a: T; b: T; }) => T
+>r14arg1 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

@@ -11,7 +11,5 @@
 ////    abstract bar(): void;
 ////}
 
-verify.baselineCommands(
-    { type: "documentHighlights", markerOrRange: ["1", "2"] },
-    { type: "documentHighlights" }
-);
+verify.baselineDocumentHighlights(["1", "2"]);
+verify.baselineDocumentHighlights();

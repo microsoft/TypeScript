@@ -172,6 +172,7 @@ import {
     isJSDocEnumTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
+    isJSDocTypeAssertion,
     isJsonSourceFile,
     isJsxNamespacedName,
     isLeftHandSideExpression,
@@ -280,7 +281,6 @@ import {
     setValueDeclaration,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
-    shouldResolveJsRequire,
     SignatureDeclaration,
     skipParentheses,
     sliceAfter,
@@ -1095,7 +1095,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
-        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
+        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && (!options.allowUnreachableCode || node.kind === SyntaxKind.ReturnStatement)) {
             (node as HasFlowNode).flowNode = currentFlow;
         }
         switch (node.kind) {
@@ -1224,6 +1224,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.CallExpression:
                 return hasNarrowableArgument(expr as CallExpression);
             case SyntaxKind.ParenthesizedExpression:
+                if (isJSDocTypeAssertion(expr)) {
+                    return false;
+                }
+                // fallthrough
             case SyntaxKind.NonNullExpression:
                 return isNarrowingExpression((expr as ParenthesizedExpression | NonNullExpression).expression);
             case SyntaxKind.BinaryExpression:
@@ -1685,9 +1689,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const clauses = node.clauses;
         const isNarrowingSwitch = node.parent.expression.kind === SyntaxKind.TrueKeyword || isNarrowingExpression(node.parent.expression);
         let fallthroughFlow = unreachableFlow;
+
         for (let i = 0; i < clauses.length; i++) {
             const clauseStart = i;
             while (!clauses[i].statements.length && i + 1 < clauses.length) {
+                if (fallthroughFlow === unreachableFlow) {
+                    currentFlow = preSwitchCaseFlow!;
+                }
                 bind(clauses[i]);
                 i++;
             }
@@ -2556,7 +2564,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function checkStrictModeFunctionName(node: FunctionLikeDeclaration) {
-        if (inStrictMode) {
+        if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
             checkStrictModeEvalOrArguments(node, node.name);
         }
@@ -2566,14 +2574,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Provide specialized messages to help the user understand why we think they're in
         // strict mode.
         if (getContainingClass(node)) {
-            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Class_definitions_are_automatically_in_strict_mode;
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Class_definitions_are_automatically_in_strict_mode;
         }
 
         if (file.externalModuleIndicator) {
-            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Modules_are_automatically_in_strict_mode;
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Modules_are_automatically_in_strict_mode;
         }
 
-        return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5;
+        return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5;
     }
 
     function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
@@ -3301,7 +3309,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
         // Class declarations in Typescript do not allow property declarations
-        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer);
+        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) || lookupSymbolForPropertyAccess(node.left.expression, container);
         if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
             return;
         }
@@ -3420,7 +3428,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-        let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
+        let namespaceSymbol = lookupSymbolForPropertyAccess(name, blockScopeContainer) || lookupSymbolForPropertyAccess(name, container);
         const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
         namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
         bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
@@ -3551,7 +3559,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (
                 isInJSFile(node) &&
-                shouldResolveJsRequire(options) &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)

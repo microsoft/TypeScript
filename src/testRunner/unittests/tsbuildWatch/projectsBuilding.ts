@@ -1,6 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noopChange,
     TscWatchCompileChange,
     verifyTscWatch,
@@ -30,7 +33,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             },
             {
                 path: `/user/username/projects/myproject/pkg${index}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: index === 0 ?
                         undefined :
@@ -42,7 +45,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function solution(maxPkgs: number): File {
         return {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 references: pkgs(createPkgReference, maxPkgs),
                 files: [],
             }),

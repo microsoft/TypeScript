@@ -6,9 +6,8 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -18,7 +17,7 @@ import {
 describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
     function setup(globalPlugins: string[]) {
         const host = createServerHost([libFile]);
-        const session = createSession(host, { canUseEvents: true, globalPlugins, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, globalPlugins });
         return { host, session };
     }
 

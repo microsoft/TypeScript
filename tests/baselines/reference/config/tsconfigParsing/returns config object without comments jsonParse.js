@@ -7,9 +7,9 @@ Input::
         }
 Config::
 {
- "exclude": [
-  "file.d.ts"
- ]
+  "exclude": [
+    "file.d.ts"
+  ]
 }
 Errors::
 
@@ -25,9 +25,9 @@ Input::
         }
 Config::
 {
- "exclude": [
-  "file.d.ts"
- ]
+  "exclude": [
+    "file.d.ts"
+  ]
 }
 Errors::
 

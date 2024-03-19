@@ -2,6 +2,9 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     commandLineCallbacks,
 } from "../helpers/baseline";
 import {
@@ -65,7 +68,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
             };
             const config = {
                 path: configFilePath,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     include: ["app.ts"],
                 }),
             };
@@ -260,7 +263,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
             };
             const tsconfig: File = {
                 path: "/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { allowUnusedLabels: true },
                 }),
             };
@@ -272,7 +275,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 edit: sys =>
                     sys.modifyFile(
                         "/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { allowUnusedLabels: false },
                         }),
                     ),
@@ -283,7 +286,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 edit: sys =>
                     sys.modifyFile(
                         "/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { allowUnusedLabels: true },
                         }),
                     ),
@@ -307,7 +310,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
             };
             const tsconfig: File = {
                 path: "/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { allowArbitraryExtensions: true },
                     files: ["/a.ts"],
                 }),
@@ -320,7 +323,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 edit: sys =>
                     sys.modifyFile(
                         "/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { allowArbitraryExtensions: false },
                             files: ["/a.ts"],
                         }),
@@ -332,7 +335,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 edit: sys =>
                     sys.modifyFile(
                         "/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { allowArbitraryExtensions: true },
                             files: ["/a.ts"],
                         }),
@@ -361,8 +364,8 @@ export class A {
             };
             const tsconfig: File = {
                 path: "/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error" },
+                content: jsonToReadableText({
+                    compilerOptions: { target: "es6", verbatimModuleSyntax: true },
                 }),
             };
             return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
@@ -373,8 +376,8 @@ export class A {
                 edit: sys =>
                     sys.modifyFile(
                         "/tsconfig.json",
-                        JSON.stringify({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true },
+                        jsonToReadableText({
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -384,8 +387,8 @@ export class A {
                 edit: sys =>
                     sys.modifyFile(
                         "/tsconfig.json",
-                        JSON.stringify({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true },
+                        jsonToReadableText({
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true, emitDecoratorMetadata: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -582,7 +585,7 @@ export class A {
             };
             const configFile = {
                 path: "/a/c/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
+                content: jsonToReadableText({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
             };
             return createWatchedSystem([file1, file2, file3, libFile, configFile]);
         },
@@ -603,7 +606,7 @@ export class A {
             caption: "change `module` to 'none'",
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             edit: sys => {
-                sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
+                sys.writeFile(configFilePath, jsonToReadableText({ compilerOptions: { module: "none" } }));
             },
         }],
     });
@@ -623,7 +626,7 @@ export class A {
             path: "/a/d/f3.ts",
             content: "export let y = 1;",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file2.path, file3.path],
             system: sys,
@@ -638,11 +641,9 @@ export class A {
             getPrograms,
             oldPrograms: ts.emptyArray,
             sys,
-            oldSnap,
         });
 
         const { cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
-        const oldSnap2 = sys.snap();
         baseline.push("createing separate watcher");
         ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file1.path],
@@ -656,10 +657,8 @@ export class A {
             getPrograms: getPrograms2,
             oldPrograms: ts.emptyArray,
             sys,
-            oldSnap: oldSnap2,
         });
 
-        sys.logTimeoutQueueLength();
         baseline.push(`First program is not updated:: ${getPrograms() === ts.emptyArray}`);
         baseline.push(`Second program is not updated:: ${getPrograms2() === ts.emptyArray}`);
         Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
@@ -700,14 +699,14 @@ export class A {
             };
             const configFile = {
                 path: configFilePath,
-                content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts"] }),
+                content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts"] }),
             };
             return createWatchedSystem([file1, file2, libFile, configFile]);
         },
         edits: [
             {
                 caption: "Modify config to make f2 as root too",
-                edit: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
+                edit: sys => sys.writeFile(configFilePath, jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -728,7 +727,7 @@ export class A {
             };
             const configFile = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] }),
+                content: jsonToReadableText({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] }),
             };
             return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: "/user/username/projects/myproject" });
         },
@@ -757,7 +756,7 @@ export class A {
             };
             const configFile = {
                 path: `/user/username/projects/myproject/Project/tsconfig.json`,
-                content: JSON.stringify({ include: [".", "./**/*.json"] }),
+                content: jsonToReadableText({ include: [".", "./**/*.json"] }),
             };
             return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `/user/username/projects/myproject/Project` });
         },
@@ -785,14 +784,14 @@ export class A {
             };
             const configFile = {
                 path: configFilePath,
-                content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
+                content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
             };
             return createWatchedSystem([file1, file2, libFile, configFile]);
         },
         edits: [
             {
                 caption: "Modify config to set outFile option",
-                edit: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
+                edit: sys => sys.writeFile(configFilePath, jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -813,7 +812,7 @@ export class A {
             };
             const configFile = {
                 path: configFilePath,
-                content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
+                content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
             };
             return createWatchedSystem([file1, file2, libFile, configFile]);
         },
@@ -887,7 +886,7 @@ declare const eval: any`,
             };
             const config1 = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify(
+                content: jsonToReadableText(
                     {
                         compilerOptions: {
                             module: "commonjs",
@@ -909,7 +908,7 @@ declare const eval: any`,
                 edit: sys =>
                     sys.writeFile(
                         "/src/tsconfig.json",
-                        JSON.stringify(
+                        jsonToReadableText(
                             {
                                 compilerOptions: {
                                     module: "commonjs",
@@ -940,7 +939,7 @@ declare const eval: any`,
             };
             const config = {
                 path: "/a/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {},
                     include: [
                         "src/**/*",
@@ -1032,7 +1031,7 @@ declare const eval: any`,
                     };
                     const config = {
                         path: configFilePath,
-                        content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
+                        content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
                     };
                     const node = {
                         path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -1181,7 +1180,7 @@ declare const eval: any`,
             };
             const config = {
                 path: "/a/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compiler: {},
                     files: [],
                 }),
@@ -1203,7 +1202,7 @@ declare const eval: any`,
             path: "/a/compile",
             content: "let x = 1",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
         const watch = ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [f.path],
             system: sys,
@@ -1217,7 +1216,6 @@ declare const eval: any`,
             commandLineArgs: ["--w", f.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: watch,
         });
@@ -1282,7 +1280,7 @@ declare const eval: any`,
                     };
                     const tsconfig: File = {
                         path: `/user/username/projects/myproject/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: compilerOptionsToConfigJson(options),
                         }),
                     };
@@ -1417,7 +1415,7 @@ export default test;`,
             };
             const tsconfigFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "commonjs",
                         noEmit: true,
@@ -1447,24 +1445,24 @@ foo().hello`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: {} }),
+                content: jsonToReadableText({ compilerOptions: {} }),
             };
             return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
                 caption: "Enable strict null checks",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strictNullChecks: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Set always strict false",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Disable strict",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: {} })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1490,14 +1488,14 @@ v === 'foo';`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: {} }),
+                content: jsonToReadableText({ compilerOptions: {} }),
             };
             return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
                 caption: "Enable noErrorTruncation",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { noErrorTruncation: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1515,14 +1513,14 @@ class D extends C { prop = 1; }`,
             };
             const config: File = {
                 path: `/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { target: "es6" } }),
+                content: jsonToReadableText({ compilerOptions: { target: "es6" } }),
             };
             return createWatchedSystem([aFile, config, libFile]);
         },
         edits: [
             {
                 caption: "Enable useDefineForClassFields",
-                edit: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1530,7 +1528,7 @@ class D extends C { prop = 1; }`,
 
     verifyTscWatch({
         scenario,
-        subScenario: "updates errors and emit when importsNotUsedAsValues changes",
+        subScenario: "updates errors and emit when verbatimModuleSyntax changes",
         commandLineArgs: ["-w"],
         sys: () => {
             const aFile: File = {
@@ -1544,24 +1542,31 @@ export function f(p: C) { return p; }`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: {} }),
+                content: jsonToReadableText({ compilerOptions: {} }),
             };
             return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
-                caption: 'Set to "remove"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                caption: "Enable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: true },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
-                caption: 'Set to "error"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-            {
-                caption: 'Set to "preserve"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                caption: "Disable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: false },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1582,14 +1587,14 @@ export function f(p: C) { return p; }`,
             };
             const config: File = {
                 path: `/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: false } }),
+                content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: false } }),
             };
             return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
         },
         edits: [
             {
                 caption: "Enable forceConsistentCasingInFileNames",
-                edit: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1610,14 +1615,14 @@ export function f(p: C) { return p; }`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { moduleResolution: "node" } }),
+                content: jsonToReadableText({ compilerOptions: { moduleResolution: "node" } }),
             };
             return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
                 caption: "Enable resolveJsonModule",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1725,7 +1730,7 @@ var y: number;
     });
 
     function changeWhenLibCheckChanges(compilerOptions: ts.CompilerOptions): TscWatchCompileChange {
-        const configFileContent = JSON.stringify({ compilerOptions });
+        const configFileContent = jsonToReadableText({ compilerOptions });
         return {
             caption: `Changing config to ${configFileContent}`,
             edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, configFileContent),
@@ -1790,7 +1795,7 @@ const b: string = a;`,
             };
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         isolatedModules: true,
                     },
@@ -1822,7 +1827,7 @@ const b: string = a;`,
             };
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         rootDir: ".",
                         outDir: "lib",
@@ -1857,7 +1862,7 @@ import { x } from "../b";`,
             };
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         jsx: "preserve",
                     },
@@ -1885,7 +1890,7 @@ import { x } from "../b";`,
             };
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {},
                 }),
             };
@@ -1907,7 +1912,7 @@ import { x } from "../b";`,
         sys: () => {
             const firstExtendedConfigFile: File = {
                 path: "/a/b/first.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
                     },
@@ -1915,13 +1920,13 @@ import { x } from "../b";`,
             };
             const secondExtendedConfigFile: File = {
                 path: "/a/b/second.tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     extends: "./first.tsconfig.json",
                 }),
             };
             const configFile: File = {
                 path: configFilePath,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {},
                     files: [commonFile1.path, commonFile2.path],
                 }),
@@ -1941,7 +1946,7 @@ import { x } from "../b";`,
                 edit: sys =>
                     sys.modifyFile(
                         configFilePath,
-                        JSON.stringify({
+                        jsonToReadableText({
                             extends: "./second.tsconfig.json",
                             compilerOptions: {},
                             files: [commonFile1.path, commonFile2.path],
@@ -1954,7 +1959,7 @@ import { x } from "../b";`,
                 edit: sys =>
                     sys.modifyFile(
                         "/a/b/first.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 strict: false,
                             },
@@ -1967,7 +1972,7 @@ import { x } from "../b";`,
                 edit: sys =>
                     sys.modifyFile(
                         "/a/b/second.tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             extends: "./first.tsconfig.json",
                             compilerOptions: {
                                 strictNullChecks: true,
@@ -1981,7 +1986,7 @@ import { x } from "../b";`,
                 edit: sys =>
                     sys.modifyFile(
                         configFilePath,
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {},
                             files: [commonFile1.path, commonFile2.path],
                         }),
@@ -2010,7 +2015,7 @@ import { x } from "../b";`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         baseUrl: "client",
                         paths: { "*": ["*"] },
@@ -2036,7 +2041,7 @@ import { x } from "../b";`,
         sys: () => {
             const config1: File = {
                 path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -2055,7 +2060,7 @@ import { x } from "../b";`,
             };
             const config2: File = {
                 path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -2085,7 +2090,7 @@ import { x } from "../b";`,
             {
                 caption: "Add excluded file to project1",
                 edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                timeouts: sys => sys.logTimeoutQueueLength(),
+                timeouts: ts.noop,
             },
             {
                 caption: "Delete output of class3",
@@ -2139,7 +2144,7 @@ import { x } from "../b";`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         noEmit: true,
                         allowImportingTsExtensions: false,
@@ -2154,7 +2159,7 @@ import { x } from "../b";`,
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 noEmit: true,
                                 allowImportingTsExtensions: true,
@@ -2181,7 +2186,7 @@ import { x } from "../b";`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         checkJs: false,
                     },
@@ -2195,7 +2200,7 @@ import { x } from "../b";`,
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 checkJs: true,
                             },

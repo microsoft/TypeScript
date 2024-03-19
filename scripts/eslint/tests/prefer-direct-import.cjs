@@ -1,12 +1,12 @@
-const { RuleTester } = require("./support/RuleTester.cjs");
-const rule = require("../rules/prefer-direct-import.cjs");
+// const { RuleTester } = require("./support/RuleTester.cjs");
+// const rule = require("../rules/prefer-direct-import.cjs");
 
-const ruleTester = new RuleTester({
-    parserOptions: {
-        warnOnUnsupportedTypeScriptVersion: false,
-    },
-    parser: require.resolve("@typescript-eslint/parser"),
-});
+// const ruleTester = new RuleTester({
+//     parserOptions: {
+//         warnOnUnsupportedTypeScriptVersion: false,
+//     },
+//     parser: require.resolve("@typescript-eslint/parser"),
+// });
 
 // ruleTester.run("no-ts-debug", rule, {
 //     valid: [

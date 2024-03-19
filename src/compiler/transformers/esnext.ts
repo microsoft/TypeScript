@@ -71,6 +71,10 @@ const enum UsingKind {
 
 /** @internal */
 export function transformESNext(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
+    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

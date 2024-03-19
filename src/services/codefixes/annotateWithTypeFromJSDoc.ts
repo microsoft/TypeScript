@@ -26,7 +26,6 @@ import {
     last,
     map,
     Node,
-    nullTransformationContext,
     ParameterDeclaration,
     PropertyDeclaration,
     PropertySignature,
@@ -145,7 +144,7 @@ function transformJSDocType(node: Node): Node {
         case SyntaxKind.JSDocTypeLiteral:
             return transformJSDocTypeLiteral(node as JSDocTypeLiteral);
         default:
-            const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
+            const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined);
             setEmitFlags(visited, EmitFlags.SingleLine);
             return visited;
     }

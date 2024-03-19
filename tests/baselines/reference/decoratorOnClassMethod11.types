@@ -12,7 +12,8 @@ module M {
 >target : Object
 >key : string
 
-        @this.decorator
+        @(this.decorator)
+>(this.decorator) : any
 >this.decorator : any
 >this : any
 >decorator : any

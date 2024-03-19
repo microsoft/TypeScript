@@ -4,8 +4,7 @@ import {
 
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -79,7 +78,7 @@ const bar: Bar = {
             },
         ];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,

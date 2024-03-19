@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a.ts]
 
@@ -25,7 +25,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.ts Text-1 ""
@@ -37,43 +37,48 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "ef055f5036459f2705212d5657970dd7bc0280bdb6fa2cddd17d0cd73eb2a989",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 1,
-        "tsSize": 0,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 0,
-        "dtsSize": 0,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "strict": true
-       },
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "compileOnSave": true,
-       "configFileName": "other",
-       "projectType": "external",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "ef055f5036459f2705212d5657970dd7bc0280bdb6fa2cddd17d0cd73eb2a989",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "strict": true
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
       }
-     }
     }
+Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -88,6 +93,17 @@ PolledWatches::
 FsWatches::
 /a.ts: *new*
   {}
+
+Projects::
+/hunter2/foo.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj
 
 Before request
 
@@ -122,6 +138,13 @@ FsWatches *deleted*::
 /a.ts:
   {}
 
+ScriptInfos::
+/a.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -153,6 +176,13 @@ FsWatches::
 /a.ts: *new*
   {}
 
+ScriptInfos::
+/a.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -175,6 +205,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -189,6 +220,18 @@ PolledWatches *deleted*::
 FsWatches::
 /a.ts:
   {}
+
+Projects::
+/hunter2/foo.csproj (External) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+
+ScriptInfos::
+/a.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /hunter2/foo.csproj *deleted*
 
 Before request
 
@@ -213,7 +256,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.ts Text-1 ""
@@ -223,6 +266,11 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -237,6 +285,17 @@ PolledWatches::
 FsWatches::
 /a.ts:
   {}
+
+Projects::
+/hunter2/foo.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /hunter2/foo.csproj *new*
 
 Before request
 
@@ -270,3 +329,10 @@ PolledWatches::
 FsWatches *deleted*::
 /a.ts:
   {}
+
+ScriptInfos::
+/a.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj *default*
