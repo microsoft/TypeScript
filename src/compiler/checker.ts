@@ -45580,7 +45580,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (getIsolatedModules(compilerOptions) && typeof value === "string" && !isSyntacticallyString(initializer)) {
                 error(
                     initializer,
-                    Diagnostics.A_string_member_initializer_in_a_enum_declaration_can_only_use_constant_expressions_when_isolatedModules_is_enabled,
+                    Diagnostics._0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled,
+                    `${idText(member.parent.name)}.${getTextOfPropertyName(member.name)}`,
                 );
             }
         }

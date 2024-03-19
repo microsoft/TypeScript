@@ -7977,7 +7977,7 @@
         "category": "Error",
         "code": 18054
     },
-    "A string member initializer in a enum declaration can only use constant expressions when 'isolatedModules' is enabled.": {
+    "'{0}' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18055
     },
