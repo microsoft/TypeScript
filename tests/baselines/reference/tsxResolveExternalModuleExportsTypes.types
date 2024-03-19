@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 600 / 600 (nearest 100)
+Type Count: 2,500 / 2,500 (nearest 100)
+Instantiation count: 1,500 / 1,500 (nearest 500)
+Symbol count: 27,000 / 27,000 (nearest 500)
+
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : import("/node_modules/@types/a/index.d.ts").Foo

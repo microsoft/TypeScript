@@ -52,6 +52,7 @@ export function f22() { } // trailing`,
 
         // Create system
         sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys.storeSignatureInfo = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
@@ -73,7 +74,6 @@ export function f22() { } // trailing`,
             (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
-        buildHost.afterEmitBundle = cb;
         const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
         const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
         sys.exit(exitStatus);

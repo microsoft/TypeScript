@@ -16,7 +16,7 @@ interface bar<T> {
 >arg : T
 
     fail2(func2: { (arg: T): void; }): void;
->fail2 : (func2: (arg: T) => void) => void
+>fail2 : (func2: {    (arg: T): void;}) => void
 >func2 : (arg: T) => void
 >arg : T
 }

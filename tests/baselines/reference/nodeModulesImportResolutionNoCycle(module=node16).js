@@ -58,7 +58,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-var type = __importStar(require("#type"));
+const type = __importStar(require("#type"));
 type;
 
 

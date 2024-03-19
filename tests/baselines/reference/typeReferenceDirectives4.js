@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives4.ts] ////
 
 //// [ref.d.ts]
-// $ comes from d.ts file - no need to add type reference directive
-
 interface $ { x }
 
 //// [index.d.ts]
