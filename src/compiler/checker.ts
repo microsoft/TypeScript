@@ -5755,12 +5755,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Checks if two symbols, through aliasing and/or merging, refer to the same thing
      */
     function getSymbolIfSameReference(s1: Symbol, s2: Symbol) {
-        if (s1.flags & SymbolFlags.TypeAlias && s2.declarations?.find(isTypeAlias)) {
-            s2 = getDeclaredTypeOfTypeAlias(s2).aliasSymbol || s2;
-        }
-        if (s2.flags & SymbolFlags.TypeAlias && s1.declarations?.find(isTypeAlias)) {
-            s1 = getDeclaredTypeOfTypeAlias(s1).aliasSymbol || s1;
-        }
         if (getMergedSymbol(resolveSymbol(getMergedSymbol(s1))) === getMergedSymbol(resolveSymbol(getMergedSymbol(s2)))) {
             return s1;
         }
@@ -45714,7 +45708,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             const text = getTextOfPropertyName(member.name);
-            if (isNumericLiteralName(text)) {
+            if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
                 error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
             }
         }

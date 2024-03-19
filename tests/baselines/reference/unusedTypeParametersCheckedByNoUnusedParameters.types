@@ -1,9 +1,5 @@
 //// [tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts] ////
 
-=== Performance Stats ===
-Type Count: 100 / 3,200 (nearest 100)
-Symbol count: 25,500 / 25,500 (nearest 500)
-
 === unusedTypeParametersCheckedByNoUnusedParameters.ts ===
 function f<T>() { }
 >f : <T>() => void
