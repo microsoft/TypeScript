@@ -10,9 +10,9 @@ var foge = new SharedArrayBuffer(1024);
 var bar = foge.slice(1, 10);
 >bar : SharedArrayBuffer
 >foge.slice(1, 10) : SharedArrayBuffer
->foge.slice : (begin: number, end?: number) => SharedArrayBuffer
+>foge.slice : (begin?: number, end?: number) => SharedArrayBuffer
 >foge : SharedArrayBuffer
->slice : (begin: number, end?: number) => SharedArrayBuffer
+>slice : (begin?: number, end?: number) => SharedArrayBuffer
 >1 : 1
 >10 : 10
 
