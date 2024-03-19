@@ -63,7 +63,7 @@ jobs:
 
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
-        run: git diff --no-index -- ./tests/baselines/reference ./tests/baselines/local
+        run: git diff --diff-filter=AM --no-index -- ./tests/baselines/reference ./tests/baselines/local
 
   lint:
     runs-on: ubuntu-latest
