@@ -1,5 +1,10 @@
 //// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 400 / 400 (nearest 100)
+Type Count: 1,300 / 1,500 (nearest 100)
+Symbol count: 27,500 / 27,500 (nearest 500)
+
 === generatedContextualTyping.ts ===
 class Base { private p; }
 >Base : Base

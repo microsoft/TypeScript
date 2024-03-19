@@ -10031,7 +10031,7 @@ export interface UserPreferences {
      *
      * Default: `last`
      */
-    readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
     /**
      * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
      */
@@ -10041,6 +10041,8 @@ export interface UserPreferences {
     readonly generateReturnInDocTemplate?: boolean;
     readonly disableLineTextInReferences?: boolean;
 }
+
+export type OrganizeImportsTypeOrder = "last" | "inline" | "first";
 
 /** Represents a bigint literal value without requiring bigint support */
 export interface PseudoBigInt {

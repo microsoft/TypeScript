@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/callsOnComplexSignatures.tsx] ////
 
+=== Performance Stats ===
+Subtype cache: 100 / 100 (nearest 100)
+Assignability cache: 2,400 / 2,400 (nearest 100)
+Type Count: 8,200 / 8,200 (nearest 100)
+Instantiation count: 92,500 / 92,500 (nearest 500)
+Symbol count: 68,000 / 68,000 (nearest 500)
+
 === callsOnComplexSignatures.tsx ===
 /// <reference path="react16.d.ts" />
 import React from "react";

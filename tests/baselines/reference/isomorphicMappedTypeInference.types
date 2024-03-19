@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 600 / 700 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === isomorphicMappedTypeInference.ts ===
 type Box<T> = {
 >Box : Box<T>

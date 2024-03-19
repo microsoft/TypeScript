@@ -673,4 +673,13 @@ export * as alias from './file';`,
             options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
         },
     );
+
+    transpilesCorrectly(
+        "Syntactically string but non-evaluatable enum members do not get reverse mapping",
+        // eslint-disable-next-line no-template-curly-in-string
+        "import { BAR } from './bar'; enum Foo { A = `${BAR}` }",
+        {
+            options: { compilerOptions: { target: ts.ScriptTarget.ESNext } },
+        },
+    );
 });

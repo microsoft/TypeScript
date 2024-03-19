@@ -8253,7 +8253,7 @@ declare namespace ts {
          *
          * Default: `last`
          */
-        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+        readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
         /**
          * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
          */
@@ -8263,6 +8263,7 @@ declare namespace ts {
         readonly generateReturnInDocTemplate?: boolean;
         readonly disableLineTextInReferences?: boolean;
     }
+    type OrganizeImportsTypeOrder = "last" | "inline" | "first";
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
         negative: boolean;

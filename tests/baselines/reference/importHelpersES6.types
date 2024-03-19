@@ -22,7 +22,7 @@ declare var dec: any;
 >this : this
 
     g(u) { return #x in u; }
->g : (u: any) => boolean
+>g : (u: any) => u is A
 >u : any
 >#x in u : boolean
 >#x : any
