@@ -24,11 +24,11 @@ export {x};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 // cjs format file
-var x = import.meta.url;
+const x = import.meta.url;
 exports.x = x;
 //// [index.js]
 // esm format file
-var x = import.meta.url;
+const x = import.meta.url;
 export { x };
 
 

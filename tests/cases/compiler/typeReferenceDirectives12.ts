@@ -2,7 +2,7 @@
 // @declaration: true
 // @typeRoots: /types
 // @traceResolution: true
-// @out: output.js
+// @outFile: output.js
 
 // @currentDirectory: /
 

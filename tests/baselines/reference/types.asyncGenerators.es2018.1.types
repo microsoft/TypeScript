@@ -433,7 +433,7 @@ async function * awaitedType2() {
 >1 : 1
 }
 async function * nextType1(): { next(...args: [] | [number | PromiseLike<number>]): any } {
->nextType1 : () => { next(...args: [] | [number | PromiseLike<number>]): any; }
+>nextType1 : () => {    next(...args: [] | [number | PromiseLike<number>]): any;}
 >next : (...args: [] | [number | PromiseLike<number>]) => any
 >args : [] | [number | PromiseLike<number>]
 

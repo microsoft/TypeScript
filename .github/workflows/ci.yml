@@ -21,11 +21,13 @@ defaults:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-14
         runtime:
           - { name: node, version: 20 }
           - { name: node, version: 18 }
@@ -34,9 +36,14 @@ jobs:
         bundle:
           - true
         include:
-          - { runtime: { name: node, version: 20 }, bundle: false }
-          - { runtime: { name: bun, version: 'latest' }, bundle: true }
+          - { os: linux, runtime: { name: node, version: 20 }, bundle: false }
+          - { os: linux, runtime: { name: bun, version: 'latest' }, bundle: true }
+          - { os: macos-14, runtime: { name: bun, version: 'latest' }, bundle: true }
+        exclude:
+          # No Node 14 on ARM macOS
+          - { os: macos-14, runtime: { name: node, version: 14 }, bundle: false }
 
+    runs-on: ${{ matrix.os }}
     name: Test ${{ matrix.runtime.name }} ${{ matrix.runtime.version }} with --bundle=${{ matrix.bundle }}
 
     steps:
@@ -88,7 +95,7 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      - uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+      - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}

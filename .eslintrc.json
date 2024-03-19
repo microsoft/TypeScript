@@ -82,6 +82,10 @@
             { "selector": "property", "format": null }
         ],
 
+        "@typescript-eslint/unified-signatures": "error",
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true }],
+
         // Rules enabled in typescript-eslint configs that are not applicable here
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/class-literal-property-style": "off",

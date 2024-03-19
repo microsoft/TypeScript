@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,200 / 2,200 (nearest 100)
+Type Count: 7,800 / 7,800 (nearest 100)
+Instantiation count: 92,500 / 92,500 (nearest 500)
+Symbol count: 68,000 / 68,000 (nearest 500)
+
 === tsxReactPropsInferenceSucceedsOnIntersections.tsx ===
 /// <reference path="react16.d.ts" />
 

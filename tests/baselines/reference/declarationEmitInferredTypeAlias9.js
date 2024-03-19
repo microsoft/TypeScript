@@ -11,12 +11,11 @@ export function returnSomeGlobalValue() {
 //// [declarationEmitInferredTypeAlias9.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.returnSomeGlobalValue = void 0;
+exports.returnSomeGlobalValue = returnSomeGlobalValue;
 var x;
 function returnSomeGlobalValue() {
     return x;
 }
-exports.returnSomeGlobalValue = returnSomeGlobalValue;
 
 
 //// [declarationEmitInferredTypeAlias9.d.ts]

@@ -22,7 +22,7 @@ obj1 = obj2; // Error - indexer doesn't match
 >obj2 : { x: string; }
 
 function f(x: { [s: string]: string }) { }
->f : (x: { [s: string]: string; }) => void
+>f : (x: {    [s: string]: string;}) => void
 >x : { [s: string]: string; }
 >s : string
 

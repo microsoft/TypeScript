@@ -849,38 +849,6 @@ export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
 }
 
 /** @internal */
-export const enum SortKind {
-    None = 0,
-    CaseSensitive = 1 << 0,
-    CaseInsensitive = 1 << 1,
-    Both = CaseSensitive | CaseInsensitive,
-}
-
-/** @internal */
-export function detectSortCaseSensitivity<T>(
-    array: readonly T[],
-    getString: (element: T) => string,
-    compareStringsCaseSensitive: Comparer<string>,
-    compareStringsCaseInsensitive: Comparer<string>,
-): SortKind {
-    let kind = SortKind.Both;
-    if (array.length < 2) return kind;
-
-    let prevElement = getString(array[0]);
-    for (let i = 1, len = array.length; i < len && kind !== SortKind.None; i++) {
-        const element = getString(array[i]);
-        if (kind & SortKind.CaseSensitive && compareStringsCaseSensitive(prevElement, element) > 0) {
-            kind &= ~SortKind.CaseSensitive;
-        }
-        if (kind & SortKind.CaseInsensitive && compareStringsCaseInsensitive(prevElement, element) > 0) {
-            kind &= ~SortKind.CaseInsensitive;
-        }
-        prevElement = element;
-    }
-    return kind;
-}
-
-/** @internal */
 export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
     if (!array1 || !array2) {
         return array1 === array2;
@@ -2252,7 +2220,7 @@ const createUIStringComparer = (() => {
     function createIntlCollatorStringComparer(locale: string | undefined): Comparer<string> {
         // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
         // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
-        const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant" }).compare;
+        const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant", numeric: true }).compare;
         return (a, b) => compareWithCallback(a, b, comparer);
     }
 })();
@@ -2743,12 +2711,8 @@ export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predi
 export function isNodeLikeSystem(): boolean {
     // This is defined here rather than in sys.ts to prevent a cycle from its
     // use in performanceCore.ts.
-    //
-    // We don't use the presence of `require` to check if we are in Node;
-    // when bundled using esbuild, this function will be rewritten to `__require`
-    // and definitely exist.
     return typeof process !== "undefined"
         && !!process.nextTick
         && !(process as any).browser
-        && typeof module === "object";
+        && typeof require !== "undefined";
 }

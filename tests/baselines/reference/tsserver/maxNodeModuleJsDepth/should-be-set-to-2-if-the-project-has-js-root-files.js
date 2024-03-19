@@ -222,7 +222,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "target": "ES2016"
+          "target": "es2016"
         }
       },
       "seq": 2,

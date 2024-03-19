@@ -1,11 +1,8 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== optionsOutAndNoModuleGen.ts (1 errors) ====
     export var x = 10;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+    

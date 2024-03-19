@@ -60,7 +60,8 @@ class D extends DecoratorProvider {
         class C {
 >C : C
 
-            @super.decorate
+            @(super.decorate)
+>(super.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >super.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 >super : DecoratorProvider
 >decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
