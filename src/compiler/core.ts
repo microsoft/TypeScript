@@ -1074,7 +1074,7 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
 }
 
 /**
- * Returns a new sorted array.
+ * Returns a new sorted array. This sort is stable, meaning elements equal to each other maintain their relative position in the array.
  *
  * @internal
  */
