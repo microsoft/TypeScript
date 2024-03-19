@@ -10657,17 +10657,3 @@ export function isSyntacticallyString(expr: Expression): boolean {
     }
     return false;
 }
-
-/** @internal */
-export function isSyntacticallyNumeric(expr: Expression): boolean {
-    expr = skipOuterExpressions(expr);
-    switch (expr.kind) {
-        case SyntaxKind.PrefixUnaryExpression:
-            return isSyntacticallyNumeric((expr as PrefixUnaryExpression).operand);
-        case SyntaxKind.BinaryExpression:
-            return isSyntacticallyNumeric((expr as BinaryExpression).left) && isSyntacticallyNumeric((expr as BinaryExpression).right);
-        case SyntaxKind.NumericLiteral:
-            return true;
-    }
-    return false;
-}

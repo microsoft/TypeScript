@@ -719,7 +719,6 @@ import {
     isStringOrNumericLiteralLike,
     isSuperCall,
     isSuperProperty,
-    isSyntacticallyNumeric,
     isSyntacticallyString,
     isTaggedTemplateExpression,
     isTemplateSpan,
@@ -45556,7 +45555,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(member.name, Diagnostics.Enum_member_must_have_initializer);
             return undefined;
         }
-        if (getIsolatedModules(compilerOptions) && previous?.initializer && !isSyntacticallyNumeric(previous.initializer)) {
+        if (getIsolatedModules(compilerOptions) && previous?.initializer && !isSyntacticallyNumericConstant(previous.initializer)) {
             error(
                 member.name,
                 Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
@@ -45595,6 +45594,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
         }
         return value;
+    }
+
+    function isSyntacticallyNumericConstant(expr: Expression): boolean {
+        expr = skipOuterExpressions(expr);
+        switch (expr.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+                return isSyntacticallyNumericConstant((expr as PrefixUnaryExpression).operand);
+            case SyntaxKind.BinaryExpression:
+                return isSyntacticallyNumericConstant((expr as BinaryExpression).left) && isSyntacticallyNumericConstant((expr as BinaryExpression).right);
+            case SyntaxKind.NumericLiteral:
+                return true;
+        }
+        return false;
     }
 
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
