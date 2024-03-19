@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/errorReportNotCircular1.ts] ////
+
+=== data.ts ===
+// https://github.com/microsoft/TypeScript/issues/57357
+
+import type { Data } from "./processor";
+>Data : Symbol(Data, Decl(data.ts, 2, 13))
+
+export function getData() {
+>getData : Symbol(getData, Decl(data.ts, 2, 40))
+
+  return constructData({}) satisfies []; // error
+>constructData : Symbol(constructData, Decl(data.ts, 6, 1))
+}
+
+function constructData(data: Data) {
+>constructData : Symbol(constructData, Decl(data.ts, 6, 1))
+>data : Symbol(data, Decl(data.ts, 8, 23))
+>Data : Symbol(Data, Decl(data.ts, 2, 13))
+
+  const { ...props } = data;
+>props : Symbol(props, Decl(data.ts, 9, 9))
+>data : Symbol(data, Decl(data.ts, 8, 23))
+
+  return {
+    ...props,
+>props : Symbol(props, Decl(data.ts, 9, 9))
+
+  };
+}
+
+=== type.ts ===
+export type Value = {};
+>Value : Symbol(Value, Decl(type.ts, 0, 0))
+
+=== processor.ts ===
+import { getData } from "./data";
+>getData : Symbol(getData, Decl(processor.ts, 0, 8))
+
+import type { Value } from "./type";
+>Value : Symbol(Value, Decl(processor.ts, 2, 13))
+
+export type Data = {
+>Data : Symbol(Data, Decl(processor.ts, 2, 36))
+
+  quantity: Value;
+>quantity : Symbol(quantity, Decl(processor.ts, 4, 20))
+>Value : Symbol(Value, Decl(processor.ts, 2, 13))
+
+};
+
+declare function createRequestProcessor<Req>(pipeline: () => Req): Req;
+>createRequestProcessor : Symbol(createRequestProcessor, Decl(processor.ts, 6, 2))
+>Req : Symbol(Req, Decl(processor.ts, 8, 40))
+>pipeline : Symbol(pipeline, Decl(processor.ts, 8, 45))
+>Req : Symbol(Req, Decl(processor.ts, 8, 40))
+>Req : Symbol(Req, Decl(processor.ts, 8, 40))
+
+export const processor = createRequestProcessor(getData);
+>processor : Symbol(processor, Decl(processor.ts, 10, 12))
+>createRequestProcessor : Symbol(createRequestProcessor, Decl(processor.ts, 6, 2))
+>getData : Symbol(getData, Decl(processor.ts, 0, 8))
+
+=== main.ts ===
+import { processor } from "./processor";
+>processor : Symbol(processor, Decl(main.ts, 0, 8))
+
+export default processor;
+>processor : Symbol(processor, Decl(main.ts, 0, 8))
+
+=== workerinterface.ts ===
+import type Server from "./main";
+>Server : Symbol(Server, Decl(workerinterface.ts, 0, 6))
+
+export type _T = typeof Server;
+>_T : Symbol(_T, Decl(workerinterface.ts, 0, 33))
+>Server : Symbol(Server, Decl(workerinterface.ts, 0, 6))
+

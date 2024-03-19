@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/declarationEmitUsingTypeAlias2.ts] ////
+
+=== node_modules/some-dep/dist/inner.d.ts ===
+export declare type Other = { other: string };
+>Other : { other: string; }
+>other : string
+
+export declare type SomeType = { arg: Other };
+>SomeType : { arg: Other; }
+>arg : Other
+
+=== node_modules/some-dep/dist/indirection.d.ts ===
+import { Other as IndirectOther, SomeType as IndirectSomeType } from './inner';
+>Other : any
+>IndirectOther : any
+>SomeType : any
+>IndirectSomeType : any
+
+export declare type Other = IndirectOther;
+>Other : IndirectOther
+
+export declare type SomeType = IndirectSomeType
+>SomeType : IndirectSomeType
+
+=== node_modules/some-dep/dist/index.d.ts ===
+import { Other, SomeType as IndirectSomeType } from './indirection';
+>Other : any
+>SomeType : any
+>IndirectSomeType : any
+
+export type OtherType = Other;
+>OtherType : import("node_modules/some-dep/dist/inner").Other
+
+export type SomeType = IndirectSomeType;
+>SomeType : import("node_modules/some-dep/dist/inner").SomeType
+
+=== src/index.ts ===
+import { SomeType } from "some-dep";
+>SomeType : any
+
+export const foo = (thing: SomeType) => {
+>foo : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
+>(thing: SomeType) => {  return thing;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+
+  return thing;
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+
+};
+
+export const bar = (thing: SomeType) => {
+>bar : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
+>(thing: SomeType) => {  return thing.arg;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+
+  return thing.arg;
+>thing.arg : import("node_modules/some-dep/dist/inner").Other
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+>arg : import("node_modules/some-dep/dist/inner").Other
+
+};

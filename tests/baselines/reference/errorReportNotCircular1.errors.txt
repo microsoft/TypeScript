@@ -1,0 +1,52 @@
+data.ts(6,24): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Data'.
+  Property 'quantity' is missing in type '{}' but required in type 'Data'.
+data.ts(6,28): error TS1360: Type '{ quantity: Value; }' does not satisfy the expected type '[]'.
+
+
+==== data.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/57357
+    
+    import type { Data } from "./processor";
+    
+    export function getData() {
+      return constructData({}) satisfies []; // error
+                           ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Data'.
+!!! error TS2345:   Property 'quantity' is missing in type '{}' but required in type 'Data'.
+!!! related TS2728 processor.ts:6:3: 'quantity' is declared here.
+                               ~~~~~~~~~
+!!! error TS1360: Type '{ quantity: Value; }' does not satisfy the expected type '[]'.
+    }
+    
+    function constructData(data: Data) {
+      const { ...props } = data;
+      return {
+        ...props,
+      };
+    }
+    
+==== type.ts (0 errors) ====
+    export type Value = {};
+    
+==== processor.ts (0 errors) ====
+    import { getData } from "./data";
+    
+    import type { Value } from "./type";
+    
+    export type Data = {
+      quantity: Value;
+    };
+    
+    declare function createRequestProcessor<Req>(pipeline: () => Req): Req;
+    
+    export const processor = createRequestProcessor(getData);
+    
+==== main.ts (0 errors) ====
+    import { processor } from "./processor";
+    export default processor;
+    
+==== workerinterface.ts (0 errors) ====
+    import type Server from "./main";
+    
+    export type _T = typeof Server;
+    
