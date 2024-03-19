@@ -56,7 +56,7 @@
 //// const a = { "foo.bar": 1 }
 //// a['/*13*/
 
-// tests 7-9 should return no replacementSpan
+// tests 11-13 should return no replacementSpan
 const markers = test.markers();
 const ranges = test.ranges();
 
