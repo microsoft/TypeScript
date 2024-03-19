@@ -1,26 +1,60 @@
 ///<reference path="fourslash.ts" />
 
-// @Filename: file1.ts
+// @Filename: file0.ts
 //// const a = { "foo.bar": 1 }
 //// a["[|foo.b/*0*/|]
+
+// @Filename: file1.ts
+//// const a = { "foo.bar": 1 }
 //// a["[|foo.b           /*1*/|]
-//// a[    "[|foo.b/*2*/|]
-//// a["[|foo.b/*3*/|]"
-//// a["[|foo./*4*/b|]
-//// a['[|foo./*5*/b|]
-//// a[`[|foo./*6*/b|]
 
 // @Filename: file2.ts
 //// const a = { "foo.bar": 1 }
-//// a[`/*7*/
+//// a[    "[|foo.b/*2*/|]
 
 // @Filename: file3.ts
 //// const a = { "foo.bar": 1 }
-//// a["/*8*/
+//// a["[|foo.b/*3*/|]"
 
 // @Filename: file4.ts
 //// const a = { "foo.bar": 1 }
-//// a['/*9*/
+//// a["[|foo./*4*/b|]
+
+// @Filename: file5.ts
+//// const a = { "foo.bar": 1 }
+//// a['[|foo./*5*/b|]
+
+// @Filename: file6.ts
+//// const a = { "foo.bar": 1 }
+//// a[`[|foo./*6*/b|]
+
+// @Filename: file7.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|foo./*7*/|]
+
+// @Filename: file8.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|foo/*8*/|]
+
+// @Filename: file9.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|foo./*9*/|]"
+
+// @Filename: file10.ts
+//// const a = { "foo.bar": 1 }
+//// a["[|foo/*10*/|]"
+
+// @Filename: empty1.ts
+//// const a = { "foo.bar": 1 }
+//// a[`/*11*/
+
+// @Filename: empty2.ts
+//// const a = { "foo.bar": 1 }
+//// a["/*12*/
+
+// @Filename: empty3.ts
+//// const a = { "foo.bar": 1 }
+//// a['/*13*/
 
 // tests 7-9 should return no replacementSpan
 const markers = test.markers();
