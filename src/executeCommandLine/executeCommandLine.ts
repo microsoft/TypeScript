@@ -962,11 +962,6 @@ function updateSolutionBuilderHost(
         reportStatistics(sys, program.getProgram(), solutionPerformance);
         cb(program);
     };
-    buildHost.beforeEmitBundle = config => enableStatisticsAndTracing(sys, config.options, /*isBuildMode*/ true);
-    buildHost.afterEmitBundle = config => {
-        reportStatistics(sys, config, solutionPerformance);
-        cb(config);
-    };
 }
 
 function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { createProgram: CreateProgram<T>; }, isBuildMode: boolean) {
@@ -1148,14 +1143,8 @@ function isSolutionMarkOrMeasure(name: string) {
     return startsWith(name, "SolutionBuilder::");
 }
 
-function isProgram(programOrConfig: Program | ParsedCommandLine): programOrConfig is Program {
-    return !(programOrConfig as ParsedCommandLine).options;
-}
-
-function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine, solutionPerformance: SolutionPerformance | undefined) {
-    const program = isProgram(programOrConfig) ? programOrConfig : undefined;
-    const config = isProgram(programOrConfig) ? undefined : programOrConfig;
-    const compilerOptions = program ? program.getCompilerOptions() : config!.options;
+function reportStatistics(sys: System, program: Program, solutionPerformance: SolutionPerformance | undefined) {
+    const compilerOptions = program.getCompilerOptions();
 
     if (canTrace(sys, compilerOptions)) {
         tracing?.stopTracing();
@@ -1165,24 +1154,22 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
     if (canReportDiagnostics(sys, compilerOptions)) {
         statistics = [];
         const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
-        if (program) {
-            reportCountStatistic("Files", program.getSourceFiles().length);
+        reportCountStatistic("Files", program.getSourceFiles().length);
 
-            const lineCounts = countLines(program);
-            if (compilerOptions.extendedDiagnostics) {
-                for (const [key, value] of lineCounts.entries()) {
-                    reportCountStatistic("Lines of " + key, value);
-                }
+        const lineCounts = countLines(program);
+        if (compilerOptions.extendedDiagnostics) {
+            for (const [key, value] of lineCounts.entries()) {
+                reportCountStatistic("Lines of " + key, value);
             }
-            else {
-                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
-            }
-
-            reportCountStatistic("Identifiers", program.getIdentifierCount());
-            reportCountStatistic("Symbols", program.getSymbolCount());
-            reportCountStatistic("Types", program.getTypeCount());
-            reportCountStatistic("Instantiations", program.getInstantiationCount());
         }
+        else {
+            reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+        }
+
+        reportCountStatistic("Identifiers", program.getIdentifierCount());
+        reportCountStatistic("Symbols", program.getSymbolCount());
+        reportCountStatistic("Types", program.getTypeCount());
+        reportCountStatistic("Instantiations", program.getInstantiationCount());
         if (memoryUsed >= 0) {
             reportStatisticalValue({ name: "Memory used", value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
         }
@@ -1193,13 +1180,11 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
         const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
         const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
         if (compilerOptions.extendedDiagnostics) {
-            if (program) {
-                const caches = program.getRelationCacheSizes();
-                reportCountStatistic("Assignability cache size", caches.assignable);
-                reportCountStatistic("Identity cache size", caches.identity);
-                reportCountStatistic("Subtype cache size", caches.subtype);
-                reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
-            }
+            const caches = program.getRelationCacheSizes();
+            reportCountStatistic("Assignability cache size", caches.assignable);
+            reportCountStatistic("Identity cache size", caches.identity);
+            reportCountStatistic("Subtype cache size", caches.subtype);
+            reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
             if (isPerformanceEnabled) {
                 performance.forEachMeasure((name, duration) => {
                     if (!isSolutionMarkOrMeasure(name)) reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true);

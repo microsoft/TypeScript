@@ -4,7 +4,7 @@
 // See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
 
 declare function test(
->test : (arg: Record<string, (arg: string) => void> | ((arg: number) => void)[]) => void
+>test : (arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>) => void
 
   arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
 >arg : Record<string, (arg: string) => void> | ((arg: number) => void)[]

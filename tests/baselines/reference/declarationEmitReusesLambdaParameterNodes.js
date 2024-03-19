@@ -14,11 +14,11 @@ export function CustomSelect2<Option,>(x: Props<Option> & {}) {}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomSelect2 = exports.CustomSelect1 = void 0;
+exports.CustomSelect1 = void 0;
+exports.CustomSelect2 = CustomSelect2;
 const CustomSelect1 = (x) => { };
 exports.CustomSelect1 = CustomSelect1;
 function CustomSelect2(x) { }
-exports.CustomSelect2 = CustomSelect2;
 
 
 //// [index.d.ts]

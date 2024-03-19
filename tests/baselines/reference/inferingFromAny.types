@@ -49,12 +49,12 @@ declare function f9<T>(x: new () => T): T;
 >x : new () => T
 
 declare function f10<T>(x: { [x: string]: T }): T;
->f10 : <T>(x: { [x: string]: T; }) => T
+>f10 : <T>(x: {    [x: string]: T;}) => T
 >x : { [x: string]: T; }
 >x : string
 
 declare function f11<T>(x: { [x: number]: T }): T;
->f11 : <T>(x: { [x: number]: T; }) => T
+>f11 : <T>(x: {    [x: number]: T;}) => T
 >x : { [x: number]: T; }
 >x : number
 
@@ -82,7 +82,7 @@ declare function f16<T>(x: Partial<T>): T;
 >x : Partial<T>
 
 declare function f17<T, K>(x: {[P in keyof T]: K}): T;
->f17 : <T, K>(x: { [P in keyof T]: K; }) => T
+>f17 : <T, K>(x: {    [P in keyof T]: K;}) => T
 >x : { [P in keyof T]: K; }
 
 declare function f18<T, K extends keyof T>(x: {[P in K]: T[P]}): T;

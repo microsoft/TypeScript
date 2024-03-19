@@ -86,7 +86,6 @@ import {
     normalizePath,
     normalizeSlashes,
     orderedRemoveItem,
-    outFile,
     PackageJsonAutoImportPreference,
     PackageJsonInfo,
     ParsedCommandLine,
@@ -1580,7 +1579,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             );
 
             if (this.generatedFilesMap) {
-                const outPath = outFile(this.compilerOptions);
+                const outPath = this.compilerOptions.outFile;
                 if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                     // --out
                     if (
@@ -1736,7 +1735,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
-        if (outFile(this.compilerOptions)) {
+        if (this.compilerOptions.outFile) {
             // Single watcher
             if (!this.generatedFilesMap) {
                 this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);

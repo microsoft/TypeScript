@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 1,900 / 1,900 (nearest 100)
+Type Count: 14,200 / 14,200 (nearest 100)
+Instantiation count: 57,000 / 57,000 (nearest 500)
+Symbol count: 49,000 / 49,000 (nearest 500)
+
 === input.d.ts ===
 type _BuildPowersOf2LengthArrays<
 >_BuildPowersOf2LengthArrays : _BuildPowersOf2LengthArrays<Length, AccumulatedArray>

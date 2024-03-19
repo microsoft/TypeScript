@@ -62,7 +62,7 @@ class D extends DecoratorProvider {
         class C {
 >C : Symbol(C, Decl(esDecorators-preservesThis.ts, 23, 9))
 
-            @super.decorate
+            @(super.decorate)
 >super.decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))
 >super : Symbol(DecoratorProvider, Decl(esDecorators-preservesThis.ts, 0, 0))
 >decorate : Symbol(DecoratorProvider.decorate, Decl(esDecorators-preservesThis.ts, 2, 33))

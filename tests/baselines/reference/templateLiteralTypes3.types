@@ -93,8 +93,8 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >b : boolean
 
     let x7 = foo1(`*${t}*` as const);
->x7 : `${T}`
->foo1(`*${t}*` as const) : `${T}`
+>x7 : T
+>foo1(`*${t}*` as const) : T
 >foo1 : <V extends string>(arg: `*${V}*`) => V
 >`*${t}*` as const : `*${T}*`
 >`*${t}*` : `*${T}*`
