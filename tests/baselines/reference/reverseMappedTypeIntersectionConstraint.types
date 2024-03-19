@@ -401,10 +401,10 @@ const child = () => Promise.resolve("foo");
 >"foo" : "foo"
 
 const config = createXMachine({
->config : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { readonly src: "str"; }; }
->createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { readonly src: "str"; }; }
+>config : { types: {    actors: {        src: "str";        logic: typeof child;    };}; invoke: { readonly src: "str"; }; }
+>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: {    actors: {        src: "str";        logic: typeof child;    };}; invoke: { readonly src: "str"; }; }
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { src: "str"; }; extra: number; }
+>{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: {    actors: {        src: "str";        logic: typeof child;    };}; invoke: { src: "str"; }; extra: number; }
 
   types: {} as {
 >types : { actors: {    src: "str";    logic: typeof child;}; }

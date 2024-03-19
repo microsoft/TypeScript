@@ -175,7 +175,7 @@ interface Obj { x: number }
 >x : number
 
 async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
->fn : <T>() => Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
+>fn : <T>() => Promise<T extends object ? {    [K in keyof T]: Obj;} : Obj>
 
 	// Per #45924, this was failing due to incorrect inference both above and here.
 	// Should not error.

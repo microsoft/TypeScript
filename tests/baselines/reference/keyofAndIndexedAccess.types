@@ -657,7 +657,7 @@ function f51<T, K extends keyof T>(k: K, s: string) {
 }
 
 function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
->f52 : <T>(obj: { [x: string]: boolean; }, k: Exclude<keyof T, symbol>, s: string, n: number) => void
+>f52 : <T>(obj: {    [x: string]: boolean;}, k: Exclude<keyof T, symbol>, s: string, n: number) => void
 >obj : { [x: string]: boolean; }
 >x : string
 >k : Exclude<keyof T, symbol>
@@ -684,7 +684,7 @@ function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: s
 }
 
 function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
->f53 : <T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
+>f53 : <T, K extends Exclude<keyof T, symbol>>(obj: {    [x: string]: boolean;}, k: K, s: string, n: number) => void
 >obj : { [x: string]: boolean; }
 >x : string
 >k : K
@@ -1782,7 +1782,7 @@ function updateIds<T extends Record<K, string>, K extends string>(
 // Repro from #13285
 
 function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
->updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
+>updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: {    [oldId: string]: string;}) => void
 >x : string
 
     obj: T,

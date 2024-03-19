@@ -165,7 +165,7 @@ export type FilterOptionsHandler<TValue = OptionValues> = (options: Options<TVal
 >currentValues : Options<TValue>
 
 export type InputRendererHandler = (props: { [key: string]: any }) => HandlerRendererResult;
->InputRendererHandler : (props: { [key: string]: any; }) => HandlerRendererResult
+>InputRendererHandler : (props: {    [key: string]: any;}) => HandlerRendererResult
 >props : { [key: string]: any; }
 >key : string
 

@@ -123,7 +123,7 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
-    host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
+    host.storeSignatureInfo = system.storeSignatureInfo;
     setGetSourceFileAsHashVersioned(host);
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
     return host;
@@ -268,7 +268,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
     // For testing
     /** @internal */
-    storeFilesChangingSignatureDuringEmit?: boolean;
+    storeSignatureInfo?: boolean;
     /** @internal */
     now?(): Date;
 }
