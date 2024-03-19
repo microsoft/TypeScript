@@ -58,24 +58,24 @@ function f<T>() {
 >sym : unique symbol
     
     type Okay = keyof Orig;
->Okay : string | number | unique symbol | keyof T
+>Okay : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 
     let a: Okay;
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 
     a = "str";
 >a = "str" : "str"
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 >"str" : "str"
 
     a = sym;
 >a = sym : unique symbol
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 >sym : unique symbol
 
     a = "whatever";
 >a = "whatever" : "whatever"
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 >"whatever" : "whatever"
 
     // type Okay = string | number | typeof sym
@@ -118,24 +118,24 @@ function g<T>() {
 >sym : unique symbol
     
     type Okay = keyof Orig;
->Okay : string | number | unique symbol | keyof T
+>Okay : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 
     let a: Okay;
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 
     a = "str";
 >a = "str" : "str"
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 >"str" : "str"
 
     a = sym;
 >a = sym : unique symbol
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 >sym : unique symbol
 
     a = "whatever";
 >a = "whatever" : "whatever"
->a : string | number | unique symbol | keyof T
+>a : keyof ({ [k: string]: any; str: any; [sym]: any; } & T)
 >"whatever" : "whatever"
 
     // type Okay = string | number | typeof sym

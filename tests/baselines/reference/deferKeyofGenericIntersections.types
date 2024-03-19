@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/deferKeyofGenericIntersections.ts] ////
+
+=== deferKeyofGenericIntersections.ts ===
+type Foo = { x: string } | undefined;
+>Foo : { x: string; } | undefined
+>x : string
+
+type Bar = { y: string };
+>Bar : { y: string; }
+>y : string
+
+type FooAndBar = Foo & Bar;
+>FooAndBar : { x: string; } & Bar
+
+type Keys<T, U> = keyof (T & U);
+>Keys : keyof (T & U)
+
+type K1 = keyof Foo;  // never
+>K1 : never
+
+type K2 = keyof Bar;  // "y"
+>K2 : "y"
+
+type K3 = Keys<Foo, Bar>;  // "x" | "y"
+>K3 : "x" | "y"
+
+type K4 = keyof (Foo & Bar);  // "x" | "y"
+>K4 : "x" | "y"
+
+// Repro from #51331
+
+type GestureKey = "drag";
+>GestureKey : "drag"
+
+type DragState = { movement: [number, number]; };
+>DragState : { movement: [number, number]; }
+>movement : [number, number]
+
+interface State {
+    drag?: DragState;
+>drag : DragState | undefined
+}
+
+type SharedGestureState = {
+>SharedGestureState : { dragging?: boolean | undefined; }
+
+    dragging?: boolean;
+>dragging : boolean | undefined
+
+};
+
+type FullGestureState<Key extends GestureKey> = SharedGestureState & NonNullable<State[Key]>;
+>FullGestureState : FullGestureState<Key>
+
+type Handler<Key extends GestureKey> = (state: Omit<FullGestureState<Key>, "event">) => void;
+>Handler : Handler<Key>
+>state : Omit<FullGestureState<Key>, "event">
+
+const f1 = (state: Omit<FullGestureState<"drag">, "event">) => {
+>f1 : (state: Omit<FullGestureState<"drag">, "event">) => void
+>(state: Omit<FullGestureState<"drag">, "event">) => {  state;  state.movement;} : (state: Omit<FullGestureState<"drag">, "event">) => void
+>state : Omit<SharedGestureState & DragState, "event">
+
+  state;
+>state : Omit<SharedGestureState & DragState, "event">
+
+  state.movement;
+>state.movement : [number, number]
+>state : Omit<SharedGestureState & DragState, "event">
+>movement : [number, number]
+
+};
+
+const f2: Handler<"drag"> = (state) => {
+>f2 : Handler<"drag">
+>(state) => {  state;  state.movement;} : (state: Omit<SharedGestureState & DragState, "event">) => void
+>state : Omit<SharedGestureState & DragState, "event">
+
+  state;
+>state : Omit<SharedGestureState & DragState, "event">
+
+  state.movement;
+>state.movement : [number, number]
+>state : Omit<SharedGestureState & DragState, "event">
+>movement : [number, number]
+
+};
+
