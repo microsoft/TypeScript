@@ -996,7 +996,7 @@ export class Session<TMessage = string> implements EventSender {
     private includeDiagnosticsDuration: boolean;
 
     // Maps a file name to duration in milliseconds of semantic checking
-    private semanticCheckPerformance: Map<string, number>;
+    private semanticCheckPerformance: Map<NormalizedPath, number>;
 
     private diagnosticsTime: [number, number] | undefined;
 
