@@ -446,8 +446,12 @@ declare namespace FourSlashInterface {
         uncommentSelection(newFileContent: string): void;
         pasteEdits(options: {
             newFileContents: { readonly [fileName: string]: string };
-            copies: { text: string; copyRange?: { file: string; range: { pos: number, end: number };} }[],
-            pastes: { pos: number, end: number }[],
+            args: {
+                pastedText: string[];
+                pasteLocations: { pos: number, end: number }[];
+                copiedFrom?: { file: string, range: { pos: number, end: number }[] };
+            }
+            fixId?: string;
         }): void;
     }
     class edit {
