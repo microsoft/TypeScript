@@ -66,10 +66,16 @@ jobs:
       - run: npm ci
 
       - run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+        id: test-node
         if: matrix.runtime.name == 'node'
 
       - run: bun run --bun test --no-lint --bundle=${{ matrix.bundle }}
+        id: test-bun
         if: matrix.runtime.name == 'bun'
+
+      - name: Print baseline diff on failure
+        if: ${{ failure() && (steps.test-node.conclusion == 'failure' || steps.test-bun.conclusion == 'failure') }}
+        run: git diff --diff-filter=AM --no-index -- ./tests/baselines/reference ./tests/baselines/local
 
   lint:
     runs-on: ubuntu-latest
