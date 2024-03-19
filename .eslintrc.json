@@ -214,6 +214,7 @@
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
         "unicorn/prefer-top-level-await": "off",
         "unicorn/prefer-negative-index": "off",
+        "unicorn/no-unreadable-array-destructuring": "off",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
