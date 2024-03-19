@@ -3396,6 +3396,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -3463,6 +3469,166 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "7 * aa_1__0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "aa_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_2__0",
+              "exportMapKey": "7 * aa_2__0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "aa_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_3__0",
+              "exportMapKey": "7 * aa_3__0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "aa_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_4__0",
+              "exportMapKey": "7 * aa_4__0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "aa_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_5__0",
+              "exportMapKey": "7 * aa_5__0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "aa_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_6__0",
+              "exportMapKey": "7 * aa_6__0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "aa_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_7__0",
+              "exportMapKey": "7 * aa_7__0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "aa_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_8__0",
+              "exportMapKey": "7 * aa_8__0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "aa_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_9__0",
+              "exportMapKey": "7 * aa_9__0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -3666,26 +3832,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_2__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_2__0",
-              "exportMapKey": "7 * aa_2__0 ",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
-            }
-          },
-          {
             "name": "aa_20__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -3883,26 +4029,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_29__0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "aa_3__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_3__0",
-              "exportMapKey": "7 * aa_3__0 ",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -4106,26 +4232,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_4__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_4__0",
-              "exportMapKey": "7 * aa_4__0 ",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
-            }
-          },
-          {
             "name": "aa_40__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -4323,26 +4429,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_49__0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "aa_5__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_5__0",
-              "exportMapKey": "7 * aa_5__0 ",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -4546,26 +4632,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_6__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_6__0",
-              "exportMapKey": "7 * aa_6__0 ",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
-            }
-          },
-          {
             "name": "aa_60__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -4763,26 +4829,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_69__0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "aa_7__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_7__0",
-              "exportMapKey": "7 * aa_7__0 ",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -4986,26 +5032,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_8__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_8__0",
-              "exportMapKey": "7 * aa_8__0 ",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
-            }
-          },
-          {
             "name": "aa_80__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -5203,26 +5229,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_89__0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "aa_9__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_9__0",
-              "exportMapKey": "7 * aa_9__0 ",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -5456,6 +5462,126 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
+            "name": "depA_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_2",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_2__0",
+              "exportMapKey": "9 * depA_2__0 ",
+              "fileName": "/node_modules/dep-a/file_2.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_3",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_3__0",
+              "exportMapKey": "9 * depA_3__0 ",
+              "fileName": "/node_modules/dep-a/file_3.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_4",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_4__0",
+              "exportMapKey": "9 * depA_4__0 ",
+              "fileName": "/node_modules/dep-a/file_4.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_5",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_5__0",
+              "exportMapKey": "9 * depA_5__0 ",
+              "fileName": "/node_modules/dep-a/file_5.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_6",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_6__0",
+              "exportMapKey": "9 * depA_6__0 ",
+              "fileName": "/node_modules/dep-a/file_6.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_7",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_7__0",
+              "exportMapKey": "9 * depA_7__0 ",
+              "fileName": "/node_modules/dep-a/file_7.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_8",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_8__0",
+              "exportMapKey": "9 * depA_8__0 ",
+              "fileName": "/node_modules/dep-a/file_8.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_9",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_9__0",
+              "exportMapKey": "9 * depA_9__0 ",
+              "fileName": "/node_modules/dep-a/file_9.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
             "name": "depA_10__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -5602,21 +5728,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "depA_19__0",
               "exportMapKey": "10 * depA_19__0 ",
               "fileName": "/node_modules/dep-a/file_19.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_2__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_2",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_2__0",
-              "exportMapKey": "9 * depA_2__0 ",
-              "fileName": "/node_modules/dep-a/file_2.ts",
               "isPackageJsonImport": true
             }
           },
@@ -5771,21 +5882,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "depA_3__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_3",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_3__0",
-              "exportMapKey": "9 * depA_3__0 ",
-              "fileName": "/node_modules/dep-a/file_3.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
             "name": "depA_30__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -5936,21 +6032,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "depA_4__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_4",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_4__0",
-              "exportMapKey": "9 * depA_4__0 ",
-              "fileName": "/node_modules/dep-a/file_4.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
             "name": "depA_40__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -6097,81 +6178,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportName": "depA_49__0",
               "exportMapKey": "10 * depA_49__0 ",
               "fileName": "/node_modules/dep-a/file_49.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_5__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_5",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_5__0",
-              "exportMapKey": "9 * depA_5__0 ",
-              "fileName": "/node_modules/dep-a/file_5.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_6__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_6",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_6__0",
-              "exportMapKey": "9 * depA_6__0 ",
-              "fileName": "/node_modules/dep-a/file_6.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_7__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_7",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_7__0",
-              "exportMapKey": "9 * depA_7__0 ",
-              "fileName": "/node_modules/dep-a/file_7.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_8__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_8",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_8__0",
-              "exportMapKey": "9 * depA_8__0 ",
-              "fileName": "/node_modules/dep-a/file_8.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_9__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_9",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_9__0",
-              "exportMapKey": "9 * depA_9__0 ",
-              "fileName": "/node_modules/dep-a/file_9.ts",
               "isPackageJsonImport": true
             }
           },
@@ -7375,6 +7381,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -7442,6 +7454,166 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "7 * aa_1__0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "aa_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_2__0",
+              "exportMapKey": "7 * aa_2__0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "aa_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_3__0",
+              "exportMapKey": "7 * aa_3__0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "aa_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_4__0",
+              "exportMapKey": "7 * aa_4__0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "aa_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_5__0",
+              "exportMapKey": "7 * aa_5__0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "aa_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_6__0",
+              "exportMapKey": "7 * aa_6__0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "aa_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_7__0",
+              "exportMapKey": "7 * aa_7__0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "aa_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_8__0",
+              "exportMapKey": "7 * aa_8__0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "aa_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_9__0",
+              "exportMapKey": "7 * aa_9__0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -7645,26 +7817,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_2__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_2__0",
-              "exportMapKey": "7 * aa_2__0 ",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
-            }
-          },
-          {
             "name": "aa_20__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -7862,26 +8014,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_29__0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "aa_3__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_3__0",
-              "exportMapKey": "7 * aa_3__0 ",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -8085,26 +8217,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_4__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_4__0",
-              "exportMapKey": "7 * aa_4__0 ",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
-            }
-          },
-          {
             "name": "aa_40__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -8302,26 +8414,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_49__0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "aa_5__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_5__0",
-              "exportMapKey": "7 * aa_5__0 ",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -8525,26 +8617,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_6__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_6__0",
-              "exportMapKey": "7 * aa_6__0 ",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
-            }
-          },
-          {
             "name": "aa_60__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -8742,26 +8814,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_69__0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "aa_7__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_7__0",
-              "exportMapKey": "7 * aa_7__0 ",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -8965,26 +9017,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "aa_8__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_8__0",
-              "exportMapKey": "7 * aa_8__0 ",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
-            }
-          },
-          {
             "name": "aa_80__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -9182,26 +9214,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "8 * aa_89__0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "aa_9__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_9__0",
-              "exportMapKey": "7 * aa_9__0 ",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -9449,6 +9461,182 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
+            "name": "depA_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_2__0",
+              "exportMapKey": "9 * depA_2__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_2.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_3__0",
+              "exportMapKey": "9 * depA_3__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_3.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_4__0",
+              "exportMapKey": "9 * depA_4__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_4.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_5__0",
+              "exportMapKey": "9 * depA_5__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_5.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_6__0",
+              "exportMapKey": "9 * depA_6__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_6.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_7__0",
+              "exportMapKey": "9 * depA_7__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_7.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_8__0",
+              "exportMapKey": "9 * depA_8__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_8.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_9__0",
+              "exportMapKey": "9 * depA_9__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_9.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
             "name": "depA_10__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -9665,28 +9853,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "10 * depA_19__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_19.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_2__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_2__0",
-              "exportMapKey": "9 * depA_2__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_2.ts",
               "isPackageJsonImport": true
             }
           },
@@ -9911,28 +10077,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "depA_3__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_3__0",
-              "exportMapKey": "9 * depA_3__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_3.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
             "name": "depA_30__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -10153,28 +10297,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "depA_4__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_4__0",
-              "exportMapKey": "9 * depA_4__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_4.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
             "name": "depA_40__0",
             "kind": "const",
             "kindModifiers": "export",
@@ -10391,116 +10513,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "10 * depA_49__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_49.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_5__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_5__0",
-              "exportMapKey": "9 * depA_5__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_5.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_6__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_6__0",
-              "exportMapKey": "9 * depA_6__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_6.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_7__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_7__0",
-              "exportMapKey": "9 * depA_7__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_7.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_8__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_8__0",
-              "exportMapKey": "9 * depA_8__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_8.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_9__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_9__0",
-              "exportMapKey": "9 * depA_9__0 ",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_9.ts",
               "isPackageJsonImport": true
             }
           }

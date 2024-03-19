@@ -360,6 +360,16 @@ watchedDirectoriesRecursive::
 /tests/cases/fourslash/server/out:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /tests/cases/fourslash/server/out/indexdef.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /lib.d.ts
     version: Text-1
@@ -394,5 +404,8 @@ ScriptInfos::
     declarationInfoPath: /tests/cases/fourslash/server/out/indexdef.d.ts
     sourceInfos: 1
         /tests/cases/fourslash/server/index.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

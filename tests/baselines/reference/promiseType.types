@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/promiseType.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 200 / 200 (nearest 100)
+Type Count: 700 / 700 (nearest 100)
+Instantiation count: 1,500 / 1,500 (nearest 500)
+Symbol count: 28,000 / 28,000 (nearest 500)
+
 === promiseType.ts ===
 declare var p: Promise<boolean>;
 >p : Promise<boolean>

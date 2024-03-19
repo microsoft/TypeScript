@@ -155,6 +155,6 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/other2.vue
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/other2.vue (used version)
+/user/username/projects/myproject/other2.vue (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

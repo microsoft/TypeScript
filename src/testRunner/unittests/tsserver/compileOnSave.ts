@@ -733,7 +733,6 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         }
         test("compileOnSaveAffectedFileList projectUsesOutFile should not be returned if not set", {});
         test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", { outFile: "/a/out.js" });
-        test("compileOnSaveAffectedFileList projectUsesOutFile should be true if out is set", { out: "/a/out.js" });
     });
 });
 

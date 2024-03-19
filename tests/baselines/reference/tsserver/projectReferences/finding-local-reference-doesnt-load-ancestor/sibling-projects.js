@@ -650,9 +650,11 @@ FsWatches::
   {}
 
 Projects::
-/user/username/projects/solution/compiler/tsconfig.json (Configured)
+/user/username/projects/solution/compiler/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/solution/compiler/types.d.ts: identitySourceMapConsumer *new*
 /user/username/projects/solution/services/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

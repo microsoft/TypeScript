@@ -192,8 +192,8 @@ PolledWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.4",
-  "@types/node@ts5.4"
+  "@types/commander@tsFakeMajor.Minor",
+  "@types/node@tsFakeMajor.Minor"
 ] *new*
 
 Projects::

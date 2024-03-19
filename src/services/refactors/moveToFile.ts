@@ -39,6 +39,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findIndex,
     findLast,
     firstDefined,
@@ -49,6 +50,7 @@ import {
     GetCanonicalFileName,
     getDecorators,
     getDirectoryPath,
+    getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getModifiers,
     getPropertySymbolFromBindingElement,
@@ -58,6 +60,7 @@ import {
     getRelativePathFromFile,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
+    getTokenAtPosition,
     getUniqueName,
     hasJSFileExtension,
     hasSyntacticModifier,
@@ -73,6 +76,7 @@ import {
     isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
+    isBlockLike,
     isDeclarationName,
     isExportDeclaration,
     isExportSpecifier,
@@ -161,12 +165,26 @@ const moveToFileAction = {
 registerRefactor(refactorNameForMoveToFile, {
     kinds: [moveToFileAction.kind],
     getAvailableActions: function getRefactorActionsToMoveToFile(context, interactiveRefactorArguments): readonly ApplicableRefactorInfo[] {
+        const file = context.file;
         const statements = getStatementsToMove(context);
         if (!interactiveRefactorArguments) {
             return emptyArray;
         }
+        /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
+         *  This condition is used in order to show less often the `Move to file` code action */
+        if (context.endPosition !== undefined) {
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+                return emptyArray;
+            }
+        }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
-            return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
+            const affectedTextRange = {
+                start: { line: getLineAndCharacterOfPosition(file, statements.all[0].getStart(file)).line, offset: getLineAndCharacterOfPosition(file, statements.all[0].getStart(file)).character },
+                end: { line: getLineAndCharacterOfPosition(file, last(statements.all).end).line, offset: getLineAndCharacterOfPosition(file, last(statements.all).end).character },
+            };
+            return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, range: affectedTextRange }] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];

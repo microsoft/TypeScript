@@ -1,0 +1,177 @@
+//// [tests/cases/compiler/indexedAccessAndNullableNarrowing.ts] ////
+
+=== indexedAccessAndNullableNarrowing.ts ===
+function f1<T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) {
+>f1 : Symbol(f1, Decl(indexedAccessAndNullableNarrowing.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 0, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 0, 42))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 0, 12))
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 0, 62))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 0, 12))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 0, 42))
+
+    if (x === undefined) return;
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 0, 62))
+>undefined : Symbol(undefined)
+
+    x;  // T[K] & ({} | null)
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 0, 62))
+
+    if (x === undefined) return;
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 0, 62))
+>undefined : Symbol(undefined)
+
+    x;  // T[K] & ({} | null)
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 0, 62))
+}
+
+function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
+>f2 : Symbol(f2, Decl(indexedAccessAndNullableNarrowing.ts, 5, 1))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 7, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 7, 42))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 7, 12))
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 7, 62))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 7, 12))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 7, 42))
+
+    if (x === null) return;
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 7, 62))
+
+    x;  // T[K] & ({} | undefined)
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 7, 62))
+
+    if (x === null) return;
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 7, 62))
+
+    x;  // T[K] & ({} | undefined)
+>x : Symbol(x, Decl(indexedAccessAndNullableNarrowing.ts, 7, 62))
+}
+
+function f3<T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) {
+>f3 : Symbol(f3, Decl(indexedAccessAndNullableNarrowing.ts, 12, 1))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 14, 12))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 14, 14))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 14, 12))
+>t : Symbol(t, Decl(indexedAccessAndNullableNarrowing.ts, 14, 34))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 14, 12))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 14, 14))
+>p1 : Symbol(p1, Decl(indexedAccessAndNullableNarrowing.ts, 14, 42))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 14, 12))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 14, 14))
+>p2 : Symbol(p2, Decl(indexedAccessAndNullableNarrowing.ts, 14, 66))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 14, 12))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 14, 14))
+
+    t = p1;
+>t : Symbol(t, Decl(indexedAccessAndNullableNarrowing.ts, 14, 34))
+>p1 : Symbol(p1, Decl(indexedAccessAndNullableNarrowing.ts, 14, 42))
+
+    t = p2;
+>t : Symbol(t, Decl(indexedAccessAndNullableNarrowing.ts, 14, 34))
+>p2 : Symbol(p2, Decl(indexedAccessAndNullableNarrowing.ts, 14, 66))
+}
+
+// https://github.com/microsoft/TypeScript/issues/57693
+
+type AnyObject = Record<string, any>;
+>AnyObject : Symbol(AnyObject, Decl(indexedAccessAndNullableNarrowing.ts, 17, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type State = AnyObject;
+>State : Symbol(State, Decl(indexedAccessAndNullableNarrowing.ts, 21, 37))
+>AnyObject : Symbol(AnyObject, Decl(indexedAccessAndNullableNarrowing.ts, 17, 1))
+
+declare function hasOwnProperty<T extends AnyObject>(
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(indexedAccessAndNullableNarrowing.ts, 22, 23))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 24, 32))
+>AnyObject : Symbol(AnyObject, Decl(indexedAccessAndNullableNarrowing.ts, 17, 1))
+
+    object: T,
+>object : Symbol(object, Decl(indexedAccessAndNullableNarrowing.ts, 24, 53))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 24, 32))
+
+    prop: PropertyKey,
+>prop : Symbol(prop, Decl(indexedAccessAndNullableNarrowing.ts, 25, 14))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+
+): prop is keyof T;
+>prop : Symbol(prop, Decl(indexedAccessAndNullableNarrowing.ts, 25, 14))
+>T : Symbol(T, Decl(indexedAccessAndNullableNarrowing.ts, 24, 32))
+
+interface Store<S = State> {
+>Store : Symbol(Store, Decl(indexedAccessAndNullableNarrowing.ts, 27, 19))
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 29, 16))
+>State : Symbol(State, Decl(indexedAccessAndNullableNarrowing.ts, 21, 37))
+
+    setState<K extends keyof S>(key: K, value: S[K]): void;
+>setState : Symbol(Store.setState, Decl(indexedAccessAndNullableNarrowing.ts, 29, 28))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 30, 13))
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 29, 16))
+>key : Symbol(key, Decl(indexedAccessAndNullableNarrowing.ts, 30, 32))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 30, 13))
+>value : Symbol(value, Decl(indexedAccessAndNullableNarrowing.ts, 30, 39))
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 29, 16))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 30, 13))
+}
+
+export function syncStoreProp<
+>syncStoreProp : Symbol(syncStoreProp, Decl(indexedAccessAndNullableNarrowing.ts, 31, 1))
+
+    S extends State,
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 33, 30))
+>State : Symbol(State, Decl(indexedAccessAndNullableNarrowing.ts, 21, 37))
+
+    P extends Partial<S>,
+>P : Symbol(P, Decl(indexedAccessAndNullableNarrowing.ts, 34, 20))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 33, 30))
+
+    K extends keyof S,
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 35, 25))
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 33, 30))
+
+>(store: Store<S>, props: P, key: K) {
+>store : Symbol(store, Decl(indexedAccessAndNullableNarrowing.ts, 37, 2))
+>Store : Symbol(Store, Decl(indexedAccessAndNullableNarrowing.ts, 27, 19))
+>S : Symbol(S, Decl(indexedAccessAndNullableNarrowing.ts, 33, 30))
+>props : Symbol(props, Decl(indexedAccessAndNullableNarrowing.ts, 37, 18))
+>P : Symbol(P, Decl(indexedAccessAndNullableNarrowing.ts, 34, 20))
+>key : Symbol(key, Decl(indexedAccessAndNullableNarrowing.ts, 37, 28))
+>K : Symbol(K, Decl(indexedAccessAndNullableNarrowing.ts, 35, 25))
+
+    const value = hasOwnProperty(props, key) ? props[key] : undefined;
+>value : Symbol(value, Decl(indexedAccessAndNullableNarrowing.ts, 38, 9))
+>hasOwnProperty : Symbol(hasOwnProperty, Decl(indexedAccessAndNullableNarrowing.ts, 22, 23))
+>props : Symbol(props, Decl(indexedAccessAndNullableNarrowing.ts, 37, 18))
+>key : Symbol(key, Decl(indexedAccessAndNullableNarrowing.ts, 37, 28))
+>props : Symbol(props, Decl(indexedAccessAndNullableNarrowing.ts, 37, 18))
+>key : Symbol(key, Decl(indexedAccessAndNullableNarrowing.ts, 37, 28))
+>undefined : Symbol(undefined)
+
+    if (value === undefined) return;
+>value : Symbol(value, Decl(indexedAccessAndNullableNarrowing.ts, 38, 9))
+>undefined : Symbol(undefined)
+
+    store.setState(key, value);
+>store.setState : Symbol(Store.setState, Decl(indexedAccessAndNullableNarrowing.ts, 29, 28))
+>store : Symbol(store, Decl(indexedAccessAndNullableNarrowing.ts, 37, 2))
+>setState : Symbol(Store.setState, Decl(indexedAccessAndNullableNarrowing.ts, 29, 28))
+>key : Symbol(key, Decl(indexedAccessAndNullableNarrowing.ts, 37, 28))
+>value : Symbol(value, Decl(indexedAccessAndNullableNarrowing.ts, 38, 9))
+
+    if (value === undefined) return;
+>value : Symbol(value, Decl(indexedAccessAndNullableNarrowing.ts, 38, 9))
+>undefined : Symbol(undefined)
+
+    store.setState(key, value);
+>store.setState : Symbol(Store.setState, Decl(indexedAccessAndNullableNarrowing.ts, 29, 28))
+>store : Symbol(store, Decl(indexedAccessAndNullableNarrowing.ts, 37, 2))
+>setState : Symbol(Store.setState, Decl(indexedAccessAndNullableNarrowing.ts, 29, 28))
+>key : Symbol(key, Decl(indexedAccessAndNullableNarrowing.ts, 37, 28))
+>value : Symbol(value, Decl(indexedAccessAndNullableNarrowing.ts, 38, 9))
+}
+

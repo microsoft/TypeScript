@@ -54,14 +54,13 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/exec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/exec.js",
                     },
                     files: [
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -79,7 +78,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/compositeExec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/compositeExec.js",
                         composite: true,
                         declarationMap: true,
@@ -88,7 +86,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
