@@ -765,7 +765,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
-        storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+        storeSignatureInfo: host.storeSignatureInfo,
         jsDocParsingMode: host.jsDocParsingMode,
     };
     return compilerHost;
@@ -847,7 +847,7 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
         writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
         createHash: maybeBind(system, system.createHash),
         createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
-        storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
+        storeSignatureInfo: system.storeSignatureInfo,
         now: maybeBind(system, system.now),
     };
 }

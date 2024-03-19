@@ -118,6 +118,7 @@ import {
     tokenToString,
     TupleTypeReference,
     Type,
+    TypeFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -260,7 +261,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
+            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+        ) {
             return;
         }
 

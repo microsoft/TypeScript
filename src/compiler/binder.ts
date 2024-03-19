@@ -1094,7 +1094,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
-        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
+        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && (!options.allowUnreachableCode || node.kind === SyntaxKind.ReturnStatement)) {
             (node as HasFlowNode).flowNode = currentFlow;
         }
         switch (node.kind) {

@@ -28,7 +28,7 @@
 //// d/*1*/
 
 goTo.marker("0");
-verify.importFixAtPosition([`import { A, B, C, a } from "./exports1";\na`]);
+verify.importFixAtPosition([`import { a, A, B, C } from "./exports1";\na`]);
 verify.importFixAtPosition([`import { a, A, B, C } from "./exports1";\na`],
     /*errorCode*/ undefined,
     { organizeImportsIgnoreCase: true });

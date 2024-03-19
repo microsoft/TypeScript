@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 3,600 / 3,600 (nearest 100)
+Type Count: 12,600 / 12,600 (nearest 100)
+Instantiation count: 2,500 / 2,500 (nearest 500)
+Symbol count: 29,000 / 29,000 (nearest 500)
+
 === objectTypeWithStringIndexerHidingObjectIndexer.ts ===
 // object types can define string indexers that are more specific than the default 'any' that would be returned
 // no errors expected below 
