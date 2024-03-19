@@ -1,6 +1,5 @@
 // @module: esnext
 // @target: esnext
-// @lib: esnext
 
 export { };
 async function * asyncGen (n) {
