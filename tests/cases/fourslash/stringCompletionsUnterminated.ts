@@ -23,14 +23,17 @@
 //// a['/*9*/
 
 // tests 7-9 should return no replacementSpan
-for (let i = 0; i < test.markers().length; i++) {
+const markers = test.markers();
+const ranges = test.ranges();
+
+for (let i = 0; i < markers.length; i++) {
     verify.completions({
-        marker: test.markers()[i],
+        marker: markers[i],
         includes: [{
             "name": "foo.bar",
             "kind": "property",
             "kindModifiers": "",
-            "replacementSpan": test.ranges()[i],
+            "replacementSpan": ranges[i],
         }],
     });    
 }
