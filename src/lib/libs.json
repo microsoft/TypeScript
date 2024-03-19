@@ -39,6 +39,8 @@
         "es2017.string",
         "es2017.intl",
         "es2017.typedarrays",
+        "es2017.dataview",
+        "es2017.arraybuffer",
         "es2018.asyncgenerator",
         "es2018.asynciterable",
         "es2018.regexp",
@@ -79,6 +81,7 @@
         "esnext.collection",
         "esnext.array",
         "esnext.regexp",
+        "esnext.arraybuffer",
         "decorators",
         "decorators.legacy",
         // Default libraries
