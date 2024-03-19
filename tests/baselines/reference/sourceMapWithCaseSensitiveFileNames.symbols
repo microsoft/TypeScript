@@ -11,3 +11,4 @@ class c {
 class d {
 >d : Symbol(d, Decl(app2.ts, 0, 0))
 }
+

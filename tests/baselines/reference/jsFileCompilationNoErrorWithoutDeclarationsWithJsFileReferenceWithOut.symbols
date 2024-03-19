@@ -16,3 +16,4 @@ function foo() {
 function bar() {
 >bar : Symbol(bar, Decl(c.js, 0, 0))
 }
+

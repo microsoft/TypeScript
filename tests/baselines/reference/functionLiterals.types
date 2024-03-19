@@ -4,7 +4,7 @@
 // PropName<TypeParamList>(ParamList):ReturnType is equivalent to PropName: { <TypeParamList>(ParamList): ReturnType }
 
 var b: {
->b : { func1(x: number): number; func2: (x: number) => number; func3: (x: number) => number; }
+>b : { func1(x: number): number; func2: (x: number) => number; func3: {    (x: number): number;}; }
 
     func1(x: number): number;         // Method signature
 >func1 : (x: number) => number
@@ -75,7 +75,7 @@ b.func3 = b.func2;
 >func2 : (x: number) => number
 
 var c: {
->c : { func4(x: number): number; func4(s: string): string; func5: { (x: number): number; (s: string): string; }; }
+>c : { func4(x: number): number; func4(s: string): string; func5: {    (x: number): number;    (s: string): string;}; }
 
     func4(x: number): number;
 >func4 : { (x: number): number; (s: string): string; }

@@ -2,8 +2,6 @@
 
 === fakelib.ts ===
 
-// Test that passing noLib disables <reference lib> resolution.
-
 interface Object { }
 interface Array<T> { }
 interface String { }

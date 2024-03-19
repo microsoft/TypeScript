@@ -25,9 +25,8 @@ exports.id = void 0;
 //// [aliasUsedAsNameValue_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-function b(a) { return null; }
 exports.b = b;
+function b(a) { return null; }
 //// [aliasUsedAsNameValue_2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

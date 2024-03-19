@@ -13,7 +13,7 @@ module M {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(decoratorOnClassMethod11.ts, 2, 33))
 
-        @this.decorator
+        @(this.decorator)
         method() { }
 >method : Symbol(C.method, Decl(decoratorOnClassMethod11.ts, 2, 56))
     }

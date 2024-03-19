@@ -87,7 +87,6 @@ import {
     normalizePath,
     normalizeSlashes,
     orderedRemoveItem,
-    outFile,
     PackageJsonAutoImportPreference,
     PackageJsonInfo,
     ParsedCommandLine,
@@ -373,15 +372,17 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /**
      * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
      * This property is changed in 'updateGraph' based on the set of files in program
+     * @internal
      */
-    private projectProgramVersion = 0;
+    projectProgramVersion = 0;
     /**
      * Current version of the project state. It is changed when:
      * - new root file was added/removed
      * - edit happen in some file that is currently included in the project.
      * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
+     * @internal
      */
-    private projectStateVersion = 0;
+    projectStateVersion = 0;
 
     protected projectErrors: Diagnostic[] | undefined;
 
@@ -1579,7 +1580,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             );
 
             if (this.generatedFilesMap) {
-                const outPath = outFile(this.compilerOptions);
+                const outPath = this.compilerOptions.outFile;
                 if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                     // --out
                     if (
@@ -1665,7 +1666,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         );
         const elapsed = timestamp() - start;
         this.sendPerformanceEvent("UpdateGraph", elapsed);
-        this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
+        this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} projectStateVersion: ${this.projectStateVersion} projectProgramVersion: ${this.projectProgramVersion} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
         if (this.projectService.logger.isTestLogger) {
             if (this.program !== oldProgram) {
                 this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
@@ -1735,7 +1736,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
-        if (outFile(this.compilerOptions)) {
+        if (this.compilerOptions.outFile) {
             // Single watcher
             if (!this.generatedFilesMap) {
                 this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);
@@ -1837,6 +1838,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (this.autoImportProviderHost) {
             this.autoImportProviderHost.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
         }
+        this.noDtsResolutionProject?.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
     }
 
     setCompilerOptions(compilerOptions: CompilerOptions) {
