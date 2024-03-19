@@ -26653,7 +26653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function tryGetNameFromEntityNameExpression(node: EntityNameOrEntityNameExpression) {
-        const symbol = isIdentifier(node) ? getResolvedSymbol(node) : resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true);
+        const symbol = resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true);
         if (!symbol || !(isConstantVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
 
         const declaration = symbol.valueDeclaration;
