@@ -1008,6 +1008,11 @@ export interface RefactorActionInfo {
      * when calling `getEditsForRefactor`.
      */
     isInteractive?: boolean;
+
+    /**
+     * Range of code the refactoring will be applied to.
+     */
+    range?: { start: { line: number; offset: number; }; end: { line: number; offset: number; }; };
 }
 
 /**

@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/deeplyNestedMappedTypes.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 500 / 600 (nearest 100)
+Type Count: 1,500 / 1,500 (nearest 100)
+Instantiation count: 15,500 / 15,500 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === deeplyNestedMappedTypes.ts ===
 // Simplified repro from #55535
 

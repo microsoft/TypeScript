@@ -144,6 +144,6 @@ Semantic diagnostics in builder refreshed for::
 /a/username/project/src/file2.ts
 
 Shape signatures in builder refreshed for::
-/a/username/project/src/file2.ts (used version)
+/a/username/project/src/file2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

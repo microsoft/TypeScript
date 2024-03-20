@@ -8253,7 +8253,7 @@ declare namespace ts {
          *
          * Default: `last`
          */
-        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+        readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
         /**
          * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
          */
@@ -8263,6 +8263,7 @@ declare namespace ts {
         readonly generateReturnInDocTemplate?: boolean;
         readonly disableLineTextInReferences?: boolean;
     }
+    type OrganizeImportsTypeOrder = "last" | "inline" | "first";
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
         negative: boolean;
@@ -10351,6 +10352,19 @@ declare namespace ts {
          * when calling `getEditsForRefactor`.
          */
         isInteractive?: boolean;
+        /**
+         * Range of code the refactoring will be applied to.
+         */
+        range?: {
+            start: {
+                line: number;
+                offset: number;
+            };
+            end: {
+                line: number;
+                offset: number;
+            };
+        };
     }
     /**
      * A set of edits to make in response to a refactor action, plus an optional
