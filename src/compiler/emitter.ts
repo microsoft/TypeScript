@@ -1106,18 +1106,15 @@ export const notImplementedResolver: EmitResolver = {
     getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,
     isOptionalParameter: notImplemented,
-    moduleExportsSomeValue: notImplemented,
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
     isLiteralConstDeclaration: notImplemented,
     getJsxFactoryEntity: notImplemented,
     getJsxFragmentFactoryEntity: notImplemented,
     getAllAccessorDeclarations: notImplemented,
-    getSymbolOfExternalModuleSpecifier: notImplemented,
     isBindingCapturedByNode: notImplemented,
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
-    tryFindAmbientModule: notImplemented,
 };
 
 const enum PipelinePhase {

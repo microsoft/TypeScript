@@ -48209,35 +48209,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !isPropertyName && getReferencedValueSymbol(node) === argumentsSymbol;
     }
 
-    function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
-        let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-        if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
-            // If the module is not found or is shorthand, assume that it may export a value.
-            return true;
-        }
-
-        const hasExportAssignment = hasExportAssignmentSymbol(moduleSymbol);
-        // if module has export assignment then 'resolveExternalModuleSymbol' will return resolved symbol for export assignment
-        // otherwise it will return moduleSymbol itself
-        moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
-
-        const symbolLinks = getSymbolLinks(moduleSymbol);
-        if (symbolLinks.exportsSomeValue === undefined) {
-            // for export assignments - check if resolved symbol for RHS is itself a value
-            // otherwise - check if at least one export is value
-            symbolLinks.exportsSomeValue = hasExportAssignment
-                ? !!(moduleSymbol.flags & SymbolFlags.Value)
-                : forEachEntry(getExportsOfModule(moduleSymbol), isValue);
-        }
-
-        return symbolLinks.exportsSomeValue!;
-
-        function isValue(s: Symbol): boolean {
-            s = resolveSymbol(s);
-            return s && !!(getSymbolFlags(s) & SymbolFlags.Value);
-        }
-    }
-
     function isNameOfModuleOrEnumDeclaration(node: Identifier) {
         return isModuleOrEnumDeclaration(node.parent) && node === node.parent.name;
     }
@@ -48922,7 +48893,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getReferencedValueDeclarations,
             getTypeReferenceSerializationKind,
             isOptionalParameter,
-            moduleExportsSomeValue,
             isArgumentsLocalBinding,
             getExternalModuleFileFromDeclaration: nodeIn => {
                 const node = getParseTreeNode(nodeIn, hasPossibleExternalModuleReference);
@@ -48951,7 +48921,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getAccessor,
                 };
             },
-            getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined),
             isBindingCapturedByNode: (node, decl) => {
                 const parseNode = getParseTreeNode(node);
                 const parseDecl = getParseTreeNode(decl);
@@ -48967,11 +48936,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker, bundled);
             },
             isImportRequiredByAugmentation,
-            tryFindAmbientModule: moduleReferenceExpression => {
-                const node = getParseTreeNode(moduleReferenceExpression);
-                const moduleSpecifier = node && isStringLiteralLike(node) ? node.text : undefined;
-                return moduleSpecifier !== undefined ? tryFindAmbientModule(moduleSpecifier, /*withAugmentations*/ true) : undefined;
-            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
