@@ -658,11 +658,10 @@ After request
 //// [/user/username/projects/myproject/dependency/fns.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn2 = exports.fn1 = void 0;
-function fn1() { }
 exports.fn1 = fn1;
-function fn2() { }
 exports.fn2 = fn2;
+function fn1() { }
+function fn2() { }
 function fn3() { }
 
 
@@ -723,7 +722,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/user/username/projects/myproject/dependency/fns.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn2 = exports.fn1 = void 0;\nfunction fn1() { }\nexports.fn1 = fn1;\nfunction fn2() { }\nexports.fn2 = fn2;\nfunction fn3() { }\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn1 = fn1;\nexports.fn2 = fn2;\nfunction fn1() { }\nfunction fn2() { }\nfunction fn3() { }\n"
           },
           {
             "name": "/user/username/projects/myproject/decls/fns.d.ts",

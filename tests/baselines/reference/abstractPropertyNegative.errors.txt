@@ -1,4 +1,4 @@
-abstractPropertyNegative.ts(13,7): error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
+abstractPropertyNegative.ts(13,7): error TS2654: Non-abstract class 'C' is missing implementations for the following members of 'B': 'prop', 'readonlyProp', 'm', 'mismatch'.
 abstractPropertyNegative.ts(15,5): error TS1253: Abstract properties can only appear within an abstract class.
 abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
 abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a read-only property.
@@ -29,11 +29,7 @@ abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstrac
     }
     class C extends B {
           ~
-!!! error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
-!!! related TS2515 abstractPropertyNegative.ts:6:14: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
-!!! related TS2515 abstractPropertyNegative.ts:8:18: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
-!!! related TS2515 abstractPropertyNegative.ts:9:14: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
-!!! related TS2515 abstractPropertyNegative.ts:10:18: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
+!!! error TS2654: Non-abstract class 'C' is missing implementations for the following members of 'B': 'prop', 'readonlyProp', 'm', 'mismatch'.
         readonly ro = "readonly please";
         abstract notAllowed: string;
         ~~~~~~~~

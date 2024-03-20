@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 4,000 / 4,000 (nearest 100)
+Type Count: 10,300 / 10,300 (nearest 100)
+Instantiation count: 221,500 / 221,500 (nearest 500)
+Symbol count: 88,000 / 88,000 (nearest 500)
+
 === genericInferenceDefaultTypeParameterJsxReact.tsx ===
 /// <reference path="react16.d.ts" />
 

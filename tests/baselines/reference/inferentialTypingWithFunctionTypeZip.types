@@ -2,7 +2,7 @@
 
 === inferentialTypingWithFunctionTypeZip.ts ===
 var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
->pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
+>pair : <T, S>(x: T) => (y: S) => {    x: T;    y: S;}
 >x : T
 >y : S
 >x : T

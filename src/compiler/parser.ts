@@ -9227,7 +9227,7 @@ namespace Parser {
 
                     let name: EntityName | JSDocMemberName = parseIdentifierName();
                     while (parseOptional(SyntaxKind.DotToken)) {
-                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifier()), pos);
+                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifierName()), pos);
                     }
                     while (token() === SyntaxKind.PrivateIdentifier) {
                         reScanHashToken();
@@ -10511,7 +10511,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                     const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
-                    if (arg.arguments["no-default-lib"]) {
+                    if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {
