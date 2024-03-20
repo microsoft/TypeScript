@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/emptyObjectMappedTypeWithNeverKey.ts] ////
+
+=== emptyObjectMappedTypeWithNeverKey.ts ===
+declare const u: unknown;
+>u : unknown
+
+type A = { [K in never]: any };
+>A : {}
+
+const a: null | undefined | A = u;
+>a : A | null | undefined
+>u : unknown
+
+type Point = { x: number; y: number };
+>Point : { x: number; y: number; }
+>x : number
+>y : number
+
+declare function foo<T, K extends keyof T>(
+>foo : <T, K extends keyof T>(obj: T, keys: K[], rest: Omit<T, K> | null | undefined) => void
+
+  obj: T,
+>obj : T
+
+  keys: K[],
+>keys : K[]
+
+  rest: Omit<T, K> | null | undefined,
+>rest : Omit<T, K> | null | undefined
+
+): void;
+const p: Point = { x: 0, y: 0 };
+>p : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+foo(p, ["x", "y"], u);
+>foo(p, ["x", "y"], u) : void
+>foo : <T, K extends keyof T>(obj: T, keys: K[], rest: Omit<T, K> | null | undefined) => void
+>p : Point
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+>u : unknown
+

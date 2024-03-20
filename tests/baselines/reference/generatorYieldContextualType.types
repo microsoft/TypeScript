@@ -198,7 +198,7 @@ function canPickStepContinue<T extends QuickPickStep>(
 >_step : T
 
   _state: PartialStepState,
->_state : PartialStepState<unknown>
+>_state : { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; }
 
   _selection: StepItemType<T> | Directive
 >_selection : Directive | StepItemType<T>
@@ -220,7 +220,7 @@ function createPickStep<T extends QuickPickItem>(
 }
 
 function* showStep<
->showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
+>showStep : <State extends { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
 
   State extends PartialStepState & { repo: any },
 >repo : any
@@ -258,7 +258,7 @@ function* showStep<
   return canPickStepContinue(step, state, selection)
 >canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : QuickPickItem | unique symbol
 >canPickStepContinue(step, state, selection) : boolean
->canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
+>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; }, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
 >step : QuickPickStep<QuickPickItem>
 >state : State
 >selection : Directive | QuickPickItem[]

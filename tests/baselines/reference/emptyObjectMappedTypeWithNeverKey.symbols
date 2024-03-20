@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/emptyObjectMappedTypeWithNeverKey.ts] ////
+
+=== emptyObjectMappedTypeWithNeverKey.ts ===
+declare const u: unknown;
+>u : Symbol(u, Decl(emptyObjectMappedTypeWithNeverKey.ts, 0, 13))
+
+type A = { [K in never]: any };
+>A : Symbol(A, Decl(emptyObjectMappedTypeWithNeverKey.ts, 0, 25))
+>K : Symbol(K, Decl(emptyObjectMappedTypeWithNeverKey.ts, 2, 12))
+
+const a: null | undefined | A = u;
+>a : Symbol(a, Decl(emptyObjectMappedTypeWithNeverKey.ts, 3, 5))
+>A : Symbol(A, Decl(emptyObjectMappedTypeWithNeverKey.ts, 0, 25))
+>u : Symbol(u, Decl(emptyObjectMappedTypeWithNeverKey.ts, 0, 13))
+
+type Point = { x: number; y: number };
+>Point : Symbol(Point, Decl(emptyObjectMappedTypeWithNeverKey.ts, 3, 34))
+>x : Symbol(x, Decl(emptyObjectMappedTypeWithNeverKey.ts, 5, 14))
+>y : Symbol(y, Decl(emptyObjectMappedTypeWithNeverKey.ts, 5, 25))
+
+declare function foo<T, K extends keyof T>(
+>foo : Symbol(foo, Decl(emptyObjectMappedTypeWithNeverKey.ts, 5, 38))
+>T : Symbol(T, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 21))
+>K : Symbol(K, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 23))
+>T : Symbol(T, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 21))
+
+  obj: T,
+>obj : Symbol(obj, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 43))
+>T : Symbol(T, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 21))
+
+  keys: K[],
+>keys : Symbol(keys, Decl(emptyObjectMappedTypeWithNeverKey.ts, 7, 9))
+>K : Symbol(K, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 23))
+
+  rest: Omit<T, K> | null | undefined,
+>rest : Symbol(rest, Decl(emptyObjectMappedTypeWithNeverKey.ts, 8, 12))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 21))
+>K : Symbol(K, Decl(emptyObjectMappedTypeWithNeverKey.ts, 6, 23))
+
+): void;
+const p: Point = { x: 0, y: 0 };
+>p : Symbol(p, Decl(emptyObjectMappedTypeWithNeverKey.ts, 11, 5))
+>Point : Symbol(Point, Decl(emptyObjectMappedTypeWithNeverKey.ts, 3, 34))
+>x : Symbol(x, Decl(emptyObjectMappedTypeWithNeverKey.ts, 11, 18))
+>y : Symbol(y, Decl(emptyObjectMappedTypeWithNeverKey.ts, 11, 24))
+
+foo(p, ["x", "y"], u);
+>foo : Symbol(foo, Decl(emptyObjectMappedTypeWithNeverKey.ts, 5, 38))
+>p : Symbol(p, Decl(emptyObjectMappedTypeWithNeverKey.ts, 11, 5))
+>u : Symbol(u, Decl(emptyObjectMappedTypeWithNeverKey.ts, 0, 13))
+
