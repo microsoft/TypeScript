@@ -99,7 +99,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
-                GetPasteEdits = "GetPasteEdits",
+                GetPasteEdits = "getPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -478,17 +478,19 @@ declare namespace ts {
                 arguments: GetPasteEditsRequestArgs;
             }
             export type GetPasteEditsRequestArgs = FileRequestArgs & {
-                copies: {
-                    text: string;
-                    range?: FileSpan;
-                }[];
-                pastes: TextSpan[];
+                pastedText: string[];
+                pasteLocations: TextSpan[];
+                copiedFrom?: {
+                    file: string;
+                    range: TextSpan[];
+                };
             };
             export interface GetPasteEditsResponse extends Response {
                 body: PasteEditsAction;
             }
             export interface PasteEditsAction {
                 edits: FileCodeEdits[];
+                fixId?: {};
             }
             export interface GetEditsForRefactorRequest extends Request {
                 command: CommandTypes.GetEditsForRefactor;
@@ -10103,19 +10105,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
-        getPasteEdits(
-            targetFile: string,
-            copies: {
-                text: string;
-                range?: {
-                    file: string;
-                    range: TextRange;
-                };
-            }[],
-            pastes: TextRange[],
-            preferences: UserPreferences,
-            formatOptions: FormatCodeSettings,
-        ): PasteEdits;
+        getPasteEdits(args: PasteEditsArgs, formatOptions: FormatCodeSettings): PasteEdits;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -10135,6 +10125,17 @@ declare namespace ts {
     }
     interface PasteEdits {
         edits: readonly FileTextChanges[];
+        fixId?: {};
+    }
+    interface PasteEditsArgs {
+        targetFile: string;
+        pastedText: string[];
+        pasteLocations: TextRange[];
+        copiedFrom: {
+            file: string;
+            range: TextRange[];
+        } | undefined;
+        preferences: UserPreferences;
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */

@@ -647,7 +647,7 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     }
 }
 
-export function getImportFixesForNonExportedSymbols(
+function getImportFixesForNonExportedSymbols(
     sourceFile: SourceFile,
     symbol: Symbol,
     importKind: ImportKind,
@@ -1531,7 +1531,7 @@ function promoteFromTypeOnly(
     }
 }
 
-export function doAddExistingFix(
+function doAddExistingFix(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
     clause: ImportClause | ObjectBindingPattern,
