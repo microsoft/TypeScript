@@ -1,0 +1,256 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiersReturnsAndYields.ts] ////
+
+=== typeParameterConstModifiersReturnsAndYields.ts ===
+enum E { Val, Val2 }
+>E : E
+>Val : E.Val
+>Val2 : E.Val2
+
+declare function test1<const T>(create: () => T): T;
+>test1 : <const T>(create: () => T) => T
+>create : () => T
+
+const result1 = test1(() => ['a']);
+>result1 : readonly ["a"]
+>test1(() => ['a']) : readonly ["a"]
+>test1 : <const T>(create: () => T) => T
+>() => ['a'] : () => readonly ["a"]
+>['a'] : ["a"]
+>'a' : "a"
+
+const result2 = test1(() => `a${Math.random()}`);
+>result2 : `a${number}`
+>test1(() => `a${Math.random()}`) : `a${number}`
+>test1 : <const T>(create: () => T) => T
+>() => `a${Math.random()}` : () => `a${number}`
+>`a${Math.random()}` : `a${number}`
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+const result3 = test1(() => 'a');
+>result3 : "a"
+>test1(() => 'a') : "a"
+>test1 : <const T>(create: () => T) => T
+>() => 'a' : () => "a"
+>'a' : "a"
+
+const result4 = test1(() => true);
+>result4 : true
+>test1(() => true) : true
+>test1 : <const T>(create: () => T) => T
+>() => true : () => true
+>true : true
+
+const result5 = test1(() => 101n);
+>result5 : 101n
+>test1(() => 101n) : 101n
+>test1 : <const T>(create: () => T) => T
+>() => 101n : () => 101n
+>101n : 101n
+
+const result6 = test1(() => false);
+>result6 : false
+>test1(() => false) : false
+>test1 : <const T>(create: () => T) => T
+>() => false : () => false
+>false : false
+
+const result7 = test1(() => 11111);
+>result7 : 11111
+>test1(() => 11111) : 11111
+>test1 : <const T>(create: () => T) => T
+>() => 11111 : () => 11111
+>11111 : 11111
+
+const result8 = test1(() => E.Val);
+>result8 : E.Val
+>test1(() => E.Val) : E.Val
+>test1 : <const T>(create: () => T) => T
+>() => E.Val : () => E.Val
+>E.Val : E.Val
+>E : typeof E
+>Val : E.Val
+
+const result9 = test1(() => { return ['a']; });
+>result9 : readonly ["a"]
+>test1(() => { return ['a']; }) : readonly ["a"]
+>test1 : <const T>(create: () => T) => T
+>() => { return ['a']; } : () => readonly ["a"]
+>['a'] : ["a"]
+>'a' : "a"
+
+const result10 = test1(() => { return `a${Math.random()}`; });
+>result10 : `a${number}`
+>test1(() => { return `a${Math.random()}`; }) : `a${number}`
+>test1 : <const T>(create: () => T) => T
+>() => { return `a${Math.random()}`; } : () => `a${number}`
+>`a${Math.random()}` : `a${number}`
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+const result11 = test1(() => { return 'a'; });
+>result11 : "a"
+>test1(() => { return 'a'; }) : "a"
+>test1 : <const T>(create: () => T) => T
+>() => { return 'a'; } : () => "a"
+>'a' : "a"
+
+const result12 = test1(() => { return true; });
+>result12 : true
+>test1(() => { return true; }) : true
+>test1 : <const T>(create: () => T) => T
+>() => { return true; } : () => true
+>true : true
+
+const result13 = test1(() => { return 101n; });
+>result13 : 101n
+>test1(() => { return 101n; }) : 101n
+>test1 : <const T>(create: () => T) => T
+>() => { return 101n; } : () => 101n
+>101n : 101n
+
+const result14 = test1(() => { return false; });
+>result14 : false
+>test1(() => { return false; }) : false
+>test1 : <const T>(create: () => T) => T
+>() => { return false; } : () => false
+>false : false
+
+const result15 = test1(() => { return 11111; });
+>result15 : 11111
+>test1(() => { return 11111; }) : 11111
+>test1 : <const T>(create: () => T) => T
+>() => { return 11111; } : () => 11111
+>11111 : 11111
+
+const result16 = test1(() => { return E.Val; });
+>result16 : E.Val
+>test1(() => { return E.Val; }) : E.Val
+>test1 : <const T>(create: () => T) => T
+>() => { return E.Val; } : () => E.Val
+>E.Val : E.Val
+>E : typeof E
+>Val : E.Val
+
+const result17 = test1(async () => 'foo');
+>result17 : Promise<"foo">
+>test1(async () => 'foo') : Promise<"foo">
+>test1 : <const T>(create: () => T) => T
+>async () => 'foo' : () => Promise<"foo">
+>'foo' : "foo"
+
+const result18 = test1(async () => { return 'foo'; });
+>result18 : Promise<"foo">
+>test1(async () => { return 'foo'; }) : Promise<"foo">
+>test1 : <const T>(create: () => T) => T
+>async () => { return 'foo'; } : () => Promise<"foo">
+>'foo' : "foo"
+
+declare function test2<const T>(create: () => Promise<T>): T;
+>test2 : <const T>(create: () => Promise<T>) => T
+>create : () => Promise<T>
+
+const result19 = test2(async () => 'foo');
+>result19 : "foo"
+>test2(async () => 'foo') : "foo"
+>test2 : <const T>(create: () => Promise<T>) => T
+>async () => 'foo' : () => Promise<"foo">
+>'foo' : "foo"
+
+const result20 = test2(async () => { return 'foo'; });
+>result20 : "foo"
+>test2(async () => { return 'foo'; }) : "foo"
+>test2 : <const T>(create: () => Promise<T>) => T
+>async () => { return 'foo'; } : () => Promise<"foo">
+>'foo' : "foo"
+
+declare function test3<const T, const R>(arg: () => Generator<T, R>): [T, R]
+>test3 : <const T, const R>(arg: () => Generator<T, R>) => [T, R]
+>arg : () => Generator<T, R>
+
+const result21 = test3(function*() {
+>result21 : [10, "1"]
+>test3(function*() {    yield 10;    return '1';}) : [10, "1"]
+>test3 : <const T, const R>(arg: () => Generator<T, R, unknown>) => [T, R]
+>function*() {    yield 10;    return '1';} : () => Generator<10, "1", unknown>
+
+    yield 10;
+>yield 10 : unknown
+>10 : 10
+
+    return '1';
+>'1' : "1"
+
+});
+
+declare function test4<const T, const R>(arg: () => AsyncGenerator<T, R>): [T, R]
+>test4 : <const T, const R>(arg: () => AsyncGenerator<T, R>) => [T, R]
+>arg : () => AsyncGenerator<T, R>
+
+const result22 = test4(async function*() {
+>result22 : [10, "1"]
+>test4(async function*() {    yield 10;    return '1';}) : [10, "1"]
+>test4 : <const T, const R>(arg: () => AsyncGenerator<T, R, unknown>) => [T, R]
+>async function*() {    yield 10;    return '1';} : () => AsyncGenerator<10, "1", unknown>
+
+    yield 10;
+>yield 10 : unknown
+>10 : 10
+
+    return '1';
+>'1' : "1"
+
+});
+
+// https://github.com/microsoft/TypeScript/issues/53813
+const UploadThingServerHelper = <const ValidRoutes,>(route: {
+>UploadThingServerHelper : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
+><const ValidRoutes,>(route: {  readonly [Route in keyof ValidRoutes]: {    middleware: () => ValidRoutes[Route];    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;  };}) => {} : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
+>route : { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }
+
+  readonly [Route in keyof ValidRoutes]: {
+    middleware: () => ValidRoutes[Route];
+>middleware : () => ValidRoutes[Route]
+
+    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;
+>onUpload : (response: {    metadata: ValidRoutes[Route];}) => void
+>response : { metadata: ValidRoutes[Route]; }
+>metadata : ValidRoutes[Route]
+
+  };
+}) => {};
+
+const FileRouter = UploadThingServerHelper({
+>FileRouter : void
+>UploadThingServerHelper({  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },}) : void
+>UploadThingServerHelper : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
+>{  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },} : { example: { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }; }
+
+  example: {
+>example : { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }
+>{    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  } : { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }
+
+    middleware: () => "someValue",
+>middleware : () => "someValue"
+>() => "someValue" : () => "someValue"
+>"someValue" : "someValue"
+
+    onUpload: (response) => {
+>onUpload : (response: { metadata: "someValue"; }) => void
+>(response) => {      const v: "someValue" = response.metadata;    } : (response: { metadata: "someValue"; }) => void
+>response : { metadata: "someValue"; }
+
+      const v: "someValue" = response.metadata;
+>v : "someValue"
+>response.metadata : "someValue"
+>response : { metadata: "someValue"; }
+>metadata : "someValue"
+
+    },
+  },
+});
+
