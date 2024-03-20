@@ -1,6 +1,5 @@
 import {
     CodeFixAction,
-    Diagnostics,
     Expression,
     factory,
     getEmitModuleKind,
@@ -16,6 +15,8 @@ import {
     setJsonCompilerOptionValue,
     setJsonCompilerOptionValues,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 registerCodeFix({
     errorCodes: [

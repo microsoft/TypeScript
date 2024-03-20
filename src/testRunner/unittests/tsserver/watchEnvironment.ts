@@ -1,8 +1,9 @@
+import * as ts from "../../_namespaces/ts";
+
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";

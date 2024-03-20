@@ -1,7 +1,4 @@
 import {
-    getModuleSpecifierPreferences,
-} from "../compiler/moduleSpecifiers";
-import {
     addToSeen,
     altDirectorySeparator,
     arrayFrom,
@@ -160,6 +157,10 @@ import {
     Log,
     SortText,
 } from "./_namespaces/ts.Completions";
+
+import {
+    getModuleSpecifierPreferences,
+} from "../compiler/moduleSpecifiers";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;

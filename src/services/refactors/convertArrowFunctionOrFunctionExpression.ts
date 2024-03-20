@@ -6,7 +6,6 @@ import {
     copyComments,
     copyTrailingAsLeadingComments,
     Debug,
-    Diagnostics,
     emptyArray,
     factory,
     FileTextChanges,
@@ -57,6 +56,8 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Convert arrow function or function expression";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);

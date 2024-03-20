@@ -2,6 +2,9 @@ import {
     expect,
 } from "chai";
 
+import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+
 import {
     incrementalVerifier,
 } from "../../../harness/incrementalUtils";
@@ -9,8 +12,6 @@ import {
     createHasErrorMessageLogger,
     nullLogger,
 } from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };

@@ -59,7 +59,6 @@ import {
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticReporter,
-    Diagnostics,
     DiagnosticWithLocation,
     directorySeparator,
     DirectoryStructureHost,
@@ -324,6 +323,8 @@ import {
     writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {

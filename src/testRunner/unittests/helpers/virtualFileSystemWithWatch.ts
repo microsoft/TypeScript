@@ -1,9 +1,4 @@
 import {
-    createWatchUtils,
-    Watches,
-    WatchUtils,
-} from "../../../harness/watchUtils";
-import {
     arrayFrom,
     clear,
     clone,
@@ -50,6 +45,12 @@ import {
 import {
     timeIncrements,
 } from "../../_namespaces/vfs";
+
+import {
+    createWatchUtils,
+    Watches,
+    WatchUtils,
+} from "../../../harness/watchUtils";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",

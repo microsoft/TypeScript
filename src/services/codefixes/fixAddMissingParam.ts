@@ -3,7 +3,6 @@ import {
     ArrowFunction,
     CodeFixAction,
     declarationNameToString,
-    Diagnostics,
     factory,
     filter,
     findAncestor,
@@ -45,6 +44,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const addMissingParamFixId = "addMissingParam";
 const addOptionalParamFixId = "addOptionalParam";

@@ -1,3 +1,6 @@
+import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
+
 import {
     incrementalVerifier,
 } from "../../../harness/incrementalUtils";
@@ -8,8 +11,6 @@ import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
 import {
     ensureErrorFreeBuild,
 } from "./solutionBuilder";

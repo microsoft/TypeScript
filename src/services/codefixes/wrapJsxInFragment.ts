@@ -1,6 +1,5 @@
 import {
     BinaryExpression,
-    Diagnostics,
     factory,
     getTokenAtPosition,
     isBinaryExpression,
@@ -17,6 +16,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixID = "wrapJsxInFragment";
 const errorCodes = [Diagnostics.JSX_expressions_must_have_one_parent_element.code];

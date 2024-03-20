@@ -2,7 +2,6 @@ import {
     ApplicableRefactorInfo,
     codefix,
     Debug,
-    Diagnostics,
     emptyArray,
     getLocaleSpecificMessage,
     getRenameLocation,
@@ -14,6 +13,8 @@ import {
     isRefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const actionName = "Generate 'get' and 'set' accessors";
 const actionDescription = getLocaleSpecificMessage(Diagnostics.Generate_get_and_set_accessors);

@@ -1,7 +1,8 @@
+import * as ts from "../_namespaces/ts";
+
 import {
     deprecate,
 } from "../../deprecatedCompat/deprecate";
-import * as ts from "../_namespaces/ts";
 
 describe("unittests:: debugDeprecation", () => {
     let loggingHost: ts.LoggingHost | undefined;

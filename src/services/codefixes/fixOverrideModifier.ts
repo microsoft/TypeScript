@@ -4,7 +4,6 @@ import {
     ConstructorDeclaration,
     Debug,
     DiagnosticMessage,
-    Diagnostics,
     emptyArray,
     factory,
     find,
@@ -37,6 +36,8 @@ import {
     createCodeFixActionMaybeFixAll,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixName = "fixOverrideModifier";
 const fixAddOverrideId = "fixAddOverrideModifier";

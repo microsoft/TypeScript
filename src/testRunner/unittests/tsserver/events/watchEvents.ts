@@ -1,3 +1,5 @@
+import * as ts from "../../../_namespaces/ts";
+
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
@@ -6,7 +8,6 @@ import {
     createWatchUtils,
     WatchUtils,
 } from "../../../../harness/watchUtils";
-import * as ts from "../../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,

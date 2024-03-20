@@ -5,7 +5,6 @@ import {
     copyComments,
     createSymbolTable,
     Debug,
-    Diagnostics,
     Expression,
     factory,
     findAncestor,
@@ -45,6 +44,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "returnValueCorrect";
 const fixIdAddReturnStatement = "fixAddReturnStatement";

@@ -20,7 +20,6 @@ import {
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
-    Diagnostics,
     directoryProbablyExists,
     directorySeparator,
     emptyArray,
@@ -109,6 +108,8 @@ import {
     versionMajorMinor,
     VersionRange,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 /** @internal */
 export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void {

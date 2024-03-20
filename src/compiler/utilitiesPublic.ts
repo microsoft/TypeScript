@@ -48,7 +48,6 @@ import {
     DeclarationWithTypeParameters,
     Decorator,
     Diagnostic,
-    Diagnostics,
     ElementAccessChain,
     ElementAccessExpression,
     emptyArray,
@@ -295,6 +294,8 @@ import {
     UnaryExpression,
     VariableDeclaration,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1

@@ -2,7 +2,6 @@ import {
     addToSeen,
     createTextSpan,
     DiagnosticMessageChain,
-    Diagnostics,
     factory,
     find,
     flattenDiagnosticMessageText,
@@ -36,6 +35,8 @@ import {
     registerCodeFix,
     typeToAutoImportableTypeNode,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "addMissingConstraint";
 const errorCodes = [

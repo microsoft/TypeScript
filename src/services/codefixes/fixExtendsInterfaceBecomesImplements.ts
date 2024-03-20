@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     getContainingClass,
     getTokenAtPosition,
@@ -15,6 +14,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "extendsInterfaceBecomesImplements";
 const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];

@@ -1,6 +1,5 @@
 import {
     addToSeen,
-    Diagnostics,
     factory,
     findChildOfKind,
     getSymbolId,
@@ -20,6 +19,8 @@ import {
     eachDiagnostic,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "fixConvertConstToLet";
 const errorCodes = [Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code];

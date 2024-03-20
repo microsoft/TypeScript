@@ -5,7 +5,6 @@ import {
     compact,
     contains,
     Diagnostic,
-    Diagnostics,
     Expression,
     factory,
     FileTextChanges,
@@ -51,6 +50,8 @@ import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
 const fixId = "addMissingAwait";

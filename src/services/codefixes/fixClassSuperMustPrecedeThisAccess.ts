@@ -2,7 +2,6 @@ import {
     addToSeen,
     CallExpression,
     ConstructorDeclaration,
-    Diagnostics,
     ExpressionStatement,
     forEachChild,
     getContainingFunction,
@@ -22,6 +21,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "classSuperMustPrecedeThisAccess";
 const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];

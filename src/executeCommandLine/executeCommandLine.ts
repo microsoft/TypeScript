@@ -1,4 +1,3 @@
-import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -34,7 +33,6 @@ import {
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
-    Diagnostics,
     dumpTracingLegend,
     EmitAndSemanticDiagnosticsBuilderProgram,
     emitFilesAndReportErrorsAndGetExitStatus,
@@ -87,6 +85,9 @@ import {
     WatchCompilerHost,
     WatchOptions,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
+import * as performance from "../compiler/performance";
 
 interface Statistic {
     name: string;

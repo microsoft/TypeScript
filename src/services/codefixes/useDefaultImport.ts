@@ -1,6 +1,5 @@
 import {
     AnyImportSyntax,
-    Diagnostics,
     Expression,
     getQuotePreference,
     getTokenAtPosition,
@@ -19,6 +18,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "useDefaultImport";
 const errorCodes = [Diagnostics.Import_may_be_converted_to_a_default_import.code];

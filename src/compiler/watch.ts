@@ -27,7 +27,6 @@ import {
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticReporter,
-    Diagnostics,
     DirectoryStructureHost,
     EmitAndSemanticDiagnosticsBuilderProgram,
     EmitResult,
@@ -106,6 +105,8 @@ import {
     whitespaceOrMapCommentRegExp,
     WriteFileCallback,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),

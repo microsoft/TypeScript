@@ -1,6 +1,5 @@
 import {
     Debug,
-    Diagnostics,
     factory,
     getTokenAtPosition,
     ImportTypeNode,
@@ -13,6 +12,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
 const fixId = fixIdAddMissingTypeof;

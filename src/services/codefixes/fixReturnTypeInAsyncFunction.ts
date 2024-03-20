@@ -1,5 +1,4 @@
 import {
-    Diagnostics,
     factory,
     findAncestor,
     getTokenAtPosition,
@@ -16,6 +15,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [

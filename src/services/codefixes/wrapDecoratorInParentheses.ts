@@ -1,6 +1,5 @@
 import {
     Debug,
-    Diagnostics,
     factory,
     findAncestor,
     getTokenAtPosition,
@@ -13,6 +12,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "wrapDecoratorInParentheses";
 const errorCodes = [Diagnostics.Expression_must_be_enclosed_in_parentheses_to_be_used_as_a_decorator.code];

@@ -3,7 +3,6 @@ import {
     Comparison,
     createTextSpan,
     DiagnosticMessage,
-    Diagnostics,
     endsWith,
     every,
     Extension,
@@ -52,6 +51,8 @@ import {
     UnionType,
     UserPreferences,
 } from "./_namespaces/ts";
+
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 /** @internal */
 export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {

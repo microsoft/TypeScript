@@ -1,6 +1,5 @@
 import {
     AsExpression,
-    Diagnostics,
     factory,
     findAncestor,
     getTokenAtPosition,
@@ -17,6 +16,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "addConvertToUnknownForNonOverlappingTypes";
 const errorCodes = [Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first.code];

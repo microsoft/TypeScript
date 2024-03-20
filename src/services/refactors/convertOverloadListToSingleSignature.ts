@@ -4,7 +4,6 @@ import {
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
     Debug,
-    Diagnostics,
     displayPartsToString,
     EmitFlags,
     emptyArray,
@@ -43,6 +42,8 @@ import {
 import {
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_overload_list_to_single_signature);

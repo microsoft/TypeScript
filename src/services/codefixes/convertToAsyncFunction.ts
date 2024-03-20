@@ -11,7 +11,6 @@ import {
     concatenate,
     createMultiMap,
     Debug,
-    Diagnostics,
     elementAt,
     emptyArray,
     every,
@@ -83,6 +82,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "convertToAsyncFunction";
 const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];

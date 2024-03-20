@@ -1,4 +1,5 @@
 import * as ts from "../../_namespaces/ts";
+
 import {
     commonFile1,
     commonFile2,

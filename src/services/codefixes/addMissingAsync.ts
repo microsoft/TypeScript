@@ -4,7 +4,6 @@ import {
     CodeFixContext,
     createTextSpanFromNode,
     Diagnostic,
-    Diagnostics,
     factory,
     FileTextChanges,
     find,
@@ -34,6 +33,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
 const fixId = "addMissingAsync";

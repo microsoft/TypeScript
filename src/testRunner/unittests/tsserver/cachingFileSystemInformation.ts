@@ -1,10 +1,11 @@
+import * as ts from "../../_namespaces/ts";
+
 import {
     IncrementalVerifierCallbacks,
 } from "../../../harness/incrementalUtils";
 import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";

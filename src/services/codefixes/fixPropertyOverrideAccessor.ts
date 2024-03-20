@@ -2,7 +2,6 @@ import {
     CodeFixAllContext,
     CodeFixContext,
     Debug,
-    Diagnostics,
     getSourceFileOfNode,
     getTextOfPropertyName,
     getTokenAtPosition,
@@ -19,6 +18,8 @@ import {
     getAllSupers,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const errorCodes = [
     Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,

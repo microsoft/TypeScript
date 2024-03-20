@@ -2,7 +2,6 @@ import {
     ANONYMOUS,
     Debug,
     DiagnosticOrDiagnosticAndArguments,
-    Diagnostics,
     emptyArray,
     factory,
     FindAllReferences,
@@ -23,6 +22,8 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "fixImplicitThis";
 const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];

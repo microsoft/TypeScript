@@ -6,7 +6,6 @@ import {
     concatenate,
     ConstructorDeclaration,
     DeclarationName,
-    Diagnostics,
     factory,
     FileTextChanges,
     find,
@@ -56,6 +55,8 @@ import {
     TypeChecker,
     TypeNode,
 } from "../_namespaces/ts";
+
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 /** @internal */
 export type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;
