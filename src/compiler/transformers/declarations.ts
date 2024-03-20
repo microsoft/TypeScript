@@ -257,9 +257,9 @@ export function transformDeclarations(context: TransformationContext) {
     let errorFallbackNode: Declaration | undefined;
 
     let currentSourceFile: SourceFile;
-    let rawReferencedFiles: readonly [SourceFile, FileReference][] = [];
-    let rawTypeReferenceDirectives: readonly FileReference[] = [];
-    let rawLibReferenceDirectives: readonly FileReference[] = [];
+    let rawReferencedFiles: readonly [SourceFile, FileReference][];
+    let rawTypeReferenceDirectives: readonly FileReference[];
+    let rawLibReferenceDirectives: readonly FileReference[];
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
     const { stripInternal } = options;
@@ -389,6 +389,9 @@ export function transformDeclarations(context: TransformationContext) {
 
         if (node.kind === SyntaxKind.Bundle) {
             isBundledEmit = true;
+            rawReferencedFiles = [];
+            rawTypeReferenceDirectives = [];
+            rawLibReferenceDirectives = [];
             let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
@@ -447,6 +450,9 @@ export function transformDeclarations(context: TransformationContext) {
         suppressNewDiagnosticContexts = false;
         lateMarkedStatements = undefined;
         lateStatementReplacementMap = new Map();
+        rawReferencedFiles = [];
+        rawTypeReferenceDirectives = [];
+        rawLibReferenceDirectives = [];
         collectFileReferences(currentSourceFile);
         let combinedStatements: NodeArray<Statement>;
         if (isSourceFileJS(currentSourceFile)) {
