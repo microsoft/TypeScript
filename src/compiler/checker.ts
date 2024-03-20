@@ -719,6 +719,7 @@ import {
     isStringOrNumericLiteralLike,
     isSuperCall,
     isSuperProperty,
+    isSyntacticallyString,
     isTaggedTemplateExpression,
     isTemplateSpan,
     isThisContainerOrFunctionBlock,
@@ -45675,15 +45676,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
             nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             let autoValue: number | undefined = 0;
+            let previous: EnumMember | undefined;
             for (const member of node.members) {
-                const value = computeMemberValue(member, autoValue);
+                const value = computeMemberValue(member, autoValue, previous);
                 getNodeLinks(member).enumMemberValue = value;
                 autoValue = typeof value === "number" ? value + 1 : undefined;
+                previous = member;
             }
         }
     }
 
-    function computeMemberValue(member: EnumMember, autoValue: number | undefined) {
+    function computeMemberValue(member: EnumMember, autoValue: number | undefined, previous: EnumMember | undefined) {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
@@ -45705,11 +45708,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If the member is the first member in the enum declaration, it is assigned the value zero.
         // Otherwise, it is assigned the value of the immediately preceding member plus one, and an error
         // occurs if the immediately preceding member is not a constant enum member.
-        if (autoValue !== undefined) {
-            return autoValue;
+        if (autoValue === undefined) {
+            error(member.name, Diagnostics.Enum_member_must_have_initializer);
+            return undefined;
         }
-        error(member.name, Diagnostics.Enum_member_must_have_initializer);
-        return undefined;
+        if (getIsolatedModules(compilerOptions) && previous?.initializer && !isSyntacticallyNumericConstant(previous.initializer)) {
+            error(
+                member.name,
+                Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
+            );
+        }
+        return autoValue;
     }
 
     function computeConstantValue(member: EnumMember): string | number | undefined {
@@ -45725,6 +45734,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value,
                 );
             }
+            else if (getIsolatedModules(compilerOptions) && typeof value === "string" && !isSyntacticallyString(initializer)) {
+                error(
+                    initializer,
+                    Diagnostics._0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled,
+                    `${idText(member.parent.name)}.${getTextOfPropertyName(member.name)}`,
+                );
+            }
         }
         else if (isConstEnum) {
             error(initializer, Diagnostics.const_enum_member_initializers_must_be_constant_expressions);
@@ -45736,6 +45752,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
         }
         return value;
+    }
+
+    function isSyntacticallyNumericConstant(expr: Expression): boolean {
+        expr = skipOuterExpressions(expr);
+        switch (expr.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+                return isSyntacticallyNumericConstant((expr as PrefixUnaryExpression).operand);
+            case SyntaxKind.BinaryExpression:
+                return isSyntacticallyNumericConstant((expr as BinaryExpression).left) && isSyntacticallyNumericConstant((expr as BinaryExpression).right);
+            case SyntaxKind.NumericLiteral:
+                return true;
+        }
+        return false;
     }
 
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
