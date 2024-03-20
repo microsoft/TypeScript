@@ -66,6 +66,7 @@ import {
     IncompleteCompletionsCache,
     IndentStyle,
     isArray,
+    isExternalModuleNameRelative,
     isIgnoredFileFromWildCardWatching,
     isInsideNodeModules,
     isJsonEqual,
@@ -90,7 +91,6 @@ import {
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
     parseJsonText,
-    parsePackageName,
     Path,
     PerformanceEvent,
     PluginImport,
@@ -4202,7 +4202,7 @@ export class ProjectService {
 
     closeExternalProject(uncheckedFileName: string): void;
     /** @internal */
-    closeExternalProject(uncheckedFileName: string, print: boolean): void;
+    closeExternalProject(uncheckedFileName: string, print: boolean): void; // eslint-disable-line @typescript-eslint/unified-signatures
     closeExternalProject(uncheckedFileName: string, print?: boolean): void {
         const fileName = toNormalizedPath(uncheckedFileName);
         const configuredProjects = this.externalProjectToConfiguredProjectMap.get(fileName);
@@ -4373,7 +4373,7 @@ export class ProjectService {
 
     openExternalProject(proj: protocol.ExternalProject): void;
     /** @internal */
-    openExternalProject(proj: protocol.ExternalProject, print: boolean): void;
+    openExternalProject(proj: protocol.ExternalProject, print: boolean): void; // eslint-disable-line @typescript-eslint/unified-signatures
     openExternalProject(proj: protocol.ExternalProject, print?: boolean): void {
         const existingExternalProject = this.findExternalProjectByProjectName(proj.projectFileName);
         const existingConfiguredProjects = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);
@@ -4474,7 +4474,11 @@ export class ProjectService {
         }
 
         this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-        if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
+        if (
+            !pluginConfigEntry.name ||
+            isExternalModuleNameRelative(pluginConfigEntry.name) ||
+            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
+        ) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;
         }

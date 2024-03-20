@@ -89,36 +89,10 @@ declare namespace Hmi {
 
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":251,"kind":"text"}],"hash":"10774636636-var Hmi;\n(function (Hmi) {\n    var Button = /** @class */ (function () {\n        function Button() {\n        }\n        Button.myStaticFunction = function () {\n        };\n        return Button;\n    }());\n    Hmi.Button = Button;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":92,"kind":"text"}],"hash":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./Source.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 251,
-          "kind": "text"
-        }
-      ],
-      "hash": "10774636636-var Hmi;\n(function (Hmi) {\n    var Button = /** @class */ (function () {\n        function Button() {\n        }\n        Button.myStaticFunction = function () {\n        };\n        return Button;\n    }());\n    Hmi.Button = Button;\n})(Hmi || (Hmi = {}));\n"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 92,
-          "kind": "text"
-        }
-      ],
-      "hash": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n"
-    }
-  },
   "program": {
     "fileNames": [
       "../../../../../a/lib/lib.d.ts",
@@ -143,38 +117,8 @@ declare namespace Hmi {
     "latestChangedDtsFile": "./Source.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1413
+  "size": 833
 }
-
-//// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/myproject/buttonClass/Source.js
-----------------------------------------------------------------------
-text: (0-251)
-var Hmi;
-(function (Hmi) {
-    var Button = /** @class */ (function () {
-        function Button() {
-        }
-        Button.myStaticFunction = function () {
-        };
-        return Button;
-    }());
-    Hmi.Button = Button;
-})(Hmi || (Hmi = {}));
-
-======================================================================
-======================================================================
-File:: /user/username/projects/myproject/buttonClass/Source.d.ts
-----------------------------------------------------------------------
-text: (0-92)
-declare namespace Hmi {
-    class Button {
-        static myStaticFunction(): void;
-    }
-}
-
-======================================================================
 
 //// [/user/username/projects/myproject/SiblingClass/Source.js]
 var Hmi;
@@ -199,36 +143,10 @@ declare namespace Hmi {
 
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./Source.ts"],"js":{"sections":[{"pos":0,"end":268,"kind":"text"}],"hash":"7833001416-var Hmi;\n(function (Hmi) {\n    var Sibling = /** @class */ (function () {\n        function Sibling() {\n        }\n        Sibling.prototype.mySiblingFunction = function () {\n        };\n        return Sibling;\n    }());\n    Hmi.Sibling = Sibling;\n})(Hmi || (Hmi = {}));\n"},"dts":{"sections":[{"pos":0,"end":87,"kind":"text"}],"hash":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./Source.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 268,
-          "kind": "text"
-        }
-      ],
-      "hash": "7833001416-var Hmi;\n(function (Hmi) {\n    var Sibling = /** @class */ (function () {\n        function Sibling() {\n        }\n        Sibling.prototype.mySiblingFunction = function () {\n        };\n        return Sibling;\n    }());\n    Hmi.Sibling = Sibling;\n})(Hmi || (Hmi = {}));\n"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 87,
-          "kind": "text"
-        }
-      ],
-      "hash": "-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n"
-    }
-  },
   "program": {
     "fileNames": [
       "../../../../../a/lib/lib.d.ts",
@@ -255,38 +173,8 @@ declare namespace Hmi {
     "latestChangedDtsFile": "./Source.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1556
+  "size": 964
 }
-
-//// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/myproject/SiblingClass/Source.js
-----------------------------------------------------------------------
-text: (0-268)
-var Hmi;
-(function (Hmi) {
-    var Sibling = /** @class */ (function () {
-        function Sibling() {
-        }
-        Sibling.prototype.mySiblingFunction = function () {
-        };
-        return Sibling;
-    }());
-    Hmi.Sibling = Sibling;
-})(Hmi || (Hmi = {}));
-
-======================================================================
-======================================================================
-File:: /user/username/projects/myproject/SiblingClass/Source.d.ts
-----------------------------------------------------------------------
-text: (0-87)
-declare namespace Hmi {
-    class Sibling {
-        mySiblingFunction(): void;
-    }
-}
-
-======================================================================
 
 
 Info seq  [hh:mm:ss:mss] request:

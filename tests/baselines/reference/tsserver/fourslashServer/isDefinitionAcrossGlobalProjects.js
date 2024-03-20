@@ -477,9 +477,11 @@ watchedFiles::
   {"pollingInterval":2000}
 
 Projects::
-/a/tsconfig.json (Configured)
+/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/index.d.ts: identitySourceMapConsumer *new*
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
@@ -1127,6 +1129,28 @@ watchedFiles::
 /tsconfig.settings.json:
   {"pollingInterval":2000}
 
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /b/tsconfig.json
+        /a/tsconfig.json
+        /c/tsconfig.json
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /b/index.d.ts: identitySourceMapConsumer *new*
+/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 6,
@@ -1628,6 +1652,27 @@ watchedFiles::
   {"pollingInterval":2000}
 /tsconfig.settings.json:
   {"pollingInterval":2000}
+
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /b/tsconfig.json
+        /a/tsconfig.json
+        /c/tsconfig.json
+/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /c/index.d.ts: identitySourceMapConsumer *new*
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] request:
     {

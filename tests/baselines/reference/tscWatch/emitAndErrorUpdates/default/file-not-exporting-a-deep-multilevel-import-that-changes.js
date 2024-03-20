@@ -88,7 +88,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPoint = void 0;
+exports.getPoint = getPoint;
 function getPoint() {
     return {
         name: "test",
@@ -98,7 +98,6 @@ function getPoint() {
         }
     };
 }
-exports.getPoint = getPoint;
 ;
 
 
@@ -325,12 +324,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/c.ts (used version)
 /user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
 
 exitCode:: ExitStatus.undefined
 

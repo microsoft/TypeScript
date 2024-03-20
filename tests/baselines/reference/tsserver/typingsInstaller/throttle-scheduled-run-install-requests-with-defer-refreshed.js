@@ -634,9 +634,9 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4",
-  "@types/cordova@ts5.4",
-  "@types/commander@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/cordova@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Before running PendingInstalls callback:: count: 1
@@ -944,9 +944,9 @@ After running Timeout callback:: count: 1
 
 PendingInstalls callback:: count: 1
 2: #2 with arguments:: [
-  "@types/grunt@ts5.4",
-  "@types/gulp@ts5.4",
-  "@types/lodash@ts5.4"
+  "@types/grunt@tsFakeMajor.Minor",
+  "@types/gulp@tsFakeMajor.Minor",
+  "@types/lodash@tsFakeMajor.Minor"
 ] *new*
 
 Before running PendingInstalls callback:: count: 1

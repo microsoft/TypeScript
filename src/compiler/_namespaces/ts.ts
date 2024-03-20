@@ -50,7 +50,6 @@ export * from "../transformers/esnext";
 export * from "../transformers/jsx";
 export * from "../transformers/es2016";
 export * from "../transformers/es2015";
-export * from "../transformers/es5";
 export * from "../transformers/generators";
 export * from "../transformers/module/module";
 export * from "../transformers/module/system";

@@ -2,9 +2,13 @@ import {
     arrayFrom,
     compareStringsCaseSensitive,
     Debug,
+    DocumentPositionMapper,
+    emptyArray,
     identity,
+    identitySourceMapConsumer,
     isString,
     noop,
+    SourceMapper,
 } from "./_namespaces/ts";
 import {
     AutoImportProviderProject,
@@ -30,6 +34,7 @@ interface ProjectData {
     isClosed: ReturnType<Project["isClosed"]>;
     isOrphan: ReturnType<Project["isOrphan"]>;
     noOpenRef: boolean;
+    documentPositionMappers: SourceMapper["documentPositionMappers"];
     autoImportProviderHost: Project["autoImportProviderHost"];
     noDtsResolutionProject: Project["noDtsResolutionProject"];
     originalConfiguredProjects: Project["originalConfiguredProjects"];
@@ -66,14 +71,21 @@ export function patchServiceForStateBaseline(service: ProjectService) {
 
     const projects = new Map<Project, ProjectData>();
     const scriptInfos = new Map<ScriptInfo, ScriptInfoData>();
+    const documentPositionMappers = new Map<DocumentPositionMapper, DocumentPositionMapper>();
+    let nextDocumentPositionMapperId = 1;
+    const mapperToId = new Map<DocumentPositionMapper, number>();
     const logger = service.logger as LoggerWithInMemoryLogs;
     service.baseline = title => {
-        const projectLogs = baselineProjects();
-        const infoLogs = baselineScriptInfos();
-        if (projectLogs?.length || infoLogs?.length) {
+        const currentMappers = new Set<DocumentPositionMapper>();
+        const projectLogs = baselineProjects(currentMappers);
+        const infoLogs = baselineScriptInfos(currentMappers);
+        currentMappers.delete(identitySourceMapConsumer);
+        const mapperLogs = baselineDocumentPositionMappers(currentMappers);
+        if (projectLogs?.length || infoLogs?.length || mapperLogs?.length) {
             if (title) logger.log(title);
             sendLogsToLogger("Projects::", projectLogs);
             sendLogsToLogger("ScriptInfos::", infoLogs);
+            sendLogsToLogger("DocumentPositionMappers::", mapperLogs);
         }
     };
 
@@ -88,7 +100,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         logger.log("");
     }
 
-    function baselineProjects() {
+    function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
         return baselineState(
@@ -98,6 +110,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);
                 if (project.noDtsResolutionProject) auxiliaryProjects.push(project.noDtsResolutionProject);
                 let projectDiff = newOrDeleted(project, projects, data);
+                if (projectDiff !== Diff.Deleted) getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
                 const projectPropertyLogs = [] as string[];
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectStateVersion", project.projectStateVersion, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
@@ -105,6 +118,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
+                projectDiff = printMapPropertyValue(
+                    PrintPropertyWhen.Changed,
+                    data?.documentPositionMappers,
+                    "documentPositionMappers",
+                    getSourceMapper(project)?.documentPositionMappers,
+                    projectDiff,
+                    projectPropertyLogs,
+                    toStringDocumentPostionMapper,
+                );
                 projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "autoImportProviderHost", project.autoImportProviderHost, projectDiff, projectPropertyLogs, project.autoImportProviderHost ? project.autoImportProviderHost.projectName : project.autoImportProviderHost);
                 projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "noDtsResolutionProject", project.noDtsResolutionProject, projectDiff, projectPropertyLogs, project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName : project.noDtsResolutionProject);
                 return printSetPropertyAndCreateStatementLog(
@@ -129,16 +151,18 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
                 originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),
+                documentPositionMappers: new Map(getSourceMapper(project)?.documentPositionMappers),
             }),
         );
     }
 
-    function baselineScriptInfos() {
+    function baselineScriptInfos(currentMappers: Set<DocumentPositionMapper>) {
         return baselineState(
             [service.filenameToScriptInfo],
             scriptInfos,
             (logs, info, data) => {
                 let infoDiff = newOrDeleted(info, scriptInfos, data);
+                if (infoDiff !== Diff.Deleted && info.documentPositionMapper) currentMappers.add(info.documentPositionMapper);
                 const infoPropertyLogs = [] as string[];
                 const isOpen = info.isScriptOpen();
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
@@ -147,7 +171,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
                 infoDiff = printSetPropertyValueWorker(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
-                infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "documentPositionMapper", info.documentPositionMapper, infoDiff, infoPropertyLogs, info.documentPositionMapper ? "DocumentPositionMapper" : undefined);
+                infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "documentPositionMapper", info.documentPositionMapper, infoDiff, infoPropertyLogs, info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper) : undefined);
                 let defaultProject: Project | undefined;
                 try {
                     if (isOpen) defaultProject = info.getDefaultProject();
@@ -182,8 +206,28 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         );
     }
 
+    function baselineDocumentPositionMappers(currentMappers: Set<DocumentPositionMapper>) {
+        const result = baselineState(
+            [currentMappers],
+            documentPositionMappers,
+            (logs, mapper, data) => {
+                const mapperDiff = newOrDeleted(mapper, documentPositionMappers, data);
+                logs.push([
+                    `${toStringDocumentPostionMapper(mapper)}${mapperDiff}`,
+                    emptyArray,
+                ]);
+                return mapperDiff;
+            },
+            identity,
+        );
+        mapperToId.forEach((_id, mapper) => {
+            if (!documentPositionMappers.has(mapper)) mapperToId.delete(mapper);
+        });
+        return result;
+    }
+
     function baselineState<T, Data>(
-        currentCaches: (T[] | Map<any, T>)[],
+        currentCaches: (T[] | Map<any, T> | Set<T>)[],
         dataMap: Map<T, Data>,
         printWorker: (logs: StateItemLog[], current: T, data: Data | undefined) => Diff,
         toData: (current: T) => Data,
@@ -235,8 +279,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         return printPropertyWorker(
             printWhen,
             value,
-            !!data && data[key] !== value,
-            Diff.Change,
+            !!data && data[key] !== value ? Diff.Change : Diff.None,
             dataDiff,
             propertyLogs,
             `${key}: ${stringValue === undefined ? value : stringValue}`,
@@ -252,48 +295,92 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         propertyLogs: StatePropertyLog[],
         toStringPropertyValue: (v: T) => string,
     ) {
-        const setPropertyLogs = [] as string[];
-        let setPropertyDiff = Diff.None;
-        propertyValue?.forEach(p =>
-            setPropertyDiff = printPropertyWorker(
+        return printMapOrSetPropertyValueWorker(
+            printWhen,
+            dataValue,
+            propertyName,
+            propertyValue,
+            dataDiff,
+            propertyLogs,
+            value => dataDiff !== Diff.New && !dataValue?.has(value) ? Diff.New : Diff.None,
+            toStringPropertyValue,
+        );
+    }
+
+    function printMapPropertyValue<T>(
+        printWhen: PrintPropertyWhen.Changed,
+        dataValue: Map<string, T> | undefined,
+        propertyName: string,
+        propertyValue: Map<string, T> | undefined,
+        dataDiff: Diff,
+        propertyLogs: StatePropertyLog[],
+        toStringPropertyValue: (v: T) => string,
+    ) {
+        return printMapOrSetPropertyValueWorker(
+            printWhen,
+            dataValue,
+            propertyName,
+            propertyValue,
+            dataDiff,
+            propertyLogs,
+            (value, key) =>
+                dataDiff !== Diff.New && dataValue?.get(key) !== value ?
+                    !dataValue?.has(key) ? Diff.New : Diff.Change : Diff.None,
+            (value, key) => `${key}: ${toStringPropertyValue(value)}`,
+        );
+    }
+
+    type MapOrSetPropertyKey<T> = T extends Map<infer U, any> ? U : T extends Set<infer U> ? U : never;
+    type MapOrSetPropertyValue<T> = T extends Map<any, infer U> ? U : T extends Set<infer U> ? U : never;
+    function printMapOrSetPropertyValueWorker<T extends Map<string, any> | Set<any>>(
+        printWhen: PrintPropertyWhen.Always | PrintPropertyWhen.DefinedOrChangedOrNew | PrintPropertyWhen.Changed,
+        dataValue: T | undefined,
+        propertyName: string,
+        propertyValue: T | undefined,
+        dataDiff: Diff,
+        propertyLogs: StatePropertyLog[],
+        getPropertyDiff: (value: MapOrSetPropertyValue<T>, key: MapOrSetPropertyKey<T>) => Diff,
+        toStringPropertyValue: (value: MapOrSetPropertyValue<T>, key: MapOrSetPropertyKey<T>) => string,
+    ) {
+        // Print changes
+        const mapPropertyLogs = [] as string[];
+        let mapPropertyDiff = Diff.None;
+        propertyValue?.forEach((p, key) =>
+            mapPropertyDiff = printPropertyWorker(
                 PrintPropertyWhen.Always,
                 p,
-                dataDiff !== Diff.New && !dataValue?.has(p),
-                Diff.New,
-                setPropertyDiff,
-                setPropertyLogs,
-                `    ${toStringPropertyValue(p)}`,
+                getPropertyDiff(p, key),
+                mapPropertyDiff,
+                mapPropertyLogs,
+                `    ${toStringPropertyValue(p, key)}`,
             )
         );
-        dataValue?.forEach(p => {
-            if (propertyValue?.has(p)) return;
-            setPropertyDiff = Diff.Change;
-            setPropertyLogs.push(`        ${toStringPropertyValue(p)}${Diff.Deleted}`);
+        dataValue?.forEach((p, key) => {
+            if (propertyValue?.has(key)) return;
+            mapPropertyDiff = Diff.Change;
+            mapPropertyLogs.push(`        ${toStringPropertyValue(p, key)}${Diff.Deleted}`);
         });
         dataDiff = printPropertyWorker(
             printWhen,
             propertyValue,
-            !!setPropertyDiff,
-            Diff.Change,
+            !!mapPropertyDiff ? Diff.Change : Diff.None,
             dataDiff,
             propertyLogs,
             `${propertyName}: ${propertyValue?.size || 0}`,
         );
-        propertyLogs.push(setPropertyLogs);
+        if (printWhen !== PrintPropertyWhen.Changed || mapPropertyDiff) propertyLogs.push(mapPropertyLogs);
         return dataDiff;
     }
 
     function printPropertyWorker(
         printWhen: PrintPropertyWhen,
         value: any,
-        propertyChanged: boolean,
-        propertyChangeDiff: Diff.Change | Diff.New,
+        propertyDiff: Diff,
         dataDiff: Diff,
         propertyLogs: StatePropertyLog[],
         stringValue: string,
     ) {
-        const propertyDiff = propertyChanged ? propertyChangeDiff : Diff.None;
-        const result = !dataDiff && propertyDiff ? propertyChangeDiff : dataDiff;
+        const result = !dataDiff && propertyDiff ? Diff.Change : dataDiff;
         switch (printWhen) {
             case PrintPropertyWhen.Changed:
                 if (!propertyDiff) return result;
@@ -364,5 +451,18 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoPropertyLogs,
                 identity,
             );
+    }
+
+    function toStringDocumentPostionMapper(documentPositionMapper: DocumentPositionMapper) {
+        if (documentPositionMapper === identitySourceMapConsumer) return "identitySourceMapConsumer";
+        let id = mapperToId.get(documentPositionMapper);
+        if (!id) mapperToId.set(documentPositionMapper, id = nextDocumentPositionMapperId++);
+        return `DocumentPositionMapper${id}`;
+    }
+
+    function getSourceMapper(project: Project) {
+        return project.projectKind !== ProjectKind.AutoImportProvider ?
+            project.getLanguageService(/*ensureSynchronized*/ false)?.getSourceMapper() :
+            undefined;
     }
 }

@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/awaitedType.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 200 / 200 (nearest 100)
+Type Count: 900 / 900 (nearest 100)
+Instantiation count: 26,000 / 26,000 (nearest 500)
+Symbol count: 31,500 / 31,500 (nearest 500)
+
 === awaitedType.ts ===
 type T1 = Awaited<number>;
 >T1 : number
