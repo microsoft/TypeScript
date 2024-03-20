@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 600 / 700 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 26,000 / 26,000 (nearest 500)
+
 === isomorphicMappedTypeInference.ts ===
 type Box<T> = {
 >Box : Box<T>
@@ -267,7 +273,7 @@ function f4() {
 }
 
 function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
->makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
+>makeRecord : <T, K extends string>(obj: {    [P in K]: T;}) => { [P in K]: T; }
 >obj : { [P in K]: T; }
 
     return obj;
@@ -317,7 +323,7 @@ function f5(s: string) {
 }
 
 function makeDictionary<T>(obj: { [x: string]: T }) {
->makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
+>makeDictionary : <T>(obj: {    [x: string]: T;}) => { [x: string]: T; }
 >obj : { [x: string]: T; }
 >x : string
 

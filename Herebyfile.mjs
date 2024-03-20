@@ -184,6 +184,7 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {boolean} [usePublicAPI]
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
@@ -207,6 +208,19 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
+
+        if (taskOptions.usePublicAPI) {
+            options.external = ["./typescript.js"];
+            options.plugins = options.plugins || [];
+            options.plugins.push({
+                name: "remap-typescript-to-require",
+                setup(build) {
+                    build.onLoad({ filter: /src[\\/]typescript[\\/]typescript\.ts$/ }, () => {
+                        return { contents: `export * from "./typescript.js"` };
+                    });
+                },
+            });
+        }
 
         if (taskOptions.exportIsTsObject) {
             // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
@@ -235,7 +249,8 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const toCommonJsRegExp = /var __toCommonJS .*/;
             const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
 
-            options.plugins = [
+            options.plugins = options.plugins || [];
+            options.plugins.push(
                 {
                     name: "post-process",
                     setup: build => {
@@ -252,7 +267,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                         });
                     },
                 },
-            ];
+            );
         }
 
         return options;
@@ -422,7 +437,8 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     srcEntrypoint: "./src/tsserver/server.ts",
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
-    mainDeps: [generateLibs],
+    mainDeps: [generateLibs, services],
+    bundlerOptions: { usePublicAPI: true },
 });
 export { tsserver, watchTsserver };
 
@@ -572,6 +588,8 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     srcEntrypoint: "./src/typingsInstaller/nodeTypingsInstaller.ts",
     builtEntrypoint: "./built/local/typingsInstaller/nodeTypingsInstaller.js",
     output: "./built/local/typingsInstaller.js",
+    mainDeps: [services],
+    bundlerOptions: { usePublicAPI: true },
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({

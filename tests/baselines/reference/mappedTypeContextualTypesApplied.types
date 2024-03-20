@@ -20,27 +20,27 @@ declare function mapped3<T extends {[P in keyof any]: TakeString}>(obj: T): void
 >obj : T
 
 declare function mapped4<T>(obj: T & {[P in keyof T]: TakeString}): void;
->mapped4 : <T>(obj: T & { [P in keyof T]: TakeString; }) => void
+>mapped4 : <T>(obj: T & {    [P in keyof T]: TakeString;}) => void
 >obj : T & { [P in keyof T]: TakeString; }
 
 declare function mapped5<T, K extends keyof T>(obj: T & {[P in K]: TakeString}): void;
->mapped5 : <T, K extends keyof T>(obj: T & { [P in K]: TakeString; }) => void
+>mapped5 : <T, K extends keyof T>(obj: T & {    [P in K]: TakeString;}) => void
 >obj : T & { [P in K]: TakeString; }
 
 declare function mapped6<K extends string>(obj: {[P in K]: TakeString}): void;
->mapped6 : <K extends string>(obj: { [P in K]: TakeString; }) => void
+>mapped6 : <K extends string>(obj: {    [P in K]: TakeString;}) => void
 >obj : { [P in K]: TakeString; }
 
 declare function mapped7<K extends keyof any>(obj: {[P in K]: TakeString}): void;
->mapped7 : <K extends string | number | symbol>(obj: { [P in K]: TakeString; }) => void
+>mapped7 : <K extends string | number | symbol>(obj: {    [P in K]: TakeString;}) => void
 >obj : { [P in K]: TakeString; }
 
 declare function mapped8<K extends 'foo'>(obj: {[P in K]: TakeString}): void;
->mapped8 : <K extends "foo">(obj: { [P in K]: TakeString; }) => void
+>mapped8 : <K extends "foo">(obj: {    [P in K]: TakeString;}) => void
 >obj : { [P in K]: TakeString; }
 
 declare function mapped9<K extends 'foo'|'bar'>(obj: {[P in K]: TakeString}): void;
->mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void
+>mapped9 : <K extends "foo" | "bar">(obj: {    [P in K]: TakeString;}) => void
 >obj : { [P in K]: TakeString; }
 
 mapped1({foo: s => 42});

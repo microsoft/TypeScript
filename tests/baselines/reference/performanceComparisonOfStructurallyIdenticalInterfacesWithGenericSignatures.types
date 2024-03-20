@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 5,800 / 5,800 (nearest 100)
+Instantiation count: 17,000 / 17,000 (nearest 500)
+Symbol count: 28,500 / 28,500 (nearest 500)
+
 === performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts ===
 export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
 >ThenArg : ThenArg<T>

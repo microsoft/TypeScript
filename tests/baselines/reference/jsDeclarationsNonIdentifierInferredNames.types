@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 2,100 / 2,100 (nearest 100)
+Type Count: 6,800 / 6,800 (nearest 100)
+Instantiation count: 73,000 / 73,000 (nearest 500)
+Symbol count: 68,000 / 68,000 (nearest 500)
+
 === jsDeclarationsNonIdentifierInferredNames.jsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
