@@ -233,6 +233,8 @@ const libEntries: [string, string][] = [
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["esnext.object", "lib.esnext.object.d.ts"],
+    ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.regexp", "lib.esnext.regexp.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];

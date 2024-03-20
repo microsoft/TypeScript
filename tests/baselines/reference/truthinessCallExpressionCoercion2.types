@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 1,100 / 1,100 (nearest 100)
-Symbol count: 28,500 / 29,000 (nearest 500)
+Symbol count: 29,000 / 29,000 (nearest 500)
 
 === truthinessCallExpressionCoercion2.ts ===
 declare class A {

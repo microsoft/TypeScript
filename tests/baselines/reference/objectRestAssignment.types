@@ -15,7 +15,7 @@ let rest: { };
 >rest : {}
 
 let complex: { x: { ka, ki }, y: number };
->complex : { x: {    ka;    ki;}; y: number; }
+>complex : { x: {    ka: any;    ki: any;}; y: number; }
 >x : { ka: any; ki: any; }
 >ka : any
 >ki : any

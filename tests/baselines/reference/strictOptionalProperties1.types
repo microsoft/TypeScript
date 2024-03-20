@@ -2,7 +2,7 @@
 
 === strictOptionalProperties1.ts ===
 function f1(obj: { a?: string, b?: string | undefined }) {
->f1 : (obj: { a?: string; b?: string | undefined; }) => void
+>f1 : (obj: {    a?: string;    b?: string | undefined;}) => void
 >obj : { a?: string; b?: string | undefined; }
 >a : string | undefined
 >b : string | undefined
@@ -220,7 +220,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 }
 
 function f3(obj: Partial<{ a: string, b: string | undefined }>) {
->f3 : (obj: Partial<{ a: string; b: string | undefined; }>) => void
+>f3 : (obj: Partial<{    a: string;    b: string | undefined;}>) => void
 >obj : Partial<{ a: string; b: string | undefined; }>
 >a : string
 >b : string | undefined

@@ -418,7 +418,7 @@ const f41 = pipe4([box, list]);
 >list : <T>(a: T) => T[]
 
 declare function pipe5<A, B>(f: (a: A) => B): { f: (a: A) => B };
->pipe5 : <A, B>(f: (a: A) => B) => { f: (a: A) => B; }
+>pipe5 : <A, B>(f: (a: A) => B) => {    f: (a: A) => B;}
 >f : (a: A) => B
 >a : A
 >f : (a: A) => B

@@ -50,7 +50,7 @@ export interface I1 {
 >params : any[]
 
     register(inputClass: { new (...params: any[]): A; }[]);
->register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
+>register : { (inputClass: new (...params: any[]) => A): any; (inputClass: {    new (...params: any[]): A;}[]): any; }
 >inputClass : (new (...params: any[]) => A)[]
 >params : any[]
 }
