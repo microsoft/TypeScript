@@ -8135,7 +8135,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 const lit = factory.createLiteralTypeNode(factory.createStringLiteral(specifier));
-                if (context.tracker.trackExternalModuleSymbolOfImportTypeNode) context.tracker.trackExternalModuleSymbolOfImportTypeNode(chain[0]);
                 context.approximateLength += specifier.length + 10; // specifier + import("")
                 if (!nonRootParts || isEntityName(nonRootParts)) {
                     if (nonRootParts) {
@@ -8700,14 +8699,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 };
                                 const newName = getResolvedExternalModuleName(resolverHost, targetFile);
                                 return factory.createStringLiteral(newName);
-                            }
-                        }
-                    }
-                    else {
-                        if (context.tracker && context.tracker.trackExternalModuleSymbolOfImportTypeNode) {
-                            const moduleSym = resolveExternalModuleNameWorker(lit, lit, /*moduleNotFoundError*/ undefined);
-                            if (moduleSym) {
-                                context.tracker.trackExternalModuleSymbolOfImportTypeNode(moduleSym);
                             }
                         }
                     }
@@ -51253,13 +51244,6 @@ class SymbolTrackerImpl implements SymbolTracker {
         if (this.inner?.reportTruncationError) {
             this.onDiagnosticReported();
             this.inner.reportTruncationError();
-        }
-    }
-
-    trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol): void {
-        if (this.inner?.trackExternalModuleSymbolOfImportTypeNode) {
-            this.onDiagnosticReported();
-            this.inner.trackExternalModuleSymbolOfImportTypeNode(symbol);
         }
     }
 
