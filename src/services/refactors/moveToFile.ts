@@ -18,6 +18,7 @@ import {
     ClassDeclaration,
     codefix,
     combinePaths,
+    Comparison,
     concatenate,
     contains,
     createModuleSpecifierResolutionHost,
@@ -53,12 +54,14 @@ import {
     getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getModifiers,
+    getNormalizedAbsolutePath,
     getPropertySymbolFromBindingElement,
     getQuotePreference,
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
     getSourceFileOfNode,
+    getStringComparer,
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getUniqueName,
@@ -434,7 +437,12 @@ export function updateImportsInOtherFiles(
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
-                const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), targetFileName);
+                const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(getNormalizedAbsolutePath(oldFile.fileName, program.getCurrentDirectory())), targetFileName);
+
+                // no self-imports
+
+                if (getStringComparer(!program.useCaseSensitiveFileNames())(pathToTargetFileWithExtension, sourceFile.fileName) === Comparison.EqualTo) return;
+
                 const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
@@ -586,7 +594,7 @@ export function makeImportOrRequire(
     useEs6Imports: boolean,
     quotePreference: QuotePreference,
 ): AnyImportOrRequireStatement | undefined {
-    const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
+    const pathToTargetFile = resolvePath(getDirectoryPath(getNormalizedAbsolutePath(sourceFile.fileName, program.getCurrentDirectory())), targetFileNameWithExtension);
     const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
 
     if (useEs6Imports) {

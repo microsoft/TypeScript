@@ -2,7 +2,7 @@
 
 === /index.ts ===
 
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends ImportInterface {}
 === /node_modules/pkg/import.d.ts ===
 export {};
