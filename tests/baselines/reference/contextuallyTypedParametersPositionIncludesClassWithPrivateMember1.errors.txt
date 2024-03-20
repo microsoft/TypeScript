@@ -1,0 +1,41 @@
+contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts(18,8): error TS2345: Argument of type '{ doStuff: (arg: any) => void; }' is not assignable to parameter of type 'Foo'.
+  Property '#foo' is missing in type '{ doStuff: (arg: any) => void; }' but required in type 'Foo'.
+contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts(19,13): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+
+
+==== contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts (2 errors) ====
+    class Foo {
+      #foo = "foo";
+      doStuff(cb: (arg: string) => void) {}
+    }
+    
+    interface FooLike {
+      doStuff: (cb: (arg: number) => void) => void;
+    }
+    
+    declare function useIt(arg: Foo | FooLike): void;
+    
+    useIt({
+      doStuff: (arg) => {},
+    });
+    
+    declare function useIt2(arg: Foo): void;
+    
+    useIt2({
+           ~
+      doStuff: (arg) => {},
+    ~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.
+    });
+    ~
+!!! error TS2345: Argument of type '{ doStuff: (arg: any) => void; }' is not assignable to parameter of type 'Foo'.
+!!! error TS2345:   Property '#foo' is missing in type '{ doStuff: (arg: any) => void; }' but required in type 'Foo'.
+!!! related TS2728 contextuallyTypedParametersPositionIncludesClassWithPrivateMember1.ts:2:3: '#foo' is declared here.
+    
+    declare function useIt3(arg: FooLike): void;
+    
+    useIt3({
+      doStuff: (arg) => {},
+    });
+    

@@ -207,6 +207,7 @@ import {
     isModifier,
     isModifierKind,
     isModuleDeclaration,
+    isNamedDeclaration,
     isNamedExports,
     isNamedImports,
     isNamedImportsOrExports,
@@ -5453,7 +5454,7 @@ function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAt
 }
 
 function containsNonPublicProperties(props: Symbol[]) {
-    return some(props, p => !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier));
+    return some(props, p => !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier) || !!p.valueDeclaration && isNamedDeclaration(p.valueDeclaration) && isPrivateIdentifier(p.valueDeclaration.name));
 }
 
 /**
