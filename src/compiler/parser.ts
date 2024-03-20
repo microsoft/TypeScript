@@ -454,17 +454,17 @@ function visitNodes<T>(cbNode: (node: Node) => T, cbNodes: ((node: NodeArray<Nod
 
 /** @internal */
 export function isJSDocLikeText(text: string, start: number) {
-    return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
-        text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-        text.charCodeAt(start + 3) !== CharacterCodes.slash;
+    return text.charCodeAt(start + 1) === CharacterCodes.asterisk
+        && text.charCodeAt(start + 2) === CharacterCodes.asterisk
+        && text.charCodeAt(start + 3) !== CharacterCodes.slash;
 }
 
 /** @internal */
 export function isFileProbablyExternalModule(sourceFile: SourceFile) {
     // Try to use the first top-level import/export when available, then
     // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
-    return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
-        getImportMetaIfNecessary(sourceFile);
+    return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode)
+        || getImportMetaIfNecessary(sourceFile);
 }
 
 function isAnExternalModuleIndicatorNode(node: Node) {
@@ -476,9 +476,9 @@ function isAnExternalModuleIndicatorNode(node: Node) {
 }
 
 function getImportMetaIfNecessary(sourceFile: SourceFile) {
-    return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
-        walkTreeForImportMeta(sourceFile) :
-        undefined;
+    return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta
+        ? walkTreeForImportMeta(sourceFile)
+        : undefined;
 }
 
 function walkTreeForImportMeta(node: Node): Node | undefined {
@@ -498,174 +498,174 @@ type ForEachChildFunction<TNode> = <T>(node: TNode, cbNode: (node: Node) => T | 
 type ForEachChildTable = { [TNode in ForEachChildNodes as TNode["kind"]]: ForEachChildFunction<TNode>; };
 const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.QualifiedName]: function forEachChildInQualifiedName<T>(node: QualifiedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.left) ||
-            visitNode(cbNode, node.right);
+        return visitNode(cbNode, node.left)
+            || visitNode(cbNode, node.right);
     },
     [SyntaxKind.TypeParameter]: function forEachChildInTypeParameter<T>(node: TypeParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.constraint) ||
-            visitNode(cbNode, node.default) ||
-            visitNode(cbNode, node.expression);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.constraint)
+            || visitNode(cbNode, node.default)
+            || visitNode(cbNode, node.expression);
     },
     [SyntaxKind.ShorthandPropertyAssignment]: function forEachChildInShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.exclamationToken) ||
-            visitNode(cbNode, node.equalsToken) ||
-            visitNode(cbNode, node.objectAssignmentInitializer);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.exclamationToken)
+            || visitNode(cbNode, node.equalsToken)
+            || visitNode(cbNode, node.objectAssignmentInitializer);
     },
     [SyntaxKind.SpreadAssignment]: function forEachChildInSpreadAssignment<T>(node: SpreadAssignment, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.Parameter]: function forEachChildInParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.dotDotDotToken) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.initializer);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.dotDotDotToken)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.PropertyDeclaration]: function forEachChildInPropertyDeclaration<T>(node: PropertyDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.exclamationToken) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.initializer);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.exclamationToken)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.PropertySignature]: function forEachChildInPropertySignature<T>(node: PropertySignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.initializer);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.PropertyAssignment]: function forEachChildInPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.exclamationToken) ||
-            visitNode(cbNode, node.initializer);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.exclamationToken)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.VariableDeclaration]: function forEachChildInVariableDeclaration<T>(node: VariableDeclaration, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.exclamationToken) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.initializer);
+        return visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.exclamationToken)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.BindingElement]: function forEachChildInBindingElement<T>(node: BindingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.dotDotDotToken) ||
-            visitNode(cbNode, node.propertyName) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.initializer);
+        return visitNode(cbNode, node.dotDotDotToken)
+            || visitNode(cbNode, node.propertyName)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.IndexSignature]: function forEachChildInIndexSignature<T>(node: IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.ConstructorType]: function forEachChildInConstructorType<T>(node: ConstructorTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.FunctionType]: function forEachChildInFunctionType<T>(node: FunctionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.CallSignature]: forEachChildInCallOrConstructSignature,
     [SyntaxKind.ConstructSignature]: forEachChildInCallOrConstructSignature,
     [SyntaxKind.MethodDeclaration]: function forEachChildInMethodDeclaration<T>(node: MethodDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.asteriskToken) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.exclamationToken) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.asteriskToken)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.exclamationToken)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.MethodSignature]: function forEachChildInMethodSignature<T>(node: MethodSignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.Constructor]: function forEachChildInConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.GetAccessor]: function forEachChildInGetAccessor<T>(node: GetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.SetAccessor]: function forEachChildInSetAccessor<T>(node: SetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.FunctionDeclaration]: function forEachChildInFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.asteriskToken) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.asteriskToken)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.FunctionExpression]: function forEachChildInFunctionExpression<T>(node: FunctionExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.asteriskToken) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.asteriskToken)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.ArrowFunction]: function forEachChildInArrowFunction<T>(node: ArrowFunction, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.equalsGreaterThanToken) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.equalsGreaterThanToken)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.ClassStaticBlockDeclaration]: function forEachChildInClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.TypeReference]: function forEachChildInTypeReference<T>(node: TypeReferenceNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.typeName) ||
-            visitNodes(cbNode, cbNodes, node.typeArguments);
+        return visitNode(cbNode, node.typeName)
+            || visitNodes(cbNode, cbNodes, node.typeArguments);
     },
     [SyntaxKind.TypePredicate]: function forEachChildInTypePredicate<T>(node: TypePredicateNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.assertsModifier) ||
-            visitNode(cbNode, node.parameterName) ||
-            visitNode(cbNode, node.type);
+        return visitNode(cbNode, node.assertsModifier)
+            || visitNode(cbNode, node.parameterName)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.TypeQuery]: function forEachChildInTypeQuery<T>(node: TypeQueryNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.exprName) ||
-            visitNodes(cbNode, cbNodes, node.typeArguments);
+        return visitNode(cbNode, node.exprName)
+            || visitNodes(cbNode, cbNodes, node.typeArguments);
     },
     [SyntaxKind.TypeLiteral]: function forEachChildInTypeLiteral<T>(node: TypeLiteralNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.members);
@@ -679,19 +679,19 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.UnionType]: forEachChildInUnionOrIntersectionType,
     [SyntaxKind.IntersectionType]: forEachChildInUnionOrIntersectionType,
     [SyntaxKind.ConditionalType]: function forEachChildInConditionalType<T>(node: ConditionalTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.checkType) ||
-            visitNode(cbNode, node.extendsType) ||
-            visitNode(cbNode, node.trueType) ||
-            visitNode(cbNode, node.falseType);
+        return visitNode(cbNode, node.checkType)
+            || visitNode(cbNode, node.extendsType)
+            || visitNode(cbNode, node.trueType)
+            || visitNode(cbNode, node.falseType);
     },
     [SyntaxKind.InferType]: function forEachChildInInferType<T>(node: InferTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.typeParameter);
     },
     [SyntaxKind.ImportType]: function forEachChildInImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.argument) ||
-            visitNode(cbNode, node.attributes) ||
-            visitNode(cbNode, node.qualifier) ||
-            visitNodes(cbNode, cbNodes, node.typeArguments);
+        return visitNode(cbNode, node.argument)
+            || visitNode(cbNode, node.attributes)
+            || visitNode(cbNode, node.qualifier)
+            || visitNodes(cbNode, cbNodes, node.typeArguments);
     },
     [SyntaxKind.ImportTypeAssertionContainer]: function forEachChildInImportTypeAssertionContainer<T>(node: ImportTypeAssertionContainer, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.assertClause);
@@ -699,25 +699,25 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ParenthesizedType]: forEachChildInParenthesizedTypeOrTypeOperator,
     [SyntaxKind.TypeOperator]: forEachChildInParenthesizedTypeOrTypeOperator,
     [SyntaxKind.IndexedAccessType]: function forEachChildInIndexedAccessType<T>(node: IndexedAccessTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.objectType) ||
-            visitNode(cbNode, node.indexType);
+        return visitNode(cbNode, node.objectType)
+            || visitNode(cbNode, node.indexType);
     },
     [SyntaxKind.MappedType]: function forEachChildInMappedType<T>(node: MappedTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.readonlyToken) ||
-            visitNode(cbNode, node.typeParameter) ||
-            visitNode(cbNode, node.nameType) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.type) ||
-            visitNodes(cbNode, cbNodes, node.members);
+        return visitNode(cbNode, node.readonlyToken)
+            || visitNode(cbNode, node.typeParameter)
+            || visitNode(cbNode, node.nameType)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.type)
+            || visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.LiteralType]: function forEachChildInLiteralType<T>(node: LiteralTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.literal);
     },
     [SyntaxKind.NamedTupleMember]: function forEachChildInNamedTupleMember<T>(node: NamedTupleMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.dotDotDotToken) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.type);
+        return visitNode(cbNode, node.dotDotDotToken)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.ObjectBindingPattern]: forEachChildInObjectOrArrayBindingPattern,
     [SyntaxKind.ArrayBindingPattern]: forEachChildInObjectOrArrayBindingPattern,
@@ -728,26 +728,26 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.properties);
     },
     [SyntaxKind.PropertyAccessExpression]: function forEachChildInPropertyAccessExpression<T>(node: PropertyAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.questionDotToken) ||
-            visitNode(cbNode, node.name);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.questionDotToken)
+            || visitNode(cbNode, node.name);
     },
     [SyntaxKind.ElementAccessExpression]: function forEachChildInElementAccessExpression<T>(node: ElementAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.questionDotToken) ||
-            visitNode(cbNode, node.argumentExpression);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.questionDotToken)
+            || visitNode(cbNode, node.argumentExpression);
     },
     [SyntaxKind.CallExpression]: forEachChildInCallOrNewExpression,
     [SyntaxKind.NewExpression]: forEachChildInCallOrNewExpression,
     [SyntaxKind.TaggedTemplateExpression]: function forEachChildInTaggedTemplateExpression<T>(node: TaggedTemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tag) ||
-            visitNode(cbNode, node.questionDotToken) ||
-            visitNodes(cbNode, cbNodes, node.typeArguments) ||
-            visitNode(cbNode, node.template);
+        return visitNode(cbNode, node.tag)
+            || visitNode(cbNode, node.questionDotToken)
+            || visitNodes(cbNode, cbNodes, node.typeArguments)
+            || visitNode(cbNode, node.template);
     },
     [SyntaxKind.TypeAssertionExpression]: function forEachChildInTypeAssertionExpression<T>(node: TypeAssertion, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.expression);
+        return visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.expression);
     },
     [SyntaxKind.ParenthesizedExpression]: function forEachChildInParenthesizedExpression<T>(node: ParenthesizedExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -765,8 +765,8 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.operand);
     },
     [SyntaxKind.YieldExpression]: function forEachChildInYieldExpression<T>(node: YieldExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.asteriskToken) ||
-            visitNode(cbNode, node.expression);
+        return visitNode(cbNode, node.asteriskToken)
+            || visitNode(cbNode, node.expression);
     },
     [SyntaxKind.AwaitExpression]: function forEachChildInAwaitExpression<T>(node: AwaitExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -775,13 +775,13 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.operand);
     },
     [SyntaxKind.BinaryExpression]: function forEachChildInBinaryExpression<T>(node: BinaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.left) ||
-            visitNode(cbNode, node.operatorToken) ||
-            visitNode(cbNode, node.right);
+        return visitNode(cbNode, node.left)
+            || visitNode(cbNode, node.operatorToken)
+            || visitNode(cbNode, node.right);
     },
     [SyntaxKind.AsExpression]: function forEachChildInAsExpression<T>(node: AsExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.type);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.NonNullExpression]: function forEachChildInNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -793,11 +793,11 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.name);
     },
     [SyntaxKind.ConditionalExpression]: function forEachChildInConditionalExpression<T>(node: ConditionalExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.condition) ||
-            visitNode(cbNode, node.questionToken) ||
-            visitNode(cbNode, node.whenTrue) ||
-            visitNode(cbNode, node.colonToken) ||
-            visitNode(cbNode, node.whenFalse);
+        return visitNode(cbNode, node.condition)
+            || visitNode(cbNode, node.questionToken)
+            || visitNode(cbNode, node.whenTrue)
+            || visitNode(cbNode, node.colonToken)
+            || visitNode(cbNode, node.whenFalse);
     },
     [SyntaxKind.SpreadElement]: function forEachChildInSpreadElement<T>(node: SpreadElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -805,12 +805,12 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.Block]: forEachChildInBlock,
     [SyntaxKind.ModuleBlock]: forEachChildInBlock,
     [SyntaxKind.SourceFile]: function forEachChildInSourceFile<T>(node: SourceFile, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.statements) ||
-            visitNode(cbNode, node.endOfFileToken);
+        return visitNodes(cbNode, cbNodes, node.statements)
+            || visitNode(cbNode, node.endOfFileToken);
     },
     [SyntaxKind.VariableStatement]: function forEachChildInVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.declarationList);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.declarationList);
     },
     [SyntaxKind.VariableDeclarationList]: function forEachChildInVariableDeclarationList<T>(node: VariableDeclarationList, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.declarations);
@@ -819,34 +819,34 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.IfStatement]: function forEachChildInIfStatement<T>(node: IfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.thenStatement) ||
-            visitNode(cbNode, node.elseStatement);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.thenStatement)
+            || visitNode(cbNode, node.elseStatement);
     },
     [SyntaxKind.DoStatement]: function forEachChildInDoStatement<T>(node: DoStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.statement) ||
-            visitNode(cbNode, node.expression);
+        return visitNode(cbNode, node.statement)
+            || visitNode(cbNode, node.expression);
     },
     [SyntaxKind.WhileStatement]: function forEachChildInWhileStatement<T>(node: WhileStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.statement);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.statement);
     },
     [SyntaxKind.ForStatement]: function forEachChildInForStatement<T>(node: ForStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.initializer) ||
-            visitNode(cbNode, node.condition) ||
-            visitNode(cbNode, node.incrementor) ||
-            visitNode(cbNode, node.statement);
+        return visitNode(cbNode, node.initializer)
+            || visitNode(cbNode, node.condition)
+            || visitNode(cbNode, node.incrementor)
+            || visitNode(cbNode, node.statement);
     },
     [SyntaxKind.ForInStatement]: function forEachChildInForInStatement<T>(node: ForInStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.initializer) ||
-            visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.statement);
+        return visitNode(cbNode, node.initializer)
+            || visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.statement);
     },
     [SyntaxKind.ForOfStatement]: function forEachChildInForOfStatement<T>(node: ForOfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.awaitModifier) ||
-            visitNode(cbNode, node.initializer) ||
-            visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.statement);
+        return visitNode(cbNode, node.awaitModifier)
+            || visitNode(cbNode, node.initializer)
+            || visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.statement);
     },
     [SyntaxKind.ContinueStatement]: forEachChildInContinueOrBreakStatement,
     [SyntaxKind.BreakStatement]: forEachChildInContinueOrBreakStatement,
@@ -854,38 +854,38 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.WithStatement]: function forEachChildInWithStatement<T>(node: WithStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.statement);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.statement);
     },
     [SyntaxKind.SwitchStatement]: function forEachChildInSwitchStatement<T>(node: SwitchStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.caseBlock);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.caseBlock);
     },
     [SyntaxKind.CaseBlock]: function forEachChildInCaseBlock<T>(node: CaseBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.clauses);
     },
     [SyntaxKind.CaseClause]: function forEachChildInCaseClause<T>(node: CaseClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNodes(cbNode, cbNodes, node.statements);
+        return visitNode(cbNode, node.expression)
+            || visitNodes(cbNode, cbNodes, node.statements);
     },
     [SyntaxKind.DefaultClause]: function forEachChildInDefaultClause<T>(node: DefaultClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.statements);
     },
     [SyntaxKind.LabeledStatement]: function forEachChildInLabeledStatement<T>(node: LabeledStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.label) ||
-            visitNode(cbNode, node.statement);
+        return visitNode(cbNode, node.label)
+            || visitNode(cbNode, node.statement);
     },
     [SyntaxKind.ThrowStatement]: function forEachChildInThrowStatement<T>(node: ThrowStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.TryStatement]: function forEachChildInTryStatement<T>(node: TryStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tryBlock) ||
-            visitNode(cbNode, node.catchClause) ||
-            visitNode(cbNode, node.finallyBlock);
+        return visitNode(cbNode, node.tryBlock)
+            || visitNode(cbNode, node.catchClause)
+            || visitNode(cbNode, node.finallyBlock);
     },
     [SyntaxKind.CatchClause]: function forEachChildInCatchClause<T>(node: CatchClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.variableDeclaration) ||
-            visitNode(cbNode, node.block);
+        return visitNode(cbNode, node.variableDeclaration)
+            || visitNode(cbNode, node.block);
     },
     [SyntaxKind.Decorator]: function forEachChildInDecorator<T>(node: Decorator, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -893,57 +893,57 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
     [SyntaxKind.ClassExpression]: forEachChildInClassDeclarationOrExpression,
     [SyntaxKind.InterfaceDeclaration]: function forEachChildInInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNodes(cbNode, cbNodes, node.heritageClauses) ||
-            visitNodes(cbNode, cbNodes, node.members);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNodes(cbNode, cbNodes, node.heritageClauses)
+            || visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.TypeAliasDeclaration]: function forEachChildInTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            visitNode(cbNode, node.type);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.EnumDeclaration]: function forEachChildInEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNodes(cbNode, cbNodes, node.members);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.EnumMember]: function forEachChildInEnumMember<T>(node: EnumMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.initializer);
+        return visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.ModuleDeclaration]: function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.body);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.body);
     },
     [SyntaxKind.ImportEqualsDeclaration]: function forEachChildInImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.moduleReference);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.moduleReference);
     },
     [SyntaxKind.ImportDeclaration]: function forEachChildInImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.importClause) ||
-            visitNode(cbNode, node.moduleSpecifier) ||
-            visitNode(cbNode, node.attributes);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.importClause)
+            || visitNode(cbNode, node.moduleSpecifier)
+            || visitNode(cbNode, node.attributes);
     },
     [SyntaxKind.ImportClause]: function forEachChildInImportClause<T>(node: ImportClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.namedBindings);
+        return visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.namedBindings);
     },
     [SyntaxKind.ImportAttributes]: function forEachChildInImportAttributes<T>(node: ImportAttributes, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     },
     [SyntaxKind.ImportAttribute]: function forEachChildInImportAttribute<T>(node: ImportAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.value);
+        return visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.value);
     },
     [SyntaxKind.NamespaceExportDeclaration]: function forEachChildInNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.name);
     },
     [SyntaxKind.NamespaceImport]: function forEachChildInNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name);
@@ -954,32 +954,32 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.NamedImports]: forEachChildInNamedImportsOrExports,
     [SyntaxKind.NamedExports]: forEachChildInNamedImportsOrExports,
     [SyntaxKind.ExportDeclaration]: function forEachChildInExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.exportClause) ||
-            visitNode(cbNode, node.moduleSpecifier) ||
-            visitNode(cbNode, node.attributes);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.exportClause)
+            || visitNode(cbNode, node.moduleSpecifier)
+            || visitNode(cbNode, node.attributes);
     },
     [SyntaxKind.ImportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportAssignment]: function forEachChildInExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.expression);
+        return visitNodes(cbNode, cbNodes, node.modifiers)
+            || visitNode(cbNode, node.expression);
     },
     [SyntaxKind.TemplateExpression]: function forEachChildInTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.head) ||
-            visitNodes(cbNode, cbNodes, node.templateSpans);
+        return visitNode(cbNode, node.head)
+            || visitNodes(cbNode, cbNodes, node.templateSpans);
     },
     [SyntaxKind.TemplateSpan]: function forEachChildInTemplateSpan<T>(node: TemplateSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNode(cbNode, node.literal);
+        return visitNode(cbNode, node.expression)
+            || visitNode(cbNode, node.literal);
     },
     [SyntaxKind.TemplateLiteralType]: function forEachChildInTemplateLiteralType<T>(node: TemplateLiteralTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.head) ||
-            visitNodes(cbNode, cbNodes, node.templateSpans);
+        return visitNode(cbNode, node.head)
+            || visitNodes(cbNode, cbNodes, node.templateSpans);
     },
     [SyntaxKind.TemplateLiteralTypeSpan]: function forEachChildInTemplateLiteralTypeSpan<T>(node: TemplateLiteralTypeSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.literal);
+        return visitNode(cbNode, node.type)
+            || visitNode(cbNode, node.literal);
     },
     [SyntaxKind.ComputedPropertyName]: function forEachChildInComputedPropertyName<T>(node: ComputedPropertyName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -988,8 +988,8 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.types);
     },
     [SyntaxKind.ExpressionWithTypeArguments]: function forEachChildInExpressionWithTypeArguments<T>(node: ExpressionWithTypeArguments, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.expression) ||
-            visitNodes(cbNode, cbNodes, node.typeArguments);
+        return visitNode(cbNode, node.expression)
+            || visitNodes(cbNode, cbNodes, node.typeArguments);
     },
     [SyntaxKind.ExternalModuleReference]: function forEachChildInExternalModuleReference<T>(node: ExternalModuleReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
@@ -1001,14 +1001,14 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.elements);
     },
     [SyntaxKind.JsxElement]: function forEachChildInJsxElement<T>(node: JsxElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.openingElement) ||
-            visitNodes(cbNode, cbNodes, node.children) ||
-            visitNode(cbNode, node.closingElement);
+        return visitNode(cbNode, node.openingElement)
+            || visitNodes(cbNode, cbNodes, node.children)
+            || visitNode(cbNode, node.closingElement);
     },
     [SyntaxKind.JsxFragment]: function forEachChildInJsxFragment<T>(node: JsxFragment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.openingFragment) ||
-            visitNodes(cbNode, cbNodes, node.children) ||
-            visitNode(cbNode, node.closingFragment);
+        return visitNode(cbNode, node.openingFragment)
+            || visitNodes(cbNode, cbNodes, node.children)
+            || visitNode(cbNode, node.closingFragment);
     },
     [SyntaxKind.JsxSelfClosingElement]: forEachChildInJsxOpeningOrSelfClosingElement,
     [SyntaxKind.JsxOpeningElement]: forEachChildInJsxOpeningOrSelfClosingElement,
@@ -1016,22 +1016,22 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.properties);
     },
     [SyntaxKind.JsxAttribute]: function forEachChildInJsxAttribute<T>(node: JsxAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.name) ||
-            visitNode(cbNode, node.initializer);
+        return visitNode(cbNode, node.name)
+            || visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.JsxSpreadAttribute]: function forEachChildInJsxSpreadAttribute<T>(node: JsxSpreadAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.JsxExpression]: function forEachChildInJsxExpression<T>(node: JsxExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.dotDotDotToken) ||
-            visitNode(cbNode, node.expression);
+        return visitNode(cbNode, node.dotDotDotToken)
+            || visitNode(cbNode, node.expression);
     },
     [SyntaxKind.JsxClosingElement]: function forEachChildInJsxClosingElement<T>(node: JsxClosingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName);
     },
     [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName<T>(node: JsxNamespacedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.namespace) ||
-            visitNode(cbNode, node.name);
+        return visitNode(cbNode, node.namespace)
+            || visitNode(cbNode, node.name);
     },
     [SyntaxKind.OptionalType]: forEachChildInOptionalRestOrJSDocParameterModifier,
     [SyntaxKind.RestType]: forEachChildInOptionalRestOrJSDocParameterModifier,
@@ -1041,63 +1041,63 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocOptionalType]: forEachChildInOptionalRestOrJSDocParameterModifier,
     [SyntaxKind.JSDocVariadicType]: forEachChildInOptionalRestOrJSDocParameterModifier,
     [SyntaxKind.JSDocFunctionType]: function forEachChildInJSDocFunctionType<T>(node: JSDocFunctionType, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNodes(cbNode, cbNodes, node.parameters) ||
-            visitNode(cbNode, node.type);
+        return visitNodes(cbNode, cbNodes, node.parameters)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.JSDoc]: function forEachChildInJSDoc<T>(node: JSDoc, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment))
             || visitNodes(cbNode, cbNodes, node.tags);
     },
     [SyntaxKind.JSDocSeeTag]: function forEachChildInJSDocSeeTag<T>(node: JSDocSeeTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            visitNode(cbNode, node.name) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+        return visitNode(cbNode, node.tagName)
+            || visitNode(cbNode, node.name)
+            || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
     [SyntaxKind.JSDocNameReference]: function forEachChildInJSDocNameReference<T>(node: JSDocNameReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name);
     },
     [SyntaxKind.JSDocMemberName]: function forEachChildInJSDocMemberName<T>(node: JSDocMemberName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.left) ||
-            visitNode(cbNode, node.right);
+        return visitNode(cbNode, node.left)
+            || visitNode(cbNode, node.right);
     },
     [SyntaxKind.JSDocParameterTag]: forEachChildInJSDocParameterOrPropertyTag,
     [SyntaxKind.JSDocPropertyTag]: forEachChildInJSDocParameterOrPropertyTag,
     [SyntaxKind.JSDocAuthorTag]: function forEachChildInJSDocAuthorTag<T>(node: JSDocAuthorTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+        return visitNode(cbNode, node.tagName)
+            || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
     [SyntaxKind.JSDocImplementsTag]: function forEachChildInJSDocImplementsTag<T>(node: JSDocImplementsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            visitNode(cbNode, node.class) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+        return visitNode(cbNode, node.tagName)
+            || visitNode(cbNode, node.class)
+            || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
     [SyntaxKind.JSDocAugmentsTag]: function forEachChildInJSDocAugmentsTag<T>(node: JSDocAugmentsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            visitNode(cbNode, node.class) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+        return visitNode(cbNode, node.tagName)
+            || visitNode(cbNode, node.class)
+            || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
     [SyntaxKind.JSDocTemplateTag]: function forEachChildInJSDocTemplateTag<T>(node: JSDocTemplateTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            visitNode(cbNode, node.constraint) ||
-            visitNodes(cbNode, cbNodes, node.typeParameters) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+        return visitNode(cbNode, node.tagName)
+            || visitNode(cbNode, node.constraint)
+            || visitNodes(cbNode, cbNodes, node.typeParameters)
+            || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
     [SyntaxKind.JSDocTypedefTag]: function forEachChildInJSDocTypedefTag<T>(node: JSDocTypedefTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            (node.typeExpression &&
-                    node.typeExpression.kind === SyntaxKind.JSDocTypeExpression
-                ? visitNode(cbNode, node.typeExpression) ||
-                    visitNode(cbNode, node.fullName) ||
-                    (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment))
-                : visitNode(cbNode, node.fullName) ||
-                    visitNode(cbNode, node.typeExpression) ||
-                    (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment)));
+        return visitNode(cbNode, node.tagName)
+            || (node.typeExpression
+                    && node.typeExpression.kind === SyntaxKind.JSDocTypeExpression
+                ? visitNode(cbNode, node.typeExpression)
+                    || visitNode(cbNode, node.fullName)
+                    || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment))
+                : visitNode(cbNode, node.fullName)
+                    || visitNode(cbNode, node.typeExpression)
+                    || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment)));
     },
     [SyntaxKind.JSDocCallbackTag]: function forEachChildInJSDocCallbackTag<T>(node: JSDocCallbackTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.tagName) ||
-            visitNode(cbNode, node.fullName) ||
-            visitNode(cbNode, node.typeExpression) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+        return visitNode(cbNode, node.tagName)
+            || visitNode(cbNode, node.fullName)
+            || visitNode(cbNode, node.typeExpression)
+            || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
     [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
@@ -1107,9 +1107,9 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocOverloadTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return forEach(node.typeParameters, cbNode) ||
-            forEach(node.parameters, cbNode) ||
-            visitNode(cbNode, node.type);
+        return forEach(node.typeParameters, cbNode)
+            || forEach(node.parameters, cbNode)
+            || visitNode(cbNode, node.type);
     },
     [SyntaxKind.JSDocLink]: forEachChildInJSDocLinkCodeOrPlain,
     [SyntaxKind.JSDocLinkCode]: forEachChildInJSDocLinkCodeOrPlain,
@@ -1131,9 +1131,9 @@ const forEachChildTable: ForEachChildTable = {
 // shared
 
 function forEachChildInCallOrConstructSignature<T>(node: CallSignatureDeclaration | ConstructSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNodes(cbNode, cbNodes, node.typeParameters) ||
-        visitNodes(cbNode, cbNodes, node.parameters) ||
-        visitNode(cbNode, node.type);
+    return visitNodes(cbNode, cbNodes, node.typeParameters)
+        || visitNodes(cbNode, cbNodes, node.parameters)
+        || visitNode(cbNode, node.type);
 }
 
 function forEachChildInUnionOrIntersectionType<T>(node: UnionTypeNode | IntersectionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -1149,11 +1149,11 @@ function forEachChildInObjectOrArrayBindingPattern<T>(node: BindingPattern, cbNo
 }
 
 function forEachChildInCallOrNewExpression<T>(node: CallExpression | NewExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNode(cbNode, node.expression) ||
+    return visitNode(cbNode, node.expression)
         // TODO: should we separate these branches out?
-        visitNode(cbNode, (node as CallExpression).questionDotToken) ||
-        visitNodes(cbNode, cbNodes, node.typeArguments) ||
-        visitNodes(cbNode, cbNodes, node.arguments);
+        || visitNode(cbNode, (node as CallExpression).questionDotToken)
+        || visitNodes(cbNode, cbNodes, node.typeArguments)
+        || visitNodes(cbNode, cbNodes, node.arguments);
 }
 
 function forEachChildInBlock<T>(node: Block | ModuleBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -1165,11 +1165,11 @@ function forEachChildInContinueOrBreakStatement<T>(node: ContinueStatement | Bre
 }
 
 function forEachChildInClassDeclarationOrExpression<T>(node: ClassDeclaration | ClassExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNodes(cbNode, cbNodes, node.modifiers) ||
-        visitNode(cbNode, node.name) ||
-        visitNodes(cbNode, cbNodes, node.typeParameters) ||
-        visitNodes(cbNode, cbNodes, node.heritageClauses) ||
-        visitNodes(cbNode, cbNodes, node.members);
+    return visitNodes(cbNode, cbNodes, node.modifiers)
+        || visitNode(cbNode, node.name)
+        || visitNodes(cbNode, cbNodes, node.typeParameters)
+        || visitNodes(cbNode, cbNodes, node.heritageClauses)
+        || visitNodes(cbNode, cbNodes, node.members);
 }
 
 function forEachChildInNamedImportsOrExports<T>(node: NamedImports | NamedExports, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -1177,14 +1177,14 @@ function forEachChildInNamedImportsOrExports<T>(node: NamedImports | NamedExport
 }
 
 function forEachChildInImportOrExportSpecifier<T>(node: ImportSpecifier | ExportSpecifier, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNode(cbNode, node.propertyName) ||
-        visitNode(cbNode, node.name);
+    return visitNode(cbNode, node.propertyName)
+        || visitNode(cbNode, node.name);
 }
 
 function forEachChildInJsxOpeningOrSelfClosingElement<T>(node: JsxOpeningLikeElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNode(cbNode, node.tagName) ||
-        visitNodes(cbNode, cbNodes, node.typeArguments) ||
-        visitNode(cbNode, node.attributes);
+    return visitNode(cbNode, node.tagName)
+        || visitNodes(cbNode, cbNodes, node.typeArguments)
+        || visitNode(cbNode, node.attributes);
 }
 
 function forEachChildInOptionalRestOrJSDocParameterModifier<T>(node: OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocNullableType | JSDocNonNullableType | JSDocOptionalType | JSDocVariadicType, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -1192,17 +1192,17 @@ function forEachChildInOptionalRestOrJSDocParameterModifier<T>(node: OptionalTyp
 }
 
 function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | JSDocPropertyTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNode(cbNode, node.tagName) ||
-        (node.isNameFirst
+    return visitNode(cbNode, node.tagName)
+        || (node.isNameFirst
             ? visitNode(cbNode, node.name) || visitNode(cbNode, node.typeExpression)
-            : visitNode(cbNode, node.typeExpression) || visitNode(cbNode, node.name)) ||
-        (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+            : visitNode(cbNode, node.typeExpression) || visitNode(cbNode, node.name))
+        || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
 function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocOverloadTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNode(cbNode, node.tagName) ||
-        visitNode(cbNode, node.typeExpression) ||
-        (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+    return visitNode(cbNode, node.tagName)
+        || visitNode(cbNode, node.typeExpression)
+        || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
 function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -2516,8 +2516,8 @@ namespace Parser {
 
     function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): Token<TKind>;
     function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: string): Node {
-        return parseOptionalToken(t) ||
-            createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t)!);
+        return parseOptionalToken(t)
+            || createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t)!);
     }
 
     function parseExpectedTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
@@ -2603,12 +2603,12 @@ namespace Parser {
         }
 
         const pos = getNodePos();
-        const result = kind === SyntaxKind.Identifier ? factoryCreateIdentifier("", /*originalKeywordKind*/ undefined) :
-            isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined) :
-            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral("", /*numericLiteralFlags*/ undefined) :
-            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral("", /*isSingleQuote*/ undefined) :
-            kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration() :
-            factoryCreateToken(kind);
+        const result = kind === SyntaxKind.Identifier ? factoryCreateIdentifier("", /*originalKeywordKind*/ undefined)
+            : isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined)
+            : kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral("", /*numericLiteralFlags*/ undefined)
+            : kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral("", /*isSingleQuote*/ undefined)
+            : kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration()
+            : factoryCreateToken(kind);
         return finishNode(result, pos) as T;
     }
 
@@ -2652,9 +2652,9 @@ namespace Parser {
         const isReservedWord = scanner.isReservedWord();
         const msgArg = scanner.getTokenText();
 
-        const defaultMessage = isReservedWord ?
-            Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here :
-            Diagnostics.Identifier_expected;
+        const defaultMessage = isReservedWord
+            ? Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here
+            : Diagnostics.Identifier_expected;
 
         return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || defaultMessage, msgArg);
     }
@@ -2679,9 +2679,9 @@ namespace Parser {
     }
 
     function isLiteralPropertyName(): boolean {
-        return tokenIsIdentifierOrKeyword(token()) ||
-            token() === SyntaxKind.StringLiteral ||
-            token() === SyntaxKind.NumericLiteral;
+        return tokenIsIdentifierOrKeyword(token())
+            || token() === SyntaxKind.StringLiteral
+            || token() === SyntaxKind.NumericLiteral;
     }
 
     function isImportAttributeName(): boolean {
@@ -2944,8 +2944,8 @@ namespace Parser {
 
     function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
         if (
-            token() === SyntaxKind.ImplementsKeyword ||
-            token() === SyntaxKind.ExtendsKeyword
+            token() === SyntaxKind.ImplementsKeyword
+            || token() === SyntaxKind.ExtendsKeyword
         ) {
             return lookAhead(nextTokenIsStartOfExpression);
         }
@@ -3260,8 +3260,8 @@ namespace Parser {
                     // may have a method calls "constructor(...)" and we must reparse that
                     // into an actual .ConstructorDeclaration.
                     const methodDeclaration = node as MethodDeclaration;
-                    const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                        methodDeclaration.name.escapedText === "constructor";
+                    const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier
+                        && methodDeclaration.name.escapedText === "constructor";
 
                     return !nameIsConstructor;
             }
@@ -3726,16 +3726,16 @@ namespace Parser {
 
     function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
         const pos = getNodePos();
-        const node = isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, scanner.getTokenValue(), getTemplateLiteralRawText(kind), scanner.getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags) :
+        const node = isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, scanner.getTokenValue(), getTemplateLiteralRawText(kind), scanner.getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags)
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal. But because of how the scanner separates the tokens, we would
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
-            kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
-            isLiteralKind(kind) ? factoryCreateLiteralLikeNode(kind, scanner.getTokenValue()) :
-            Debug.fail();
+            : kind === SyntaxKind.NumericLiteral ? factoryCreateNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags())
+            : kind === SyntaxKind.StringLiteral ? factoryCreateStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape())
+            : isLiteralKind(kind) ? factoryCreateLiteralLikeNode(kind, scanner.getTokenValue())
+            : Debug.fail();
 
         if (scanner.hasExtendedUnicodeEscape()) {
             node.hasExtendedUnicodeEscape = true;
@@ -3828,12 +3828,12 @@ namespace Parser {
         //      Foo(?=
         //      (?|
         if (
-            token() === SyntaxKind.CommaToken ||
-            token() === SyntaxKind.CloseBraceToken ||
-            token() === SyntaxKind.CloseParenToken ||
-            token() === SyntaxKind.GreaterThanToken ||
-            token() === SyntaxKind.EqualsToken ||
-            token() === SyntaxKind.BarToken
+            token() === SyntaxKind.CommaToken
+            || token() === SyntaxKind.CloseBraceToken
+            || token() === SyntaxKind.CloseParenToken
+            || token() === SyntaxKind.GreaterThanToken
+            || token() === SyntaxKind.EqualsToken
+            || token() === SyntaxKind.BarToken
         ) {
             return finishNode(factory.createJSDocUnknownType(), pos);
         }
@@ -3958,11 +3958,11 @@ namespace Parser {
     }
 
     function isStartOfParameter(isJSDocParameter: boolean): boolean {
-        return token() === SyntaxKind.DotDotDotToken ||
-            isBindingIdentifierOrPrivateIdentifierOrPattern() ||
-            isModifierKind(token()) ||
-            token() === SyntaxKind.AtToken ||
-            isStartOfType(/*inStartOfParameter*/ !isJSDocParameter);
+        return token() === SyntaxKind.DotDotDotToken
+            || isBindingIdentifierOrPrivateIdentifierOrPattern()
+            || isModifierKind(token())
+            || token() === SyntaxKind.AtToken
+            || isStartOfType(/*inStartOfParameter*/ !isJSDocParameter);
     }
 
     function parseNameOfParameter(modifiers: NodeArray<ModifierLike> | undefined) {
@@ -4008,9 +4008,9 @@ namespace Parser {
         //      BindingElement[?Yield,?Await]
 
         // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-        const modifiers = inOuterAwaitContext ?
-            doInAwaitContext(() => parseModifiers(/*allowDecorators*/ true)) :
-            doOutsideOfAwaitContext(() => parseModifiers(/*allowDecorators*/ true));
+        const modifiers = inOuterAwaitContext
+            ? doInAwaitContext(() => parseModifiers(/*allowDecorators*/ true))
+            : doOutsideOfAwaitContext(() => parseModifiers(/*allowDecorators*/ true));
 
         if (token() === SyntaxKind.ThisKeyword) {
             const node = factory.createParameterDeclaration(
@@ -4104,9 +4104,9 @@ namespace Parser {
         setYieldContext(!!(flags & SignatureFlags.Yield));
         setAwaitContext(!!(flags & SignatureFlags.Await));
 
-        const parameters = flags & SignatureFlags.JSDoc ?
-            parseDelimitedList(ParsingContext.JSDocParameters, parseJSDocParameter) :
-            parseDelimitedList(ParsingContext.Parameters, () => allowAmbiguity ? parseParameter(savedAwaitContext) : parseParameterForSpeculation(savedAwaitContext));
+        const parameters = flags & SignatureFlags.JSDoc
+            ? parseDelimitedList(ParsingContext.JSDocParameters, parseJSDocParameter)
+            : parseDelimitedList(ParsingContext.Parameters, () => allowAmbiguity ? parseParameter(savedAwaitContext) : parseParameterForSpeculation(savedAwaitContext));
 
         setYieldContext(savedYieldContext);
         setAwaitContext(savedAwaitContext);
@@ -4259,10 +4259,10 @@ namespace Parser {
     function isTypeMemberStart(): boolean {
         // Return true if we have the start of a signature member
         if (
-            token() === SyntaxKind.OpenParenToken ||
-            token() === SyntaxKind.LessThanToken ||
-            token() === SyntaxKind.GetKeyword ||
-            token() === SyntaxKind.SetKeyword
+            token() === SyntaxKind.OpenParenToken
+            || token() === SyntaxKind.LessThanToken
+            || token() === SyntaxKind.GetKeyword
+            || token() === SyntaxKind.SetKeyword
         ) {
             return true;
         }
@@ -4284,12 +4284,12 @@ namespace Parser {
         // If we were able to get any potential identifier, check that it is
         // the start of a member declaration
         if (idToken) {
-            return token() === SyntaxKind.OpenParenToken ||
-                token() === SyntaxKind.LessThanToken ||
-                token() === SyntaxKind.QuestionToken ||
-                token() === SyntaxKind.ColonToken ||
-                token() === SyntaxKind.CommaToken ||
-                canParseSemicolon();
+            return token() === SyntaxKind.OpenParenToken
+                || token() === SyntaxKind.LessThanToken
+                || token() === SyntaxKind.QuestionToken
+                || token() === SyntaxKind.ColonToken
+                || token() === SyntaxKind.CommaToken
+                || canParseSemicolon();
         }
         return false;
     }
@@ -4497,9 +4497,9 @@ namespace Parser {
         if (negative) {
             nextToken();
         }
-        let expression: BooleanLiteral | NullLiteral | LiteralExpression | PrefixUnaryExpression = token() === SyntaxKind.TrueKeyword || token() === SyntaxKind.FalseKeyword || token() === SyntaxKind.NullKeyword ?
-            parseTokenNode<BooleanLiteral | NullLiteral>() :
-            parseLiteralLikeNode(token()) as LiteralExpression;
+        let expression: BooleanLiteral | NullLiteral | LiteralExpression | PrefixUnaryExpression = token() === SyntaxKind.TrueKeyword || token() === SyntaxKind.FalseKeyword || token() === SyntaxKind.NullKeyword
+            ? parseTokenNode<BooleanLiteral | NullLiteral>()
+            : parseLiteralLikeNode(token()) as LiteralExpression;
         if (negative) {
             expression = finishNode(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, expression), pos);
         }
@@ -4822,8 +4822,8 @@ namespace Parser {
         if (token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType)) {
             return true;
         }
-        return token() === SyntaxKind.NewKeyword ||
-            token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsNewKeyword);
+        return token() === SyntaxKind.NewKeyword
+            || token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsNewKeyword);
     }
 
     function skipParameterStart(): boolean {
@@ -4855,8 +4855,8 @@ namespace Parser {
             // We successfully skipped modifiers (if any) and an identifier or binding pattern,
             // now see if we have something that indicates a parameter declaration
             if (
-                token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken ||
-                token() === SyntaxKind.QuestionToken || token() === SyntaxKind.EqualsToken
+                token() === SyntaxKind.ColonToken || token() === SyntaxKind.CommaToken
+                || token() === SyntaxKind.QuestionToken || token() === SyntaxKind.EqualsToken
             ) {
                 // ( xxx :
                 // ( xxx ,
@@ -4997,11 +4997,11 @@ namespace Parser {
 
     function isStartOfExpressionStatement(): boolean {
         // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
-        return token() !== SyntaxKind.OpenBraceToken &&
-            token() !== SyntaxKind.FunctionKeyword &&
-            token() !== SyntaxKind.ClassKeyword &&
-            token() !== SyntaxKind.AtToken &&
-            isStartOfExpression();
+        return token() !== SyntaxKind.OpenBraceToken
+            && token() !== SyntaxKind.FunctionKeyword
+            && token() !== SyntaxKind.ClassKeyword
+            && token() !== SyntaxKind.AtToken
+            && isStartOfExpression();
     }
 
     function parseExpression(): Expression {
@@ -5142,8 +5142,8 @@ namespace Parser {
         nextToken();
 
         if (
-            !scanner.hasPrecedingLineBreak() &&
-            (token() === SyntaxKind.AsteriskToken || isStartOfExpression())
+            !scanner.hasPrecedingLineBreak()
+            && (token() === SyntaxKind.AsteriskToken || isStartOfExpression())
         ) {
             return finishNode(
                 factory.createYieldExpression(
@@ -5190,9 +5190,9 @@ namespace Parser {
         // following => or { token. Otherwise, we *might* have an arrow function.  Try to parse
         // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
         // expression instead.
-        return triState === Tristate.True ?
-            parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, /*allowReturnTypeInArrowFunction*/ true) :
-            tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction));
+        return triState === Tristate.True
+            ? parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, /*allowReturnTypeInArrowFunction*/ true)
+            : tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction));
     }
 
     //  True        -> We definitely expect a parenthesized arrow function here.
@@ -5502,11 +5502,11 @@ namespace Parser {
         }
 
         if (
-            token() !== SyntaxKind.SemicolonToken &&
-            token() !== SyntaxKind.FunctionKeyword &&
-            token() !== SyntaxKind.ClassKeyword &&
-            isStartOfStatement() &&
-            !isStartOfExpressionStatement()
+            token() !== SyntaxKind.SemicolonToken
+            && token() !== SyntaxKind.FunctionKeyword
+            && token() !== SyntaxKind.ClassKeyword
+            && isStartOfStatement()
+            && !isStartOfExpressionStatement()
         ) {
             // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
             //
@@ -5597,9 +5597,9 @@ namespace Parser {
             //            ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
             //      a ** b - c
             //             ^token; leftOperand = b. Return b to the caller as a rightOperand
-            const consumeCurrentOperator = token() === SyntaxKind.AsteriskAsteriskToken ?
-                newPrecedence >= precedence :
-                newPrecedence > precedence;
+            const consumeCurrentOperator = token() === SyntaxKind.AsteriskAsteriskToken
+                ? newPrecedence >= precedence
+                : newPrecedence > precedence;
 
             if (!consumeCurrentOperator) {
                 break;
@@ -5621,8 +5621,8 @@ namespace Parser {
                 else {
                     const keywordKind = token();
                     nextToken();
-                    leftOperand = keywordKind === SyntaxKind.SatisfiesKeyword ? makeSatisfiesExpression(leftOperand, parseType()) :
-                        makeAsExpression(leftOperand, parseType());
+                    leftOperand = keywordKind === SyntaxKind.SatisfiesKeyword ? makeSatisfiesExpression(leftOperand, parseType())
+                        : makeAsExpression(leftOperand, parseType());
                 }
             }
             else {
@@ -5710,9 +5710,9 @@ namespace Parser {
         if (isUpdateExpression()) {
             const pos = getNodePos();
             const updateExpression = parseUpdateExpression();
-            return token() === SyntaxKind.AsteriskAsteriskToken ?
-                parseBinaryExpressionRest(getBinaryOperatorPrecedence(token()), updateExpression, pos) as BinaryExpression :
-                updateExpression;
+            return token() === SyntaxKind.AsteriskAsteriskToken
+                ? parseBinaryExpressionRest(getBinaryOperatorPrecedence(token()), updateExpression, pos) as BinaryExpression
+                : updateExpression;
         }
 
         /**
@@ -6370,9 +6370,9 @@ namespace Parser {
     function parsePropertyAccessExpressionRest(pos: number, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
         const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /*allowUnicodeEscapeSequenceInIdentifierName*/ true);
         const isOptionalChain = questionDotToken || tryReparseOptionalChain(expression);
-        const propertyAccess = isOptionalChain ?
-            factoryCreatePropertyAccessChain(expression, questionDotToken, name) :
-            factoryCreatePropertyAccessExpression(expression, name);
+        const propertyAccess = isOptionalChain
+            ? factoryCreatePropertyAccessChain(expression, questionDotToken, name)
+            : factoryCreatePropertyAccessExpression(expression, name);
         if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
             parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
         }
@@ -6399,9 +6399,9 @@ namespace Parser {
 
         parseExpected(SyntaxKind.CloseBracketToken);
 
-        const indexedAccess = questionDotToken || tryReparseOptionalChain(expression) ?
-            factoryCreateElementAccessChain(expression, questionDotToken, argumentExpression) :
-            factoryCreateElementAccessExpression(expression, argumentExpression);
+        const indexedAccess = questionDotToken || tryReparseOptionalChain(expression)
+            ? factoryCreateElementAccessChain(expression, questionDotToken, argumentExpression)
+            : factoryCreateElementAccessExpression(expression, argumentExpression);
         return finishNode(indexedAccess, pos);
     }
 
@@ -6430,9 +6430,9 @@ namespace Parser {
 
             if (isTemplateStartOfTaggedTemplate()) {
                 // Absorb type arguments into TemplateExpression when preceding expression is ExpressionWithTypeArguments
-                expression = !questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments ?
-                    parseTaggedTemplateRest(pos, (expression as ExpressionWithTypeArguments).expression, questionDotToken, (expression as ExpressionWithTypeArguments).typeArguments) :
-                    parseTaggedTemplateRest(pos, expression, questionDotToken, /*typeArguments*/ undefined);
+                expression = !questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments
+                    ? parseTaggedTemplateRest(pos, (expression as ExpressionWithTypeArguments).expression, questionDotToken, (expression as ExpressionWithTypeArguments).typeArguments)
+                    : parseTaggedTemplateRest(pos, expression, questionDotToken, /*typeArguments*/ undefined);
                 continue;
             }
 
@@ -6461,9 +6461,9 @@ namespace Parser {
         const tagExpression = factory.createTaggedTemplateExpression(
             tag,
             typeArguments,
-            token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
-                (reScanTemplateToken(/*isTaggedTemplate*/ true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
-                parseTemplateExpression(/*isTaggedTemplate*/ true),
+            token() === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? (reScanTemplateToken(/*isTaggedTemplate*/ true), parseLiteralNode() as NoSubstitutionTemplateLiteral)
+                : parseTemplateExpression(/*isTaggedTemplate*/ true),
         );
         if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
             (tagExpression as Mutable<Node>).flags |= NodeFlags.OptionalChain;
@@ -6491,9 +6491,9 @@ namespace Parser {
                     expression = (expression as ExpressionWithTypeArguments).expression;
                 }
                 const argumentList = parseArgumentList();
-                const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
-                    factoryCreateCallChain(expression, questionDotToken, typeArguments, argumentList) :
-                    factoryCreateCallExpression(expression, typeArguments, argumentList);
+                const callExpr = questionDotToken || tryReparseOptionalChain(expression)
+                    ? factoryCreateCallChain(expression, questionDotToken, typeArguments, argumentList)
+                    : factoryCreateCallExpression(expression, typeArguments, argumentList);
                 expression = finishNode(callExpr, pos);
                 continue;
             }
@@ -6632,9 +6632,9 @@ namespace Parser {
     }
 
     function parseArgumentOrArrayLiteralElement(): Expression {
-        return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
-            token() === SyntaxKind.CommaToken ? finishNode(factory.createOmittedExpression(), getNodePos()) :
-            parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true);
+        return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement()
+            : token() === SyntaxKind.CommaToken ? finishNode(factory.createOmittedExpression(), getNodePos())
+            : parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true);
     }
 
     function parseArgumentExpression(): Expression {
@@ -6733,10 +6733,10 @@ namespace Parser {
         const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
         const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
         const isAsync = some(modifiers, isAsyncModifier) ? SignatureFlags.Await : SignatureFlags.None;
-        const name = isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalBindingIdentifier) :
-            isGenerator ? doInYieldContext(parseOptionalBindingIdentifier) :
-            isAsync ? doInAwaitContext(parseOptionalBindingIdentifier) :
-            parseOptionalBindingIdentifier();
+        const name = isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalBindingIdentifier)
+            : isGenerator ? doInYieldContext(parseOptionalBindingIdentifier)
+            : isAsync ? doInAwaitContext(parseOptionalBindingIdentifier)
+            : parseOptionalBindingIdentifier();
 
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(isGenerator | isAsync);
@@ -6890,10 +6890,10 @@ namespace Parser {
         let initializer!: VariableDeclarationList | Expression;
         if (token() !== SyntaxKind.SemicolonToken) {
             if (
-                token() === SyntaxKind.VarKeyword || token() === SyntaxKind.LetKeyword || token() === SyntaxKind.ConstKeyword ||
-                token() === SyntaxKind.UsingKeyword && lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLineDisallowOf) ||
+                token() === SyntaxKind.VarKeyword || token() === SyntaxKind.LetKeyword || token() === SyntaxKind.ConstKeyword
+                || token() === SyntaxKind.UsingKeyword && lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLineDisallowOf)
                 // this one is meant to allow of
-                token() === SyntaxKind.AwaitKeyword && lookAhead(nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine)
+                || token() === SyntaxKind.AwaitKeyword && lookAhead(nextTokenIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine)
             ) {
                 initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
             }
@@ -7189,17 +7189,17 @@ namespace Parser {
 
                 case SyntaxKind.ImportKeyword:
                     nextToken();
-                    return token() === SyntaxKind.StringLiteral || token() === SyntaxKind.AsteriskToken ||
-                        token() === SyntaxKind.OpenBraceToken || tokenIsIdentifierOrKeyword(token());
+                    return token() === SyntaxKind.StringLiteral || token() === SyntaxKind.AsteriskToken
+                        || token() === SyntaxKind.OpenBraceToken || tokenIsIdentifierOrKeyword(token());
                 case SyntaxKind.ExportKeyword:
                     let currentToken = nextToken();
                     if (currentToken === SyntaxKind.TypeKeyword) {
                         currentToken = lookAhead(nextToken);
                     }
                     if (
-                        currentToken === SyntaxKind.EqualsToken || currentToken === SyntaxKind.AsteriskToken ||
-                        currentToken === SyntaxKind.OpenBraceToken || currentToken === SyntaxKind.DefaultKeyword ||
-                        currentToken === SyntaxKind.AsKeyword || currentToken === SyntaxKind.AtToken
+                        currentToken === SyntaxKind.EqualsToken || currentToken === SyntaxKind.AsteriskToken
+                        || currentToken === SyntaxKind.OpenBraceToken || currentToken === SyntaxKind.DefaultKeyword
+                        || currentToken === SyntaxKind.AsKeyword || currentToken === SyntaxKind.AtToken
                     ) {
                         return true;
                     }
@@ -7595,8 +7595,8 @@ namespace Parser {
         const name = parseIdentifierOrPattern(Diagnostics.Private_identifiers_are_not_allowed_in_variable_declarations);
         let exclamationToken: ExclamationToken | undefined;
         if (
-            allowExclamation && name.kind === SyntaxKind.Identifier &&
-            token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()
+            allowExclamation && name.kind === SyntaxKind.Identifier
+            && token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()
         ) {
             exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
         }
@@ -8041,11 +8041,11 @@ namespace Parser {
         // It is very important that we check this *after* checking indexers because
         // the [ token can start an index signature or a computed property name
         if (
-            tokenIsIdentifierOrKeyword(token()) ||
-            token() === SyntaxKind.StringLiteral ||
-            token() === SyntaxKind.NumericLiteral ||
-            token() === SyntaxKind.AsteriskToken ||
-            token() === SyntaxKind.OpenBracketToken
+            tokenIsIdentifierOrKeyword(token())
+            || token() === SyntaxKind.StringLiteral
+            || token() === SyntaxKind.NumericLiteral
+            || token() === SyntaxKind.AsteriskToken
+            || token() === SyntaxKind.OpenBracketToken
         ) {
             const isAmbient = some(modifiers, isDeclareModifier);
             if (isAmbient) {
@@ -8164,8 +8164,8 @@ namespace Parser {
     }
 
     function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
-        return token() === SyntaxKind.LessThanToken ?
-            parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
+        return token() === SyntaxKind.LessThanToken
+            ? parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken) : undefined;
     }
 
     function isHeritageClause(): boolean {
@@ -8294,8 +8294,8 @@ namespace Parser {
     }
 
     function isExternalModuleReference() {
-        return token() === SyntaxKind.RequireKeyword &&
-            lookAhead(nextTokenIsOpenParen);
+        return token() === SyntaxKind.RequireKeyword
+            && lookAhead(nextTokenIsOpenParen);
     }
 
     function nextTokenIsOpenParen() {
@@ -8334,9 +8334,9 @@ namespace Parser {
 
         let isTypeOnly = false;
         if (
-            identifier?.escapedText === "type" &&
-            (token() !== SyntaxKind.FromKeyword || isIdentifier() && lookAhead(nextTokenIsFromKeywordOrEqualsToken)) &&
-            (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
+            identifier?.escapedText === "type"
+            && (token() !== SyntaxKind.FromKeyword || isIdentifier() && lookAhead(nextTokenIsFromKeywordOrEqualsToken))
+            && (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
         ) {
             isTypeOnly = true;
             identifier = isIdentifier() ? parseIdentifier() : undefined;
@@ -8351,9 +8351,9 @@ namespace Parser {
         //  import ModuleSpecifier;
         let importClause: ImportClause | undefined;
         if (
-            identifier || // import id
-            token() === SyntaxKind.AsteriskToken || // import *
-            token() === SyntaxKind.OpenBraceToken // import {
+            identifier // import id
+            || token() === SyntaxKind.AsteriskToken // import *
+            || token() === SyntaxKind.OpenBraceToken // import {
         ) {
             importClause = parseImportClause(identifier, afterImportPos, isTypeOnly);
             parseExpected(SyntaxKind.FromKeyword);
@@ -8434,8 +8434,8 @@ namespace Parser {
         // parse namespace or named imports
         let namedBindings: NamespaceImport | NamedImports | undefined;
         if (
-            !identifier ||
-            parseOptional(SyntaxKind.CommaToken)
+            !identifier
+            || parseOptional(SyntaxKind.CommaToken)
         ) {
             namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
         }
@@ -9524,17 +9524,17 @@ namespace Parser {
                     if (hasChildren) {
                         const isArrayType = typeExpression && typeExpression.type.kind === SyntaxKind.ArrayType;
                         const jsdocTypeLiteral = factory.createJSDocTypeLiteral(jsDocPropertyTags, isArrayType);
-                        typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
-                            childTypeTag.typeExpression :
-                            finishNode(jsdocTypeLiteral, start);
+                        typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type)
+                            ? childTypeTag.typeExpression
+                            : finishNode(jsdocTypeLiteral, start);
                         end = typeExpression.end;
                     }
                 }
 
                 // Only include the characters between the name end and the next token if a comment was actually parsed out - otherwise it's just whitespace
-                end = end || comment !== undefined ?
-                    getNodePos() :
-                    (fullName ?? typeExpression ?? tagName).end;
+                end = end || comment !== undefined
+                    ? getNodePos()
+                    : (fullName ?? typeExpression ?? tagName).end;
 
                 if (!comment) {
                     comment = parseTrailingTagComments(start, end, indent, indentText);
@@ -9643,8 +9643,8 @@ namespace Parser {
                             if (canParseTag) {
                                 const child = tryParseChildTag(target, indent);
                                 if (
-                                    child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) &&
-                                    name && (isIdentifierNode(child.name) || !escapedTextsEqual(name, child.name.left))
+                                    child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag)
+                                    && name && (isIdentifierNode(child.name) || !escapedTextsEqual(name, child.name.left))
                                 ) {
                                     return false;
                                 }
@@ -10060,12 +10060,12 @@ namespace IncrementalParser {
         // However any element that ended after that will have their pos adjusted to be
         // at the end of the new range.  i.e. any node that ended in the 'Y' range will
         // be adjusted to have their end at the end of the 'Z' range.
-        const end = element.end >= changeRangeOldEnd ?
+        const end = element.end >= changeRangeOldEnd
             // Element ends after the change range.  Always adjust the end pos.
-            element.end + delta :
+            ? element.end + delta
             // Element ends in the change range.  The element will keep its position if
             // possible. Or Move backward to the new-end if it's in the 'Y' range.
-            Math.min(element.end, changeRangeNewEnd);
+            : Math.min(element.end, changeRangeNewEnd);
 
         Debug.assert(pos <= end);
         if (element.parent) {
@@ -10689,13 +10689,13 @@ export function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagName
     }
 
     if (lhs.kind === SyntaxKind.JsxNamespacedName) {
-        return lhs.namespace.escapedText === (rhs as JsxNamespacedName).namespace.escapedText &&
-            lhs.name.escapedText === (rhs as JsxNamespacedName).name.escapedText;
+        return lhs.namespace.escapedText === (rhs as JsxNamespacedName).namespace.escapedText
+            && lhs.name.escapedText === (rhs as JsxNamespacedName).name.escapedText;
     }
 
     // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
     // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
     // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
-    return (lhs as PropertyAccessExpression).name.escapedText === (rhs as PropertyAccessExpression).name.escapedText &&
-        tagNamesAreEquivalent((lhs as PropertyAccessExpression).expression as JsxTagNameExpression, (rhs as PropertyAccessExpression).expression as JsxTagNameExpression);
+    return (lhs as PropertyAccessExpression).name.escapedText === (rhs as PropertyAccessExpression).name.escapedText
+        && tagNamesAreEquivalent((lhs as PropertyAccessExpression).expression as JsxTagNameExpression, (rhs as PropertyAccessExpression).expression as JsxTagNameExpression);
 }

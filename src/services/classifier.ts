@@ -1126,20 +1126,20 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                 if (tokenKind === SyntaxKind.EqualsToken) {
                     // the '=' in a variable declaration is special cased here.
                     if (
-                        parent.kind === SyntaxKind.VariableDeclaration ||
-                        parent.kind === SyntaxKind.PropertyDeclaration ||
-                        parent.kind === SyntaxKind.Parameter ||
-                        parent.kind === SyntaxKind.JsxAttribute
+                        parent.kind === SyntaxKind.VariableDeclaration
+                        || parent.kind === SyntaxKind.PropertyDeclaration
+                        || parent.kind === SyntaxKind.Parameter
+                        || parent.kind === SyntaxKind.JsxAttribute
                     ) {
                         return ClassificationType.operator;
                     }
                 }
 
                 if (
-                    parent.kind === SyntaxKind.BinaryExpression ||
-                    parent.kind === SyntaxKind.PrefixUnaryExpression ||
-                    parent.kind === SyntaxKind.PostfixUnaryExpression ||
-                    parent.kind === SyntaxKind.ConditionalExpression
+                    parent.kind === SyntaxKind.BinaryExpression
+                    || parent.kind === SyntaxKind.PrefixUnaryExpression
+                    || parent.kind === SyntaxKind.PostfixUnaryExpression
+                    || parent.kind === SyntaxKind.ConditionalExpression
                 ) {
                     return ClassificationType.operator;
                 }

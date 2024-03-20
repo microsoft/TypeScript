@@ -110,9 +110,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
     function textSpan(startNode: Node, endNode?: Node) {
         const lastDecorator = canHaveDecorators(startNode) ? findLast(startNode.modifiers, isDecorator) : undefined;
-        const start = lastDecorator ?
-            skipTrivia(sourceFile.text, lastDecorator.end) :
-            startNode.getStart(sourceFile);
+        const start = lastDecorator
+            ? skipTrivia(sourceFile.text, lastDecorator.end)
+            : startNode.getStart(sourceFile);
         return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
     }
 
@@ -347,11 +347,11 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                     // `a` or `...c` or `d: x` from
                     // `[a, b, ...c]` or `{ a, b }` or `{ d: x }` from destructuring pattern
                     if (
-                        (node.kind === SyntaxKind.Identifier ||
-                            node.kind === SyntaxKind.SpreadElement ||
-                            node.kind === SyntaxKind.PropertyAssignment ||
-                            node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
-                        isArrayLiteralOrObjectLiteralDestructuringPattern(parent)
+                        (node.kind === SyntaxKind.Identifier
+                            || node.kind === SyntaxKind.SpreadElement
+                            || node.kind === SyntaxKind.PropertyAssignment
+                            || node.kind === SyntaxKind.ShorthandPropertyAssignment)
+                        && isArrayLiteralOrObjectLiteralDestructuringPattern(parent)
                     ) {
                         return textSpan(node);
                     }
@@ -415,8 +415,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                         case SyntaxKind.PropertyAssignment:
                             // If this is name of property assignment, set breakpoint in the initializer
                             if (
-                                (node.parent as PropertyAssignment).name === node &&
-                                !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)
+                                (node.parent as PropertyAssignment).name === node
+                                && !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)
                             ) {
                                 return spanInNode((node.parent as PropertyAssignment).initializer);
                             }
@@ -482,16 +482,16 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             // Breakpoint is possible in variableDeclaration only if there is initialization
             // or its declaration from 'for of'
             if (
-                (hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer) ||
-                hasSyntacticModifier(variableDeclaration, ModifierFlags.Export) ||
-                parent.parent.kind === SyntaxKind.ForOfStatement
+                (hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer)
+                || hasSyntacticModifier(variableDeclaration, ModifierFlags.Export)
+                || parent.parent.kind === SyntaxKind.ForOfStatement
             ) {
                 return textSpanFromVariableDeclaration(variableDeclaration);
             }
 
             if (
-                isVariableDeclarationList(variableDeclaration.parent) &&
-                variableDeclaration.parent.declarations[0] !== variableDeclaration
+                isVariableDeclarationList(variableDeclaration.parent)
+                && variableDeclaration.parent.declarations[0] !== variableDeclaration
             ) {
                 // If we cannot set breakpoint on this declaration, set it on previous one
                 // Because the variable declaration may be binding pattern and
@@ -503,8 +503,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function canHaveSpanInParameterDeclaration(parameter: ParameterDeclaration): boolean {
             // Breakpoint is possible on parameter only if it has initializer, is a rest parameter, or has public or private modifier
-            return !!parameter.initializer || parameter.dotDotDotToken !== undefined ||
-                hasSyntacticModifier(parameter, ModifierFlags.Public | ModifierFlags.Private);
+            return !!parameter.initializer || parameter.dotDotDotToken !== undefined
+                || hasSyntacticModifier(parameter, ModifierFlags.Public | ModifierFlags.Private);
         }
 
         function spanInParameterDeclaration(parameter: ParameterDeclaration): TextSpan | undefined {
@@ -531,8 +531,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         }
 
         function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLikeDeclaration) {
-            return hasSyntacticModifier(functionDeclaration, ModifierFlags.Export) ||
-                (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
+            return hasSyntacticModifier(functionDeclaration, ModifierFlags.Export)
+                || (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
         }
 
         function spanInFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): TextSpan | undefined {
@@ -733,9 +733,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInOpenParenToken(node: Node): TextSpan | undefined {
             if (
-                node.parent.kind === SyntaxKind.DoStatement || // Go to while keyword and do action instead
-                node.parent.kind === SyntaxKind.CallExpression ||
-                node.parent.kind === SyntaxKind.NewExpression
+                node.parent.kind === SyntaxKind.DoStatement // Go to while keyword and do action instead
+                || node.parent.kind === SyntaxKind.CallExpression
+                || node.parent.kind === SyntaxKind.NewExpression
             ) {
                 return spanInPreviousNode(node);
             }
@@ -777,9 +777,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         function spanInColonToken(node: Node): TextSpan | undefined {
             // Is this : specifying return annotation of the function declaration
             if (
-                isFunctionLike(node.parent) ||
-                node.parent.kind === SyntaxKind.PropertyAssignment ||
-                node.parent.kind === SyntaxKind.Parameter
+                isFunctionLike(node.parent)
+                || node.parent.kind === SyntaxKind.PropertyAssignment
+                || node.parent.kind === SyntaxKind.Parameter
             ) {
                 return spanInPreviousNode(node);
             }

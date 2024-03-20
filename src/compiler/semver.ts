@@ -322,9 +322,9 @@ function parseHyphen(left: string, right: string, comparators: Comparator[]) {
 
     if (!isWildcard(rightResult.major)) {
         comparators.push(
-            isWildcard(rightResult.minor) ? createComparator("<", rightResult.version.increment("major")) :
-                isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor")) :
-                createComparator("<=", rightResult.version),
+            isWildcard(rightResult.minor) ? createComparator("<", rightResult.version.increment("major"))
+                : isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor"))
+                : createComparator("<=", rightResult.version),
         );
     }
 
@@ -343,8 +343,8 @@ function parseComparator(operator: string, text: string, comparators: Comparator
                 comparators.push(createComparator(
                     "<",
                     version.increment(
-                        isWildcard(minor) ? "major" :
-                            "minor",
+                        isWildcard(minor) ? "major"
+                            : "minor",
                     ),
                 ));
                 break;
@@ -353,25 +353,25 @@ function parseComparator(operator: string, text: string, comparators: Comparator
                 comparators.push(createComparator(
                     "<",
                     version.increment(
-                        version.major > 0 || isWildcard(minor) ? "major" :
-                            version.minor > 0 || isWildcard(patch) ? "minor" :
-                            "patch",
+                        version.major > 0 || isWildcard(minor) ? "major"
+                            : version.minor > 0 || isWildcard(patch) ? "minor"
+                            : "patch",
                     ),
                 ));
                 break;
             case "<":
             case ">=":
                 comparators.push(
-                    isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
-                        createComparator(operator, version),
+                    isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" }))
+                        : createComparator(operator, version),
                 );
                 break;
             case "<=":
             case ">":
                 comparators.push(
-                    isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" })) :
-                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
-                        createComparator(operator, version),
+                    isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" }))
+                        : isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" }))
+                        : createComparator(operator, version),
                 );
                 break;
             case "=":

@@ -290,9 +290,9 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Array");
 
             case SyntaxKind.TypePredicate:
-                return (node as TypePredicateNode).assertsModifier ?
-                    factory.createVoidZero() :
-                    factory.createIdentifier("Boolean");
+                return (node as TypePredicateNode).assertsModifier
+                    ? factory.createVoidZero()
+                    : factory.createIdentifier("Boolean");
 
             case SyntaxKind.BooleanKeyword:
                 return factory.createIdentifier("Boolean");
@@ -449,37 +449,37 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
     function equateSerializedTypeNodes(left: Expression, right: Expression): boolean {
         return (
             // temp vars used in fallback
-            isGeneratedIdentifier(left) ? isGeneratedIdentifier(right) :
+            isGeneratedIdentifier(left) ? isGeneratedIdentifier(right)
                 // entity names
-                isIdentifier(left) ? isIdentifier(right)
-                    && left.escapedText === right.escapedText :
-                isPropertyAccessExpression(left) ? isPropertyAccessExpression(right)
+                : isIdentifier(left) ? isIdentifier(right)
+                    && left.escapedText === right.escapedText
+                : isPropertyAccessExpression(left) ? isPropertyAccessExpression(right)
                     && equateSerializedTypeNodes(left.expression, right.expression)
-                    && equateSerializedTypeNodes(left.name, right.name) :
+                    && equateSerializedTypeNodes(left.name, right.name)
                 // `void 0`
-                isVoidExpression(left) ? isVoidExpression(right)
+                : isVoidExpression(left) ? isVoidExpression(right)
                     && isNumericLiteral(left.expression) && left.expression.text === "0"
-                    && isNumericLiteral(right.expression) && right.expression.text === "0" :
+                    && isNumericLiteral(right.expression) && right.expression.text === "0"
                 // `"undefined"` or `"function"` in `typeof` checks
-                isStringLiteral(left) ? isStringLiteral(right)
-                    && left.text === right.text :
+                : isStringLiteral(left) ? isStringLiteral(right)
+                    && left.text === right.text
                 // used in `typeof` checks for fallback
-                isTypeOfExpression(left) ? isTypeOfExpression(right)
-                    && equateSerializedTypeNodes(left.expression, right.expression) :
+                : isTypeOfExpression(left) ? isTypeOfExpression(right)
+                    && equateSerializedTypeNodes(left.expression, right.expression)
                 // parens in `typeof` checks with temps
-                isParenthesizedExpression(left) ? isParenthesizedExpression(right)
-                    && equateSerializedTypeNodes(left.expression, right.expression) :
+                : isParenthesizedExpression(left) ? isParenthesizedExpression(right)
+                    && equateSerializedTypeNodes(left.expression, right.expression)
                 // conditionals used in fallback
-                isConditionalExpression(left) ? isConditionalExpression(right)
+                : isConditionalExpression(left) ? isConditionalExpression(right)
                     && equateSerializedTypeNodes(left.condition, right.condition)
                     && equateSerializedTypeNodes(left.whenTrue, right.whenTrue)
-                    && equateSerializedTypeNodes(left.whenFalse, right.whenFalse) :
+                    && equateSerializedTypeNodes(left.whenFalse, right.whenFalse)
                 // logical binary and assignments used in fallback
-                isBinaryExpression(left) ? isBinaryExpression(right)
+                : isBinaryExpression(left) ? isBinaryExpression(right)
                     && left.operatorToken.kind === right.operatorToken.kind
                     && equateSerializedTypeNodes(left.left, right.left)
-                    && equateSerializedTypeNodes(left.right, right.right) :
-                false
+                    && equateSerializedTypeNodes(left.right, right.right)
+                : false
         );
     }
 
@@ -626,8 +626,8 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
     }
 
     function getGlobalConstructor(name: string, minLanguageVersion: ScriptTarget): SerializedTypeNode {
-        return languageVersion < minLanguageVersion ?
-            getGlobalConstructorWithFallback(name) :
-            factory.createIdentifier(name);
+        return languageVersion < minLanguageVersion
+            ? getGlobalConstructorWithFallback(name)
+            : factory.createIdentifier(name);
     }
 }

@@ -99,8 +99,8 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
         if (isIdentifier(name)) return { source: errorNode, target: name };
     }
     else if (
-        isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
-        isShorthandPropertyAssignment(errorNode.parent)
+        isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name)
+        || isShorthandPropertyAssignment(errorNode.parent)
     ) {
         const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
         if (!parentTarget) return undefined;

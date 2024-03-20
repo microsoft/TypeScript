@@ -405,8 +405,8 @@ export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | unde
         // in a parameter list to the body if we detect a variable being hoisted while visiting a parameter list
         // when the emit target is greater than ES2015.
         if (
-            context.getLexicalEnvironmentFlags() & LexicalEnvironmentFlags.VariablesHoistedInParameters &&
-            getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015
+            context.getLexicalEnvironmentFlags() & LexicalEnvironmentFlags.VariablesHoistedInParameters
+            && getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015
         ) {
             updated = addDefaultValueAssignmentsIfNeeded(updated, context);
         }
@@ -435,10 +435,10 @@ function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDecla
 function addDefaultValueAssignmentIfNeeded(parameter: ParameterDeclaration, context: TransformationContext) {
     // A rest parameter cannot have a binding pattern or an initializer,
     // so let's just ignore it.
-    return parameter.dotDotDotToken ? parameter :
-        isBindingPattern(parameter.name) ? addDefaultValueAssignmentForBindingPattern(parameter, context) :
-        parameter.initializer ? addDefaultValueAssignmentForInitializer(parameter, parameter.name, parameter.initializer, context) :
-        parameter;
+    return parameter.dotDotDotToken ? parameter
+        : isBindingPattern(parameter.name) ? addDefaultValueAssignmentForBindingPattern(parameter, context)
+        : parameter.initializer ? addDefaultValueAssignmentForInitializer(parameter, parameter.name, parameter.initializer, context)
+        : parameter;
 }
 
 function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclaration, context: TransformationContext) {
@@ -451,8 +451,8 @@ function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclarat
                     parameter.name,
                     /*exclamationToken*/ undefined,
                     parameter.type,
-                    parameter.initializer ?
-                        factory.createConditionalExpression(
+                    parameter.initializer
+                        ? factory.createConditionalExpression(
                             factory.createStrictEquality(
                                 factory.getGeneratedNameForNode(parameter),
                                 factory.createVoidZero(),
@@ -461,8 +461,8 @@ function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclarat
                             parameter.initializer,
                             /*colonToken*/ undefined,
                             factory.getGeneratedNameForNode(parameter),
-                        ) :
-                        factory.getGeneratedNameForNode(parameter),
+                        )
+                        : factory.getGeneratedNameForNode(parameter),
                 ),
             ]),
         ),
@@ -1018,14 +1018,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     [SyntaxKind.PropertyAccessExpression]: function visitEachChildOfPropertyAccessExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
-        return isPropertyAccessChain(node) ?
-            context.factory.updatePropertyAccessChain(
+        return isPropertyAccessChain(node)
+            ? context.factory.updatePropertyAccessChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
                 tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
                 Debug.checkDefined(nodeVisitor(node.name, visitor, isMemberName)),
-            ) :
-            context.factory.updatePropertyAccessExpression(
+            )
+            : context.factory.updatePropertyAccessExpression(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
                 Debug.checkDefined(nodeVisitor(node.name, visitor, isMemberName)),
@@ -1033,14 +1033,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     [SyntaxKind.ElementAccessExpression]: function visitEachChildOfElementAccessExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
-        return isElementAccessChain(node) ?
-            context.factory.updateElementAccessChain(
+        return isElementAccessChain(node)
+            ? context.factory.updateElementAccessChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
                 tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
                 Debug.checkDefined(nodeVisitor(node.argumentExpression, visitor, isExpression)),
-            ) :
-            context.factory.updateElementAccessExpression(
+            )
+            : context.factory.updateElementAccessExpression(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
                 Debug.checkDefined(nodeVisitor(node.argumentExpression, visitor, isExpression)),
@@ -1048,15 +1048,15 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     [SyntaxKind.CallExpression]: function visitEachChildOfCallExpression(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
-        return isCallChain(node) ?
-            context.factory.updateCallChain(
+        return isCallChain(node)
+            ? context.factory.updateCallChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
                 tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
                 nodesVisitor(node.arguments, visitor, isExpression),
-            ) :
-            context.factory.updateCallExpression(
+            )
+            : context.factory.updateCallExpression(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
@@ -1243,12 +1243,12 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     [SyntaxKind.NonNullExpression]: function visitEachChildOfNonNullExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
-        return isOptionalChain(node) ?
-            context.factory.updateNonNullChain(
+        return isOptionalChain(node)
+            ? context.factory.updateNonNullChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-            ) :
-            context.factory.updateNonNullExpression(
+            )
+            : context.factory.updateNonNullExpression(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
             );

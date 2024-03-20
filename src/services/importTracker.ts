@@ -450,8 +450,8 @@ function findNamespaceReExports(sourceFileLike: SourceFileLike, name: Identifier
     return !!forEachPossibleImportOrExportStatement(sourceFileLike, statement => {
         if (!isExportDeclaration(statement)) return;
         const { exportClause, moduleSpecifier } = statement;
-        return !moduleSpecifier && exportClause && isNamedExports(exportClause) &&
-            exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
+        return !moduleSpecifier && exportClause && isNamedExports(exportClause)
+            && exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
     });
 }
 
@@ -717,8 +717,8 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 function getExportNode(parent: Node, node: Node): Node | undefined {
     const declaration = isVariableDeclaration(parent) ? parent : isBindingElement(parent) ? walkUpBindingElementsAndPatterns(parent) : undefined;
     if (declaration) {
-        return (parent as VariableDeclaration | BindingElement).name !== node ? undefined :
-            isCatchClause(declaration.parent) ? undefined : isVariableStatement(declaration.parent.parent) ? declaration.parent.parent : undefined;
+        return (parent as VariableDeclaration | BindingElement).name !== node ? undefined
+            : isCatchClause(declaration.parent) ? undefined : isVariableStatement(declaration.parent.parent) ? declaration.parent.parent : undefined;
     }
     else {
         return parent;

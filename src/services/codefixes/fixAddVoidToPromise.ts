@@ -70,8 +70,8 @@ function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, 
     if (some(typeArguments)) {
         // append ` | void` to type argument
         const typeArgument = typeArguments[0];
-        const needsParens = !isUnionTypeNode(typeArgument) && !isParenthesizedTypeNode(typeArgument) &&
-            isParenthesizedTypeNode(factory.createUnionTypeNode([typeArgument, factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)]).types[0]);
+        const needsParens = !isUnionTypeNode(typeArgument) && !isParenthesizedTypeNode(typeArgument)
+            && isParenthesizedTypeNode(factory.createUnionTypeNode([typeArgument, factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)]).types[0]);
         if (needsParens) {
             changes.insertText(sourceFile, typeArgument.pos, "(");
         }

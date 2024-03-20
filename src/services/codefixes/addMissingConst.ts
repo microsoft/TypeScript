@@ -48,8 +48,8 @@ registerCodeFix({
 function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
     const token = getTokenAtPosition(sourceFile, pos);
     const forInitializer = findAncestor(token, node =>
-        isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
-            isPossiblyPartOfDestructuring(node) ? false : "quit");
+        isForInOrOfStatement(node.parent) ? node.parent.initializer === node
+            : isPossiblyPartOfDestructuring(node) ? false : "quit");
     if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
     const parent = token.parent;
@@ -67,8 +67,8 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     }
 
     const commaExpression = findAncestor(token, node =>
-        isExpressionStatement(node.parent) ? true :
-            isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit");
+        isExpressionStatement(node.parent) ? true
+            : isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit");
     if (commaExpression) {
         const checker = program.getTypeChecker();
         if (!expressionCouldBeVariableDeclaration(commaExpression, checker)) {
@@ -99,9 +99,9 @@ function isPossiblyPartOfDestructuring(node: Node): boolean {
 }
 
 function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker): boolean {
-    const identifier = isIdentifier(expression) ? expression :
-        isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left :
-        undefined;
+    const identifier = isIdentifier(expression) ? expression
+        : isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left
+        : undefined;
     return !!identifier && !checker.getSymbolAtLocation(identifier);
 }
 

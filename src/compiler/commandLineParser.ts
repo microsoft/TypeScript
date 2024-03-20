@@ -1782,9 +1782,9 @@ function createUnknownOptionError(
     }
 
     const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
-    return possibleOption ?
-        createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
-        createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
+    return possibleOption
+        ? createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name)
+        : createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
 }
 
 /** @internal */
@@ -2430,11 +2430,11 @@ export function convertToJson(
 }
 
 function getCompilerOptionValueTypeString(option: CommandLineOption): string {
-    return (option.type === "listOrElement") ?
-        `${getCompilerOptionValueTypeString(option.element)} or Array` :
-        option.type === "list" ?
-        "Array" :
-        isString(option.type) ? option.type : "string";
+    return (option.type === "listOrElement")
+        ? `${getCompilerOptionValueTypeString(option.element)} or Array`
+        : option.type === "list"
+        ? "Array"
+        : isString(option.type) ? option.type : "string";
 }
 
 function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
@@ -2890,9 +2890,9 @@ function parseJsonConfigFileContentWorker(
     const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
     const { raw } = parsedConfig;
     const options = extend(existingOptions, parsedConfig.options || {});
-    const watchOptions = existingWatchOptions && parsedConfig.watchOptions ?
-        extend(existingWatchOptions, parsedConfig.watchOptions) :
-        parsedConfig.watchOptions || existingWatchOptions;
+    const watchOptions = existingWatchOptions && parsedConfig.watchOptions
+        ? extend(existingWatchOptions, parsedConfig.watchOptions)
+        : parsedConfig.watchOptions || existingWatchOptions;
 
     options.configFilePath = configFileName && normalizeSlashes(configFileName);
     const configFileSpecs = getConfigFileSpecs();
@@ -3122,9 +3122,9 @@ function parseConfig(
         return { raw: json || convertToObject(sourceFile!, errors) };
     }
 
-    const ownConfig = json ?
-        parseOwnConfigOfJson(json, host, basePath, configFileName, errors) :
-        parseOwnConfigOfJsonSourceFile(sourceFile!, host, basePath, configFileName, errors);
+    const ownConfig = json
+        ? parseOwnConfigOfJson(json, host, basePath, configFileName, errors)
+        : parseOwnConfigOfJsonSourceFile(sourceFile!, host, basePath, configFileName, errors);
 
     if (ownConfig.options?.paths) {
         // If we end up needing to resolve relative paths from 'paths' relative to
@@ -3150,9 +3150,9 @@ function parseConfig(
         if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
         ownConfig.options = assign(result.options, ownConfig.options);
-        ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
-            assign(result.watchOptions, ownConfig.watchOptions) :
-            ownConfig.watchOptions || result.watchOptions;
+        ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions
+            ? assign(result.watchOptions, ownConfig.watchOptions)
+            : ownConfig.watchOptions || result.watchOptions;
     }
     return ownConfig;
 
@@ -3177,9 +3177,9 @@ function parseConfig(
                 result.compileOnSave = extendsRaw.compileOnSave;
             }
             assign(result.options, extendedConfig.options);
-            result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
-                assign({}, result.watchOptions, extendedConfig.watchOptions) :
-                result.watchOptions || extendedConfig.watchOptions;
+            result.watchOptions = result.watchOptions && extendedConfig.watchOptions
+                ? assign({}, result.watchOptions, extendedConfig.watchOptions)
+                : result.watchOptions || extendedConfig.watchOptions;
             // TODO extend type typeAcquisition
         }
     }
@@ -3200,9 +3200,9 @@ function parseOwnConfigOfJson(
     const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition, basePath, errors, configFileName);
     const watchOptions = convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors);
     json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
-    const extendedConfigPath = json.extends || json.extends === "" ?
-        getExtendsConfigPathOrArray(json.extends, host, basePath, configFileName, errors) :
-        undefined;
+    const extendedConfigPath = json.extends || json.extends === ""
+        ? getExtendsConfigPathOrArray(json.extends, host, basePath, configFileName, errors)
+        : undefined;
     return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
 }
 
@@ -3484,9 +3484,9 @@ function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, 
 }
 
 function createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile: TsConfigSourceFile | undefined, node: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
-    return sourceFile && node ?
-        createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args) :
-        createCompilerDiagnostic(message, ...args);
+    return sourceFile && node
+        ? createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args)
+        : createCompilerDiagnostic(message, ...args);
 }
 
 /** @internal */
@@ -3509,9 +3509,9 @@ export function convertJsonOption(
             return convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile);
         }
         else if (optType === "listOrElement") {
-            return isArray(value) ?
-                convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile) :
-                convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
+            return isArray(value)
+                ? convertJsonOptionOfListType(opt, value, basePath, errors, propertyAssignment, valueExpression as ArrayLiteralExpression | undefined, sourceFile)
+                : convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion

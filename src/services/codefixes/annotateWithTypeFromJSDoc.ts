@@ -117,10 +117,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
 }
 
 function isDeclarationWithType(node: Node): node is DeclarationWithType {
-    return isFunctionLikeDeclaration(node) ||
-        node.kind === SyntaxKind.VariableDeclaration ||
-        node.kind === SyntaxKind.PropertySignature ||
-        node.kind === SyntaxKind.PropertyDeclaration;
+    return isFunctionLikeDeclaration(node)
+        || node.kind === SyntaxKind.VariableDeclaration
+        || node.kind === SyntaxKind.PropertySignature
+        || node.kind === SyntaxKind.PropertyDeclaration;
 }
 
 function transformJSDocType(node: Node): Node {

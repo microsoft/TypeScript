@@ -124,16 +124,16 @@ export class TypeWriterWalker {
             // But this is generally expected, so we don't call those out, either
             let typeString: string;
             if (
-                !this.hadErrorBaseline &&
-                type.flags & ts.TypeFlags.Any &&
-                !ts.isBindingElement(node.parent) &&
-                !ts.isPropertyAccessOrQualifiedName(node.parent) &&
-                !ts.isLabelName(node) &&
-                !(ts.isModuleDeclaration(node.parent) && ts.isGlobalScopeAugmentation(node.parent)) &&
-                !ts.isMetaProperty(node.parent) &&
-                !this.isImportStatementName(node) &&
-                !this.isExportStatementName(node) &&
-                !this.isIntrinsicJsxTag(node)
+                !this.hadErrorBaseline
+                && type.flags & ts.TypeFlags.Any
+                && !ts.isBindingElement(node.parent)
+                && !ts.isPropertyAccessOrQualifiedName(node.parent)
+                && !ts.isLabelName(node)
+                && !(ts.isModuleDeclaration(node.parent) && ts.isGlobalScopeAugmentation(node.parent))
+                && !ts.isMetaProperty(node.parent)
+                && !this.isImportStatementName(node)
+                && !this.isExportStatementName(node)
+                && !this.isIntrinsicJsxTag(node)
             ) {
                 typeString = (type as ts.IntrinsicType).intrinsicName;
             }

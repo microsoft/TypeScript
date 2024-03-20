@@ -221,10 +221,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function transformSourceFile(node: SourceFile) {
         if (
-            node.isDeclarationFile ||
-            !(isEffectiveExternalModule(node, compilerOptions) ||
-                node.transformFlags & TransformFlags.ContainsDynamicImport ||
-                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && compilerOptions.outFile))
+            node.isDeclarationFile
+            || !(isEffectiveExternalModule(node, compilerOptions)
+                || node.transformFlags & TransformFlags.ContainsDynamicImport
+                || (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && compilerOptions.outFile))
         ) {
             return node;
         }
@@ -358,9 +358,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 // Add the module body function argument:
                                 //
                                 //     function (require, exports, module1, module2) ...
-                                jsonSourceFile ?
-                                    jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : factory.createObjectLiteralExpression() :
-                                    factory.createFunctionExpression(
+                                jsonSourceFile
+                                    ? jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : factory.createObjectLiteralExpression()
+                                    : factory.createFunctionExpression(
                                         /*modifiers*/ undefined,
                                         /*asteriskToken*/ undefined,
                                         /*name*/ undefined,
@@ -865,9 +865,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
     function visitForStatement(node: ForStatement, isTopLevel: boolean) {
         if (
-            isTopLevel && node.initializer &&
-            isVariableDeclarationList(node.initializer) &&
-            !(node.initializer.flags & NodeFlags.BlockScoped)
+            isTopLevel && node.initializer
+            && isVariableDeclarationList(node.initializer)
+            && !(node.initializer.flags & NodeFlags.BlockScoped)
         ) {
             const exportStatements = appendExportsOfVariableDeclarationList(/*statements*/ undefined, node.initializer, /*isForInOrOfInitializer*/ false);
             if (exportStatements) {
@@ -905,9 +905,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 const initializer = visitNode(node.initializer, discardedValueVisitor, isForInitializer);
                 const expression = visitNode(node.expression, visitor, isExpression);
                 const body = visitIterationBody(node.statement, topLevelNestedVisitor, context);
-                const mergedBody = isBlock(body) ?
-                    factory.updateBlock(body, [...exportStatements, ...body.statements]) :
-                    factory.createBlock([...exportStatements, body], /*multiLine*/ true);
+                const mergedBody = isBlock(body)
+                    ? factory.updateBlock(body, [...exportStatements, ...body.statements])
+                    : factory.createBlock([...exportStatements, body], /*multiLine*/ true);
                 return factory.updateForInStatement(node, initializer, expression, mergedBody);
             }
         }
@@ -931,9 +931,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             const expression = visitNode(node.expression, visitor, isExpression);
             let body = visitIterationBody(node.statement, topLevelNestedVisitor, context);
             if (some(exportStatements)) {
-                body = isBlock(body) ?
-                    factory.updateBlock(body, [...exportStatements, ...body.statements]) :
-                    factory.createBlock([...exportStatements, body], /*multiLine*/ true);
+                body = isBlock(body)
+                    ? factory.updateBlock(body, [...exportStatements, ...body.statements])
+                    : factory.createBlock([...exportStatements, body], /*multiLine*/ true);
             }
             return factory.updateForOfStatement(node, node.awaitModifier, initializer, expression, body);
         }
@@ -1607,9 +1607,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
             for (const specifier of node.exportClause.elements) {
-                const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
-                    !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                    idText(specifier.propertyName || specifier.name) === "default";
+                const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions)
+                    && !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper)
+                    && idText(specifier.propertyName || specifier.name) === "default";
                 const exportedValue = factory.createPropertyAccessExpression(
                     exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
                     specifier.propertyName || specifier.name,
@@ -1641,10 +1641,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 factory.cloneNode(node.exportClause.name),
                                 getHelperExpressionForExport(
                                     node,
-                                    moduleKind !== ModuleKind.AMD ?
-                                        createRequireCall(node) :
-                                        isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
-                                        factory.createIdentifier(idText(node.exportClause.name)),
+                                    moduleKind !== ModuleKind.AMD
+                                        ? createRequireCall(node)
+                                        : isExportNamespaceAsDefaultDeclaration(node) ? generatedName
+                                        : factory.createIdentifier(idText(node.exportClause.name)),
                                 ),
                             ),
                         ),

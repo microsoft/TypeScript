@@ -940,8 +940,8 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
 
 export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
     if (declaration === undefined) return undefined;
-    return getNonAssignedNameOfDeclaration(declaration) ||
-        (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+    return getNonAssignedNameOfDeclaration(declaration)
+        || (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
 }
 
 /** @internal */
@@ -1298,9 +1298,9 @@ export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeP
 }
 
 export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
-    return node.constraint ? node.constraint :
-        isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0] ? node.parent.constraint :
-        undefined;
+    return node.constraint ? node.constraint
+        : isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0] ? node.parent.constraint
+        : undefined;
 }
 
 // #region
@@ -1328,8 +1328,8 @@ export function isCallChain(node: Node): node is CallChain {
 
 export function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain {
     const kind = node.kind;
-    return !!(node.flags & NodeFlags.OptionalChain) &&
-        (kind === SyntaxKind.PropertyAccessExpression
+    return !!(node.flags & NodeFlags.OptionalChain)
+        && (kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
             || kind === SyntaxKind.CallExpression
             || kind === SyntaxKind.NonNullExpression);
@@ -1373,8 +1373,8 @@ export function isNullishCoalesce(node: Node) {
 }
 
 export function isConstTypeReference(node: Node) {
-    return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
-        node.typeName.escapedText === "const" && !node.typeArguments;
+    return isTypeReferenceNode(node) && isIdentifier(node.typeName)
+        && node.typeName.escapedText === "const" && !node.typeArguments;
 }
 
 export function skipPartiallyEmittedExpressions(node: Expression): Expression;
@@ -1586,10 +1586,10 @@ export function isParameterPropertyModifier(kind: SyntaxKind): boolean {
 
 /** @internal */
 export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-    return isParameterPropertyModifier(idToken) ||
-        idToken === SyntaxKind.StaticKeyword ||
-        idToken === SyntaxKind.OverrideKeyword ||
-        idToken === SyntaxKind.AccessorKeyword;
+    return isParameterPropertyModifier(idToken)
+        || idToken === SyntaxKind.StaticKeyword
+        || idToken === SyntaxKind.OverrideKeyword
+        || idToken === SyntaxKind.AccessorKeyword;
 }
 
 export function isModifier(node: Node): node is Modifier {
@@ -2018,8 +2018,8 @@ export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpre
         case SyntaxKind.PostfixUnaryExpression:
             return true;
         case SyntaxKind.PrefixUnaryExpression:
-            return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken ||
-                (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
+            return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken
+                || (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
         default:
             return false;
     }

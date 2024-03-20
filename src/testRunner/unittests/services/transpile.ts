@@ -152,9 +152,9 @@ var x = 0;`,
 
     transpilesCorrectly(
         "Rename dependencies - System",
-        `import {foo} from "SomeName";\n` +
-            `declare function use(a: any);\n` +
-            `use(foo);`,
+        `import {foo} from "SomeName";\n`
+            + `declare function use(a: any);\n`
+            + `use(foo);`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
         },
@@ -162,9 +162,9 @@ var x = 0;`,
 
     transpilesCorrectly(
         "Rename dependencies - AMD",
-        `import {foo} from "SomeName";\n` +
-            `declare function use(a: any);\n` +
-            `use(foo);`,
+        `import {foo} from "SomeName";\n`
+            + `declare function use(a: any);\n`
+            + `use(foo);`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.AMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
         },
@@ -172,9 +172,9 @@ var x = 0;`,
 
     transpilesCorrectly(
         "Rename dependencies - UMD",
-        `import {foo} from "SomeName";\n` +
-            `declare function use(a: any);\n` +
-            `use(foo);`,
+        `import {foo} from "SomeName";\n`
+            + `declare function use(a: any);\n`
+            + `use(foo);`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.UMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
         },
@@ -182,19 +182,19 @@ var x = 0;`,
 
     transpilesCorrectly(
         "Transpile with emit decorators and emit metadata",
-        `import {db} from './db';\n` +
-            `function someDecorator(target) {\n` +
-            `    return target;\n` +
-            `} \n` +
-            `@someDecorator\n` +
-            `class MyClass {\n` +
-            `    db: db;\n` +
-            `    constructor(db: db) {\n` +
-            `        this.db = db;\n` +
-            `        this.db.doSomething(); \n` +
-            `    }\n` +
-            `}\n` +
-            `export {MyClass}; \n`,
+        `import {db} from './db';\n`
+            + `function someDecorator(target) {\n`
+            + `    return target;\n`
+            + `} \n`
+            + `@someDecorator\n`
+            + `class MyClass {\n`
+            + `    db: db;\n`
+            + `    constructor(db: db) {\n`
+            + `        this.db = db;\n`
+            + `        this.db.doSomething(); \n`
+            + `    }\n`
+            + `}\n`
+            + `export {MyClass}; \n`,
         {
             options: {
                 compilerOptions: {
@@ -530,12 +530,12 @@ var x = 0;`,
 
     transpilesCorrectly(
         "Correctly serialize metadata when transpile with CommonJS option",
-        `import * as ng from "angular2/core";` +
-            `declare function foo(...args: any[]);` +
-            `@foo` +
-            `export class MyClass1 {` +
-            `    constructor(private _elementRef: ng.ElementRef){}` +
-            `}`,
+        `import * as ng from "angular2/core";`
+            + `declare function foo(...args: any[]);`
+            + `@foo`
+            + `export class MyClass1 {`
+            + `    constructor(private _elementRef: ng.ElementRef){}`
+            + `}`,
         {
             options: {
                 compilerOptions: {
@@ -552,12 +552,12 @@ var x = 0;`,
 
     transpilesCorrectly(
         "Correctly serialize metadata when transpile with System option",
-        `import * as ng from "angular2/core";` +
-            `declare function foo(...args: any[]);` +
-            `@foo` +
-            `export class MyClass1 {` +
-            `    constructor(private _elementRef: ng.ElementRef){}` +
-            `}`,
+        `import * as ng from "angular2/core";`
+            + `declare function foo(...args: any[]);`
+            + `@foo`
+            + `export class MyClass1 {`
+            + `    constructor(private _elementRef: ng.ElementRef){}`
+            + `}`,
         {
             options: {
                 compilerOptions: {
@@ -601,8 +601,8 @@ export * as alias from './file';`,
 
     transpilesCorrectly(
         "Elides import equals referenced only by export type",
-        `import IFoo = Namespace.IFoo;` +
-            `export type { IFoo };`,
+        `import IFoo = Namespace.IFoo;`
+            + `export type { IFoo };`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
         },
@@ -610,8 +610,8 @@ export * as alias from './file';`,
 
     transpilesCorrectly(
         "Does not elide import equals referenced only by export type",
-        `import IFoo = Namespace.IFoo;` +
-            `export type { IFoo };`,
+        `import IFoo = Namespace.IFoo;`
+            + `export type { IFoo };`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
             testVerbatimModuleSyntax: "only",
@@ -620,8 +620,8 @@ export * as alias from './file';`,
 
     transpilesCorrectly(
         "Elides import equals referenced only by type only export specifier",
-        `import IFoo = Namespace.IFoo;` +
-            `export { type IFoo };`,
+        `import IFoo = Namespace.IFoo;`
+            + `export { type IFoo };`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
         },
@@ -629,8 +629,8 @@ export * as alias from './file';`,
 
     transpilesCorrectly(
         "Does not elide import equals referenced only by type only export specifier",
-        `import IFoo = Namespace.IFoo;` +
-            `export { type IFoo };`,
+        `import IFoo = Namespace.IFoo;`
+            + `export { type IFoo };`,
         {
             options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
             testVerbatimModuleSyntax: "only",

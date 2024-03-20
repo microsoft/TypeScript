@@ -115,11 +115,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                     const firstDeclaration = member.declarations[0];
                     // only one "x.prototype = { ... }" will pass
                     if (
-                        member.declarations.length === 1 &&
-                        isPropertyAccessExpression(firstDeclaration) &&
-                        isBinaryExpression(firstDeclaration.parent) &&
-                        firstDeclaration.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
-                        isObjectLiteralExpression(firstDeclaration.parent.right)
+                        member.declarations.length === 1
+                        && isPropertyAccessExpression(firstDeclaration)
+                        && isBinaryExpression(firstDeclaration.parent)
+                        && firstDeclaration.parent.operatorToken.kind === SyntaxKind.EqualsToken
+                        && isObjectLiteralExpression(firstDeclaration.parent.right)
                     ) {
                         const prototypes = firstDeclaration.parent.right;
                         createClassElement(prototypes.symbol, /*modifiers*/ undefined, memberElements);

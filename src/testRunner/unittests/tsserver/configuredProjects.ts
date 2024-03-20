@@ -668,15 +668,15 @@ declare var console: {
                 bar,
                 libFile,
                 { path: `/user/username/projects/myproject/src/sub` },
-                withExclude ?
-                    {
+                withExclude
+                    ? {
                         path: config.path,
                         content: jsonToReadableText({
                             include: ["./src"],
                             exclude: ["./src/sub"],
                         }),
-                    } :
-                    config,
+                    }
+                    : config,
             ]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -703,9 +703,9 @@ declare var console: {
             }
             verifyGetErrRequest({
                 session,
-                files: errorOnNewFileBeforeOldFile ?
-                    [fooBar, foo] :
-                    [foo, fooBar],
+                files: errorOnNewFileBeforeOldFile
+                    ? [fooBar, foo]
+                    : [foo, fooBar],
                 existingTimeouts: !withExclude,
             });
             baselineTsserverLogs("configuredProjects", `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`, session);
@@ -1056,9 +1056,9 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         const session = new TestSession(host);
         const originalReadFile = host.readFile;
         host.readFile = f => {
-            return f === configFile.path ?
-                undefined :
-                originalReadFile.call(host, f);
+            return f === configFile.path
+                ? undefined
+                : originalReadFile.call(host, f);
         };
         openFilesForSession([file1], session);
 

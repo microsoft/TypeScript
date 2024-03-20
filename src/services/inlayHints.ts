@@ -262,8 +262,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
         if (
-            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
-            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any))
+            || isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
         ) {
             return;
         }

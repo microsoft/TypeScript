@@ -720,8 +720,8 @@ export class ChangeTracker {
     private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
         const comments = flatMap(node.jsDoc, jsDoc => isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
         const jsDoc = singleOrUndefined(node.jsDoc);
-        return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
-            factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+        return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined
+            : factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
     }
 
     public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]) {
@@ -1194,9 +1194,9 @@ function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
     if (parent.kind !== SyntaxKind.ArrowFunction) {
         return parent;
     }
-    const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration ?
-        parent.parent as HasJSDoc :
-        parent.parent.parent as HasJSDoc;
+    const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration
+        ? parent.parent as HasJSDoc
+        : parent.parent.parent as HasJSDoc;
     jsDocNode.jsDoc = parent.jsDoc;
     return jsDocNode;
 }
@@ -1272,9 +1272,9 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
-                const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
-                    c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile :
-                    c.sourceFile;
+                const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile
+                    : c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile
+                    : c.sourceFile;
                 const newText = computeNewText(c, targetSourceFile, sourceFile, newLineCharacter, formatContext, validate);
                 // Filter out redundant changes.
                 if (span.length === newText.length && stringContainsAt(targetSourceFile.text, newText, span.start)) {
@@ -1674,9 +1674,9 @@ namespace deleteDeclaration {
             case SyntaxKind.Parameter: {
                 const oldFunction = node.parent;
                 if (
-                    isArrowFunction(oldFunction) &&
-                    oldFunction.parameters.length === 1 &&
-                    !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)
+                    isArrowFunction(oldFunction)
+                    && oldFunction.parameters.length === 1
+                    && !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)
                 ) {
                     // Lambdas with exactly one parameter are special because, after removal, there
                     // must be an empty parameter list (i.e. `()`) and this won't necessarily be the

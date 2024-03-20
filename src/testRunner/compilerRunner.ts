@@ -331,8 +331,8 @@ class CompilerTest {
     }
 
     public verifyTypesAndSymbols() {
-        const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols &&
-            this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
+        const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols
+            && this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
         if (noTypesAndSymbols) {
             return;
         }

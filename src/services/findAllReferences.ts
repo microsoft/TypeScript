@@ -346,13 +346,13 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
     if (!isDeclaration(node.parent) && !isExportAssignment(node.parent)) {
         // Special property assignment in javascript
         if (isInJSFile(node)) {
-            const binaryExpression = isBinaryExpression(node.parent) ?
-                node.parent :
-                isAccessExpression(node.parent) &&
-                    isBinaryExpression(node.parent.parent) &&
-                    node.parent.parent.left === node.parent ?
-                node.parent.parent :
-                undefined;
+            const binaryExpression = isBinaryExpression(node.parent)
+                ? node.parent
+                : isAccessExpression(node.parent)
+                        && isBinaryExpression(node.parent.parent)
+                        && node.parent.parent.left === node.parent
+                ? node.parent.parent
+                : undefined;
             if (binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None) {
                 return getContextNode(binaryExpression);
             }
@@ -363,9 +363,9 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
             return node.parent.parent;
         }
         else if (
-            isJsxSelfClosingElement(node.parent) ||
-            isLabeledStatement(node.parent) ||
-            isBreakOrContinueStatement(node.parent)
+            isJsxSelfClosingElement(node.parent)
+            || isLabeledStatement(node.parent)
+            || isBreakOrContinueStatement(node.parent)
         ) {
             return node.parent;
         }
@@ -373,31 +373,31 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
             const validImport = tryGetImportFromModuleSpecifier(node);
             if (validImport) {
                 const declOrStatement = findAncestor(validImport, node =>
-                    isDeclaration(node) ||
-                    isStatement(node) ||
-                    isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
-                return isDeclaration(declOrStatement) ?
-                    getContextNode(declOrStatement) :
-                    declOrStatement;
+                    isDeclaration(node)
+                    || isStatement(node)
+                    || isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
+                return isDeclaration(declOrStatement)
+                    ? getContextNode(declOrStatement)
+                    : declOrStatement;
             }
         }
 
         // Handle computed property name
         const propertyName = findAncestor(node, isComputedPropertyName);
-        return propertyName ?
-            getContextNode(propertyName.parent) :
-            undefined;
+        return propertyName
+            ? getContextNode(propertyName.parent)
+            : undefined;
     }
 
     if (
-        node.parent.name === node || // node is name of declaration, use parent
-        isConstructorDeclaration(node.parent) ||
-        isExportAssignment(node.parent) ||
+        node.parent.name === node // node is name of declaration, use parent
+        || isConstructorDeclaration(node.parent)
+        || isExportAssignment(node.parent)
         // Property name of the import export specifier or binding pattern, use parent
-        ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
-            && node.parent.propertyName === node) ||
+        || ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
+            && node.parent.propertyName === node)
         // Is default export
-        (node.kind === SyntaxKind.DefaultKeyword && hasSyntacticModifier(node.parent, ModifierFlags.ExportDefault))
+        || (node.kind === SyntaxKind.DefaultKeyword && hasSyntacticModifier(node.parent, ModifierFlags.ExportDefault))
     ) {
         return getContextNode(node.parent);
     }
@@ -410,13 +410,13 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
     if (!node) return undefined;
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
-            return !isVariableDeclarationList(node.parent) || node.parent.declarations.length !== 1 ?
-                node :
-                isVariableStatement(node.parent.parent) ?
-                node.parent.parent :
-                isForInOrOfStatement(node.parent.parent) ?
-                getContextNode(node.parent.parent) :
-                node.parent;
+            return !isVariableDeclarationList(node.parent) || node.parent.declarations.length !== 1
+                ? node
+                : isVariableStatement(node.parent.parent)
+                ? node.parent.parent
+                : isForInOrOfStatement(node.parent.parent)
+                ? getContextNode(node.parent.parent)
+                : node.parent;
 
         case SyntaxKind.BindingElement:
             return getContextNode(node.parent.parent as NamedDeclaration);
@@ -433,9 +433,9 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
             return node.parent;
 
         case SyntaxKind.BinaryExpression:
-            return isExpressionStatement(node.parent) ?
-                node.parent :
-                node;
+            return isExpressionStatement(node.parent)
+                ? node.parent
+                : node;
 
         case SyntaxKind.ForOfStatement:
         case SyntaxKind.ForInStatement:
@@ -446,11 +446,11 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
 
         case SyntaxKind.PropertyAssignment:
         case SyntaxKind.ShorthandPropertyAssignment:
-            return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
-                getContextNode(
+            return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)
+                ? getContextNode(
                     findAncestor(node.parent, node => isBinaryExpression(node) || isForInOrOfStatement(node)) as BinaryExpression | ForInOrOfStatement,
-                ) :
-                node;
+                )
+                : node;
         case SyntaxKind.SwitchStatement:
             return {
                 start: find(node.getChildren(node.getSourceFile()), node => node.kind === SyntaxKind.SwitchKeyword)!,
@@ -464,12 +464,12 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
 /** @internal */
 export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context: ContextNode | undefined): { contextSpan: TextSpan; } | undefined {
     if (!context) return undefined;
-    const contextSpan = isContextWithStartAndEndNode(context) ?
-        getTextSpan(context.start, sourceFile, context.end) :
-        getTextSpan(context, sourceFile);
-    return contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length ?
-        { contextSpan } :
-        undefined;
+    const contextSpan = isContextWithStartAndEndNode(context)
+        ? getTextSpan(context.start, sourceFile, context.end)
+        : getTextSpan(context, sourceFile);
+    return contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length
+        ? { contextSpan }
+        : undefined;
 }
 
 /** @internal */
@@ -777,9 +777,9 @@ function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeC
             if (isShorthandAssignment) {
                 const grandParent = parent.parent;
                 if (
-                    isObjectLiteralExpression(grandParent) &&
-                    isBinaryExpression(grandParent.parent) &&
-                    isModuleExportsAccessExpression(grandParent.parent.left)
+                    isObjectLiteralExpression(grandParent)
+                    && isBinaryExpression(grandParent.parent)
+                    && isModuleExportsAccessExpression(grandParent.parent.left)
                 ) {
                     return prefixColon;
                 }
@@ -796,9 +796,9 @@ function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeC
         }
         else if (isExportSpecifier(parent) && !parent.propertyName) {
             // If the symbol for the node is same as declared node symbol use prefix text
-            return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node) ?
-                { prefixText: name + " as " } :
-                { suffixText: " as " + name };
+            return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node)
+                ? { prefixText: name + " as " }
+                : { suffixText: " as " + name };
         }
     }
 
@@ -886,8 +886,8 @@ function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSp
 
 /** @internal */
 export function getTextSpanOfEntry(entry: Entry) {
-    return entry.kind === EntryKind.Span ? entry.textSpan :
-        getTextSpan(entry.node, entry.node.getSourceFile());
+    return entry.kind === EntryKind.Span ? entry.textSpan
+        : getTextSpan(entry.node, entry.node.getSourceFile());
 }
 
 /**
@@ -907,8 +907,8 @@ export function isWriteAccessForReference(node: Node): boolean {
  */
 export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
     if (!target) return false;
-    const source = getDeclarationFromName(node) ||
-        (node.kind === SyntaxKind.DefaultKeyword ? node.parent
+    const source = getDeclarationFromName(node)
+        || (node.kind === SyntaxKind.DefaultKeyword ? node.parent
             : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
             : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
             : undefined);
@@ -1046,8 +1046,8 @@ export namespace Core {
         }
 
         const aliasedSymbol = getMergedAliasedSymbolOfNamespaceExportDeclaration(node, symbol, checker);
-        const moduleReferencesOfExportTarget = aliasedSymbol &&
-            getReferencedSymbolsForModuleIfDeclaredBySourceFile(aliasedSymbol, program, sourceFiles, cancellationToken, options, sourceFilesSet);
+        const moduleReferencesOfExportTarget = aliasedSymbol
+            && getReferencedSymbolsForModuleIfDeclaredBySourceFile(aliasedSymbol, program, sourceFiles, cancellationToken, options, sourceFilesSet);
 
         const references = getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
         return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
@@ -1134,9 +1134,9 @@ export namespace Core {
                 }
                 const symbol = entry.definition.symbol;
                 const refIndex = findIndex(result, ref =>
-                    !!ref.definition &&
-                    ref.definition.type === DefinitionKind.Symbol &&
-                    ref.definition.symbol === symbol);
+                    !!ref.definition
+                    && ref.definition.type === DefinitionKind.Symbol
+                    && ref.definition.symbol === symbol);
                 if (refIndex === -1) {
                     result.push(entry);
                     continue;
@@ -1154,9 +1154,9 @@ export namespace Core {
 
                         const entry1Span = getTextSpanOfEntry(entry1);
                         const entry2Span = getTextSpanOfEntry(entry2);
-                        return entry1Span.start !== entry2Span.start ?
-                            compareValues(entry1Span.start, entry2Span.start) :
-                            compareValues(entry1Span.length, entry2Span.length);
+                        return entry1Span.start !== entry2Span.start
+                            ? compareValues(entry1Span.start, entry2Span.start)
+                            : compareValues(entry1Span.length, entry2Span.length);
                     }),
                 };
             }
@@ -1165,9 +1165,9 @@ export namespace Core {
     }
 
     function getSourceFileIndexOfEntry(program: Program, entry: Entry) {
-        const sourceFile = entry.kind === EntryKind.Span ?
-            program.getSourceFile(entry.fileName)! :
-            entry.node.getSourceFile();
+        const sourceFile = entry.kind === EntryKind.Span
+            ? program.getSourceFile(entry.fileName)!
+            : entry.node.getSourceFile();
         return program.getSourceFiles().indexOf(sourceFile);
     }
 
@@ -1227,9 +1227,9 @@ export namespace Core {
                 const sourceFile = decl.getSourceFile();
                 if (sourceFilesSet.has(sourceFile.fileName)) {
                     // At `module.exports = ...`, reference node is `module`
-                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
-                        isExportAssignment(decl) ? Debug.checkDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
-                        getNameOfDeclaration(decl) || decl;
+                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression
+                        : isExportAssignment(decl) ? Debug.checkDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile))
+                        : getNameOfDeclaration(decl) || decl;
                     references.push(nodeEntry(node));
                 }
             }
@@ -1806,8 +1806,8 @@ export namespace Core {
             const endPosition = position + symbolNameLength;
 
             if (
-                (position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
-                (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))
+                (position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest))
+                && (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))
             ) {
                 // Found a real match.  Keep searching.
                 positions.push(position);
@@ -1840,8 +1840,8 @@ export namespace Core {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
-                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node) || (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node)) &&
-                    str.text.length === searchSymbolName.length;
+                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node) || (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node))
+                    && str.text.length === searchSymbolName.length;
             }
 
             case SyntaxKind.NumericLiteral:
@@ -1942,9 +1942,9 @@ export namespace Core {
         }
 
         if (
-            isJSDocPropertyLikeTag(parent) && parent.isNameFirst &&
-            parent.typeExpression && isJSDocTypeLiteral(parent.typeExpression.type) &&
-            parent.typeExpression.type.jsDocPropertyTags && length(parent.typeExpression.type.jsDocPropertyTags)
+            isJSDocPropertyLikeTag(parent) && parent.isNameFirst
+            && parent.typeExpression && isJSDocTypeLiteral(parent.typeExpression.type)
+            && parent.typeExpression.type.jsDocPropertyTags && length(parent.typeExpression.type.jsDocPropertyTags)
         ) {
             getReferencesAtJSDocTypeLiteral(parent.typeExpression.type.jsDocPropertyTags, referenceLocation, search, state);
             return;
@@ -2484,8 +2484,8 @@ export namespace Core {
                         }
                     }
                     else {
-                        return isNoSubstitutionTemplateLiteral(ref) && !rangeIsOnSingleLine(ref, sourceFile) ? undefined :
-                            nodeEntry(ref, EntryKind.StringLiteral);
+                        return isNoSubstitutionTemplateLiteral(ref) && !rangeIsOnSingleLine(ref, sourceFile) ? undefined
+                            : nodeEntry(ref, EntryKind.StringLiteral);
                     }
                 }
             });
@@ -2747,10 +2747,10 @@ export namespace Core {
     }
 
     function isImplementation(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
-            (isVariableLike(node) ? hasInitializer(node) :
-                isFunctionLikeDeclaration(node) ? !!node.body :
-                isClassLike(node) || isModuleOrEnumDeclaration(node));
+        return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node))
+            : (isVariableLike(node) ? hasInitializer(node)
+                : isFunctionLikeDeclaration(node) ? !!node.body
+                : isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {

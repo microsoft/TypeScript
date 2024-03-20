@@ -14,7 +14,7 @@
         "nextControlFlowPosition": "nextLine", // Stroustrup style braces.
         "trailingCommas": "onlyMultiLine",
         "preferHanging": false,
-        "operatorPosition": "maintain",
+        "operatorPosition": "nextLine",
 
         "arrowFunction.useParentheses": "preferNone",
         "conditionalExpression.linePerExpression": false, // Keep our "match/case"-ish conditionals.

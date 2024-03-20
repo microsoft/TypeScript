@@ -557,11 +557,11 @@ function isNotTypeAnnotationContext(context: FormattingContext): boolean {
 
 function isTypeAnnotationContext(context: FormattingContext): boolean {
     const contextKind = context.contextNode.kind;
-    return contextKind === SyntaxKind.PropertyDeclaration ||
-        contextKind === SyntaxKind.PropertySignature ||
-        contextKind === SyntaxKind.Parameter ||
-        contextKind === SyntaxKind.VariableDeclaration ||
-        isFunctionLikeKind(contextKind);
+    return contextKind === SyntaxKind.PropertyDeclaration
+        || contextKind === SyntaxKind.PropertySignature
+        || contextKind === SyntaxKind.Parameter
+        || contextKind === SyntaxKind.VariableDeclaration
+        || isFunctionLikeKind(contextKind);
 }
 
 function isOptionalPropertyContext(context: FormattingContext) {
@@ -573,8 +573,8 @@ function isNonOptionalPropertyContext(context: FormattingContext) {
 }
 
 function isConditionalOperatorContext(context: FormattingContext): boolean {
-    return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
-        context.contextNode.kind === SyntaxKind.ConditionalType;
+    return context.contextNode.kind === SyntaxKind.ConditionalExpression
+        || context.contextNode.kind === SyntaxKind.ConditionalType;
 }
 
 function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
@@ -582,9 +582,9 @@ function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolea
 }
 
 function isBraceWrappedContext(context: FormattingContext): boolean {
-    return context.contextNode.kind === SyntaxKind.ObjectBindingPattern ||
-        context.contextNode.kind === SyntaxKind.MappedType ||
-        isSingleLineBlockContext(context);
+    return context.contextNode.kind === SyntaxKind.ObjectBindingPattern
+        || context.contextNode.kind === SyntaxKind.MappedType
+        || isSingleLineBlockContext(context);
 }
 
 // This check is done before an open brace in a control construct, a function, or a typescript block declaration
@@ -803,10 +803,10 @@ function isNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext
 }
 
 function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
-    return context.TokensAreOnSameLine() &&
-        hasDecorators(context.contextNode) &&
-        nodeIsInDecoratorContext(context.currentTokenParent) &&
-        !nodeIsInDecoratorContext(context.nextTokenParent);
+    return context.TokensAreOnSameLine()
+        && hasDecorators(context.contextNode)
+        && nodeIsInDecoratorContext(context.currentTokenParent)
+        && !nodeIsInDecoratorContext(context.nextTokenParent);
 }
 
 function nodeIsInDecoratorContext(node: Node): boolean {
@@ -817,8 +817,8 @@ function nodeIsInDecoratorContext(node: Node): boolean {
 }
 
 function isStartOfVariableDeclarationList(context: FormattingContext): boolean {
-    return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList &&
-        context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
+    return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList
+        && context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
 }
 
 function isNotFormatOnEnter(context: FormattingContext): boolean {
@@ -865,8 +865,8 @@ function isTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: 
 }
 
 function isTypeArgumentOrParameterOrAssertionContext(context: FormattingContext): boolean {
-    return isTypeArgumentOrParameterOrAssertion(context.currentTokenSpan, context.currentTokenParent) ||
-        isTypeArgumentOrParameterOrAssertion(context.nextTokenSpan, context.nextTokenParent);
+    return isTypeArgumentOrParameterOrAssertion(context.currentTokenSpan, context.currentTokenParent)
+        || isTypeArgumentOrParameterOrAssertion(context.nextTokenSpan, context.nextTokenParent);
 }
 
 function isTypeAssertionContext(context: FormattingContext): boolean {
@@ -934,15 +934,15 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
     }
 
     if (
-        nextTokenKind === SyntaxKind.SemicolonClassElement ||
-        nextTokenKind === SyntaxKind.SemicolonToken
+        nextTokenKind === SyntaxKind.SemicolonClassElement
+        || nextTokenKind === SyntaxKind.SemicolonToken
     ) {
         return false;
     }
 
     if (
-        context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
-        context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
+        context.contextNode.kind === SyntaxKind.InterfaceDeclaration
+        || context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
     ) {
         // Can't remove semicolon after `foo`; it would parse as a method declaration:
         //

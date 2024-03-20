@@ -513,9 +513,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     // Cache for the module resolution
     const resolutionCache = createResolutionCache(
         compilerHost,
-        configFileName ?
-            getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory)) :
-            currentDirectory,
+        configFileName
+            ? getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory))
+            : currentDirectory,
         /*logChangesWhenResolvingModule*/ false,
     );
     // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
@@ -529,21 +529,21 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
         compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
     }
-    compilerHost.resolveLibrary = !host.resolveLibrary ?
-        resolutionCache.resolveLibrary.bind(resolutionCache) :
-        host.resolveLibrary.bind(host);
-    compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames ?
-        maybeBind(host, host.getModuleResolutionCache) :
-        (() => resolutionCache.getModuleResolutionCache());
-    const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences ||
-        !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
+    compilerHost.resolveLibrary = !host.resolveLibrary
+        ? resolutionCache.resolveLibrary.bind(resolutionCache)
+        : host.resolveLibrary.bind(host);
+    compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames
+        ? maybeBind(host, host.getModuleResolutionCache)
+        : (() => resolutionCache.getModuleResolutionCache());
+    const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences
+        || !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
     // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
-    const customHasInvalidatedResolutions = userProvidedResolution ?
-        maybeBind(host, host.hasInvalidatedResolutions) || returnTrue :
-        returnFalse;
-    const customHasInvalidLibResolutions = host.resolveLibrary ?
-        maybeBind(host, host.hasInvalidatedLibResolutions) || returnTrue :
-        returnFalse;
+    const customHasInvalidatedResolutions = userProvidedResolution
+        ? maybeBind(host, host.hasInvalidatedResolutions) || returnTrue
+        : returnFalse;
+    const customHasInvalidLibResolutions = host.resolveLibrary
+        ? maybeBind(host, host.hasInvalidatedLibResolutions) || returnTrue
+        : returnFalse;
 
     builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
     synchronizeProgram();
@@ -554,9 +554,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     // Update extended config file watch
     if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
 
-    return configFileName ?
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close, getResolutionCache } :
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close, getResolutionCache };
+    return configFileName
+        ? { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close, getResolutionCache }
+        : { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close, getResolutionCache };
 
     function close() {
         clearInvalidateResolutionsOfFailedLookupLocations();
@@ -987,9 +987,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
 
         writeLog(`Loading config file: ${configFileName}`);
-        const parsedCommandLine = host.getParsedCommandLine ?
-            host.getParsedCommandLine(configFileName) :
-            getParsedCommandLineFromConfigFileHost(configFileName);
+        const parsedCommandLine = host.getParsedCommandLine
+            ? host.getParsedCommandLine(configFileName)
+            : getParsedCommandLineFromConfigFileHost(configFileName);
         if (config) {
             config.parsedCommandLine = parsedCommandLine;
             config.updateLevel = undefined;
@@ -1059,9 +1059,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     function watchMissingFilePath(missingFilePath: Path, missingFileName: string) {
         // If watching missing referenced config file, we are already watching it so no need for separate watcher
-        return parsedConfigs?.has(missingFilePath) ?
-            noopFileWatcher :
-            watchFilePath(
+        return parsedConfigs?.has(missingFilePath)
+            ? noopFileWatcher
+            : watchFilePath(
                 missingFilePath,
                 missingFileName,
                 onMissingFileChange,

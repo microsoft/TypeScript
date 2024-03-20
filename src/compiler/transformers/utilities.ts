@@ -117,9 +117,9 @@ function containsDefaultReference(node: NamedImportBindings | NamedExportBinding
 }
 
 function isNamedDefaultReference(e: ImportSpecifier | ExportSpecifier): boolean {
-    return e.propertyName !== undefined ?
-        e.propertyName.escapedText === InternalSymbolName.Default :
-        e.name.escapedText === InternalSymbolName.Default;
+    return e.propertyName !== undefined
+        ? e.propertyName.escapedText === InternalSymbolName.Default
+        : e.name.escapedText === InternalSymbolName.Default;
 }
 
 /** @internal */
@@ -445,10 +445,10 @@ export class IdentifierNameMultiMap<V> extends IdentifierNameMap<V[]> {
  * @internal
  */
 export function isSimpleCopiableExpression(expression: Expression) {
-    return isStringLiteralLike(expression) ||
-        expression.kind === SyntaxKind.NumericLiteral ||
-        isKeyword(expression.kind) ||
-        isIdentifier(expression);
+    return isStringLiteralLike(expression)
+        || expression.kind === SyntaxKind.NumericLiteral
+        || isKeyword(expression.kind)
+        || isIdentifier(expression);
 }
 
 /**
@@ -708,9 +708,9 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
     }
 
     const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
-    const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor :
-        secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
-        undefined;
+    const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor
+        : secondAccessor && hasDecorators(secondAccessor) ? secondAccessor
+        : undefined;
 
     if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
         return undefined;
@@ -807,9 +807,9 @@ export function getPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry> | undefined,
     name: PrivateIdentifier,
 ) {
-    return isGeneratedPrivateIdentifier(name) ?
-        privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name)) :
-        privateEnv?.identifiers?.get(name.escapedText);
+    return isGeneratedPrivateIdentifier(name)
+        ? privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name))
+        : privateEnv?.identifiers?.get(name.escapedText);
 }
 
 /** @internal */

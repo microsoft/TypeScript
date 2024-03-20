@@ -251,15 +251,15 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
                 return false;
             }
             if (
-                usableByFileName && usableByFileName !== newSourceFile.path ||
+                usableByFileName && usableByFileName !== newSourceFile.path
                 // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
                 // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
-                typeAcquisitionEnabled && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile) ||
+                || typeAcquisitionEnabled && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile)
                 // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
                 // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
                 // but type info is gathered in getCompletionEntryDetails, which doesn't use the cache.
-                !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
-                !ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
+                || !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations)
+                || !ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
             ) {
                 cache.clear();
                 return true;
@@ -386,8 +386,8 @@ export function isImportableFile(
             const toFile = program.getSourceFile(toPath);
             // Determine to import using toPath only if toPath is what we were looking at
             // or there doesnt exist the file in the program by the symlink
-            return (toFile === to || !toFile) &&
-                isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
+            return (toFile === to || !toFile)
+                && isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
         },
     );
 
@@ -583,8 +583,8 @@ export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeC
     }
 
     if (
-        defaultExport.escapedName !== InternalSymbolName.Default &&
-        defaultExport.escapedName !== InternalSymbolName.ExportEquals
+        defaultExport.escapedName !== InternalSymbolName.Default
+        && defaultExport.escapedName !== InternalSymbolName.ExportEquals
     ) {
         return { resolvedSymbol: defaultExport, name: defaultExport.getName() };
     }

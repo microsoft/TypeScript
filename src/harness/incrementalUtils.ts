@@ -257,8 +257,8 @@ export function verifyResolutionCache(
             resolution.refCount === info.length,
             `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.refCount}`,
             () =>
-                `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
-                `Actual from: ${resolution.refCount}`,
+                `Expected from:: ${JSON.stringify(info, undefined, " ")}`
+                + `Actual from: ${resolution.refCount}`,
         );
         ts.Debug.assert(
             resolutionToExpected.get(resolution)!.refCount === resolution.refCount,
@@ -570,8 +570,8 @@ function afterResolveSingleModuleNameWithoutWatching(
             expected?.length === actual?.length,
             `Expected ${caption} to not change: ${moduleName} ${containingFile}`,
             () =>
-                `Expected: ${JSON.stringify(expected, undefined, " ")}` +
-                `Actual: ${JSON.stringify(actual, undefined, " ")}`,
+                `Expected: ${JSON.stringify(expected, undefined, " ")}`
+                + `Actual: ${JSON.stringify(actual, undefined, " ")}`,
         );
     }
 }

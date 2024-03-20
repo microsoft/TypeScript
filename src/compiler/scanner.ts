@@ -355,15 +355,15 @@ function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
 }
 
 /** @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {
-    return languageVersion! >= ScriptTarget.ES2015 ?
-        lookupInUnicodeMap(code, unicodeESNextIdentifierStart) :
-        lookupInUnicodeMap(code, unicodeES5IdentifierStart);
+    return languageVersion! >= ScriptTarget.ES2015
+        ? lookupInUnicodeMap(code, unicodeESNextIdentifierStart)
+        : lookupInUnicodeMap(code, unicodeES5IdentifierStart);
 }
 
 function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | undefined) {
-    return languageVersion! >= ScriptTarget.ES2015 ?
-        lookupInUnicodeMap(code, unicodeESNextIdentifierPart) :
-        lookupInUnicodeMap(code, unicodeES5IdentifierPart);
+    return languageVersion! >= ScriptTarget.ES2015
+        ? lookupInUnicodeMap(code, unicodeESNextIdentifierPart)
+        : lookupInUnicodeMap(code, unicodeES5IdentifierPart);
 }
 
 function makeReverseMap(source: Map<string, number>): string[] {
@@ -422,9 +422,9 @@ export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: 
 /** @internal */
 export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
 export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
-    return sourceFile.getPositionOfLineAndCharacter ?
-        sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
-        computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
+    return sourceFile.getPositionOfLineAndCharacter
+        ? sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits)
+        : computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
 }
 
 /** @internal */
@@ -513,18 +513,18 @@ export function isWhiteSpaceLike(ch: number): boolean {
 export function isWhiteSpaceSingleLine(ch: number): boolean {
     // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
     // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
-    return ch === CharacterCodes.space ||
-        ch === CharacterCodes.tab ||
-        ch === CharacterCodes.verticalTab ||
-        ch === CharacterCodes.formFeed ||
-        ch === CharacterCodes.nonBreakingSpace ||
-        ch === CharacterCodes.nextLine ||
-        ch === CharacterCodes.ogham ||
-        ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace ||
-        ch === CharacterCodes.narrowNoBreakSpace ||
-        ch === CharacterCodes.mathematicalSpace ||
-        ch === CharacterCodes.ideographicSpace ||
-        ch === CharacterCodes.byteOrderMark;
+    return ch === CharacterCodes.space
+        || ch === CharacterCodes.tab
+        || ch === CharacterCodes.verticalTab
+        || ch === CharacterCodes.formFeed
+        || ch === CharacterCodes.nonBreakingSpace
+        || ch === CharacterCodes.nextLine
+        || ch === CharacterCodes.ogham
+        || ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace
+        || ch === CharacterCodes.narrowNoBreakSpace
+        || ch === CharacterCodes.mathematicalSpace
+        || ch === CharacterCodes.ideographicSpace
+        || ch === CharacterCodes.byteOrderMark;
 }
 
 export function isLineBreak(ch: number): boolean {
@@ -539,10 +539,10 @@ export function isLineBreak(ch: number): boolean {
     // Only the characters in Table 3 are treated as line terminators. Other new line or line
     // breaking characters are treated as white space but not as line terminators.
 
-    return ch === CharacterCodes.lineFeed ||
-        ch === CharacterCodes.carriageReturn ||
-        ch === CharacterCodes.lineSeparator ||
-        ch === CharacterCodes.paragraphSeparator;
+    return ch === CharacterCodes.lineFeed
+        || ch === CharacterCodes.carriageReturn
+        || ch === CharacterCodes.lineSeparator
+        || ch === CharacterCodes.paragraphSeparator;
 }
 
 function isDigit(ch: number): boolean {
@@ -703,8 +703,8 @@ function isConflictMarkerTrivia(text: string, pos: number) {
                 }
             }
 
-            return ch === CharacterCodes.equals ||
-                text.charCodeAt(pos + mergeConflictMarkerLength) === CharacterCodes.space;
+            return ch === CharacterCodes.equals
+                || text.charCodeAt(pos + mergeConflictMarkerLength) === CharacterCodes.space;
         }
     }
 
@@ -925,17 +925,17 @@ export function getShebang(text: string): string | undefined {
 }
 
 export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
-    return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
-        ch === CharacterCodes.$ || ch === CharacterCodes._ ||
-        ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
+    return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z
+        || ch === CharacterCodes.$ || ch === CharacterCodes._
+        || ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
 }
 
 export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
-    return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
-        ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
+    return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z
+        || ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._
         // "-" and ":" are valid in JSX Identifiers
-        (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false) ||
-        ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
+        || (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false)
+        || ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
 }
 
 /** @internal */
@@ -1294,8 +1294,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 ch += CharacterCodes.a - CharacterCodes.A; // standardize hex literals to lowercase
             }
             else if (
-                !((ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
-                    (ch >= CharacterCodes.a && ch <= CharacterCodes.f))
+                !((ch >= CharacterCodes._0 && ch <= CharacterCodes._9)
+                    || (ch >= CharacterCodes.a && ch <= CharacterCodes.f))
             ) {
                 break;
             }
@@ -2079,9 +2079,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                     }
                     if (
-                        languageVariant === LanguageVariant.JSX &&
-                        text.charCodeAt(pos + 1) === CharacterCodes.slash &&
-                        text.charCodeAt(pos + 2) !== CharacterCodes.asterisk
+                        languageVariant === LanguageVariant.JSX
+                        && text.charCodeAt(pos + 1) === CharacterCodes.slash
+                        && text.charCodeAt(pos + 2) !== CharacterCodes.asterisk
                     ) {
                         return pos += 2, token = SyntaxKind.LessThanSlashToken;
                     }

@@ -220,8 +220,8 @@ function isDeclarationFileInJSOnlyNonConfiguredProject(project: Project, file: N
     // file has '// @ts-check').
 
     if (
-        (isInferredProject(project) || isExternalProject(project)) &&
-        project.isJsOnlyProject()
+        (isInferredProject(project) || isExternalProject(project))
+        && project.isJsOnlyProject()
     ) {
         const scriptInfo = project.getScriptInfoForNormalizedPath(file);
         return scriptInfo && !scriptInfo.isJavaScript();
@@ -642,9 +642,9 @@ function getReferencesWorker(
     perProjectResults.forEach((projectResults, project) => {
         for (const referencedSymbol of projectResults) {
             const mappedDefinitionFile = getMappedLocationForProject(documentSpanLocation(referencedSymbol.definition), project);
-            const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
-                referencedSymbol.definition :
-                {
+            const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined
+                ? referencedSymbol.definition
+                : {
                     ...referencedSymbol.definition,
                     textSpan: createTextSpan(mappedDefinitionFile.pos, referencedSymbol.definition.textSpan.length), // Why would the length be the same in the original?
                     fileName: mappedDefinitionFile.fileName,
@@ -728,14 +728,14 @@ function getPerProjectReferences<TResult>(
 
     // Don't call these unless !!defaultDefinition
     const getGeneratedDefinition = memoize(() =>
-        defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
-            defaultDefinition :
-            defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition!)
+        defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName)
+            ? defaultDefinition
+            : defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition!)
     );
     const getSourceDefinition = memoize(() =>
-        defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
-            defaultDefinition :
-            defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition!)
+        defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName)
+            ? defaultDefinition
+            : defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition!)
     );
 
     // The keys of resultsMap allow us to check which projects have already been searched, but we also
@@ -832,8 +832,8 @@ function mapDefinitionInProject(
 ): DocumentPosition | undefined {
     // If the definition is actually from the project, definition is correct as is
     if (
-        project.containsFile(toNormalizedPath(definition.fileName)) &&
-        !isLocationProjectReferenceRedirect(project, definition)
+        project.containsFile(toNormalizedPath(definition.fileName))
+        && !isLocationProjectReferenceRedirect(project, definition)
     ) {
         return definition;
     }
@@ -854,9 +854,9 @@ function isLocationProjectReferenceRedirect(project: Project, location: Document
     // This happens when rootFile in project is one of the file from referenced project
     // Thus root is attached but program doesnt have the actual .ts file but .d.ts
     // If this is not the file we were actually looking, return rest of the toDo
-    return !!sourceFile &&
-        sourceFile.resolvedPath !== sourceFile.path &&
-        sourceFile.resolvedPath !== project.toPath(location.fileName);
+    return !!sourceFile
+        && sourceFile.resolvedPath !== sourceFile.path
+        && sourceFile.resolvedPath !== project.toPath(location.fileName);
 }
 
 function getProjectKey(project: Project) {
@@ -1408,9 +1408,9 @@ export class Session<TMessage = string> implements EventSender {
             concatenate(projectErrors, optionsErrors),
             diagnostic => !!diagnostic.file && diagnostic.file.fileName === configFile,
         );
-        return includeLinePosition ?
-            this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile) :
-            map(
+        return includeLinePosition
+            ? this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile)
+            : map(
                 diagnosticsForConfigFile,
                 diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ false),
             );
@@ -1539,8 +1539,8 @@ export class Session<TMessage = string> implements EventSender {
         const unmappedDefinitions = project.getLanguageService().getDefinitionAtPosition(file, position);
         let definitions: readonly DefinitionInfo[] = this.mapDefinitionInfoLocations(unmappedDefinitions || emptyArray, project).slice();
         const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
-            !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
-            some(definitions, d => !!d.failedAliasResolution)
+            !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient)
+            || some(definitions, d => !!d.failedAliasResolution)
         );
 
         if (needsJsResolution) {
@@ -1694,14 +1694,14 @@ export class Session<TMessage = string> implements EventSender {
             return { emitSkipped: true, outputFiles: [], diagnostics: [] };
         }
         const result = project.getLanguageService().getEmitOutput(file);
-        return args.richResponse ?
-            {
+        return args.richResponse
+            ? {
                 ...result,
-                diagnostics: args.includeLinePosition ?
-                    this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(result.diagnostics) :
-                    result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true)),
-            } :
-            result;
+                diagnostics: args.includeLinePosition
+                    ? this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(result.diagnostics)
+                    : result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true)),
+            }
+            : result;
     }
 
     private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project, richResponse: boolean): protocol.JSDocTagInfo[] {
@@ -1774,9 +1774,9 @@ export class Session<TMessage = string> implements EventSender {
     private toFileSpanWithContext(fileName: string, textSpan: TextSpan, contextSpan: TextSpan | undefined, project: Project): protocol.FileSpanWithContext {
         const fileSpan = this.toFileSpan(fileName, textSpan, project);
         const context = contextSpan && this.toFileSpan(fileName, contextSpan, project);
-        return context ?
-            { ...fileSpan, contextStart: context.start, contextEnd: context.end } :
-            fileSpan;
+        return context
+            ? { ...fileSpan, contextStart: context.start, contextEnd: context.end }
+            : fileSpan;
     }
 
     private getTypeDefinition(args: protocol.FileLocationRequestArgs): readonly protocol.FileSpanWithContext[] {
@@ -1802,9 +1802,9 @@ export class Session<TMessage = string> implements EventSender {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
         const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
-        return simplifiedResult ?
-            implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
-            implementations.map(Session.mapToOriginalLocation);
+        return simplifiedResult
+            ? implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project))
+            : implementations.map(Session.mapToOriginalLocation);
     }
 
     private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs) {
@@ -1940,9 +1940,9 @@ export class Session<TMessage = string> implements EventSender {
             }
         }
         else {
-            const scriptInfo = getScriptInfoEnsuringProjectsUptoDate ?
-                this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file) :
-                this.projectService.getScriptInfo(args.file);
+            const scriptInfo = getScriptInfoEnsuringProjectsUptoDate
+                ? this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file)
+                : this.projectService.getScriptInfo(args.file);
             if (!scriptInfo) {
                 if (ignoreNoProjectError) return emptyArray;
                 this.projectService.logErrorForScriptInfoNotFound(args.file);
@@ -2439,14 +2439,14 @@ export class Session<TMessage = string> implements EventSender {
         }
         const scriptInfo = project.getScriptInfo(file)!;
         const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
-        return args.richResponse ?
-            {
+        return args.richResponse
+            ? {
                 emitSkipped,
-                diagnostics: args.includeLinePosition ?
-                    this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics) :
-                    diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true)),
-            } :
-            !emitSkipped;
+                diagnostics: args.includeLinePosition
+                    ? this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics)
+                    : diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true)),
+            }
+            : !emitSkipped;
     }
 
     private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
@@ -2584,9 +2584,9 @@ export class Session<TMessage = string> implements EventSender {
 
     private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): readonly protocol.NavtoItem[] | readonly NavigateToItem[] {
         const full = this.getFullNavigateToItems(args);
-        return !simplifiedResult ?
-            flatMap(full, ({ navigateToItems }) => navigateToItems) :
-            flatMap(
+        return !simplifiedResult
+            ? flatMap(full, ({ navigateToItems }) => navigateToItems)
+            : flatMap(
                 full,
                 ({ project, navigateToItems }) =>
                     navigateToItems.map(navItem => {
@@ -2697,16 +2697,16 @@ export class Session<TMessage = string> implements EventSender {
             if (!a || !b) {
                 return false;
             }
-            return a.containerKind === b.containerKind &&
-                a.containerName === b.containerName &&
-                a.fileName === b.fileName &&
-                a.isCaseSensitive === b.isCaseSensitive &&
-                a.kind === b.kind &&
-                a.kindModifiers === b.kindModifiers &&
-                a.matchKind === b.matchKind &&
-                a.name === b.name &&
-                a.textSpan.start === b.textSpan.start &&
-                a.textSpan.length === b.textSpan.length;
+            return a.containerKind === b.containerKind
+                && a.containerName === b.containerName
+                && a.fileName === b.fileName
+                && a.isCaseSensitive === b.isCaseSensitive
+                && a.kind === b.kind
+                && a.kindModifiers === b.kindModifiers
+                && a.matchKind === b.matchKind
+                && a.name === b.name
+                && a.textSpan.start === b.textSpan.start
+                && a.textSpan.length === b.textSpan.length;
         }
     }
 
@@ -3740,9 +3740,9 @@ function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protoco
 function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | undefined, scriptInfo: ScriptInfo): protocol.TextSpanWithContext {
     const textSpan = toProtocolTextSpan(span, scriptInfo);
     const contextTextSpan = contextSpan && toProtocolTextSpan(contextSpan, scriptInfo);
-    return contextTextSpan ?
-        { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end } :
-        textSpan;
+    return contextTextSpan
+        ? { ...textSpan, contextStart: contextTextSpan.start, contextEnd: contextTextSpan.end }
+        : textSpan;
 }
 
 function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {

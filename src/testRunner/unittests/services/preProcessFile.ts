@@ -126,13 +126,13 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly return ES6 imports", () => {
             test(
-                'import * as ns from "m1";' + "\n" +
-                    'import def, * as ns from "m2";' + "\n" +
-                    'import def from "m3";' + "\n" +
-                    'import {a} from "m4";' + "\n" +
-                    'import {a as A} from "m5";' + "\n" +
-                    'import {a as A, b, c as C} from "m6";' + "\n" +
-                    'import def , {a, b, c as C} from "m7";' + "\n",
+                'import * as ns from "m1";' + "\n"
+                    + 'import def, * as ns from "m2";' + "\n"
+                    + 'import def from "m3";' + "\n"
+                    + 'import {a} from "m4";' + "\n"
+                    + 'import {a as A} from "m5";' + "\n"
+                    + 'import {a as A, b, c as C} from "m6";' + "\n"
+                    + 'import def , {a, b, c as C} from "m7";' + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -157,20 +157,20 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly ignore commented imports following template expression", () => {
             /* eslint-disable no-template-curly-in-string */
             test(
-                "/**" + "\n" +
-                    " * Before" + "\n" +
-                    " * ```" + "\n" +
-                    ' * import * as a from "a";' + "\n" +
-                    " * ```" + "\n" +
-                    " */" + "\n" +
-                    "type Foo = `${string}`;" + "\n" +
-                    "/**" + "\n" +
-                    " * After" + "\n" +
-                    " * ```" + "\n" +
-                    ' * import { B } from "b";' + "\n" +
-                    ' * import * as c from "c";' + "\n" +
-                    " * ```" + "\n" +
-                    " */",
+                "/**" + "\n"
+                    + " * Before" + "\n"
+                    + " * ```" + "\n"
+                    + ' * import * as a from "a";' + "\n"
+                    + " * ```" + "\n"
+                    + " */" + "\n"
+                    + "type Foo = `${string}`;" + "\n"
+                    + "/**" + "\n"
+                    + " * After" + "\n"
+                    + " * ```" + "\n"
+                    + ' * import { B } from "b";' + "\n"
+                    + ' * import * as c from "c";' + "\n"
+                    + " * ```" + "\n"
+                    + " */",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
@@ -216,9 +216,9 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly returns dynamic imports from template expression", () => {
             /* eslint-disable no-template-curly-in-string */
             test(
-                "`${(<div>Text `` ${} text {} " + "\n" +
-                    '${import("a")} {import("b")} ' + "\n" +
-                    '${/* A comment */} ${/* import("ignored") */} </div>)}`',
+                "`${(<div>Text `` ${} text {} " + "\n"
+                    + '${import("a")} {import("b")} ' + "\n"
+                    + '${/* A comment */} ${/* import("ignored") */} </div>)}`',
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
@@ -276,8 +276,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly returns dynamic imports from template expression and imports following it", () => {
             /* eslint-disable no-template-curly-in-string */
             test(
-                'const x = `hello ${await import("a").default}`;' + "\n\n" +
-                    'import { y } from "b";',
+                'const x = `hello ${await import("a").default}`;' + "\n\n"
+                    + 'import { y } from "b";',
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
@@ -298,10 +298,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly returns dynamic imports from template expressions and other imports", () => {
             /* eslint-disable no-template-curly-in-string */
             test(
-                'const x = `x ${await import("a").default}`;' + "\n\n" +
-                    'import { y } from "b";' + "\n" +
-                    'const y = `y ${import("c")}`;' + "\n\n" +
-                    'import { d } from "d";',
+                'const x = `x ${await import("a").default}`;' + "\n\n"
+                    + 'import { y } from "b";' + "\n"
+                    + 'const y = `y ${import("c")}`;' + "\n\n"
+                    + 'import { d } from "d";',
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
@@ -334,10 +334,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly return ES6 exports", () => {
             test(
-                'export * from "m1";' + "\n" +
-                    'export {a} from "m2";' + "\n" +
-                    'export {a as A} from "m3";' + "\n" +
-                    'export {a as A, b, c as C} from "m4";' + "\n",
+                'export * from "m1";' + "\n"
+                    + 'export {a} from "m2";' + "\n"
+                    + 'export {a as A} from "m3";' + "\n"
+                    + 'export {a as A, b, c as C} from "m4";' + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -358,18 +358,18 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly handles import types", () => {
             test(
-                'import type * as ns from "m1";' + "\n" +
-                    'import type def, * as ns from "m2";' + "\n" +
-                    'import type def from "m3";' + "\n" +
-                    'import type {a} from "m4";' + "\n" +
-                    'import type {a as A} from "m5";' + "\n" +
-                    'import type {a as A, b, c as C} from "m6";' + "\n" +
-                    'import type def , {a, b, c as C} from "m7";' + "\n" +
-                    'import type from "m8";' + "\n" +
-                    'import type T = require("m9");' + "\n" +
-                    'import type = require("m10");' + "\n" +
-                    'export import type T = require("m11");' + "\n" +
-                    'export import type = require("m12");' + "\n",
+                'import type * as ns from "m1";' + "\n"
+                    + 'import type def, * as ns from "m2";' + "\n"
+                    + 'import type def from "m3";' + "\n"
+                    + 'import type {a} from "m4";' + "\n"
+                    + 'import type {a as A} from "m5";' + "\n"
+                    + 'import type {a as A, b, c as C} from "m6";' + "\n"
+                    + 'import type def , {a, b, c as C} from "m7";' + "\n"
+                    + 'import type from "m8";' + "\n"
+                    + 'import type T = require("m9");' + "\n"
+                    + 'import type = require("m10");' + "\n"
+                    + 'export import type T = require("m11");' + "\n"
+                    + 'export import type = require("m12");' + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -398,10 +398,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly handles export types", () => {
             test(
-                'export type * from "m1";' + "\n" +
-                    'export type {a} from "m2";' + "\n" +
-                    'export type {a as A} from "m3";' + "\n" +
-                    'export type {a as A, b, c as C} from "m4";' + "\n",
+                'export type * from "m1";' + "\n"
+                    + 'export type {a} from "m2";' + "\n"
+                    + 'export type {a as A} from "m3";' + "\n"
+                    + 'export type {a as A, b, c as C} from "m4";' + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -422,9 +422,9 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly handles import type node", () => {
             test(
-                'const x: import("m1") = { x: 0, y: 0 };' + "\n" +
-                    'let y: import("m2").Bar.I = { a: "", b: 0 };' + "\n" +
-                    'let shim: typeof import("m3") = { Bar: Bar2 };' + "\n",
+                'const x: import("m1") = { x: 0, y: 0 };' + "\n"
+                    + 'let y: import("m2").Bar.I = { a: "", b: 0 };' + "\n"
+                    + 'let shim: typeof import("m3") = { Bar: Bar2 };' + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -790,10 +790,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly handles dynamic imports with template literals", () => {
             test(
-                "const m1 = import('mod1');" + "\n" +
-                    "const m2 = import(`mod2`);" + "\n" +
-                    "Promise.all([import('mod3'), import(`mod4`)]);" + "\n" +
-                    "import(/* webpackChunkName: 'module5' */ `mod5`);" + "\n",
+                "const m1 = import('mod1');" + "\n"
+                    + "const m2 = import(`mod2`);" + "\n"
+                    + "Promise.all([import('mod3'), import(`mod4`)]);" + "\n"
+                    + "import(/* webpackChunkName: 'module5' */ `mod5`);" + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -815,9 +815,9 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly handles require calls with template literals in JS files", () => {
             test(
-                "const m1 = require(`mod1`);" + "\n" +
-                    "f(require(`mod2`));" + "\n" +
-                    "const a = { x: require(`mod3`) };" + "\n",
+                "const m1 = require(`mod1`);" + "\n"
+                    + "f(require(`mod2`));" + "\n"
+                    + "const a = { x: require(`mod3`) };" + "\n",
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {

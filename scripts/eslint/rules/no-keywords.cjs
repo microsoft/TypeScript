@@ -46,10 +46,10 @@ module.exports = createRule({
         const checkProperties = node => {
             node.properties.forEach(property => {
                 if (
-                    property &&
-                    property.type === AST_NODE_TYPES.Property &&
-                    property.key.type === AST_NODE_TYPES.Identifier &&
-                    isKeyword(property.key.name)
+                    property
+                    && property.type === AST_NODE_TYPES.Property
+                    && property.key.type === AST_NODE_TYPES.Identifier
+                    && isKeyword(property.key.name)
                 ) {
                     report(property.key);
                 }
@@ -60,9 +60,9 @@ module.exports = createRule({
         const checkElements = node => {
             node.elements.forEach(element => {
                 if (
-                    element &&
-                    element.type === AST_NODE_TYPES.Identifier &&
-                    isKeyword(element.name)
+                    element
+                    && element.type === AST_NODE_TYPES.Identifier
+                    && isKeyword(element.name)
                 ) {
                     report(element);
                 }
@@ -77,9 +77,9 @@ module.exports = createRule({
 
             node.params.forEach(param => {
                 if (
-                    param &&
-                    param.type === AST_NODE_TYPES.Identifier &&
-                    isKeyword(param.name)
+                    param
+                    && param.type === AST_NODE_TYPES.Identifier
+                    && isKeyword(param.name)
                 ) {
                     report(param);
                 }
@@ -97,8 +97,8 @@ module.exports = createRule({
                 }
 
                 if (
-                    node.id.type === AST_NODE_TYPES.Identifier &&
-                    isKeyword(node.id.name)
+                    node.id.type === AST_NODE_TYPES.Identifier
+                    && isKeyword(node.id.name)
                 ) {
                     report(node.id);
                 }

@@ -161,8 +161,8 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
     }
 
     function shouldRescanTemplateToken(container: Node): boolean {
-        return container.kind === SyntaxKind.TemplateMiddle ||
-            container.kind === SyntaxKind.TemplateTail;
+        return container.kind === SyntaxKind.TemplateMiddle
+            || container.kind === SyntaxKind.TemplateTail;
     }
 
     function shouldRescanJsxAttributeValue(node: Node): boolean {
@@ -178,13 +178,13 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
 
         // normally scanner returns the smallest available token
         // check the kind of context node to determine if scanner should have more greedy behavior and consume more text.
-        const expectedScanAction = shouldRescanGreaterThanToken(n) ? ScanAction.RescanGreaterThanToken :
-            shouldRescanSlashToken(n) ? ScanAction.RescanSlashToken :
-            shouldRescanTemplateToken(n) ? ScanAction.RescanTemplateToken :
-            shouldRescanJsxIdentifier(n) ? ScanAction.RescanJsxIdentifier :
-            shouldRescanJsxText(n) ? ScanAction.RescanJsxText :
-            shouldRescanJsxAttributeValue(n) ? ScanAction.RescanJsxAttributeValue :
-            ScanAction.Scan;
+        const expectedScanAction = shouldRescanGreaterThanToken(n) ? ScanAction.RescanGreaterThanToken
+            : shouldRescanSlashToken(n) ? ScanAction.RescanSlashToken
+            : shouldRescanTemplateToken(n) ? ScanAction.RescanTemplateToken
+            : shouldRescanJsxIdentifier(n) ? ScanAction.RescanJsxIdentifier
+            : shouldRescanJsxText(n) ? ScanAction.RescanJsxText
+            : shouldRescanJsxAttributeValue(n) ? ScanAction.RescanJsxAttributeValue
+            : ScanAction.Scan;
 
         if (lastTokenInfo && expectedScanAction === lastScanAction) {
             // readTokenInfo was called before with the same expected scan action.

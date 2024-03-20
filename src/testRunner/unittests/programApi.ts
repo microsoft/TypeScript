@@ -35,10 +35,10 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
 
     const referenceFile = new documents.TextDocument(
         referenceFileName,
-        '/// <reference path="d:/imaginary/nonexistent1.ts"/>\n' + // Absolute
-            '/// <reference path="./nonexistent2.ts"/>\n' + // Relative
-            '/// <reference path="nonexistent3.ts"/>\n' + // Unqualified
-            '/// <reference path="nonexistent4"/>\n', // No extension
+        '/// <reference path="d:/imaginary/nonexistent1.ts"/>\n' // Absolute
+            + '/// <reference path="./nonexistent2.ts"/>\n' // Relative
+            + '/// <reference path="nonexistent3.ts"/>\n' // Unqualified
+            + '/// <reference path="nonexistent4"/>\n', // No extension
     );
 
     const testCompilerHost = new fakes.CompilerHost(

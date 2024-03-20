@@ -191,9 +191,9 @@ const a: string = 10;`,
                 ...noChangeRun,
                 caption: "No Change run with noEmit",
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
-                discrepancyExplanation: compilerOptions.composite ?
-                    discrepancyExplanation :
-                    undefined,
+                discrepancyExplanation: compilerOptions.composite
+                    ? discrepancyExplanation
+                    : undefined,
             };
             const noChangeRunWithEmit: TestTscEdit = {
                 ...noChangeRun,
@@ -219,9 +219,9 @@ const a: string = 10;`,
                         caption: "Introduce error but still noEmit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                        discrepancyExplanation: compilerOptions.composite ?
-                            discrepancyExplanation :
-                            undefined,
+                        discrepancyExplanation: compilerOptions.composite
+                            ? discrepancyExplanation
+                            : undefined,
                     },
                     {
                         caption: "Fix error and emit",
@@ -243,9 +243,9 @@ const a: string = 10;`,
                         caption: "Fix error and no emit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite ?
-                            discrepancyExplanation :
-                            undefined,
+                        discrepancyExplanation: compilerOptions.composite
+                            ? discrepancyExplanation
+                            : undefined,
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
@@ -269,9 +269,9 @@ const a: string = 10;`,
                     {
                         caption: "Fix error and no emit",
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite ?
-                            discrepancyExplanation :
-                            undefined,
+                        discrepancyExplanation: compilerOptions.composite
+                            ? discrepancyExplanation
+                            : undefined,
                     },
                     noChangeRunWithEmit,
                 ],

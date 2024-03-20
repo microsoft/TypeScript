@@ -340,14 +340,14 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
                         const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptKind = fileName =>
-                            ts.fileExtensionIs(fileName, ".vue") ?
-                                ts.ScriptKind.TS :
-                                originalScriptKind(fileName);
+                            ts.fileExtensionIs(fileName, ".vue")
+                                ? ts.ScriptKind.TS
+                                : originalScriptKind(fileName);
                         const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptSnapshot = fileName =>
-                            ts.fileExtensionIs(fileName, ".vue") ?
-                                ts.ScriptSnapshot.fromString(`export const y = "${info.languageServiceHost.readFile(fileName)}";`) :
-                                originalGetScriptSnapshot(fileName);
+                            ts.fileExtensionIs(fileName, ".vue")
+                                ? ts.ScriptSnapshot.fromString(`export const y = "${info.languageServiceHost.readFile(fileName)}";`)
+                                : originalGetScriptSnapshot(fileName);
                         return proxy;
                     },
                     getExternalFiles: createGetExternalFiles(() => session),
@@ -392,14 +392,14 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
                         const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptKind = fileName =>
-                            fileName === bVue.path ?
-                                currentVueScriptKind :
-                                originalScriptKind(fileName);
+                            fileName === bVue.path
+                                ? currentVueScriptKind
+                                : originalScriptKind(fileName);
                         const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
                         info.languageServiceHost.getScriptSnapshot = fileName =>
-                            fileName === bVue.path ?
-                                ts.ScriptSnapshot.fromString(`import { y } from "${bVue.content}";`) : // Change the text so that imports change and we need to reconstruct program
-                                originalGetScriptSnapshot(fileName);
+                            fileName === bVue.path
+                                ? ts.ScriptSnapshot.fromString(`import { y } from "${bVue.content}";`) // Change the text so that imports change and we need to reconstruct program
+                                : originalGetScriptSnapshot(fileName);
                         return proxy;
                     },
                     getExternalFiles: createGetExternalFiles(() => session),

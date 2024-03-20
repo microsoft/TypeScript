@@ -553,8 +553,8 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
 function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
     if (!type) return emptyArray;
     type = skipConstraint(type);
-    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
-        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques))
+        : type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
 }
 
 interface NameAndKind {
@@ -642,9 +642,9 @@ function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOpti
 
     const extensions = [...getSupportedExtensions(compilerOptions), ambientModulesExtensions];
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-    return moduleResolutionUsesNodeModules(moduleResolution) ?
-        getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
-        extensions;
+    return moduleResolutionUsesNodeModules(moduleResolution)
+        ? getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions)
+        : extensions;
 }
 
 /**
@@ -801,9 +801,9 @@ function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerO
     }
 
     if (
-        !isExportsWildcard &&
-        (allowedEndings[0] === ModuleSpecifierEnding.Minimal || allowedEndings[0] === ModuleSpecifierEnding.Index) &&
-        fileExtensionIsOneOf(name, [Extension.Js, Extension.Jsx, Extension.Ts, Extension.Tsx, Extension.Dts])
+        !isExportsWildcard
+        && (allowedEndings[0] === ModuleSpecifierEnding.Minimal || allowedEndings[0] === ModuleSpecifierEnding.Index)
+        && fileExtensionIsOneOf(name, [Extension.Js, Extension.Jsx, Extension.Ts, Extension.Tsx, Extension.Dts])
     ) {
         return { name: removeFileExtension(name), extension: tryGetExtensionFromPath(name) };
     }

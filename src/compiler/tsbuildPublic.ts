@@ -608,9 +608,9 @@ function createBuildOrder<T extends BuilderProgram>(state: SolutionBuilderState<
         visit(root);
     }
 
-    return circularDiagnostics ?
-        { buildOrder: buildOrder || emptyArray, circularDiagnostics } :
-        buildOrder || emptyArray;
+    return circularDiagnostics
+        ? { buildOrder: buildOrder || emptyArray, circularDiagnostics }
+        : buildOrder || emptyArray;
 
     function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
         const projPath = toResolvedConfigFilePath(state, configFileName);
@@ -881,9 +881,9 @@ function doneInvalidatedProject<T extends BuilderProgram>(
     projectPath: ResolvedConfigFilePath,
 ) {
     state.projectPendingBuild.delete(projectPath);
-    return state.diagnostics.has(projectPath) ?
-        ExitStatus.DiagnosticsPresent_OutputsSkipped :
-        ExitStatus.Success;
+    return state.diagnostics.has(projectPath)
+        ? ExitStatus.DiagnosticsPresent_OutputsSkipped
+        : ExitStatus.Success;
 }
 
 function createUpdateOutputFileStampsProject<T extends BuilderProgram>(
@@ -984,8 +984,8 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         getSemanticDiagnosticsOfNextAffectedFile: (cancellationToken, ignoreSourceFile) =>
             withProgramOrUndefined(
                 program =>
-                    ((program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile) &&
-                    (program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile(cancellationToken, ignoreSourceFile),
+                    ((program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile)
+                    && (program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile(cancellationToken, ignoreSourceFile),
             ),
         emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
             if (targetSourceFile || emitOnlyDtsFiles) {
@@ -1060,9 +1060,9 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
                 internalMap && new Set(arrayFrom(
                     internalMap.values(),
                     data =>
-                        state.host.realpath && (isPackageJsonInfo(data) || data.directoryExists) ?
-                            state.host.realpath(combinePaths(data.packageDirectory, "package.json")) :
-                            combinePaths(data.packageDirectory, "package.json"),
+                        state.host.realpath && (isPackageJsonInfo(data) || data.directoryExists)
+                            ? state.host.realpath(combinePaths(data.packageDirectory, "package.json"))
+                            : combinePaths(data.packageDirectory, "package.json"),
                 )),
             );
             state.builderPrograms.set(projectPath, program);
@@ -1359,9 +1359,9 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             if (options.verbose) {
                 reportStatus(
                     state,
-                    status.upstreamProjectBlocked ?
-                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built :
-                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
+                    status.upstreamProjectBlocked
+                        ? Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built
+                        : Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
                     project,
                     status.upstreamProjectName,
                 );
@@ -1396,16 +1396,16 @@ function createInvalidatedProjectWithInfo<T extends BuilderProgram>(
     buildOrder: AnyBuildOrder,
 ) {
     verboseReportProjectStatus(state, info.project, info.status);
-    return info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps ?
-        createBuildOrUpdateInvalidedProject(
+    return info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps
+        ? createBuildOrUpdateInvalidedProject(
             state,
             info.project,
             info.projectPath,
             info.projectIndex,
             info.config,
             buildOrder as BuildOrder,
-        ) :
-        createUpdateOutputFileStampsProject(
+        )
+        : createUpdateOutputFileStampsProject(
             state,
             info.project,
             info.projectPath,
@@ -1614,16 +1614,16 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
 
             // Its a circular reference ignore the status of this project
             if (
-                refStatus.type === UpToDateStatusType.ComputingUpstream ||
-                refStatus.type === UpToDateStatusType.ContainerOnly
+                refStatus.type === UpToDateStatusType.ComputingUpstream
+                || refStatus.type === UpToDateStatusType.ContainerOnly
             ) { // Container only ignore this project
                 continue;
             }
 
             // An upstream project is blocked
             if (
-                refStatus.type === UpToDateStatusType.Unbuildable ||
-                refStatus.type === UpToDateStatusType.UpstreamBlocked
+                refStatus.type === UpToDateStatusType.Unbuildable
+                || refStatus.type === UpToDateStatusType.UpstreamBlocked
             ) {
                 return {
                     type: UpToDateStatusType.UpstreamBlocked,
@@ -1693,11 +1693,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // But if noEmit is true, affectedFilesPendingEmit will have file list even if there are no semantic errors to preserve list of files to be emitted when running with noEmit false
             // So with noEmit set to true, check on semantic diagnostics needs to be explicit as oppose to when it is false when only files pending emit is sufficient
             if (
-                (buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
-                (!project.options.noEmit ?
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length :
-                    some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
+                (buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length
+                || (!project.options.noEmit
+                    ? (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length
+                        || (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length
+                    : some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
             ) {
                 return {
                     type: UpToDateStatusType.OutOfDateBuildInfo,
@@ -1874,11 +1874,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
 
     // Up to date
     return {
-        type: pseudoUpToDate ?
-            UpToDateStatusType.UpToDateWithUpstreamTypes :
-            pseudoInputUpToDate ?
-            UpToDateStatusType.UpToDateWithInputFileText :
-            UpToDateStatusType.UpToDate,
+        type: pseudoUpToDate
+            ? UpToDateStatusType.UpToDateWithUpstreamTypes
+            : pseudoInputUpToDate
+            ? UpToDateStatusType.UpToDateWithInputFileText
+            : UpToDateStatusType.UpToDate,
         newestInputFileTime,
         newestInputFileName,
         oldestOutputFileName: oldestOutputFileName!,
@@ -1962,9 +1962,9 @@ function getLatestChangedDtsTime<T extends BuilderProgram>(state: SolutionBuilde
     if (!options.composite) return undefined;
     const entry = Debug.checkDefined(state.buildInfoCache.get(resolvedConfigPath));
     if (entry.latestChangedDtsTime !== undefined) return entry.latestChangedDtsTime || undefined;
-    const latestChangedDtsTime = entry.buildInfo && entry.buildInfo.program && entry.buildInfo.program.latestChangedDtsFile ?
-        state.host.getModifiedTime(getNormalizedAbsolutePath(entry.buildInfo.program.latestChangedDtsFile, getDirectoryPath(entry.path))) :
-        undefined;
+    const latestChangedDtsTime = entry.buildInfo && entry.buildInfo.program && entry.buildInfo.program.latestChangedDtsFile
+        ? state.host.getModifiedTime(getNormalizedAbsolutePath(entry.buildInfo.program.latestChangedDtsFile, getDirectoryPath(entry.path)))
+        : undefined;
     entry.latestChangedDtsTime = latestChangedDtsTime || false;
     return latestChangedDtsTime;
 }
@@ -2531,9 +2531,9 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
         case UpToDateStatusType.UpstreamBlocked:
             return reportStatus(
                 state,
-                status.upstreamProjectBlocked ?
-                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built :
-                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
+                status.upstreamProjectBlocked
+                    ? Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built
+                    : Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
                 relName(state, configFileName),
                 relName(state, status.upstreamProjectName),
             );

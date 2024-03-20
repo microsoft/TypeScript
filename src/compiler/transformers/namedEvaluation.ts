@@ -57,8 +57,8 @@ import {
 export function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifier, expression: WrappedExpression<AnonymousFunctionDefinition>): StringLiteral {
     const original = getOriginalNode(skipOuterExpressions(expression));
     if (
-        (isClassDeclaration(original) || isFunctionDeclaration(original)) &&
-        !original.name && hasSyntacticModifier(original, ModifierFlags.Default)
+        (isClassDeclaration(original) || isFunctionDeclaration(original))
+        && !original.name && hasSyntacticModifier(original, ModifierFlags.Default)
     ) {
         return factory.createStringLiteral("default");
     }
@@ -144,10 +144,10 @@ export function isClassNamedEvaluationHelperBlock(node: Node): node is ClassName
     }
 
     const statement = node.body.statements[0];
-    return isExpressionStatement(statement) &&
-        isCallToHelper(statement.expression, "___setFunctionName" as __String) &&
-        (statement.expression as CallExpression).arguments.length >= 2 &&
-        (statement.expression as CallExpression).arguments[1] === node.emitNode?.assignedName;
+    return isExpressionStatement(statement)
+        && isCallToHelper(statement.expression, "___setFunctionName" as __String)
+        && (statement.expression as CallExpression).arguments.length >= 2
+        && (statement.expression as CallExpression).arguments[1] === node.emitNode?.assignedName;
 }
 
 /**
@@ -213,16 +213,16 @@ export function injectClassNamedEvaluationHelperBlockIfMissing(
     const members = factory.createNodeArray([...leading, namedEvaluationBlock, ...trailing]);
     setTextRange(members, node.members);
 
-    node = isClassDeclaration(node) ?
-        factory.updateClassDeclaration(
+    node = isClassDeclaration(node)
+        ? factory.updateClassDeclaration(
             node,
             node.modifiers,
             node.name,
             node.typeParameters,
             node.heritageClauses,
             members,
-        ) :
-        factory.updateClassExpression(
+        )
+        : factory.updateClassExpression(
             node,
             node.modifiers,
             node.name,
@@ -248,9 +248,9 @@ function finishTransformNamedEvaluation(
     const { factory } = context;
     const innerExpression = skipOuterExpressions(expression);
 
-    const updatedExpression = isClassExpression(innerExpression) ?
-        cast(injectClassNamedEvaluationHelperBlockIfMissing(context, innerExpression, assignedName), isClassExpression) :
-        context.getEmitHelperFactory().createSetFunctionNameHelper(innerExpression, assignedName);
+    const updatedExpression = isClassExpression(innerExpression)
+        ? cast(injectClassNamedEvaluationHelperBlockIfMissing(context, innerExpression, assignedName), isClassExpression)
+        : context.getEmitHelperFactory().createSetFunctionNameHelper(innerExpression, assignedName);
 
     return factory.restoreOuterExpressions(expression, updatedExpression);
 }
@@ -283,8 +283,8 @@ function transformNamedEvaluationOfShorthandAssignmentProperty(context: Transfor
     //     ...
 
     const { factory } = context;
-    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
-        getAssignedNameOfIdentifier(factory, node.name, node.objectAssignmentInitializer);
+    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText)
+        : getAssignedNameOfIdentifier(factory, node.name, node.objectAssignmentInitializer);
     const objectAssignmentInitializer = finishTransformNamedEvaluation(context, node.objectAssignmentInitializer, assignedName, ignoreEmptyStringLiteral);
     return factory.updateShorthandPropertyAssignment(
         node,
@@ -309,8 +309,8 @@ function transformNamedEvaluationOfVariableDeclaration(context: TransformationCo
     //     ...
 
     const { factory } = context;
-    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
-        getAssignedNameOfIdentifier(factory, node.name, node.initializer);
+    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText)
+        : getAssignedNameOfIdentifier(factory, node.name, node.initializer);
     const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
     return factory.updateVariableDeclaration(
         node,
@@ -339,8 +339,8 @@ function transformNamedEvaluationOfParameterDeclaration(context: TransformationC
     //     ...
 
     const { factory } = context;
-    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
-        getAssignedNameOfIdentifier(factory, node.name, node.initializer);
+    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText)
+        : getAssignedNameOfIdentifier(factory, node.name, node.initializer);
     const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
     return factory.updateParameterDeclaration(
         node,
@@ -371,8 +371,8 @@ function transformNamedEvaluationOfBindingElement(context: TransformationContext
     //     ...
 
     const { factory } = context;
-    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
-        getAssignedNameOfIdentifier(factory, node.name, node.initializer);
+    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText)
+        : getAssignedNameOfIdentifier(factory, node.name, node.initializer);
     const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
     return factory.updateBindingElement(
         node,
@@ -432,8 +432,8 @@ function transformNamedEvaluationOfAssignmentExpression(context: TransformationC
     //     ...
 
     const { factory } = context;
-    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
-        getAssignedNameOfIdentifier(factory, node.left, node.right);
+    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText)
+        : getAssignedNameOfIdentifier(factory, node.left, node.right);
     const right = finishTransformNamedEvaluation(context, node.right, assignedName, ignoreEmptyStringLiteral);
     return factory.updateBinaryExpression(
         node,
@@ -454,8 +454,8 @@ function transformNamedEvaluationOfExportAssignment(context: TransformationConte
     // is `""`.
 
     const { factory } = context;
-    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
-        factory.createStringLiteral(node.isExportEquals ? "" : "default");
+    const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText)
+        : factory.createStringLiteral(node.isExportEquals ? "" : "default");
     const expression = finishTransformNamedEvaluation(context, node.expression, assignedName, ignoreEmptyStringLiteral);
     return factory.updateExportAssignment(
         node,

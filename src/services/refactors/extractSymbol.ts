@@ -644,9 +644,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         if (rangeFacts & RangeFacts.UsesThis) {
             const container = getThisContainer(nodeToCheck, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
             if (
-                container.kind === SyntaxKind.FunctionDeclaration ||
-                (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
-                container.kind === SyntaxKind.FunctionExpression
+                container.kind === SyntaxKind.FunctionDeclaration
+                || (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression)
+                || container.kind === SyntaxKind.FunctionExpression
             ) {
                 rangeFacts |= RangeFacts.UsesThisInFunction;
             }
@@ -840,8 +840,8 @@ function getStatementOrExpressionRange(node: Node): Statement[] | Expression | u
 }
 
 function isScope(node: Node): node is Scope {
-    return isArrowFunction(node) ? isFunctionBody(node.body) :
-        isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+    return isArrowFunction(node) ? isFunctionBody(node.body)
+        : isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
 }
 
 /**
@@ -1556,10 +1556,10 @@ function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     let prevNode;
     while (node !== undefined && node !== scope) {
         if (
-            isVariableDeclaration(node) &&
-            node.initializer === prevNode &&
-            isVariableDeclarationList(node.parent) &&
-            node.parent.declarations.length > 1
+            isVariableDeclaration(node)
+            && node.initializer === prevNode
+            && isVariableDeclarationList(node.parent)
+            && node.parent.declarations.length > 1
         ) {
             return node;
         }
@@ -1954,9 +1954,9 @@ function collectReadsAndWrites(
             if (value.usage === Usage.Write) {
                 hasWrite = true;
                 if (
-                    value.symbol.flags & SymbolFlags.ClassMember &&
-                    value.symbol.valueDeclaration &&
-                    hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)
+                    value.symbol.flags & SymbolFlags.ClassMember
+                    && value.symbol.valueDeclaration
+                    && hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)
                 ) {
                     readonlyClassPropertyWrite = value.symbol.valueDeclaration;
                 }
@@ -2214,8 +2214,8 @@ function isExtractableExpression(node: Node): boolean {
 
     switch (node.kind) {
         case SyntaxKind.StringLiteral:
-            return parent.kind !== SyntaxKind.ImportDeclaration &&
-                parent.kind !== SyntaxKind.ImportSpecifier;
+            return parent.kind !== SyntaxKind.ImportDeclaration
+                && parent.kind !== SyntaxKind.ImportSpecifier;
 
         case SyntaxKind.SpreadElement:
         case SyntaxKind.ObjectBindingPattern:
@@ -2223,16 +2223,16 @@ function isExtractableExpression(node: Node): boolean {
             return false;
 
         case SyntaxKind.Identifier:
-            return parent.kind !== SyntaxKind.BindingElement &&
-                parent.kind !== SyntaxKind.ImportSpecifier &&
-                parent.kind !== SyntaxKind.ExportSpecifier;
+            return parent.kind !== SyntaxKind.BindingElement
+                && parent.kind !== SyntaxKind.ImportSpecifier
+                && parent.kind !== SyntaxKind.ExportSpecifier;
     }
     return true;
 }
 
 function isInJSXContent(node: Node) {
-    return isStringLiteralJsxAttribute(node) ||
-        (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
+    return isStringLiteralJsxAttribute(node)
+        || (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
 }
 
 function isStringLiteralJsxAttribute(node: Node): node is StringLiteral {

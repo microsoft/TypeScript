@@ -212,11 +212,11 @@ fn5();
     }
 
     function setup(type: SessionType, openFiles: readonly File[], action: Action | Action[], max?: number, onHostCreate?: OnHostCreate) {
-        const session = type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate) :
-            type === SessionType.ProjectReference ? createSessionWithProjectReferences(onHostCreate) :
-            type === SessionType.DisableSourceOfProjectReferenceRedirect ?
-            createSessionWithDisabledProjectReferences(onHostCreate) :
-            ts.Debug.assertNever(type);
+        const session = type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate)
+            : type === SessionType.ProjectReference ? createSessionWithProjectReferences(onHostCreate)
+            : type === SessionType.DisableSourceOfProjectReferenceRedirect
+            ? createSessionWithDisabledProjectReferences(onHostCreate)
+            : ts.Debug.assertNever(type);
         openFilesForSession(openFiles, session);
         runActions(session, action, max);
         return session;

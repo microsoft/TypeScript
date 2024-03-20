@@ -391,8 +391,8 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(declaration))) return undefined;
 
         const declSourceFile = declaration.getSourceFile();
-        const modifierFlags = isTypeLiteralNode(declaration) ? ModifierFlags.None :
-            (makeStatic ? ModifierFlags.Static : ModifierFlags.None) | (startsWithUnderscore(token.text) ? ModifierFlags.Private : ModifierFlags.None);
+        const modifierFlags = isTypeLiteralNode(declaration) ? ModifierFlags.None
+            : (makeStatic ? ModifierFlags.Static : ModifierFlags.None) | (startsWithUnderscore(token.text) ? ModifierFlags.Private : ModifierFlags.None);
         const isJSFile = isSourceFileJS(declSourceFile);
         const call = tryCast(parent.parent, isCallExpression);
         return { kind: InfoKind.TypeLikeDeclaration, token, call, modifierFlags, parentDeclaration: declaration, declSourceFile, isJSFile };
@@ -407,8 +407,8 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 }
 
 function getActionsForMissingMemberDeclaration(context: CodeFixContext, info: TypeLikeDeclarationInfo): CodeFixAction[] | undefined {
-    return info.isJSFile ? singleElementArray(createActionForAddMissingMemberInJavascriptFile(context, info)) :
-        createActionsForAddMissingMemberInTypeScriptFile(context, info);
+    return info.isJSFile ? singleElementArray(createActionForAddMissingMemberInJavascriptFile(context, info))
+        : createActionsForAddMissingMemberInTypeScriptFile(context, info);
 }
 
 function createActionForAddMissingMemberInJavascriptFile(context: CodeFixContext, { parentDeclaration, declSourceFile, modifierFlags, token }: TypeLikeDeclarationInfo): CodeFixAction | undefined {
@@ -421,8 +421,8 @@ function createActionForAddMissingMemberInJavascriptFile(context: CodeFixContext
         return undefined;
     }
 
-    const diagnostic = modifierFlags & ModifierFlags.Static ? Diagnostics.Initialize_static_property_0 :
-        isPrivateIdentifier(token) ? Diagnostics.Declare_a_private_field_named_0 : Diagnostics.Initialize_property_0_in_the_constructor;
+    const diagnostic = modifierFlags & ModifierFlags.Static ? Diagnostics.Initialize_static_property_0
+        : isPrivateIdentifier(token) ? Diagnostics.Declare_a_private_field_named_0 : Diagnostics.Initialize_property_0_in_the_constructor;
 
     return createCodeFixAction(fixMissingMember, changes, [diagnostic, token.text], fixMissingMember, Diagnostics.Add_all_missing_members);
 }
@@ -739,8 +739,8 @@ function createUndefined() {
 }
 
 function isObjectLiteralType(type: Type) {
-    return (type.flags & TypeFlags.Object) &&
-        ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
+    return (type.flags & TypeFlags.Object)
+        && ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
 }
 
 function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, source: JsxOpeningLikeElement) {

@@ -241,9 +241,9 @@ export abstract class TypingsInstaller {
         }) || projectRootPath;
         if (cwd) {
             this.installWorker(-1, [packageName], cwd, success => {
-                const message = success ?
-                    `Package ${packageName} installed.` :
-                    `There was an error installing ${packageName}.`;
+                const message = success
+                    ? `Package ${packageName} installed.`
+                    : `There was an error installing ${packageName}.`;
                 const response: PackageInstalledResponse = {
                     kind: ActionPackageInstalled,
                     projectName,

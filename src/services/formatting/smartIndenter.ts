@@ -259,8 +259,8 @@ export namespace SmartIndenter {
             }
 
             const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
-            const parentAndChildShareLine = containingListOrParentStart.line === currentStart.line ||
-                childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
+            const parentAndChildShareLine = containingListOrParentStart.line === currentStart.line
+                || childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
             if (useActualIndentation) {
                 // check if current node is a list item - if yes, take indentation from it
@@ -346,8 +346,8 @@ export namespace SmartIndenter {
         // actual indentation is used for statements\declarations if one of cases below is true:
         // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
         // - parent and child are not on the same line
-        const useActualIndentation = (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
-            (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
+        const useActualIndentation = (isDeclaration(current) || isStatementButNotDeclaration(current))
+            && (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
         if (!useActualIndentation) {
             return Value.Unknown;
@@ -713,8 +713,8 @@ export namespace SmartIndenter {
             case SyntaxKind.ExportDeclaration:
                 return childKind !== SyntaxKind.NamedExports;
             case SyntaxKind.ImportDeclaration:
-                return childKind !== SyntaxKind.ImportClause ||
-                    (!!(child as ImportClause).namedBindings && (child as ImportClause).namedBindings!.kind !== SyntaxKind.NamedImports);
+                return childKind !== SyntaxKind.ImportClause
+                    || (!!(child as ImportClause).namedBindings && (child as ImportClause).namedBindings!.kind !== SyntaxKind.NamedImports);
             case SyntaxKind.JsxElement:
                 return childKind !== SyntaxKind.JsxClosingElement;
             case SyntaxKind.JsxFragment:

@@ -229,18 +229,18 @@ function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFacto
 
 /** @internal */
 export function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
-    return jsxFactoryEntity ?
-        createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
-        factory.createPropertyAccessExpression(
+    return jsxFactoryEntity
+        ? createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent)
+        : factory.createPropertyAccessExpression(
             createReactNamespace(reactNamespace, parent),
             "createElement",
         );
 }
 
 function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
-    return jsxFragmentFactoryEntity ?
-        createJsxFactoryExpressionFromEntityName(factory, jsxFragmentFactoryEntity, parent) :
-        factory.createPropertyAccessExpression(
+    return jsxFragmentFactoryEntity
+        ? createJsxFactoryExpressionFromEntityName(factory, jsxFragmentFactoryEntity, parent)
+        : factory.createPropertyAccessExpression(
             createReactNamespace(reactNamespace, parent),
             "Fragment",
         );
@@ -534,9 +534,9 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFa
     expression = factory.createAssignment(temp, expression);
     setTextRange(expression, node.operand);
 
-    let operation: Expression = isPrefixUnaryExpression(node) ?
-        factory.createPrefixUnaryExpression(operator, temp) :
-        factory.createPostfixUnaryExpression(temp, operator);
+    let operation: Expression = isPrefixUnaryExpression(node)
+        ? factory.createPrefixUnaryExpression(operator, temp)
+        : factory.createPostfixUnaryExpression(temp, operator);
     setTextRange(operation, node);
 
     if (resultVariable) {
@@ -1555,9 +1555,9 @@ export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPri
             // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
             if (
                 isMemberName(node) && (
-                    autoGenerate === undefined ||
-                    !!(autoGenerate.flags & GeneratedIdentifierFlags.Node) &&
-                        autoGenerate.id !== autoGenerateId
+                    autoGenerate === undefined
+                    || !!(autoGenerate.flags & GeneratedIdentifierFlags.Node)
+                        && autoGenerate.id !== autoGenerateId
                 )
             ) {
                 break;
@@ -1585,21 +1585,21 @@ export function formatGeneratedNamePart(part: string | undefined): string;
 export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
 /** @internal */
 export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string {
-    return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
-        typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
-        "";
+    return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!)
+        : typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part
+        : "";
 }
 
 function formatIdentifier(name: string | Identifier | PrivateIdentifier, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
-    return typeof name === "string" ? name :
-        formatIdentifierWorker(name, Debug.checkDefined(generateName));
+    return typeof name === "string" ? name
+        : formatIdentifierWorker(name, Debug.checkDefined(generateName));
 }
 
 function formatIdentifierWorker(node: Identifier | PrivateIdentifier, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
-    return isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1) :
-        isGeneratedIdentifier(node) ? generateName(node) :
-        isPrivateIdentifier(node) ? (node.escapedText as string).slice(1) :
-        idText(node);
+    return isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1)
+        : isGeneratedIdentifier(node) ? generateName(node)
+        : isPrivateIdentifier(node) ? (node.escapedText as string).slice(1)
+        : idText(node);
 }
 
 /**

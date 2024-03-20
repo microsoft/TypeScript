@@ -119,10 +119,10 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                     const skipTypeKeyword = scanner.lookAhead(() => {
                         const token = scanner.scan();
                         return token !== SyntaxKind.FromKeyword && (
-                            token === SyntaxKind.AsteriskToken ||
-                            token === SyntaxKind.OpenBraceToken ||
-                            token === SyntaxKind.Identifier ||
-                            isKeyword(token)
+                            token === SyntaxKind.AsteriskToken
+                            || token === SyntaxKind.OpenBraceToken
+                            || token === SyntaxKind.Identifier
+                            || isKeyword(token)
                         );
                     });
                     if (skipTypeKeyword) {
@@ -208,8 +208,8 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             if (token === SyntaxKind.TypeKeyword) {
                 const skipTypeKeyword = scanner.lookAhead(() => {
                     const token = scanner.scan();
-                    return token === SyntaxKind.AsteriskToken ||
-                        token === SyntaxKind.OpenBraceToken;
+                    return token === SyntaxKind.AsteriskToken
+                        || token === SyntaxKind.OpenBraceToken;
                 });
                 if (skipTypeKeyword) {
                     token = nextToken();
@@ -250,8 +250,8 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                 if (token === SyntaxKind.TypeKeyword) {
                     const skipTypeKeyword = scanner.lookAhead(() => {
                         const token = scanner.scan();
-                        return token === SyntaxKind.Identifier ||
-                            isKeyword(token);
+                        return token === SyntaxKind.Identifier
+                            || isKeyword(token);
                     });
                     if (skipTypeKeyword) {
                         token = nextToken();
@@ -280,8 +280,8 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             if (token === SyntaxKind.OpenParenToken) {
                 token = nextToken();
                 if (
-                    token === SyntaxKind.StringLiteral ||
-                    allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral
+                    token === SyntaxKind.StringLiteral
+                    || allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral
                 ) {
                     //  require("mod");
                     recordModuleName();
@@ -398,12 +398,12 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
 
             // check if at least one of alternative have moved scanner forward
             if (
-                tryConsumeDeclare() ||
-                tryConsumeImport() ||
-                tryConsumeExport() ||
-                (detectJavaScriptImports && (
-                    tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true) ||
-                    tryConsumeDefine()
+                tryConsumeDeclare()
+                || tryConsumeImport()
+                || tryConsumeExport()
+                || (detectJavaScriptImports && (
+                    tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true)
+                    || tryConsumeDefine()
                 ))
             ) {
                 continue;

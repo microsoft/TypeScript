@@ -146,13 +146,13 @@ export function getModuleSpecifierPreferences(
 ): ModuleSpecifierPreferences {
     const filePreferredEnding = getPreferredEnding();
     return {
-        relativePreference: oldImportSpecifier !== undefined ? (isExternalModuleNameRelative(oldImportSpecifier) ?
-            RelativePreference.Relative :
-            RelativePreference.NonRelative) :
-            importModuleSpecifierPreference === "relative" ? RelativePreference.Relative :
-            importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
-            importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
-            RelativePreference.Shortest,
+        relativePreference: oldImportSpecifier !== undefined ? (isExternalModuleNameRelative(oldImportSpecifier)
+            ? RelativePreference.Relative
+            : RelativePreference.NonRelative)
+            : importModuleSpecifierPreference === "relative" ? RelativePreference.Relative
+            : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative
+            : importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative
+            : RelativePreference.Shortest,
         getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
             const preferredEnding = syntaxImpliedNodeFormat !== importingSourceFile.impliedNodeFormat ? getPreferredEnding(syntaxImpliedNodeFormat) : filePreferredEnding;
             if ((syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
@@ -265,8 +265,8 @@ function getModuleSpecifierWorker(
 ): string {
     const info = getInfo(importingSourceFileName, host);
     const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, options);
-    return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
-        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
+    return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode))
+        || getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
 }
 
 /** @internal */
@@ -391,9 +391,9 @@ function computeModuleSpecifiers(
                 if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)) return undefined;
                 const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
                 // If the preference is for non relative and the module specifier is relative, ignore it
-                return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
-                    specifier :
-                    undefined;
+                return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier)
+                    ? specifier
+                    : undefined;
             },
         ));
     if (existingSpecifier) {
@@ -466,10 +466,10 @@ function computeModuleSpecifiers(
         }
     }
 
-    return pathsSpecifiers?.length ? pathsSpecifiers :
-        redirectPathsSpecifiers?.length ? redirectPathsSpecifiers :
-        nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
-        Debug.checkDefined(relativeSpecifiers);
+    return pathsSpecifiers?.length ? pathsSpecifiers
+        : redirectPathsSpecifiers?.length ? redirectPathsSpecifiers
+        : nodeModulesSpecifiers?.length ? nodeModulesSpecifiers
+        : Debug.checkDefined(relativeSpecifiers);
 }
 
 interface Info {
@@ -501,8 +501,8 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
 
     const { sourceDirectory, canonicalSourceDirectory, getCanonicalFileName } = info;
     const allowedEndings = getAllowedEndingsInPrefererredOrder(importMode);
-    const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, allowedEndings, compilerOptions) ||
-        processEnding(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), allowedEndings, compilerOptions);
+    const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, allowedEndings, compilerOptions)
+        || processEnding(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), allowedEndings, compilerOptions);
     if (!baseUrl && !paths && !getResolvePackageJsonImports(compilerOptions) || relativePreference === RelativePreference.Relative) {
         return pathsOnly ? undefined : relativePath;
     }
@@ -530,9 +530,9 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     }
 
     if (relativePreference === RelativePreference.ExternalNonRelative && !pathIsRelative(maybeNonRelative)) {
-        const projectDirectory = compilerOptions.configFilePath ?
-            toPath(getDirectoryPath(compilerOptions.configFilePath), host.getCurrentDirectory(), info.getCanonicalFileName) :
-            info.getCanonicalFileName(host.getCurrentDirectory());
+        const projectDirectory = compilerOptions.configFilePath
+            ? toPath(getDirectoryPath(compilerOptions.configFilePath), host.getCurrentDirectory(), info.getCanonicalFileName)
+            : info.getCanonicalFileName(host.getCurrentDirectory());
         const modulePath = toPath(moduleFileName, projectDirectory, getCanonicalFileName);
         const sourceIsInternal = startsWith(canonicalSourceDirectory, projectDirectory);
         const targetIsInternal = startsWith(modulePath, projectDirectory);
@@ -824,10 +824,10 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                 const suffix = pattern.substring(indexOfStar + 1);
                 for (const { ending, value } of candidates) {
                     if (
-                        value.length >= prefix.length + suffix.length &&
-                        startsWith(value, prefix) &&
-                        endsWith(value, suffix) &&
-                        validateEnding({ ending, value })
+                        value.length >= prefix.length + suffix.length
+                        && startsWith(value, prefix)
+                        && endsWith(value, suffix)
+                        && validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
                         if (!pathIsRelative(matchedStar)) {
@@ -837,8 +837,8 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                 }
             }
             else if (
-                some(candidates, c => c.ending !== ModuleSpecifierEnding.Minimal && pattern === c.value) ||
-                some(candidates, c => c.ending === ModuleSpecifierEnding.Minimal && pattern === c.value && validateEnding(c))
+                some(candidates, c => c.ending !== ModuleSpecifierEnding.Minimal && pattern === c.value)
+                || some(candidates, c => c.ending === ModuleSpecifierEnding.Minimal && pattern === c.value && validateEnding(c))
             ) {
                 return key;
             }
@@ -876,10 +876,10 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
         switch (mode) {
             case MatchingMode.Exact:
                 if (
-                    extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
-                    comparePaths(targetFilePath, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
-                    outputFile && comparePaths(outputFile, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
-                    declarationFile && comparePaths(declarationFile, pathOrPattern, ignoreCase) === Comparison.EqualTo
+                    extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern, ignoreCase) === Comparison.EqualTo
+                    || comparePaths(targetFilePath, pathOrPattern, ignoreCase) === Comparison.EqualTo
+                    || outputFile && comparePaths(outputFile, pathOrPattern, ignoreCase) === Comparison.EqualTo
+                    || declarationFile && comparePaths(declarationFile, pathOrPattern, ignoreCase) === Comparison.EqualTo
                 ) {
                     return { moduleFileToTry: packageName };
                 }
@@ -1131,11 +1131,11 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                     return { packageRootPath, moduleFileToTry };
                 }
                 else if (
-                    packageJsonContent?.type !== "module" &&
-                    !fileExtensionIsOneOf(canonicalModuleFileToTry, extensionsNotSupportingExtensionlessResolution) &&
-                    startsWith(canonicalModuleFileToTry, mainExportFile) &&
-                    getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile) &&
-                    removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
+                    packageJsonContent?.type !== "module"
+                    && !fileExtensionIsOneOf(canonicalModuleFileToTry, extensionsNotSupportingExtensionlessResolution)
+                    && startsWith(canonicalModuleFileToTry, mainExportFile)
+                    && getDirectoryPath(canonicalModuleFileToTry) === removeTrailingDirectorySeparator(mainExportFile)
+                    && removeFileExtension(getBaseFileName(canonicalModuleFileToTry)) === "index"
                 ) {
                     // if mainExportFile is a directory, which contains moduleFileToTry, we just try index file
                     // example mainExportFile: `pkg/lib` and moduleFileToTry: `pkg/lib/index`, we can use packageRootPath

@@ -562,9 +562,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function visitSourceFile(node: SourceFile): SourceFile {
         const ancestorFacts = enterSubtree(
             HierarchyFacts.SourceFileExcludes,
-            isEffectiveStrictModeSourceFile(node, compilerOptions) ?
-                HierarchyFacts.StrictModeSourceFileIncludes :
-                HierarchyFacts.SourceFileIncludes,
+            isEffectiveStrictModeSourceFile(node, compilerOptions)
+                ? HierarchyFacts.StrictModeSourceFileIncludes
+                : HierarchyFacts.SourceFileIncludes,
         );
         exportedVariableStatement = false;
         const visited = visitEachChild(node, visitor, context);
@@ -641,9 +641,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
     function visitCatchClause(node: CatchClause) {
         if (
-            node.variableDeclaration &&
-            isBindingPattern(node.variableDeclaration.name) &&
-            node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread
+            node.variableDeclaration
+            && isBindingPattern(node.variableDeclaration.name)
+            && node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread
         ) {
             const name = factory.getGeneratedNameForNode(node.variableDeclaration.name);
             const updatedDecl = factory.updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*exclamationToken*/ undefined, /*type*/ undefined, name);
@@ -728,14 +728,14 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
         const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
         if (
-            node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
-            isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)
+            node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread
+            || isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)
         ) {
             node = transformForOfStatementWithObjectRest(node);
         }
-        const result = node.awaitModifier ?
-            transformForAwaitOfStatement(node, outermostLabeledStatement, ancestorFacts) :
-            factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+        const result = node.awaitModifier
+            ? transformForAwaitOfStatement(node, outermostLabeledStatement, ancestorFacts)
+            : factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
         exitSubtree(ancestorFacts);
         return result;
     }
@@ -842,9 +842,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         hoistVariableDeclaration(returnMethod);
 
         // if we are enclosed in an outer loop ensure we reset 'errorRecord' per each iteration
-        const initializer = ancestorFacts & HierarchyFacts.IterationContainer ?
-            factory.inlineExpressions([factory.createAssignment(errorRecord, factory.createVoidZero()), callValues]) :
-            callValues;
+        const initializer = ancestorFacts & HierarchyFacts.IterationContainer
+            ? factory.inlineExpressions([factory.createAssignment(errorRecord, factory.createVoidZero()), callValues])
+            : callValues;
 
         const forStatement = setEmitFlags(
             setTextRange(
@@ -1050,13 +1050,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             visitNode(node.name, visitor, isPropertyName),
             visitNode(/*node*/ undefined, visitor, isQuestionToken),
             /*typeParameters*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
-                transformAsyncGeneratorFunctionParameterList(node) :
-                visitParameterList(node.parameters, parameterVisitor, context),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+                ? transformAsyncGeneratorFunctionParameterList(node)
+                : visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
-                transformAsyncGeneratorFunctionBody(node) :
-                transformFunctionBody(node),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+                ? transformAsyncGeneratorFunctionBody(node)
+                : transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1078,13 +1078,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 : node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
-                transformAsyncGeneratorFunctionParameterList(node) :
-                visitParameterList(node.parameters, parameterVisitor, context),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+                ? transformAsyncGeneratorFunctionParameterList(node)
+                : visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
-                transformAsyncGeneratorFunctionBody(node) :
-                transformFunctionBody(node),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+                ? transformAsyncGeneratorFunctionBody(node)
+                : transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1125,13 +1125,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 : node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
-                transformAsyncGeneratorFunctionParameterList(node) :
-                visitParameterList(node.parameters, parameterVisitor, context),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+                ? transformAsyncGeneratorFunctionParameterList(node)
+                : visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
-                transformAsyncGeneratorFunctionBody(node) :
-                transformFunctionBody(node),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+                ? transformAsyncGeneratorFunctionBody(node)
+                : transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;

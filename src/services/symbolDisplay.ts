@@ -122,8 +122,8 @@ export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location
 
     const flags = getCombinedLocalAndExportSymbolFlags(symbol);
     if (flags & SymbolFlags.Class) {
-        return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
-            ScriptElementKind.localClassElement : ScriptElementKind.classElement;
+        return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)
+            ? ScriptElementKind.localClassElement : ScriptElementKind.classElement;
     }
     if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
     if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
@@ -392,8 +392,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
             }
         }
         else if (
-            (isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) || // name of function declaration
-            (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)
+            (isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) // name of function declaration
+            || (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)
         ) { // At constructor keyword of constructor declaration
             // get the signature from the declaration and write it
             const functionDeclaration = location.parent as SignatureDeclaration;
@@ -417,8 +417,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                 else {
                     // (function/method) symbol(..signature)
                     addPrefixForAnyFunctionOrVar(
-                        functionDeclaration.kind === SyntaxKind.CallSignature &&
-                            !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol,
+                        functionDeclaration.kind === SyntaxKind.CallSignature
+                            && !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol,
                         symbolKind,
                     );
                 }
@@ -550,8 +550,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                 const resolvedNode = resolvedSymbol.declarations[0];
                 const declarationName = getNameOfDeclaration(resolvedNode);
                 if (declarationName && !hasAddedSymbolInfo) {
-                    const isExternalModuleDeclaration = isModuleWithStringLiteralName(resolvedNode) &&
-                        hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
+                    const isExternalModuleDeclaration = isModuleWithStringLiteralName(resolvedNode)
+                        && hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                     const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
                     const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         typeChecker,
@@ -633,17 +633,17 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                 }
                 // For properties, variables and local vars: show the type
                 if (
-                    symbolKind === ScriptElementKind.memberVariableElement ||
-                    symbolKind === ScriptElementKind.memberAccessorVariableElement ||
-                    symbolKind === ScriptElementKind.memberGetAccessorElement ||
-                    symbolKind === ScriptElementKind.memberSetAccessorElement ||
-                    symbolKind === ScriptElementKind.jsxAttribute ||
-                    symbolFlags & SymbolFlags.Variable ||
-                    symbolKind === ScriptElementKind.localVariableElement ||
-                    symbolKind === ScriptElementKind.indexSignatureElement ||
-                    symbolKind === ScriptElementKind.variableUsingElement ||
-                    symbolKind === ScriptElementKind.variableAwaitUsingElement ||
-                    isThisExpression
+                    symbolKind === ScriptElementKind.memberVariableElement
+                    || symbolKind === ScriptElementKind.memberAccessorVariableElement
+                    || symbolKind === ScriptElementKind.memberGetAccessorElement
+                    || symbolKind === ScriptElementKind.memberSetAccessorElement
+                    || symbolKind === ScriptElementKind.jsxAttribute
+                    || symbolFlags & SymbolFlags.Variable
+                    || symbolKind === ScriptElementKind.localVariableElement
+                    || symbolKind === ScriptElementKind.indexSignatureElement
+                    || symbolKind === ScriptElementKind.variableUsingElement
+                    || symbolKind === ScriptElementKind.variableAwaitUsingElement
+                    || isThisExpression
                 ) {
                     displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                     displayParts.push(spacePart());
@@ -668,12 +668,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                     }
                 }
                 else if (
-                    symbolFlags & SymbolFlags.Function ||
-                    symbolFlags & SymbolFlags.Method ||
-                    symbolFlags & SymbolFlags.Constructor ||
-                    symbolFlags & SymbolFlags.Signature ||
-                    symbolFlags & SymbolFlags.Accessor ||
-                    symbolKind === ScriptElementKind.memberFunctionElement
+                    symbolFlags & SymbolFlags.Function
+                    || symbolFlags & SymbolFlags.Method
+                    || symbolFlags & SymbolFlags.Constructor
+                    || symbolFlags & SymbolFlags.Signature
+                    || symbolFlags & SymbolFlags.Accessor
+                    || symbolKind === ScriptElementKind.memberFunctionElement
                 ) {
                     const allSignatures = type.getNonNullableType().getCallSignatures();
                     if (allSignatures.length) {

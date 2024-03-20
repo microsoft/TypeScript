@@ -149,9 +149,9 @@ function updateReportDiagnostic(
     existing: DiagnosticReporter,
     options: CompilerOptions | BuildOptions,
 ): DiagnosticReporter {
-    return shouldBePretty(sys, options) ?
-        createDiagnosticReporter(sys, /*pretty*/ true) :
-        existing;
+    return shouldBePretty(sys, options)
+        ? createDiagnosticReporter(sys, /*pretty*/ true)
+        : existing;
 }
 
 function defaultIsPretty(sys: System) {
@@ -167,9 +167,9 @@ function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
 
 function getOptionsForHelp(commandLine: ParsedCommandLine) {
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-    return !!commandLine.options.all ?
-        sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-        filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
+    return !!commandLine.options.all
+        ? sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name))
+        : filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
 }
 
 function printVersion(sys: System) {
@@ -854,8 +854,8 @@ function performBuild(
             onWatchStatusChange?.(d, newLine, options, errorCount);
             if (
                 reportBuildStatistics && (
-                    d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
-                    d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code
+                    d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code
+                    || d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code
                 )
             ) {
                 reportSolutionBuilderTimes(builder, solutionPerformance);
@@ -886,9 +886,9 @@ function performBuild(
 }
 
 function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
-    return shouldBePretty(sys, options) ?
-        (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
-        undefined;
+    return shouldBePretty(sys, options)
+        ? (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
+        : undefined;
 }
 
 function performCompilation(

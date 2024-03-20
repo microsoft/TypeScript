@@ -56,8 +56,8 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
 
         if (isAccessExpression(left)) {
             const propertyAccessTargetSimpleCopiable = isSimpleCopiableExpression(left.expression);
-            const propertyAccessTarget = propertyAccessTargetSimpleCopiable ? left.expression :
-                factory.createTempVariable(hoistVariableDeclaration);
+            const propertyAccessTarget = propertyAccessTargetSimpleCopiable ? left.expression
+                : factory.createTempVariable(hoistVariableDeclaration);
             const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
                 propertyAccessTarget,
                 left.expression,
@@ -75,8 +75,8 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
             }
             else {
                 const elementAccessArgumentSimpleCopiable = isSimpleCopiableExpression(left.argumentExpression);
-                const elementAccessArgument = elementAccessArgumentSimpleCopiable ? left.argumentExpression :
-                    factory.createTempVariable(hoistVariableDeclaration);
+                const elementAccessArgument = elementAccessArgumentSimpleCopiable ? left.argumentExpression
+                    : factory.createTempVariable(hoistVariableDeclaration);
 
                 assignmentTarget = factory.createElementAccessExpression(
                     propertyAccessTarget,

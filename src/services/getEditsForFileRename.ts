@@ -121,8 +121,8 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
                 const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
                 // If there isn't some include for this, add a new one.
                 if (
-                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
+                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath)
+                    && !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
                 ) {
                     changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                 }
@@ -246,9 +246,9 @@ function getSourceFileToImport(
     }
     else {
         const mode = program.getModeForUsageLocation(importingSourceFile, importLiteral);
-        const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
-            program.getResolvedModuleFromModuleSpecifier(importLiteral) :
-            host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+        const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames
+            ? program.getResolvedModuleFromModuleSpecifier(importLiteral)
+            : host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }
 }

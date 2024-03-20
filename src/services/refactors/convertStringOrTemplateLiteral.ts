@@ -83,9 +83,9 @@ function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
     const isNonStringBinary = !treeToArray(nestedBinary).isValidConcatenation;
 
     if (
-        isNonStringBinary &&
-        isParenthesizedExpression(nestedBinary.parent) &&
-        isBinaryExpression(nestedBinary.parent.parent)
+        isNonStringBinary
+        && isParenthesizedExpression(nestedBinary.parent)
+        && isBinaryExpression(nestedBinary.parent.parent)
     ) {
         return nestedBinary.parent.parent;
     }

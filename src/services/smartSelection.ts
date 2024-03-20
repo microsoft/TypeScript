@@ -158,9 +158,9 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
             if (
                 !selectionRange || (
                     // Skip ranges that are identical to the parent
-                    !textSpansEqual(textSpan, selectionRange.textSpan) &&
+                    !textSpansEqual(textSpan, selectionRange.textSpan)
                     // Skip ranges that don't contain the original position
-                    textSpanIntersectsWithPosition(textSpan, pos)
+                    && textSpanIntersectsWithPosition(textSpan, pos)
                 )
             ) {
                 selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
@@ -236,13 +236,13 @@ function getSelectionChildren(node: Node): readonly Node[] {
         Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
         // Group `-/+readonly` and `-/+?`
         const groupedWithPlusMinusTokens = groupChildren(children, child =>
-            child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
-            child === node.questionToken || child.kind === SyntaxKind.QuestionToken);
+            child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword
+            || child === node.questionToken || child.kind === SyntaxKind.QuestionToken);
         // Group type parameter with surrounding brackets
         const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
-            kind === SyntaxKind.OpenBracketToken ||
-            kind === SyntaxKind.TypeParameter ||
-            kind === SyntaxKind.CloseBracketToken);
+            kind === SyntaxKind.OpenBracketToken
+            || kind === SyntaxKind.TypeParameter
+            || kind === SyntaxKind.CloseBracketToken);
         return [
             openBraceToken,
             // Pivot on `:`

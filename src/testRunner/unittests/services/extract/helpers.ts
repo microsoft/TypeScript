@@ -23,9 +23,9 @@ export type TestProjectServicePartialOptionsAndHost = Partial<Omit<TestProjectSe
 export class TestProjectService extends ts.server.ProjectService {
     constructor(optsOrHost: TestServerHost | TestProjectServicePartialOptionsAndHost) {
         // eslint-disable-next-line local/no-in-operator
-        const opts = "host" in optsOrHost ?
-            optsOrHost :
-            { host: optsOrHost };
+        const opts = "host" in optsOrHost
+            ? optsOrHost
+            : { host: optsOrHost };
         super({
             logger: createHasErrorMessageLogger(),
             session: undefined,
@@ -59,8 +59,8 @@ export function extractTest(source: string): Test {
 
     while (pos < source.length) {
         if (
-            source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&
-            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash || source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
+            source.charCodeAt(pos) === ts.CharacterCodes.openBracket
+            && (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash || source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
         ) {
             const saved = pos;
             pos += 2;

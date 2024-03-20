@@ -106,8 +106,8 @@ registerRefactor(refactorName, {
             const refactorInfo: ApplicableRefactorInfo[] = [{
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
-                actions: info.isJS ?
-                    [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
+                actions: info.isJS
+                    ? [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
             }];
             return refactorInfo.map(info => ({
                 ...info,
@@ -225,8 +225,8 @@ function getFirstTypeAt(file: SourceFile, startPosition: number, range: TextRang
         const current = f();
         const overlappingRange = nodeOverlapsWithStartEnd(current, file, range.pos, range.end);
         const firstType = findAncestor(current, node =>
-            node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-            (isCursorRequest || overlappingRange));
+            node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file)
+            && (isCursorRequest || overlappingRange));
         if (firstType) {
             return firstType;
         }

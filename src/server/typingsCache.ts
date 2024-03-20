@@ -83,9 +83,9 @@ function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): b
 }
 
 function typeAcquisitionChanged(opt1: TypeAcquisition, opt2: TypeAcquisition): boolean {
-    return opt1.enable !== opt2.enable ||
-        !setIsEqualTo(opt1.include, opt2.include) ||
-        !setIsEqualTo(opt1.exclude, opt2.exclude);
+    return opt1.enable !== opt2.enable
+        || !setIsEqualTo(opt1.include, opt2.include)
+        || !setIsEqualTo(opt1.exclude, opt2.exclude);
 }
 
 function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
@@ -124,11 +124,11 @@ export class TypingsCache {
 
         const entry = this.perProjectCache.get(project.getProjectName());
         if (
-            forceRefresh ||
-            !entry ||
-            typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
-            compilerOptionsChanged(project.getCompilationSettings(), entry.compilerOptions) ||
-            unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)
+            forceRefresh
+            || !entry
+            || typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition)
+            || compilerOptionsChanged(project.getCompilationSettings(), entry.compilerOptions)
+            || unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)
         ) {
             // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
             // instead it acts as a placeholder to prevent issuing multiple requests

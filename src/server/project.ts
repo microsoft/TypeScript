@@ -811,8 +811,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     invalidateResolutionsOfFailedLookupLocations() {
         if (
-            this.clearInvalidateResolutionOfFailedLookupTimer() &&
-            this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()
+            this.clearInvalidateResolutionOfFailedLookupTimer()
+            && this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()
         ) {
             this.markAsDirty();
             this.projectService.delayEnsureProjectForOpenFiles();
@@ -925,9 +925,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     shouldEmitFile(scriptInfo: ScriptInfo | undefined) {
-        return scriptInfo &&
-            !scriptInfo.isDynamicOrHasMixedContent() &&
-            !this.program!.isSourceOfProjectReferenceRedirect(scriptInfo.path);
+        return scriptInfo
+            && !scriptInfo.isDynamicOrHasMixedContent()
+            && !this.program!.isSourceOfProjectReferenceRedirect(scriptInfo.path);
     }
 
     getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -967,9 +967,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 const dtsFiles = outputFiles.filter(f => isDeclarationFileName(f.name));
                 if (dtsFiles.length === 1) {
                     const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
-                    const signature = this.projectService.host.createHash ?
-                        this.projectService.host.createHash(dtsFiles[0].text) :
-                        generateDjb2Hash(dtsFiles[0].text);
+                    const signature = this.projectService.host.createHash
+                        ? this.projectService.host.createHash(dtsFiles[0].text)
+                        : generateDjb2Hash(dtsFiles[0].text);
                     BuilderState.updateSignatureOfFile(this.builderState, signature, sourceFile.resolvedPath);
                 }
             }
@@ -1448,19 +1448,19 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             if (!this.typingWatchers!.has(canonicalPath)) {
                 this.typingWatchers!.set(
                     canonicalPath,
-                    typingsWatcherType === TypingWatcherType.FileWatcher ?
-                        this.projectService.watchFactory.watchFile(
+                    typingsWatcherType === TypingWatcherType.FileWatcher
+                        ? this.projectService.watchFactory.watchFile(
                             path,
                             () =>
-                                !this.typingWatchers!.isInvoked ?
-                                    this.onTypingInstallerWatchInvoke() :
-                                    this.writeLog(`TypingWatchers already invoked`),
+                                !this.typingWatchers!.isInvoked
+                                    ? this.onTypingInstallerWatchInvoke()
+                                    : this.writeLog(`TypingWatchers already invoked`),
                             PollingInterval.High,
                             this.projectService.getWatchOptions(this),
                             WatchType.TypingInstallerLocationFile,
                             this,
-                        ) :
-                        this.projectService.watchFactory.watchDirectory(
+                        )
+                        : this.projectService.watchFactory.watchDirectory(
                             path,
                             f => {
                                 if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
@@ -1600,9 +1600,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                         this.generatedFilesMap.forEach((watcher, source) => {
                             const sourceFile = this.program!.getSourceFileByPath(source);
                             if (
-                                !sourceFile ||
-                                sourceFile.resolvedPath !== source ||
-                                !this.isValidGeneratedFileWatcher(
+                                !sourceFile
+                                || sourceFile.resolvedPath !== source
+                                || !this.isValidGeneratedFileWatcher(
                                     getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
                                     watcher,
                                 )
@@ -2121,10 +2121,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
         if (
-            this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.Off ||
-            !this.languageServiceEnabled ||
-            isInsideNodeModules(this.currentDirectory) ||
-            !this.isDefaultProjectForOpenFiles()
+            this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.Off
+            || !this.languageServiceEnabled
+            || isInsideNodeModules(this.currentDirectory)
+            || !this.isDefaultProjectForOpenFiles()
         ) {
             return PackageJsonAutoImportPreference.Off;
         }
@@ -2256,9 +2256,9 @@ function extractUnresolvedImportsFromSourceFile(
         program.forEachResolvedModule(({ resolvedModule }, name) => {
             // pick unresolved non-relative names
             if (
-                (!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
-                !isExternalModuleNameRelative(name) &&
-                !ambientModules.some(m => m === name)
+                (!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension))
+                && !isExternalModuleNameRelative(name)
+                && !ambientModules.some(m => m === name)
             ) {
                 unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
             }
@@ -2371,8 +2371,8 @@ export class InferredProject extends Project {
         // - when useSingleInferredProject is not set and projectRootPath is not set,
         //   we can guarantee that this will be the only root
         // - other wise it has single root if it has single root script info
-        return (!this.projectRootPath && !this.projectService.useSingleInferredProject) ||
-            this.getRootScriptInfos().length === 1;
+        return (!this.projectRootPath && !this.projectService.useSingleInferredProject)
+            || this.getRootScriptInfos().length === 1;
     }
 
     override close() {
@@ -2895,8 +2895,8 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     isSolution() {
-        return this.getRootFilesMap().size === 0 &&
-            !this.canConfigFileJsonReportNoInputFiles;
+        return this.getRootFilesMap().size === 0
+            && !this.canConfigFileJsonReportNoInputFiles;
     }
 
     /**
@@ -2909,9 +2909,9 @@ export class ConfiguredProject extends Project {
             this,
             info.path,
             child =>
-                projectContainsInfoDirectly(child, info) ?
-                    child :
-                    undefined,
+                projectContainsInfoDirectly(child, info)
+                    ? child
+                    : undefined,
             ProjectReferenceProjectLoadKind.Find,
         );
     }
@@ -2946,8 +2946,8 @@ export class ConfiguredProject extends Project {
                     configFileExistenceInfo.openFilesImpactedByConfigFile,
                     (_value, infoPath) => {
                         const info = this.projectService.getScriptInfoForPath(infoPath)!;
-                        return this.containsScriptInfo(info) ||
-                            !!forEachResolvedProjectReferenceProject(
+                        return this.containsScriptInfo(info)
+                            || !!forEachResolvedProjectReferenceProject(
                                 this,
                                 info.path,
                                 child => child.containsScriptInfo(info),

@@ -394,9 +394,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
         const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
-        const modifiers = node.transformFlags & TransformFlags.ContainsAwait ?
-            factory.createModifiersFromModifierFlags(ModifierFlags.Async) :
-            undefined;
+        const modifiers = node.transformFlags & TransformFlags.ContainsAwait
+            ? factory.createModifiersFromModifierFlags(ModifierFlags.Async)
+            : undefined;
         const moduleObject = factory.createObjectLiteralExpression([
             factory.createPropertyAssignment("setters", createSettersArray(exportStarFunction, dependencyGroups)),
             factory.createPropertyAssignment(

@@ -895,8 +895,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             //   - break/continue is labeled and label is located inside the converted loop
             //   - break/continue is non-labeled and located in non-converted loop/switch statement
             const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
-            const canUseBreakOrContinue = (node.label && convertedLoopState.labels && convertedLoopState.labels.get(idText(node.label))) ||
-                (!node.label && (convertedLoopState.allowedNonLabeledJumps! & jump));
+            const canUseBreakOrContinue = (node.label && convertedLoopState.labels && convertedLoopState.labels.get(idText(node.label)))
+                || (!node.label && (convertedLoopState.allowedNonLabeledJumps! & jump));
 
             if (!canUseBreakOrContinue) {
                 let labelMarker: string;
@@ -1350,14 +1350,14 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
     /** Tests whether `node` is a generated identifier whose base text is `_super` */
     function isSyntheticSuper(node: Node): node is SyntheticSuper {
-        return isGeneratedIdentifier(node) &&
-            idText(node) === "_super";
+        return isGeneratedIdentifier(node)
+            && idText(node) === "_super";
     }
 
     /** Tests whether `node` is VariableStatement like `var _this = ...;` */
     function isThisCapturingVariableStatement(node: Node): node is ThisCapturingVariableStatement {
-        return isVariableStatement(node) && node.declarationList.declarations.length === 1 &&
-            isThisCapturingVariableDeclaration(node.declarationList.declarations[0]);
+        return isVariableStatement(node) && node.declarationList.declarations.length === 1
+            && isThisCapturingVariableDeclaration(node.declarationList.declarations[0]);
     }
 
     /** Tests whether `node` is a VariableDeclaration like in `var _this = ...` */
@@ -1372,37 +1372,37 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
     /** Tests whether `node` is a call like `_super.call(this, ...)` or `_super.apply(this, ...)` */
     function isTransformedSuperCall(node: Node): node is TransformedSuperCall {
-        return isCallExpression(node) &&
-            isPropertyAccessExpression(node.expression) &&
-            isSyntheticSuper(node.expression.expression) &&
-            isIdentifier(node.expression.name) &&
-            (idText(node.expression.name) === "call" || idText(node.expression.name) === "apply") &&
-            node.arguments.length >= 1 &&
-            node.arguments[0].kind === SyntaxKind.ThisKeyword;
+        return isCallExpression(node)
+            && isPropertyAccessExpression(node.expression)
+            && isSyntheticSuper(node.expression.expression)
+            && isIdentifier(node.expression.name)
+            && (idText(node.expression.name) === "call" || idText(node.expression.name) === "apply")
+            && node.arguments.length >= 1
+            && node.arguments[0].kind === SyntaxKind.ThisKeyword;
     }
 
     /** Tests whether `node` is an expression like `_super.call(this) || this` */
     function isTransformedSuperCallWithFallback(node: Node): node is TransformedSuperCallWithFallback {
-        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken &&
-            node.right.kind === SyntaxKind.ThisKeyword &&
-            isTransformedSuperCall(node.left);
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken
+            && node.right.kind === SyntaxKind.ThisKeyword
+            && isTransformedSuperCall(node.left);
     }
 
     /** Tests whether `node` is a call like `_super !== null && _super.apply(this, arguments)` */
     function isImplicitSuperCall(node: Node): node is ImplicitSuperCall {
-        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
-            isBinaryExpression(node.left) && node.left.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken &&
-            isSyntheticSuper(node.left.left) &&
-            node.left.right.kind === SyntaxKind.NullKeyword &&
-            isTransformedSuperCall(node.right) &&
-            idText(node.right.expression.name) === "apply";
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken
+            && isBinaryExpression(node.left) && node.left.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken
+            && isSyntheticSuper(node.left.left)
+            && node.left.right.kind === SyntaxKind.NullKeyword
+            && isTransformedSuperCall(node.right)
+            && idText(node.right.expression.name) === "apply";
     }
 
     /** Tests whether `node` is an expression like `_super !== null && _super.apply(this, arguments) || this` */
     function isImplicitSuperCallWithFallback(node: Node): node is ImplicitSuperCallWithFallback {
-        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken &&
-            node.right.kind === SyntaxKind.ThisKeyword &&
-            isImplicitSuperCall(node.left);
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.BarBarToken
+            && node.right.kind === SyntaxKind.ThisKeyword
+            && isImplicitSuperCall(node.left);
     }
 
     /** Tests whether `node` is an expression like `_this = _super.call(this) || this` */
@@ -1416,12 +1416,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function isTransformedSuperCallLike(node: Node): node is TransformedSuperCallLike {
-        return isTransformedSuperCall(node) ||
-            isTransformedSuperCallWithFallback(node) ||
-            isThisCapturingTransformedSuperCallWithFallback(node) ||
-            isImplicitSuperCall(node) ||
-            isImplicitSuperCallWithFallback(node) ||
-            isThisCapturingImplicitSuperCallWithFallback(node);
+        return isTransformedSuperCall(node)
+            || isTransformedSuperCallWithFallback(node)
+            || isThisCapturingTransformedSuperCallWithFallback(node)
+            || isImplicitSuperCall(node)
+            || isImplicitSuperCallWithFallback(node)
+            || isThisCapturingImplicitSuperCallWithFallback(node);
     }
 
     /**
@@ -1562,9 +1562,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // If the original node contained a lexical `this` that must be preserved, or if we recorded a captured `this`
         // or `super`, then we cannot simplify `var _this = ...;`, but may still be able to inline standalone `_this = ...`
         // assignment statements.
-        const canElideThisCapturingVariable = !(original.transformFlags & TransformFlags.ContainsLexicalThis) &&
-            !(hierarchyFacts & HierarchyFacts.LexicalThis) &&
-            !(hierarchyFacts & HierarchyFacts.CapturedLexicalThis);
+        const canElideThisCapturingVariable = !(original.transformFlags & TransformFlags.ContainsLexicalThis)
+            && !(hierarchyFacts & HierarchyFacts.LexicalThis)
+            && !(hierarchyFacts & HierarchyFacts.CapturedLexicalThis);
 
         // find the return statement and the preceding transformed `super()` call
         for (let i = body.statements.length - 1; i > 0; i--) {
@@ -1574,8 +1574,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 const preceding = body.statements[i - 1];
                 let expression: Expression | undefined;
                 if (
-                    isExpressionStatement(preceding) &&
-                    isThisCapturingTransformedSuperCallWithFallback(skipOuterExpressions(preceding.expression))
+                    isExpressionStatement(preceding)
+                    && isThisCapturingTransformedSuperCallWithFallback(skipOuterExpressions(preceding.expression))
                 ) {
                     // The preceding statement is `_this = _super.call(this, ...) || this`, so we'll inline the
                     // expression.
@@ -1679,9 +1679,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // If the original node contained a lexical `this` that must be preserved, or if we recorded a captured `this`,
         // then there is nothing we can simplify.
         if (
-            original.transformFlags & TransformFlags.ContainsLexicalThis ||
-            hierarchyFacts & HierarchyFacts.LexicalThis ||
-            hierarchyFacts & HierarchyFacts.CapturedLexicalThis
+            original.transformFlags & TransformFlags.ContainsLexicalThis
+            || hierarchyFacts & HierarchyFacts.LexicalThis
+            || hierarchyFacts & HierarchyFacts.CapturedLexicalThis
         ) {
             return body;
         }
@@ -1699,8 +1699,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     /** Injects `_super !== null &&` preceding any instance of a synthetic `_super.apply(this, arguments)` */
     function injectSuperPresenceCheckWorker(node: Node): VisitResult<Node | undefined> {
         if (
-            isTransformedSuperCall(node) && node.arguments.length === 2 &&
-            isIdentifier(node.arguments[1]) && idText(node.arguments[1]) === "arguments"
+            isTransformedSuperCall(node) && node.arguments.length === 2
+            && isIdentifier(node.arguments[1]) && idText(node.arguments[1]) === "arguments"
         ) {
             return factory.createLogicalAnd(
                 factory.createStrictInequality(
@@ -1801,8 +1801,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         else if (statement.kind === SyntaxKind.IfStatement) {
             const ifStatement = statement as IfStatement;
             if (ifStatement.elseStatement) {
-                return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement) &&
-                    isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
+                return isSufficientlyCoveredByReturnStatements(ifStatement.thenStatement)
+                    && isSufficientlyCoveredByReturnStatements(ifStatement.elseStatement);
             }
         }
         // A block is covered if it has a last statement which is covered.
@@ -3316,8 +3316,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         for (let i = 0; i < properties.length; i++) {
             const property = properties[i];
             if (
-                (property.transformFlags & TransformFlags.ContainsYield &&
-                    hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
+                (property.transformFlags & TransformFlags.ContainsYield
+                    && hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
                 || (hasComputed = Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName)
             ) {
                 numInitialProperties = i;
@@ -3566,9 +3566,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // variables declared in the loop initializer that will be changed inside the loop
         const loopOutParameters: LoopOutParameter[] = [];
         if (loopInitializer && (getCombinedNodeFlags(loopInitializer) & NodeFlags.BlockScoped)) {
-            const hasCapturedBindingsInForHead = shouldConvertInitializerOfForStatement(node) ||
-                shouldConvertConditionOfForStatement(node) ||
-                shouldConvertIncrementorOfForStatement(node);
+            const hasCapturedBindingsInForHead = shouldConvertInitializerOfForStatement(node)
+                || shouldConvertConditionOfForStatement(node)
+                || shouldConvertIncrementorOfForStatement(node);
             for (const decl of loopInitializer.declarations) {
                 processLoopVariableDeclaration(node, decl, loopParameters, loopOutParameters, hasCapturedBindingsInForHead);
             }
@@ -3940,9 +3940,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
         // simple loops are emitted as just 'loop()';
         // NOTE: if loop uses only 'continue' it still will be emitted as simple loop
-        const isSimpleLoop = !(state.nonLocalJumps! & ~Jump.Continue) &&
-            !state.labeledNonLocalBreaks &&
-            !state.labeledNonLocalContinues;
+        const isSimpleLoop = !(state.nonLocalJumps! & ~Jump.Continue)
+            && !state.labeledNonLocalBreaks
+            && !state.labeledNonLocalContinues;
 
         const call = factory.createCallExpression(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => p.name as Identifier));
         const callResult = containsYield
@@ -4069,8 +4069,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         flags |= LoopOutParameterFlags.Initializer;
                     }
                     if (
-                        container.condition && resolver.isBindingCapturedByNode(container.condition, decl) ||
-                        container.incrementor && resolver.isBindingCapturedByNode(container.incrementor, decl)
+                        container.condition && resolver.isBindingCapturedByNode(container.condition, decl)
+                        || container.incrementor && resolver.isBindingCapturedByNode(container.incrementor, decl)
                     ) {
                         flags |= LoopOutParameterFlags.Body;
                     }
@@ -4325,9 +4325,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         const expression = skipOuterExpressions(node.expression);
         if (
-            expression.kind === SyntaxKind.SuperKeyword ||
-            isSuperProperty(expression) ||
-            some(node.arguments, isSpreadElement)
+            expression.kind === SyntaxKind.SuperKeyword
+            || isSuperProperty(expression)
+            || some(node.arguments, isSpreadElement)
         ) {
             return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
         }
@@ -4471,8 +4471,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const returnStatement = tryCast(elementAt(funcStatements, classBodyEnd), isReturnStatement);
         for (const statement of remainingStatements) {
             if (
-                isReturnStatement(statement) && returnStatement?.expression &&
-                !isIdentifier(returnStatement.expression)
+                isReturnStatement(statement) && returnStatement?.expression
+                && !isIdentifier(returnStatement.expression)
             ) {
                 statements.push(returnStatement);
             }
@@ -4523,9 +4523,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         // We are here either because SuperKeyword was used somewhere in the expression, or
         // because we contain a SpreadElementExpression.
         if (
-            node.transformFlags & TransformFlags.ContainsRestOrSpread ||
-            node.expression.kind === SyntaxKind.SuperKeyword ||
-            isSuperProperty(skipOuterExpressions(node.expression))
+            node.transformFlags & TransformFlags.ContainsRestOrSpread
+            || node.expression.kind === SyntaxKind.SuperKeyword
+            || isSuperProperty(skipOuterExpressions(node.expression))
         ) {
             const { target, thisArg } = factory.createCallBinding(node.expression, hoistVariableDeclaration);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -4689,8 +4689,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         const helpers = emitHelpers();
         const startsWithSpread = segments[0].kind !== SpreadSegmentKind.None;
-        let expression: Expression = startsWithSpread ? factory.createArrayLiteralExpression() :
-            segments[0].expression;
+        let expression: Expression = startsWithSpread ? factory.createArrayLiteralExpression()
+            : segments[0].expression;
         for (let i = startsWithSpread ? 0 : 1; i < segments.length; i++) {
             const segment = segments[i];
             // If this is for an argument list, it doesn't matter if the array is packed or sparse

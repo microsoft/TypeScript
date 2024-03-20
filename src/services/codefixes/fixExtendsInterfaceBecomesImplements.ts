@@ -48,9 +48,9 @@ function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, e
 
     // If there is already an implements clause, replace the implements keyword with a comma.
     if (
-        heritageClauses.length === 2 &&
-        heritageClauses[0].token === SyntaxKind.ExtendsKeyword &&
-        heritageClauses[1].token === SyntaxKind.ImplementsKeyword
+        heritageClauses.length === 2
+        && heritageClauses[0].token === SyntaxKind.ExtendsKeyword
+        && heritageClauses[1].token === SyntaxKind.ImplementsKeyword
     ) {
         const implementsToken = heritageClauses[1].getFirstToken()!;
         const implementsFullStart = implementsToken.getFullStart();

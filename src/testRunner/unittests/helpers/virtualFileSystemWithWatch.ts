@@ -210,9 +210,9 @@ class Callbacks {
                 this.serializedKeys.delete(key);
             });
         }
-        return `${this.callbackType} callback:: count: ${this.map.size}` +
-            (deleted.length ? "\r\n" + deleted.join("\r\n") : "") +
-            (details.length ? "\r\n" + details.join("\r\n") : "");
+        return `${this.callbackType} callback:: count: ${this.map.size}`
+            + (deleted.length ? "\r\n" + deleted.join("\r\n") : "")
+            + (details.length ? "\r\n" + details.join("\r\n") : "");
     }
 
     private invokeCallback(timeoutId: number) {
@@ -463,9 +463,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         if (isArray(fileOrFolderOrSymLinkList)) {
             fileOrFolderOrSymLinkList.forEach(f =>
                 this.ensureFileOrFolder(
-                    !this.windowsStyleRoot ?
-                        f :
-                        { ...f, path: this.getHostSpecificPath(f.path) },
+                    !this.windowsStyleRoot
+                        ? f
+                        : { ...f, path: this.getHostSpecificPath(f.path) },
                 )
             );
         }

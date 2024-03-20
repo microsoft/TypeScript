@@ -714,8 +714,8 @@ function getAddAsTypeOnly(
         return AddAsTypeOnly.NotAllowed;
     }
     if (
-        compilerOptions.verbatimModuleSyntax &&
-        (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
+        compilerOptions.verbatimModuleSyntax
+        && (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
     ) {
         // A type-only import is required for this symbol if under these settings if the symbol will
         // be erased, which will happen if the target symbol is purely a type or if it was exported/imported
@@ -732,8 +732,8 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         if (!fix) continue;
         const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
         if (
-            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
-            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
+            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly
+            || fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
         ) {
             // Give preference to putting types in existing type-only imports and avoiding conversions
             // of import statements to/from type-only.
@@ -773,15 +773,15 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
 
         if (
             importKind === ImportKind.Default && (
-                name || // Cannot add a default import to a declaration that already has one
-                addAsTypeOnly === AddAsTypeOnly.Required && namedBindings // Cannot add a default import as type-only if the import already has named bindings
+                name // Cannot add a default import to a declaration that already has one
+                || addAsTypeOnly === AddAsTypeOnly.Required && namedBindings // Cannot add a default import as type-only if the import already has named bindings
             )
         ) {
             return undefined;
         }
         if (
-            importKind === ImportKind.Named &&
-            namedBindings?.kind === SyntaxKind.NamespaceImport // Cannot add a named import to a declaration that has a namespace import
+            importKind === ImportKind.Named
+            && namedBindings?.kind === SyntaxKind.NamespaceImport // Cannot add a named import to a declaration that has a namespace import
         ) {
             return undefined;
         }
@@ -998,9 +998,9 @@ function getFixInfos(context: CodeFixContextBase, errorCode: number, pos: number
 function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
     const _toPath = (fileName: string) => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
     return sort(fixes, (a, b) =>
-        compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
-        compareValues(a.fix.kind, b.fix.kind) ||
-        compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
+        compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix)
+        || compareValues(a.fix.kind, b.fix.kind)
+        || compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
 }
 
 function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): ImportFixWithModuleSpecifier | undefined {
@@ -1050,9 +1050,9 @@ function compareModuleSpecifiers(
 // (e.g. `export * from "../whatever"`) or are not named "index".
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (
-        fix.isReExport &&
-        fix.exportInfo?.moduleFileName &&
-        isIndexFileName(fix.exportInfo.moduleFileName)
+        fix.isReExport
+        && fix.exportInfo?.moduleFileName
+        && isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));
         return startsWith(importingFile.path, reExportDir);
@@ -1231,8 +1231,8 @@ function getExportInfos(
     function addSymbol(moduleSymbol: Symbol, toFile: SourceFile | undefined, exportedSymbol: Symbol, exportKind: ExportKind, program: Program, isFromPackageJson: boolean): void {
         const moduleSpecifierResolutionHost = getModuleSpecifierResolutionHost(isFromPackageJson);
         if (
-            toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
-            !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
+            toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache)
+            || !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
         ) {
             const checker = program.getTypeChecker();
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFileName: toFile?.fileName, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });
@@ -1441,9 +1441,9 @@ function promoteFromTypeOnly(
             if (namedImports && namedImports.elements.length > 1) {
                 const sortState = OrganizeImports.getNamedImportSpecifierComparerWithDetection(importClause.parent, preferences, sourceFile);
                 if (
-                    (sortState.isSorted !== false) &&
-                    aliasDeclaration.kind === SyntaxKind.ImportSpecifier &&
-                    namedImports.elements.indexOf(aliasDeclaration) !== 0
+                    (sortState.isSorted !== false)
+                    && aliasDeclaration.kind === SyntaxKind.ImportSpecifier
+                    && namedImports.elements.indexOf(aliasDeclaration) !== 0
                 ) {
                     // The import specifier being promoted will be the only non-type-only,
                     //  import in the NamedImports, so it should be moved to the front.
@@ -1610,10 +1610,10 @@ function getNewImports(
     if (defaultImport !== undefined || namedImports?.length) {
         // `verbatimModuleSyntax` should prefer top-level `import type` -
         // even though it's not an error, it would add unnecessary runtime emit.
-        const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly) ||
-            (compilerOptions.verbatimModuleSyntax || preferences.preferTypeOnlyAutoImports) &&
-                defaultImport?.addAsTypeOnly !== AddAsTypeOnly.NotAllowed &&
-                !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
+        const topLevelTypeOnly = (!defaultImport || needsTypeOnly(defaultImport)) && every(namedImports, needsTypeOnly)
+            || (compilerOptions.verbatimModuleSyntax || preferences.preferTypeOnlyAutoImports)
+                && defaultImport?.addAsTypeOnly !== AddAsTypeOnly.NotAllowed
+                && !some(namedImports, i => i.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         statements = combine(
             statements,
             makeImport(

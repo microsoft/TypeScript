@@ -149,8 +149,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         enter();
         // If this location wasn't recorded or the location in source is going backwards, record the mapping
         if (
-            isNewGeneratedPosition(generatedLine, generatedCharacter) ||
-            isBacktrackingSourcePosition(sourceIndex, sourceLine, sourceCharacter)
+            isNewGeneratedPosition(generatedLine, generatedCharacter)
+            || isBacktrackingSourcePosition(sourceIndex, sourceLine, sourceCharacter)
         ) {
             commitPendingMapping();
             pendingGeneratedLine = generatedLine;
@@ -184,8 +184,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         for (const raw of mappingIterator) {
             if (
                 end && (
-                    raw.generatedLine > end.line ||
-                    (raw.generatedLine === end.line && raw.generatedCharacter > end.character)
+                    raw.generatedLine > end.line
+                    || (raw.generatedLine === end.line && raw.generatedCharacter > end.character)
                 )
             ) {
                 break;
@@ -193,8 +193,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
             if (
                 start && (
-                    raw.generatedLine < start.line ||
-                    (start.line === raw.generatedLine && raw.generatedCharacter < start.character)
+                    raw.generatedLine < start.line
+                    || (start.line === raw.generatedLine && raw.generatedCharacter < start.character)
                 )
             ) {
                 continue;
@@ -576,9 +576,9 @@ export function decodeMappings(mappings: string): MappingsDecoder {
     }
 
     function isSourceMappingSegmentEnd() {
-        return (pos === mappings.length ||
-            mappings.charCodeAt(pos) === CharacterCodes.comma ||
-            mappings.charCodeAt(pos) === CharacterCodes.semicolon);
+        return (pos === mappings.length
+            || mappings.charCodeAt(pos) === CharacterCodes.comma
+            || mappings.charCodeAt(pos) === CharacterCodes.semicolon);
     }
 
     function base64VLQFormatDecode(): number {
@@ -635,21 +635,21 @@ export function isSourceMapping(mapping: Mapping): mapping is SourceMapping {
 }
 
 function base64FormatEncode(value: number) {
-    return value >= 0 && value < 26 ? CharacterCodes.A + value :
-        value >= 26 && value < 52 ? CharacterCodes.a + value - 26 :
-        value >= 52 && value < 62 ? CharacterCodes._0 + value - 52 :
-        value === 62 ? CharacterCodes.plus :
-        value === 63 ? CharacterCodes.slash :
-        Debug.fail(`${value}: not a base64 value`);
+    return value >= 0 && value < 26 ? CharacterCodes.A + value
+        : value >= 26 && value < 52 ? CharacterCodes.a + value - 26
+        : value >= 52 && value < 62 ? CharacterCodes._0 + value - 52
+        : value === 62 ? CharacterCodes.plus
+        : value === 63 ? CharacterCodes.slash
+        : Debug.fail(`${value}: not a base64 value`);
 }
 
 function base64FormatDecode(ch: number) {
-    return ch >= CharacterCodes.A && ch <= CharacterCodes.Z ? ch - CharacterCodes.A :
-        ch >= CharacterCodes.a && ch <= CharacterCodes.z ? ch - CharacterCodes.a + 26 :
-        ch >= CharacterCodes._0 && ch <= CharacterCodes._9 ? ch - CharacterCodes._0 + 52 :
-        ch === CharacterCodes.plus ? 62 :
-        ch === CharacterCodes.slash ? 63 :
-        -1;
+    return ch >= CharacterCodes.A && ch <= CharacterCodes.Z ? ch - CharacterCodes.A
+        : ch >= CharacterCodes.a && ch <= CharacterCodes.z ? ch - CharacterCodes.a + 26
+        : ch >= CharacterCodes._0 && ch <= CharacterCodes._9 ? ch - CharacterCodes._0 + 52
+        : ch === CharacterCodes.plus ? 62
+        : ch === CharacterCodes.slash ? 63
+        : -1;
 }
 
 interface MappedPosition {
