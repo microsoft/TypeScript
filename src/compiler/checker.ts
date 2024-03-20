@@ -13359,35 +13359,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const nameElements = restDeclaration.name.elements;
         const elementFlags = restType.target.elementFlags;
+        const result: (__String | undefined)[] = arrayOf(elementFlags.length, () => undefined);
         const length = Math.min(nameElements.length, elementFlags.length);
-        const result: (__String | undefined)[] = [];
         for (let i = 0; i < length; i++) {
             const nameElement = nameElements[i];
 
             if (elementFlags[i] & ElementFlags.Variable) {
                 if (nameElement.kind === SyntaxKind.BindingElement && nameElement.dotDotDotToken && nameElement.name.kind === SyntaxKind.Identifier) {
-                    result.push(nameElement.name.escapedText);
+                    result[i] = nameElement.name.escapedText;
                 }
                 break;
             }
             if (nameElement.kind !== SyntaxKind.BindingElement) {
-                result.push(undefined);
                 continue;
             }
             if (nameElement.dotDotDotToken) {
                 break;
             }
             if (nameElement.name.kind !== SyntaxKind.Identifier) {
-                result.push(undefined);
                 continue;
             }
-            result.push(nameElement.name.escapedText);
-        }
-        // fill the rest of the labels with undefined
-        // it makes it easier to consume the fallback labels later
-        // since they will have the same length as the labeledElementDeclarations etc
-        for (let i = result.length; i < elementFlags.length; i++) {
-            result.push(undefined);
+            result[i] = nameElement.name.escapedText;
         }
         return result;
     }
