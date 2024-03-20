@@ -46344,6 +46344,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ) {
                     error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
                 }
+                else if (
+                    moduleKind === ModuleKind.Preserve &&
+                    node.kind !== SyntaxKind.ImportEqualsDeclaration &&
+                    node.kind !== SyntaxKind.VariableDeclaration &&
+                    getEmitModuleFormatOfFile(getSourceFileOfNode(node), compilerOptions) === ModuleKind.CommonJS
+                ) {
+                    // In `--module preserve`, ESM input syntax emits ESM output syntax, but there will be times
+                    // when we look at the `impliedNodeFormat` of this file and decide it's CommonJS. To avoid
+                    // that inconsistency, we disallow ESM syntax in files that are unambiguously CommonJS in
+                    // this mode.
+                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
+                }
             }
 
             if (isImportSpecifier(node)) {
