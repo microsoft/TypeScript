@@ -12,7 +12,7 @@ export type Data<A extends Readonly<Record<string, any>> | ReadonlyArray<any>> =
 >A : Symbol(A, Decl(Data.d.ts, 3, 17))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
 
   Readonly<A> & Equal.Equal;
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
