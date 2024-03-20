@@ -13353,7 +13353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!restDeclaration) {
             return;
         }
-        Debug.assert(isParameter(restDeclaration));
+        Debug.assertNode(restDeclaration, isParameter);
         if (restDeclaration.name.kind !== SyntaxKind.ArrayBindingPattern) {
             return;
         }
