@@ -251,7 +251,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
 
     function addImportFromSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, targetFilePath?: string) {
         if (!exportedSymbol.parent && targetFilePath) {
-            const fix = getImportFixForNonEportedSymbol(sourceFile, exportedSymbol, ImportKind.Named, program, !!isValidTypeOnlyUseSite, targetFilePath);
+            const fix = getImportFixForNonExportedSymbol(sourceFile, exportedSymbol, ImportKind.Named, program, !!isValidTypeOnlyUseSite, targetFilePath);
             if (fix?.kind === ImportFixKind.AddToExisting) {
                 addImport({ fix, symbolName: exportedSymbol.name, errorIdentifierText: undefined });
             }
@@ -604,7 +604,7 @@ function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly Sym
     return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
 }
 
-function getImportFixForNonEportedSymbol(sourceFile: SourceFile, symbol: Symbol, importKind: ImportKind, program: Program, isValidTypeOnlyUseSite: boolean, targetFilePath: string) {
+function getImportFixForNonExportedSymbol(sourceFile: SourceFile, symbol: Symbol, importKind: ImportKind, program: Program, isValidTypeOnlyUseSite: boolean, targetFilePath: string) {
     const fix = getImportFixesForNonExportedSymbols(sourceFile, symbol, importKind, program, isValidTypeOnlyUseSite, targetFilePath);
     if (fix.fixes[0] === undefined) return; // Not adding an import to an existing import
     if (fix.fixes[0].kind === ImportFixKind.AddToExisting) {
