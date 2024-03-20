@@ -934,7 +934,6 @@ import {
     ResolutionMode,
     ResolvedModuleFull,
     ResolvedType,
-    resolveTripleslashReference,
     resolvingEmptyArray,
     RestTypeNode,
     ReturnStatement,
@@ -48736,26 +48735,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createResolver(): EmitResolver {
-        // this variable and functions that use it are deliberately moved here from the outer scope
-        // to avoid scope pollution
-        const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
-        let fileToDirective: Map<string, [specifier: string, mode: ResolutionMode]>;
-        if (resolvedTypeReferenceDirectives) {
-            // populate reverse mapping: file path -> type reference directive that was resolved to this file
-            fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode]>();
-            resolvedTypeReferenceDirectives.forEach(({ resolvedTypeReferenceDirective }, key, mode) => {
-                if (!resolvedTypeReferenceDirective?.resolvedFileName) {
-                    return;
-                }
-                const file = host.getSourceFile(resolvedTypeReferenceDirective.resolvedFileName);
-                if (file) {
-                    // Add the transitive closure of path references loaded by this file (as long as they are not)
-                    // part of an existing type reference.
-                    addReferencedFilesToTypeDirective(file, key, mode);
-                }
-            });
-        }
-
         return {
             getReferencedExportContainer,
             getReferencedImportDeclaration,
@@ -48870,21 +48849,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return false;
-        }
-
-        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode) {
-            if (fileToDirective.has(file.path)) return;
-            fileToDirective.set(file.path, [key, mode]);
-            for (const { fileName } of file.referencedFiles) {
-                const resolvedFile = resolveTripleslashReference(fileName, file.fileName);
-                const referencedFile = host.getSourceFile(resolvedFile);
-                if (referencedFile) {
-                    // The resolution mode of the file reference doesn't actually matter here -
-                    // all we're recording is the fact that the file entered the compilation
-                    // transitively via a type reference directive of {key} with mode {mode}.
-                    addReferencedFilesToTypeDirective(referencedFile, key, mode || file.impliedNodeFormat);
-                }
-            }
         }
     }
 

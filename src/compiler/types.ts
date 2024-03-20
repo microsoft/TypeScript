@@ -4841,7 +4841,6 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
