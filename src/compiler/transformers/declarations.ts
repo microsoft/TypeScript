@@ -257,9 +257,9 @@ export function transformDeclarations(context: TransformationContext) {
     let errorFallbackNode: Declaration | undefined;
 
     let currentSourceFile: SourceFile;
-    let rawReferencedFiles: readonly [SourceFile, FileReference][];
-    let rawTypeReferenceDirectives: readonly FileReference[];
-    let rawLibReferenceDirectives: readonly FileReference[];
+    let rawReferencedFiles: readonly [SourceFile, FileReference][] = [];
+    let rawTypeReferenceDirectives: readonly FileReference[] = [];
+    let rawLibReferenceDirectives: readonly FileReference[] = [];
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
     const { stripInternal } = options;
@@ -389,9 +389,6 @@ export function transformDeclarations(context: TransformationContext) {
 
         if (node.kind === SyntaxKind.Bundle) {
             isBundledEmit = true;
-            rawReferencedFiles = [];
-            rawTypeReferenceDirectives = [];
-            rawLibReferenceDirectives = [];
             let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
@@ -405,9 +402,7 @@ export function transformDeclarations(context: TransformationContext) {
                     getSymbolAccessibilityDiagnostic = throwDiagnostic;
                     needsScopeFixMarker = false;
                     resultHasScopeMarker = false;
-                    rawReferencedFiles = concatenate(rawReferencedFiles, map(sourceFile.referencedFiles, f => [sourceFile, f]));
-                    rawTypeReferenceDirectives = concatenate(rawTypeReferenceDirectives, sourceFile.typeReferenceDirectives);
-                    rawLibReferenceDirectives = concatenate(rawLibReferenceDirectives, sourceFile.libReferenceDirectives);
+                    collectFileReferences(sourceFile);
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                         resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                         needsDeclare = false;
@@ -452,9 +447,7 @@ export function transformDeclarations(context: TransformationContext) {
         suppressNewDiagnosticContexts = false;
         lateMarkedStatements = undefined;
         lateStatementReplacementMap = new Map();
-        rawReferencedFiles = map(currentSourceFile.referencedFiles, f => [currentSourceFile, f]);
-        rawTypeReferenceDirectives = currentSourceFile.typeReferenceDirectives;
-        rawLibReferenceDirectives = currentSourceFile.libReferenceDirectives;
+        collectFileReferences(currentSourceFile);
         let combinedStatements: NodeArray<Statement>;
         if (isSourceFileJS(currentSourceFile)) {
             combinedStatements = factory.createNodeArray(transformDeclarationsForJS(node));
@@ -468,6 +461,12 @@ export function transformDeclarations(context: TransformationContext) {
         }
         const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
         return factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, getReferencedFiles(outputFilePath), getTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+
+        function collectFileReferences(sourceFile: SourceFile) {
+            rawReferencedFiles = concatenate(rawReferencedFiles, map(sourceFile.referencedFiles, f => [sourceFile, f]));
+            rawTypeReferenceDirectives = concatenate(rawTypeReferenceDirectives, sourceFile.typeReferenceDirectives);
+            rawLibReferenceDirectives = concatenate(rawLibReferenceDirectives, sourceFile.libReferenceDirectives);
+        }
 
         function copyFileReferenceAsSynthetic(ref: FileReference): FileReference {
             const newRef: FileReference = { ...ref };
