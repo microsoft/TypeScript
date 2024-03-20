@@ -1786,6 +1786,10 @@ export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTyp
     return false;
 }
 
+export function isTypeOrFunctionOrConstructorTypeNode(node: Node): node is TypeNode | FunctionTypeNode | ConstructorTypeNode {
+    return isTypeNode(node) || isFunctionOrConstructorTypeNode(node);
+}
+
 // Binding patterns
 
 /** @internal */

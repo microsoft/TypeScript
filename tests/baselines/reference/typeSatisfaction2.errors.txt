@@ -1,0 +1,63 @@
+typeSatisfaction2.ts(5,36): error TS1360: Type '() => void' does not satisfy the expected type '() => number'.
+  Type 'void' is not assignable to type 'number'.
+typeSatisfaction2.ts(18,13): error TS1360: Type '(a: boolean, b: boolean) => number' does not satisfy the expected type '(a: number, b: number) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
+    Type 'number' is not assignable to type 'boolean'.
+typeSatisfaction2.ts(22,13): error TS1360: Type '(a: number, b: boolean) => number' does not satisfy the expected type 'T2'.
+  Types of parameters 'b' and 'b' are incompatible.
+    Type 'number' is not assignable to type 'boolean'.
+typeSatisfaction2.ts(26,13): error TS1360: Type '(a: number, b: number) => string' does not satisfy the expected type '(a: number, b: number) => number'.
+  Type 'string' is not assignable to type 'number'.
+typeSatisfaction2.ts(30,13): error TS1360: Type '(a: number, b: number) => string' does not satisfy the expected type 'T2'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== typeSatisfaction2.ts (5 errors) ====
+    export type T1 = () => void;
+    export type T2 = (a: number, b: number) => number;
+    
+    export function f1() { } satisfies () => void;
+    export function f2() { } satisfies () => number;
+                                       ~~~~~~~~~~~~
+!!! error TS1360: Type '() => void' does not satisfy the expected type '() => number'.
+!!! error TS1360:   Type 'void' is not assignable to type 'number'.
+    export function f3() { } satisfies T1;
+    
+    export function f4(a: number, b: number) {
+        return 1;
+    } satisfies (a: number, b: number) => number;
+    
+    export function f5(a: number, b: number) {
+        return 1;
+    } satisfies T2;
+    
+    export function f6(a: boolean, b: boolean) {
+        return 1;
+    } satisfies (a: number, b: number) => number;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1360: Type '(a: boolean, b: boolean) => number' does not satisfy the expected type '(a: number, b: number) => number'.
+!!! error TS1360:   Types of parameters 'a' and 'a' are incompatible.
+!!! error TS1360:     Type 'number' is not assignable to type 'boolean'.
+    
+    export function f7(a: number, b: boolean) {
+        return 1;
+    } satisfies T2;
+                ~~
+!!! error TS1360: Type '(a: number, b: boolean) => number' does not satisfy the expected type 'T2'.
+!!! error TS1360:   Types of parameters 'b' and 'b' are incompatible.
+!!! error TS1360:     Type 'number' is not assignable to type 'boolean'.
+    
+    export function f8(a: number, b: number) {
+        return "";
+    } satisfies (a: number, b: number) => number;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1360: Type '(a: number, b: number) => string' does not satisfy the expected type '(a: number, b: number) => number'.
+!!! error TS1360:   Type 'string' is not assignable to type 'number'.
+    
+    export function f9(a: number, b: number) {
+        return "";
+    } satisfies T2;
+                ~~
+!!! error TS1360: Type '(a: number, b: number) => string' does not satisfy the expected type 'T2'.
+!!! error TS1360:   Type 'string' is not assignable to type 'number'.
+    

@@ -1085,6 +1085,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
                 transformAsyncGeneratorFunctionBody(node) :
                 transformFunctionBody(node),
+            /*satisfiesClause*/ undefined,
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;

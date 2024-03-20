@@ -352,6 +352,7 @@ import {
     resolvePath,
     RestTypeNode,
     ReturnStatement,
+    SatisfiesClause,
     SatisfiesExpression,
     ScriptTarget,
     setOriginalNode,
@@ -1747,6 +1748,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitHeritageClause(node as HeritageClause);
                 case SyntaxKind.CatchClause:
                     return emitCatchClause(node as CatchClause);
+                case SyntaxKind.SatisfiesClause:
+                    return emitSatisfiesClause(node as SatisfiesClause);
 
                 // Property assignments
                 case SyntaxKind.PropertyAssignment:
@@ -3295,6 +3298,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitFunctionDeclaration(node: FunctionDeclaration) {
         emitFunctionDeclarationOrExpression(node);
+        if (node.satisfiesClause) {
+            emit(node.satisfiesClause);
+        }
     }
 
     function emitFunctionDeclarationOrExpression(node: FunctionDeclaration | FunctionExpression) {
@@ -3423,6 +3429,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitClassDeclaration(node: ClassDeclaration) {
         emitClassDeclarationOrExpression(node);
+        if (node.satisfiesClause) {
+            emit(node.satisfiesClause);
+        }
     }
 
     function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
@@ -3917,6 +3926,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
         }
         emit(node.block);
+    }
+
+    function emitSatisfiesClause(node: SatisfiesClause) {
+        writeSpace();
+        emitTokenWithComment(SyntaxKind.SatisfiesKeyword, node.pos, writeKeyword, node);
+        writeSpace();
+        emit(node.type);
     }
 
     //

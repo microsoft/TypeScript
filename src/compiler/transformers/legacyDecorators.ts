@@ -224,6 +224,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
             /*typeParameters*/ undefined,
             heritageClauses,
             members,
+            /*satisfiesClause*/ undefined,
         );
 
         return addRange([updated], decorationStatements);

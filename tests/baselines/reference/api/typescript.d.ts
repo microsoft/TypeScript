@@ -3885,67 +3885,68 @@ declare namespace ts {
         DefaultClause = 297,
         HeritageClause = 298,
         CatchClause = 299,
-        ImportAttributes = 300,
-        ImportAttribute = 301,
-        /** @deprecated */ AssertClause = 300,
-        /** @deprecated */ AssertEntry = 301,
-        /** @deprecated */ ImportTypeAssertionContainer = 302,
-        PropertyAssignment = 303,
-        ShorthandPropertyAssignment = 304,
-        SpreadAssignment = 305,
-        EnumMember = 306,
-        SourceFile = 307,
-        Bundle = 308,
-        JSDocTypeExpression = 309,
-        JSDocNameReference = 310,
-        JSDocMemberName = 311,
-        JSDocAllType = 312,
-        JSDocUnknownType = 313,
-        JSDocNullableType = 314,
-        JSDocNonNullableType = 315,
-        JSDocOptionalType = 316,
-        JSDocFunctionType = 317,
-        JSDocVariadicType = 318,
-        JSDocNamepathType = 319,
-        JSDoc = 320,
+        SatisfiesClause = 300,
+        ImportAttributes = 301,
+        ImportAttribute = 302,
+        /** @deprecated */ AssertClause = 301,
+        /** @deprecated */ AssertEntry = 302,
+        /** @deprecated */ ImportTypeAssertionContainer = 303,
+        PropertyAssignment = 304,
+        ShorthandPropertyAssignment = 305,
+        SpreadAssignment = 306,
+        EnumMember = 307,
+        SourceFile = 308,
+        Bundle = 309,
+        JSDocTypeExpression = 310,
+        JSDocNameReference = 311,
+        JSDocMemberName = 312,
+        JSDocAllType = 313,
+        JSDocUnknownType = 314,
+        JSDocNullableType = 315,
+        JSDocNonNullableType = 316,
+        JSDocOptionalType = 317,
+        JSDocFunctionType = 318,
+        JSDocVariadicType = 319,
+        JSDocNamepathType = 320,
+        JSDoc = 321,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 320,
-        JSDocText = 321,
-        JSDocTypeLiteral = 322,
-        JSDocSignature = 323,
-        JSDocLink = 324,
-        JSDocLinkCode = 325,
-        JSDocLinkPlain = 326,
-        JSDocTag = 327,
-        JSDocAugmentsTag = 328,
-        JSDocImplementsTag = 329,
-        JSDocAuthorTag = 330,
-        JSDocDeprecatedTag = 331,
-        JSDocClassTag = 332,
-        JSDocPublicTag = 333,
-        JSDocPrivateTag = 334,
-        JSDocProtectedTag = 335,
-        JSDocReadonlyTag = 336,
-        JSDocOverrideTag = 337,
-        JSDocCallbackTag = 338,
-        JSDocOverloadTag = 339,
-        JSDocEnumTag = 340,
-        JSDocParameterTag = 341,
-        JSDocReturnTag = 342,
-        JSDocThisTag = 343,
-        JSDocTypeTag = 344,
-        JSDocTemplateTag = 345,
-        JSDocTypedefTag = 346,
-        JSDocSeeTag = 347,
-        JSDocPropertyTag = 348,
-        JSDocThrowsTag = 349,
-        JSDocSatisfiesTag = 350,
-        SyntaxList = 351,
-        NotEmittedStatement = 352,
-        PartiallyEmittedExpression = 353,
-        CommaListExpression = 354,
-        SyntheticReferenceExpression = 355,
-        Count = 356,
+        JSDocComment = 321,
+        JSDocText = 322,
+        JSDocTypeLiteral = 323,
+        JSDocSignature = 324,
+        JSDocLink = 325,
+        JSDocLinkCode = 326,
+        JSDocLinkPlain = 327,
+        JSDocTag = 328,
+        JSDocAugmentsTag = 329,
+        JSDocImplementsTag = 330,
+        JSDocAuthorTag = 331,
+        JSDocDeprecatedTag = 332,
+        JSDocClassTag = 333,
+        JSDocPublicTag = 334,
+        JSDocPrivateTag = 335,
+        JSDocProtectedTag = 336,
+        JSDocReadonlyTag = 337,
+        JSDocOverrideTag = 338,
+        JSDocCallbackTag = 339,
+        JSDocOverloadTag = 340,
+        JSDocEnumTag = 341,
+        JSDocParameterTag = 342,
+        JSDocReturnTag = 343,
+        JSDocThisTag = 344,
+        JSDocTypeTag = 345,
+        JSDocTemplateTag = 346,
+        JSDocTypedefTag = 347,
+        JSDocSeeTag = 348,
+        JSDocPropertyTag = 349,
+        JSDocThrowsTag = 350,
+        JSDocSatisfiesTag = 351,
+        SyntaxList = 352,
+        NotEmittedStatement = 353,
+        PartiallyEmittedExpression = 354,
+        CommaListExpression = 355,
+        SyntheticReferenceExpression = 356,
+        Count = 357,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -3973,10 +3974,10 @@ declare namespace ts {
         FirstStatement = 243,
         LastStatement = 259,
         FirstNode = 166,
-        FirstJSDocNode = 309,
-        LastJSDocNode = 350,
-        FirstJSDocTagNode = 327,
-        LastJSDocTagNode = 350,
+        FirstJSDocNode = 310,
+        LastJSDocNode = 351,
+        FirstJSDocTagNode = 328,
+        LastJSDocTagNode = 351,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -4556,6 +4557,7 @@ declare namespace ts {
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name?: Identifier;
         readonly body?: FunctionBody;
+        readonly satisfiesClause?: SatisfiesClause;
     }
     interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.MethodSignature;
@@ -5321,6 +5323,7 @@ declare namespace ts {
         readonly modifiers?: NodeArray<ModifierLike>;
         /** May be undefined in `export default class { ... }`. */
         readonly name?: Identifier;
+        readonly satisfiesClause?: SatisfiesClause;
     }
     interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
         readonly kind: SyntaxKind.ClassExpression;
@@ -5349,6 +5352,11 @@ declare namespace ts {
         readonly parent: InterfaceDeclaration | ClassLikeDeclaration;
         readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         readonly types: NodeArray<ExpressionWithTypeArguments>;
+    }
+    interface SatisfiesClause extends Node {
+        readonly kind: SyntaxKind.SatisfiesClause;
+        readonly parent: FunctionDeclaration | ClassDeclaration;
+        readonly type: TypeNode;
     }
     interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.TypeAliasDeclaration;
@@ -7565,10 +7573,10 @@ declare namespace ts {
         updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
         updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
-        createFunctionDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-        updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-        createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-        updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        createFunctionDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined, satisfiesClause: SatisfiesClause | undefined): FunctionDeclaration;
+        updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined, satisfiesClause: SatisfiesClause | undefined): FunctionDeclaration;
+        createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[], satisfiesClause: SatisfiesClause | undefined): ClassDeclaration;
+        updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[], satisfiesClause: SatisfiesClause | undefined): ClassDeclaration;
         createInterfaceDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
         updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
         createTypeAliasDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
@@ -7731,6 +7739,8 @@ declare namespace ts {
         updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
         createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
         updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
+        createSatisfiesClause(type: TypeNode): SatisfiesClause;
+        updateSatisfiesClause(node: SatisfiesClause, type: TypeNode): SatisfiesClause;
         createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
         updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
         createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression): ShorthandPropertyAssignment;
@@ -8645,6 +8655,7 @@ declare namespace ts {
      */
     function isTypeNode(node: Node): node is TypeNode;
     function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
+    function isTypeOrFunctionOrConstructorTypeNode(node: Node): node is TypeNode | FunctionTypeNode | ConstructorTypeNode;
     function isArrayBindingElement(node: Node): node is ArrayBindingElement;
     function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
@@ -8950,6 +8961,7 @@ declare namespace ts {
     function isDefaultClause(node: Node): node is DefaultClause;
     function isHeritageClause(node: Node): node is HeritageClause;
     function isCatchClause(node: Node): node is CatchClause;
+    function isSatisfiesClause(node: Node): node is SatisfiesClause;
     function isPropertyAssignment(node: Node): node is PropertyAssignment;
     function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
     function isSpreadAssignment(node: Node): node is SpreadAssignment;

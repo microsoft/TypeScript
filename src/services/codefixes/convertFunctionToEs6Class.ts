@@ -292,7 +292,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
         }
 
         const modifiers = getModifierKindFromSource(node.parent.parent, SyntaxKind.ExportKeyword);
-        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements, /*satisfiesClause*/ undefined);
         // Don't call copyComments here because we'll already leave them in place
         return cls;
     }
@@ -304,7 +304,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
         }
 
         const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
-        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements, /*satisfiesClause*/ undefined);
         // Don't call copyComments here because we'll already leave them in place
         return cls;
     }

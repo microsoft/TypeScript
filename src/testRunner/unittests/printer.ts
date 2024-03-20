@@ -181,6 +181,7 @@ describe("unittests:: PrinterAPI", () => {
                         /*type*/ undefined,
                         /*initializer*/ undefined,
                     )],
+                    /*satisfiesClause*/ undefined,
                 ),
                 ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
             ));
@@ -275,6 +276,7 @@ describe("unittests:: PrinterAPI", () => {
                             /*initializer*/ undefined,
                         ),
                     ],
+                    /*satisfiesClause*/ undefined,
                 ),
                 ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
             ));

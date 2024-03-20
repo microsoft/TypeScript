@@ -683,6 +683,7 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
                     /*typeParameters*/ undefined,
                     /*heritageClauses*/ undefined,
                     [],
+                    /*satisfiesClause*/ undefined,
                 ),
                 a.node,
             );
@@ -713,6 +714,7 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
                     /*typeParameters*/ undefined,
                     /*heritageClauses*/ undefined,
                     [],
+                    /*satisfiesClause*/ undefined,
                 ),
                 b.node,
             ));

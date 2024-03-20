@@ -1,0 +1,22 @@
+typeSatisfaction3.ts(7,13): error TS1360: Type 'C1' does not satisfy the expected type 'T1'.
+  Types of property 'p' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== typeSatisfaction3.ts (1 errors) ====
+    type T1 = {
+        p: string;
+    }
+    
+    class C1 {
+        p: number;
+    } satisfies T1;
+                ~~
+!!! error TS1360: Type 'C1' does not satisfy the expected type 'T1'.
+!!! error TS1360:   Types of property 'p' are incompatible.
+!!! error TS1360:     Type 'number' is not assignable to type 'string'.
+    
+    class C2 {
+        p: string;
+    } satisfies T1;
+    

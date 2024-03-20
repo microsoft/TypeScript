@@ -1152,6 +1152,7 @@ function extractFunctionInScope(
             parameters,
             returnType,
             body,
+            /*satisfiesClause*/ undefined,
         );
     }
 

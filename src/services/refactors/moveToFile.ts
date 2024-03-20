@@ -724,10 +724,10 @@ function addEs6Export(d: TopLevelDeclarationStatement): TopLevelDeclarationState
     const modifiers = canHaveModifiers(d) ? concatenate([factory.createModifier(SyntaxKind.ExportKeyword)], getModifiers(d)) : undefined;
     switch (d.kind) {
         case SyntaxKind.FunctionDeclaration:
-            return factory.updateFunctionDeclaration(d, modifiers, d.asteriskToken, d.name, d.typeParameters, d.parameters, d.type, d.body);
+            return factory.updateFunctionDeclaration(d, modifiers, d.asteriskToken, d.name, d.typeParameters, d.parameters, d.type, d.body, d.satisfiesClause);
         case SyntaxKind.ClassDeclaration:
             const decorators = canHaveDecorators(d) ? getDecorators(d) : undefined;
-            return factory.updateClassDeclaration(d, concatenate<ModifierLike>(decorators, modifiers), d.name, d.typeParameters, d.heritageClauses, d.members);
+            return factory.updateClassDeclaration(d, concatenate<ModifierLike>(decorators, modifiers), d.name, d.typeParameters, d.heritageClauses, d.members, d.satisfiesClause);
         case SyntaxKind.VariableStatement:
             return factory.updateVariableStatement(d, modifiers, d.declarationList);
         case SyntaxKind.ModuleDeclaration:

@@ -378,6 +378,7 @@ import {
     ReturnStatement,
     returnTrue,
     sameFlatMap,
+    SatisfiesClause,
     SatisfiesExpression,
     Scanner,
     ScriptTarget,
@@ -987,6 +988,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateHeritageClause,
         createCatchClause,
         updateCatchClause,
+        createSatisfiesClause,
+        updateSatisfiesClause,
         createPropertyAssignment,
         updatePropertyAssignment,
         createShorthandPropertyAssignment,
@@ -4291,6 +4294,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
         body: Block | undefined,
+        satisfiesClause: SatisfiesClause | undefined,
     ) {
         const node = createBaseDeclaration<FunctionDeclaration>(SyntaxKind.FunctionDeclaration);
         node.modifiers = asNodeArray(modifiers);
@@ -4300,6 +4304,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.parameters = createNodeArray(parameters);
         node.type = type;
         node.body = body;
+        node.satisfiesClause = satisfiesClause;
 
         if (!node.body || modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -4343,6 +4348,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
         body: Block | undefined,
+        satisfiesClause: SatisfiesClause | undefined,
     ) {
         return node.modifiers !== modifiers
                 || node.asteriskToken !== asteriskToken
@@ -4351,7 +4357,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-            ? finishUpdateFunctionDeclaration(createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+                || node.satisfiesClause !== satisfiesClause
+            ? finishUpdateFunctionDeclaration(createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body, satisfiesClause), node)
             : node;
     }
 
@@ -4372,6 +4379,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         typeParameters: readonly TypeParameterDeclaration[] | undefined,
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[],
+        satisfiesClause: SatisfiesClause | undefined,
     ) {
         const node = createBaseDeclaration<ClassDeclaration>(SyntaxKind.ClassDeclaration);
         node.modifiers = asNodeArray(modifiers);
@@ -4379,6 +4387,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.typeParameters = asNodeArray(typeParameters);
         node.heritageClauses = asNodeArray(heritageClauses);
         node.members = createNodeArray(members);
+        node.satisfiesClause = satisfiesClause;
 
         if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -4408,13 +4417,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         typeParameters: readonly TypeParameterDeclaration[] | undefined,
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[],
+        satisfiesClause: SatisfiesClause | undefined,
     ) {
         return node.modifiers !== modifiers
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-            ? update(createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members), node)
+                || node.satisfiesClause !== satisfiesClause
+            ? update(createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members, satisfiesClause), node)
             : node;
     }
 
@@ -5874,6 +5885,21 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
+    // @api
+    function createSatisfiesClause(type: TypeNode) {
+        const node = createBaseNode<SatisfiesClause>(SyntaxKind.SatisfiesClause);
+        node.type = type;
+        node.transformFlags = TransformFlags.ContainsTypeScript;
+        return node;
+    }
+
+    // @api
+    function updateSatisfiesClause(node: SatisfiesClause, type: TypeNode) {
+        return node.type !== type
+            ? update(createSatisfiesClause(type), node)
+            : node;
+    }
+
     //
     // Property assignments
     //
@@ -7041,8 +7067,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
             isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
-            isFunctionDeclaration(node) ? updateFunctionDeclaration(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-            isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+            isFunctionDeclaration(node) ? updateFunctionDeclaration(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body, node.satisfiesClause) :
+            isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members, node.satisfiesClause) :
             isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, modifierArray, node.name, node.typeParameters, node.type) :
             isEnumDeclaration(node) ? updateEnumDeclaration(node, modifierArray, node.name, node.members) :
@@ -7062,7 +7088,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
             isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
             isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
-            isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+            isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members, node.satisfiesClause) :
             Debug.assertNever(node);
     }
 

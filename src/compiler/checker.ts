@@ -942,6 +942,7 @@ import {
     ReverseMappedSymbol,
     ReverseMappedType,
     sameMap,
+    SatisfiesClause,
     SatisfiesExpression,
     scanTokenAtPosition,
     ScriptKind,
@@ -7802,7 +7803,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 kind === SyntaxKind.JSDocFunctionType ? factory.createJSDocFunctionType(parameters, returnTypeNode) :
                 kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
                 kind === SyntaxKind.ConstructorType ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
-                kind === SyntaxKind.FunctionDeclaration ? factory.createFunctionDeclaration(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
+                kind === SyntaxKind.FunctionDeclaration ? factory.createFunctionDeclaration(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, /*body*/ undefined, /*satisfiesClause*/ undefined) :
                 kind === SyntaxKind.FunctionExpression ? factory.createFunctionExpression(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, factory.createBlock([])) :
                 kind === SyntaxKind.ArrowFunction ? factory.createArrowFunction(modifiers, typeParameters, parameters, returnTypeNode, /*equalsGreaterThanToken*/ undefined, factory.createBlock([])) :
                 Debug.assertNever(kind);
@@ -9672,6 +9673,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             typeParamDecls,
                             heritageClauses,
                             [...indexSignatures, ...staticMembers, ...constructors, ...publicProperties, ...privateProperties],
+                            /*satisfiesClause*/ undefined,
                         ),
                         symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0],
                     ),
@@ -36393,6 +36395,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkSatisfiesClause(sourceType: Type, node: SatisfiesClause) {
+        checkSourceElement(node.type);
+        const targetType = getTypeFromTypeNode(node.type);
+        if (isErrorType(targetType)) {
+            return targetType;
+        }
+        checkTypeAssignableToAndOptionallyElaborate(sourceType, targetType, node, /*expr*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
+    }
+
     function checkSatisfiesExpression(node: SatisfiesExpression) {
         checkSourceElement(node.type);
         return checkSatisfiesExpressionWorker(node.expression, node.type);
@@ -42308,6 +42319,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
+        if (isFunctionDeclaration(node) && node.satisfiesClause) {
+            checkSatisfiesClause(getTypeOfSymbol(getSymbolOfDeclaration(node)), node.satisfiesClause);
+        }
+
         function checkFunctionOrMethodDeclarationDiagnostics() {
             if (!getEffectiveReturnTypeNode(node)) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -44909,7 +44924,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         checkClassLikeDeclaration(node);
         forEach(node.members, checkSourceElement);
-
+        if (node.satisfiesClause) {
+            checkSatisfiesClause(getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(node)), node.satisfiesClause);
+        }
         registerForUnusedIdentifiersCheck(node);
     }
 

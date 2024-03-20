@@ -264,7 +264,7 @@ describe("unittests:: TransformAPI", () => {
                 const result = ts.factory.updateSourceFile(
                     sourceFile,
                     ts.factory.createNodeArray([
-                        ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                        ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!, /*satisfiesClause*/ undefined), // TODO: GH#18217
                         ts.factory.createModuleDeclaration(/*modifiers*/ undefined, ts.factory.createIdentifier("Foo"), ts.factory.createModuleBlock([ts.factory.createEmptyStatement()])),
                     ]),
                 );
@@ -375,7 +375,7 @@ describe("unittests:: TransformAPI", () => {
                 // produce `class Foo { @Bar baz() {} }`;
                 const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
                     ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /*asteriskToken*/ undefined, "baz", /*questionToken*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, ts.factory.createBlock([])),
-                ]);
+                ], /*satisfiesClause*/ undefined);
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
@@ -417,7 +417,7 @@ describe("unittests:: TransformAPI", () => {
                     ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
                         ts.factory.createParameterDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x"),
                     ], ts.factory.createBlock([])),
-                ]);
+                ], /*satisfiesClause*/ undefined);
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
@@ -668,6 +668,7 @@ module MyModule {
                         node.typeParameters,
                         node.heritageClauses,
                         newMembers,
+                        node.satisfiesClause,
                     ) :
                     ts.factory.updateClassExpression(
                         node,

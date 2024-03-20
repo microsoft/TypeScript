@@ -474,7 +474,7 @@ export function createSignatureDeclarationFromSignature(
         return factory.updateMethodDeclaration(signatureDeclaration, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
     }
     if (isFunctionDeclaration(signatureDeclaration)) {
-        return factory.updateFunctionDeclaration(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
+        return factory.updateFunctionDeclaration(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body, signatureDeclaration.satisfiesClause);
     }
     return undefined;
 }
@@ -552,6 +552,7 @@ export function createSignatureDeclarationFromCallExpression(
                 parameters,
                 type,
                 createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference),
+                /*satisfiesClause*/ undefined,
             );
         default:
             Debug.fail("Unexpected kind");

@@ -221,6 +221,7 @@ export function injectClassNamedEvaluationHelperBlockIfMissing(
             node.typeParameters,
             node.heritageClauses,
             members,
+            /*satisfiesClause*/ undefined,
         ) :
         factory.updateClassExpression(
             node,

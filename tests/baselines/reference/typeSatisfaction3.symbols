@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction3.ts] ////
+
+=== typeSatisfaction3.ts ===
+type T1 = {
+>T1 : Symbol(T1, Decl(typeSatisfaction3.ts, 0, 0))
+
+    p: string;
+>p : Symbol(p, Decl(typeSatisfaction3.ts, 0, 11))
+}
+
+class C1 {
+>C1 : Symbol(C1, Decl(typeSatisfaction3.ts, 2, 1))
+
+    p: number;
+>p : Symbol(C1.p, Decl(typeSatisfaction3.ts, 4, 10))
+
+} satisfies T1;
+>T1 : Symbol(T1, Decl(typeSatisfaction3.ts, 0, 0))
+
+class C2 {
+>C2 : Symbol(C2, Decl(typeSatisfaction3.ts, 6, 15))
+
+    p: string;
+>p : Symbol(C2.p, Decl(typeSatisfaction3.ts, 8, 10))
+
+} satisfies T1;
+>T1 : Symbol(T1, Decl(typeSatisfaction3.ts, 0, 0))
+

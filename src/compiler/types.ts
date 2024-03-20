@@ -375,6 +375,7 @@ export const enum SyntaxKind {
     DefaultClause,
     HeritageClause,
     CatchClause,
+    SatisfiesClause,
 
     ImportAttributes,
     ImportAttribute,
@@ -1170,6 +1171,7 @@ export type HasChildren =
     | DefaultClause
     | HeritageClause
     | CatchClause
+    | SatisfiesClause
     | PropertyAssignment
     | ShorthandPropertyAssignment
     | SpreadAssignment
@@ -2051,6 +2053,7 @@ export interface FunctionDeclaration extends FunctionLikeDeclarationBase, Declar
     readonly modifiers?: NodeArray<ModifierLike>;
     readonly name?: Identifier;
     readonly body?: FunctionBody;
+    readonly satisfiesClause?: SatisfiesClause;
 }
 
 export interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
@@ -3481,6 +3484,7 @@ export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationS
     readonly modifiers?: NodeArray<ModifierLike>;
     /** May be undefined in `export default class { ... }`. */
     readonly name?: Identifier;
+    readonly satisfiesClause?: SatisfiesClause;
 }
 
 export interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
@@ -3517,6 +3521,12 @@ export interface HeritageClause extends Node {
     readonly parent: InterfaceDeclaration | ClassLikeDeclaration;
     readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
     readonly types: NodeArray<ExpressionWithTypeArguments>;
+}
+
+export interface SatisfiesClause extends Node {
+    readonly kind: SyntaxKind.SatisfiesClause;
+    readonly parent: FunctionDeclaration | ClassDeclaration;
+    readonly type: TypeNode;
 }
 
 export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
@@ -8635,10 +8645,10 @@ export interface NodeFactory {
     updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
     createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
     updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
-    createFunctionDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-    updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-    createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-    updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+    createFunctionDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined, satisfiesClause: SatisfiesClause | undefined): FunctionDeclaration;
+    updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined, satisfiesClause: SatisfiesClause | undefined): FunctionDeclaration;
+    createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[], satisfiesClause: SatisfiesClause | undefined): ClassDeclaration;
+    updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[], satisfiesClause: SatisfiesClause | undefined): ClassDeclaration;
     createInterfaceDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
     updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
     createTypeAliasDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
@@ -8823,6 +8833,8 @@ export interface NodeFactory {
     updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
     createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
     updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
+    createSatisfiesClause(type: TypeNode): SatisfiesClause;
+    updateSatisfiesClause(node: SatisfiesClause, type: TypeNode): SatisfiesClause;
 
     //
     // Property assignments

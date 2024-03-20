@@ -562,6 +562,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                         visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body!),
+                        /*satisfiesClause*/ undefined,
                     ),
                     /*location*/ node,
                 ),

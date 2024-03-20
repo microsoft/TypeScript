@@ -1941,6 +1941,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             /*typeParameters*/ undefined,
             heritageClauses,
             members,
+            /*satisfiesClause*/ undefined,
         );
         statements.unshift(classDecl);
 
