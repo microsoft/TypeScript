@@ -12072,6 +12072,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // up recursively calling getTypeOfAlias, causing a stack overflow.
             links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                 : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
                 : declaredType ? declaredType
                 : getSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
@@ -14812,7 +14813,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const writeType = getWriteTypeOfSymbol(prop);
             if (writeTypes || writeType !== type) {
-                writeTypes = append(!writeTypes ? propTypes.slice() : writeTypes, writeType);
+                writeTypes = append(writeTypes ?? propTypes.slice(), writeType);
             }
             if (type !== firstType) {
                 checkFlags |= CheckFlags.HasNonUniformType;
@@ -15109,6 +15110,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // the intersected key type, we just use unknownType for the key type as nothing actually depends on the
         // keyType property of the returned IndexInfo.
         return applicableInfos ? createIndexInfo(unknownType, getIntersectionType(map(applicableInfos, info => info.type)), reduceLeft(applicableInfos, (isReadonly, info) => isReadonly && info.isReadonly, /*initial*/ true)) :
+            // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
             applicableInfo ? applicableInfo :
             stringIndexInfo && isApplicableIndexType(keyType, stringType) ? stringIndexInfo :
             undefined;
@@ -16875,7 +16877,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
-        const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
+        const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join(",") +
             (readonly ? "R" : "") +
             (some(namedMemberDeclarations, node => !!node) ? "," + map(namedMemberDeclarations, node => node ? getNodeId(node) : "_").join(",") : "");
         let type = tupleTypes.get(key);
@@ -21892,7 +21894,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const sourceSize = sourceUnionOrIntersection.types.length;
                 const targetSize = targetUnionOrIntersection.types.length;
-                if (sourceSize * targetSize > 1E6) {
+                if (sourceSize * targetSize > 1e6) {
                     tracing.instant(tracing.Phase.CheckTypes, "traceUnionsOrIntersectionsTooLarge_DepthLimit", {
                         sourceId: source.id,
                         sourceSize,
@@ -47762,7 +47764,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
                     copy.declarations = mapDefined(infos, i => i.declaration);
-                    copy.parent = type.aliasSymbol ? type.aliasSymbol : type.symbol ? type.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                    copy.parent = type.aliasSymbol ?? type.symbol ?? getSymbolAtLocation(copy.declarations[0].parent);
                     symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
                     return copy;
                 }
@@ -51120,6 +51122,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getEffectivePropertyNameForPropertyNameNode(node: PropertyName) {
         const name = getPropertyNameForPropertyNameNode(node);
+        // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
         return name ? name :
             isComputedPropertyName(node) ? tryGetNameFromType(getTypeOfExpression(node.expression)) : undefined;
     }

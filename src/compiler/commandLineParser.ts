@@ -2508,7 +2508,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
             version: undefined,
         },
         watchOptions: watchOptionMap && optionMapToObject(watchOptionMap),
-        references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
+        references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath || "", originalPath: undefined })),
         files: length(files) ? files : undefined,
         ...(configParseResult.options.configFile?.configFileSpecs ? {
             include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),
@@ -2533,10 +2533,8 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 }
 
 /** @internal */
-export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
-    return {
-        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
-    };
+export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>) {
+    return Object.fromEntries(optionMap.entries());
 }
 
 function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
@@ -2655,7 +2653,7 @@ export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: s
     return getOverwrittenDefaultOptions();
 
     function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
+        return " ".repeat(paddingLength);
     }
 
     function getOverwrittenDefaultOptions() {
@@ -2699,7 +2697,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
     return writeConfigurations();
 
     function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
+        return " ".repeat(paddingLength);
     }
 
     function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {

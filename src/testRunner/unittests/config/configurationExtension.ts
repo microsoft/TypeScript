@@ -319,7 +319,7 @@ describe("unittests:: config:: configurationExtension", () => {
                         baseline.push("CompilerOptions::");
                         baseline.push(jsonToReadableText(parsed.options));
                         baseline.push("FileNames::");
-                        baseline.push(parsed.fileNames.join());
+                        baseline.push(parsed.fileNames.join(","));
                     },
                 })),
             skipFs: true,

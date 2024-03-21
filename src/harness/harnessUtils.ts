@@ -41,7 +41,7 @@ export function readTestFile(path: string) {
     try {
         content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
     }
-    catch (err) {
+    catch {
         return undefined;
     }
 

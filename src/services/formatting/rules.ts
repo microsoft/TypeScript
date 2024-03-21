@@ -49,7 +49,7 @@ export function getAllRules(): RuleSpec[] {
         }
     }
     function anyTokenExcept(...tokens: SyntaxKind[]): TokenRange {
-        return { tokens: allTokens.filter(t => !tokens.some(t2 => t2 === t)), isSpecific: false };
+        return { tokens: allTokens.filter(t => !tokens.includes(t)), isSpecific: false };
     }
 
     const anyToken: TokenRange = { tokens: allTokens, isSpecific: false };

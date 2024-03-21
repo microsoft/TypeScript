@@ -137,7 +137,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     function getOrCreateSourceFileLike(fileName: string): SourceFileLike | undefined {
         const path = toPath(fileName);
         const fileFromCache = sourceFileLike.get(path);
-        if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
+        if (fileFromCache !== undefined) return fileFromCache || undefined;
 
         if (!host.readFile || host.fileExists && !host.fileExists(fileName)) {
             sourceFileLike.set(path, false);
@@ -148,7 +148,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const text = host.readFile(fileName);
         const file = text ? createSourceFileLike(text) : false;
         sourceFileLike.set(path, file);
-        return file ? file : undefined;
+        return file || undefined;
     }
 
     // This can be called from source mapper in either source program or program that includes generated file

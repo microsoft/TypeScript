@@ -1,3 +1,4 @@
+import assert from "assert";
 import fs from "fs";
 import fsPromises from "fs/promises";
 import {
@@ -25,7 +26,8 @@ async function checkErrorBaselines() {
         let g;
         while (g = errRegex.exec(baseline)) {
             const errCode = +g[1];
-            const msg = keys.filter(k => messages[k].code === errCode)[0];
+            const msg = keys.find(k => messages[k].code === errCode);
+            assert(msg);
             messages[msg].seen = true;
         }
     }

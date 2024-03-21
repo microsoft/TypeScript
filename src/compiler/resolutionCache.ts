@@ -274,13 +274,13 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
 
     if (
         isDosStyle &&
-        !pathComponents[indexAfterOsRoot].match(/^users$/i)
+        !/^users$/i.test(pathComponents[indexAfterOsRoot])
     ) {
         // Paths like c:/notUsers
         return indexAfterOsRoot;
     }
 
-    if (pathComponents[indexAfterOsRoot].match(/^workspaces$/i)) {
+    if (/^workspaces$/i.test(pathComponents[indexAfterOsRoot])) {
         // Paths like: /workspaces as codespaces hoist the repos in /workspaces so we have to exempt these from "2" level from root rule
         return indexAfterOsRoot + 1;
     }

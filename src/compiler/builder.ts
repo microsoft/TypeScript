@@ -1186,7 +1186,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
 
     function toFileIdListId(set: ReadonlySet<Path>): ProgramBuildInfoFileIdListId {
         const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
-        const key = fileIds.join();
+        const key = fileIds.join(",");
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {
             (fileIdsList ||= []).push(fileIds);
@@ -1777,7 +1777,7 @@ export function toBuilderFileEmit(value: ProgramBuilderInfoFilePendingEmit, full
 
 /** @internal */
 export function toProgramEmitPending(value: ProgramBuildInfoBundlePendingEmit, options: CompilerOptions | undefined): BuilderFileEmit | undefined {
-    return !value ? getBuilderFileEmit(options || {}) : value;
+    return value || getBuilderFileEmit(options || {});
 }
 
 /** @internal */

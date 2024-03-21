@@ -1480,7 +1480,8 @@ export let sys: System = (() => {
         const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
-        const _os = require("os");
+        const _os: typeof import("os") = require("os");
+        const _buffer: typeof import("buffer") = require("buffer");
         // crypto can be absent on reduced node installations
         let _crypto: typeof import("crypto") | undefined;
         try {
@@ -1492,10 +1493,7 @@ export let sys: System = (() => {
         let activeSession: import("inspector").Session | "stopping" | undefined;
         let profilePath = "./profile.cpuprofile";
 
-        const Buffer: {
-            new (input: string, encoding?: string): any;
-            from?(input: string, encoding?: string): any;
-        } = require("buffer").Buffer;
+        const Buffer = _buffer.Buffer;
 
         const isMacOs = process.platform === "darwin";
         const isLinuxOrMacOs = process.platform === "linux" || isMacOs;
@@ -1627,9 +1625,9 @@ export let sys: System = (() => {
                     handle.setBlocking(true);
                 }
             },
-            bufferFrom,
-            base64decode: input => bufferFrom(input, "base64").toString("utf8"),
-            base64encode: input => bufferFrom(input).toString("base64"),
+            bufferFrom: Buffer.from,
+            base64decode: input => Buffer.from(input, "base64").toString("utf8"),
+            base64encode: input => Buffer.from(input).toString("base64"),
             require: (baseDir, moduleName) => {
                 try {
                     const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
@@ -1738,13 +1736,6 @@ export let sys: System = (() => {
             }
         }
 
-        function bufferFrom(input: string, encoding?: string): Buffer {
-            // See https://github.com/Microsoft/TypeScript/issues/25652
-            return Buffer.from && Buffer.from !== Int8Array.from
-                ? Buffer.from(input, encoding)
-                : new Buffer(input, encoding);
-        }
-
         function isFileSystemCaseSensitive(): boolean {
             // win32\win64 are case insensitive platforms
             if (platform === "win32" || platform === "win64") {
@@ -1815,7 +1806,7 @@ export let sys: System = (() => {
             try {
                 buffer = _fs.readFileSync(fileName);
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             let len = buffer.length;
@@ -1895,7 +1886,7 @@ export let sys: System = (() => {
                                 continue;
                             }
                         }
-                        catch (e) {
+                        catch {
                             continue;
                         }
                     }
@@ -1914,7 +1905,7 @@ export let sys: System = (() => {
                 directories.sort();
                 return { files, directories };
             }
-            catch (e) {
+            catch {
                 return emptyFileSystemEntries;
             }
         }
@@ -1943,7 +1934,7 @@ export let sys: System = (() => {
                         return false;
                 }
             }
-            catch (e) {
+            catch {
                 return false;
             }
             finally {
@@ -1984,7 +1975,7 @@ export let sys: System = (() => {
             try {
                 return statSync(path)?.mtime;
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             finally {
@@ -1996,7 +1987,7 @@ export let sys: System = (() => {
             try {
                 _fs.utimesSync(path, time, time);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -2005,7 +1996,7 @@ export let sys: System = (() => {
             try {
                 return _fs.unlinkSync(path);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }

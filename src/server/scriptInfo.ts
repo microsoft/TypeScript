@@ -412,9 +412,7 @@ export class ScriptInfo {
         if (hasMixedContent || this.isDynamic) {
             this.realpath = this.path;
         }
-        this.scriptKind = scriptKind
-            ? scriptKind
-            : getScriptKindFromFileName(fileName);
+        this.scriptKind = scriptKind || getScriptKindFromFileName(fileName);
     }
 
     /** @internal */

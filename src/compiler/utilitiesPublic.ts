@@ -682,7 +682,7 @@ export function validateLocaleAndSetLanguage(
         try {
             fileContents = sys.readFile(filePath);
         }
-        catch (e) {
+        catch {
             if (errors) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
             }
@@ -1298,6 +1298,7 @@ export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeP
 }
 
 export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
+    // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
     return node.constraint ? node.constraint :
         isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0] ? node.parent.constraint :
         undefined;
@@ -2554,7 +2555,7 @@ export function isTypeReferenceType(node: Node): node is TypeReferenceType {
     return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
 }
 
-const MAX_SMI_X86 = 0x3fff_ffff;
+const MAX_SMI_X86 = 0x3FFF_FFFF;
 /** @internal */
 export function guessIndentation(lines: string[]) {
     let indentation = MAX_SMI_X86;
