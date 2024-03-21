@@ -151,3 +151,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
+
+Change:: emulate access
+
+Input::
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined

@@ -750,6 +750,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     edit: sys => sys.appendFile("/user/username/projects/myproject/main.ts", "export const y = 10;"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
+                {
+                    caption: "emulate access",
+                    edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
             ],
         });
     });
