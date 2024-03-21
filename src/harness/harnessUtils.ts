@@ -5,16 +5,6 @@ export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
 }
 
-function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
-    const vm = require("vm");
-    if (nodeContext) {
-        vm.runInNewContext(fileContents, nodeContext, fileName);
-    }
-    else {
-        vm.runInThisContext(fileContents, fileName);
-    }
-}
-
 /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
 export function splitContentByNewlines(content: string) {
     // Split up the input file by line
@@ -29,23 +19,6 @@ export function splitContentByNewlines(content: string) {
         }
     }
     return lines;
-}
-
-/** Reads a file under /tests */
-function readTestFile(path: string) {
-    if (!path.includes("tests")) {
-        path = "tests/" + path;
-    }
-
-    let content: string | undefined;
-    try {
-        content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
-    }
-    catch (err) {
-        return undefined;
-    }
-
-    return content;
 }
 
 export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
@@ -330,60 +303,4 @@ function findChildName(parent: any, child: any) {
     }
 
     throw new Error("Could not find child in parent");
-}
-
-const maxHarnessFrames = 1;
-
-function filterStack(error: Error, stackTraceLimit = Infinity) {
-    const stack = (error as any).stack as string;
-    if (stack) {
-        const lines = stack.split(/\r\n?|\n/g);
-        const filtered: string[] = [];
-        let frameCount = 0;
-        let harnessFrameCount = 0;
-        for (let line of lines) {
-            if (isStackFrame(line)) {
-                if (
-                    frameCount >= stackTraceLimit
-                    || isMocha(line)
-                    || isNode(line)
-                ) {
-                    continue;
-                }
-
-                if (isHarness(line)) {
-                    if (harnessFrameCount >= maxHarnessFrames) {
-                        continue;
-                    }
-
-                    harnessFrameCount++;
-                }
-
-                line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
-                frameCount++;
-            }
-
-            filtered.push(line);
-        }
-
-        (error as any).stack = filtered.join(Harness.IO.newLine());
-    }
-
-    return error;
-}
-
-function isStackFrame(line: string) {
-    return /^\s+at\s/.test(line);
-}
-
-function isMocha(line: string) {
-    return /[\\/](node_modules|components)[\\/]mocha(js)?[\\/]|[\\/]mocha\.js/.test(line);
-}
-
-function isNode(line: string) {
-    return /\((timers|events|node|module)\.js:/.test(line);
-}
-
-function isHarness(line: string) {
-    return /[\\/]src[\\/]harness[\\/]|[\\/]run\.js/.test(line);
 }

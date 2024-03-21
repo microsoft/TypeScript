@@ -45,9 +45,6 @@ import {
     toPath,
 } from "../../_namespaces/ts";
 import {
-    typingsInstaller,
-} from "../../_namespaces/ts.server";
-import {
     timeIncrements,
 } from "../../_namespaces/vfs";
 
@@ -305,22 +302,6 @@ export enum Tsc_WatchDirectory {
     NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
     DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling",
 }
-
-interface TestServerHostOptions {
-    useCaseSensitiveFileNames: boolean;
-    executingFilePath: string;
-    currentDirectory: string;
-    newLine?: string;
-    useWindowsStylePaths?: boolean;
-    environmentVariables?: Map<string, string>;
-}
-
-type PendingInstallCallback = (
-    pendingInstallInfo: string,
-    installedTypingsOrSuccess: string[] | string | boolean,
-    typingFiles: readonly File[],
-    onRequestCompleted: typingsInstaller.RequestCompletedAction,
-) => void;
 
 export enum SerializeOutputOrder {
     None,

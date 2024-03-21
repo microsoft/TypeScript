@@ -1,6 +1,5 @@
 import * as collections from "./_namespaces/collections";
 import * as documents from "./_namespaces/documents";
-import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import * as vpath from "./_namespaces/vpath";
 
@@ -1633,23 +1632,4 @@ function formatPatchWorker(dirname: string, container: FileSet): string {
         }
     }
     return text;
-}
-
-function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
-    // eslint-disable-next-line no-null/no-null
-    return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
-}
-
-function* iteratePatchWorker(dirname: string, container: FileSet): IterableIterator<documents.TextDocument> {
-    for (const name of Object.keys(container)) {
-        const entry = normalizeFileSetEntry(container[name]);
-        const file = dirname ? vpath.combine(dirname, name) : name;
-        if (entry instanceof Directory) {
-            yield* iteratePatchWorker(file, entry.files);
-        }
-        else if (entry instanceof File) {
-            const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");
-            yield new documents.TextDocument(file, content);
-        }
-    }
 }

@@ -77,12 +77,6 @@ export type InstallActionThrowingError = string;
 export type InstallActionWithSuccess = boolean;
 export type InstallActionWithTypingFiles = readonly FileWithPackageName[];
 export type InstallAction = InstallActionThrowingError | InstallActionWithSuccess | InstallActionWithTypingFiles;
-type PendingInstallCallback = (
-    pendingInstallInfo: string,
-    installedTypingsOrSuccess: string[] | string | boolean,
-    typingFiles: readonly File[],
-    onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
-) => void;
 class TestTypingsInstallerWorker extends ts.server.typingsInstaller.TypingsInstaller {
     readonly typesRegistry: Map<string, ts.MapLike<string>>;
     constructor(readonly testTypingInstaller: TestTypingsInstallerAdapter) {

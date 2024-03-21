@@ -1732,13 +1732,6 @@ export namespace Completion {
     }
 }
 
-interface ReferenceGroup {
-    definition: ReferenceGroupDefinition;
-    ranges: FourSlash.Range[];
-}
-
-export type ReferenceGroupDefinition = string | { text: string; range: FourSlash.Range; };
-
 export interface ApplyRefactorOptions {
     refactorName: string;
     actionName: string;
@@ -1831,23 +1824,7 @@ export interface ExpectedNavigateToItem {
     readonly containerKind?: ts.ScriptElementKind;
 }
 
-interface VerifyInlayHintsOptions {
-    text: string;
-    position: number;
-    kind?: ts.InlayHintKind;
-    whitespaceBefore?: boolean;
-    whitespaceAfter?: boolean;
-}
-
 export type ArrayOrSingle<T> = T | readonly T[];
-
-interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
-    triggerCharacter?: ts.CompletionsTriggerCharacter;
-    sourceDisplay: string;
-    isRecommended?: true;
-    insertText?: string;
-    replacementSpan?: FourSlash.Range;
-}
 
 export interface VerifyDocumentHighlightsOptions {
     filesToSearch: readonly string[];
@@ -1881,12 +1858,6 @@ export interface VerifyCodeFixAllOptions {
     newFileContent: NewFileContent;
     commands: readonly {}[];
     preferences?: ts.UserPreferences;
-}
-
-interface VerifyRefactorOptions {
-    name: string;
-    actionName: string;
-    refactors: readonly ts.ApplicableRefactorInfo[];
 }
 
 export interface VerifyCompletionActionOptions extends NewContentOptions {
@@ -1923,16 +1894,9 @@ export interface MoveToFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
-type RenameLocationsOptions = readonly RenameLocationOptions[] | {
-    readonly findInStrings?: boolean;
-    readonly findInComments?: boolean;
-    readonly ranges: readonly RenameLocationOptions[];
-    readonly providePrefixAndSuffixTextForRename?: boolean;
-};
 export interface DiagnosticIgnoredInterpolations {
     template: string;
 }
-export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range; readonly prefixText?: string; readonly suffixText?: string; };
 export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;

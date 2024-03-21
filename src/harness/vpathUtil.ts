@@ -120,12 +120,6 @@ export function isSourceMap(path: string) {
     return extname(path, ".map", /*ignoreCase*/ false).length > 0;
 }
 
-const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
-
-function isJavaScriptSourceMap(path: string) {
-    return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
-}
-
 export function isJson(path: string) {
     return extname(path, ".json", /*ignoreCase*/ false).length > 0;
 }
