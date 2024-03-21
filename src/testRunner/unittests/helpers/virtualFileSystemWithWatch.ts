@@ -81,6 +81,7 @@ export interface TestServerHostCreationParameters {
     runWithFallbackPolling?: boolean;
     inodeWatching?: boolean;
     fsWatchWithTimestamp?: boolean;
+    modifyFileWithoutModifyDirectory?: boolean;
 }
 
 export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -294,10 +295,6 @@ export interface WatchInvokeOptions {
     skipInodeCheckOnCreate: boolean;
     /** When invoking rename event on fs watch, send event with file name suffixed with tilde */
     useTildeAsSuffixInRenameEventFileName: boolean;
-    /** Simulate an fsevent that doesn't come with the modified time */
-    omitModifiedTime: boolean;
-    /** Simulate directory mtime not changing on file modification */
-    unmodifiedDirectoryMtime: boolean;
 }
 
 export enum Tsc_WatchFile {
@@ -347,6 +344,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     readonly watchUtils: WatchUtils<TestFileWatcher, TestFsWatcher>;
     runWithFallbackPolling: boolean;
+    private readonly modifyFileWithoutModifyDirectory: boolean;
     public readonly useCaseSensitiveFileNames: boolean;
     public readonly newLine: string;
     public readonly windowsStyleRoot?: string;
@@ -374,6 +372,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             runWithFallbackPolling,
             inodeWatching,
             fsWatchWithTimestamp,
+            modifyFileWithoutModifyDirectory,
         }: TestServerHostCreationParameters = {},
     ) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
@@ -387,6 +386,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.executingFilePath = this.getHostSpecificPath(executingFilePath || getExecutingFilePathFromLibFile());
         this.currentDirectory = this.getHostSpecificPath(currentDirectory);
         this.runWithFallbackPolling = !!runWithFallbackPolling;
+        this.modifyFileWithoutModifyDirectory = !!modifyFileWithoutModifyDirectory;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
         const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
         if (inodeWatching) {
@@ -505,18 +505,19 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         else {
             currentEntry.content = content;
             currentEntry.modifiedTime = this.now();
-            const mtime = options?.omitModifiedTime ? undefined : currentEntry.modifiedTime;
-            if (!options?.unmodifiedDirectoryMtime) {
+            let eventMtime;
+            if (!this.modifyFileWithoutModifyDirectory) {
+                eventMtime = currentEntry.modifiedTime;
                 this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
             }
             if (options?.invokeDirectoryWatcherInsteadOfFileChanged) {
                 const directoryFullPath = getDirectoryPath(currentEntry.fullPath);
-                this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, mtime);
-                this.invokeFsWatchesCallbacks(directoryFullPath, "rename", mtime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
-                this.invokeRecursiveFsWatches(directoryFullPath, "rename", mtime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, eventMtime);
+                this.invokeFsWatchesCallbacks(directoryFullPath, "rename", eventMtime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                this.invokeRecursiveFsWatches(directoryFullPath, "rename", eventMtime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
             }
             else {
-                this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, mtime, options?.useTildeAsSuffixInRenameEventFileName);
+                this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, eventMtime, options?.useTildeAsSuffixInRenameEventFileName);
             }
         }
     }

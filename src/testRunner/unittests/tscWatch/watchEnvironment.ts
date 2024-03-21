@@ -734,22 +734,20 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 createWatchedSystem(
                     {
                         [libFile.path]: libFile.content,
+                        "/user/username/projects/myproject/main.js": `export const x = 10;`,
                         "/user/username/projects/myproject/main.ts": `export const x = 10;`,
                         "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({ files: ["main.ts"] }),
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
                         fsWatchWithTimestamp: true,
+                        modifyFileWithoutModifyDirectory: true,
                     },
                 ),
             edits: [
                 {
                     caption: "modify file contents",
-                    edit: sys => sys.appendFile(
-                        "/user/username/projects/myproject/main.ts",
-                        "export const y = 10;",
-                        { omitModifiedTime: true, unmodifiedDirectoryMtime: true },
-                    ),
+                    edit: sys => sys.appendFile("/user/username/projects/myproject/main.ts", "export const y = 10;"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
