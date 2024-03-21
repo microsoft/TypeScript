@@ -20,6 +20,6 @@ import { esm, cjs } from "dual";
 
 === /main.cts ===
 import { esm, cjs } from "dual";
->esm : number
->cjs : any
+>esm : any
+>cjs : number
 
