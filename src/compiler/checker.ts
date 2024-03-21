@@ -26187,6 +26187,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferFromObjectTypes(source: Type, target: Type) {
+            if (source.aliasSymbol && source.aliasSymbol === target.aliasSymbol) {
+                if (source.aliasTypeArguments) {
+                    // Source and target are types originating in the same generic type alias declaration.
+                    // Simply infer from source type arguments to target type arguments, with defaults applied.
+                    const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
+                    const minParams = getMinTypeArgumentCount(params);
+                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    inferFromTypeArguments(sourceTypes, targetTypes!, getAliasVariances(source.aliasSymbol));
+                }
+                // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
+                return;
+            }
             if (
                 getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
                     (source as TypeReference).target === (target as TypeReference).target || isArrayType(source) && isArrayType(target)
