@@ -17789,7 +17789,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // unions of intersections than the full cartesian product (due to some intersections becoming `never`), this can
                     // dramatically reduce the overall work.
                     const middle = typeSet.length / 2;
-                    result = getIntersectionType([getIntersectionType(typeSet.slice(0, middle)), getIntersectionType(typeSet.slice(middle))]);
+                    result = getIntersectionType([getIntersectionType(typeSet.slice(0, middle)), getIntersectionType(typeSet.slice(middle))], aliasSymbol, aliasTypeArguments);
                 }
                 else {
                     // We are attempting to construct a type of the form X & (A | B) & (C | D). Transform this into a type of
