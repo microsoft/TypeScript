@@ -10,6 +10,7 @@ export * from "../tracing";
 export * from "../types";
 export * from "../sys";
 export * from "../path";
+/** @knipignore */
 export * from "../diagnosticInformationMap.generated";
 export * from "../scanner";
 export * from "../utilitiesPublic";
