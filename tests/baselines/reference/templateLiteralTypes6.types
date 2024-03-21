@@ -4,7 +4,7 @@
 // https://github.com/microsoft/TypeScript/issues/56659
 
 type Registry = {
->Registry : { a: {    a1: {};}; b: {    b1: {};}; }
+>Registry : { a: { a1: {}; }; b: { b1: {}; }; }
 
   a: { a1: {} };
 >a : { a1: {}; }

@@ -46,7 +46,7 @@ var unused5 = { ...abq, b: 1 } // ok
 >1 : 1
 
 function g(obj: { x: number | undefined }) {
->g : (obj: {    x: number | undefined;}) => { x: number | undefined; }
+>g : (obj: { x: number | undefined; }) => { x: number | undefined; }
 >obj : { x: number | undefined; }
 >x : number | undefined
 
@@ -57,7 +57,7 @@ function g(obj: { x: number | undefined }) {
 >obj : { x: number | undefined; }
 }
 function f(obj: { x: number } | undefined) {
->f : (obj: {    x: number;} | undefined) => { x: number; }
+>f : (obj: { x: number; } | undefined) => { x: number; }
 >obj : { x: number; } | undefined
 >x : number
 
@@ -68,7 +68,7 @@ function f(obj: { x: number } | undefined) {
 >obj : { x: number; } | undefined
 }
 function h(obj: { x: number } | { x: string }) {
->h : (obj: {    x: number;} | {    x: string;}) => { x: number; } | { x: string; }
+>h : (obj: { x: number; } | { x: string; }) => { x: number; } | { x: string; }
 >obj : { x: number; } | { x: string; }
 >x : number
 >x : string
@@ -80,7 +80,7 @@ function h(obj: { x: number } | { x: string }) {
 >obj : { x: number; } | { x: string; }
 }
 function i(b: boolean, t: { command: string, ok: string }) {
->i : (b: boolean, t: {    command: string;    ok: string;}) => { command: string; ok?: string | undefined; }
+>i : (b: boolean, t: { command: string; ok: string; }) => { command: string; ok?: string | undefined; }
 >b : boolean
 >t : { command: string; ok: string; }
 >command : string
@@ -109,7 +109,7 @@ function j() {
 >"bye" : "bye"
 }
 function k(t: { command: string, ok: string }) {
->k : (t: {    command: string;    ok: string;}) => { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
+>k : (t: { command: string; ok: string; }) => { command: string; ok: string; spoiler2: boolean; spoiler: boolean; }
 >t : { command: string; ok: string; }
 >command : string
 >ok : string
@@ -127,7 +127,7 @@ function k(t: { command: string, ok: string }) {
 }
 
 function l(anyrequired: { a: any }) {
->l : (anyrequired: {    a: any;}) => { a: any; }
+>l : (anyrequired: { a: any; }) => { a: any; }
 >anyrequired : { a: any; }
 >a : any
 
@@ -138,7 +138,7 @@ function l(anyrequired: { a: any }) {
 >anyrequired : { a: any; }
 }
 function m(anyoptional: { a?: any }) {
->m : (anyoptional: {    a?: any;}) => { a: any; }
+>m : (anyoptional: { a?: any; }) => { a: any; }
 >anyoptional : { a?: any; }
 >a : any
 

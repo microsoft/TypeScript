@@ -333,7 +333,7 @@ const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyT
 
 // type literals
 type L = {
->L : { readonly readonlyType: unique symbol; nested: {    readonly readonlyNestedType: unique symbol;}; }
+>L : { readonly readonlyType: unique symbol; nested: { readonly readonlyNestedType: unique symbol; }; }
 
     readonly readonlyType: unique symbol;
 >readonlyType : unique symbol
@@ -912,7 +912,7 @@ const ce0 = class {
 };
 
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: {    method(p: typeof s): void;}) => { method(p: typeof s): void; }
+>funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
 >obj : { method(p: typeof s): void; }
 >method : (p: typeof s) => void
 >p : unique symbol

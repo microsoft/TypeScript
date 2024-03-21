@@ -306,7 +306,7 @@ class UnreachableCodeDetection {
 }
 
 function positiveIntersectionTest(x: { a: string } & { b: string }) {
->positiveIntersectionTest : (x: {    a: string;} & {    b: string;}) => void
+>positiveIntersectionTest : (x: { a: string; } & { b: string; }) => void
 >x : { a: string; } & { b: string; }
 >a : string
 >b : string
@@ -347,7 +347,7 @@ if ('extra' in error) {
 }
 
 function narrowsToNever(x: { l: number } | { r: number }) {
->narrowsToNever : (x: {    l: number;} | {    r: number;}) => number
+>narrowsToNever : (x: { l: number; } | { r: number; }) => number
 >x : { l: number; } | { r: number; }
 >l : number
 >r : number
@@ -664,7 +664,7 @@ function f3<T>(x: T) {
 }
 
 function f4(x: { a: string }) {
->f4 : (x: {    a: string;}) => void
+>f4 : (x: { a: string; }) => void
 >x : { a: string; }
 >a : string
 
@@ -709,7 +709,7 @@ function f4(x: { a: string }) {
 }
 
 function f5(x: { a: string } | { b: string }) {
->f5 : (x: {    a: string;} | {    b: string;}) => void
+>f5 : (x: { a: string; } | { b: string; }) => void
 >x : { a: string; } | { b: string; }
 >a : string
 >b : string
@@ -737,7 +737,7 @@ function f5(x: { a: string } | { b: string }) {
 }
 
 function f6(x: { a: string } | { b: string }) {
->f6 : (x: {    a: string;} | {    b: string;}) => void
+>f6 : (x: { a: string; } | { b: string; }) => void
 >x : { a: string; } | { b: string; }
 >a : string
 >b : string
@@ -767,7 +767,7 @@ function f6(x: { a: string } | { b: string }) {
 // Object and corresponding intersection should narrow the same
 
 function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
->f7 : (x: {    a: string;    b: number;}, y: {    a: string;} & {    b: number;}) => void
+>f7 : (x: { a: string; b: number; }, y: { a: string; } & { b: number; }) => void
 >x : { a: string; b: number; }
 >a : string
 >b : number
@@ -895,7 +895,7 @@ function f9(x: object) {
 }
 
 function f10(x: { a: unknown }) {
->f10 : (x: {    a: unknown;}) => void
+>f10 : (x: { a: unknown; }) => void
 >x : { a: unknown; }
 >a : unknown
 
@@ -914,7 +914,7 @@ function f10(x: { a: unknown }) {
 }
 
 function f11(x: { a: any }) {
->f11 : (x: {    a: any;}) => void
+>f11 : (x: { a: any; }) => void
 >x : { a: any; }
 >a : any
 
@@ -933,7 +933,7 @@ function f11(x: { a: any }) {
 }
 
 function f12(x: { a: string }) {
->f12 : (x: {    a: string;}) => void
+>f12 : (x: { a: string; }) => void
 >x : { a: string; }
 >a : string
 
@@ -952,7 +952,7 @@ function f12(x: { a: string }) {
 }
 
 function f13(x: { a?: string }) {
->f13 : (x: {    a?: string;}) => void
+>f13 : (x: { a?: string; }) => void
 >x : { a?: string | undefined; }
 >a : string | undefined
 
@@ -971,7 +971,7 @@ function f13(x: { a?: string }) {
 }
 
 function f14(x: { a: string | undefined }) {
->f14 : (x: {    a: string | undefined;}) => void
+>f14 : (x: { a: string | undefined; }) => void
 >x : { a: string | undefined; }
 >a : string | undefined
 
@@ -990,7 +990,7 @@ function f14(x: { a: string | undefined }) {
 }
 
 function f15(x: { a?: string | undefined }) {
->f15 : (x: {    a?: string | undefined;}) => void
+>f15 : (x: { a?: string | undefined; }) => void
 >x : { a?: string | undefined; }
 >a : string | undefined
 

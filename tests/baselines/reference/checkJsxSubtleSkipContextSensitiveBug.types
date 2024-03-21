@@ -29,7 +29,7 @@ class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 }
 
 async function load(): Promise<{ success: true } | ErrorResult> {
->load : () => Promise<{    success: true;} | ErrorResult>
+>load : () => Promise<{ success: true; } | ErrorResult>
 >success : true
 >true : true
 

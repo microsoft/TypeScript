@@ -8,8 +8,8 @@ const obj1 = { a: 1 };
 >1 : 1
 
 const fn1 = (s: { a: true }) => {};
->fn1 : (s: {    a: true;}) => void
->(s: { a: true }) => {} : (s: {    a: true;}) => void
+>fn1 : (s: { a: true; }) => void
+>(s: { a: true }) => {} : (s: { a: true; }) => void
 >s : { a: true; }
 >a : true
 >true : true
@@ -198,8 +198,8 @@ function fn6(): number {
 
 ((): { a: true } => ({}) satisfies unknown)();
 >((): { a: true } => ({}) satisfies unknown)() : { a: true; }
->((): { a: true } => ({}) satisfies unknown) : () => {    a: true;}
->(): { a: true } => ({}) satisfies unknown : () => {    a: true;}
+>((): { a: true } => ({}) satisfies unknown) : () => { a: true; }
+>(): { a: true } => ({}) satisfies unknown : () => { a: true; }
 >a : true
 >true : true
 >({}) satisfies unknown : {}
@@ -208,8 +208,8 @@ function fn6(): number {
 
 ((): { a: true } => ({ a: 1 }) satisfies unknown)();
 >((): { a: true } => ({ a: 1 }) satisfies unknown)() : { a: true; }
->((): { a: true } => ({ a: 1 }) satisfies unknown) : () => {    a: true;}
->(): { a: true } => ({ a: 1 }) satisfies unknown : () => {    a: true;}
+>((): { a: true } => ({ a: 1 }) satisfies unknown) : () => { a: true; }
+>(): { a: true } => ({ a: 1 }) satisfies unknown : () => { a: true; }
 >a : true
 >true : true
 >({ a: 1 }) satisfies unknown : { a: number; }
@@ -220,8 +220,8 @@ function fn6(): number {
 
 ((): { a: true } => obj1 satisfies unknown)();
 >((): { a: true } => obj1 satisfies unknown)() : { a: true; }
->((): { a: true } => obj1 satisfies unknown) : () => {    a: true;}
->(): { a: true } => obj1 satisfies unknown : () => {    a: true;}
+>((): { a: true } => obj1 satisfies unknown) : () => { a: true; }
+>(): { a: true } => obj1 satisfies unknown : () => { a: true; }
 >a : true
 >true : true
 >obj1 satisfies unknown : { a: number; }

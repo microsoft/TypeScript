@@ -44,8 +44,8 @@ let value = "";
 
 // 2.Can change in meaning for typeof value if we remove alias
 const shadowedVariable = ({ value: alias }: { value: string }): typeof value => value;
->shadowedVariable : ({ value: alias }: {    value: string;}) => typeof value
->({ value: alias }: { value: string }): typeof value => value : ({ value: alias }: {    value: string;}) => typeof value
+>shadowedVariable : ({ value: alias }: { value: string; }) => typeof value
+>({ value: alias }: { value: string }): typeof value => value : ({ value: alias }: { value: string; }) => typeof value
 >value : any
 >alias : string
 >value : string

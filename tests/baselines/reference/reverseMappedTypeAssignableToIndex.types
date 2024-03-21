@@ -21,7 +21,7 @@ type LiteralType = {
 >second : "second"
 }
 type MappedLiteralType = {
->MappedLiteralType : { first: {    name: "first";}; second: {    name: "second";}; }
+>MappedLiteralType : { first: { name: "first"; }; second: { name: "second"; }; }
 
 	first: { name: "first" },
 >first : { name: "first"; }

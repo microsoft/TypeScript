@@ -279,7 +279,7 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 }
 
 type Nested = {
->Nested : { type: 'string'; resp: {    data: string;}; } | { type: 'number'; resp: {    data: number;}; }
+>Nested : { type: 'string'; resp: { data: string; }; } | { type: 'number'; resp: { data: number; }; }
 
     type: 'string';
 >type : "string"

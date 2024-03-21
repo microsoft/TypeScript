@@ -279,7 +279,7 @@ function checkD(f: FnTypes) {
 // Type of x = y is y with freshness preserved
 
 function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
->fx10 : (obj1: {    x?: number;}, obj2: {    x?: number;    y?: number;}) => void
+>fx10 : (obj1: { x?: number; }, obj2: { x?: number; y?: number; }) => void
 >obj1 : { x?: number | undefined; }
 >x : number | undefined
 >obj2 : { x?: number | undefined; y?: number | undefined; }
@@ -310,7 +310,7 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 }
 
 function fx11(): { x?: number } {
->fx11 : () => {    x?: number;}
+>fx11 : () => { x?: number; }
 >x : number | undefined
 
     let obj: { x?: number, y?: number };
@@ -336,7 +336,7 @@ declare function isArrayLike(value: any): value is { length: number };
 >length : number
 
 function ff1(value: { [index: number]: boolean, length: number } | undefined) {
->ff1 : (value: {    [index: number]: boolean;    length: number;} | undefined) => void
+>ff1 : (value: { [index: number]: boolean; length: number; } | undefined) => void
 >value : { [index: number]: boolean; length: number; } | undefined
 >index : number
 >length : number
@@ -358,7 +358,7 @@ function ff1(value: { [index: number]: boolean, length: number } | undefined) {
 }
 
 function ff2(value: { [index: number]: boolean, length: number } | string) {
->ff2 : (value: {    [index: number]: boolean;    length: number;} | string) => void
+>ff2 : (value: { [index: number]: boolean; length: number; } | string) => void
 >value : string | { [index: number]: boolean; length: number; }
 >index : number
 >length : number
@@ -380,7 +380,7 @@ function ff2(value: { [index: number]: boolean, length: number } | string) {
 }
 
 function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
->ff3 : (value: string | string[] | {    [index: number]: boolean;    length: number;} | [number, boolean] | number | {    length: string;} | {    a: string;} | null | undefined) => void
+>ff3 : (value: string | string[] | { [index: number]: boolean; length: number; } | [number, boolean] | number | { length: string; } | { a: string; } | null | undefined) => void
 >value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
 >index : number
 >length : number
@@ -450,7 +450,7 @@ declare function doesValueAtDeepPathSatisfy<
 
 
 type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
->Foo : { value: {    type: 'A';}; a?: number | undefined; } | { value: {    type: 'B';}; b?: number | undefined; }
+>Foo : { value: { type: 'A'; }; a?: number | undefined; } | { value: { type: 'B'; }; b?: number | undefined; }
 >value : { type: 'A'; }
 >type : "A"
 >a : number | undefined
@@ -471,7 +471,7 @@ declare function assert(condition: boolean): asserts condition;
 >condition : boolean
 
 function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
->test1 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>test1 : (foo: Foo) => { value: {    type: 'A';}; a?: number; }
 >foo : Foo
 >value : { type: 'A'; }
 >type : "A"
@@ -493,7 +493,7 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 }
 
 function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
->test2 : (foo: Foo) => {    value: {        type: 'A';    };    a?: number;}
+>test2 : (foo: Foo) => { value: {    type: 'A';}; a?: number; }
 >foo : Foo
 >value : { type: 'A'; }
 >type : "A"
