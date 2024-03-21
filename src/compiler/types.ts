@@ -3784,6 +3784,7 @@ export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
 export interface FileReference extends TextRange {
     fileName: string;
     resolutionMode?: ResolutionMode;
+    preserve?: boolean;
 }
 
 export interface CheckJsDirective extends TextRange {
@@ -4850,7 +4851,6 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
@@ -5030,12 +5030,9 @@ export interface TypeChecker {
     getApparentType(type: Type): Type;
     /** @internal */ getSuggestedSymbolForNonexistentProperty(name: MemberName | string, containingType: Type): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | string, containingType: Type): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentProperty(name: MemberName | string, containingType: Type): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
     getBaseConstraintOfType(type: Type): Type | undefined;
     getDefaultFromTypeParameter(type: Type): Type | undefined;
 
@@ -5627,20 +5624,15 @@ export interface EmitResolver {
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
-    moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
     isArgumentsLocalBinding(node: Identifier): boolean;
     getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined;
-    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined;
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
-    tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
 }
 
 // dprint-ignore
@@ -8189,8 +8181,6 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
 
-    getLibFileFromReference(ref: FileReference): SourceFile | undefined;
-
     getCommonSourceDirectory(): string;
     getCanonicalFileName(fileName: string): string;
 
@@ -9615,8 +9605,6 @@ export interface SymbolTracker {
     reportLikelyUnsafeImportRequiredError?(specifier: string): void;
     reportTruncationError?(): void;
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
-    trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
-    trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
 }
@@ -9795,6 +9783,7 @@ export const commentPragmas = {
             { name: "path", optional: true, captureSpan: true },
             { name: "no-default-lib", optional: true },
             { name: "resolution-mode", optional: true },
+            { name: "preserve", optional: true },
         ],
         kind: PragmaKindFlags.TripleSlashXML,
     },
