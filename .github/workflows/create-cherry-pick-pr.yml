@@ -115,7 +115,19 @@ jobs:
                 head: pickBranch,
                 title,
                 body,
+              });
+
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: newPr.data.number,
                 assignees: ["DanielRosenwasser"],
+              });
+
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: newPr.data.number,
                 reviewers: ["DanielRosenwasser", REQUESTING_USER],
               });
 
