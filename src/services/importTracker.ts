@@ -16,6 +16,7 @@ import {
     findAncestor,
     forEach,
     getAssignmentDeclarationKind,
+    getDefaultResolutionModeForFile,
     getFirstIdentifier,
     getNameOfAccessExpression,
     getSourceFileOfNode,
@@ -468,6 +469,7 @@ export type ModuleReference =
 export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
     const refs: ModuleReference[] = [];
     const checker = program.getTypeChecker();
+    const compilerOptions = program.getCompilerOptions();
     for (const referencingFile of sourceFiles) {
         const searchSourceFile = searchModuleSymbol.valueDeclaration;
         if (searchSourceFile?.kind === SyntaxKind.SourceFile) {
@@ -477,7 +479,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || getDefaultResolutionModeForFile(referencingFile, compilerOptions))?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }

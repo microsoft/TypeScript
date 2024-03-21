@@ -1157,11 +1157,13 @@ function getJSDocParamAnnotation(
                             ? createSnippetPrinter({
                                 removeComments: true,
                                 module: options.module,
+                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             })
                             : createPrinter({
                                 removeComments: true,
                                 module: options.module,
+                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             });
                         setEmitFlags(typeNode, EmitFlags.SingleLine);
@@ -1455,6 +1457,7 @@ function getExhaustiveCaseSnippets(
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
+            moduleResolution: options.moduleResolution,
             target: options.target,
             newLine: getNewLineKind(newLineChar),
         });
@@ -1942,6 +1945,7 @@ function getEntryForMemberCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2168,6 +2172,7 @@ function getEntryForObjectLiteralMethodCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2182,6 +2187,7 @@ function getEntryForObjectLiteralMethodCompletion(
     const signaturePrinter = createPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: true,
     });
