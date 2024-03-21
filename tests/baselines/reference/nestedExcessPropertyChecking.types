@@ -111,7 +111,7 @@ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
 // Simplified repro from #52252
 
 type T1 = {
->T1 : { primary: { __typename?: 'Feature'; } & { colors: {    light: number;    dark: number;}; }; }
+>T1 : { primary: { __typename?: 'Feature'; } & { colors: { light: number; dark: number; }; }; }
 
     primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
 >primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; dark: number; }; }
@@ -123,7 +123,7 @@ type T1 = {
 };
 
 type T2 = {
->T2 : { primary: { __typename?: 'Feature'; } & { colors: {    light: number;}; }; }
+>T2 : { primary: { __typename?: 'Feature'; } & { colors: { light: number; }; }; }
 
     primary: { __typename?: 'Feature' } & { colors: { light: number } },
 >primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; }; }

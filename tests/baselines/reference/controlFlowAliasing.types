@@ -454,7 +454,7 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 }
 
 function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
->f26 : (outer: { readonly obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}; }) => void
+>f26 : (outer: { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }) => void
 >outer : { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
@@ -493,7 +493,7 @@ function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar'
 }
 
 function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
->f27 : (outer: { obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}; }) => void
+>f27 : (outer: { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }) => void
 >outer : { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"

@@ -237,7 +237,7 @@ declare function foo17(a: any): any;
 >a : any
 
 declare function foo18(a: {
->foo18 : { (a: { (x: {    (a: number): number;    (a: string): string;}): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }): typeof a; (a: any): any; }
+>foo18 : { (a: { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }): typeof a; (a: any): any; }
 >a : { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }
 
     (x: {

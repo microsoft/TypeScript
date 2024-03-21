@@ -70,13 +70,13 @@ function f3({[foo2()]: x}: { bar: number }) {}
 >bar : number
 
 function f4([{[foo]: x}]: [{ bar: number }]) {}
->f4 : ([{ [foo]: x }]: [{    bar: number;}]) => void
+>f4 : ([{ [foo]: x }]: [{ bar: number; }]) => void
 >foo : string
 >x : any
 >bar : number
 
 function f5([{[foo2()]: x}]: [{ bar: number }]) {}
->f5 : ([{ [foo2()]: x }]: [{    bar: number;}]) => void
+>f5 : ([{ [foo2()]: x }]: [{ bar: number; }]) => void
 >foo2() : string
 >foo2 : () => string
 >x : any

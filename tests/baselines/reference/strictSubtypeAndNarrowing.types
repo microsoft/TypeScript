@@ -471,7 +471,7 @@ declare function assert(condition: boolean): asserts condition;
 >condition : boolean
 
 function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
->test1 : (foo: Foo) => { value: {    type: 'A';}; a?: number; }
+>test1 : (foo: Foo) => { value: { type: 'A'; }; a?: number; }
 >foo : Foo
 >value : { type: 'A'; }
 >type : "A"
@@ -493,7 +493,7 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 }
 
 function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
->test2 : (foo: Foo) => { value: {    type: 'A';}; a?: number; }
+>test2 : (foo: Foo) => { value: { type: 'A'; }; a?: number; }
 >foo : Foo
 >value : { type: 'A'; }
 >type : "A"

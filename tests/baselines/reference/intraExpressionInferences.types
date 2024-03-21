@@ -1058,8 +1058,8 @@ const resOnion2 = onion2({
 });
 
 declare function distant<T>(args: {
->distant : <T>(args: { foo: { bar: {    baz: { producer: (arg: string) => T; };}; }; consumer: (val: T) => unknown; }) => T
->args : { foo: { bar: {    baz: { producer: (arg: string) => T; };}; }; consumer: (val: T) => unknown; }
+>distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
+>args : { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }
 
   foo: {
 >foo : { bar: { baz: { producer: (arg: string) => T; }; }; }

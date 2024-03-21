@@ -308,7 +308,7 @@ type T5 = { new <const T>(x: T): T };
 // Corrected repro from #51745
 
 type Obj = { a: { b: { c: "123" } } };
->Obj : { a: { b: {    c: "123";}; }; }
+>Obj : { a: { b: { c: "123"; }; }; }
 >a : { b: { c: "123"; }; }
 >b : { c: "123"; }
 >c : "123"

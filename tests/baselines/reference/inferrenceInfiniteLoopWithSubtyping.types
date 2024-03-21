@@ -15,7 +15,7 @@ export class EnumTypeComposer {
 >EnumTypeComposer : EnumTypeComposer
 
   public setFields(fields: { [name: string]: { [key: string]: any } }): this;
->setFields : (fields: { [name: string]: {    [key: string]: any;}; }) => this
+>setFields : (fields: { [name: string]: { [key: string]: any; }; }) => this
 >fields : { [name: string]: { [key: string]: any; }; }
 >name : string
 >key : string
