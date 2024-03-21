@@ -1295,9 +1295,9 @@ export function createSystemWatchFunctions({
         const initialModifiedTime = getModifiedTime(fileOrDirectory) ?? missingFileModifiedTime;
         const modifiedTime: Record<string, Date | undefined> = {};
         return fsWatchWorker(fileOrDirectory, recursive, (eventName, relativeFileName, currentModifiedTime) => {
-            const filename = entryKind === FileSystemEntryKind.File
-                ? fileOrDirectory
-                : (relativeFileName ? combinePaths(fileOrDirectory, relativeFileName) : fileOrDirectory);
+            const filename = entryKind === FileSystemEntryKind.Directory && relativeFileName
+                ? combinePaths(fileOrDirectory, relativeFileName)
+                : fileOrDirectory;
             currentModifiedTime ??= getModifiedTime(filename) ?? missingFileModifiedTime;
             const prevModifiedTime = modifiedTime[filename] ?? initialModifiedTime;
             if (eventName === "change" && currentModifiedTime.getTime() === prevModifiedTime?.getTime()) return;
