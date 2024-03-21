@@ -118,13 +118,13 @@ str = int8Array.toLocaleString(); // OK
 >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2020.ts, 21, 5))
 >toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = int8Array.toLocaleString('en-US'); // should be error
+str = int8Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2020.ts, 21, 5))
 >toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2020.ts, 21, 5))
@@ -142,13 +142,13 @@ str = uint8Array.toLocaleString(); // OK
 >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2020.ts, 26, 5))
 >toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint8Array.toLocaleString('en-US'); // should be error
+str = uint8Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2020.ts, 26, 5))
 >toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2020.ts, 26, 5))
@@ -166,13 +166,13 @@ str = uint8ClampedArray.toLocaleString(); // OK
 >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2020.ts, 31, 5))
 >toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint8ClampedArray.toLocaleString('en-US'); // should be error
+str = uint8ClampedArray.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2020.ts, 31, 5))
 >toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2020.ts, 31, 5))
@@ -190,13 +190,13 @@ str = int16Array.toLocaleString(); // OK
 >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2020.ts, 36, 5))
 >toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = int16Array.toLocaleString('en-US'); // should be error
+str = int16Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2020.ts, 36, 5))
 >toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2020.ts, 36, 5))
@@ -214,13 +214,13 @@ str = uint16Array.toLocaleString(); // OK
 >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2020.ts, 41, 5))
 >toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint16Array.toLocaleString('en-US'); // should be error
+str = uint16Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2020.ts, 41, 5))
 >toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2020.ts, 41, 5))
@@ -238,13 +238,13 @@ str = int32Array.toLocaleString(); // OK
 >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2020.ts, 46, 5))
 >toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = int32Array.toLocaleString('en-US'); // should be error
+str = int32Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2020.ts, 46, 5))
 >toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2020.ts, 46, 5))
@@ -262,13 +262,13 @@ str = uint32Array.toLocaleString(); // OK
 >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2020.ts, 51, 5))
 >toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint32Array.toLocaleString('en-US'); // should be error
+str = uint32Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2020.ts, 51, 5))
 >toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2020.ts, 51, 5))
@@ -286,13 +286,13 @@ str = float32Array.toLocaleString(); // OK
 >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2020.ts, 56, 5))
 >toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = float32Array.toLocaleString('en-US'); // should be error
+str = float32Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2020.ts, 56, 5))
 >toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2020.ts, 56, 5))
@@ -310,13 +310,13 @@ str = float64Array.toLocaleString(); // OK
 >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2020.ts, 61, 5))
 >toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = float64Array.toLocaleString('en-US'); // should be error
+str = float64Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2020.ts, 61, 5))
 >toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2020.ts, 61, 5))
@@ -334,13 +334,13 @@ str = bigInt64Array.toLocaleString(); // OK
 >bigInt64Array : Symbol(bigInt64Array, Decl(arrayToLocaleStringES2020.ts, 66, 5))
 >toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
 
-str = bigInt64Array.toLocaleString('en-US'); // should be error
+str = bigInt64Array.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >bigInt64Array.toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
 >bigInt64Array : Symbol(bigInt64Array, Decl(arrayToLocaleStringES2020.ts, 66, 5))
 >toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
 
-str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
 >bigInt64Array.toLocaleString : Symbol(BigInt64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
 >bigInt64Array : Symbol(bigInt64Array, Decl(arrayToLocaleStringES2020.ts, 66, 5))

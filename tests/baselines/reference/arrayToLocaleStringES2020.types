@@ -187,7 +187,7 @@ str = int8Array.toLocaleString(); // OK
 >int8Array : Int8Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = int8Array.toLocaleString('en-US'); // should be error
+str = int8Array.toLocaleString('en-US'); // OK
 >str = int8Array.toLocaleString('en-US') : string
 >str : string
 >int8Array.toLocaleString('en-US') : string
@@ -196,7 +196,7 @@ str = int8Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -224,7 +224,7 @@ str = uint8Array.toLocaleString(); // OK
 >uint8Array : Uint8Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = uint8Array.toLocaleString('en-US'); // should be error
+str = uint8Array.toLocaleString('en-US'); // OK
 >str = uint8Array.toLocaleString('en-US') : string
 >str : string
 >uint8Array.toLocaleString('en-US') : string
@@ -233,7 +233,7 @@ str = uint8Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -261,7 +261,7 @@ str = uint8ClampedArray.toLocaleString(); // OK
 >uint8ClampedArray : Uint8ClampedArray
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = uint8ClampedArray.toLocaleString('en-US'); // should be error
+str = uint8ClampedArray.toLocaleString('en-US'); // OK
 >str = uint8ClampedArray.toLocaleString('en-US') : string
 >str : string
 >uint8ClampedArray.toLocaleString('en-US') : string
@@ -270,7 +270,7 @@ str = uint8ClampedArray.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -298,7 +298,7 @@ str = int16Array.toLocaleString(); // OK
 >int16Array : Int16Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = int16Array.toLocaleString('en-US'); // should be error
+str = int16Array.toLocaleString('en-US'); // OK
 >str = int16Array.toLocaleString('en-US') : string
 >str : string
 >int16Array.toLocaleString('en-US') : string
@@ -307,7 +307,7 @@ str = int16Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -335,7 +335,7 @@ str = uint16Array.toLocaleString(); // OK
 >uint16Array : Uint16Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = uint16Array.toLocaleString('en-US'); // should be error
+str = uint16Array.toLocaleString('en-US'); // OK
 >str = uint16Array.toLocaleString('en-US') : string
 >str : string
 >uint16Array.toLocaleString('en-US') : string
@@ -344,7 +344,7 @@ str = uint16Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -372,7 +372,7 @@ str = int32Array.toLocaleString(); // OK
 >int32Array : Int32Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = int32Array.toLocaleString('en-US'); // should be error
+str = int32Array.toLocaleString('en-US'); // OK
 >str = int32Array.toLocaleString('en-US') : string
 >str : string
 >int32Array.toLocaleString('en-US') : string
@@ -381,7 +381,7 @@ str = int32Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -409,7 +409,7 @@ str = uint32Array.toLocaleString(); // OK
 >uint32Array : Uint32Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = uint32Array.toLocaleString('en-US'); // should be error
+str = uint32Array.toLocaleString('en-US'); // OK
 >str = uint32Array.toLocaleString('en-US') : string
 >str : string
 >uint32Array.toLocaleString('en-US') : string
@@ -418,7 +418,7 @@ str = uint32Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -446,7 +446,7 @@ str = float32Array.toLocaleString(); // OK
 >float32Array : Float32Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = float32Array.toLocaleString('en-US'); // should be error
+str = float32Array.toLocaleString('en-US'); // OK
 >str = float32Array.toLocaleString('en-US') : string
 >str : string
 >float32Array.toLocaleString('en-US') : string
@@ -455,7 +455,7 @@ str = float32Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -483,7 +483,7 @@ str = float64Array.toLocaleString(); // OK
 >float64Array : Float64Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 
-str = float64Array.toLocaleString('en-US'); // should be error
+str = float64Array.toLocaleString('en-US'); // OK
 >str = float64Array.toLocaleString('en-US') : string
 >str : string
 >float64Array.toLocaleString('en-US') : string
@@ -492,7 +492,7 @@ str = float64Array.toLocaleString('en-US'); // should be error
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >'en-US' : "en-US"
 
-str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
@@ -520,7 +520,7 @@ str = bigInt64Array.toLocaleString(); // OK
 >bigInt64Array : BigInt64Array
 >toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
 
-str = bigInt64Array.toLocaleString('en-US'); // should be error
+str = bigInt64Array.toLocaleString('en-US'); // OK
 >str = bigInt64Array.toLocaleString('en-US') : string
 >str : string
 >bigInt64Array.toLocaleString('en-US') : string
@@ -529,7 +529,7 @@ str = bigInt64Array.toLocaleString('en-US'); // should be error
 >toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
 >'en-US' : "en-US"
 
-str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
