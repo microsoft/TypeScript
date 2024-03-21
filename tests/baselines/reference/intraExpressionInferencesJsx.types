@@ -308,7 +308,7 @@ type ErrorFn = (error: unknown) => void;
 >error : unknown
 
 function GenericComp<T>(props: {
->GenericComp : <T>(props: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }) => null
+>GenericComp : <T>(props: {    parser: (p: unknown, errorFn: ErrorFn) => T;    handler: (data: {        body: T;    }) => unknown;}) => null
 >props : { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }
 
   parser: (p: unknown, errorFn: ErrorFn) => T;
