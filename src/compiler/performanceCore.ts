@@ -19,15 +19,12 @@ export interface PerformanceTime {
 }
 
 /** @internal */
-export interface PerformanceMarkAndMeasure {
+export interface Performance extends PerformanceTime {
     mark(name: string): void;
     measure(name: string, startMark?: string, endMark?: string): void;
     clearMeasures(name?: string): void;
     clearMarks(name?: string): void;
 }
-
-/** @internal */
-export interface Performance extends PerformanceTime, PerformanceMarkAndMeasure {}
 
 // Browser globals for the Web Performance User Timings API
 declare const performance: Performance | undefined;
