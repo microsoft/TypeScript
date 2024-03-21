@@ -4183,10 +4183,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         function writeDirectives(kind: "path" | "types" | "lib", directives: readonly FileReference[]) {
             for (const directive of directives) {
-                const preserve = directive.preserve ? `preserve="true" ` : "";
-                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+                const resolutionMode = directive.resolutionMode
                     ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
                     : "";
+                const preserve = directive.preserve ? `preserve="true" ` : "";
                 writeComment(`/// <reference ${kind}="${directive.fileName}" ${resolutionMode}${preserve}/>`);
                 writeLine();
             }
