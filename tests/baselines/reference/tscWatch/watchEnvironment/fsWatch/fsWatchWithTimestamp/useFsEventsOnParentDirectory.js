@@ -87,9 +87,12 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: emulate access
+Change:: modify file contents
 
 Input::
+//// [/user/username/projects/myproject/main.ts]
+export const x = 10;export const y = 10;
+
 
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/main.ts 1:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":5} Source file
@@ -106,40 +109,12 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-
-
-
-
-exitCode:: ExitStatus.undefined
-
-Change:: modify file contents
-
-Input::
-//// [/user/username/projects/myproject/main.ts]
-export const x = 10;export const y = 10;
-
-
-Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/main.ts 1:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":5} Source file
-Scheduling update
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/main.ts 1:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":5} Source file
-
-
-Timeout callback:: count: 1
-2: timerToUpdateProgram *new*
-
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
-
-After running Timeout callback:: count: 0
-Output::
-Synchronizing program
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

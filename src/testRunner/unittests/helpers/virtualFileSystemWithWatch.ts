@@ -294,6 +294,10 @@ export interface WatchInvokeOptions {
     skipInodeCheckOnCreate: boolean;
     /** When invoking rename event on fs watch, send event with file name suffixed with tilde */
     useTildeAsSuffixInRenameEventFileName: boolean;
+    /** Simulate an fsevent that doesn't come with the modified time */
+    omitModifiedTime: boolean;
+    /** Simulate directory mtime not changing on file modification */
+    unmodifiedDirectoryMtime: boolean;
 }
 
 export enum Tsc_WatchFile {
@@ -501,15 +505,18 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         else {
             currentEntry.content = content;
             currentEntry.modifiedTime = this.now();
-            this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
-            if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+            const mtime = options?.omitModifiedTime ? undefined : currentEntry.modifiedTime;
+            if (!options?.unmodifiedDirectoryMtime) {
+                this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
+            }
+            if (options?.invokeDirectoryWatcherInsteadOfFileChanged) {
                 const directoryFullPath = getDirectoryPath(currentEntry.fullPath);
-                this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime);
-                this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
-                this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, mtime);
+                this.invokeFsWatchesCallbacks(directoryFullPath, "rename", mtime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                this.invokeRecursiveFsWatches(directoryFullPath, "rename", mtime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
             }
             else {
-                this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+                this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, mtime, options?.useTildeAsSuffixInRenameEventFileName);
             }
         }
     }

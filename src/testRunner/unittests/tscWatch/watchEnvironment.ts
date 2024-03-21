@@ -725,7 +725,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         verify(/*fsWatchWithTimestamp*/ false);
     });
 
-    describe("with fsWatch with fsWatchWithTimestamp with useFsEventsOnParentDirectory", () => {
+    describe("with fsWatch with fsWatchWithTimestamp with useFsEventsOnParentDirectory (GH#57877)", () => {
         verifyTscWatch({
             scenario,
             subScenario: "fsWatch/fsWatchWithTimestamp/useFsEventsOnParentDirectory",
@@ -744,13 +744,12 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 ),
             edits: [
                 {
-                    caption: "emulate access",
-                    edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
-                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                },
-                {
                     caption: "modify file contents",
-                    edit: sys => sys.appendFile("/user/username/projects/myproject/main.ts", "export const y = 10;"),
+                    edit: sys => sys.appendFile(
+                        "/user/username/projects/myproject/main.ts",
+                        "export const y = 10;",
+                        { omitModifiedTime: true, unmodifiedDirectoryMtime: true },
+                    ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
