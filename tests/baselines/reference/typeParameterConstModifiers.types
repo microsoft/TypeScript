@@ -634,7 +634,7 @@ fc2((a: string, b: number) => {}, "hello", 42);
 >42 : 42
 
 declare function fd1<const T extends string[] | number[]>(args: T): T;
->fd1 : <const T extends string[] | number[]>(args: T) => T
+>fd1 : <const T extends number[] | string[]>(args: T) => T
 >args : T
 
 declare function fd2<const T extends string[] | readonly number[]>(args: T): T;
@@ -647,14 +647,14 @@ declare function fd3<const T extends readonly string[] | readonly number[]>(args
 
 fd1(["hello", "world"]);
 >fd1(["hello", "world"]) : ["hello", "world"]
->fd1 : <const T extends string[] | number[]>(args: T) => T
+>fd1 : <const T extends number[] | string[]>(args: T) => T
 >["hello", "world"] : ["hello", "world"]
 >"hello" : "hello"
 >"world" : "world"
 
 fd1([1, 2, 3]);
 >fd1([1, 2, 3]) : [1, 2, 3]
->fd1 : <const T extends string[] | number[]>(args: T) => T
+>fd1 : <const T extends number[] | string[]>(args: T) => T
 >[1, 2, 3] : [1, 2, 3]
 >1 : 1
 >2 : 2

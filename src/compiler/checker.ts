@@ -30992,7 +30992,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If no inferences have been made, and none of the type parameters for which we are inferring
             // specify default types, nothing is gained from instantiating as type parameters would just be
             // replaced with their constraints similar to the apparent type.
-            if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
+            if (
+                inferenceContext &&
+                (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Conditional)) &&
+                some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)
+            ) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return
                 // types as well as arguments to the left in a function call.
                 return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);

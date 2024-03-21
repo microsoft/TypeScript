@@ -1,0 +1,164 @@
+//// [tests/cases/compiler/contextualInnerCallFromConditionalContextualType2.ts] ////
+
+=== contextualInnerCallFromConditionalContextualType2.ts ===
+interface ActorImpl {
+>ActorImpl : Symbol(ActorImpl, Decl(contextualInnerCallFromConditionalContextualType2.ts, 0, 0))
+
+  src: string;
+>src : Symbol(ActorImpl.src, Decl(contextualInnerCallFromConditionalContextualType2.ts, 0, 21))
+
+  output: any;
+>output : Symbol(ActorImpl.output, Decl(contextualInnerCallFromConditionalContextualType2.ts, 1, 14))
+}
+
+interface DoneInvokeEvent<TData> {
+>DoneInvokeEvent : Symbol(DoneInvokeEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 3, 1))
+>TData : Symbol(TData, Decl(contextualInnerCallFromConditionalContextualType2.ts, 5, 26))
+
+  type: `done.invoke.${string}`;
+>type : Symbol(DoneInvokeEvent.type, Decl(contextualInnerCallFromConditionalContextualType2.ts, 5, 34))
+
+  output: TData;
+>output : Symbol(DoneInvokeEvent.output, Decl(contextualInnerCallFromConditionalContextualType2.ts, 6, 32))
+>TData : Symbol(TData, Decl(contextualInnerCallFromConditionalContextualType2.ts, 5, 26))
+}
+
+type AssignActionObject<TEvent extends { type: string }> = {
+>AssignActionObject : Symbol(AssignActionObject, Decl(contextualInnerCallFromConditionalContextualType2.ts, 8, 1))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 10, 24))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType2.ts, 10, 40))
+
+  type: "xstate.assign";
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType2.ts, 10, 60))
+
+  ev: TEvent;
+>ev : Symbol(ev, Decl(contextualInnerCallFromConditionalContextualType2.ts, 11, 24))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 10, 24))
+
+  (ev: TEvent): void;
+>ev : Symbol(ev, Decl(contextualInnerCallFromConditionalContextualType2.ts, 13, 3))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 10, 24))
+
+};
+
+type ActionFunction<TEvent extends { type: string }> = (ev: TEvent) => void;
+>ActionFunction : Symbol(ActionFunction, Decl(contextualInnerCallFromConditionalContextualType2.ts, 14, 2))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 16, 20))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType2.ts, 16, 36))
+>ev : Symbol(ev, Decl(contextualInnerCallFromConditionalContextualType2.ts, 16, 56))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 16, 20))
+
+declare function assign<TEvent extends { type: string }>(
+>assign : Symbol(assign, Decl(contextualInnerCallFromConditionalContextualType2.ts, 16, 76))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 18, 24))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType2.ts, 18, 40))
+
+  assigner: (ev: TEvent) => void
+>assigner : Symbol(assigner, Decl(contextualInnerCallFromConditionalContextualType2.ts, 18, 57))
+>ev : Symbol(ev, Decl(contextualInnerCallFromConditionalContextualType2.ts, 19, 13))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 18, 24))
+
+): AssignActionObject<TEvent>;
+>AssignActionObject : Symbol(AssignActionObject, Decl(contextualInnerCallFromConditionalContextualType2.ts, 8, 1))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 18, 24))
+
+type Action<TEvent extends { type: string }> =
+>Action : Symbol(Action, Decl(contextualInnerCallFromConditionalContextualType2.ts, 20, 30))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 22, 12))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType2.ts, 22, 28))
+
+  | AssignActionObject<TEvent>
+>AssignActionObject : Symbol(AssignActionObject, Decl(contextualInnerCallFromConditionalContextualType2.ts, 8, 1))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 22, 12))
+
+  | ActionFunction<TEvent>;
+>ActionFunction : Symbol(ActionFunction, Decl(contextualInnerCallFromConditionalContextualType2.ts, 14, 2))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 22, 12))
+
+declare function createMachine<TActors extends ActorImpl>(config: {
+>createMachine : Symbol(createMachine, Decl(contextualInnerCallFromConditionalContextualType2.ts, 24, 27))
+>TActors : Symbol(TActors, Decl(contextualInnerCallFromConditionalContextualType2.ts, 26, 31))
+>ActorImpl : Symbol(ActorImpl, Decl(contextualInnerCallFromConditionalContextualType2.ts, 0, 0))
+>config : Symbol(config, Decl(contextualInnerCallFromConditionalContextualType2.ts, 26, 58))
+
+  types: {
+>types : Symbol(types, Decl(contextualInnerCallFromConditionalContextualType2.ts, 26, 67))
+
+    actors: TActors;
+>actors : Symbol(actors, Decl(contextualInnerCallFromConditionalContextualType2.ts, 27, 10))
+>TActors : Symbol(TActors, Decl(contextualInnerCallFromConditionalContextualType2.ts, 26, 31))
+
+  };
+  states: Record<
+>states : Symbol(states, Decl(contextualInnerCallFromConditionalContextualType2.ts, 29, 4))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    string,
+    {
+      invoke: TActors extends { src: infer TSrc }
+>invoke : Symbol(invoke, Decl(contextualInnerCallFromConditionalContextualType2.ts, 32, 5))
+>TActors : Symbol(TActors, Decl(contextualInnerCallFromConditionalContextualType2.ts, 26, 31))
+>src : Symbol(src, Decl(contextualInnerCallFromConditionalContextualType2.ts, 33, 31))
+>TSrc : Symbol(TSrc, Decl(contextualInnerCallFromConditionalContextualType2.ts, 33, 42))
+
+        ? {
+            src: TSrc;
+>src : Symbol(src, Decl(contextualInnerCallFromConditionalContextualType2.ts, 34, 11))
+>TSrc : Symbol(TSrc, Decl(contextualInnerCallFromConditionalContextualType2.ts, 33, 42))
+
+            onDone: Action<DoneInvokeEvent<TActors["output"]>>;
+>onDone : Symbol(onDone, Decl(contextualInnerCallFromConditionalContextualType2.ts, 35, 22))
+>Action : Symbol(Action, Decl(contextualInnerCallFromConditionalContextualType2.ts, 20, 30))
+>DoneInvokeEvent : Symbol(DoneInvokeEvent, Decl(contextualInnerCallFromConditionalContextualType2.ts, 3, 1))
+>TActors : Symbol(TActors, Decl(contextualInnerCallFromConditionalContextualType2.ts, 26, 31))
+          }
+        : never;
+    }
+  >;
+}): void;
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(contextualInnerCallFromConditionalContextualType2.ts, 24, 27))
+
+  types: {
+>types : Symbol(types, Decl(contextualInnerCallFromConditionalContextualType2.ts, 43, 15))
+
+    actors: {} as {
+>actors : Symbol(actors, Decl(contextualInnerCallFromConditionalContextualType2.ts, 44, 10))
+
+      src: "getRandomNumber";
+>src : Symbol(src, Decl(contextualInnerCallFromConditionalContextualType2.ts, 45, 19))
+
+      output: { result: number };
+>output : Symbol(output, Decl(contextualInnerCallFromConditionalContextualType2.ts, 46, 29))
+>result : Symbol(result, Decl(contextualInnerCallFromConditionalContextualType2.ts, 47, 15))
+
+    },
+  },
+  states: {
+>states : Symbol(states, Decl(contextualInnerCallFromConditionalContextualType2.ts, 49, 4))
+
+    a: {
+>a : Symbol(a, Decl(contextualInnerCallFromConditionalContextualType2.ts, 50, 11))
+
+      invoke: {
+>invoke : Symbol(invoke, Decl(contextualInnerCallFromConditionalContextualType2.ts, 51, 8))
+
+        src: "getRandomNumber",
+>src : Symbol(src, Decl(contextualInnerCallFromConditionalContextualType2.ts, 52, 15))
+
+        onDone: assign((event) => {
+>onDone : Symbol(onDone, Decl(contextualInnerCallFromConditionalContextualType2.ts, 53, 31))
+>assign : Symbol(assign, Decl(contextualInnerCallFromConditionalContextualType2.ts, 16, 76))
+>event : Symbol(event, Decl(contextualInnerCallFromConditionalContextualType2.ts, 54, 24))
+
+          event;
+>event : Symbol(event, Decl(contextualInnerCallFromConditionalContextualType2.ts, 54, 24))
+
+          // ^?
+        }),
+      },
+    },
+  },
+});
+
