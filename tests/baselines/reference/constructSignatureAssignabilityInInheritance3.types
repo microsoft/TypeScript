@@ -81,7 +81,7 @@ module Errors {
 >b : number
 
             a16: {
->a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>a16 : { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }
 
                 // type of parameter is overload set which means we can't do inference based on this type
                 new (x: {

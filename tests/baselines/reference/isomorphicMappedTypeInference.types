@@ -317,7 +317,7 @@ function f5(s: string) {
 }
 
 function makeDictionary<T>(obj: { [x: string]: T }) {
->makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
+>makeDictionary : <T>(obj: {    [x: string]: T;}) => { [x: string]: T; }
 >obj : { [x: string]: T; }
 >x : string
 

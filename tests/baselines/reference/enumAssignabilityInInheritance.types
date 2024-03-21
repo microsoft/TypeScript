@@ -207,7 +207,7 @@ var r4 = foo10(E.A);
 >A : E
 
 declare function foo11(x: (x) => number): (x) => number;
->foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
+>foo11 : { (x: (x) => number): (x) => number; (x: E): E; }
 >x : (x: any) => number
 >x : any
 >x : any
