@@ -467,7 +467,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 arguments: {
                     knownProjects: knownProjects.map(p => p.info!),
                 },
-            }).response as ts.server.protocol.ProjectFilesWithDiagnostics[];
+            });
 
             externalProject.rootFiles.length = 1;
             openExternalProjectsForSession([externalProject], session);
