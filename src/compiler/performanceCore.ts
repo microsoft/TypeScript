@@ -33,7 +33,10 @@ export interface Performance extends PerformanceTime, PerformanceMarkAndMeasure 
 declare const performance: Performance | undefined;
 
 function tryGetPerformance() {
-    // Try Node first; Node 16+ have the performance global but we want consistent behavior.
+    if (typeof performance === "object") {
+        return { performance, isGlobal: true };
+    }
+
     if (isNodeLikeSystem()) {
         try {
             const { performance } = require("perf_hooks") as typeof import("perf_hooks");
@@ -42,10 +45,6 @@ function tryGetPerformance() {
         catch {
             // ignore errors
         }
-    }
-
-    if (typeof performance === "object") {
-        return { performance, isGlobal: true };
     }
 
     return undefined;
