@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts] ////
+
+=== genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts ===
+type Fn<T> = <U extends T>(x: U) => U;
+>Fn : Symbol(Fn, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 0))
+>T : Symbol(T, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 8))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 14))
+>T : Symbol(T, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 8))
+>x : Symbol(x, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 27))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 14))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 14))
+
+type Concrete1 = <U extends number>(x: U) => U;
+>Concrete1 : Symbol(Concrete1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 38))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 2, 18))
+>x : Symbol(x, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 2, 36))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 2, 18))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 2, 18))
+
+type Concrete2 = <U extends string>(x: U) => U;
+>Concrete2 : Symbol(Concrete2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 2, 47))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 3, 18))
+>x : Symbol(x, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 3, 36))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 3, 18))
+>U : Symbol(U, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 3, 18))
+
+function f<T1, T2>(t1: Fn<T1>, t2: Fn<T2>, c1: Concrete1, c2: Concrete2) {
+>f : Symbol(f, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 3, 47))
+>T1 : Symbol(T1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 11))
+>T2 : Symbol(T2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 14))
+>t1 : Symbol(t1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 19))
+>Fn : Symbol(Fn, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 0))
+>T1 : Symbol(T1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 11))
+>t2 : Symbol(t2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 30))
+>Fn : Symbol(Fn, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 0))
+>T2 : Symbol(T2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 14))
+>c1 : Symbol(c1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 42))
+>Concrete1 : Symbol(Concrete1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 0, 38))
+>c2 : Symbol(c2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 57))
+>Concrete2 : Symbol(Concrete2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 2, 47))
+
+    // every single one of these assignments should error
+
+    t1 = t2;
+>t1 : Symbol(t1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 19))
+>t2 : Symbol(t2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 30))
+
+    t2 = t1;
+>t2 : Symbol(t2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 30))
+>t1 : Symbol(t1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 19))
+
+    c1 = c2;
+>c1 : Symbol(c1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 42))
+>c2 : Symbol(c2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 57))
+
+    c2 = c1;
+>c2 : Symbol(c2, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 57))
+>c1 : Symbol(c1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 42))
+
+    t1 = c1;
+>t1 : Symbol(t1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 19))
+>c1 : Symbol(c1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 42))
+
+    c1 = t1;
+>c1 : Symbol(c1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 42))
+>t1 : Symbol(t1, Decl(genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts, 5, 19))
+}
+

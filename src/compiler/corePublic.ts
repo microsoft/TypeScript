@@ -15,11 +15,11 @@ export interface MapLike<T> {
     [index: string]: T;
 }
 
-export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+export interface SortedReadonlyArray<out T> extends ReadonlyArray<T> {
     " __sortedArrayBrand": any;
 }
 
-export interface SortedArray<T> extends Array<T> {
+export interface SortedArray<out T> extends Array<T> {
     " __sortedArrayBrand": any;
 }
 

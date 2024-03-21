@@ -23573,7 +23573,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // as they are known to always be the same.
                 Debug.assertEqual(sourceSignatures.length, targetSignatures.length);
                 for (let i = 0; i < targetSignatures.length; i++) {
-                    const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, intersectionState, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
+                    const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ !inVarianceComputation, reportErrors, intersectionState, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
                     if (!related) {
                         return Ternary.False;
                     }
