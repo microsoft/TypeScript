@@ -125,7 +125,6 @@ import {
     getContainingNodeArray,
     getDeclarationEmitExtensionForPath,
     getDeclarationEmitOutputFilePath,
-    getDefaultResolutionModeForFile,
     getDirectoryPath,
     getEmitDeclarations,
     getEmitFlags,
@@ -1162,7 +1161,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     var omitBraceSourcePositions = !!printerOptions.omitBraceSourceMapPositions;
     var newLine = getNewLineCharacter(printerOptions);
     var moduleKind = getEmitModuleKind(printerOptions);
-    var moduleResolution = getEmitModuleResolutionKind(printerOptions);
     var bundledHelpers = new Map<string, boolean>();
 
     var currentSourceFile: SourceFile | undefined;
@@ -4188,10 +4186,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         function writeDirectives(kind: "path" | "types" | "lib", directives: readonly FileReference[]) {
             for (const directive of directives) {
-                const preserve = directive.preserve ? `preserve="true" ` : "";
-                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== (currentSourceFile && getDefaultResolutionModeForFile(currentSourceFile, { moduleResolution }))
+                const resolutionMode = directive.resolutionMode
                     ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
                     : "";
+                const preserve = directive.preserve ? `preserve="true" ` : "";
                 writeComment(`/// <reference ${kind}="${directive.fileName}" ${resolutionMode}${preserve}/>`);
                 writeLine();
             }

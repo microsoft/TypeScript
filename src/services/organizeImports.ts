@@ -750,7 +750,7 @@ function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDecl
             }
         }
         for (const key of typesToTest) {
-            const typeOrder = key as OrganizeImportsTypeOrder;
+            const typeOrder = key;
             if (currDiff[typeOrder] < bestDiff[typeOrder]) {
                 bestDiff[typeOrder] = currDiff[typeOrder];
                 bestComparer[typeOrder] = curComparer;
@@ -759,9 +759,9 @@ function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDecl
     }
 
     outer: for (const bestKey of typesToTest) {
-        const bestTypeOrder = bestKey as OrganizeImportsTypeOrder;
+        const bestTypeOrder = bestKey;
         for (const testKey of typesToTest) {
-            const testTypeOrder = testKey as OrganizeImportsTypeOrder;
+            const testTypeOrder = testKey;
             if (bestDiff[testTypeOrder] < bestDiff[bestTypeOrder]) continue outer;
         }
         return { namedImportComparer: bestComparer[bestTypeOrder], typeOrder: bestTypeOrder, isSorted: bestDiff[bestTypeOrder] === 0 };
