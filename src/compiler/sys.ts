@@ -1286,7 +1286,12 @@ export function createSystemWatchFunctions({
         }
     }
 
-    function fsWatchWorkerHandlingTimestamp(fileOrDirectory: string, entryKind: FileSystemEntryKind, recursive: boolean, callback: FsWatchCallback): FsWatchWorkerWatcher {
+    function fsWatchWorkerHandlingTimestamp(
+        fileOrDirectory: string,
+        entryKind: FileSystemEntryKind,
+        recursive: boolean,
+        callback: FsWatchCallback,
+    ): FsWatchWorkerWatcher {
         const initialModifiedTime = getModifiedTime(fileOrDirectory) ?? missingFileModifiedTime;
         const modifiedTime: Record<string, Date | undefined> = {};
         return fsWatchWorker(fileOrDirectory, recursive, (eventName, relativeFileName, currentModifiedTime) => {
