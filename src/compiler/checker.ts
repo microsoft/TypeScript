@@ -8754,7 +8754,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (isTupleTypeNode(node) || isTypeLiteralNode(node) || isMappedTypeNode(node)) {
                     const visited = visitEachChild(node, visitExistingNodeTreeSymbols, /*context*/ undefined);
-                    const clone = setTextRange(visited === node ? factory.cloneNode(node) : node, node);
+                    const clone = setTextRange(visited === node ? factory.cloneNode(node) : visited, node);
                     const flags = getEmitFlags(clone);
                     setEmitFlags(clone, flags | (context.flags & NodeBuilderFlags.MultilineObjectLiterals && isTypeLiteralNode(node) ? 0 : EmitFlags.SingleLine));
                     return clone;
