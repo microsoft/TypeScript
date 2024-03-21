@@ -348,3 +348,27 @@ str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR'
 >style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 69, 45))
 >currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 69, 64))
 
+const bigIntUint64Array = new BigUint64Array(3);
+>bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+>BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+str = bigIntUint64Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+>bigIntUint64Array.toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+>toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+
+str = bigIntUint64Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+>bigIntUint64Array.toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+>toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+
+str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2020.ts, 0, 3))
+>bigIntUint64Array.toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntUint64Array : Symbol(bigIntUint64Array, Decl(arrayToLocaleStringES2020.ts, 71, 5))
+>toLocaleString : Symbol(BigUint64Array.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2020.ts, 74, 49))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2020.ts, 74, 68))
+

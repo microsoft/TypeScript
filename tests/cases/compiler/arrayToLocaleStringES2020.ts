@@ -70,3 +70,8 @@ const bigInt64Array = new BigInt64Array(3);
 str = bigInt64Array.toLocaleString(); // OK
 str = bigInt64Array.toLocaleString('en-US'); // OK
 str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+
+const bigIntUint64Array = new BigUint64Array(3);
+str = bigIntUint64Array.toLocaleString(); // OK
+str = bigIntUint64Array.toLocaleString('en-US'); // OK
+str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK

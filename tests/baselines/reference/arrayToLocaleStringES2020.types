@@ -543,3 +543,40 @@ str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR'
 >currency : string
 >'EUR' : "EUR"
 
+const bigIntUint64Array = new BigUint64Array(3);
+>bigIntUint64Array : BigUint64Array
+>new BigUint64Array(3) : BigUint64Array
+>BigUint64Array : BigUint64ArrayConstructor
+>3 : 3
+
+str = bigIntUint64Array.toLocaleString(); // OK
+>str = bigIntUint64Array.toLocaleString() : string
+>str : string
+>bigIntUint64Array.toLocaleString() : string
+>bigIntUint64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>bigIntUint64Array : BigUint64Array
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+
+str = bigIntUint64Array.toLocaleString('en-US'); // OK
+>str = bigIntUint64Array.toLocaleString('en-US') : string
+>str : string
+>bigIntUint64Array.toLocaleString('en-US') : string
+>bigIntUint64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>bigIntUint64Array : BigUint64Array
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>'en-US' : "en-US"
+
+str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>str : string
+>bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>bigIntUint64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>bigIntUint64Array : BigUint64Array
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>'en-US' : "en-US"
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>style : "currency"
+>'currency' : "currency"
+>currency : string
+>'EUR' : "EUR"
+
