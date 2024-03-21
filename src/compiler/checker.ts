@@ -17788,7 +17788,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // where A & B & C & D is processed as (A & B) & (C & D). Since intersections of unions often produce far smaller
                     // unions of intersections than the full cartesian product (due to some intersections becoming `never`), this can
                     // dramatically reduce the overall work.
-                    const middle = typeSet.length / 2;
+                    const middle = Math.floor(typeSet.length / 2);
                     result = getIntersectionType([getIntersectionType(typeSet.slice(0, middle)), getIntersectionType(typeSet.slice(middle))], aliasSymbol, aliasTypeArguments);
                 }
                 else {
