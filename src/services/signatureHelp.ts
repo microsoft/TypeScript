@@ -59,7 +59,6 @@ import {
     JsxTagNameExpression,
     last,
     lastOrUndefined,
-    length,
     ListFormat,
     map,
     mapToDisplayParts,
@@ -494,8 +493,7 @@ function getArgumentIndex(argumentsList: Node, node: Node, checker: TypeChecker)
     const args = argumentsList.getChildren();
     let argumentIndex = 0;
     let skipComma = false;
-    for (let pos = 0; pos < length(args); pos++) {
-        const child = args[pos];
+    for (const child of args) {
         if (child === node) {
             if (!skipComma && child.kind === SyntaxKind.CommaToken) {
                 argumentIndex++;
@@ -544,8 +542,7 @@ function getArgumentCount(argumentsList: Node, checker: TypeChecker) {
     const args = argumentsList.getChildren();
     let argumentCount = 0;
     let skipComma = false;
-    for (let pos = 0; pos < length(args); pos++) {
-        const child = args[pos];
+    for (const child of args) {
         if (isSpreadElement(child)) {
             argumentCount += getSpreadElementCount(child, checker);
             skipComma = true;
