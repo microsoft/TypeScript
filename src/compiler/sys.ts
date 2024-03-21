@@ -1191,13 +1191,10 @@ export function createSystemWatchFunctions({
                 return watchPresentFileSystemEntryWithFsWatchFile();
             }
             try {
-                const presentWatcher = (!fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
-                    fileOrDirectory,
-                    recursive,
-                    inodeWatching ?
-                        callbackChangingToMissingFileSystemEntry :
-                        callback,
-                );
+                const fsWatchCallback = inodeWatching ? callbackChangingToMissingFileSystemEntry : callback;
+                const presentWatcher = !fsWatchWithTimestamp
+                    ? fsWatchWorker(fileOrDirectory, recursive, fsWatchCallback)
+                    : fsWatchWorkerHandlingTimestamp(fileOrDirectory, entryKind, recursive, fsWatchCallback);
                 // Watch the missing file or directory or error
                 presentWatcher.on("error", () => {
                     callback("rename", "");
@@ -1289,15 +1286,18 @@ export function createSystemWatchFunctions({
         }
     }
 
-    function fsWatchWorkerHandlingTimestamp(fileOrDirectory: string, recursive: boolean, callback: FsWatchCallback): FsWatchWorkerWatcher {
-        let modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+    function fsWatchWorkerHandlingTimestamp(fileOrDirectory: string, entryKind: FileSystemEntryKind, recursive: boolean, callback: FsWatchCallback): FsWatchWorkerWatcher {
+        const initialModifiedTime = getModifiedTime(fileOrDirectory) ?? missingFileModifiedTime;
+        const modifiedTime: Record<string, Date | undefined> = {};
         return fsWatchWorker(fileOrDirectory, recursive, (eventName, relativeFileName, currentModifiedTime) => {
-            if (eventName === "change") {
-                currentModifiedTime ||= getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
-                if (currentModifiedTime.getTime() === modifiedTime.getTime()) return;
-            }
-            modifiedTime = currentModifiedTime || getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
-            callback(eventName, relativeFileName, modifiedTime);
+            const filename = entryKind === FileSystemEntryKind.File
+                ? fileOrDirectory
+                : (relativeFileName ? combinePaths(fileOrDirectory, relativeFileName) : fileOrDirectory);
+            currentModifiedTime ??= getModifiedTime(filename) ?? missingFileModifiedTime;
+            const prevModifiedTime = modifiedTime[filename] ?? initialModifiedTime;
+            if (eventName === "change" && currentModifiedTime.getTime() === prevModifiedTime?.getTime()) return;
+            modifiedTime[filename] = currentModifiedTime;
+            callback(eventName, relativeFileName, currentModifiedTime);
         });
     }
 }
