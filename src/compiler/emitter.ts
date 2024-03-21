@@ -125,6 +125,7 @@ import {
     getContainingNodeArray,
     getDeclarationEmitExtensionForPath,
     getDeclarationEmitOutputFilePath,
+    getDefaultResolutionModeForFile,
     getDirectoryPath,
     getEmitDeclarations,
     getEmitFlags,
@@ -175,7 +176,6 @@ import {
     Identifier,
     idText,
     IfStatement,
-    impliedNodeFormatForModuleResolution,
     ImportAttribute,
     ImportAttributes,
     ImportClause,
@@ -4189,7 +4189,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         function writeDirectives(kind: "path" | "types" | "lib", directives: readonly FileReference[]) {
             for (const directive of directives) {
                 const preserve = directive.preserve ? `preserve="true" ` : "";
-                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== (currentSourceFile && impliedNodeFormatForModuleResolution(currentSourceFile, { moduleResolution }))
+                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== (currentSourceFile && getDefaultResolutionModeForFile(currentSourceFile, { moduleResolution }))
                     ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
                     : "";
                 writeComment(`/// <reference ${kind}="${directive.fileName}" ${resolutionMode}${preserve}/>`);

@@ -35,6 +35,7 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getConditions,
+    getDefaultResolutionModeForFile,
     getDirectoryPath,
     getEmitModuleResolutionKind,
     getModeForResolutionAtIndex,
@@ -60,7 +61,6 @@ import {
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     Identifier,
-    impliedNodeFormatForModuleResolution,
     isAmbientModule,
     isApplicableVersionedTypesKey,
     isDeclarationFileName,
@@ -155,9 +155,10 @@ export function getModuleSpecifierPreferences(
             importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
             RelativePreference.Shortest,
         getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
-            const impliedNodeFormat = impliedNodeFormatForModuleResolution(importingSourceFile, compilerOptions);
+            const impliedNodeFormat = getDefaultResolutionModeForFile(importingSourceFile, compilerOptions);
             const preferredEnding = syntaxImpliedNodeFormat !== impliedNodeFormat ? getPreferredEnding(syntaxImpliedNodeFormat) : filePreferredEnding;
-            if ((syntaxImpliedNodeFormat ?? impliedNodeFormat) === ModuleKind.ESNext) {
+            const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+            if ((syntaxImpliedNodeFormat ?? impliedNodeFormat) === ModuleKind.ESNext && ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) {
                 if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
                     return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension];
                 }
@@ -197,7 +198,7 @@ export function getModuleSpecifierPreferences(
         }
         return getModuleSpecifierEndingPreference(
             importModuleSpecifierEnding,
-            resolutionMode ?? impliedNodeFormatForModuleResolution(importingSourceFile, compilerOptions),
+            resolutionMode ?? getDefaultResolutionModeForFile(importingSourceFile, compilerOptions),
             compilerOptions,
             importingSourceFile,
         );
@@ -268,7 +269,7 @@ function getModuleSpecifierWorker(
     const info = getInfo(importingSourceFileName, host);
     const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, options);
     return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
-        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || impliedNodeFormatForModuleResolution(importingSourceFile, compilerOptions), preferences);
+        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || getDefaultResolutionModeForFile(importingSourceFile, compilerOptions), preferences);
 }
 
 /** @internal */
@@ -391,7 +392,7 @@ function computeModuleSpecifiers(
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
                 const existingMode = getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions);
-                const targetMode = options.overrideImportMode ?? impliedNodeFormatForModuleResolution(importingSourceFile, compilerOptions);
+                const targetMode = options.overrideImportMode ?? getDefaultResolutionModeForFile(importingSourceFile, compilerOptions);
                 if (existingMode !== targetMode && existingMode !== undefined && targetMode !== undefined) {
                     return undefined;
                 }
@@ -1084,8 +1085,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (isPackageJsonInfo(cachedPackageJson) || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent: Record<string, any> | undefined = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile!(packageJsonPath)!);
-            // TODO: `impliedNodeFormatForModuleResolution` wrong
-            const importMode = overrideMode || impliedNodeFormatForModuleResolution(importingSourceFile, options);
+            const importMode = overrideMode || getDefaultResolutionModeForFile(importingSourceFile, options);
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
                 // name in the package.json content via url/filepath dependency specifiers. We need to

@@ -8600,17 +8600,26 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
     }
 }
 
-/** @internal */
-export function impliedNodeFormatAffectsModuleResolution(options: CompilerOptions) {
+/**
+ * @internal
+ * Returns true if an `import` and a `require` of the same module specifier
+ * can resolve to a different file.
+ */
+export function importSyntaxAffectsModuleResolution(options: CompilerOptions) {
     const moduleResolution = getEmitModuleResolutionKind(options);
     return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
         || getResolvePackageJsonExports(options)
         || getResolvePackageJsonImports(options);
 }
 
-/** @internal */
-export function impliedNodeFormatForModuleResolution(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
-    return impliedNodeFormatAffectsModuleResolution(options) ? impliedNodeFormatForEmit(sourceFile, options) : undefined;
+/**
+ * @internal
+ * The resolution mode to use for module resolution or module specifier resolution
+ * outside the context of an existing module reference, where
+ * `program.getModeForUsageLocation` should be used instead.
+ */
+export function getDefaultResolutionModeForFile(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
+    return importSyntaxAffectsModuleResolution(options) ? impliedNodeFormatForEmit(sourceFile, options) : undefined;
 }
 
 /** @internal */

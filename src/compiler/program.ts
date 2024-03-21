@@ -112,6 +112,7 @@ import {
     getCommonSourceDirectoryOfConfig,
     getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
+    getDefaultResolutionModeForFile,
     getDirectoryPath,
     getEmitDeclarations,
     getEmitModuleFormatOfFile,
@@ -165,12 +166,11 @@ import {
     HeritageClause,
     Identifier,
     identity,
-    impliedNodeFormatAffectsModuleResolution,
-    impliedNodeFormatForModuleResolution,
     ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
+    importSyntaxAffectsModuleResolution,
     InternalEmitFlags,
     inverseJsxOptionMap,
     isAmbientModule,
@@ -943,7 +943,7 @@ function getModeForUsageLocationWorker(file: Pick<SourceFile, "fileName" | "impl
         }
     }
 
-    if (compilerOptions && impliedNodeFormatAffectsModuleResolution(compilerOptions)) {
+    if (compilerOptions && importSyntaxAffectsModuleResolution(compilerOptions)) {
         return getEmitSyntaxForUsageLocationWorker(file, usage, compilerOptions);
     }
 }
@@ -1062,7 +1062,7 @@ function getTypeReferenceResolutionName<T extends FileReference | string>(entry:
 
 const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
     getName: getTypeReferenceResolutionName,
-    getMode: (entry, file, compilerOptions) => getModeForFileReference(entry, file && impliedNodeFormatForModuleResolution(file, compilerOptions)),
+    getMode: (entry, file, compilerOptions) => getModeForFileReference(entry, file && getDefaultResolutionModeForFile(file, compilerOptions)),
 };
 
 /** @internal */
@@ -3905,7 +3905,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // store resolved type directive on the file
             const fileName = toFileNameLowerCase(ref.fileName);
             resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
-            const mode = ref.resolutionMode || impliedNodeFormatForModuleResolution(file, optionsForFile);
+            const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file, optionsForFile);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }

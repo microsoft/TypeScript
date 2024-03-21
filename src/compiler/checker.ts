@@ -259,6 +259,7 @@ import {
     getDeclarationsOfKind,
     getDeclaredExpandoInitializer,
     getDecorators,
+    getDefaultResolutionModeForFile,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getEffectiveConstraintOfTypeParameter,
@@ -409,7 +410,6 @@ import {
     idText,
     IfStatement,
     impliedNodeFormatForEmit,
-    impliedNodeFormatForModuleResolution,
     ImportAttribute,
     ImportAttributes,
     ImportCall,
@@ -5037,7 +5037,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 findAncestor(location, isExportDeclaration)?.moduleSpecifier;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier)
             ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier)
-            : impliedNodeFormatForModuleResolution(currentSourceFile, compilerOptions);
+            : getDefaultResolutionModeForFile(currentSourceFile, compilerOptions);
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
@@ -8117,7 +8117,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const contextFile = getSourceFileOfNode(enclosingDeclaration);
             const resolutionMode = overrideImportMode
                 || originalModuleSpecifier && host.getModeForUsageLocation(contextFile, originalModuleSpecifier)
-                || contextFile && impliedNodeFormatForModuleResolution(contextFile, compilerOptions);
+                || contextFile && getDefaultResolutionModeForFile(contextFile, compilerOptions);
             const cacheKey = createModeAwareCacheKey(contextFile.path, resolutionMode);
             const links = getSymbolLinks(symbol);
             let specifier = links.specifierCache && links.specifierCache.get(cacheKey);
