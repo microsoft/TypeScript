@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/arrayToLocaleStringES2015.ts] ////
+//// [tests/cases/compiler/arrayToLocaleStringES2020.ts] ////
 
-=== arrayToLocaleStringES2015.ts ===
+=== arrayToLocaleStringES2020.ts ===
 let str: string;
 >str : string
 
@@ -97,15 +97,6 @@ str = mixed.toLocaleString(); // OK
 >mixed : (number | Date)[]
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 
-str = mixed.toLocaleString('fr'); // OK
->str = mixed.toLocaleString('fr') : string
->str : string
->mixed.toLocaleString('fr') : string
->mixed.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->mixed : (number | Date)[]
->toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->'fr' : "fr"
-
 str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
 >str : string
@@ -137,6 +128,50 @@ str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: '
 >'currency' : "currency"
 >timeZone : string
 >'UTC' : "UTC"
+
+const bigInts = [BigInt(1), BigInt(2), BigInt(3)];
+>bigInts : bigint[]
+>[BigInt(1), BigInt(2), BigInt(3)] : bigint[]
+>BigInt(1) : bigint
+>BigInt : BigIntConstructor
+>1 : 1
+>BigInt(2) : bigint
+>BigInt : BigIntConstructor
+>2 : 2
+>BigInt(3) : bigint
+>BigInt : BigIntConstructor
+>3 : 3
+
+str = bigInts.toLocaleString(); // OK
+>str = bigInts.toLocaleString() : string
+>str : string
+>bigInts.toLocaleString() : string
+>bigInts.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>bigInts : bigint[]
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+
+str = bigInts.toLocaleString('en-US'); // OK
+>str = bigInts.toLocaleString('en-US') : string
+>str : string
+>bigInts.toLocaleString('en-US') : string
+>bigInts.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>bigInts : bigint[]
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>'en-US' : "en-US"
+
+str = bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>str : string
+>bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>bigInts.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>bigInts : bigint[]
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>'en-US' : "en-US"
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>style : "currency"
+>'currency' : "currency"
+>currency : string
+>'EUR' : "EUR"
 
 const int8Array = new Int8Array(3);
 >int8Array : Int8Array
@@ -464,6 +499,43 @@ str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' 
 >float64Array.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
 >float64Array : Float64Array
 >toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions): string; }
+>'en-US' : "en-US"
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>style : "currency"
+>'currency' : "currency"
+>currency : string
+>'EUR' : "EUR"
+
+const bigInt64Array = new BigInt64Array(3);
+>bigInt64Array : BigInt64Array
+>new BigInt64Array(3) : BigInt64Array
+>BigInt64Array : BigInt64ArrayConstructor
+>3 : 3
+
+str = bigInt64Array.toLocaleString(); // OK
+>str = bigInt64Array.toLocaleString() : string
+>str : string
+>bigInt64Array.toLocaleString() : string
+>bigInt64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>bigInt64Array : BigInt64Array
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+
+str = bigInt64Array.toLocaleString('en-US'); // should be error
+>str = bigInt64Array.toLocaleString('en-US') : string
+>str : string
+>bigInt64Array.toLocaleString('en-US') : string
+>bigInt64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>bigInt64Array : BigInt64Array
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>'en-US' : "en-US"
+
+str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+>str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>str : string
+>bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>bigInt64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>bigInt64Array : BigInt64Array
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
 >'en-US' : "en-US"
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
 >style : "currency"
