@@ -7,72 +7,80 @@ import {
 
 /** @internal */
 export interface PerformanceHooks {
-    /** Indicates whether we should write native performance events */
-    shouldWriteNativeEvents: boolean;
-    performance: Performance;
+    isGlobal: boolean;
+    performance?: Performance;
+    performanceTime?: PerformanceTime;
 }
 
 /** @internal */
-export interface Performance {
-    mark(name: string): void;
-    measure(name: string, startMark?: string, endMark?: string): void;
-    clearMeasures(name?: string): void;
-    clearMarks(name?: string): void;
+export interface PerformanceTime {
     now(): number;
     timeOrigin: number;
 }
 
+/** @internal */
+export interface PerformanceMarkAndMeasure {
+    mark(name: string): void;
+    measure(name: string, startMark?: string, endMark?: string): void;
+    clearMeasures(name?: string): void;
+    clearMarks(name?: string): void;
+}
+
+/** @internal */
+export interface Performance extends PerformanceTime, PerformanceMarkAndMeasure {}
+
 // Browser globals for the Web Performance User Timings API
 declare const performance: Performance | undefined;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-function hasRequiredAPI(performance: Performance | undefined) {
-    return typeof performance === "object" &&
-        typeof performance.timeOrigin === "number" &&
-        typeof performance.mark === "function" &&
-        typeof performance.measure === "function" &&
-        typeof performance.now === "function" &&
-        typeof performance.clearMarks === "function" &&
-        typeof performance.clearMeasures === "function";
-}
-
-function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
-    if (
-        typeof performance === "object" &&
-        hasRequiredAPI(performance)
-    ) {
-        return {
-            // For now we always write native performance events when running in the browser. We may
-            // make this conditional in the future if we find that native web performance hooks
-            // in the browser also slow down compilation.
-            shouldWriteNativeEvents: true,
-            performance,
-        };
-    }
-}
-
-function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
+function tryGetPerformance() {
+    // Try Node first; Node 16+ have the performance global but we want consistent behavior.
     if (isNodeLikeSystem()) {
         try {
             const { performance } = require("perf_hooks") as typeof import("perf_hooks");
-            if (hasRequiredAPI(performance)) {
-                return {
-                    // By default, only write native events when generating a cpu profile or using the v8 profiler.
-                    shouldWriteNativeEvents: false,
-                    performance,
-                };
-            }
+            return { performance, isGlobal: false };
         }
         catch {
             // ignore errors
         }
     }
+
+    if (typeof performance === "object") {
+        return { performance, isGlobal: true };
+    }
+
+    return undefined;
 }
 
-// Unlike with the native Map/Set 'tryGet' functions in corePublic.ts, we eagerly evaluate these
-// since we will need them for `timestamp`, below.
-const nativePerformanceHooks = tryGetWebPerformanceHooks() || tryGetNodePerformanceHooks();
-const nativePerformance = nativePerformanceHooks?.performance;
+function tryGetPerformanceHooks(): PerformanceHooks | undefined {
+    const p = tryGetPerformance();
+    if (!p) return undefined;
+    const { performance, isGlobal } = p;
+
+    const hooks: PerformanceHooks = {
+        isGlobal,
+        performance: undefined,
+        performanceTime: undefined,
+    };
+
+    if (typeof performance.timeOrigin === "number" && typeof performance.now === "function") {
+        hooks.performanceTime = performance;
+    }
+
+    if (
+        hooks.performanceTime &&
+        typeof performance.mark === "function" &&
+        typeof performance.measure === "function" &&
+        typeof performance.clearMarks === "function" &&
+        typeof performance.clearMeasures === "function"
+    ) {
+        hooks.performance = performance;
+    }
+
+    return hooks;
+}
+
+const nativePerformanceHooks = tryGetPerformanceHooks();
+const nativePerformanceTime = nativePerformanceHooks?.performanceTime;
 
 /** @internal */
 export function tryGetNativePerformanceHooks() {
@@ -84,6 +92,4 @@ export function tryGetNativePerformanceHooks() {
  *
  * @internal
  */
-export const timestamp = nativePerformance ? () => nativePerformance.now() :
-    Date.now ? Date.now :
-    () => +(new Date());
+export const timestamp = nativePerformanceTime ? () => nativePerformanceTime.now() : Date.now;
