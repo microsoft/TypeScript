@@ -225,9 +225,11 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
 /a/b/f2.ts
+/a/b/f3.ts
 
 Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 /a/b/f2.ts (computed .d.ts)
+/a/b/f3.ts (used version)
 
 exitCode:: ExitStatus.undefined

@@ -2630,7 +2630,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             getSourceFile: program.getSourceFile,
             getSourceFileByPath: program.getSourceFileByPath,
             getSourceFiles: program.getSourceFiles,
-            getLibFileFromReference: program.getLibFileFromReference,
             isSourceFileFromExternalLibrary,
             getResolvedProjectReferenceToRedirect,
             getProjectReferenceRedirect,

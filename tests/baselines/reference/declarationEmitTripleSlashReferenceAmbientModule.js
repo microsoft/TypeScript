@@ -21,11 +21,8 @@ export const thing = parse();
 
 
 //// [usage1.d.ts]
-/// <reference types="node" />
 export { parse } from "url";
 //// [usage2.d.ts]
-/// <reference types="node" />
 export declare const thing: import("url").Url;
 //// [usage3.d.ts]
-/// <reference types="node" />
 export declare const thing: import("url").Url;

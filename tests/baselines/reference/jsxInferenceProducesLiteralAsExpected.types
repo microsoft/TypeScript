@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 600 / 600 (nearest 100)
+Type Count: 2,600 / 2,600 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 26,500 / 26,500 (nearest 500)
+
 === jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");
 >React : typeof React

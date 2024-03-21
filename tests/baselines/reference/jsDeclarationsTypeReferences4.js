@@ -38,7 +38,6 @@ var A;
 
 
 //// [index.d.ts]
-/// <reference types="node" />
 export const Something: 2;
 export namespace A {
     namespace B {

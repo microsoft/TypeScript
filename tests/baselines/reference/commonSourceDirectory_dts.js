@@ -4,7 +4,7 @@
 declare const y: number;
 
 //// [index.ts]
-/// <reference path="../lib/bar.d.ts" />
+/// <reference path="../lib/bar.d.ts" preserve="true" />
 export const x = y;
 
 
@@ -12,10 +12,10 @@ export const x = y;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-/// <reference path="../lib/bar.d.ts" />
+/// <reference path="../lib/bar.d.ts" preserve="true" />
 exports.x = y;
 //# sourceMappingURL=../src/myMapRoot/index.js.map
 
 //// [/app/bin/index.d.ts]
-/// <reference path="../lib/bar.d.ts" />
+/// <reference path="../lib/bar.d.ts" preserve="true" />
 export declare const x: number;

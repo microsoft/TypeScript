@@ -29,7 +29,7 @@ type T2 = ObjectHasKey<{ a: string }, 'b'>;  // 'false'
 // Verify that mapped type isn't eagerly resolved in type-to-string operation
 
 declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A | B]: any };
->f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
+>f1 : <A extends string, B extends string>(a: A, b: B) => {    [P in A | B]: any;}
 >a : A
 >b : B
 

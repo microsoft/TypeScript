@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileWithErrorsInInputDeclarationFile.ts] ////
 
 === client.ts ===
-///<reference path="declFile.d.ts"/>
+///<reference path="declFile.d.ts" preserve="true"/>
 var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
 >x : M.C
 >new M.C() : M.C

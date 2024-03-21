@@ -7,7 +7,7 @@ var v1: (_i: number, ...restParameters) => void; // no error - no code gen
 >restParameters : any[]
 
 var v2: {
->v2 : { (_i: number, ...restParameters: any[]): any; new (_i: number, ...restParameters: any[]): any; foo(_i: number, ...restParameters: any[]): any; prop: (_i: number, ...restParameters: any[]) => void; }
+>v2 : { (_i: number, ...restParameters: any[]): any; new (_i: number, ...restParameters: any[]): any; foo(_i: number, ...restParameters: any[]): any; prop: (_i: number, ...restParameters: any) => void; }
 
     (_i: number, ...restParameters); // no error - no code gen
 >_i : number
