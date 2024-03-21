@@ -20,7 +20,7 @@ interface ArrayBufferOptions {
 }
 
 interface ArrayBufferConstructor {
-    new(byteLength?: number, options?: ArrayBufferOptions): ArrayBuffer;
+    new (byteLength?: number, options?: ArrayBufferOptions): ArrayBuffer;
 }
 
 interface SharedArrayBuffer {
@@ -46,7 +46,7 @@ interface SharedArrayBufferOptions {
 }
 
 interface SharedArrayBufferConstructor {
-    new(
+    new (
         byteLength?: number,
         options?: SharedArrayBufferOptions,
     ): SharedArrayBuffer;
