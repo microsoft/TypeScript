@@ -68,11 +68,11 @@ export function appendText(fs: vfs.FileSystem, path: string, additionalContent: 
     fs.writeFileSync(path, `${old}${additionalContent}`);
 }
 
-export function enableStrict(fs: vfs.FileSystem, path: string) {
+function enableStrict(fs: vfs.FileSystem, path: string) {
     replaceText(fs, path, `"strict": false`, `"strict": true`);
 }
 
-export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
+function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
     prependText(
         fs,
         path,
@@ -81,7 +81,7 @@ export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: stri
     );
 }
 
-export function addShebang(fs: vfs.FileSystem, project: string, file: string) {
+function addShebang(fs: vfs.FileSystem, project: string, file: string) {
     prependText(
         fs,
         `src/${project}/${file}.ts`,
@@ -90,7 +90,7 @@ export function addShebang(fs: vfs.FileSystem, project: string, file: string) {
     );
 }
 
-export function restContent(project: string, file: string) {
+function restContent(project: string, file: string) {
     return `function for${project}${file}Rest() {
 const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 }`;
@@ -99,23 +99,23 @@ function nonrestContent(project: string, file: string) {
     return `function for${project}${file}Rest() { }`;
 }
 
-export function addRest(fs: vfs.FileSystem, project: string, file: string) {
+function addRest(fs: vfs.FileSystem, project: string, file: string) {
     appendText(fs, `src/${project}/${file}.ts`, restContent(project, file));
 }
 
-export function removeRest(fs: vfs.FileSystem, project: string, file: string) {
+function removeRest(fs: vfs.FileSystem, project: string, file: string) {
     replaceText(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
 }
 
-export function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
+function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
     appendText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
 }
 
-export function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
+function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
     replaceText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
 }
 
-export function addSpread(fs: vfs.FileSystem, project: string, file: string) {
+function addSpread(fs: vfs.FileSystem, project: string, file: string) {
     const path = `src/${project}/${file}.ts`;
     const content = fs.readFileSync(path, "utf8");
     fs.writeFileSync(
@@ -135,11 +135,11 @@ ${project}${file}Spread(10, ...${project}${file}_ar);`,
     );
 }
 
-export function getTripleSlashRef(project: string) {
+function getTripleSlashRef(project: string) {
     return `/src/${project}/tripleRef.d.ts`;
 }
 
-export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
+function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
     fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
     prependText(
         fs,

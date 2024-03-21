@@ -102,7 +102,7 @@ export function getSysForSampleProjectReferences() {
     );
 }
 
-export function getServerHostForSampleProjectReferences() {
+function getServerHostForSampleProjectReferences() {
     return createServerHost(
         getFsContentsForSampleProjectReferences(),
         {

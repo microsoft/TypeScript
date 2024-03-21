@@ -81,7 +81,7 @@ function guessIndentation(lines: string[]) {
     return indentation;
 }
 
-export function getByteOrderMarkLength(text: string): number {
+function getByteOrderMarkLength(text: string): number {
     if (text.length >= 1) {
         const ch0 = text.charCodeAt(0);
         if (ch0 === 0xfeff) return 1;

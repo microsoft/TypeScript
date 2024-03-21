@@ -122,7 +122,7 @@ export function isSourceMap(path: string) {
 
 const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
 
-export function isJavaScriptSourceMap(path: string) {
+function isJavaScriptSourceMap(path: string) {
     return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
 }
 

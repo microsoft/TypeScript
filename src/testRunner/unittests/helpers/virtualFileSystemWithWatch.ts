@@ -115,7 +115,7 @@ export type FileOrFolderOrSymLink = File | Folder | SymLink;
 export interface FileOrFolderOrSymLinkMap {
     [path: string]: string | Omit<File, "path"> | Omit<SymLink, "path"> | undefined;
 }
-export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
+function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
     return isString((fileOrFolderOrSymLink as File).content);
 }
 
@@ -306,7 +306,7 @@ export enum Tsc_WatchDirectory {
     DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling",
 }
 
-export interface TestServerHostOptions {
+interface TestServerHostOptions {
     useCaseSensitiveFileNames: boolean;
     executingFilePath: string;
     currentDirectory: string;
@@ -315,7 +315,7 @@ export interface TestServerHostOptions {
     environmentVariables?: Map<string, string>;
 }
 
-export type PendingInstallCallback = (
+type PendingInstallCallback = (
     pendingInstallInfo: string,
     installedTypingsOrSuccess: string[] | string | boolean,
     typingFiles: readonly File[],

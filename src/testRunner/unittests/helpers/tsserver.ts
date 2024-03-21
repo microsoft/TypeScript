@@ -259,7 +259,7 @@ function nthIndexOf(str: string, substr: string, n: number): number {
  * should be made before canceling the token. The id of the request to cancel should be set with
  * setRequestToCancel();
  */
-export class TestServerCancellationToken implements ts.server.ServerCancellationToken {
+class TestServerCancellationToken implements ts.server.ServerCancellationToken {
     private currentId: number | undefined = -1;
     private requestToCancel = -1;
     private isCancellationRequestedCount = 0;

@@ -144,7 +144,7 @@ interface BaselineDocumentSpansWithFileContentsOptions<T extends ts.DocumentSpan
     additionalSpan?: ts.DocumentSpan;
 }
 
-export class TestCancellationToken implements ts.HostCancellationToken {
+class TestCancellationToken implements ts.HostCancellationToken {
     // 0 - cancelled
     // >0 - not cancelled
     // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
@@ -174,7 +174,7 @@ export class TestCancellationToken implements ts.HostCancellationToken {
     }
 }
 
-export function verifyOperationIsCancelled(f: () => void) {
+function verifyOperationIsCancelled(f: () => void) {
     try {
         f();
     }
@@ -187,7 +187,7 @@ export function verifyOperationIsCancelled(f: () => void) {
     throw new Error("Operation should be cancelled");
 }
 
-export function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations {
+function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations {
     return { template: typeof diagnostic === "string" ? diagnostic : diagnostic.message };
 }
 
@@ -4556,7 +4556,7 @@ export function runFourSlashTest(basePath: string, testType: FourSlashTestType, 
     runFourSlashTestContent(basePath, testType, content, fileName, serverLogBaseliner);
 }
 
-export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string, serverLogBaseliner?: FourSlashServerLogBaseliner): void {
+function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string, serverLogBaseliner?: FourSlashServerLogBaseliner): void {
     // Give file paths an absolute path for the virtual file system
     const absoluteBasePath = ts.combinePaths(Harness.virtualFileSystemRoot, basePath);
     const absoluteFileName = ts.combinePaths(Harness.virtualFileSystemRoot, fileName);

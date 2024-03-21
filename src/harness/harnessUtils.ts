@@ -5,7 +5,7 @@ export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
 }
 
-export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
+function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
     const vm = require("vm");
     if (nodeContext) {
         vm.runInNewContext(fileContents, nodeContext, fileName);
@@ -32,7 +32,7 @@ export function splitContentByNewlines(content: string) {
 }
 
 /** Reads a file under /tests */
-export function readTestFile(path: string) {
+function readTestFile(path: string) {
     if (!path.includes("tests")) {
         path = "tests/" + path;
     }
@@ -149,7 +149,7 @@ function isNodeOrArray(a: any): boolean {
     return a !== undefined && typeof a.pos === "number";
 }
 
-export function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
+function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
     return diagnostics.map(convertDiagnostic);
 }
 
@@ -334,7 +334,7 @@ function findChildName(parent: any, child: any) {
 
 const maxHarnessFrames = 1;
 
-export function filterStack(error: Error, stackTraceLimit = Infinity) {
+function filterStack(error: Error, stackTraceLimit = Infinity) {
     const stack = (error as any).stack as string;
     if (stack) {
         const lines = stack.split(/\r\n?|\n/g);

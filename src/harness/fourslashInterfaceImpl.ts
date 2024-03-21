@@ -123,7 +123,7 @@ export class GoTo {
     }
 }
 
-export class VerifyNegatable {
+class VerifyNegatable {
     public not: VerifyNegatable | undefined;
 
     constructor(protected state: FourSlash.TestState, private negative = false) {
@@ -1732,7 +1732,7 @@ export namespace Completion {
     }
 }
 
-export interface ReferenceGroup {
+interface ReferenceGroup {
     definition: ReferenceGroupDefinition;
     ranges: FourSlash.Range[];
 }
@@ -1831,7 +1831,7 @@ export interface ExpectedNavigateToItem {
     readonly containerKind?: ts.ScriptElementKind;
 }
 
-export interface VerifyInlayHintsOptions {
+interface VerifyInlayHintsOptions {
     text: string;
     position: number;
     kind?: ts.InlayHintKind;
@@ -1841,7 +1841,7 @@ export interface VerifyInlayHintsOptions {
 
 export type ArrayOrSingle<T> = T | readonly T[];
 
-export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
+interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
     triggerCharacter?: ts.CompletionsTriggerCharacter;
     sourceDisplay: string;
     isRecommended?: true;
@@ -1883,7 +1883,7 @@ export interface VerifyCodeFixAllOptions {
     preferences?: ts.UserPreferences;
 }
 
-export interface VerifyRefactorOptions {
+interface VerifyRefactorOptions {
     name: string;
     actionName: string;
     refactors: readonly ts.ApplicableRefactorInfo[];
@@ -1923,7 +1923,7 @@ export interface MoveToFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
-export type RenameLocationsOptions = readonly RenameLocationOptions[] | {
+type RenameLocationsOptions = readonly RenameLocationOptions[] | {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
     readonly ranges: readonly RenameLocationOptions[];

@@ -16,7 +16,7 @@ export interface Project {
     errors?: ts.Diagnostic[];
 }
 
-export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
+function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
     if (project) {
         project = vpath.isTsConfigFile(project) ? project : vpath.combine(project, "tsconfig.json");
     }

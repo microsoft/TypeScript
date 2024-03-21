@@ -12,7 +12,7 @@ export const builtFolder = "/.ts";
 /**
  * Posix-style path to additional mountable folders (./tests/projects in this repo)
  */
-export const projectsFolder = "/.projects";
+const projectsFolder = "/.projects";
 
 /**
  * Posix-style path to additional test libraries
@@ -1279,7 +1279,7 @@ export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: b
     return fs;
 }
 
-export class Stats {
+class Stats {
     public dev: number;
     public ino: number;
     public mode: number;
@@ -1345,7 +1345,7 @@ export class Stats {
     }
 }
 
-export const IOErrorMessages = Object.freeze({
+const IOErrorMessages = Object.freeze({
     EACCES: "access denied",
     EIO: "an I/O error occurred",
     ENOENT: "no such file or directory",
@@ -1378,7 +1378,7 @@ export type DirectoryLike = FileSet | Directory;
 export type FileLike = File | Buffer | string;
 
 /** Extended options for a directory in a `FileSet` */
-export class Directory {
+class Directory {
     public readonly files: FileSet;
     public readonly meta: Record<string, any> | undefined;
     constructor(files: FileSet, { meta }: { meta?: Record<string, any>; } = {}) {
@@ -1399,20 +1399,20 @@ export class File {
     }
 }
 
-export class SameFileContentFile extends File {
+class SameFileContentFile extends File {
     constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string; meta?: Record<string, any>; }) {
         super(data, metaAndEncoding);
     }
 }
 
-export class SameFileWithModifiedTime extends File {
+class SameFileWithModifiedTime extends File {
     constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string; meta?: Record<string, any>; }) {
         super(data, metaAndEncoding);
     }
 }
 
 /** Extended options for a hard link in a `FileSet` */
-export class Link {
+class Link {
     public readonly path: string;
     constructor(path: string) {
         this.path = path;
@@ -1420,12 +1420,12 @@ export class Link {
 }
 
 /** Removes a directory in a `FileSet` */
-export class Rmdir {
+class Rmdir {
     public _rmdirBrand?: never; // brand necessary for proper type guards
 }
 
 /** Unlinks a file in a `FileSet` */
-export class Unlink {
+class Unlink {
     public _unlinkBrand?: never; // brand necessary for proper type guards
 }
 
@@ -1440,7 +1440,7 @@ export class Symlink {
 }
 
 /** Extended options for mounting a virtual copy of an external file system via a `FileSet` */
-export class Mount {
+class Mount {
     public readonly source: string;
     public readonly resolver: FileSystemResolver;
     public readonly meta: Record<string, any> | undefined;
@@ -1635,7 +1635,7 @@ function formatPatchWorker(dirname: string, container: FileSet): string {
     return text;
 }
 
-export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
+function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
     // eslint-disable-next-line no-null/no-null
     return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
 }
