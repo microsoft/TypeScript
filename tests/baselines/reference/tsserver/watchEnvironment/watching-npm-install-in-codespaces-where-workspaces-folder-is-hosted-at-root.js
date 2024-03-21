@@ -66,6 +66,11 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /wo
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/random-seed/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
@@ -162,10 +167,20 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/workspaces/somerepo/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json: *new*
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules: *new*
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types: *new*
   {"pollingInterval":500}
+/workspaces/somerepo/src/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -315,10 +330,20 @@ PolledWatches::
   {"pollingInterval":500}
 /workspaces/somerepo/node_modules/@types: *new*
   {"pollingInterval":500}
+/workspaces/somerepo/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules:
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types:
   {"pollingInterval":500}
+/workspaces/somerepo/src/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -396,6 +421,9 @@ Before running Timeout callback:: count: 5
 
 Invoking Timeout callback:: timeoutId:: 17:: checkOne
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/node_modules/@types/random-seed/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/node_modules/@types/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /workspaces/somerepo/node_modules/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -420,6 +448,36 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 3
+
+PolledWatches::
+/workspaces/somerepo/node_modules:
+  {"pollingInterval":500}
+/workspaces/somerepo/node_modules/@types:
+  {"pollingInterval":500}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/src/node_modules:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/node_modules/@types:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/workspaces/somerepo/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {"inode":12}
+/workspaces/somerepo/src:
+  {"inode":3}
+/workspaces/somerepo/src/tsconfig.json:
+  {"inode":4}
 
 Timeout callback:: count: 3
 16: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
@@ -568,10 +626,14 @@ export function randomSeed(): string;
 
 
 PolledWatches::
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules:
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types:
   {"pollingInterval":500}
+/workspaces/somerepo/src/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /workspaces/somerepo/node_modules:
@@ -634,6 +696,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/random-seed/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/package.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -662,6 +727,34 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 3
+
+PolledWatches::
+/workspaces/somerepo/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/src/node_modules:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/node_modules/@types:
+  {"pollingInterval":500}
+/workspaces/somerepo/src/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {"inode":12}
+/workspaces/somerepo/node_modules:
+  {"inode":13}
+/workspaces/somerepo/node_modules/@types:
+  {"inode":14}
+/workspaces/somerepo/src:
+  {"inode":3}
+/workspaces/somerepo/src/tsconfig.json:
+  {"inode":4}
 
 Timeout callback:: count: 3
 25: *ensureProjectForOpenFiles* *deleted*
@@ -757,10 +850,20 @@ Info seq  [hh:mm:ss:mss] sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 
 After running Timeout callback:: count: 3
 
 PolledWatches::
+/workspaces/somerepo/node_modules/@types/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/@types/random-seed/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/node_modules/package.json:
+  {"pollingInterval":2000}
+/workspaces/somerepo/package.json:
+  {"pollingInterval":2000}
 /workspaces/somerepo/src/node_modules:
   {"pollingInterval":500}
 /workspaces/somerepo/src/node_modules/@types:
   {"pollingInterval":500}
+/workspaces/somerepo/src/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

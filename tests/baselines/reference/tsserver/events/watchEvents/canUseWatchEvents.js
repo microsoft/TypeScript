@@ -106,6 +106,30 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile: 4: /a/lib/lib.d.ts
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::createFileWatcher",
+      "body": {
+        "id": 5,
+        "path": "/user/username/projects/myproject/package.json"
+      }
+    }
+Custom watchFile: 5: /user/username/projects/myproject/package.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::createFileWatcher",
+      "body": {
+        "id": 6,
+        "path": "/user/username/projects/package.json"
+      }
+    }
+Custom watchFile: 6: /user/username/projects/package.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -113,12 +137,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "CustomHandler::createDirectoryWatcher",
       "body": {
-        "id": 5,
+        "id": 7,
         "path": "/user/username/projects/myproject/node_modules/@types",
         "recursive": true
       }
     }
-Custom watchDirectory: 5: /user/username/projects/myproject/node_modules/@types true
+Custom watchDirectory: 7: /user/username/projects/myproject/node_modules/@types true
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -127,12 +151,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "CustomHandler::createDirectoryWatcher",
       "body": {
-        "id": 6,
+        "id": 8,
         "path": "/user/username/projects/node_modules/@types",
         "recursive": true
       }
     }
-Custom watchDirectory: 6: /user/username/projects/node_modules/@types true
+Custom watchDirectory: 8: /user/username/projects/node_modules/@types true
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -226,16 +250,20 @@ Custom WatchedFiles::
   {"id":4,"path":"/a/lib/lib.d.ts"}
 /user/username/projects/myproject/b.ts: *new*
   {"id":3,"path":"/user/username/projects/myproject/b.ts"}
+/user/username/projects/myproject/package.json: *new*
+  {"id":5,"path":"/user/username/projects/myproject/package.json"}
 /user/username/projects/myproject/tsconfig.json: *new*
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/package.json: *new*
+  {"id":6,"path":"/user/username/projects/package.json"}
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject: *new*
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types: *new*
-  {"id":5,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
 /user/username/projects/node_modules/@types: *new*
-  {"id":6,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
@@ -310,11 +338,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "CustomHandler::createFileWatcher",
       "body": {
-        "id": 7,
+        "id": 9,
         "path": "/user/username/projects/myproject/c.ts"
       }
     }
-Custom watchFile: 7: /user/username/projects/myproject/c.ts
+Custom watchFile: 9: /user/username/projects/myproject/c.ts
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -371,17 +399,21 @@ Custom WatchedFiles::
 /user/username/projects/myproject/b.ts:
   {"id":3,"path":"/user/username/projects/myproject/b.ts"}
 /user/username/projects/myproject/c.ts: *new*
-  {"id":7,"path":"/user/username/projects/myproject/c.ts"}
+  {"id":9,"path":"/user/username/projects/myproject/c.ts"}
+/user/username/projects/myproject/package.json:
+  {"id":5,"path":"/user/username/projects/myproject/package.json"}
 /user/username/projects/myproject/tsconfig.json:
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/package.json:
+  {"id":6,"path":"/user/username/projects/package.json"}
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
-  {"id":5,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
 /user/username/projects/node_modules/@types:
-  {"id":6,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
@@ -581,9 +613,13 @@ Custom WatchedFiles::
 /a/lib/lib.d.ts:
   {"id":4,"path":"/a/lib/lib.d.ts"}
 /user/username/projects/myproject/c.ts:
-  {"id":7,"path":"/user/username/projects/myproject/c.ts"}
+  {"id":9,"path":"/user/username/projects/myproject/c.ts"}
+/user/username/projects/myproject/package.json:
+  {"id":5,"path":"/user/username/projects/myproject/package.json"}
 /user/username/projects/myproject/tsconfig.json:
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/package.json:
+  {"id":6,"path":"/user/username/projects/package.json"}
 
 Custom WatchedFiles *deleted*::
 /user/username/projects/myproject/b.ts:
@@ -593,9 +629,9 @@ Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
-  {"id":5,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
 /user/username/projects/node_modules/@types:
-  {"id":6,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -634,11 +670,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "CustomHandler::createFileWatcher",
       "body": {
-        "id": 8,
+        "id": 10,
         "path": "/user/username/projects/myproject/b.ts"
       }
     }
-Custom watchFile: 8: /user/username/projects/myproject/b.ts
+Custom watchFile: 10: /user/username/projects/myproject/b.ts
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -656,19 +692,23 @@ Custom WatchedFiles::
 /a/lib/lib.d.ts:
   {"id":4,"path":"/a/lib/lib.d.ts"}
 /user/username/projects/myproject/b.ts: *new*
-  {"id":8,"path":"/user/username/projects/myproject/b.ts"}
+  {"id":10,"path":"/user/username/projects/myproject/b.ts"}
 /user/username/projects/myproject/c.ts:
-  {"id":7,"path":"/user/username/projects/myproject/c.ts"}
+  {"id":9,"path":"/user/username/projects/myproject/c.ts"}
+/user/username/projects/myproject/package.json:
+  {"id":5,"path":"/user/username/projects/myproject/package.json"}
 /user/username/projects/myproject/tsconfig.json:
   {"id":1,"path":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/package.json:
+  {"id":6,"path":"/user/username/projects/package.json"}
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
   {"id":2,"path":"/user/username/projects/myproject","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
-  {"id":5,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
 /user/username/projects/node_modules/@types:
-  {"id":6,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
 
 ScriptInfos::
 /a/lib/lib.d.ts
