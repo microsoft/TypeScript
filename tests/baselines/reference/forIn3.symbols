@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/forIn3.ts] ////
+
+=== forIn3.ts ===
+function test(obj: { a: 1; b: 2 }) {
+>test : Symbol(test, Decl(forIn3.ts, 0, 0))
+>obj : Symbol(obj, Decl(forIn3.ts, 0, 14))
+>a : Symbol(a, Decl(forIn3.ts, 0, 20))
+>b : Symbol(b, Decl(forIn3.ts, 0, 26))
+
+  let key: "a" | "b";
+>key : Symbol(key, Decl(forIn3.ts, 1, 5))
+
+  for (key in obj) {} // error
+>key : Symbol(key, Decl(forIn3.ts, 1, 5))
+>obj : Symbol(obj, Decl(forIn3.ts, 0, 14))
+}
+
