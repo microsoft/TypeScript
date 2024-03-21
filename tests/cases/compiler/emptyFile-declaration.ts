@@ -1,4 +1,4 @@
-// @target: ES3
+// @target: ES5
 // @sourcemap: false
 // @declaration: true
 // @module: commonjs

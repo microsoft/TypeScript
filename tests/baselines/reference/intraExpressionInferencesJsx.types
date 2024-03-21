@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx] ////
 
+=== Performance Stats ===
+Assignability cache: 2,300 / 2,300 (nearest 100)
+Type Count: 7,800 / 7,800 (nearest 100)
+Instantiation count: 89,500 / 89,500 (nearest 500)
+Symbol count: 66,500 / 66,500 (nearest 500)
+
 === intraExpressionInferencesJsx.tsx ===
 /// <reference path="react16.d.ts" />
 

@@ -44,7 +44,6 @@ import {
     getExportInfoMap,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
-    getModeForUsageLocation,
     getNameForExportedSymbol,
     getNodeId,
     getOutputExtension,
@@ -62,8 +61,6 @@ import {
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
     ImportKind,
-    importNameElisionDisabled,
-    ImportsNotUsedAsValues,
     insertImports,
     InternalSymbolName,
     isExternalModule,
@@ -98,7 +95,6 @@ import {
     mapDefined,
     memoizeOne,
     ModuleKind,
-    ModuleResolutionKind,
     moduleResolutionUsesNodeModules,
     moduleSpecifiers,
     MultiMap,
@@ -118,6 +114,7 @@ import {
     removeFileExtension,
     removeSuffix,
     RequireVariableStatement,
+    sameMap,
     ScriptTarget,
     SemanticMeaning,
     shouldUseUriStyleNodeCoreModules,
@@ -125,7 +122,6 @@ import {
     skipAlias,
     some,
     sort,
-    SortKind,
     SourceFile,
     stableSort,
     startsWith,
@@ -717,12 +713,8 @@ function getAddAsTypeOnly(
         // Can't use a type-only import if the usage is an emitting position
         return AddAsTypeOnly.NotAllowed;
     }
-    if (isForNewImportDeclaration && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error) {
-        // Not writing a (top-level) type-only import here would create an error because the runtime dependency is unnecessary
-        return AddAsTypeOnly.Required;
-    }
     if (
-        importNameElisionDisabled(compilerOptions) &&
+        compilerOptions.verbatimModuleSyntax &&
         (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
     ) {
         // A type-only import is required for this symbol if under these settings if the symbol will
@@ -1055,13 +1047,11 @@ function compareModuleSpecifiers(
 // This is a simple heuristic to try to avoid creating an import cycle with a barrel re-export.
 // E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
 // This can produce false positives or negatives if re-exports cross into sibling directories
-// (e.g. `export * from "../whatever"`) or are not named "index" (we don't even try to consider
-// this if we're in a resolution mode where you can't drop trailing "/index" from paths).
+// (e.g. `export * from "../whatever"`) or are not named "index".
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (
         fix.isReExport &&
         fix.exportInfo?.moduleFileName &&
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
         isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));
@@ -1160,6 +1150,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
         case ModuleKind.ES2022:
         case ModuleKind.ESNext:
         case ModuleKind.None:
+        case ModuleKind.Preserve:
             // Fall back to the `import * as ns` style import.
             return ImportKind.Namespace;
         case ModuleKind.Node16:
@@ -1399,15 +1390,14 @@ function promoteFromTypeOnly(
 ) {
     const compilerOptions = program.getCompilerOptions();
     // See comment in `doAddExistingFix` on constant with the same name.
-    const convertExistingToTypeOnly = importNameElisionDisabled(compilerOptions);
+    const convertExistingToTypeOnly = compilerOptions.verbatimModuleSyntax;
     switch (aliasDeclaration.kind) {
         case SyntaxKind.ImportSpecifier:
             if (aliasDeclaration.isTypeOnly) {
-                const sortKind = OrganizeImports.detectImportSpecifierSorting(aliasDeclaration.parent.elements, preferences);
-                if (aliasDeclaration.parent.elements.length > 1 && sortKind) {
+                if (aliasDeclaration.parent.elements.length > 1) {
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
-                    const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
-                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparer, preferences);
+                    const { specifierComparer } = OrganizeImports.getNamedImportSpecifierComparerWithDetection(aliasDeclaration.parent.parent.parent, preferences, sourceFile);
+                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, specifierComparer);
                     if (insertionIndex !== aliasDeclaration.parent.elements.indexOf(aliasDeclaration)) {
                         changes.delete(sourceFile, aliasDeclaration);
                         changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
@@ -1440,7 +1430,7 @@ function promoteFromTypeOnly(
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
-            const resolvedModule = moduleSpecifier && program.getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
+            const resolvedModule = moduleSpecifier && program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
             if (resolvedModule?.resolvedUsingTsExtension) {
                 const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
                 changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
@@ -1449,8 +1439,9 @@ function promoteFromTypeOnly(
         if (convertExistingToTypeOnly) {
             const namedImports = tryCast(importClause.namedBindings, isNamedImports);
             if (namedImports && namedImports.elements.length > 1) {
+                const sortState = OrganizeImports.getNamedImportSpecifierComparerWithDetection(importClause.parent, preferences, sourceFile);
                 if (
-                    OrganizeImports.detectImportSpecifierSorting(namedImports.elements, preferences) &&
+                    (sortState.isSorted !== false) &&
                     aliasDeclaration.kind === SyntaxKind.ImportSpecifier &&
                     namedImports.elements.indexOf(aliasDeclaration) !== 0
                 ) {
@@ -1487,6 +1478,7 @@ function doAddExistingFix(
         return;
     }
 
+    // promoteFromTypeOnly = true if we need to promote the entire original clause from type only
     const promoteFromTypeOnly = clause.isTypeOnly && some([defaultImport, ...namedImports], i => i?.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
     const existingSpecifiers = clause.namedBindings && tryCast(clause.namedBindings, isNamedImports)?.elements;
 
@@ -1496,25 +1488,7 @@ function doAddExistingFix(
     }
 
     if (namedImports.length) {
-        // sort case sensitivity:
-        // - if the user preference is explicit, use that
-        // - otherwise, if there are enough existing import specifiers in this import to detect unambiguously, use that
-        // - otherwise, detect from other imports in the file
-        let ignoreCaseForSorting: boolean | undefined;
-        if (typeof preferences.organizeImportsIgnoreCase === "boolean") {
-            ignoreCaseForSorting = preferences.organizeImportsIgnoreCase;
-        }
-        else if (existingSpecifiers) {
-            const targetImportSorting = OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
-            if (targetImportSorting !== SortKind.Both) {
-                ignoreCaseForSorting = targetImportSorting === SortKind.CaseInsensitive;
-            }
-        }
-        if (ignoreCaseForSorting === undefined) {
-            ignoreCaseForSorting = OrganizeImports.detectSorting(sourceFile, preferences) === SortKind.CaseInsensitive;
-        }
-
-        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
+        const { specifierComparer, isSorted } = OrganizeImports.getNamedImportSpecifierComparerWithDetection(clause.parent, preferences, sourceFile);
         const newSpecifiers = stableSort(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
@@ -1523,7 +1497,7 @@ function doAddExistingFix(
                     factory.createIdentifier(namedImport.name),
                 )
             ),
-            (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, comparer),
+            specifierComparer,
         );
 
         // The sorting preference computed earlier may or may not have validated that these particular
@@ -1531,15 +1505,16 @@ function doAddExistingFix(
         // nonsense. So if there are existing specifiers, even if we know the sorting preference, we
         // need to ensure that the existing specifiers are sorted according to the preference in order
         // to do a sorted insertion.
-        const specifierSort = existingSpecifiers?.length && OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
-        if (specifierSort && !(ignoreCaseForSorting && specifierSort === SortKind.CaseSensitive)) {
+
+        // changed to check if existing specifiers are sorted
+        if (existingSpecifiers?.length && isSorted !== false) {
+            // if we're promoting the clause from type-only, we need to transform the existing imports before attempting to insert the new named imports
+            const transformedExistingSpecifiers = (promoteFromTypeOnly && existingSpecifiers) ? factory.updateNamedImports(
+                clause.namedBindings as NamedImports,
+                sameMap(existingSpecifiers, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ true, e.propertyName, e.name)),
+            ).elements : existingSpecifiers;
             for (const spec of newSpecifiers) {
-                // Organize imports puts type-only import specifiers last, so if we're
-                // adding a non-type-only specifier and converting all the other ones to
-                // type-only, there's no need to ask for the insertion index - it's 0.
-                const insertionIndex = promoteFromTypeOnly && !spec.isTypeOnly
-                    ? 0
-                    : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparer, preferences);
+                const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(transformedExistingSpecifiers, spec, specifierComparer);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
             }
         }

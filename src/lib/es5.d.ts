@@ -626,6 +626,7 @@ interface ImportCallOptions {
 
 /**
  * The type for the `assert` property of the optional second argument to `import()`.
+ * @deprecated
  */
 interface ImportAssertions {
     [key: string]: string;
@@ -1647,6 +1648,11 @@ type Capitalize<S extends string> = intrinsic;
  * Convert first character of string literal type to lowercase
  */
 type Uncapitalize<S extends string> = intrinsic;
+
+/**
+ * Marker for non-inference type position
+ */
+type NoInfer<T> = intrinsic;
 
 /**
  * Marker for contextual 'this' type
@@ -4409,12 +4415,33 @@ declare namespace Intl {
 
     var Collator: CollatorConstructor;
 
+    interface NumberFormatOptionsStyleRegistry {
+        decimal: never;
+        percent: never;
+        currency: never;
+    }
+
+    type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
+
+    interface NumberFormatOptionsCurrencyDisplayRegistry {
+        code: never;
+        symbol: never;
+        name: never;
+    }
+
+    type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
+
+    interface NumberFormatOptionsUseGroupingRegistry {}
+
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
+
     interface NumberFormatOptions {
-        localeMatcher?: string | undefined;
-        style?: string | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        style?: NumberFormatOptionsStyle | undefined;
         currency?: string | undefined;
-        currencySign?: string | undefined;
-        useGrouping?: boolean | undefined;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay | undefined;
+        useGrouping?: NumberFormatOptionsUseGrouping | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;
         maximumFractionDigits?: number | undefined;
@@ -4425,14 +4452,15 @@ declare namespace Intl {
     interface ResolvedNumberFormatOptions {
         locale: string;
         numberingSystem: string;
-        style: string;
+        style: NumberFormatOptionsStyle;
         currency?: string;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay;
         minimumIntegerDigits: number;
-        minimumFractionDigits: number;
-        maximumFractionDigits: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
-        useGrouping: boolean;
+        useGrouping: ResolvedNumberFormatOptionsUseGrouping;
     }
 
     interface NumberFormat {
