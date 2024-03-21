@@ -6308,7 +6308,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
+    function getMeaningOfEntityNameReference(entityName: EntityNameOrEntityNameExpression): SymbolFlags {
         // get symbol of the first identifier of the entityName
         let meaning: SymbolFlags;
         if (
@@ -6321,7 +6321,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else if (
             entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
-            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration
+            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ||
+            (entityName.parent.kind === SyntaxKind.QualifiedName && (entityName.parent as QualifiedName).left === entityName) ||
+            (entityName.parent.kind === SyntaxKind.PropertyAccessExpression && (entityName.parent as PropertyAccessExpression).expression === entityName) ||
+            (entityName.parent.kind === SyntaxKind.ElementAccessExpression && (entityName.parent as ElementAccessExpression).expression === entityName)
         ) {
             // Left identifier from type reference or TypeAlias
             // Entity name of the import declaration
@@ -6331,7 +6334,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Type Reference or TypeAlias entity = Identifier
             meaning = SymbolFlags.Type;
         }
+        return meaning;
+    }
 
+    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
+        const meaning = getMeaningOfEntityNameReference(entityName);
         const firstIdentifier = getFirstIdentifier(entityName);
         const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
         if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
@@ -8576,15 +8583,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 introducesError = true;
                 return { introducesError, node };
             }
-            const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
+            const meaning = getMeaningOfEntityNameReference(node);
+            const sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
             if (sym) {
-                if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                if (isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                     if (!isDeclarationName(node)) {
                         introducesError = true;
                     }
                 }
                 else {
-                    context.tracker.trackSymbol(sym, context.enclosingDeclaration, SymbolFlags.All);
+                    context.tracker.trackSymbol(sym, context.enclosingDeclaration, meaning);
                     includePrivateSymbol?.(sym);
                 }
                 if (isIdentifier(node)) {
