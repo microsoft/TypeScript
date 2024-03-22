@@ -491,11 +491,11 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     //
     // - A union type constituent has the same precedence as the check type of a conditional type
     function parenthesizeConstituentTypeOfUnionType(type: TypeNode) {
-        switch (type.kind) {
-            case SyntaxKind.UnionType: // Not strictly necessary, but a union containing a union should have been flattened
-            case SyntaxKind.IntersectionType: // Not strictly necessary, but makes generated output more readable and avoids breaks in DT tests
-                return factory.createParenthesizedType(type);
-        }
+        // switch (type.kind) {
+        //     case SyntaxKind.UnionType: // Not strictly necessary, but a union containing a union should have been flattened
+        //     case SyntaxKind.IntersectionType: // Not strictly necessary, but makes generated output more readable and avoids breaks in DT tests
+        //         return factory.createParenthesizedType(type);
+        // }
         return parenthesizeCheckTypeOfConditionalType(type);
     }
 

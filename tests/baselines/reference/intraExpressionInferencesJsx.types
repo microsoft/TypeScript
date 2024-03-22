@@ -36,7 +36,7 @@ type C = {
 };
 
 type Animations = {
->Animations : { [key: string]: { value: number; } & (({ kind: "a"; func?(): Partial<A>; } & A) | ({ kind: "b"; func?(): Partial<B>; } & B) | ({ kind: "c"; func?(): Partial<C>; } & C)); }
+>Animations : { [key: string]: { value: number; } & ({ kind: "a"; func?(): Partial<A>; } & A | { kind: "b"; func?(): Partial<B>; } & B | { kind: "c"; func?(): Partial<C>; } & C); }
 
   [key: string]: { value: number } & (
 >key : string

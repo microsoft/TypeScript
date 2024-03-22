@@ -13,7 +13,7 @@ function isDefined<T>(value: T | undefined | null | void): value is T {
 >value : void | T | null | undefined
 >undefined : undefined
 >value !== null : boolean
->value : (T & {}) | null
+>value : T & {} | null
 }
 
 declare const foo: string | undefined;

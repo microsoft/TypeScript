@@ -12,17 +12,17 @@ class B { b = 0 }
 >0 : 0
 
 function f10(obj: A & { x: string } | B) {
->f10 : (obj: (A & {    x: string;}) | B) => void
->obj : B | (A & { x: string; })
+>f10 : (obj: A & {    x: string;} | B) => void
+>obj : B | A & { x: string; }
 >x : string
 
     if (obj instanceof Object) {
 >obj instanceof Object : boolean
->obj : B | (A & { x: string; })
+>obj : B | A & { x: string; }
 >Object : ObjectConstructor
 
         obj;  // A & { x: string } | B
->obj : B | (A & { x: string; })
+>obj : B | A & { x: string; }
     }
     else {
         obj;  // Error

@@ -344,14 +344,14 @@ function f23<T>(x: T | undefined | null) {
 >undefined : undefined
 
         x;  // T & {} | null
->x : (T & {}) | null
+>x : T & {} | null
     }
     if (x !== null) {
 >x !== null : boolean
 >x : T | null | undefined
 
         x;  // T & {} | undefined
->x : (T & {}) | undefined
+>x : T & {} | undefined
     }
     if (x != undefined) {
 >x != undefined : boolean
@@ -396,7 +396,7 @@ function f31<T>(x: T) {
 >"object" : "object"
 
         x;  // T & object | T & null
->x : (T & object) | (T & null)
+>x : T & object | T & null
     }
     if (x && typeof x === "object") {
 >x && typeof x === "object" : boolean
@@ -410,12 +410,12 @@ function f31<T>(x: T) {
 >x : T & object
     }
     if (typeof x === "object" && x) {
->typeof x === "object" && x : false | (T & object) | (T & null)
+>typeof x === "object" && x : false | T & object | T & null
 >typeof x === "object" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : T
 >"object" : "object"
->x : (T & object) | (T & null)
+>x : T & object | T & null
 
         x;  // T & object
 >x : T & object
@@ -557,16 +557,16 @@ function f41<T>(a: T) {
 >a : T
 
     let a3 = ensureNotNull(ensureNotNull(a));  // T & {} | T & undefined
->a3 : (T & undefined) | (T & {})
->ensureNotNull(ensureNotNull(a)) : (T & undefined) | (T & {})
+>a3 : T & undefined | T & {}
+>ensureNotNull(ensureNotNull(a)) : T & undefined | T & {}
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >ensureNotNull(a) : T & ({} | undefined)
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >a : T
 
     let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
->a4 : (T & {}) | (T & null)
->ensureNotUndefined(ensureNotUndefined(a)) : (T & {}) | (T & null)
+>a4 : T & {} | T & null
+>ensureNotUndefined(ensureNotUndefined(a)) : T & {} | T & null
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >ensureNotUndefined(a) : T & ({} | null)
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
@@ -581,32 +581,32 @@ function f41<T>(a: T) {
 >a : T
 
     let a6 = ensureNotNull(possiblyNullOrUndefined(a));  // T & {} | undefined
->a6 : (T & {}) | undefined
->ensureNotNull(possiblyNullOrUndefined(a)) : (T & {}) | undefined
+>a6 : T & {} | undefined
+>ensureNotNull(possiblyNullOrUndefined(a)) : T & {} | undefined
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >possiblyNullOrUndefined(a) : T | null | undefined
 >possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
 >a : T
 
     let a7 = ensureNotUndefined(possiblyNullOrUndefined(a));  // T & {} | null
->a7 : (T & {}) | null
->ensureNotUndefined(possiblyNullOrUndefined(a)) : (T & {}) | null
+>a7 : T & {} | null
+>ensureNotUndefined(possiblyNullOrUndefined(a)) : T & {} | null
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >possiblyNullOrUndefined(a) : T | null | undefined
 >possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
 >a : T
 
     let a8 = ensureNotNull(possiblyUndefined(a));  // T & {} | undefined
->a8 : (T & {}) | undefined
->ensureNotNull(possiblyUndefined(a)) : (T & {}) | undefined
+>a8 : T & {} | undefined
+>ensureNotNull(possiblyUndefined(a)) : T & {} | undefined
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >possiblyUndefined(a) : T | undefined
 >possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
 >a : T
 
     let a9 = ensureNotUndefined(possiblyNull(a));  // T & {} | null
->a9 : (T & {}) | null
->ensureNotUndefined(possiblyNull(a)) : (T & {}) | null
+>a9 : T & {} | null
+>ensureNotUndefined(possiblyNull(a)) : T & {} | null
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >possiblyNull(a) : T | null
 >possiblyNull : <T_1>(x: T_1) => T_1 | null
@@ -633,9 +633,9 @@ function deepEquals<T>(a: T, b: T): boolean {
 >b : T
 >'object' : "object"
 >!a : boolean
->a : (T & object) | (T & null)
+>a : T & object | T & null
 >!b : boolean
->b : (T & object) | (T & null)
+>b : T & object | T & null
 
         return false;
 >false : false

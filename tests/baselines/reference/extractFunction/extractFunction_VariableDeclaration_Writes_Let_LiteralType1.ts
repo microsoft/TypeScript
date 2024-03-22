@@ -23,7 +23,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let x: (8 | 10 | 2) | undefined;
+    let x: 8 | 10 | 2 | undefined;
     ({ x, a } = /*RENAME*/newFunction(a));
     a; x;
 }

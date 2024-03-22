@@ -23,7 +23,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let x: (/*A*/ "a" /*B*/ | /*C*/ 'b' /*D*/) | undefined;
+    let x: /*A*/ /*A*/ "a" /*B*/ | /*C*/ 'b' /*D*/ | undefined;
     ({ x, a } = /*RENAME*/newFunction(a));
     a; x;
 }

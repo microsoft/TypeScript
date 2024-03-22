@@ -235,7 +235,7 @@ function isMobile() {
 
       typeof window !== 'undefined' &&
 >typeof window !== 'undefined' &&      window.matchMedia && // no error      window.matchMedia('(max-device-width: 680px)') : false | MediaQueryList
->typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
+>typeof window !== 'undefined' &&      window.matchMedia : false | ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
 >typeof window !== 'undefined' : boolean
 >typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >window : Window & typeof globalThis

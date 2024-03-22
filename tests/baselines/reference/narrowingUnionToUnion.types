@@ -33,7 +33,7 @@ function fx2<T>(x: T | undefined) {
 >x : T | undefined
 
         x;  // T & Falsy | undefined
->x : (T & null) | (T & false) | (T & "") | (T & 0) | (T & 0n) | undefined
+>x : T & null | T & false | T & "" | T & 0 | T & 0n | undefined
     }
 }
 
@@ -47,7 +47,7 @@ function fx3<T extends string | number>(x: T) {
 >x : string | number
 
         x;  // T & "" | T & 0
->x : (T & "") | (T & 0)
+>x : T & "" | T & 0
     }
 }
 
