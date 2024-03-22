@@ -3,4 +3,5 @@
 === parserGenericConstraint1.ts ===
 class C<T extends number> {
 >C : C<T>
+>  : ^^^^
 }

@@ -8,6 +8,7 @@ export interface LocalInterface extends ImportInterface {}
 export {};
 declare global {
 >global : any
+>       : ^^^
 
     interface ImportInterface {}
 }

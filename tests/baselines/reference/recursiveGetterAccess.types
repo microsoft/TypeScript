@@ -3,12 +3,15 @@
 === recursiveGetterAccess.ts ===
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
 get testProp() { return this.testProp; }
 >testProp : any
 >this.testProp : any
 >this : this
+>     : ^^^^
 >testProp : any
+>         : ^^^
 }
  
 

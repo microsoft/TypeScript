@@ -9,4 +9,5 @@ Symbol count: 31,000 / 31,000 (nearest 500)
 === verifyDefaultLib_dom.ts ===
 var x: HTMLElement;
 >x : HTMLElement
+>  : ^^^^^^^^^^^
 

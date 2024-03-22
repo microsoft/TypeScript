@@ -3,24 +3,32 @@
 === nestedBlockScopedBindings2.ts ===
 function a0() {
 >a0 : () => void
+>   : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 function a1() {
 >a1 : () => void
+>   : ^^^^^^^^^^
     {
         let x;
 >x : any
@@ -28,24 +36,33 @@ function a1() {
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
 function a2() {
 >a2 : () => void
+>   : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
     {
         let x;
@@ -53,6 +70,7 @@ function a2() {
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
 }
@@ -60,26 +78,34 @@ function a2() {
 
 function a3() {
 >a3 : () => void
+>   : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
@@ -89,21 +115,25 @@ function a3() {
 
 function a4() {
 >a4 : () => void
+>   : ^^^^^^^^^^
     {
         let x;
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
@@ -113,19 +143,23 @@ function a4() {
 
 function a5() {
 >a5 : () => void
+>   : ^^^^^^^^^^
     {
         let x;
 >x : any
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -136,12 +170,15 @@ function a5() {
 
 function a6() {
 >a6 : () => void
+>   : ^^^^^^^^^^
 
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -150,9 +187,11 @@ function a6() {
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -163,27 +202,33 @@ function a6() {
 
 function a7() {
 >a7 : () => void
+>   : ^^^^^^^^^^
 
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -194,12 +239,15 @@ function a7() {
 
 function a8() {
 >a8 : () => void
+>   : ^^^^^^^^^^
 
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -208,15 +256,18 @@ function a8() {
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
@@ -225,33 +276,40 @@ function a8() {
 
 function a9() {
 >a9 : () => void
+>   : ^^^^^^^^^^
 
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;

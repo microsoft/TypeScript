@@ -3,8 +3,11 @@
 === unusedVariablesinNamespaces1.ts ===
 namespace Validation {
 >Validation : typeof Validation
+>           : ^^^^^^^^^^^^^^^^^
 
     const lettersRegexp = /^[A-Za-z]+$/;
 >lettersRegexp : RegExp
+>              : ^^^^^^
 >/^[A-Za-z]+$/ : RegExp
+>              : ^^^^^^
 }

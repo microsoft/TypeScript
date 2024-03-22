@@ -6,10 +6,15 @@
  */
 function g(xyz) {
 >g : (xyz: any) => any
+>  : ^^^^^^^^^^^^^^^^^
 >xyz : any
+>    : ^^^
 
     return xyz.p;
 >xyz.p : any
+>      : ^^^
 >xyz : any
+>    : ^^^
 >p : any
+>  : ^^^
 }

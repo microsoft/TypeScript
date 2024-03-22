@@ -3,10 +3,12 @@
 === service.ts ===
 export class Service {
 >Service : Service
+>        : ^^^^^^^
 }
 === component.ts ===
 import type { Service } from "./service";
 >Service : Service
+>        : ^^^^^^^
 
 declare var decorator: any;
 >decorator : any
@@ -16,9 +18,11 @@ declare var decorator: any;
 
 class MyComponent {
 >MyComponent : MyComponent
+>            : ^^^^^^^^^^^
 
     constructor(public Service: Service) {
 >Service : Service
+>        : ^^^^^^^
     }
 
     @decorator
@@ -26,6 +30,8 @@ class MyComponent {
 
     method(x: this) {
 >method : (x: this) => void
+>       : ^^^^    ^^^^^^^^^
 >x : this
+>  : ^^^^
     }
 }

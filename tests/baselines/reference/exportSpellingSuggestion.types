@@ -3,18 +3,27 @@
 === a.ts ===
 export function assertNever(x: never, msg: string) {
 >assertNever : (x: never, msg: string) => void
+>            : ^^^^     ^^^^^^^      ^^^^^^^^^
 >x : never
+>  : ^^^^^
 >msg : string
+>    : ^^^^^^
 
     throw new Error("Unexpected " + msg);
 >new Error("Unexpected " + msg) : Error
+>                               : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"Unexpected " + msg : string
+>                    : ^^^^^^
 >"Unexpected " : "Unexpected "
+>              : ^^^^^^^^^^^^^
 >msg : string
+>    : ^^^^^^
 }
 
 === b.ts ===
 import { assertNevar } from "./a";
 >assertNevar : any
+>            : ^^^
 
