@@ -25311,6 +25311,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function inferReverseMappedType(source: Type, target: MappedType, constraint: IndexType): Type {
+        const cacheKey = source.id + "," + target.id + "," + constraint.id;
+        if (reverseMappedCache.has(cacheKey)) {
+            return reverseMappedCache.get(cacheKey) || unknownType;
+        }
         reverseMappedSourceStack.push(source);
         reverseMappedTargetStack.push(target);
         const saveExpandingFlags = reverseExpandingFlags;
@@ -25326,6 +25330,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         reverseMappedSourceStack.pop();
         reverseMappedTargetStack.pop();
         reverseExpandingFlags = saveExpandingFlags;
+        reverseMappedCache.set(cacheKey, type);
         return type;
     }
 
