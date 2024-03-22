@@ -1784,6 +1784,7 @@ declare namespace ts {
                 /**
                  * List of file names for which to compute compiler errors.
                  * The files will be checked in list order.
+                 * Files with ranges specified will be checked first.
                  */
                 files: (string | FileRangesRequestArgs)[];
                 /**
