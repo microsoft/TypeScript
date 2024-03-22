@@ -60,7 +60,7 @@ function tryGetPerformance() {
 function tryGetPerformanceHooks(): PerformanceHooks | undefined {
     const p = tryGetPerformance();
     if (!p) return undefined;
-    const { performance, shouldWriteNativeEvents } = p;
+    const { shouldWriteNativeEvents, performance } = p;
 
     const hooks: PerformanceHooks = {
         shouldWriteNativeEvents,
