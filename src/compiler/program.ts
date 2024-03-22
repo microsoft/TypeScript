@@ -1923,7 +1923,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolvedProjectReferenceByPath,
         forEachResolvedProjectReference,
         isSourceOfProjectReferenceRedirect,
-        getResolvedProjectReferenceByOutputFile,
+        getRedirectReferenceForResolutionFromSourceOfProject,
         emitBuildInfo,
         fileExists,
         readFile,
@@ -3834,13 +3834,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         return projectReferenceRedirects.get(projectReferencePath) || undefined;
-    }
-
-    function getResolvedProjectReferenceByOutputFile(path: Path): ResolvedProjectReference | undefined {
-        const source = getSourceOfProjectReferenceRedirect(path);
-        if (typeof source === "string") {
-            return getResolvedProjectReferenceToRedirect(source);
-        }
     }
 
     function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
