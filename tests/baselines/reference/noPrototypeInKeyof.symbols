@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/noPrototypeInKeyof.ts] ////
+
+=== noPrototypeInKeyof.ts ===
+class X {
+>X : Symbol(X, Decl(noPrototypeInKeyof.ts, 0, 0))
+
+  static K = "";
+>K : Symbol(X.K, Decl(noPrototypeInKeyof.ts, 0, 9))
+}
+type T = keyof typeof X;
+>T : Symbol(T, Decl(noPrototypeInKeyof.ts, 2, 1))
+>X : Symbol(X, Decl(noPrototypeInKeyof.ts, 0, 0))
+
+// Should error.
+const m: T = "prototype";
+>m : Symbol(m, Decl(noPrototypeInKeyof.ts, 5, 5))
+>T : Symbol(T, Decl(noPrototypeInKeyof.ts, 2, 1))
+

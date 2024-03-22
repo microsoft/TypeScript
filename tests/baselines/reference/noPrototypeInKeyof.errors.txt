@@ -1,0 +1,13 @@
+noPrototypeInKeyof.ts(6,7): error TS2322: Type '"prototype"' is not assignable to type '"K"'.
+
+
+==== noPrototypeInKeyof.ts (1 errors) ====
+    class X {
+      static K = "";
+    }
+    type T = keyof typeof X;
+    // Should error.
+    const m: T = "prototype";
+          ~
+!!! error TS2322: Type '"prototype"' is not assignable to type '"K"'.
+    
