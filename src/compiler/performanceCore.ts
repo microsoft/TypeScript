@@ -30,10 +30,6 @@ export interface Performance extends PerformanceTime {
 declare const performance: Performance | undefined;
 
 function tryGetPerformance() {
-    if (typeof performance === "object") {
-        return { performance, isGlobal: true };
-    }
-
     if (isNodeLikeSystem()) {
         try {
             const { performance } = require("perf_hooks") as typeof import("perf_hooks");
@@ -42,6 +38,10 @@ function tryGetPerformance() {
         catch {
             // ignore errors
         }
+    }
+
+    if (typeof performance === "object") {
+        return { performance, isGlobal: true };
     }
 
     return undefined;
@@ -89,3 +89,5 @@ export function tryGetNativePerformanceHooks() {
  * @internal
  */
 export const timestamp = nativePerformanceTime ? () => nativePerformanceTime.now() : Date.now;
+
+console.log(timestamp === Date.now);
