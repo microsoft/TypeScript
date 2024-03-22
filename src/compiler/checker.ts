@@ -37279,7 +37279,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (types.length === 0) {
                 // For an async function, the return type will not be void/undefined, but rather a Promise for void/undefined.
                 const contextualReturnType = getContextualReturnType(func, /*contextFlags*/ undefined);
-                const returnType = contextualReturnType && (unwrapReturnType(contextualReturnType, functionFlags) || voidType).flags & TypeFlags.Undefined ? undefinedType : voidType;
+                const returnType = contextualReturnType && someType(unwrapReturnType(contextualReturnType, functionFlags) || voidType, t => !!(t.flags & TypeFlags.Undefined)) ? undefinedType : voidType;
                 return functionFlags & FunctionFlags.Async ? createPromiseReturnType(func, returnType) : // Async function
                     returnType; // Normal function
             }

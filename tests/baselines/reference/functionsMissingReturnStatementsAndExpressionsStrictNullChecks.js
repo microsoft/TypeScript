@@ -18,7 +18,7 @@ const f20: () => undefined = () => {
 }
 
 const f21: () => undefined | number = () => {
-    // Error, regular void function because contextual type for implicit return isn't just undefined
+    // Ok, contextual type for implicit return contains undefined
 }
 
 const f22: () => number = () => {
@@ -59,6 +59,22 @@ function h2(): undefined {
 
 f(h2);
 
+// https://github.com/microsoft/TypeScript/issues/57840
+
+type FN = () => Promise<undefined> | undefined;
+
+const fn1: FN = () => {
+    return;
+};
+
+const fn2: FN = async () => {
+    return;
+};
+
+const fn3: FN = () => {};
+
+const fn4: FN = async () => {};
+
 
 //// [functionsMissingReturnStatementsAndExpressionsStrictNullChecks.js]
 function f10() {
@@ -74,7 +90,7 @@ const f20 = () => {
     // Ok, contextual type for implicit return is undefined
 };
 const f21 = () => {
-    // Error, regular void function because contextual type for implicit return isn't just undefined
+    // Ok, contextual type for implicit return contains undefined
 };
 const f22 = () => {
     // Error, regular void function because contextual type for implicit return isn't just undefined
@@ -98,3 +114,11 @@ f(h1); // Error
 function h2() {
 }
 f(h2);
+const fn1 = () => {
+    return;
+};
+const fn2 = async () => {
+    return;
+};
+const fn3 = () => { };
+const fn4 = async () => { };
