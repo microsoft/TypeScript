@@ -34,7 +34,10 @@ function tryGetPerformance() {
         try {
             // By default, only write native events when generating a cpu profile or using the v8 profiler.
             const { performance } = require("perf_hooks") as typeof import("perf_hooks");
-            return { performance, shouldWriteNativeEvents: false };
+            return {
+                shouldWriteNativeEvents: false,
+                performance,
+            };
         }
         catch {
             // ignore errors
@@ -45,7 +48,10 @@ function tryGetPerformance() {
         // For now we always write native performance events when running in the browser. We may
         // make this conditional in the future if we find that native web performance hooks
         // in the browser also slow down compilation.
-        return { performance, shouldWriteNativeEvents: true };
+        return {
+            shouldWriteNativeEvents: true,
+            performance,
+        };
     }
 
     return undefined;
