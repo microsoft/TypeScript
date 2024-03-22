@@ -7,7 +7,7 @@ import {
 
 /** @internal */
 export interface PerformanceHooks {
-    isGlobal: boolean;
+    shouldWriteNativeEvents: boolean;
     performance?: Performance;
     performanceTime?: PerformanceTime;
 }
@@ -32,8 +32,9 @@ declare const performance: Performance | undefined;
 function tryGetPerformance() {
     if (isNodeLikeSystem()) {
         try {
+            // By default, only write native events when generating a cpu profile or using the v8 profiler.
             const { performance } = require("perf_hooks") as typeof import("perf_hooks");
-            return { performance, isGlobal: false };
+            return { performance, shouldWriteNativeEvents: false };
         }
         catch {
             // ignore errors
@@ -41,7 +42,10 @@ function tryGetPerformance() {
     }
 
     if (typeof performance === "object") {
-        return { performance, isGlobal: true };
+        // For now we always write native performance events when running in the browser. We may
+        // make this conditional in the future if we find that native web performance hooks
+        // in the browser also slow down compilation.
+        return { performance, shouldWriteNativeEvents: true };
     }
 
     return undefined;
@@ -50,10 +54,10 @@ function tryGetPerformance() {
 function tryGetPerformanceHooks(): PerformanceHooks | undefined {
     const p = tryGetPerformance();
     if (!p) return undefined;
-    const { performance, isGlobal } = p;
+    const { performance, shouldWriteNativeEvents } = p;
 
     const hooks: PerformanceHooks = {
-        isGlobal,
+        shouldWriteNativeEvents,
         performance: undefined,
         performanceTime: undefined,
     };
@@ -89,5 +93,3 @@ export function tryGetNativePerformanceHooks() {
  * @internal
  */
 export const timestamp = nativePerformanceTime ? () => nativePerformanceTime.now() : Date.now;
-
-console.log(timestamp === Date.now);

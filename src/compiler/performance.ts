@@ -186,7 +186,7 @@ export function enable(system: System = sys) {
             // to be able to leverage native trace events when node is run with either `--cpu-prof`
             // or `--prof`, if we're running with our own `--generateCpuProfile` flag, or when
             // running in debug mode (since its possible to generate a cpu profile while debugging).
-            if (perfHooks.isGlobal || system?.cpuProfilingEnabled?.() || system?.debugMode) {
+            if (perfHooks.shouldWriteNativeEvents || system?.cpuProfilingEnabled?.() || system?.debugMode) {
                 performanceImpl = perfHooks.performance;
             }
         }
