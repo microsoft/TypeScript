@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/coAndContraVariantInferences6.ts] ////
+//// [tests/cases/compiler/coAndContraVariantInferences7.ts] ////
 
-=== coAndContraVariantInferences6.ts ===
+=== coAndContraVariantInferences7.ts ===
 type Request<TSchema extends Schema> = {
 >Request : Request<TSchema>
 
