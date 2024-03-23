@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/arrayFilterBooleanExternalOverload1.ts] ////
+
+=== arrayFilterBooleanExternalOverload1.ts ===
+// #56013
+
+// For reference, thise cases work as expected (no errors) when no external BooleanConstrudtor like overload is present
+declare const maybe: boolean;
+>maybe : boolean
+{
+    const id = <T>() => (t: T) => !!t;
+>id : <T>() => (t: T) => boolean
+><T>() => (t: T) => !!t : <T>() => (t: T) => boolean
+>(t: T) => !!t : (t: T) => boolean
+>t : T
+>!!t : boolean
+>!t : boolean
+>t : T
+
+    const result1 = (maybe ? ['foo', 'bar', undefined] : [1] ).filter(id());
+>result1 : (string | number | undefined)[]
+>(maybe ? ['foo', 'bar', undefined] : [1] ).filter(id()) : (string | number | undefined)[]
+>(maybe ? ['foo', 'bar', undefined] : [1] ).filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; } | { <S_1 extends number>(predicate: (value: number, index: number, array: number[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; }
+>(maybe ? ['foo', 'bar', undefined] : [1] ) : (string | undefined)[] | number[]
+>maybe ? ['foo', 'bar', undefined] : [1] : (string | undefined)[] | number[]
+>maybe : boolean
+>['foo', 'bar', undefined] : (string | undefined)[]
+>'foo' : "foo"
+>'bar' : "bar"
+>undefined : undefined
+>[1] : number[]
+>1 : 1
+>filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; } | { <S_1 extends number>(predicate: (value: number, index: number, array: number[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; }
+>id() : (t: string | number | undefined) => boolean
+>id : <T>() => (t: T) => boolean
+
+    result1;
+>result1 : (string | number | undefined)[]
+
+    const result2 = ['foo', 'bar', undefined].filter(id()); // want id() = (t: string) => boolean
+>result2 : (string | undefined)[]
+>['foo', 'bar', undefined].filter(id()) : (string | undefined)[]
+>['foo', 'bar', undefined].filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; }
+>['foo', 'bar', undefined] : (string | undefined)[]
+>'foo' : "foo"
+>'bar' : "bar"
+>undefined : undefined
+>filter : { <S extends string | undefined>(predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | undefined, index: number, array: (string | undefined)[]) => unknown, thisArg?: any): (string | undefined)[]; }
+>id() : (t: string | undefined) => boolean
+>id : <T>() => (t: T) => boolean
+
+    result2;
+>result2 : (string | undefined)[]
+}
+

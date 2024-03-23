@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/arrayFilterBooleanExternalOverload3.ts] ////
+
+=== arrayFilterBooleanExternalOverload3.ts ===
+// #56013
+
+const symbool = Symbol("MyBooleanSymbol");
+>symbool : Symbol(symbool, Decl(arrayFilterBooleanExternalOverload3.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const MyBoolean: typeof Boolean & { prototype: typeof symbool };
+>MyBoolean : Symbol(MyBoolean, Decl(arrayFilterBooleanExternalOverload3.ts, 3, 13))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(arrayFilterBooleanExternalOverload3.ts, 3, 43))
+>symbool : Symbol(symbool, Decl(arrayFilterBooleanExternalOverload3.ts, 2, 5))
+
+interface Array<T> {
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 16))
+
+    filter(predicate: typeof MyBoolean): (T extends (0 | 0n | "" | false | null | undefined) ? never : T)[];
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 20))
+>predicate : Symbol(predicate, Decl(arrayFilterBooleanExternalOverload3.ts, 5, 11))
+>MyBoolean : Symbol(MyBoolean, Decl(arrayFilterBooleanExternalOverload3.ts, 3, 13))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 16))
+}
+
+declare const maybe: boolean;
+>maybe : Symbol(maybe, Decl(arrayFilterBooleanExternalOverload3.ts, 8, 13))
+{
+    const id = <T,>() => (t: T) => !!t;
+>id : Symbol(id, Decl(arrayFilterBooleanExternalOverload3.ts, 10, 9))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload3.ts, 10, 16))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload3.ts, 10, 26))
+>T : Symbol(T, Decl(arrayFilterBooleanExternalOverload3.ts, 10, 16))
+>t : Symbol(t, Decl(arrayFilterBooleanExternalOverload3.ts, 10, 26))
+
+    const result1 = (maybe ? ['foo', 'bar', undefined] : [1] ).filter(MyBoolean);
+>result1 : Symbol(result1, Decl(arrayFilterBooleanExternalOverload3.ts, 12, 9))
+>(maybe ? ['foo', 'bar', undefined] : [1] ).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 20), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>maybe : Symbol(maybe, Decl(arrayFilterBooleanExternalOverload3.ts, 8, 13))
+>undefined : Symbol(undefined)
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 20), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>MyBoolean : Symbol(MyBoolean, Decl(arrayFilterBooleanExternalOverload3.ts, 3, 13))
+
+    result1;
+>result1 : Symbol(result1, Decl(arrayFilterBooleanExternalOverload3.ts, 12, 9))
+
+    const result2 = ['foo', 'bar', undefined].filter(MyBoolean); // want id() = (t: string) => boolean
+>result2 : Symbol(result2, Decl(arrayFilterBooleanExternalOverload3.ts, 16, 9))
+>['foo', 'bar', undefined].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 20))
+>undefined : Symbol(undefined)
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(arrayFilterBooleanExternalOverload3.ts, 4, 20))
+>MyBoolean : Symbol(MyBoolean, Decl(arrayFilterBooleanExternalOverload3.ts, 3, 13))
+
+    result2;
+>result2 : Symbol(result2, Decl(arrayFilterBooleanExternalOverload3.ts, 16, 9))
+}
+
