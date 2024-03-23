@@ -169,7 +169,7 @@ function getOptionsForHelp(commandLine: ParsedCommandLine) {
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
     return !!commandLine.options.all ?
         sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-        filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
+        filter(optionDeclarations.slice(), (v: CommandLineOption) => !!v.showInSimplifiedHelpView);
 }
 
 function printVersion(sys: System) {

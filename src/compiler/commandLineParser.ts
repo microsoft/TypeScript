@@ -16,12 +16,14 @@ import {
     CompilerOptions,
     CompilerOptionsValue,
     computedOptions,
+    concatenate,
     ConfigFileSpecs,
     containsPath,
     convertToRelativePath,
     createCompilerDiagnostic,
     createDiagnosticForNodeInSourceFile,
     createGetCanonicalFileName,
+    createProgram,
     Debug,
     Diagnostic,
     DiagnosticArguments,
@@ -63,8 +65,12 @@ import {
     getTextOfPropertyName,
     getTsConfigPropArrayElementValue,
     hasExtension,
+    hasJSFileExtension,
     hasProperty,
+    hasTSFileExtension,
     ImportsNotUsedAsValues,
+    InternalSymbolName,
+    IntrinsicType,
     isArray,
     isArrayLiteralExpression,
     isComputedNonLiteralName,
@@ -77,6 +83,7 @@ import {
     JsonSourceFile,
     JsxEmit,
     length,
+    LiteralType,
     map,
     mapDefined,
     mapIterator,
@@ -107,6 +114,7 @@ import {
     some,
     startsWith,
     StringLiteral,
+    symbolName,
     SyntaxKind,
     sys,
     toFileNameLowerCase,
@@ -114,7 +122,11 @@ import {
     tracing,
     TsConfigOnlyOption,
     TsConfigSourceFile,
+    Type,
     TypeAcquisition,
+    TypeChecker,
+    TypeFlags,
+    TypeReference,
     unescapeLeadingUnderscores,
     WatchDirectoryFlags,
     WatchDirectoryKind,
@@ -129,13 +141,17 @@ export const compileOnSaveCommandLineOption: CommandLineOption = {
     defaultValueDescription: false,
 };
 
-const jsxOptionMap = new Map(Object.entries({
+function strongMap<const T extends Record<string, string | number>>(input: T): Map<keyof T, T[keyof T]> {
+    return new Map(Object.entries(input)) as Map<keyof T, T[keyof T]>;
+}
+
+const jsxOptionMap = strongMap({
     "preserve": JsxEmit.Preserve,
     "react-native": JsxEmit.ReactNative,
     "react": JsxEmit.React,
     "react-jsx": JsxEmit.ReactJSX,
     "react-jsxdev": JsxEmit.ReactJSXDev,
-}));
+});
 
 /** @internal */
 export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
@@ -147,7 +163,7 @@ export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), (
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
 //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-const libEntries: [string, string][] = [
+const libEntries = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
     ["es6", "lib.es2015.d.ts"],
@@ -237,7 +253,7 @@ const libEntries: [string, string][] = [
     ["esnext.regexp", "lib.esnext.regexp.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
-];
+] as const satisfies [string, string][];
 
 /**
  * An array of supported "lib" reference file names used to determine the order for inclusion
@@ -246,7 +262,7 @@ const libEntries: [string, string][] = [
  *
  * @internal
  */
-export const libs = libEntries.map(entry => entry[0]);
+export const libs: string[] = libEntries.map(entry => entry[0]);
 
 /**
  * A map of lib names to lib files. This map is used both for parsing the "lib" command line
@@ -261,38 +277,38 @@ export const libMap = new Map(libEntries);
 export const optionsForWatch: CommandLineOption[] = [
     {
         name: "watchFile",
-        type: new Map(Object.entries({
+        type: strongMap({
             fixedpollinginterval: WatchFileKind.FixedPollingInterval,
             prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
             dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
             fixedchunksizepolling: WatchFileKind.FixedChunkSizePolling,
             usefsevents: WatchFileKind.UseFsEvents,
             usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
-        })),
+        }),
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Specify_how_the_TypeScript_watch_mode_works,
         defaultValueDescription: WatchFileKind.UseFsEvents,
     },
     {
         name: "watchDirectory",
-        type: new Map(Object.entries({
+        type: strongMap({
             usefsevents: WatchDirectoryKind.UseFsEvents,
             fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
             dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
             fixedchunksizepolling: WatchDirectoryKind.FixedChunkSizePolling,
-        })),
+        }),
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Specify_how_directories_are_watched_on_systems_that_lack_recursive_file_watching_functionality,
         defaultValueDescription: WatchDirectoryKind.UseFsEvents,
     },
     {
         name: "fallbackPolling",
-        type: new Map(Object.entries({
+        type: strongMap({
             fixedinterval: PollingWatchKind.FixedInterval,
             priorityinterval: PollingWatchKind.PriorityInterval,
             dynamicpriority: PollingWatchKind.DynamicPriority,
             fixedchunksize: PollingWatchKind.FixedChunkSize,
-        })),
+        }),
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Specify_what_approach_the_watcher_should_use_if_the_system_runs_out_of_native_file_watchers,
         defaultValueDescription: PollingWatchKind.PriorityInterval,
@@ -331,7 +347,7 @@ export const optionsForWatch: CommandLineOption[] = [
 ];
 
 /** @internal */
-export const commonOptionsWithBuild: CommandLineOption[] = [
+export const commonOptionsWithBuild = [
     {
         name: "help",
         shortName: "h",
@@ -516,13 +532,13 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific,
     },
-];
+] as const satisfies CommandLineOption[];
 
 /** @internal */
-export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
+export const targetOptionDeclaration = {
     name: "target",
     shortName: "t",
-    type: new Map(Object.entries({
+    type: strongMap({
         es3: ScriptTarget.ES3,
         es5: ScriptTarget.ES5,
         es6: ScriptTarget.ES2015,
@@ -535,7 +551,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2021: ScriptTarget.ES2021,
         es2022: ScriptTarget.ES2022,
         esnext: ScriptTarget.ESNext,
-    })),
+    }),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -546,13 +562,13 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
     defaultValueDescription: ScriptTarget.ES5,
-};
+} as const satisfies CommandLineOptionOfCustomType;
 
 /** @internal */
-export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
+export const moduleOptionDeclaration = {
     name: "module",
     shortName: "m",
-    type: new Map(Object.entries({
+    type: strongMap({
         none: ModuleKind.None,
         commonjs: ModuleKind.CommonJS,
         amd: ModuleKind.AMD,
@@ -566,7 +582,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
         preserve: ModuleKind.Preserve,
-    })),
+    }),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -576,9 +592,9 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
     category: Diagnostics.Modules,
     description: Diagnostics.Specify_what_module_code_is_generated,
     defaultValueDescription: undefined,
-};
+} as const satisfies CommandLineOptionOfCustomType;
 
-const commandOptionsWithoutBuild: CommandLineOption[] = [
+const commandOptionsWithoutBuild = [
     // CommandLine only options
     {
         name: "all",
@@ -787,11 +803,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "importsNotUsedAsValues",
-        type: new Map(Object.entries({
+        type: strongMap({
             remove: ImportsNotUsedAsValues.Remove,
             preserve: ImportsNotUsedAsValues.Preserve,
             error: ImportsNotUsedAsValues.Error,
-        })),
+        }),
         affectsEmit: true,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
@@ -1002,7 +1018,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     // Module Resolution
     {
         name: "moduleResolution",
-        type: new Map(Object.entries({
+        type: strongMap({
             // N.B. The first entry specifies the value shown in `tsc --init`
             node10: ModuleResolutionKind.Node10,
             node: ModuleResolutionKind.Node10,
@@ -1010,7 +1026,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             node16: ModuleResolutionKind.Node16,
             nodenext: ModuleResolutionKind.NodeNext,
             bundler: ModuleResolutionKind.Bundler,
-        })),
+        }),
         deprecatedKeys: new Set(["node"]),
         affectsSourceFile: true,
         affectsModuleResolution: true,
@@ -1309,10 +1325,10 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "newLine",
-        type: new Map(Object.entries({
+        type: strongMap({
             crlf: NewLineKind.CarriageReturnLineFeed,
             lf: NewLineKind.LineFeed,
-        })),
+        }),
         affectsEmit: true,
         affectsBuildInfo: true,
         paramType: Diagnostics.NEWLINE,
@@ -1554,11 +1570,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "moduleDetection",
-        type: new Map(Object.entries({
+        type: strongMap({
             auto: ModuleDetectionKind.Auto,
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
-        })),
+        }),
         affectsSourceFile: true,
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
@@ -1570,31 +1586,31 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "string",
         defaultValueDescription: undefined,
     },
-];
+] as const satisfies CommandLineOption[];
 
 /** @internal */
-export const optionDeclarations: CommandLineOption[] = [
+export const optionDeclarations = [
     ...commonOptionsWithBuild,
     ...commandOptionsWithoutBuild,
-];
+] as const satisfies CommandLineOption[];
 
 /** @internal */
-export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
+export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter((option: CommandLineOption) => !!option.affectsSemanticDiagnostics);
 
 /** @internal */
-export const affectsEmitOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsEmit);
+export const affectsEmitOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter((option: CommandLineOption) => !!option.affectsEmit);
 
 /** @internal */
-export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsDeclarationPath);
+export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter((option: CommandLineOption) => !!option.affectsDeclarationPath);
 
 /** @internal */
-export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
+export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter((option: CommandLineOption) => !!option.affectsModuleResolution);
 
 /** @internal */
-export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
+export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter((option: CommandLineOption) => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
 
 /** @internal */
-export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);
+export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter((option: CommandLineOption) => !!option.affectsProgramStructure);
 
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));
@@ -2070,7 +2086,17 @@ export function getParsedCommandLineOfConfigFile(
     watchOptionsToExtend?: WatchOptions,
     extraFileExtensions?: readonly FileExtensionInfo[],
 ): ParsedCommandLine | undefined {
-    const configFileText = tryReadFile(configFileName, fileName => host.readFile(fileName));
+    const typeConfig = hasTSFileExtension(configFileName) || hasJSFileExtension(configFileName) ? loadConfigFromDefaultType(
+        configFileName,
+        optionsToExtend,
+        host,
+        extendedConfigCache,
+        watchOptionsToExtend,
+        extraFileExtensions
+    ) : undefined;
+    const configFileText = typeConfig
+        ? typeConfig.configText
+        : tryReadFile(configFileName, fileName => host.readFile(fileName));
     if (!isString(configFileText)) {
         host.onUnRecoverableConfigFileDiagnostic(configFileText);
         return undefined;
@@ -2081,7 +2107,7 @@ export function getParsedCommandLineOfConfigFile(
     result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
     result.resolvedPath = result.path;
     result.originalFileName = result.fileName;
-    return parseJsonSourceFileConfigFileContent(
+    const parsedResult = parseJsonSourceFileConfigFileContent(
         result,
         host,
         getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd),
@@ -2092,6 +2118,75 @@ export function getParsedCommandLineOfConfigFile(
         extendedConfigCache,
         watchOptionsToExtend,
     );
+    parsedResult.errors = concatenate(parsedResult.errors, typeConfig?.errors);
+    return parsedResult;
+}
+
+export function loadConfigFromDefaultType(
+    configFileName: string,
+    _optionsToExtend: CompilerOptions | undefined,
+    _host: ParseConfigFileHost,
+    _extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
+    _watchOptionsToExtend?: WatchOptions,
+    _extraFileExtensions?: readonly FileExtensionInfo[],
+): { configText: string, errors: Diagnostic[] } | undefined {
+    const program = createProgram({
+        rootNames: [configFileName],
+        options: {
+            strict: true,
+            exactOptionalPropertyTypes: true,
+            noEmit: true,
+            module: ModuleKind.NodeNext,
+            target: ScriptTarget.Latest,
+            allowJs: true,
+            resolveJsonModule: true,
+            allowArbitraryExtensions: true,
+            lib: ["esnext"],
+            types: [],
+            moduleDetection: ModuleDetectionKind.Force,
+        },
+    });
+    const file = Debug.checkDefined(program.getSourceFile(configFileName));
+    const checker = program.getTypeChecker();
+    const defaultMember = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, file.symbol);
+    if (!defaultMember) {
+        return undefined; // TODO: issue diagnostic
+    }
+    const type = checker.getTypeOfSymbol(defaultMember);
+    const raw = convertTypeIntoRawConfig(checker, type);
+
+    // And to save on API work, just serialize the raw value into a string and send it through the usual path
+    return {
+        errors: program.getSemanticDiagnostics(file).slice(),
+        configText: JSON.stringify(raw)
+    };
+}
+
+function convertTypeIntoRawConfig(checker: TypeChecker, type: Type): any {
+    return convertType(type);
+
+    function convertType(type: Type): any {
+        if (type.flags & TypeFlags.BooleanLiteral) {
+            return (type as IntrinsicType).intrinsicName === "true" ? true : false;
+        }
+        if (type.flags & TypeFlags.NumberLiteral || type.flags & TypeFlags.StringLiteral) {
+            return (type as LiteralType).value;
+        }
+        if (checker.isTupleType(type)) {
+            const args = checker.getTypeArguments(type as TypeReference);
+            return map(args, convertType);
+        }
+        if (type.flags & TypeFlags.Object) {
+            const result: Record<string, any> = {};
+            const members = checker.getPropertiesOfType(type);
+            for (const member of members) {
+                const name = symbolName(member);
+                result[name] = convertType(checker.getTypeOfSymbol(member));
+            }
+            return result;
+        }
+        return undefined; // TODO: Issue diagnostic
+    }
 }
 
 /**
@@ -2722,8 +2817,8 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
         categorizedOptions.set(Diagnostics.Completeness, []);
         for (const option of optionDeclarations) {
             if (isAllowedOptionForOutput(option)) {
-                let listForCategory = categorizedOptions.get(option.category!);
-                if (!listForCategory) categorizedOptions.set(option.category!, listForCategory = []);
+                let listForCategory = categorizedOptions.get((option as CommandLineOption).category!);
+                if (!listForCategory) categorizedOptions.set((option as CommandLineOption).category!, listForCategory = []);
                 listForCategory.push(option);
             }
         }

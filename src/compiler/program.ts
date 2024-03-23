@@ -1147,7 +1147,7 @@ export function getLibraryNameFromLibFileName(libFileName: string) {
 
 function getLibFileNameFromLibReference(libReference: FileReference) {
     const libName = toFileNameLowerCase(libReference.fileName);
-    const libFileName = libMap.get(libName);
+    const libFileName = libMap.get(libName as Parameters<(typeof libMap)["get"]>[0]);
     return { libName, libFileName };
 }
 

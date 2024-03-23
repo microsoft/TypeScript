@@ -6,6 +6,7 @@ import {
     EqualityComparer,
     MapLike,
     Queue,
+    RawTSConfig,
     SortedArray,
     SortedReadonlyArray,
     TextSpan,
@@ -2715,4 +2716,9 @@ export function isNodeLikeSystem(): boolean {
         && !!process.nextTick
         && !(process as any).browser
         && typeof require !== "undefined";
+}
+
+export function config<const T extends RawTSConfig>(config: T): T {
+    Debug.fail("This function does nothing at runtime.");
+    return config;
 }

@@ -3574,6 +3574,7 @@ declare namespace ts {
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
+    function config<const T extends RawTSConfig>(config: T): T;
     type Path = string & {
         __pathBrand: any;
     };
@@ -8140,6 +8141,230 @@ declare namespace ts {
          */
         ParseForTypeInfo = 3,
     }
+    const _optionsType: {
+        help?: boolean | undefined;
+        watch?: boolean | undefined;
+        preserveWatchOutput?: boolean | undefined;
+        listFiles?: boolean | undefined;
+        explainFiles?: boolean | undefined;
+        listEmittedFiles?: boolean | undefined;
+        pretty?: boolean | undefined;
+        traceResolution?: boolean | undefined;
+        diagnostics?: boolean | undefined;
+        extendedDiagnostics?: boolean | undefined;
+        generateCpuProfile?: string | undefined;
+        generateTrace?: string | undefined;
+        incremental?: boolean | undefined;
+        declaration?: boolean | undefined;
+        declarationMap?: boolean | undefined;
+        emitDeclarationOnly?: boolean | undefined;
+        sourceMap?: boolean | undefined;
+        inlineSourceMap?: boolean | undefined;
+        assumeChangesOnlyAffectDirectDependencies?: boolean | undefined;
+        locale?: string | undefined;
+        target?: "es3" | "es5" | "es6" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "esnext" | undefined;
+        module?: "preserve" | "es6" | "es2015" | "es2020" | "es2022" | "esnext" | "none" | "commonjs" | "amd" | "system" | "umd" | "node16" | "nodenext" | undefined;
+        all?: boolean | undefined;
+        version?: boolean | undefined;
+        init?: boolean | undefined;
+        project?: string | undefined;
+        build?: boolean | undefined;
+        showConfig?: boolean | undefined;
+        listFilesOnly?: boolean | undefined;
+        lib?:
+            | (
+                | "es5"
+                | "es6"
+                | "es2015"
+                | "es2016"
+                | "es2017"
+                | "es2018"
+                | "es2019"
+                | "es2020"
+                | "es2021"
+                | "es2022"
+                | "esnext"
+                | "es7"
+                | "es2023"
+                | "dom"
+                | "dom.iterable"
+                | "dom.asynciterable"
+                | "webworker"
+                | "webworker.importscripts"
+                | "webworker.iterable"
+                | "webworker.asynciterable"
+                | "scripthost"
+                | "es2015.core"
+                | "es2015.collection"
+                | "es2015.generator"
+                | "es2015.iterable"
+                | "es2015.promise"
+                | "es2015.proxy"
+                | "es2015.reflect"
+                | "es2015.symbol"
+                | "es2015.symbol.wellknown"
+                | "es2016.array.include"
+                | "es2016.intl"
+                | "es2017.date"
+                | "es2017.object"
+                | "es2017.sharedmemory"
+                | "es2017.string"
+                | "es2017.intl"
+                | "es2017.typedarrays"
+                | "es2018.asyncgenerator"
+                | "es2018.asynciterable"
+                | "es2018.intl"
+                | "es2018.promise"
+                | "es2018.regexp"
+                | "es2019.array"
+                | "es2019.object"
+                | "es2019.string"
+                | "es2019.symbol"
+                | "es2019.intl"
+                | "es2020.bigint"
+                | "es2020.date"
+                | "es2020.promise"
+                | "es2020.sharedmemory"
+                | "es2020.string"
+                | "es2020.symbol.wellknown"
+                | "es2020.intl"
+                | "es2020.number"
+                | "es2021.promise"
+                | "es2021.string"
+                | "es2021.weakref"
+                | "es2021.intl"
+                | "es2022.array"
+                | "es2022.error"
+                | "es2022.intl"
+                | "es2022.object"
+                | "es2022.sharedmemory"
+                | "es2022.string"
+                | "es2022.regexp"
+                | "es2023.array"
+                | "es2023.collection"
+                | "es2023.intl"
+                | "esnext.array"
+                | "esnext.collection"
+                | "esnext.symbol"
+                | "esnext.asynciterable"
+                | "esnext.intl"
+                | "esnext.disposable"
+                | "esnext.bigint"
+                | "esnext.string"
+                | "esnext.promise"
+                | "esnext.weakref"
+                | "esnext.decorators"
+                | "esnext.object"
+                | "esnext.regexp"
+                | "decorators"
+                | "decorators.legacy"
+            )[]
+            | undefined;
+        allowJs?: boolean | undefined;
+        checkJs?: boolean | undefined;
+        jsx?: "preserve" | "react-native" | "react" | "react-jsx" | "react-jsxdev" | undefined;
+        outFile?: string | undefined;
+        outDir?: string | undefined;
+        rootDir?: string | undefined;
+        composite?: boolean | undefined;
+        tsBuildInfoFile?: string | undefined;
+        removeComments?: boolean | undefined;
+        noEmit?: boolean | undefined;
+        importHelpers?: boolean | undefined;
+        importsNotUsedAsValues?: "preserve" | "remove" | "error" | undefined;
+        downlevelIteration?: boolean | undefined;
+        isolatedModules?: boolean | undefined;
+        verbatimModuleSyntax?: boolean | undefined;
+        strict?: boolean | undefined;
+        noImplicitAny?: boolean | undefined;
+        strictNullChecks?: boolean | undefined;
+        strictFunctionTypes?: boolean | undefined;
+        strictBindCallApply?: boolean | undefined;
+        strictPropertyInitialization?: boolean | undefined;
+        noImplicitThis?: boolean | undefined;
+        useUnknownInCatchVariables?: boolean | undefined;
+        alwaysStrict?: boolean | undefined;
+        noUnusedLocals?: boolean | undefined;
+        noUnusedParameters?: boolean | undefined;
+        exactOptionalPropertyTypes?: boolean | undefined;
+        noImplicitReturns?: boolean | undefined;
+        noFallthroughCasesInSwitch?: boolean | undefined;
+        noUncheckedIndexedAccess?: boolean | undefined;
+        noImplicitOverride?: boolean | undefined;
+        noPropertyAccessFromIndexSignature?: boolean | undefined;
+        moduleResolution?: "node16" | "nodenext" | "node10" | "node" | "classic" | "bundler" | undefined;
+        baseUrl?: string | undefined;
+        paths?: Record<string, any> | undefined;
+        rootDirs?: string[] | undefined;
+        typeRoots?: string[] | undefined;
+        types?: string[] | undefined;
+        allowSyntheticDefaultImports?: boolean | undefined;
+        esModuleInterop?: boolean | undefined;
+        preserveSymlinks?: boolean | undefined;
+        allowUmdGlobalAccess?: boolean | undefined;
+        moduleSuffixes?: string[] | undefined;
+        allowImportingTsExtensions?: boolean | undefined;
+        resolvePackageJsonExports?: boolean | undefined;
+        resolvePackageJsonImports?: boolean | undefined;
+        customConditions?: string[] | undefined;
+        sourceRoot?: string | undefined;
+        mapRoot?: string | undefined;
+        inlineSources?: boolean | undefined;
+        experimentalDecorators?: boolean | undefined;
+        emitDecoratorMetadata?: boolean | undefined;
+        jsxFactory?: string | undefined;
+        jsxFragmentFactory?: string | undefined;
+        jsxImportSource?: string | undefined;
+        resolveJsonModule?: boolean | undefined;
+        allowArbitraryExtensions?: boolean | undefined;
+        out?: string | undefined;
+        reactNamespace?: string | undefined;
+        skipDefaultLibCheck?: boolean | undefined;
+        charset?: string | undefined;
+        emitBOM?: boolean | undefined;
+        newLine?: "crlf" | "lf" | undefined;
+        noErrorTruncation?: boolean | undefined;
+        noLib?: boolean | undefined;
+        noResolve?: boolean | undefined;
+        stripInternal?: boolean | undefined;
+        disableSizeLimit?: boolean | undefined;
+        disableSourceOfProjectReferenceRedirect?: boolean | undefined;
+        disableSolutionSearching?: boolean | undefined;
+        disableReferencedProjectLoad?: boolean | undefined;
+        noImplicitUseStrict?: boolean | undefined;
+        noEmitHelpers?: boolean | undefined;
+        noEmitOnError?: boolean | undefined;
+        preserveConstEnums?: boolean | undefined;
+        declarationDir?: string | undefined;
+        skipLibCheck?: boolean | undefined;
+        allowUnusedLabels?: boolean | undefined;
+        allowUnreachableCode?: boolean | undefined;
+        suppressExcessPropertyErrors?: boolean | undefined;
+        suppressImplicitAnyIndexErrors?: boolean | undefined;
+        forceConsistentCasingInFileNames?: boolean | undefined;
+        maxNodeModuleJsDepth?: number | undefined;
+        noStrictGenericChecks?: boolean | undefined;
+        useDefineForClassFields?: boolean | undefined;
+        preserveValueImports?: boolean | undefined;
+        keyofStringsOnly?: boolean | undefined;
+        plugins?: Record<string, any>[] | undefined;
+        moduleDetection?: "auto" | "legacy" | "force" | undefined;
+        ignoreDeprecations?: string | undefined;
+    } | undefined;
+    /**
+     * An unprocessed TSConfig object, suitable to read as JSON and transform into command line options
+     */
+    interface RawTSConfig {
+        extends?: string | string[];
+        compilerOptions?: NonNullable<typeof _optionsType>;
+        references?: {
+            path: string;
+        }[];
+        files?: string[];
+        include?: string[];
+        exclude?: string[];
+        compileOnSave?: boolean;
+    }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
@@ -9066,6 +9291,10 @@ declare namespace ts {
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
     function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
+    function loadConfigFromDefaultType(configFileName: string, _optionsToExtend: CompilerOptions | undefined, _host: ParseConfigFileHost, _extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, _watchOptionsToExtend?: WatchOptions, _extraFileExtensions?: readonly FileExtensionInfo[]): {
+        configText: string;
+        errors: Diagnostic[];
+    } | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file

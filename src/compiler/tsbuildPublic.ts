@@ -11,6 +11,7 @@ import {
     closeFileWatcher,
     closeFileWatcherOf,
     combinePaths,
+    CommandLineOption,
     commonOptionsWithBuild,
     CompilerHost,
     CompilerOptions,
@@ -324,7 +325,7 @@ export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = Em
 
 function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
     const result = {} as CompilerOptions;
-    commonOptionsWithBuild.forEach(option => {
+    commonOptionsWithBuild.forEach((option: CommandLineOption) => {
         if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];
     });
     return result;

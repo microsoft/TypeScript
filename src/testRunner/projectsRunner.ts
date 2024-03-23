@@ -472,13 +472,13 @@ function createCompilerOptions(testCase: ProjectRunnerTestCase & ts.CompilerOpti
     const optionNameMap = ts.arrayToMap(ts.optionDeclarations, option => option.name);
     for (const name in testCase) {
         if (name !== "mapRoot" && name !== "sourceRoot") {
-            const option = optionNameMap.get(name);
+            const option = optionNameMap.get(name as Parameters<(typeof optionNameMap)["get"]>[0]);
             if (option) {
                 const optType = option.type;
                 let value = testCase[name] as any;
                 if (!ts.isString(optType)) {
                     const key = value.toLowerCase();
-                    const optTypeValue = optType.get(key);
+                    const optTypeValue = optType.get(key as never);
                     if (optTypeValue) {
                         value = optTypeValue;
                     }
