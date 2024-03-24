@@ -18,8 +18,8 @@ declare global {
     }
 }
 const Compa = (x: {x: number}) => <div>{"" + x}</div>;
->Compa : (x: { x: number; }) => JSX.Element
->(x: {x: number}) => <div>{"" + x}</div> : (x: { x: number; }) => JSX.Element
+>Compa : (x: {    x: number;}) => JSX.Element
+>(x: {x: number}) => <div>{"" + x}</div> : (x: {    x: number;}) => JSX.Element
 >x : { x: number; }
 >x : number
 ><div>{"" + x}</div> : JSX.Element

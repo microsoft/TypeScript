@@ -92,7 +92,35 @@ jobs:
             await exec.exec("git", ["config", "user.name", "TypeScript Bot"]);
             await exec.exec("git", ["switch", "--detach", `origin/${TARGET_BRANCH}`]);
             await exec.exec("git", ["switch", "-c", pickBranch]);
-            await exec.exec("git", ["cherry-pick", "-m", "1", pr.data.merge_commit_sha]);
+
+            let updatedBaselinesMessage = "";
+            try {
+              await exec.exec("git", ["cherry-pick", "-m", "1", pr.data.merge_commit_sha]);
+            } catch (e) {
+              console.log(e);
+
+              // The cherry-pick failed. If all of the conflicts are in tests/baselines,
+              // try to run the tests and accept the new baselines.
+
+              await exec.exec("git", ["add", "tests/baselines"]);
+              // This will fail if any other files were modified.
+              await exec.exec("git", ["-c", "core.editor=true", "cherry-pick", "--continue"]);
+
+              await exec.exec("npm", ["ci"]);
+
+              try {
+                await exec.exec("npm", ["test", "--", "--no-lint"]);
+              } catch {
+                // Expected to fail.
+              }
+
+              await exec.exec("npx", ["hereby", "baseline-accept"]);
+              await exec.exec("git", ["add", "tests/baselines"]);
+              await exec.exec("git", ["commit", "-m", "Update baselines"]);
+
+              updatedBaselinesMessage = " This involved updating baselines; please check the diff.";
+            }
+
             await exec.exec("git", ["push", "--force", "--set-upstream", "origin", pickBranch]);
 
             const existingPulls = await github.rest.pulls.list({
@@ -106,7 +134,7 @@ jobs:
             if (existingPulls.data.length === 0) {
               console.log(`No existing PRs found for ${pickBranch}`);
 
-              const body = `This cherry-pick was triggered by a request on #${PR}.\n\nPlease review the diff and merge if no changes are unexpected.`;
+              const body = `This cherry-pick was triggered by a request on #${PR}.\n\nPlease review the diff and merge if no changes are unexpected.${updatedBaselinesMessage}`;
 
               const newPr = await github.rest.pulls.create({
                 owner: context.repo.owner,
@@ -115,11 +143,23 @@ jobs:
                 head: pickBranch,
                 title,
                 body,
+              });
+
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: newPr.data.number,
                 assignees: ["DanielRosenwasser"],
+              });
+
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: newPr.data.number,
                 reviewers: ["DanielRosenwasser", REQUESTING_USER],
               });
 
-              commentBody = `I've created #${newPr.data.number} for you.`;
+              commentBody = `I've created #${newPr.data.number} for you.${updatedBaselinesMessage}`;
             }
             else {
               const existing = existingPulls.data[0];
@@ -132,7 +172,7 @@ jobs:
                 title,
               });
 
-              commentBody = `I've updated #${existing.number} for you.`;
+              commentBody = `I've updated #${existing.number} for you.${updatedBaselinesMessage}`;
             }
 
             return commentBody;

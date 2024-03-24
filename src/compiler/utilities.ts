@@ -1338,6 +1338,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
                 "from",
                 "of",
             ],
+            esnext: [
+                "fromAsync",
+            ],
         })),
         ObjectConstructor: new Map(Object.entries({
             es2015: [
@@ -6517,7 +6520,7 @@ export function identifierIsThisKeyword(id: Identifier): boolean {
 }
 
 /** @internal */
-export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
+export function getAllAccessorDeclarations(declarations: readonly Declaration[] | undefined, accessor: AccessorDeclaration): AllAccessorDeclarations {
     // TODO: GH#18217
     let firstAccessor!: AccessorDeclaration;
     let secondAccessor!: AccessorDeclaration;

@@ -425,12 +425,12 @@ declare module Immutable {
 >value : this
 
     merge(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->merge : (...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+>merge : (...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
 >collections : (Collection<K, V> | { [key: string]: V; })[]
 >key : string
 
     mergeWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->mergeWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+>mergeWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
 >merger : (oldVal: V, newVal: V, key: K) => V
 >oldVal : V
 >newVal : V
@@ -439,12 +439,12 @@ declare module Immutable {
 >key : string
 
     mergeDeep(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->mergeDeep : (...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+>mergeDeep : (...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
 >collections : (Collection<K, V> | { [key: string]: V; })[]
 >key : string
 
     mergeDeepWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
->mergeDeepWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+>mergeDeepWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {    [key: string]: V;}>) => this
 >merger : (oldVal: V, newVal: V, key: K) => V
 >oldVal : V
 >newVal : V
@@ -507,7 +507,7 @@ declare module Immutable {
 >collections : Iterable<[KC, VC]>[]
 
     concat<C>(...collections: Array<{[key: string]: C}>): Map<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Map<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Map<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Map<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): Map<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 
@@ -592,7 +592,7 @@ declare module Immutable {
 >collections : Iterable<[KC, VC]>[]
 
     concat<C>(...collections: Array<{[key: string]: C}>): OrderedMap<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): OrderedMap<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): OrderedMap<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): OrderedMap<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 
@@ -660,7 +660,7 @@ declare module Immutable {
 >iter : Collection<T, any>
 
     function fromKeys(obj: {[key: string]: any}): Set<string>;
->fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: { [key: string]: any; }): Set<string>; }
+>fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: {    [key: string]: any;}): Set<string>; }
 >obj : { [key: string]: any; }
 >key : string
 
@@ -782,7 +782,7 @@ declare module Immutable {
 >iter : Collection<T, any>
 
     function fromKeys(obj: {[key: string]: any}): OrderedSet<string>;
->fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: { [key: string]: any; }): OrderedSet<string>; }
+>fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: {    [key: string]: any;}): OrderedSet<string>; }
 >obj : { [key: string]: any; }
 >key : string
   }
@@ -1104,7 +1104,7 @@ declare module Immutable {
 
       // Conversion to JavaScript types
       toJS(): { [K in keyof T]: any };
->toJS : () => { [K in keyof T]: any; }
+>toJS : () => {    [K in keyof T]: any;}
 
       toJSON(): T;
 >toJSON : () => T
@@ -1163,7 +1163,7 @@ declare module Immutable {
 >Seq : any
 
     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
->Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K_1, V_2>(): Keyed<K_1, V_2>; (): Keyed<any, any>; }
+>Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Keyed<K, V_1>; <V>(obj: {    [key: string]: V;}): Seq.Keyed<string, V>; <K_1, V_2>(): Keyed<K_1, V_2>; (): Keyed<any, any>; }
 >obj : { [key: string]: V; }
 >key : string
 >Seq : any
@@ -1183,7 +1183,7 @@ declare module Immutable {
 >toJS : () => Object
 
       toJSON(): { [key: string]: V };
->toJSON : () => { [key: string]: V; }
+>toJSON : () => {    [key: string]: V;}
 >key : string
 
       toSeq(): this;
@@ -1195,7 +1195,7 @@ declare module Immutable {
 >Seq : any
 
       concat<C>(...collections: Array<{[key: string]: C}>): Seq.Keyed<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Seq.Keyed<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Keyed<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): Seq.Keyed<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 >Seq : any
@@ -1507,7 +1507,7 @@ declare module Immutable {
 >Collection : any
 
     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
->Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
+>Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Keyed<K, V_1>; <V>(obj: {    [key: string]: V;}): Collection.Keyed<string, V>; }
 >obj : { [key: string]: V; }
 >key : string
 >Collection : any
@@ -1517,7 +1517,7 @@ declare module Immutable {
 >toJS : () => Object
 
       toJSON(): { [key: string]: V };
->toJSON : () => { [key: string]: V; }
+>toJSON : () => {    [key: string]: V;}
 >key : string
 
       toSeq(): Seq.Keyed<K, V>;
@@ -1534,7 +1534,7 @@ declare module Immutable {
 >Collection : any
 
       concat<C>(...collections: Array<{[key: string]: C}>): Collection.Keyed<K | string, V | C>;
->concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Collection.Keyed<K | string, V | C>; }
+>concat : { <KC, VC>(...collections: Iterable<[KC, VC]>[]): Keyed<K | KC, V | VC>; <C>(...collections: Array<{    [key: string]: C;}>): Collection.Keyed<K | string, V | C>; }
 >collections : { [key: string]: C; }[]
 >key : string
 >Collection : any
@@ -1882,18 +1882,18 @@ declare module Immutable {
 
     // Conversion to JavaScript types
     toJS(): Array<any> | { [key: string]: any };
->toJS : () => any[] | { [key: string]: any; }
+>toJS : () => Array<any> | {    [key: string]: any;}
 >key : string
 
     toJSON(): Array<V> | { [key: string]: V };
->toJSON : () => V[] | { [key: string]: V; }
+>toJSON : () => Array<V> | {    [key: string]: V;}
 >key : string
 
     toArray(): Array<V>;
 >toArray : () => Array<V>
 
     toObject(): { [key: string]: V };
->toObject : () => { [key: string]: V; }
+>toObject : () => {    [key: string]: V;}
 >key : string
 
     // Conversion to Collections

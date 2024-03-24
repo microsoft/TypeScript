@@ -2,7 +2,7 @@
 
 === contextualTypeOnYield1.ts ===
 type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any, void>)
->FuncOrGeneratorFunc : () => number | Generator<(arg: number) => void, any, void>
+>FuncOrGeneratorFunc : () => (number | Generator<(arg: number) => void, any, void>)
 >arg : number
 
 const f: FuncOrGeneratorFunc = function*() {

@@ -5565,6 +5565,7 @@ declare namespace ts {
     interface FileReference extends TextRange {
         fileName: string;
         resolutionMode?: ResolutionMode;
+        preserve?: boolean;
     }
     interface CheckJsDirective extends TextRange {
         enabled: boolean;
@@ -10352,6 +10353,19 @@ declare namespace ts {
          * when calling `getEditsForRefactor`.
          */
         isInteractive?: boolean;
+        /**
+         * Range of code the refactoring will be applied to.
+         */
+        range?: {
+            start: {
+                line: number;
+                offset: number;
+            };
+            end: {
+                line: number;
+                offset: number;
+            };
+        };
     }
     /**
      * A set of edits to make in response to a refactor action, plus an optional
