@@ -10,6 +10,7 @@
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field 'types/phaser.d.ts' that references '/typings/phaser/types/phaser.d.ts'.",
     "File '/typings/phaser/types/phaser.d.ts' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "Resolving real path for '/typings/phaser/types/phaser.d.ts', result '/typings/phaser/types/phaser.d.ts'.",
     "======== Module name 'phaser' was successfully resolved to '/typings/phaser/types/phaser.d.ts' with Package ID 'phaser/types/phaser.d.ts@1.2.3'. ========",
     "======== Resolving type reference directive 'phaser', containing file '/__inferred type names__.ts', root directory '/typings'. ========",

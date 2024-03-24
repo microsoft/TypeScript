@@ -93,6 +93,7 @@ File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.

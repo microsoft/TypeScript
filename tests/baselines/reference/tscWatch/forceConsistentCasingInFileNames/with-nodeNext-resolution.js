@@ -80,6 +80,7 @@ Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolved under condition 'types'.

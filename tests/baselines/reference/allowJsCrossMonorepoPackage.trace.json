@@ -22,6 +22,7 @@
     "Using 'exports' subpath '.' with target './index.js'.",
     "File name '/packages/main/node_modules/shared/index.js' has a '.js' extension - stripping it.",
     "File '/packages/main/node_modules/shared/index.js' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.",
     "File '/packages/main/package.json' exists according to earlier cached lookups.",
     "Loading module 'shared' from 'node_modules' folder, target file types: TypeScript, Declaration.",

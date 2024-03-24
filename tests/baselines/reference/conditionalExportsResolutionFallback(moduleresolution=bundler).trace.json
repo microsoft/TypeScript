@@ -17,6 +17,7 @@
     "Matched 'exports' condition 'types'.",
     "Using 'exports' subpath '.' with target './dist/index.d.ts'.",
     "File '/node_modules/dep/dist/index.d.ts' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "Resolved under condition 'types'.",
     "Exiting conditional exports.",
     "Resolving real path for '/node_modules/dep/dist/index.d.ts', result '/node_modules/dep/dist/index.d.ts'.",
