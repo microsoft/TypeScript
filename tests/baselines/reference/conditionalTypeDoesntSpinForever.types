@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/conditionalTypeDoesntSpinForever.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 600 / 600 (nearest 100)
+Type Count: 1,400 / 1,600 (nearest 100)
+Instantiation count: 3,500 / 4,000 (nearest 500)
+Symbol count: 28,000 / 28,000 (nearest 500)
+
 === conditionalTypeDoesntSpinForever.ts ===
 // A *self-contained* demonstration of the problem follows...
 // Test this by running `tsc --target es6` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.

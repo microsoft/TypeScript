@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 1,000 / 1,100 (nearest 100)
+Instantiation count: 500 / 500 (nearest 500)
+Symbol count: 5,000 / 5,000 (nearest 500)
+
 === parserharness.ts ===
 //﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.

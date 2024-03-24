@@ -1,5 +1,11 @@
 //// [tests/cases/compiler/normalizedIntersectionTooComplex.ts] ////
 
+=== Performance Stats ===
+Assignability cache: 300 / 300 (nearest 100)
+Type Count: 1,500 / 1,500 (nearest 100)
+Instantiation count: 500 / 500 (nearest 500)
+Symbol count: 25,500 / 25,500 (nearest 500)
+
 === normalizedIntersectionTooComplex.ts ===
 // Repro from #30050
 

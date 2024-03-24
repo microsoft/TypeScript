@@ -31,12 +31,12 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "Document", file: file1.path, projectFileName: configFile.path },
-        }).response as ts.server.protocol.NavtoItem[];
+        });
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
             arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path },
-        }).response as ts.server.protocol.NavtoItem[];
+        });
         baselineTsserverLogs("navTo", "should not include type symbols", session);
     });
 
