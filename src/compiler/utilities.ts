@@ -9858,6 +9858,7 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
     // '/// <reference no-default-lib="true"/>' directive.
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
+        options.noCheck ||
         host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
 }
 

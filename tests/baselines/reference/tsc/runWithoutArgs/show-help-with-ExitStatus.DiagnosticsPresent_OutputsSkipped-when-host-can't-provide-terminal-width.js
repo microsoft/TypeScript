@@ -145,6 +145,11 @@ Disable emitting files from a compilation.
 type: boolean
 default: false
 
+[94m--noCheck[39m
+Disable full type checking (only critical parse and emit errors will be reported).
+type: boolean
+default: false
+
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean
