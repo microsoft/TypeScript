@@ -5,7 +5,7 @@ type Keys = "a" | "b";
 >Keys : "a" | "b"
 
 type OptionsForKey = { a: { cb: (p: number) => number } } & { b: {} };
->OptionsForKey : { a: { cb: (p: number) => number; }; } & { b: {}; }
+>OptionsForKey : { a: {    cb: (p: number) => number;}; } & { b: {}; }
 >a : { cb: (p: number) => number; }
 >cb : (p: number) => number
 >p : number

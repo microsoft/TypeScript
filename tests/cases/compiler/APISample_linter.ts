@@ -2,6 +2,7 @@
 // @skipLibCheck: true
 // @noImplicitAny:true
 // @strictNullChecks:true
+// @noTypesAndSymbols: true
 
 // @filename: node_modules/typescript/package.json
 {

@@ -66,7 +66,7 @@ export function getVar(): keyof typeof variable {
                 include: ["./nominal.ts"],
             }),
             "/src/solution/src/common/nominal.ts": dedent`
-/// <reference path="./types.d.ts" />
+/// <reference path="./types.d.ts" preserve="true" />
 export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;`,
             "/src/solution/src/common/types.d.ts": dedent`
 declare type MyNominal<T, Name extends string> = T & {
@@ -135,44 +135,44 @@ export function fn4() {
             }),
         commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"],
     });
-});
 
-verifyTsc({
-    scenario: "declarationEmit",
-    subScenario: "reports dts generation errors with incremental",
-    commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "--v"],
-    fs: () =>
-        loadProjectFromFiles({
-            "/src/project/tsconfig.json": jsonToReadableText({
-                compilerOptions: {
-                    module: "NodeNext",
-                    moduleResolution: "NodeNext",
-                    incremental: true,
-                    declaration: true,
-                    skipLibCheck: true,
-                    skipDefaultLibCheck: true,
-                },
-            }),
-            "/src/project/index.ts": dedent`
+    verifyTsc({
+        scenario: "declarationEmit",
+        subScenario: "reports dts generation errors with incremental",
+        commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "--v"],
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        module: "NodeNext",
+                        moduleResolution: "NodeNext",
+                        incremental: true,
+                        declaration: true,
+                        skipLibCheck: true,
+                        skipDefaultLibCheck: true,
+                    },
+                }),
+                "/src/project/index.ts": dedent`
                     import ky from 'ky';
                     export const api = ky.extend({});
                 `,
-            "/src/project/package.json": jsonToReadableText({
-                type: "module",
-            }),
-            "/src/project/node_modules/ky/distribution/index.d.ts": dedent`
+                "/src/project/package.json": jsonToReadableText({
+                    type: "module",
+                }),
+                "/src/project/node_modules/ky/distribution/index.d.ts": dedent`
                    type KyInstance = {
                         extend(options: Record<string,unknown>): KyInstance;
                     }
                     declare const ky: KyInstance;
                     export default ky;
                 `,
-            "/src/project/node_modules/ky/package.json": jsonToReadableText({
-                name: "ky",
-                type: "module",
-                main: "./distribution/index.js",
+                "/src/project/node_modules/ky/package.json": jsonToReadableText({
+                    name: "ky",
+                    type: "module",
+                    main: "./distribution/index.js",
+                }),
+                "/lib/lib.esnext.full.d.ts": libContent,
             }),
-            "/lib/lib.esnext.full.d.ts": libContent,
-        }),
-    edits: noChangeOnlyRuns,
+        edits: noChangeOnlyRuns,
+    });
 });

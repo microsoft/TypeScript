@@ -6,7 +6,7 @@
         "subfolder/b.ts",
         "subfolder/c.ts"
     ],
-    "out": "out.js",
+    "outFile": "out.js",
     "declaration": true,
     "declarationDir": "declarations",
     "baselineCheck": true,

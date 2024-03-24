@@ -15,8 +15,6 @@ var x: string = alpha.a + beta.b;
 
 
 === /test/types/alpha/index.d.ts ===
-// Don't crash in circular library reference situations
-
 /// <reference types="beta" />
 declare var alpha: { a: string };
 >alpha : { a: string; }

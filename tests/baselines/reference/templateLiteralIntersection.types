@@ -18,7 +18,7 @@ type OriginA1 = `${A}`
 >OriginA1 : "a"
 
 type OriginA2 = `${MixA}`
->OriginA2 : `${MixA}`
+>OriginA2 : MixA
 
 type B = `${typeof a}`
 >B : "a"
@@ -32,23 +32,23 @@ type OriginB1 = `${B}`
 >OriginB1 : "a"
 
 type OriginB2 = `${MixB}`
->OriginB2 : `${MixB}`
+>OriginB2 : MixB
 
 type MixC = { foo: string } & A
 >MixC : { foo: string; } & "a"
 >foo : string
 
 type OriginC = `${MixC}`
->OriginC : `${MixC}`
+>OriginC : MixC
 
 type MixD<T extends string> =
->MixD : `${T & { foo: string; }}`
+>MixD : T & { foo: string; }
 
     `${T & { foo: string }}`
 >foo : string
 
 type OriginD = `${MixD<A & { foo: string }> & { foo: string }}`;
->OriginD : `${`${"a" & { foo: string; } & { foo: string; }}` & { foo: string; }}`
+>OriginD : "a" & { foo: string; } & { foo: string; } & { foo: string; }
 >foo : string
 >foo : string
 

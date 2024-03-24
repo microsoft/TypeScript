@@ -136,7 +136,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -191,7 +191,6 @@ declare let y: number;
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "./commonfile1.ts",
       "./commonfile2.ts",
@@ -200,7 +199,7 @@ declare let y: number;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 909
+  "size": 885
 }
 
 //// [/a/b/other.js]
@@ -212,7 +211,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -252,7 +251,6 @@ declare let z: number;
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "./other.ts",
       "../lib/lib.d.ts"
@@ -260,7 +258,7 @@ declare let z: number;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 766
+  "size": 742
 }
 
 //// [/a/b/other2.js]
@@ -404,7 +402,7 @@ var y = 1;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"strict":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -460,7 +458,6 @@ var y = 1;
       "strict": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "./commonfile1.ts",
       "./commonfile2.ts",
@@ -469,7 +466,7 @@ var y = 1;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 923
+  "size": 899
 }
 
 
@@ -525,7 +522,7 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -566,7 +563,6 @@ var z = 0;
       "strict": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "./other.ts",
       "../lib/lib.d.ts"
@@ -574,7 +570,7 @@ var z = 0;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 780
+  "size": 756
 }
 
 
@@ -637,7 +633,7 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":false},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":false},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -678,7 +674,6 @@ var z = 0;
       "strict": false
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "./other.ts",
       "../lib/lib.d.ts"
@@ -686,7 +681,7 @@ var z = 0;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 781
+  "size": 757
 }
 
 
@@ -854,7 +849,7 @@ var y = 1;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,3,1],"latestChangedDtsFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -909,7 +904,6 @@ var y = 1;
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "./commonfile1.ts",
       "./commonfile2.ts",
@@ -918,7 +912,7 @@ var y = 1;
     "latestChangedDtsFile": "./commonFile2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 909
+  "size": 885
 }
 
 
