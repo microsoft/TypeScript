@@ -3,20 +3,19 @@
 //// [autoAccessorDisallowedModifiers.ts]
 abstract class C1 {
     accessor accessor a: any;
-    readonly accessor b: any;
-    declare accessor c: any;
-    accessor public d: any;
-    accessor private e: any;
-    accessor protected f: any;
-    accessor abstract g: any;
-    accessor static h: any;
-    accessor i() {}
-    accessor get j() { return false; }
-    accessor set k(v: any) {}
+    declare accessor b: any;
+    accessor public c: any;
+    accessor private d: any;
+    accessor protected e: any;
+    accessor abstract f: any;
+    accessor static g: any;
+    accessor h() {}
+    accessor get i() { return false; }
+    accessor set j(v: any) {}
     accessor constructor() {}
-    accessor l?: any;
-    accessor readonly m: any;
-    accessor declare n: any;
+    accessor k?: any;
+    accessor readonly l: any;
+    accessor declare m: any;
 }
 
 class C2 extends C1 {
@@ -44,17 +43,16 @@ accessor import N2 = N1;
 //// [autoAccessorDisallowedModifiers.js]
 class C1 {
     accessor accessor a;
-    accessor b;
+    accessor c;
     accessor d;
     accessor e;
-    accessor f;
-    accessor static h;
-    accessor i() { }
-    accessor get j() { return false; }
-    accessor set k(v) { }
+    accessor static g;
+    accessor h() { }
+    accessor get i() { return false; }
+    accessor set j(v) { }
     constructor() { }
+    accessor k;
     accessor l;
-    accessor m;
 }
 class C2 extends C1 {
     accessor g;

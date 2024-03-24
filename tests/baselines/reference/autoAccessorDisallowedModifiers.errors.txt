@@ -1,20 +1,22 @@
 autoAccessorDisallowedModifiers.ts(2,14): error TS1030: 'accessor' modifier already seen.
-autoAccessorDisallowedModifiers.ts(3,14): error TS1243: 'accessor' modifier cannot be used with 'readonly' modifier.
-autoAccessorDisallowedModifiers.ts(4,13): error TS1243: 'accessor' modifier cannot be used with 'declare' modifier.
-autoAccessorDisallowedModifiers.ts(5,14): error TS1029: 'public' modifier must precede 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(6,14): error TS1029: 'private' modifier must precede 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(7,14): error TS1029: 'protected' modifier must precede 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(8,14): error TS1029: 'abstract' modifier must precede 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(9,14): error TS1029: 'static' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(3,13): error TS1243: 'accessor' modifier cannot be used with 'declare' modifier.
+autoAccessorDisallowedModifiers.ts(4,14): error TS1029: 'public' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(5,14): error TS1029: 'private' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(6,14): error TS1029: 'protected' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(7,14): error TS1029: 'abstract' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(8,14): error TS1029: 'static' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(9,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(10,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(11,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(12,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
-autoAccessorDisallowedModifiers.ts(13,5): error TS1275: 'accessor' modifier can only appear on a property declaration.
-autoAccessorDisallowedModifiers.ts(14,15): error TS1276: An 'accessor' property cannot be declared optional.
-autoAccessorDisallowedModifiers.ts(15,14): error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(16,14): error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(20,14): error TS1029: 'override' modifier must precede 'accessor' modifier.
-autoAccessorDisallowedModifiers.ts(24,5): error TS1070: 'accessor' modifier cannot appear on a type member.
+autoAccessorDisallowedModifiers.ts(13,15): error TS1276: An 'accessor' property cannot be declared optional.
+autoAccessorDisallowedModifiers.ts(14,14): error TS1029: 'readonly' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(15,14): error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(18,7): error TS18052: Non-abstract class 'C2' does not implement all abstract members of 'C1'
+autoAccessorDisallowedModifiers.ts(19,14): error TS1029: 'override' modifier must precede 'accessor' modifier.
+autoAccessorDisallowedModifiers.ts(19,23): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'C1'.
+autoAccessorDisallowedModifiers.ts(23,5): error TS1070: 'accessor' modifier cannot appear on a type member.
+autoAccessorDisallowedModifiers.ts(26,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(27,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(28,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(29,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
@@ -23,66 +25,67 @@ autoAccessorDisallowedModifiers.ts(31,1): error TS1275: 'accessor' modifier can 
 autoAccessorDisallowedModifiers.ts(32,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(33,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(34,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
+autoAccessorDisallowedModifiers.ts(34,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 autoAccessorDisallowedModifiers.ts(35,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
-autoAccessorDisallowedModifiers.ts(35,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 autoAccessorDisallowedModifiers.ts(36,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(37,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
-autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 
 
-==== autoAccessorDisallowedModifiers.ts (30 errors) ====
+==== autoAccessorDisallowedModifiers.ts (31 errors) ====
     abstract class C1 {
         accessor accessor a: any;
                  ~~~~~~~~
 !!! error TS1030: 'accessor' modifier already seen.
-        readonly accessor b: any;
-                 ~~~~~~~~
-!!! error TS1243: 'accessor' modifier cannot be used with 'readonly' modifier.
-        declare accessor c: any;
+        declare accessor b: any;
                 ~~~~~~~~
 !!! error TS1243: 'accessor' modifier cannot be used with 'declare' modifier.
-        accessor public d: any;
+        accessor public c: any;
                  ~~~~~~
 !!! error TS1029: 'public' modifier must precede 'accessor' modifier.
-        accessor private e: any;
+        accessor private d: any;
                  ~~~~~~~
 !!! error TS1029: 'private' modifier must precede 'accessor' modifier.
-        accessor protected f: any;
+        accessor protected e: any;
                  ~~~~~~~~~
 !!! error TS1029: 'protected' modifier must precede 'accessor' modifier.
-        accessor abstract g: any;
+        accessor abstract f: any;
                  ~~~~~~~~
 !!! error TS1029: 'abstract' modifier must precede 'accessor' modifier.
-        accessor static h: any;
+        accessor static g: any;
                  ~~~~~~
 !!! error TS1029: 'static' modifier must precede 'accessor' modifier.
-        accessor i() {}
+        accessor h() {}
         ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
-        accessor get j() { return false; }
+        accessor get i() { return false; }
         ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
-        accessor set k(v: any) {}
+        accessor set j(v: any) {}
         ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
         accessor constructor() {}
         ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
-        accessor l?: any;
+        accessor k?: any;
                   ~
 !!! error TS1276: An 'accessor' property cannot be declared optional.
-        accessor readonly m: any;
+        accessor readonly l: any;
                  ~~~~~~~~
-!!! error TS1243: 'readonly' modifier cannot be used with 'accessor' modifier.
-        accessor declare n: any;
+!!! error TS1029: 'readonly' modifier must precede 'accessor' modifier.
+        accessor declare m: any;
                  ~~~~~~~
 !!! error TS1243: 'declare' modifier cannot be used with 'accessor' modifier.
     }
     
     class C2 extends C1 {
+          ~~
+!!! error TS18052: Non-abstract class 'C2' does not implement all abstract members of 'C1'
+!!! related TS2515 autoAccessorDisallowedModifiers.ts:7:23: Non-abstract class 'C2' does not implement inherited abstract member 'f' from class 'C1'.
         accessor override g: any;
                  ~~~~~~~~
 !!! error TS1029: 'override' modifier must precede 'accessor' modifier.
+                          ~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'C1'.
     }
     
     interface I1 {

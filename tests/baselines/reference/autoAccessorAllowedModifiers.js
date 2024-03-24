@@ -16,6 +16,7 @@ abstract class C1 {
     accessor 108: any;
     accessor ["m"]: any;
     accessor n!: number;
+    readonly accessor o: any;
 }
 
 class C2 extends C1 {
@@ -44,6 +45,7 @@ class C1 {
     accessor 108;
     accessor ["m"];
     accessor n;
+    accessor o;
 }
 class C2 extends C1 {
     accessor e;
