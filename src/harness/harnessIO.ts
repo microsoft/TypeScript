@@ -370,7 +370,7 @@ export namespace Compiler {
         fileOptions?: any;
     }
 
-    export type CompileFilesResult = compiler.CompilationResult & { repeat(newOptions: ts.CompilerOptions): CompileFilesResult };
+    export type CompileFilesResult = compiler.CompilationResult & { repeat(newOptions: TestCaseParser.CompilerSettings): CompileFilesResult };
 
     export function compileFiles(
         inputFiles: TestFile[],
@@ -381,6 +381,7 @@ export namespace Compiler {
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet,
     ): CompileFilesResult {
+        const originalCurrentDirectory = currentDirectory;
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
         options.noErrorTruncation = true;
@@ -429,7 +430,7 @@ export namespace Compiler {
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
-        (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, harnessSettings, {...compilerOptions, ...newOptions}, currentDirectory, symlinks);
+        (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, {...harnessSettings, ...newOptions}, compilerOptions, originalCurrentDirectory, symlinks);
         return result as CompileFilesResult;
     }
 
@@ -975,7 +976,7 @@ export namespace Compiler {
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
         else if (!options.noCheck && !options.noEmit) {
-            const withoutChecking = result.repeat({noCheck: true});
+            const withoutChecking = result.repeat({noCheck: "true"});
             compareResultFileSets(withoutChecking.dts, result.dts);
         }
 
