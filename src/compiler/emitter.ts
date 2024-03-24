@@ -845,8 +845,8 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if (emitOnly && !getEmitDeclarations(compilerOptions)) {
-            // Checker wont collect the linked aliases since thats only done when declaration is enabled.
+        if ((emitOnly && !getEmitDeclarations(compilerOptions)) || compilerOptions.noCheck) {
+            // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
             // Do that here when emitting only dts files
             filesForEmit.forEach(collectLinkedAliases);
         }

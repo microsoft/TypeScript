@@ -370,6 +370,8 @@ export namespace Compiler {
         fileOptions?: any;
     }
 
+    export type CompileFilesResult = compiler.CompilationResult & { repeat(newOptions: ts.CompilerOptions): CompileFilesResult };
+
     export function compileFiles(
         inputFiles: TestFile[],
         otherFiles: TestFile[],
@@ -378,7 +380,7 @@ export namespace Compiler {
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet,
-    ): compiler.CompilationResult {
+    ): CompileFilesResult {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
         options.noErrorTruncation = true;
@@ -427,7 +429,8 @@ export namespace Compiler {
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
-        return result;
+        (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, harnessSettings, {...compilerOptions, ...newOptions}, currentDirectory, symlinks);
+        return result as CompileFilesResult;
     }
 
     export interface DeclarationCompilationContext {
@@ -919,7 +922,7 @@ export namespace Compiler {
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
     }
 
-    export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
+    export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompileFilesResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
         if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
             throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
         }
@@ -971,9 +974,27 @@ export namespace Compiler {
             jsCode += "\r\n\r\n";
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
+        else if (!options.noCheck && !options.noEmit) {
+            const withoutChecking = result.repeat({noCheck: true});
+            compareResultFileSets(withoutChecking.dts, result.dts);
+        }
 
         // eslint-disable-next-line no-null/no-null
         Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
+
+        function compareResultFileSets(a: ReadonlyMap<string, documents.TextDocument>, b: ReadonlyMap<string, documents.TextDocument>) {
+            a.forEach((doc, key) => {
+                const original = b.get(key);
+                if (!original) {
+                    jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} missing from original emit, but present in noCheck emit\r\n`;
+                    jsCode += fileOutput(doc, harnessSettings);
+                }
+                else if (original.text !== doc.text) {
+                    jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} differs from original emit in noCheck emit\r\n`;
+                    jsCode += fileOutput(doc, harnessSettings);
+                }
+            });
+        }
     }
 
     function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
