@@ -2,7 +2,7 @@
 
 === /index.ts ===
 
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends RequireInterface {}
 === /node_modules/pkg/require.d.ts ===
 export {};

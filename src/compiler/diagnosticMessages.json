@@ -7976,5 +7976,13 @@
     "'await using' statements cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18054
+    },
+    "'{0}' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18055
+    },
+    "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18056
     }
 }

@@ -7,7 +7,7 @@ interface JQuery {
 }
 
 // @filename: /a/app.ts
-/// <reference types="jquery"/>
+/// <reference types="jquery" preserve="true" />
 namespace Test {
     export var x: JQuery;
 }

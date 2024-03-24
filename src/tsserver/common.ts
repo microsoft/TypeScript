@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "../typescript/typescript";
 
 /** @internal */
 export function getLogLevel(level: string | undefined) {

@@ -8,7 +8,7 @@ namespace My.Internal {
 }
 
 // @filename: usage.ts
-/// <reference path="./internal.ts" />
+/// <reference path="./internal.ts" preserve="true" />
 namespace SomeOther.Thing {
     import Internal = My.Internal;
     export class Foo {

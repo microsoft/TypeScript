@@ -24,8 +24,6 @@ exports.bar = (0, mod1_1.foo)();
 
 
 //// [mod1.d.ts]
-/// <reference types="lib" />
 export declare function foo(): Lib;
 //// [mod2.d.ts]
-/// <reference types="lib" />
 export declare const bar: Lib;

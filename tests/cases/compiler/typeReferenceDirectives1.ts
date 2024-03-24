@@ -8,7 +8,7 @@
 interface $ { x }
 
 // @filename: /app.ts
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 interface A {
     x: $
 }

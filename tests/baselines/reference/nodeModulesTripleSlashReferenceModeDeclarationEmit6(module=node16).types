@@ -20,7 +20,7 @@ declare global {
 >getInterR : () => RequireInterface
 }
 === /uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 >getInterR() : RequireInterface
 >getInterR : () => RequireInterface

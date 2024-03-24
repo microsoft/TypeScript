@@ -13,7 +13,7 @@ interface $ { x }
 declare let $: { x: number }
 
 // @filename: /app.ts
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 /// <reference path="ref.d.ts" />
 interface A {
     x: () => $

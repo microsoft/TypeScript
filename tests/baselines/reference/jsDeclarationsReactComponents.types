@@ -7,7 +7,7 @@ Instantiation count: 89,500 / 89,500 (nearest 500)
 Symbol count: 66,500 / 66,500 (nearest 500)
 
 === jsDeclarationsReactComponents1.jsx ===
-/// <reference path="react16.d.ts" />
+/// <reference path="react16.d.ts" preserve="true" />
 import React from "react";
 >React : typeof React
 

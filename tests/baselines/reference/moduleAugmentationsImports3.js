@@ -23,7 +23,7 @@ declare module "D" {
 }
 
 //// [e.ts]
-/// <reference path="c.d.ts"/>
+/// <reference path="c.d.ts" preserve="true"/>
 import {A} from "./a";
 import {Cls} from "C";
 
@@ -84,8 +84,7 @@ define("main", ["require", "exports", "D", "e"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="c.d.ts" />
-/// <reference path="d.d.ts" />
+/// <reference path="c.d.ts" preserve="true" />
 declare module "a" {
     export class A {
     }

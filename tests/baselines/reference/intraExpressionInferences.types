@@ -620,7 +620,7 @@ example({
 // Repro from #45255
 
 declare const branch:
->branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
+>branch : <T, U extends T>(_: {    test: T;    if: (t: T) => t is U;    then: (u: U) => void;}) => void
 
   <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
 >_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }

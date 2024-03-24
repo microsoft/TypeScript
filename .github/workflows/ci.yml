@@ -57,8 +57,13 @@ jobs:
       - run: npm ci
 
       - name: Tests
+        id: test
         # run tests, but lint separately
         run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+
+      - name: Print baseline diff on failure
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        run: git diff --diff-filter=AM --no-index -- ./tests/baselines/reference ./tests/baselines/local
 
   lint:
     runs-on: ubuntu-latest

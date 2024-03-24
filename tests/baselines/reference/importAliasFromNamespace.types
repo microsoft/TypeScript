@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importAliasFromNamespace.ts] ////
 
 === usage.ts ===
-/// <reference path="./internal.ts" />
+/// <reference path="./internal.ts" preserve="true" />
 namespace SomeOther.Thing {
 >SomeOther : typeof SomeOther
 >Thing : typeof Thing

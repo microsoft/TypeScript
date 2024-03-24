@@ -24,7 +24,5 @@ var y = function () { return x; };
 
 
 //// [app.d.ts]
-/// <reference path="ref.d.ts" />
-/// <reference types="lib" />
 declare let x: $;
 declare let y: () => $;

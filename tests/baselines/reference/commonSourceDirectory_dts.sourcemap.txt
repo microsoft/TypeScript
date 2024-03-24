@@ -11,13 +11,13 @@ sourceFile:index.ts
 >>>"use strict";
 >>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>exports.x = void 0;
->>>/// <reference path="../lib/bar.d.ts" />
+>>>/// <reference path="../lib/bar.d.ts" preserve="true" />
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >/// <reference path="../lib/bar.d.ts" />
+2 >/// <reference path="../lib/bar.d.ts" preserve="true" />
 1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(4, 41) Source(1, 41) + SourceIndex(0)
+2 >Emitted(4, 57) Source(1, 57) + SourceIndex(0)
 ---
 >>>exports.x = y;
 1 >

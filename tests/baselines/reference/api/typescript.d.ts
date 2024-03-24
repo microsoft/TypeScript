@@ -5565,6 +5565,7 @@ declare namespace ts {
     interface FileReference extends TextRange {
         fileName: string;
         resolutionMode?: ResolutionMode;
+        preserve?: boolean;
     }
     interface CheckJsDirective extends TextRange {
         enabled: boolean;

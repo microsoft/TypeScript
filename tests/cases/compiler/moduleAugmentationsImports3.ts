@@ -25,7 +25,7 @@ declare module "D" {
 }
 
 // @filename: e.ts
-/// <reference path="c.d.ts"/>
+/// <reference path="c.d.ts" preserve="true"/>
 import {A} from "./a";
 import {Cls} from "C";
 

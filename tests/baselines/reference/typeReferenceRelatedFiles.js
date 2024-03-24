@@ -29,6 +29,5 @@ function f() {
 
 
 //// [main.d.ts]
-/// <reference types="node" />
 import { FSWatcher } from "fs";
 export declare function f(): FSWatcher;

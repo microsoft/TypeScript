@@ -39,13 +39,13 @@ declare global {
 >getInterR : () => RequireInterface
 }
 === /sub1/uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 >getInterI() : ImportInterface
 >getInterI : () => ImportInterface
 
 === /sub2/uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 >getInterR() : RequireInterface
 >getInterR : () => RequireInterface
