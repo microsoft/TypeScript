@@ -144,17 +144,17 @@ declare const console: { log(msg: any): void; };
 /a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
-[[90m12:00:45 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:46 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * tsconfig.json
 
-[[90m12:00:47 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:48 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 [96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
@@ -207,15 +207,15 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:00:59 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90mHH:MM:SS AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:01:00 AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
 
-[[90m12:01:01 AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
+[[90mHH:MM:SS AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
 
-[[90m12:01:02 AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
 
-[[90m12:01:03 AM[0m] Found 7 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 7 errors. Watching for file changes.
 
 
 
@@ -456,11 +456,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:07 AM[0m] Project 'core/tsconfig.json' is out of date because buildinfo file 'lib/core/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because buildinfo file 'lib/core/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:01:08 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 [96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
@@ -513,7 +513,7 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:01:16 AM[0m] Found 7 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 7 errors. Watching for file changes.
 
 
 
