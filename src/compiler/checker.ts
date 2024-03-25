@@ -2838,7 +2838,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const container = findAncestor(usage, n =>
                     n === declaration ? "quit" :
                         isComputedPropertyName(n) ? n.parent.parent === declaration :
-                        isDecorator(n) && (n.parent === declaration ||
+                        !legacyDecorators && isDecorator(n) && (n.parent === declaration ||
                             isMethodDeclaration(n.parent) && n.parent.parent === declaration ||
                             isGetOrSetAccessorDeclaration(n.parent) && n.parent.parent === declaration ||
                             isPropertyDeclaration(n.parent) && n.parent.parent === declaration ||
@@ -2846,7 +2846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!container) {
                     return true;
                 }
-                if (isDecorator(container)) {
+                if (!legacyDecorators && isDecorator(container)) {
                     return !!findAncestor(usage, n => n === container ? "quit" : isFunctionLike(n) && !getImmediatelyInvokedFunctionExpression(n));
                 }
                 return false;
