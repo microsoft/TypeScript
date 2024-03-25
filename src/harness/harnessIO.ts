@@ -370,7 +370,7 @@ export namespace Compiler {
         fileOptions?: any;
     }
 
-    export type CompileFilesResult = compiler.CompilationResult & { repeat(newOptions: TestCaseParser.CompilerSettings): CompileFilesResult };
+    export type CompileFilesResult = compiler.CompilationResult & { repeat(newOptions: TestCaseParser.CompilerSettings): CompileFilesResult; };
 
     export function compileFiles(
         inputFiles: TestFile[],
@@ -430,7 +430,7 @@ export namespace Compiler {
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
-        (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, {...harnessSettings, ...newOptions}, compilerOptions, originalCurrentDirectory, symlinks);
+        (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, { ...harnessSettings, ...newOptions }, compilerOptions, originalCurrentDirectory, symlinks);
         return result as CompileFilesResult;
     }
 
@@ -976,7 +976,7 @@ export namespace Compiler {
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
         else if (!options.noCheck && !options.noEmit && (options.composite || options.declaration || options.emitDeclarationOnly)) {
-            const withoutChecking = result.repeat({noCheck: "true", emitDeclarationOnly: "true"});
+            const withoutChecking = result.repeat({ noCheck: "true", emitDeclarationOnly: "true" });
             compareResultFileSets(withoutChecking.dts, result.dts);
         }
 
