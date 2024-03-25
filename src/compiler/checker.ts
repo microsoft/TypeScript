@@ -2838,7 +2838,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const container = findAncestor(usage, n =>
                     n === declaration ? "quit" :
                         isComputedPropertyName(n) ? n.parent.parent === declaration :
-                        isDecorator(n) && (n.parent === declaration ||
+                        !legacyDecorators && isDecorator(n) && (n.parent === declaration ||
                             isMethodDeclaration(n.parent) && n.parent.parent === declaration ||
                             isGetOrSetAccessorDeclaration(n.parent) && n.parent.parent === declaration ||
                             isPropertyDeclaration(n.parent) && n.parent.parent === declaration ||
@@ -2846,7 +2846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!container) {
                     return true;
                 }
-                if (isDecorator(container)) {
+                if (!legacyDecorators && isDecorator(container)) {
                     return !!findAncestor(usage, n => n === container ? "quit" : isFunctionLike(n) && !getImmediatelyInvokedFunctionExpression(n));
                 }
                 return false;
@@ -29816,12 +29816,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.EnumDeclaration:
                     error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
                     // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-                    break;
-                case SyntaxKind.Constructor:
-                    if (isInConstructorArgumentInitializer(node, container)) {
-                        error(node, Diagnostics.this_cannot_be_referenced_in_constructor_arguments);
-                        // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-                    }
                     break;
             }
         }

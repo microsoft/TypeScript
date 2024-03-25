@@ -737,7 +737,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             cleanupLibResolutionWatching(newProgram);
             newProgram?.getSourceFiles().forEach(newFile => {
                 const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
-                const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
+                const existing = impliedFormatPackageJsons.get(newFile.resolvedPath) ?? emptyArray;
                 for (let i = existing.length; i < expected; i++) {
                     createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
                 }
@@ -746,8 +746,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                         fileWatchesOfAffectingLocations.get(existing[i])!.files--;
                     }
                 }
-                if (expected) impliedFormatPackageJsons.set(newFile.path, newFile.packageJsonLocations!);
-                else impliedFormatPackageJsons.delete(newFile.path);
+                if (expected) impliedFormatPackageJsons.set(newFile.resolvedPath, newFile.packageJsonLocations!);
+                else impliedFormatPackageJsons.delete(newFile.resolvedPath);
             });
             impliedFormatPackageJsons.forEach((existing, path) => {
                 if (!newProgram?.getSourceFileByPath(path)) {
