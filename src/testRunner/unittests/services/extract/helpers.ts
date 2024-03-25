@@ -1,9 +1,9 @@
 import {
-    incrementalVerifier,
-} from "../../../../harness/incrementalUtils";
-import {
     createHasErrorMessageLogger,
 } from "../../../../harness/tsserverLogger";
+import {
+    incrementalVerifier,
+} from "../../../../incrementalVerifier/verifier";
 import * as Harness from "../../../_namespaces/Harness";
 import * as ts from "../../../_namespaces/ts";
 import {

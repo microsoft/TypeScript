@@ -8,6 +8,7 @@ import {
     FileWatcher,
     getDirectoryPath,
     getRootLength,
+    incrementalVerifier,
     LanguageServiceMode,
     MapLike,
     noop,
@@ -30,7 +31,6 @@ import {
     StartInput,
     StartSessionOptions,
 } from "./common";
-
 interface LogOptions {
     file?: string;
     detailLevel?: ts.server.LogLevel;
@@ -589,6 +589,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
                 logger,
                 canUseEvents: true,
                 typesMapLocation,
+                incrementalVerifier: withIncrementalVerifier ? incrementalVerifier : undefined,
             });
 
             this.eventPort = eventPort;
@@ -689,6 +690,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
     const validateDefaultNpmLocation = ts.server.hasArgument(ts.server.Arguments.ValidateDefaultNpmLocation);
     const disableAutomaticTypingAcquisition = ts.server.hasArgument("--disableAutomaticTypingAcquisition");
     const useNodeIpc = ts.server.hasArgument("--useNodeIpc");
+    const withIncrementalVerifier = ts.server.hasArgument("--withIncrementalVerifier");
     const telemetryEnabled = ts.server.hasArgument(ts.server.Arguments.EnableTelemetry);
     const commandLineTraceDir = ts.server.findArgument("--traceDirectory");
     const traceDir = commandLineTraceDir
