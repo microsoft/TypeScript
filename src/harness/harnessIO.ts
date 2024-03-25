@@ -975,8 +975,8 @@ export namespace Compiler {
             jsCode += "\r\n\r\n";
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
-        else if (!options.noCheck && !options.noEmit) {
-            const withoutChecking = result.repeat({noCheck: "true"});
+        else if (!options.noCheck && !options.noEmit && (options.composite || options.declaration || options.emitDeclarationOnly)) {
+            const withoutChecking = result.repeat({noCheck: "true", emitDeclarationOnly: "true"});
             compareResultFileSets(withoutChecking.dts, result.dts);
         }
 
