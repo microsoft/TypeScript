@@ -1546,6 +1546,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/sample1/core/package.json:
   {"pollingInterval":2000}
+/user/username/projects/sample1/logic/decls/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/sample1/logic/package.json:
   {"pollingInterval":2000}
 /user/username/projects/sample1/node_modules/@types:
