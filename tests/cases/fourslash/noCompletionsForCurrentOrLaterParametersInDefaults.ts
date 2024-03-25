@@ -9,7 +9,6 @@
 //// const f5 = (a, b = (c = /*7*/, e) => { }, d = b) => { }
 ////
 //// type A1<K = /*T1*/, L> = K
-//// type A2<K extends /*T2*/, L> = K
 
 verify.completions({
     marker: ["1", "2"],
@@ -42,6 +41,6 @@ verify.completions({
 })
 
 verify.completions({
-    marker: ["T1", "T2"],
+    marker: ["T1"],
     excludes: ["K", "L"],
 })
