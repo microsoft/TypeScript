@@ -29815,12 +29815,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
                     // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     break;
-                case SyntaxKind.Constructor:
-                    if (isInConstructorArgumentInitializer(node, container)) {
-                        error(node, Diagnostics.this_cannot_be_referenced_in_constructor_arguments);
-                        // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-                    }
-                    break;
             }
         }
 
