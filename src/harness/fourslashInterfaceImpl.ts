@@ -239,6 +239,10 @@ export class VerifyNegatable {
     public uncommentSelection(newFileContent: string) {
         this.state.uncommentSelection(newFileContent);
     }
+
+    public mapCode(newFileContent: Record<string, string>, mappings: ts.MapCodeDocumentMapping[], updates?: ts.FileTextChanges[]): void {
+        this.state.mapCode(newFileContent, mappings, updates);
+    }
 }
 
 export class Verify extends VerifyNegatable {

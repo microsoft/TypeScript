@@ -4507,6 +4507,15 @@ export class TestState {
 
         this.verifyCurrentFileContent(newFileContent);
     }
+
+    public mapCode(newFileContent: Record<string, string>, mappings: ts.MapCodeDocumentMapping[], updates?: ts.FileTextChanges[]): void {
+        for (const ftx of this.languageService.mapCode(mappings, this.formatCodeSettings, {}, updates)) {
+            this.applyEdits(ftx.fileName, ftx.textChanges);
+        }
+        for (const [fileName, newContent] of Object.entries(newFileContent)) {
+            this.verifyFileContent(fileName, newContent);
+        }
+    }
 }
 
 function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {

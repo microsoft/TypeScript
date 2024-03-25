@@ -212,6 +212,20 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
+    export interface TextChange {
+        span: TextSpan;
+        newText: string;
+    }
+    export interface FileTextChanges {
+        fileName: string;
+        textChanges: readonly TextChange[];
+        isNewFile?: boolean;
+    }
+    export interface MapCodeDocumentMapping {
+        fileName?: string;
+        focusLocations?: TextSpan[][];
+        contents: string[];
+    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -444,6 +458,7 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        mapCode(newFileContent: Record<string, string>, mappings: MapCodeDocumentMapping[], updates?: FileTextChanges[]): void
     }
     class edit {
         caretPosition(): Marker;
