@@ -215,6 +215,7 @@ import {
     maybeBind,
     memoize,
     MethodDeclaration,
+    missingFileModifiedTime,
     ModeAwareCache,
     ModeAwareCacheKey,
     ModifierFlags,
@@ -510,6 +511,7 @@ export function changeCompilerHostLikeToUseCache(
     host: CompilerHostLikeForCache,
     toPath: (fileName: string) => Path,
     getSourceFile?: CompilerHost["getSourceFile"],
+    getModifiedTime?: (path: Path) => Date | undefined,
 ) {
     const originalReadFile = host.readFile;
     const originalFileExists = host.fileExists;
@@ -528,7 +530,7 @@ export function changeCompilerHostLikeToUseCache(
         return setReadFileCache(key, fileName);
     };
     const setReadFileCache = (key: Path, fileName: string) => {
-        const newValue = originalReadFile.call(host, fileName);
+        const newValue = readFile(key, fileName);
         readFileCache.set(key, newValue !== undefined ? newValue : false);
         return newValue;
     };
@@ -538,7 +540,7 @@ export function changeCompilerHostLikeToUseCache(
         if (value !== undefined) return value !== false ? value : undefined; // could be .d.ts from output
         // Cache json or buildInfo
         if (!fileExtensionIs(fileName, Extension.Json) && !isBuildInfoFile(fileName)) {
-            return originalReadFile.call(host, fileName);
+            return readFile(key, fileName);
         }
 
         return setReadFileCache(key, fileName);
@@ -563,7 +565,7 @@ export function changeCompilerHostLikeToUseCache(
         const key = toPath(fileName);
         const value = fileExistsCache.get(key);
         if (value !== undefined) return value;
-        const newValue = originalFileExists.call(host, fileName);
+        const newValue = fileExists(key, fileName);
         fileExistsCache.set(key, !!newValue);
         return newValue;
     };
@@ -618,6 +620,21 @@ export function changeCompilerHostLikeToUseCache(
         getSourceFileWithCache,
         readFileWithCache,
     };
+
+    function readFile(key: Path, fileName: string) {
+        return fileExistsCache.get(key) !== false || getModifiedTime?.(key) !== missingFileModifiedTime ?
+            originalReadFile.call(host, fileName) :
+            undefined;
+    }
+
+    function fileExists(key: Path, fileName: string) {
+        const text = readFileCache.get(key);
+        if (text !== undefined) return text !== false;
+        const modifiedTime = getModifiedTime?.(key);
+        return modifiedTime === undefined ?
+            originalFileExists.call(host, fileName) :
+            modifiedTime !== missingFileModifiedTime;
+    }
 }
 
 export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
