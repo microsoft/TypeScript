@@ -13,7 +13,8 @@
         { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
-        { "path": "../deprecatedCompat" }
+        { "path": "../deprecatedCompat" },
+        { "path": "../incrementalVerifier" }
     ],
 
     "include": ["**/*"]

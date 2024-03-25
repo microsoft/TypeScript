@@ -1,7 +1,7 @@
 import {
     verifyProgramStructure,
     verifyResolutionCache,
-} from "../../../harness/incrementalUtils";
+} from "../../../incrementalVerifier/verifier";
 import {
     patchHostForBuildInfoReadWrite,
 } from "../../_namespaces/fakes";

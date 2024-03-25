@@ -1,9 +1,9 @@
 import {
-    IncrementalVerifierCallbacks,
-} from "../../../harness/incrementalUtils";
-import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
+import {
+    IncrementalVerifierCallbacks,
+} from "../../../incrementalVerifier/verifier";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
