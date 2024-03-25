@@ -136,17 +136,17 @@ export const unrelated = 10;
 
 /home/src/lib/tsc.js -b -w project1 project2 project3 project4 --verbose --explainFiles --extendedDiagnostics
 Output::
-[[90m12:01:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:14 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/tsconfig.json
     * project2/tsconfig.json
     * project3/tsconfig.json
     * project4/tsconfig.json
 
-[[90m12:01:15 AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:16 AM[0m] Building project '/home/src/projects/project1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project1/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -281,9 +281,9 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:01:34 AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:35 AM[0m] Building project '/home/src/projects/project2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project2/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project2/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -309,9 +309,9 @@ project2/index.ts
   Matched by default include pattern '**/*'
 project2/utils.d.ts
   Matched by default include pattern '**/*'
-[[90m12:01:45 AM[0m] Project 'project3/tsconfig.json' is out of date because output file 'project3/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project3/tsconfig.json' is out of date because output file 'project3/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:46 AM[0m] Building project '/home/src/projects/project3/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project3/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project3/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -337,9 +337,9 @@ project3/index.ts
   Matched by default include pattern '**/*'
 project3/utils.d.ts
   Matched by default include pattern '**/*'
-[[90m12:01:56 AM[0m] Project 'project4/tsconfig.json' is out of date because output file 'project4/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project4/tsconfig.json' is out of date because output file 'project4/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:57 AM[0m] Building project '/home/src/projects/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project4/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-esnext' from '/home/src/projects/project4/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -393,7 +393,7 @@ project4/index.ts
   Matched by default include pattern '**/*'
 project4/utils.d.ts
   Matched by default include pattern '**/*'
-[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Config file /home/src/projects/project1/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1 1 undefined Wild card directory /home/src/projects/project1/tsconfig.json

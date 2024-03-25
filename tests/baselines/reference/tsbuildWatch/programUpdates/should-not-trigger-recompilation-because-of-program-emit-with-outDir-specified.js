@@ -94,16 +94,16 @@ export const m = mod;
 /a/lib/tsc.js -b -w sample1/core -verbose
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:40 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * sample1/core/tsconfig.json
 
-[[90m12:00:41 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/outDir/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/outDir/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:42 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:00:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -283,13 +283,13 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:03 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output 'sample1/core/outDir/tsconfig.tsbuildinfo' is older than input 'sample1/core/file3.ts'
+[[90mHH:MM:SS AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output 'sample1/core/outDir/tsconfig.tsbuildinfo' is older than input 'sample1/core/file3.ts'
 
-[[90m12:01:04 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

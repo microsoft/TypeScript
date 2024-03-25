@@ -96,26 +96,26 @@ export const m = mod;
 /a/lib/tsc.js -b -w tests -verbose
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:40 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:41 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:42 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:00 AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:01 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Project 'tests/tsconfig.json' is out of date because output file 'tests/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is out of date because output file 'tests/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:14 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:01:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -581,17 +581,17 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:28 AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'logic/index.ts'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'logic/index.ts'
 
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:01:43 AM[0m] Project 'tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:44 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:01:46 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -740,11 +740,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:51 AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'logic/index.ts'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'logic/index.ts'
 
-[[90m12:01:52 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 
 
@@ -857,11 +857,11 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:02:09 AM[0m] Project 'tests/tsconfig.json' is out of date because output 'tests/index.js' is older than input 'logic/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is out of date because output 'tests/index.js' is older than input 'logic/tsconfig.json'
 
-[[90m12:02:10 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:02:21 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

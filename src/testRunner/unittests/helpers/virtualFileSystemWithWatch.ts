@@ -1164,7 +1164,11 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
 function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
     let baselinedOutput: string[] | undefined;
     for (let i = start; i < end; i++) {
-        (baselinedOutput ||= []).push(output[i].replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms"));
+        (baselinedOutput ||= []).push(
+            output[i]
+                .replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+                .replace(/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s(A|P)M/g, "HH:MM:SS AM"),
+        );
     }
     if (baselinedOutput) baseline.push(baselinedOutput.join(""));
 }
