@@ -357,16 +357,16 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >    : ^^^^^^^^^^
 
         this.#finalizationGroup.unregister(ref);
->this.#finalizationGroup.unregister(ref) : void
->                                        : ^^^^
->this.#finalizationGroup.unregister : (unregisterToken: WeakKey) => void
->                                   : ^               ^^       ^^^^^^^^^
+>this.#finalizationGroup.unregister(ref) : boolean
+>                                        : ^^^^^^^
+>this.#finalizationGroup.unregister : (unregisterToken: WeakKey) => boolean
+>                                   : ^               ^^       ^^^^^^^^^^^^
 >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->unregister : (unregisterToken: WeakKey) => void
->           : ^               ^^       ^^^^^^^^^
+>unregister : (unregisterToken: WeakKey) => boolean
+>           : ^               ^^       ^^^^^^^^^^^^
 >ref : WeakRef<K>
 >    : ^^^^^^^^^^
 
