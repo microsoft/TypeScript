@@ -23,27 +23,6 @@ export interface SortedArray<T> extends Array<T> {
     " __sortedArrayBrand": any;
 }
 
-/**
- * Common read methods for ES6 Map/Set.
- *
- * @internal
- */
-export interface ReadonlyCollection<K> {
-    readonly size: number;
-    has(key: K): boolean;
-    keys(): IterableIterator<K>;
-}
-
-/**
- * Common write methods for ES6 Map/Set.
- *
- * @internal
- */
-export interface Collection<K> extends ReadonlyCollection<K> {
-    delete(key: K): boolean;
-    clear(): void;
-}
-
 /** @internal */
 export type EqualityComparer<T> = (a: T, b: T) => boolean;
 

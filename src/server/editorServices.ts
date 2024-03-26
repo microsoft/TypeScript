@@ -99,7 +99,6 @@ import {
     ProjectPackageJsonInfo,
     ProjectReference,
     ReadMapFile,
-    ReadonlyCollection,
     removeFileExtension,
     removeIgnoredPath,
     removeMinAndVersionNumbers,
@@ -3895,7 +3894,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
+    loadAncestorProjectTree(forProjects?: ReadonlyMap<string, boolean> | ReadonlySet<string>) {
         forProjects = forProjects || mapDefinedEntries(
             this.configuredProjects,
             (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined,
@@ -3913,7 +3912,7 @@ export class ProjectService {
         }
     }
 
-    private ensureProjectChildren(project: ConfiguredProject, forProjects: ReadonlyCollection<string>, seenProjects: Set<NormalizedPath>) {
+    private ensureProjectChildren(project: ConfiguredProject, forProjects: ReadonlyMap<string, boolean> | ReadonlySet<string>, seenProjects: Set<NormalizedPath>) {
         if (!tryAddToSet(seenProjects, project.canonicalConfigFilePath)) return;
 
         // If this project disables child load ignore it

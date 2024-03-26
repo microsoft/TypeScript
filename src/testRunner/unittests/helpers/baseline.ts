@@ -128,7 +128,7 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
     baseline.push("");
 }
 
-export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
+export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: Map<ts.Path, unknown> | Set<ts.Path>; }) {
     const mapFileNames = ts.mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
     for (const mapFile of mapFileNames) {
         const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
