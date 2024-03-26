@@ -18635,11 +18635,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getUnionType([intersectTypes(type1, type2), neverType]).flags & TypeFlags.Never);
     }
 
+    // Given an indexed access on a mapped type of the form { [P in K]: E }[X], return an instantiation of E where P is
+    // replaced with X. Since this simplification doesn't account for mapped type modifiers, add 'undefined' to the
+    // resulting type if the mapped type includes a '?' modifier or if the modifiers type indicates that some properties
+    // are optional. If the modifiers type is generic, conservatively estimate optionality by recursively looking for
+    // mapped types that include '?' modifiers.
     function substituteIndexedMappedType(objectType: MappedType, index: Type) {
         const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
         const templateMapper = combineTypeMappers(objectType.mapper, mapper);
         const instantiatedTemplateType = instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
-        return addOptionality(instantiatedTemplateType, /*isProperty*/ true, getCombinedMappedTypeOptionality(objectType) > 0);
+        const isOptional = getMappedTypeOptionality(objectType) > 0 || (isGenericType(objectType) ?
+            getModifiersTypeOptionality(getModifiersTypeFromMappedType(objectType)) > 0 :
+            couldAccessOptionalProperty(objectType, index));
+        return addOptionality(instantiatedTemplateType, /*isProperty*/ true, isOptional);
+    }
+
+    // Return true if an indexed access with the given object and index types could access an optional property.
+    function couldAccessOptionalProperty(objectType: Type, indexType: Type) {
+        const indexConstraint = getBaseConstraintOfType(indexType);
+        return !!indexConstraint && some(getPropertiesOfType(objectType), p => !!(p.flags & SymbolFlags.Optional) &&
+            isTypeAssignableTo(getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique), indexConstraint));
     }
 
     function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
