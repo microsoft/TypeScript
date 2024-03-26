@@ -11,8 +11,8 @@ import {
     AmbientModuleDeclaration,
     and,
     AnonymousType,
+    AnyImportOrJsDocImport,
     AnyImportOrReExport,
-    AnyImportSyntax,
     append,
     appendIfUnique,
     ArrayBindingPattern,
@@ -581,6 +581,7 @@ import {
     isJSDocCallbackTag,
     isJSDocConstructSignature,
     isJSDocFunctionType,
+    isJSDocImportTag,
     isJSDocIndexSignature,
     isJSDocLinkLike,
     isJSDocMemberName,
@@ -770,6 +771,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -3382,6 +3384,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
+                case SyntaxKind.JSDocImportTag:
                     // js type aliases do not resolve names from their host, so skip past it
                     const root = getJSDocRoot(location);
                     if (root) {
@@ -3950,7 +3953,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || (getFunctionFlags(n) & FunctionFlags.AsyncGenerator)) ? "quit" : false));
     }
 
-    function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
+    function getAnyImportSyntax(node: Node): AnyImportOrJsDocImport | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return node as ImportEqualsDeclaration;
@@ -4288,8 +4291,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
-        const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration).moduleSpecifier!;
+    function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration | JSDocImportTag, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
+        const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration | JSDocImportTag).moduleSpecifier!;
         const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
         const name = !isPropertyAccessExpression(specifier) && specifier.propertyName || specifier.name;
         if (!isIdentifier(name)) {
@@ -5014,6 +5017,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
+                (isInJSFile(location) && isJSDocImportTag(location) ? location.moduleSpecifier : undefined) ||
                 (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
@@ -9800,12 +9804,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportClause: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
+                        const attributes = isImportDeclaration(node.parent) ? node.parent.attributes : undefined;
+                        const isTypeOnly = isJSDocImportTag((node as ImportClause).parent);
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
+                                factory.createImportClause(isTypeOnly, factory.createIdentifier(localName), /*namedBindings*/ undefined),
                                 specifier,
-                                (node as ImportClause).parent.attributes,
+                                attributes,
                             ),
                             ModifierFlags.None,
                         );
@@ -9814,10 +9820,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.NamespaceImport: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
+                        const isTypeOnly = isJSDocImportTag((node as NamespaceImport).parent.parent);
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
+                                factory.createImportClause(isTypeOnly, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
                                 specifier,
                                 (node as ImportClause).parent.attributes,
                             ),
@@ -9839,11 +9846,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportSpecifier: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
+                        const isTypeOnly = isJSDocImportTag((node as ImportSpecifier).parent.parent.parent);
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(
-                                    /*isTypeOnly*/ false,
+                                    isTypeOnly,
                                     /*name*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
@@ -42193,6 +42201,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkJSDocImportTag(node: JSDocImportTag) {
+        checkImportAttributes(node);
+    }
+
     function checkJSDocImplementsTag(node: JSDocImplementsTag): void {
         const classLike = getEffectiveJSDocHost(node);
         if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -46402,7 +46414,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration) {
+    function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration | JSDocImportTag) {
         const node = declaration.attributes;
         if (node) {
             const importAttributesType = getGlobalImportAttributesType(/*reportErrors*/ true);
@@ -46429,7 +46441,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnNode(node, message);
             }
 
-            if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
+            const isTypeOnly = isJSDocImportTag(declaration) || (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly);
+            if (isTypeOnly) {
                 return grammarErrorOnNode(node, isImportAttributes ? Diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports : Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
             }
 
@@ -46957,6 +46970,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
             case SyntaxKind.JSDocThisTag:
                 return checkJSDocThisTag(node as JSDocThisTag);
+            case SyntaxKind.JSDocImportTag:
+                return checkJSDocImportTag(node as JSDocImportTag);
             case SyntaxKind.IndexedAccessType:
                 return checkIndexedAccessType(node as IndexedAccessTypeNode);
             case SyntaxKind.MappedType:
@@ -47913,6 +47928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                     ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (node.parent as ImportDeclaration).moduleSpecifier === node) ||
+                    (isInJSFile(node) && isJSDocImportTag(node.parent) && node.parent.moduleSpecifier === node) ||
                     ((isInJSFile(node) && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
                     (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                 ) {
