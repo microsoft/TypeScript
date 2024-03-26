@@ -18653,7 +18653,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return true if an indexed access with the given object and index types could access an optional property.
     function couldAccessOptionalProperty(objectType: Type, indexType: Type) {
         const indexConstraint = getBaseConstraintOfType(indexType);
-        return !!indexConstraint && some(getPropertiesOfType(objectType), p => !!(p.flags & SymbolFlags.Optional) &&
+        return !!indexConstraint && some(getPropertiesOfType(objectType), p =>
+            !!(p.flags & SymbolFlags.Optional) &&
             isTypeAssignableTo(getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique), indexConstraint));
     }
 
