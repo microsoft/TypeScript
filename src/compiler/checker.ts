@@ -26622,13 +26622,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getFlowCacheKey((node as NonNullExpression | ParenthesizedExpression).expression, declaredType, initialType, flowContainer);
             case SyntaxKind.QualifiedName:
                 const left = getFlowCacheKey((node as QualifiedName).left, declaredType, initialType, flowContainer);
-                return left && left + "." + (node as QualifiedName).right.escapedText;
+                return left && `${left}.${(node as QualifiedName).right.escapedText}`;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const propName = getAccessedPropertyName(node as AccessExpression);
                 if (propName !== undefined) {
                     const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
-                    return key && key + "." + propName;
+                    return key && `${key}.${propName}`;
+                }
+                if (isElementAccessExpression(node) && isIdentifier(node.argumentExpression)) {
+                    const symbol = getResolvedSymbol(node.argumentExpression);
+                    if (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol)) {
+                        const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
+                        return key && `${key}.@${getSymbolId(symbol)}`;
+                    }
                 }
                 break;
             case SyntaxKind.ObjectBindingPattern:
@@ -26674,9 +26681,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
-                const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
-                return sourcePropertyName !== undefined && targetPropertyName !== undefined && targetPropertyName === sourcePropertyName &&
-                    isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                if (sourcePropertyName !== undefined) {
+                    const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
+                    if (targetPropertyName !== undefined) {
+                        return targetPropertyName === sourcePropertyName && isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                    }
+                }
+                if (isElementAccessExpression(source) && isElementAccessExpression(target) && isIdentifier(source.argumentExpression) && isIdentifier(target.argumentExpression)) {
+                    const symbol = getResolvedSymbol(source.argumentExpression);
+                    if (symbol === getResolvedSymbol(target.argumentExpression) && (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol))) {
+                        return isMatchingReference(source.expression, target.expression);
+                    }
+                }
+                break;
             case SyntaxKind.QualifiedName:
                 return isAccessExpression(target) &&
                     (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
