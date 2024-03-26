@@ -1118,7 +1118,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             enterClass(/*classInfo*/ undefined);
             const members = visitNodes(node.members, classElementVisitor, isClassElement);
             exitClass();
-            return factory.updateClassDeclaration(node, modifiers, node.name, /*typeParameters*/ undefined, heritageClauses, members);
+            return factory.updateClassDeclaration(node, modifiers, node.name, /*typeParameters*/ undefined, heritageClauses, members, /*satisfiesClause*/ undefined);
         }
     }
 

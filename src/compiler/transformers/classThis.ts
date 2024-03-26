@@ -134,6 +134,7 @@ export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaratio
             node.typeParameters,
             node.heritageClauses,
             members,
+            node.satisfiesClause,
         ) :
         factory.updateClassExpression(
             node,

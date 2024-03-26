@@ -1157,6 +1157,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             transformConstructorParameters(constructor, hasSynthesizedSuper),
             /*type*/ undefined,
             transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
+            /*satisfiesClause*/ undefined,
         );
 
         setTextRange(constructorFunction, constructor || node);
@@ -2498,6 +2499,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             parameters,
             /*type*/ undefined,
             body,
+            /*satisfiesClause*/ undefined,
         );
     }
 

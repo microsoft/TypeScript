@@ -73,6 +73,7 @@ import {
     isQuestionOrPlusOrMinusToken,
     isQuestionToken,
     isReadonlyKeywordOrPlusOrMinusToken,
+    isSatisfiesClause,
     isStatement,
     isStringLiteralOrJsxExpression,
     isTemplateHead,
@@ -1435,6 +1436,7 @@ const visitEachChildTable: VisitEachChildTable = {
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
             nodeVisitor(node.type, visitor, isTypeNode),
             visitFunctionBody(node.body, visitor, context, nodeVisitor),
+            nodeVisitor(node.satisfiesClause, visitor, isSatisfiesClause),
         );
     },
 
@@ -1446,6 +1448,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
             nodesVisitor(node.members, visitor, isClassElement),
+            nodeVisitor(node.satisfiesClause, visitor, isSatisfiesClause),
         );
     },
 
@@ -1736,6 +1739,13 @@ const visitEachChildTable: VisitEachChildTable = {
             node,
             nodeVisitor(node.variableDeclaration, visitor, isVariableDeclaration),
             Debug.checkDefined(nodeVisitor(node.block, visitor, isBlock)),
+        );
+    },
+
+    [SyntaxKind.SatisfiesClause]: function visitEachChildOfSatisfiesClause(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateSatisfiesClause(
+            node,
+            Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },
 

@@ -637,6 +637,7 @@ function functionExpressionToDeclaration(name: string | undefined, additionalMod
         getSynthesizedDeepClones(fn.parameters),
         getSynthesizedDeepClone(fn.type),
         factory.converters.convertToFunctionBlock(replaceImportUseSites(fn.body!, useSitesToUnqualify)),
+        /*satisfiesClause*/ undefined,
     );
 }
 
@@ -647,6 +648,7 @@ function classExpressionToDeclaration(name: string | undefined, additionalModifi
         getSynthesizedDeepClones(cls.typeParameters),
         getSynthesizedDeepClones(cls.heritageClauses),
         replaceImportUseSites(cls.members, useSitesToUnqualify),
+        /*satisfiesClause*/ undefined,
     );
 }
 

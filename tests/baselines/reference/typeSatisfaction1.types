@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts] ////
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction1.ts] ////
 
-=== typeSatisfaction.ts ===
+=== typeSatisfaction1.ts ===
 interface I1 {
     a: number;
 >a : number

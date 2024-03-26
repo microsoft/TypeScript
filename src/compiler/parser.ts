@@ -321,6 +321,7 @@ import {
     ResolutionMode,
     RestTypeNode,
     ReturnStatement,
+    SatisfiesClause,
     SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
@@ -631,7 +632,8 @@ const forEachChildTable: ForEachChildTable = {
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type) ||
-            visitNode(cbNode, node.body);
+            visitNode(cbNode, node.body) ||
+            visitNode(cbNode, node.satisfiesClause);
     },
     [SyntaxKind.FunctionExpression]: function forEachChildInFunctionExpression<T>(node: FunctionExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -871,6 +873,9 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.DefaultClause]: function forEachChildInDefaultClause<T>(node: DefaultClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.statements);
     },
+    [SyntaxKind.SatisfiesClause]: function forEachChildInSatisfiesClause<T>(node: SatisfiesClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.type);
+    },
     [SyntaxKind.LabeledStatement]: function forEachChildInLabeledStatement<T>(node: LabeledStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.label) ||
             visitNode(cbNode, node.statement);
@@ -890,8 +895,21 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.Decorator]: function forEachChildInDecorator<T>(node: Decorator, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     },
-    [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
-    [SyntaxKind.ClassExpression]: forEachChildInClassDeclarationOrExpression,
+    [SyntaxKind.ClassDeclaration]: function forEachChildInClassDeclaration<T>(node: ClassDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.heritageClauses) ||
+            visitNodes(cbNode, cbNodes, node.members) ||
+            visitNode(cbNode, node.satisfiesClause);
+    },
+    [SyntaxKind.ClassExpression]: function forEachChildInClassExpression<T>(node: ClassExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.heritageClauses) ||
+            visitNodes(cbNode, cbNodes, node.members);
+    },
     [SyntaxKind.InterfaceDeclaration]: function forEachChildInInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
@@ -1162,14 +1180,6 @@ function forEachChildInBlock<T>(node: Block | ModuleBlock, cbNode: (node: Node) 
 
 function forEachChildInContinueOrBreakStatement<T>(node: ContinueStatement | BreakStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.label);
-}
-
-function forEachChildInClassDeclarationOrExpression<T>(node: ClassDeclaration | ClassExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-    return visitNodes(cbNode, cbNodes, node.modifiers) ||
-        visitNode(cbNode, node.name) ||
-        visitNodes(cbNode, cbNodes, node.typeParameters) ||
-        visitNodes(cbNode, cbNodes, node.heritageClauses) ||
-        visitNodes(cbNode, cbNodes, node.members);
 }
 
 function forEachChildInNamedImportsOrExports<T>(node: NamedImports | NamedExports, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -7687,8 +7697,18 @@ namespace Parser {
         const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
         const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
         setAwaitContext(savedAwaitContext);
-        const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
+        const satisfiesClause = parseSatisfiesClause();
+        const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body, satisfiesClause);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
+    }
+
+    function parseSatisfiesClause() {
+        if (parseOptional(SyntaxKind.SatisfiesKeyword)) {
+            const pos = getNodePos();
+            const type = parseType();
+            return finishNode(factory.createSatisfiesClause(type), pos);
+        }
+        return undefined;
     }
 
     function parseConstructorName() {
@@ -8113,7 +8133,7 @@ namespace Parser {
         }
         setAwaitContext(savedAwaitContext);
         const node = kind === SyntaxKind.ClassDeclaration
-            ? factory.createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members)
+            ? factory.createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members, parseSatisfiesClause())
             : factory.createClassExpression(modifiers, name, typeParameters, heritageClauses, members);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }

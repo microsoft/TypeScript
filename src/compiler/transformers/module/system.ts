@@ -579,6 +579,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     ),
                 ),
             ], /*multiLine*/ true),
+            /*satisfiesClause*/ undefined,
         );
     }
 
@@ -808,6 +809,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
                     visitNode(node.body, visitor, isBlock),
+                    /*satisfiesClause*/ undefined,
                 ),
             );
         }

@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts] ////
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction1.ts] ////
 
-//// [typeSatisfaction.ts]
+//// [typeSatisfaction1.ts]
 interface I1 {
     a: number;
 }
@@ -27,7 +27,7 @@ let t7 = { a: 'test' } satisfies A;
 let t8 = { a: 'test', b: 'test' } satisfies A;
 
 
-//// [typeSatisfaction.js]
+//// [typeSatisfaction1.js]
 var t1 = { a: 1 }; // Ok
 var t2 = { a: 1, b: 1 }; // Error
 var t3 = {}; // Error

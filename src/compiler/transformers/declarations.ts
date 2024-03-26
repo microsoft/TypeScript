@@ -1363,6 +1363,7 @@ export function transformDeclarations(context: TransformationContext) {
                     updateParamsList(input, input.parameters),
                     ensureType(input, input.type),
                     /*body*/ undefined,
+                    /*satisfiesClause*/ undefined,
                 ));
                 if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                     const props = resolver.getPropertiesOfContainerFunction(input);
@@ -1418,6 +1419,7 @@ export function transformDeclarations(context: TransformationContext) {
                         clean.parameters,
                         clean.type,
                         /*body*/ undefined,
+                        /*satisfiesClause*/ undefined,
                     );
 
                     const namespaceDeclaration = factory.updateModuleDeclaration(
@@ -1597,6 +1599,7 @@ export function transformDeclarations(context: TransformationContext) {
                             typeParameters,
                             heritageClauses,
                             members,
+                            input.satisfiesClause,
                         ))!,
                     ]; // TODO: GH#18217
                 }
@@ -1609,6 +1612,7 @@ export function transformDeclarations(context: TransformationContext) {
                         typeParameters,
                         heritageClauses,
                         members,
+                        input.satisfiesClause,
                     ));
                 }
             }

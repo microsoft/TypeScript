@@ -1,0 +1,78 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction2.ts] ////
+
+=== typeSatisfaction2.ts ===
+export type T1 = () => void;
+>T1 : Symbol(T1, Decl(typeSatisfaction2.ts, 0, 0))
+
+export type T2 = (a: number, b: number) => number;
+>T2 : Symbol(T2, Decl(typeSatisfaction2.ts, 0, 28))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 1, 18))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 1, 28))
+
+export function f1() { } satisfies () => void;
+>f1 : Symbol(f1, Decl(typeSatisfaction2.ts, 1, 50))
+
+export function f2() { } satisfies () => number;
+>f2 : Symbol(f2, Decl(typeSatisfaction2.ts, 3, 46))
+
+export function f3() { } satisfies T1;
+>f3 : Symbol(f3, Decl(typeSatisfaction2.ts, 4, 48))
+>T1 : Symbol(T1, Decl(typeSatisfaction2.ts, 0, 0))
+
+export function f4(a: number, b: number) {
+>f4 : Symbol(f4, Decl(typeSatisfaction2.ts, 5, 38))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 7, 19))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 7, 29))
+
+    return 1;
+} satisfies (a: number, b: number) => number;
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 9, 13))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 9, 23))
+
+export function f5(a: number, b: number) {
+>f5 : Symbol(f5, Decl(typeSatisfaction2.ts, 9, 45))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 11, 19))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 11, 29))
+
+    return 1;
+} satisfies T2;
+>T2 : Symbol(T2, Decl(typeSatisfaction2.ts, 0, 28))
+
+export function f6(a: boolean, b: boolean) {
+>f6 : Symbol(f6, Decl(typeSatisfaction2.ts, 13, 15))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 15, 19))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 15, 30))
+
+    return 1;
+} satisfies (a: number, b: number) => number;
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 17, 13))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 17, 23))
+
+export function f7(a: number, b: boolean) {
+>f7 : Symbol(f7, Decl(typeSatisfaction2.ts, 17, 45))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 19, 19))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 19, 29))
+
+    return 1;
+} satisfies T2;
+>T2 : Symbol(T2, Decl(typeSatisfaction2.ts, 0, 28))
+
+export function f8(a: number, b: number) {
+>f8 : Symbol(f8, Decl(typeSatisfaction2.ts, 21, 15))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 23, 19))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 23, 29))
+
+    return "";
+} satisfies (a: number, b: number) => number;
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 25, 13))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 25, 23))
+
+export function f9(a: number, b: number) {
+>f9 : Symbol(f9, Decl(typeSatisfaction2.ts, 25, 45))
+>a : Symbol(a, Decl(typeSatisfaction2.ts, 27, 19))
+>b : Symbol(b, Decl(typeSatisfaction2.ts, 27, 29))
+
+    return "";
+} satisfies T2;
+>T2 : Symbol(T2, Decl(typeSatisfaction2.ts, 0, 28))
+

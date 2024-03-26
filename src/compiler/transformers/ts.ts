@@ -118,6 +118,7 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyName,
+    isSatisfiesClause,
     isShorthandPropertyAssignment,
     isSimpleInlineableExpression,
     isSourceFile,
@@ -160,6 +161,7 @@ import {
     PropertyDeclaration,
     PropertyName,
     removeAllComments,
+    SatisfiesClause,
     SatisfiesExpression,
     ScriptTarget,
     SetAccessorDeclaration,
@@ -831,6 +833,9 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.JsxOpeningElement:
                 return visitJsxJsxOpeningElement(node as JsxOpeningElement);
 
+            case SyntaxKind.SatisfiesClause:
+                return visitSatisfiesClause(node as SatisfiesClause);
+
             default:
                 // node contains some other TypeScript syntax
                 return visitEachChild(node, visitor, context);
@@ -896,6 +901,7 @@ export function transformTypeScript(context: TransformationContext) {
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
                 visitNodes(node.members, getClassElementVisitor(node), isClassElement),
+                visitNode(node.satisfiesClause, visitor, isSatisfiesClause),
             );
         }
 
@@ -935,6 +941,7 @@ export function transformTypeScript(context: TransformationContext) {
             /*typeParameters*/ undefined,
             visitNodes(node.heritageClauses, visitor, isHeritageClause),
             transformClassMembers(node),
+            visitNode(node.satisfiesClause, visitor, isSatisfiesClause),
         );
 
         // To better align with the old emitter, we should not emit a trailing source map
@@ -1272,6 +1279,10 @@ export function transformTypeScript(context: TransformationContext) {
         return visitEachChild(node, visitor, context);
     }
 
+    function visitSatisfiesClause(node: SatisfiesClause) {
+        return factory.updateSatisfiesClause(node, factory.createParenthesizedType(node.type));
+    }
+
     /**
      * Transforms an ExpressionWithTypeArguments with TypeScript syntax.
      *
@@ -1565,6 +1576,7 @@ export function transformTypeScript(context: TransformationContext) {
             visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
             visitFunctionBody(node.body, visitor, context) || factory.createBlock([]),
+            visitNode(node.satisfiesClause, visitor, isSatisfiesClause),
         );
         if (isExportOfNamespace(node)) {
             const statements: Statement[] = [updated];
