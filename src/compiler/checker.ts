@@ -13359,29 +13359,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const nameElements = restDeclaration.name.elements;
         const elementFlags = restType.target.elementFlags;
-        const result: (__String | undefined)[] = arrayOf(elementFlags.length, () => undefined);
-        const length = Math.min(nameElements.length, elementFlags.length);
-        for (let i = 0; i < length; i++) {
+        let seenDotDotDotish = false;
+        return map(elementFlags, (elementFlag, i) => {
+            if (seenDotDotDotish || i >= nameElements.length) return undefined;
+
             const nameElement = nameElements[i];
 
-            if (elementFlags[i] & ElementFlags.Variable) {
-                if (nameElement.kind === SyntaxKind.BindingElement && nameElement.dotDotDotToken && nameElement.name.kind === SyntaxKind.Identifier) {
-                    result[i] = nameElement.name.escapedText;
+            if (elementFlag & ElementFlags.Variable) {
+                seenDotDotDotish = true;
+                if (nameElement.kind === SyntaxKind.BindingElement && nameElement.name.kind === SyntaxKind.Identifier && nameElement.dotDotDotToken) {
+                    return nameElement.name.escapedText;
                 }
-                break;
+                return undefined;
             }
             if (nameElement.kind !== SyntaxKind.BindingElement) {
-                continue;
+                return undefined;
             }
             if (nameElement.dotDotDotToken) {
-                break;
+                seenDotDotDotish = true;
+                return undefined;
             }
-            if (nameElement.name.kind !== SyntaxKind.Identifier) {
-                continue;
+            if (nameElement.kind === SyntaxKind.BindingElement && nameElement.name.kind === SyntaxKind.Identifier) {
+                return nameElement.name.escapedText;
             }
-            result[i] = nameElement.name.escapedText;
-        }
-        return result;
+            return undefined;
+        });
     }
 
     function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
