@@ -333,7 +333,6 @@ import {
     SourceFileLike,
     SourceMapper,
     SpreadElement,
-    stableSort,
     startsWith,
     StringLiteral,
     StringLiteralLike,
@@ -362,6 +361,7 @@ import {
     Token,
     tokenToString,
     toPath,
+    toSorted,
     tryCast,
     tryParseJson,
     Type,
@@ -2632,7 +2632,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     const { comparer, isSorted } = OrganizeImports.getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
+    const sortedNewImports = isArray(imports) ? toSorted(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }

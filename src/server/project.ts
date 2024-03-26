@@ -110,7 +110,6 @@ import {
     returnTrue,
     ScriptKind,
     some,
-    sort,
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceFile,
@@ -123,6 +122,7 @@ import {
     ThrottledCancellationToken,
     timestamp,
     toPath,
+    toSorted,
     tracing,
     TypeAcquisition,
     updateErrorForNoInputFiles,
@@ -1032,7 +1032,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string> {
-        return sort(flatMap(this.plugins, plugin => {
+        return toSorted(flatMap(this.plugins, plugin => {
             if (typeof plugin.module.getExternalFiles !== "function") return;
             try {
                 return plugin.module.getExternalFiles(this, updateLevel || ProgramUpdateLevel.Update);

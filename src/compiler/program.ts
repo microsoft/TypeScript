@@ -295,7 +295,6 @@ import {
     sourceFileAffectingCompilerOptions,
     sourceFileMayBeEmitted,
     SourceOfProjectReferenceRedirect,
-    stableSort,
     startsWith,
     Statement,
     StringLiteral,
@@ -310,6 +309,7 @@ import {
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
+    toSorted,
     trace,
     tracing,
     TsConfigSourceFile,
@@ -1814,7 +1814,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+        files = toSorted(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
     }
