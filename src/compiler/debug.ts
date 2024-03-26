@@ -14,7 +14,6 @@ import {
     FlowSwitchClause,
     getEffectiveModifierFlagsNoCache,
     getEmitFlags,
-    getOwnKeys,
     getParseTreeNode,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
@@ -61,13 +60,11 @@ import {
     isUnionTypeNode,
     LiteralType,
     map,
-    MatchingKeys,
     ModifierFlags,
     Node,
     NodeArray,
     NodeFlags,
     nodeIsSynthesized,
-    noop,
     objectAllocator,
     ObjectFlags,
     ObjectType,
@@ -110,14 +107,22 @@ export interface LoggingHost {
 
 /** @internal */
 export namespace Debug {
-    /* eslint-disable prefer-const */
-    let currentAssertionLevel = AssertionLevel.None;
-    export let currentLogLevel = LogLevel.Warning;
-    export let isDebugging = false;
-    export let loggingHost: LoggingHost | undefined;
-    /* eslint-enable prefer-const */
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    // TODO(jakebailey): restore to let/const once Debug is no longer a namespace.
+    /* eslint-disable no-var */
+    var currentAssertionLevel = AssertionLevel.None;
+    export var currentLogLevel = LogLevel.Warning;
+    export var isDebugging = false;
+    export var loggingHost: LoggingHost | undefined;
 
-    type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
+    var enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
+
+    var isDebugInfoEnabled = false;
+
+    var flowNodeProto: FlowNodeBase | undefined;
+    var nodeArrayProto: NodeArray<Node> | undefined;
+    /* eslint-enable no-var */
 
     export function shouldLog(level: LogLevel): boolean {
         return currentLogLevel <= level;
@@ -151,45 +156,16 @@ export namespace Debug {
         }
     }
 
-    const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel; assertion: AnyFunction; }>> = {};
-
     export function getAssertionLevel() {
         return currentAssertionLevel;
     }
 
     export function setAssertionLevel(level: AssertionLevel) {
-        const prevAssertionLevel = currentAssertionLevel;
         currentAssertionLevel = level;
-
-        if (level > prevAssertionLevel) {
-            // restore assertion functions for the current assertion level (see `shouldAssertFunction`).
-            for (const key of getOwnKeys(assertionCache) as AssertionKeys[]) {
-                const cachedFunc = assertionCache[key];
-                if (cachedFunc !== undefined && Debug[key] !== cachedFunc.assertion && level >= cachedFunc.level) {
-                    (Debug as any)[key] = cachedFunc;
-                    assertionCache[key] = undefined;
-                }
-            }
-        }
     }
 
     export function shouldAssert(level: AssertionLevel): boolean {
         return currentAssertionLevel >= level;
-    }
-
-    /**
-     * Tests whether an assertion function should be executed. If it shouldn't, it is cached and replaced with `ts.noop`.
-     * Replaced assertion functions are restored when `Debug.setAssertionLevel` is set to a high enough level.
-     * @param level The minimum assertion level required.
-     * @param name The name of the current assertion function.
-     */
-    function shouldAssertFunction<K extends AssertionKeys>(level: AssertionLevel, name: K): boolean {
-        if (!shouldAssert(level)) {
-            assertionCache[name] = { level, assertion: Debug[name] };
-            (Debug as any)[name] = noop;
-            return false;
-        }
-        return true;
     }
 
     export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
@@ -280,7 +256,7 @@ export namespace Debug {
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
     export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-        if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
+        if (shouldAssert(AssertionLevel.Normal)) {
             assert(
                 test === undefined || every(nodes, test),
                 message || "Unexpected node.",
@@ -293,7 +269,7 @@ export namespace Debug {
     export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
     export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-        if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
+        if (shouldAssert(AssertionLevel.Normal)) {
             assert(
                 node !== undefined && (test === undefined || test(node)),
                 message || "Unexpected node.",
@@ -306,7 +282,7 @@ export namespace Debug {
     export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
     export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-        if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
+        if (shouldAssert(AssertionLevel.Normal)) {
             assert(
                 node === undefined || test === undefined || !test(node),
                 message || "Unexpected node.",
@@ -320,7 +296,7 @@ export namespace Debug {
     export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
     export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-        if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
+        if (shouldAssert(AssertionLevel.Normal)) {
             assert(
                 test === undefined || node === undefined || test(node),
                 message || "Unexpected node.",
@@ -334,7 +310,7 @@ export namespace Debug {
     export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }> | undefined;
     export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-        if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
+        if (shouldAssert(AssertionLevel.Normal)) {
             assert(
                 kind === undefined || node === undefined || node.kind === kind,
                 message || "Unexpected node.",
@@ -346,7 +322,7 @@ export namespace Debug {
 
     export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
     export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
-        if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
+        if (shouldAssert(AssertionLevel.Normal)) {
             assert(
                 node === undefined,
                 message || "Unexpected node.",
@@ -415,8 +391,6 @@ export namespace Debug {
         }
         return value.toString();
     }
-
-    const enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
 
     function getEnumMembers(enumObject: any) {
         // Assuming enum objects do not change at runtime, we can cache the enum members list
@@ -504,10 +478,6 @@ export namespace Debug {
         return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
     }
 
-    let isDebugInfoEnabled = false;
-
-    let flowNodeProto: FlowNodeBase | undefined;
-
     function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
         if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
             Object.defineProperties(flowNode, {
@@ -561,8 +531,6 @@ export namespace Debug {
             }
         }
     }
-
-    let nodeArrayProto: NodeArray<Node> | undefined;
 
     function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
         if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
