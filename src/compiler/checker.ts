@@ -22364,6 +22364,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 tracing?.pop();
             }
 
+            // if (entry !== undefined) {
+            //     // If the previous entry and the result disagree, then something has gone wrong.
+            //     const entrySucceeded = !!(entry & RelationComparisonResult.Succeeded);
+            //     const resultSucceeded = result !== Ternary.False;
+            //     Debug.assertEqual(entrySucceeded, resultSucceeded, "Cached relationship does not match recalculated result");
+            // }
+
             if (outofbandVarianceMarkerHandler) {
                 outofbandVarianceMarkerHandler = originalHandler;
             }
@@ -23078,7 +23085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // reveal the reason).
                     // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
                     // we can return `False` early here to skip calculating the structural error message we don't need.
-                    if (varianceCheckFailed && !(reportErrors && some(variances, v => (v & VarianceFlags.VarianceMask) === VarianceFlags.Invariant))) {
+                    if (varianceCheckFailed && !some(variances, v => (v & VarianceFlags.VarianceMask) === VarianceFlags.Invariant)) {
                         return Ternary.False;
                     }
                     // We remember the original error information so we can restore it in case the structural
