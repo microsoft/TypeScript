@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/ambiguousLiteralWideningEmit.ts] ////
+
+=== ambiguousLiteralWideningEmit.ts ===
+declare function pad(n: number | string): string;
+>pad : (n: number | string) => string
+>n : string | number
+
+export default (dateString: string, type: 'date' | 'month' | 'year'): string => {
+>(dateString: string, type: 'date' | 'month' | 'year'): string => {    const [year, month = 1, date = 1] = dateString.split('-')    return `${year}-${pad(month)}-${pad(date)}`.substr(0, { date: 10, month: 7, year: 4 }[type])} : (dateString: string, type: 'date' | 'month' | 'year') => string
+>dateString : string
+>type : "date" | "month" | "year"
+
+    const [year, month = 1, date = 1] = dateString.split('-')
+>year : string
+>month : string | 1
+>1 : 1
+>date : string | 1
+>1 : 1
+>dateString.split('-') : string[]
+>dateString.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>dateString : string
+>split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>'-' : "-"
+
+    return `${year}-${pad(month)}-${pad(date)}`.substr(0, { date: 10, month: 7, year: 4 }[type])
+>`${year}-${pad(month)}-${pad(date)}`.substr(0, { date: 10, month: 7, year: 4 }[type]) : string
+>`${year}-${pad(month)}-${pad(date)}`.substr : (from: number, length?: number | undefined) => string
+>`${year}-${pad(month)}-${pad(date)}` : string
+>year : string
+>pad(month) : string
+>pad : (n: string | number) => string
+>month : string | 1
+>pad(date) : string
+>pad : (n: string | number) => string
+>date : string | 1
+>substr : (from: number, length?: number | undefined) => string
+>0 : 0
+>{ date: 10, month: 7, year: 4 }[type] : number
+>{ date: 10, month: 7, year: 4 } : { date: number; month: number; year: number; }
+>date : number
+>10 : 10
+>month : number
+>7 : 7
+>year : number
+>4 : 4
+>type : "date" | "month" | "year"
+}
+

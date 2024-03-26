@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/ambiguousLiteralWideningEmit.ts] ////
+
+=== ambiguousLiteralWideningEmit.ts ===
+declare function pad(n: number | string): string;
+>pad : Symbol(pad, Decl(ambiguousLiteralWideningEmit.ts, 0, 0))
+>n : Symbol(n, Decl(ambiguousLiteralWideningEmit.ts, 0, 21))
+
+export default (dateString: string, type: 'date' | 'month' | 'year'): string => {
+>dateString : Symbol(dateString, Decl(ambiguousLiteralWideningEmit.ts, 2, 16))
+>type : Symbol(type, Decl(ambiguousLiteralWideningEmit.ts, 2, 35))
+
+    const [year, month = 1, date = 1] = dateString.split('-')
+>year : Symbol(year, Decl(ambiguousLiteralWideningEmit.ts, 3, 11))
+>month : Symbol(month, Decl(ambiguousLiteralWideningEmit.ts, 3, 16))
+>date : Symbol(date, Decl(ambiguousLiteralWideningEmit.ts, 3, 27))
+>dateString.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>dateString : Symbol(dateString, Decl(ambiguousLiteralWideningEmit.ts, 2, 16))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+
+    return `${year}-${pad(month)}-${pad(date)}`.substr(0, { date: 10, month: 7, year: 4 }[type])
+>`${year}-${pad(month)}-${pad(date)}`.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>year : Symbol(year, Decl(ambiguousLiteralWideningEmit.ts, 3, 11))
+>pad : Symbol(pad, Decl(ambiguousLiteralWideningEmit.ts, 0, 0))
+>month : Symbol(month, Decl(ambiguousLiteralWideningEmit.ts, 3, 16))
+>pad : Symbol(pad, Decl(ambiguousLiteralWideningEmit.ts, 0, 0))
+>date : Symbol(date, Decl(ambiguousLiteralWideningEmit.ts, 3, 27))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>date : Symbol(date, Decl(ambiguousLiteralWideningEmit.ts, 4, 59))
+>month : Symbol(month, Decl(ambiguousLiteralWideningEmit.ts, 4, 69))
+>year : Symbol(year, Decl(ambiguousLiteralWideningEmit.ts, 4, 79))
+>type : Symbol(type, Decl(ambiguousLiteralWideningEmit.ts, 2, 35))
+}
+

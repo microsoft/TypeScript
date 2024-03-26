@@ -888,6 +888,7 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     ObjectType,
+    OmittedExpression,
     OptionalChain,
     OptionalTypeNode,
     or,
@@ -2240,6 +2241,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var potentialReflectCollisions: Node[] = [];
     var potentialUnusedRenamedBindingElementsInTypes: BindingElement[] = [];
     var awaitedTypeStack: number[] = [];
+    var ambiguousVariableDeclarationsWhenWidened: [node: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement, type: Type, widenedLiteralType: Type][] = [];
 
     var diagnostics = createDiagnosticCollection();
     var suggestionDiagnostics = createDiagnosticCollection();
@@ -43142,6 +43144,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             checkCollisionsForDeclarationName(node, node.name);
         }
+
+        // TODO(jakebailey): copy pasted from declaration.ts; improve
+        type CanHaveLiteralInitializer = VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration;
+        function canHaveLiteralInitializer(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return !hasEffectiveModifier(node, ModifierFlags.Private);
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
+            return false;
+        }
+
+        function shouldPrintWithInitializer(node: Node) {
+            return canHaveLiteralInitializer(node) && isLiteralConstDeclaration(node as CanHaveLiteralInitializer); // TODO: Make safe
+        }
+
+        function isPrivateDeclaration(node: Node) {
+            return hasEffectiveModifier(node, ModifierFlags.Private) || isPrivateIdentifierClassElementDeclaration(node);
+        }
+
+        if (
+            getEmitDeclarations(compilerOptions)
+            && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+            && !shouldPrintWithInitializer(node)
+            && !isPrivateDeclaration(node)
+        ) {
+            const widenedLiteralType = getWidenedLiteralType(type);
+            if (!isTypeIdenticalTo(type, widenedLiteralType)) {
+                ambiguousVariableDeclarationsWhenWidened.push([node, type, widenedLiteralType]);
+            }
+        }
     }
 
     function errorNextVariableOrPropertyDeclarationMustHaveSameType(firstDeclaration: Declaration | undefined, firstType: Type, nextDeclaration: Declaration, nextType: Type): void {
@@ -47275,6 +47311,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             clear(potentialWeakMapSetCollisions);
             clear(potentialReflectCollisions);
             clear(potentialUnusedRenamedBindingElementsInTypes);
+            clear(ambiguousVariableDeclarationsWhenWidened);
 
             forEach(node.statements, checkSourceElement);
             checkSourceElement(node.endOfFileToken);
@@ -47296,6 +47333,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (!node.isDeclarationFile) {
                     checkPotentialUncheckedRenamedBindingElementsInTypes();
+                }
+            });
+
+            addLazyDiagnostic(() => {
+                function isVisibleExternally(elem: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | OmittedExpression): boolean {
+                    if (isOmittedExpression(elem)) {
+                        return false;
+                    }
+                    if (isBindingPattern(elem.name)) {
+                        return some(elem.name.elements, isVisibleExternally);
+                    }
+                    else {
+                        return isDeclarationVisible(elem);
+                    }
+                }
+
+                for (const [node, type, widenedLiteralType] of ambiguousVariableDeclarationsWhenWidened) {
+                    if (isVisibleExternally(node)) {
+                        error(node.name, Diagnostics.The_type_of_this_declaration_is_ambiguous_and_may_be_observed_as_either_0_or_1, typeToString(widenedLiteralType), typeToString(type));
+                    }
                 }
             });
 
@@ -47321,6 +47378,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (potentialReflectCollisions.length) {
                 forEach(potentialReflectCollisions, checkReflectCollision);
                 clear(potentialReflectCollisions);
+            }
+
+            if (ambiguousVariableDeclarationsWhenWidened.length) {
+                // forEach(potentialAmbiguousDeclarationsWhenWidened, checkAmbiguousDeclaration);
+                clear(ambiguousVariableDeclarationsWhenWidened);
             }
 
             links.flags |= NodeCheckFlags.TypeChecked;
