@@ -249,3 +249,25 @@ const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString(
 >key : K
 >toString : (radix?: number | undefined) => string
 
+// Additional repro from #57860
+
+type Foo = {
+>Foo : { prop: string; }
+
+    prop: string;
+>prop : string
+}
+
+function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
+>test : <K extends "prop">(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
+>obj : Pick<Required<Foo> & Partial<Foo>, K>
+>key : K
+
+    obj[key].length;
+>obj[key].length : number
+>obj[key] : Pick<Required<Foo> & Partial<Foo>, K>[K]
+>obj : Pick<Required<Foo> & Partial<Foo>, K>
+>key : K
+>length : number
+}
+

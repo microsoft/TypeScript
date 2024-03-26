@@ -79,3 +79,13 @@ const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toSt
 declare const resolved: { a?: number | undefined; b: number; c: number };
 
 const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
+
+// Additional repro from #57860
+
+type Foo = {
+    prop: string;
+}
+
+function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
+    obj[key].length;
+}
