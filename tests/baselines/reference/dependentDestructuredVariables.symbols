@@ -979,7 +979,7 @@ interface ClientEvents {
 >shardDisconnect : Symbol(ClientEvents.shardDisconnect, Decl(dependentDestructuredVariables.ts, 391, 28))
 >CloseEvent : Symbol(CloseEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 }
-  
+
 declare class Client {
 >Client : Symbol(Client, Decl(dependentDestructuredVariables.ts, 393, 1))
 
@@ -1166,5 +1166,31 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
     x; // 1 | 3
 >x : Symbol(x, Decl(dependentDestructuredVariables.ts, 456, 80))
   }
+}
+
+// repros from #47190#issuecomment-1339753554
+const f70: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => {
+>f70 : Symbol(f70, Decl(dependentDestructuredVariables.ts, 466, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 466, 12))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 466, 74))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 466, 79))
+
+  if (type !== "one") x.toUpperCase();
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 466, 74))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 466, 79))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+const f71: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => {
+>f71 : Symbol(f71, Decl(dependentDestructuredVariables.ts, 469, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 469, 12))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 469, 86))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 469, 91))
+
+  if (type !== "one") x.toUpperCase();
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 469, 86))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 469, 91))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 }
 
