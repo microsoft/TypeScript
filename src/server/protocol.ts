@@ -2656,6 +2656,7 @@ export interface CreateDirectoryWatcherEventBody {
     readonly id: number;
     readonly path: string;
     readonly recursive: boolean;
+    readonly ignoreUpdate?: boolean;
 }
 
 export type CloseFileWatcherEventName = "closeFileWatcher";

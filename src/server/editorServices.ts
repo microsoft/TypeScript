@@ -933,7 +933,16 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
             recursive ? watchedDirectoriesRecursive : watchedDirectories,
             path,
             callback,
-            id => ({ eventName: CreateDirectoryWatcherEvent, data: { id, path, recursive: !!recursive } }),
+            id => ({
+                eventName: CreateDirectoryWatcherEvent,
+                data: {
+                    id,
+                    path,
+                    recursive: !!recursive,
+                    // Special case node_modules as we watch it for changes to closed script infos as well
+                    ignoreUpdate: !path.endsWith("/node_modules") ? true : undefined,
+                },
+            }),
         );
     }
     function getOrCreateFileWatcher<T>(
@@ -964,10 +973,9 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
         };
     }
     function onWatchChange({ id, path, eventType }: protocol.WatchChangeRequestArgs) {
-        // console.log(`typescript-vscode-watcher:: Invoke:: ${id}:: ${path}:: ${eventType}`);
         onFileWatcherCallback(id, path, eventType);
-        onDirectoryWatcherCallback(watchedDirectories, id, path, eventType);
-        onDirectoryWatcherCallback(watchedDirectoriesRecursive, id, path, eventType);
+        onDirectoryWatcherCallback(watchedDirectories, id, path);
+        onDirectoryWatcherCallback(watchedDirectoriesRecursive, id, path);
     }
 
     function onFileWatcherCallback(
@@ -989,9 +997,7 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
         { idToCallbacks }: HostWatcherMap<DirectoryWatcherCallback>,
         id: number,
         eventPath: string,
-        eventType: "create" | "delete" | "update",
     ) {
-        if (eventType === "update") return;
         idToCallbacks.get(id)?.forEach(callback => {
             callback(eventPath);
         });

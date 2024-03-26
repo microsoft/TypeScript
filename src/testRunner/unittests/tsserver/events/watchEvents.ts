@@ -60,11 +60,11 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         }
 
         function watchDirectory(data: ts.server.protocol.CreateDirectoryWatcherEventBody) {
-            logger.log(`Custom watchDirectory: ${data.id}: ${data.path} ${data.recursive}`);
+            logger.log(`Custom watchDirectory: ${data.id}: ${data.path} ${data.recursive} ${data.ignoreUpdate}`);
             ts.Debug.assert(!idToClose.has(data.id));
             const result = host.factoryData.watchUtils.fsWatch(data.path, data.recursive, data);
             idToClose.set(data.id, () => {
-                logger.log(`Custom watchDirectory:: Close:: ${data.id}: ${data.path} ${data.recursive}`);
+                logger.log(`Custom watchDirectory:: Close:: ${data.id}: ${data.path} ${data.recursive} ${data.ignoreUpdate}`);
                 result.close();
             });
         }
@@ -101,11 +101,14 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         session.logger.log(`Custom watch:: ${dir} ${path} ${eventType}`);
         (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive.forEach(
             dir,
-            data =>
-                session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                    command: ts.server.protocol.CommandTypes.WatchChange,
-                    arguments: { id: data.id, path, eventType },
-                }),
+            data => {
+                if (!data.ignoreUpdate || eventType !== "update") {
+                    session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+                        command: ts.server.protocol.CommandTypes.WatchChange,
+                        arguments: { id: data.id, path, eventType },
+                    });
+                }
+            },
         );
     }
 

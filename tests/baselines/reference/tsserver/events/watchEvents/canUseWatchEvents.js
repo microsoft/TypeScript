@@ -83,10 +83,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "id": 2,
         "path": "/user/username/projects/myproject",
-        "recursive": true
+        "recursive": true,
+        "ignoreUpdate": true
       }
     }
-Custom watchDirectory: 2: /user/username/projects/myproject true
+Custom watchDirectory: 2: /user/username/projects/myproject true true
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
@@ -125,7 +126,7 @@ Info seq  [hh:mm:ss:mss] event:
         "recursive": true
       }
     }
-Custom watchDirectory: 5: /user/username/projects/myproject/node_modules true
+Custom watchDirectory: 5: /user/username/projects/myproject/node_modules true undefined
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
@@ -150,10 +151,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "id": 7,
         "path": "/user/username/projects/myproject/node_modules/@types",
-        "recursive": true
+        "recursive": true,
+        "ignoreUpdate": true
       }
     }
-Custom watchDirectory: 7: /user/username/projects/myproject/node_modules/@types true
+Custom watchDirectory: 7: /user/username/projects/myproject/node_modules/@types true true
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -164,10 +166,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "id": 8,
         "path": "/user/username/projects/node_modules/@types",
-        "recursive": true
+        "recursive": true,
+        "ignoreUpdate": true
       }
     }
-Custom watchDirectory: 8: /user/username/projects/node_modules/@types true
+Custom watchDirectory: 8: /user/username/projects/node_modules/@types true true
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -274,13 +277,13 @@ Custom WatchedFiles::
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject: *new*
-  {"id":2,"path":"/user/username/projects/myproject","recursive":true}
+  {"id":2,"path":"/user/username/projects/myproject","recursive":true,"ignoreUpdate":true}
 /user/username/projects/myproject/node_modules: *new*
   {"id":5,"path":"/user/username/projects/myproject/node_modules","recursive":true}
 /user/username/projects/myproject/node_modules/@types: *new*
-  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
 /user/username/projects/node_modules/@types: *new*
-  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
@@ -438,13 +441,13 @@ Custom WatchedFiles::
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
-  {"id":2,"path":"/user/username/projects/myproject","recursive":true}
+  {"id":2,"path":"/user/username/projects/myproject","recursive":true,"ignoreUpdate":true}
 /user/username/projects/myproject/node_modules:
   {"id":5,"path":"/user/username/projects/myproject/node_modules","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
-  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
 /user/username/projects/node_modules/@types:
-  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 
 Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
@@ -548,25 +551,6 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 
 Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/b.ts update
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "watchChange",
-      "arguments": {
-        "id": 2,
-        "path": "/user/username/projects/myproject/b.ts",
-        "eventType": "update"
-      },
-      "seq": 4,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
 Before running Timeout callback:: count: 2
 3: /user/username/projects/myproject/tsconfig.json
 4: *ensureProjectForOpenFiles*
@@ -655,7 +639,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
       },
-      "seq": 5,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
@@ -702,13 +686,13 @@ Custom WatchedFiles *deleted*::
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
-  {"id":2,"path":"/user/username/projects/myproject","recursive":true}
+  {"id":2,"path":"/user/username/projects/myproject","recursive":true,"ignoreUpdate":true}
 /user/username/projects/myproject/node_modules:
   {"id":5,"path":"/user/username/projects/myproject/node_modules","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
-  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
 /user/username/projects/node_modules/@types:
-  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -745,7 +729,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
       },
-      "seq": 6,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
@@ -787,13 +771,13 @@ Custom WatchedFiles::
 
 Custom WatchedDirectoriesRecursive::
 /user/username/projects/myproject:
-  {"id":2,"path":"/user/username/projects/myproject","recursive":true}
+  {"id":2,"path":"/user/username/projects/myproject","recursive":true,"ignoreUpdate":true}
 /user/username/projects/myproject/node_modules:
   {"id":5,"path":"/user/username/projects/myproject/node_modules","recursive":true}
 /user/username/projects/myproject/node_modules/@types:
-  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true}
+  {"id":7,"path":"/user/username/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
 /user/username/projects/node_modules/@types:
-  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true}
+  {"id":8,"path":"/user/username/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -841,7 +825,7 @@ Info seq  [hh:mm:ss:mss] request:
         "path": "/user/username/projects/myproject/c.ts",
         "eventType": "update"
       },
-      "seq": 7,
+      "seq": 6,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/c.ts 1:: WatchInfo: /user/username/projects/myproject/c.ts 500 undefined WatchType: Closed Script info
@@ -892,25 +876,6 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 
 Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts update
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "watchChange",
-      "arguments": {
-        "id": 2,
-        "path": "/user/username/projects/myproject/c.ts",
-        "eventType": "update"
-      },
-      "seq": 8,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
 Before running Timeout callback:: count: 2
 5: /user/username/projects/myproject/tsconfig.json
 6: *ensureProjectForOpenFiles*
@@ -1010,15 +975,115 @@ Info seq  [hh:mm:ss:mss] request:
         "path": "/user/username/projects/myproject/node_modules/something/index.d.ts",
         "eventType": "update"
       },
-      "seq": 9,
+      "seq": 7,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
 After request
 
-Before running Timeout callback:: count: 0
+Timeout callback:: count: 3
+7: /user/username/projects/myproject/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+9: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
 
-After running Timeout callback:: count: 0
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/b.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/c.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/m.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/something/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+
+Before running Timeout callback:: count: 3
+7: /user/username/projects/myproject/tsconfig.json
+8: *ensureProjectForOpenFiles*
+9: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/node_modules/something/index.d.ts Text-2 "export const x = 10;export const y = 20;"
+	/user/username/projects/myproject/m.ts Text-1 "import { x } from \"something\""
+	/user/username/projects/myproject/c.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }export const y = 20;"
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+After running Timeout callback:: count: 1
+
+Timeout callback:: count: 1
+8: *ensureProjectForOpenFiles* *deleted*
+9: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *deleted*
+10: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/b.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/c.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/m.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/something/index.d.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
