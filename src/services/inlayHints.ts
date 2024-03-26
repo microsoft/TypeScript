@@ -69,9 +69,9 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOptionalTypeNode,
-    isParameter,
     isParameterDeclaration,
     isParenthesizedTypeNode,
+    isPartOfParameterDeclaration,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -452,7 +452,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function getParameterDeclarationTypeHints(symbol: Symbol) {
         const valueDeclaration = symbol.valueDeclaration;
-        if (!valueDeclaration || !isParameter(valueDeclaration)) {
+        if (!valueDeclaration || !isParameterDeclaration(valueDeclaration)) {
             return undefined;
         }
 
@@ -556,8 +556,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitForDisplayParts(node.default);
                     }
                     break;
-                case SyntaxKind.Parameter:
-                    Debug.assertNode(node, isParameter);
+                case SyntaxKind.ParameterDeclaration:
+                    Debug.assertNode(node, isParameterDeclaration);
                     if (node.modifiers) {
                         visitDisplayPartList(node.modifiers, " ");
                     }
@@ -899,7 +899,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
-        if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
+        if ((isPartOfParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }

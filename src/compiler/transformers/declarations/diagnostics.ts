@@ -33,7 +33,7 @@ import {
     isJSDocTypeAlias,
     isMethodDeclaration,
     isMethodSignature,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyDeclaration,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -115,7 +115,7 @@ export function canProduceDiagnostics(node: Node): node is DeclarationDiagnostic
         isMethodDeclaration(node) ||
         isMethodSignature(node) ||
         isFunctionDeclaration(node) ||
-        isParameter(node) ||
+        isParameterDeclaration(node) ||
         isTypeParameterDeclaration(node) ||
         isExpressionWithTypeArguments(node) ||
         isImportEqualsDeclaration(node) ||
@@ -213,7 +213,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
     else if (isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) || isFunctionDeclaration(node) || isIndexSignatureDeclaration(node)) {
         return getReturnTypeVisibilityError;
     }
-    else if (isParameter(node)) {
+    else if (isParameterDeclaration(node)) {
         if (isParameterPropertyDeclaration(node, node.parent) && hasSyntacticModifier(node.parent, ModifierFlags.Private)) {
             return getVariableDeclarationTypeVisibilityError;
         }
@@ -247,7 +247,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
         else if (
             node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
-            (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))
+            (node.kind === SyntaxKind.ParameterDeclaration && hasSyntacticModifier(node.parent, ModifierFlags.Private))
         ) {
             // TODO(jfreeman): Deal with computed properties in error reporting.
             if (isStatic(node)) {
@@ -257,7 +257,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                         Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                     Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
             }
-            else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.Parameter) {
+            else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ParameterDeclaration) {
                 return symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                         Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :

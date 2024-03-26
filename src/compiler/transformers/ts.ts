@@ -769,7 +769,7 @@ export function transformTypeScript(context: TransformationContext) {
                 // TypeScript arrow functions can have modifiers and type annotations.
                 return visitArrowFunction(node as ArrowFunction);
 
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 // This may be a parameter declaration with TypeScript syntax extensions.
                 //
                 // TypeScript parameter declaration syntax extensions include:

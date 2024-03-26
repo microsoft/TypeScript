@@ -239,7 +239,7 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
 function getVariableLikeInitializer(declaration: VariableLikeDeclaration): Expression | undefined {
     switch (declaration.kind) {
         case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertyAssignment:

@@ -94,7 +94,7 @@ import {
     isLineBreak,
     isNamedImports,
     isObjectLiteralExpression,
-    isParameter,
+    isParameterDeclaration,
     isPinnedComment,
     isPrologueDirective,
     isPropertyDeclaration,
@@ -791,8 +791,8 @@ export class ChangeTracker {
         else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
             return { suffix: ", " };
         }
-        else if (isParameter(before)) {
-            return isParameter(inserted) ? { suffix: ", " } : {};
+        else if (isParameterDeclaration(before)) {
+            return isParameterDeclaration(inserted) ? { suffix: ", " } : {};
         }
         else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
             return { suffix: ", " };
@@ -969,7 +969,7 @@ export class ChangeTracker {
             case SyntaxKind.ExportKeyword:
                 return { prefix: " " };
 
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return {};
 
             default:
@@ -1671,7 +1671,7 @@ function needSemicolonBetween(a: Node, b: Node): boolean {
 namespace deleteDeclaration {
     export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
         switch (node.kind) {
-            case SyntaxKind.Parameter: {
+            case SyntaxKind.ParameterDeclaration: {
                 const oldFunction = node.parent;
                 if (
                     isArrowFunction(oldFunction) &&

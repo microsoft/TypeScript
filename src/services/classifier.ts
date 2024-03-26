@@ -1128,7 +1128,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     if (
                         parent.kind === SyntaxKind.VariableDeclaration ||
                         parent.kind === SyntaxKind.PropertyDeclaration ||
-                        parent.kind === SyntaxKind.Parameter ||
+                        parent.kind === SyntaxKind.ParameterDeclaration ||
                         parent.kind === SyntaxKind.JsxAttribute
                     ) {
                         return ClassificationType.operator;
@@ -1195,7 +1195,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                             return ClassificationType.moduleName;
                         }
                         return;
-                    case SyntaxKind.Parameter:
+                    case SyntaxKind.ParameterDeclaration:
                         if ((token.parent as ParameterDeclaration).name === token) {
                             return isThisIdentifier(token) ? ClassificationType.keyword : ClassificationType.parameterName;
                         }

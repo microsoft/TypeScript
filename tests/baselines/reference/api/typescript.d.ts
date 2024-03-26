@@ -3754,6 +3754,8 @@ declare namespace ts {
         QualifiedName = 166,
         ComputedPropertyName = 167,
         TypeParameter = 168,
+        ParameterDeclaration = 169,
+        /** @deprecated Use SyntaxKind.ParameterDeclaration */
         Parameter = 169,
         Decorator = 170,
         PropertySignature = 171,
@@ -4459,7 +4461,7 @@ declare namespace ts {
         readonly declarations: NodeArray<VariableDeclaration>;
     }
     interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
-        readonly kind: SyntaxKind.Parameter;
+        readonly kind: SyntaxKind.ParameterDeclaration;
         readonly parent: SignatureDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly dotDotDotToken?: DotDotDotToken;
@@ -8820,7 +8822,7 @@ declare namespace ts {
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
     function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
-    function isParameter(node: Node): node is ParameterDeclaration;
+    function isParameterDeclaration(node: Node): node is ParameterDeclaration;
     function isDecorator(node: Node): node is Decorator;
     function isPropertySignature(node: Node): node is PropertySignature;
     function isPropertyDeclaration(node: Node): node is PropertyDeclaration;
@@ -11217,5 +11219,7 @@ declare namespace ts {
      * @param compilerOptions Optional compiler options.
      */
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
+    /** @deprecated Use `isParameterDeclaration` instead. */
+    const isParameter: (node: Node) => node is ParameterDeclaration;
 }
 export = ts;

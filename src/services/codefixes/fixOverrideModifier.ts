@@ -211,7 +211,7 @@ function isClassElementLikeHasJSDoc(node: Node): node is ClassElementLikeHasJSDo
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
             return true;
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
             return isParameterPropertyDeclaration(node, node.parent);
         default:
             return false;

@@ -160,7 +160,7 @@ import {
     isNonNullExpression,
     isNotEmittedStatement,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isPartiallyEmittedExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -557,7 +557,7 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
 export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration; name: Identifier; };
 
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
-    return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
+    return isParameterDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
 }
 
 export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
@@ -1167,7 +1167,7 @@ export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
  */
 export function getJSDocType(node: Node): TypeNode | undefined {
     let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
-    if (!tag && isParameter(node)) {
+    if (!tag && isParameterDeclaration(node)) {
         tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
     }
 
@@ -1820,7 +1820,7 @@ export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
 export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentElement): bindingElement is VariableDeclaration | ParameterDeclaration | BindingElement {
     switch (bindingElement.kind) {
         case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
             return true;
     }
@@ -1831,7 +1831,7 @@ export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentE
 /** @internal */
 export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement {
     return isVariableDeclaration(node)
-        || isParameter(node)
+        || isParameterDeclaration(node)
         || isObjectBindingOrAssignmentElement(node)
         || isArrayBindingOrAssignmentElement(node);
 }
@@ -2223,7 +2223,7 @@ export function canHaveSymbol(node: Node): node is Declaration {
         case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.ObjectLiteralExpression:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.PropertyAccessExpression:
         case SyntaxKind.PropertyAssignment:
         case SyntaxKind.PropertyDeclaration:
@@ -2306,7 +2306,7 @@ function isDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.NamespaceExportDeclaration
         || kind === SyntaxKind.NamespaceImport
         || kind === SyntaxKind.NamespaceExport
-        || kind === SyntaxKind.Parameter
+        || kind === SyntaxKind.ParameterDeclaration
         || kind === SyntaxKind.PropertyAssignment
         || kind === SyntaxKind.PropertyDeclaration
         || kind === SyntaxKind.PropertySignature
@@ -2534,7 +2534,7 @@ export function hasInitializer(node: Node): node is HasInitializer {
 export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertyAssignment:
@@ -2604,7 +2604,7 @@ function hasInternalAnnotation(range: CommentRange, sourceFile: SourceFile) {
 export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     sourceFile ??= getSourceFileOfNode(node);
     const parseTreeNode = getParseTreeNode(node);
-    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.ParameterDeclaration) {
         const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
         const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
         const text = sourceFile.text;

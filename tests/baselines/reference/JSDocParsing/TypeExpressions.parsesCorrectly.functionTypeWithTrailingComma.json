@@ -7,7 +7,7 @@
     "transformFlags": 1,
     "parameters": {
         "0": {
-            "kind": "Parameter",
+            "kind": "ParameterDeclaration",
             "pos": 10,
             "end": 11,
             "flags": "JSDoc",

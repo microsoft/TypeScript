@@ -680,7 +680,7 @@ function formatSpanWorker(
                 // falls through
 
             case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 const name = getNameOfDeclaration(node as Declaration);
                 if (name) {
                     return name.kind;

@@ -197,7 +197,7 @@ import {
     isModifier,
     isModuleDeclaration,
     isObjectLiteralExpression,
-    isParameter,
+    isParameterDeclaration,
     isPlainJsFile,
     isRequireCall,
     isRootedDiskPath,
@@ -2984,7 +2984,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Otherwise break to visit each child
 
                 switch (parent.kind) {
-                    case SyntaxKind.Parameter:
+                    case SyntaxKind.ParameterDeclaration:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
                         if ((parent as ParameterDeclaration | PropertyDeclaration | MethodDeclaration).questionToken === node) {
@@ -3093,7 +3093,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 else if (canHaveDecorators(parent) && parent.modifiers) {
                     const decoratorIndex = findIndex(parent.modifiers, isDecorator);
                     if (decoratorIndex >= 0) {
-                        if (isParameter(parent) && !options.experimentalDecorators) {
+                        if (isParameterDeclaration(parent) && !options.experimentalDecorators) {
                             // report illegall decorator on parameter
                             diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
                         }
@@ -3158,7 +3158,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                             return "skip";
                         }
                         break;
-                    case SyntaxKind.Parameter:
+                    case SyntaxKind.ParameterDeclaration:
                         // Check modifiers of parameter declaration
                         if (nodes === (parent as ParameterDeclaration).modifiers && some(nodes, isModifier)) {
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));

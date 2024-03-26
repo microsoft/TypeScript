@@ -120,7 +120,7 @@ import {
     isObjectLiteralElementLike,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isParameter,
+    isParameterDeclaration,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
     isPrefixUnaryExpression,
@@ -479,7 +479,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return visitVariableStatement(node as VariableStatement);
             case SyntaxKind.VariableDeclaration:
                 return visitVariableDeclaration(node as VariableDeclaration);
-            case SyntaxKind.Parameter:
+            case SyntaxKind.ParameterDeclaration:
                 return visitParameterDeclaration(node as ParameterDeclaration);
             case SyntaxKind.BindingElement:
                 return visitBindingElement(node as BindingElement);
@@ -2463,7 +2463,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         setCommentRange(statement, property);
 
         const propertyOriginalNode = getOriginalNode(property);
-        if (isParameter(propertyOriginalNode)) {
+        if (isParameterDeclaration(propertyOriginalNode)) {
             // replicate comment and source map behavior from the ts transform for parameter properties.
             setSourceMapRange(statement, propertyOriginalNode);
             removeAllComments(statement);

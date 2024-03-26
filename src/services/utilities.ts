@@ -221,7 +221,7 @@ import {
     isObjectLiteralExpression,
     isOptionalChain,
     isOptionalChainRoot,
-    isParameter,
+    isParameterDeclaration,
     isPartOfTypeNode,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -400,7 +400,7 @@ export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
         case SyntaxKind.VariableDeclaration:
             return isInJSFile(node) && getJSDocEnumTag(node) ? SemanticMeaning.All : SemanticMeaning.Value;
 
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
         case SyntaxKind.BindingElement:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
@@ -823,7 +823,7 @@ export function getNodeKind(node: Node): ScriptElementKind {
             return ScriptElementKind.typeParameterElement;
         case SyntaxKind.EnumMember:
             return ScriptElementKind.enumMemberElement;
-        case SyntaxKind.Parameter:
+        case SyntaxKind.ParameterDeclaration:
             return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
@@ -885,7 +885,7 @@ export function isThis(node: Node): boolean {
             return true;
         case SyntaxKind.Identifier:
             // 'this' as a parameter
-            return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.Parameter;
+            return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.ParameterDeclaration;
         default:
             return false;
     }
@@ -2767,7 +2767,7 @@ export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: S
 /** @internal */
 export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
     const declaration = symbol.declarations ? firstOrUndefined(symbol.declarations) : undefined;
-    return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+    return !!findAncestor(declaration, n => isParameterDeclaration(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
 
 const displayPartWriter = getDisplayPartWriter();
