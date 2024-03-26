@@ -2088,11 +2088,6 @@ export function getParsedCommandLineOfConfigFile(
 ): ParsedCommandLine | undefined {
     const typeConfig = hasTSFileExtension(configFileName) || hasJSFileExtension(configFileName) ? loadConfigFromDefaultType(
         configFileName,
-        optionsToExtend,
-        host,
-        extendedConfigCache,
-        watchOptionsToExtend,
-        extraFileExtensions
     ) : undefined;
     const configFileText = typeConfig
         ? typeConfig.configText
@@ -2124,11 +2119,6 @@ export function getParsedCommandLineOfConfigFile(
 
 export function loadConfigFromDefaultType(
     configFileName: string,
-    _optionsToExtend: CompilerOptions | undefined,
-    _host: ParseConfigFileHost,
-    _extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
-    _watchOptionsToExtend?: WatchOptions,
-    _extraFileExtensions?: readonly FileExtensionInfo[],
 ): { configText: string, errors: Diagnostic[] } | undefined {
     const program = createProgram({
         rootNames: [configFileName],
@@ -2145,6 +2135,7 @@ export function loadConfigFromDefaultType(
             types: [],
             moduleDetection: ModuleDetectionKind.Force,
         },
+        // TODO: Use passed-in host object instead of sys
     });
     const file = Debug.checkDefined(program.getSourceFile(configFileName));
     const checker = program.getTypeChecker();

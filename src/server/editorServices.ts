@@ -19,11 +19,13 @@ import {
     convertCompilerOptionsForTelemetry,
     convertJsonOption,
     createCachedDirectoryStructureHost,
+    createDetachedDiagnostic,
     createDocumentRegistryInternal,
     createGetCanonicalFileName,
     createMultiMap,
     Debug,
     Diagnostic,
+    Diagnostics,
     directorySeparator,
     DirectoryStructureHost,
     DirectoryWatcherCallback,
@@ -59,6 +61,7 @@ import {
     getSnapshotText,
     getWatchFactory,
     hasExtension,
+    hasJSFileExtension,
     hasProperty,
     hasTSFileExtension,
     HostCancellationToken,
@@ -76,6 +79,7 @@ import {
     JSDocParsingMode,
     LanguageServiceMode,
     length,
+    loadConfigFromDefaultType,
     map,
     mapDefinedEntries,
     mapDefinedIterator,
@@ -2243,13 +2247,13 @@ export class ProjectService {
         do {
             if (searchInDirectory) {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
-                const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                let result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
-                if (result) return tsconfigFileName;
 
-                const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                result = action(combinePaths(canonicalSearchPath, "jsconfig.json") as NormalizedPath, jsconfigFileName);
-                if (result) return jsconfigFileName;
+                const defaultConfigFileNames = ["tsconfig.d.ts", "tsconfig.ts", "tsconfig.js", "tsconfig.json", "jsconfig.json"];
+                for (const fileName of defaultConfigFileNames) {
+                    const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, fileName));
+                    const result = action(combinePaths(canonicalSearchPath, fileName) as NormalizedPath, tsconfigFileName);
+                    if (result) return tsconfigFileName;
+                }
 
                 // If we started within node_modules, don't look outside node_modules.
                 // Otherwise, we might pick up a very large project and pull in the world,
@@ -2576,8 +2580,14 @@ export class ProjectService {
         const cachedDirectoryStructureHost = configFileExistenceInfo.config?.cachedDirectoryStructureHost ||
             createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!;
 
+        let compilerHost: true | undefined;
+        if (hasTSFileExtension(configFilename) || hasJSFileExtension(configFilename)) {
+            compilerHost = true;
+        }
+
         // Read updated contents from disk
-        const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
+        const processedResult = compilerHost && loadConfigFromDefaultType(configFilename);
+        const configFileContent = compilerHost ? length(processedResult?.errors) ? processedResult!.errors[0] : processedResult ? processedResult.configText : createDetachedDiagnostic(configFilename, "", 0, 1, Diagnostics._0_expected, "typescript") : tryReadFile(configFilename, fileName => this.host.readFile(fileName));
         const configFile = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "") as TsConfigSourceFile;
         const configFileErrors = configFile.parseDiagnostics as Diagnostic[];
         if (!isString(configFileContent)) configFileErrors.push(configFileContent);
