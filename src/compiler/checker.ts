@@ -47247,6 +47247,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             clear(potentialReflectCollisions);
             clear(potentialUnusedRenamedBindingElementsInTypes);
 
+            if (links.flags & NodeCheckFlags.PartiallyTypeChecked) {
+                potentialThisCollisions = links.potentialThisCollisions!;
+                potentialNewTargetCollisions = links.potentialNewTargetCollisions!;
+                potentialWeakMapSetCollisions = links.potentialWeakMapSetCollisions!;
+                potentialReflectCollisions = links.potentialReflectCollisions!;
+                potentialUnusedRenamedBindingElementsInTypes = links.potentialUnusedRenamedBindingElementsInTypes!;
+            }
+
             forEach(node.statements, checkSourceElement);
             checkSourceElement(node.endOfFileToken);
 
@@ -47308,9 +47316,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Grammar checking
             checkGrammarSourceFile(file);
 
+            clear(potentialThisCollisions);
+            clear(potentialNewTargetCollisions);
+            clear(potentialWeakMapSetCollisions);
+            clear(potentialReflectCollisions);
+            clear(potentialUnusedRenamedBindingElementsInTypes);
+
             forEach(nodes, checkSourceElement);
 
             checkDeferredNodes(file);
+
+            (links.potentialThisCollisions || (links.potentialThisCollisions = [])).push(...potentialThisCollisions);
+            (links.potentialNewTargetCollisions || (links.potentialNewTargetCollisions = [])).push(...potentialNewTargetCollisions);
+            (links.potentialWeakMapSetCollisions || (links.potentialWeakMapSetCollisions = [])).push(...potentialWeakMapSetCollisions);
+            (links.potentialReflectCollisions || (links.potentialReflectCollisions = [])).push(...potentialReflectCollisions);
+            (links.potentialUnusedRenamedBindingElementsInTypes || (links.potentialUnusedRenamedBindingElementsInTypes = [])).push(
+                ...potentialUnusedRenamedBindingElementsInTypes);
+
+            links.flags |= NodeCheckFlags.PartiallyTypeChecked;
         }
     }
 

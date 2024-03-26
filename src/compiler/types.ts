@@ -5945,6 +5945,7 @@ export const enum NodeCheckFlags {
     ContainsClassWithPrivateIdentifiers      = 1 << 20,  // Marked on all block-scoped containers containing a class with private identifiers.
     ContainsSuperPropertyInStaticInitializer = 1 << 21,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
     InCheckIdentifier                        = 1 << 22,
+    PartiallyTypeChecked                     = 1 << 23,  // Source file has been partially type checked
 }
 
 // dprint-ignore
@@ -5981,6 +5982,11 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    potentialThisCollisions?: Node[];
+    potentialNewTargetCollisions?: Node[];
+    potentialWeakMapSetCollisions?: Node[];
+    potentialReflectCollisions?: Node[];
+    potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
 }
 
 /** @internal */
