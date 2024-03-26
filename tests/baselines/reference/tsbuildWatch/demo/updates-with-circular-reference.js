@@ -148,9 +148,9 @@ declare const console: { log(msg: any): void; };
 /a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:47 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * core/tsconfig.json
@@ -161,7 +161,7 @@ Output::
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
 
-[[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -220,11 +220,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 
 
@@ -316,15 +316,15 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:09 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:10 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
 
-[[90m12:01:31 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:32 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
 
-[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
