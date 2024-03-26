@@ -1,3 +1,8 @@
+if (process.versions.bun) {
+    // https://github.com/oven-sh/bun/issues/7664
+    globalThis.setImmediate = process.nextTick as any;
+}
+
 import {
     IO,
     userSpecifiedRoot,
