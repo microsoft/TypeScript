@@ -13359,14 +13359,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const nameElements = restDeclaration.name.elements;
         const elementFlags = restType.target.elementFlags;
-        let seenDotDotDotish = false;
+        let structuresMatch = true;
         return map(elementFlags, (elementFlag, i) => {
-            if (seenDotDotDotish || i >= nameElements.length) return undefined;
+            if (!structuresMatch || i >= nameElements.length) {
+                return undefined;
+            }
 
             const nameElement = nameElements[i];
 
             if (elementFlag & ElementFlags.Variable) {
-                seenDotDotDotish = true;
+                // they definitely won't match at the next iteration
+                // it's impossible to have a non-dotDotDot element after a dotDotDot element
+                structuresMatch = false;
                 if (nameElement.kind === SyntaxKind.BindingElement && nameElement.name.kind === SyntaxKind.Identifier && nameElement.dotDotDotToken) {
                     return nameElement.name.escapedText;
                 }
@@ -13376,7 +13380,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return undefined;
             }
             if (nameElement.dotDotDotToken) {
-                seenDotDotDotish = true;
+                structuresMatch = false;
                 return undefined;
             }
             if (nameElement.kind === SyntaxKind.BindingElement && nameElement.name.kind === SyntaxKind.Identifier) {
