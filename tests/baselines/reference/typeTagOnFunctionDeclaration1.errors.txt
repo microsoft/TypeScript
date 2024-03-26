@@ -1,0 +1,35 @@
+index.js(15,1): error TS2322: Type 'number' is not assignable to type 'string'.
+index.js(25,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== index.js (2 errors) ====
+    /**
+     * @type {{(arg1: string): string;}}
+    */
+    function fn(arg1) {
+        return arg1;
+    }
+    
+    /**
+     * @type {{(arg1: string): string; bar: string}}
+    */
+    function fn2(arg1) {
+        return arg1;
+    }
+    
+    fn2.bar = 42; // error
+    ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    
+    /**
+     * @type {{(arg1: string): string; bar: string}}
+    */
+    function fn3(arg1) {
+        return arg1;
+    }
+    
+    fn3('hello');
+    fn3(100); // error
+        ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    

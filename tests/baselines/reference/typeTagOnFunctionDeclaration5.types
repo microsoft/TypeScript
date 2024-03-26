@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration5.ts] ////
+
+=== index.js ===
+/** @type {{(): { doStuff(arg: number): void };}} */
+function fn1() {
+>fn1 : () => { doStuff(arg: number): void; }
+
+    return {
+>{        doStuff(arg) { }    } : { doStuff(arg: number): void; }
+
+        doStuff(arg) { }
+>doStuff : (arg: number) => void
+>arg : number
+    }
+};
+
+/** @type {{(): { doStuff(arg: number): void }; bar: number }} */
+function fn2() {
+>fn2 : typeof fn2
+
+    return {
+>{        doStuff(arg) { }    } : { doStuff(arg: number): void; }
+
+        doStuff(arg) { }
+>doStuff : (arg: number) => void
+>arg : number
+    }
+};
+
+fn2.bar = 10;
+>fn2.bar = 10 : 10
+>fn2.bar : number
+>fn2 : typeof fn2
+>bar : number
+>10 : 10
+

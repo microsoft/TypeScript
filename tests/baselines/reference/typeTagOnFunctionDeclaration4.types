@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration4.ts] ////
+
+=== index.js ===
+/** @type {{(arg1: string): void;}} */
+function Named1(arg) {
+>Named1 : typeof Named1
+>arg : string
+
+	this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+
+};
+Named1.foo = 10;
+>Named1.foo = 10 : 10
+>Named1.foo : number
+>Named1 : typeof Named1
+>foo : number
+>10 : 10
+
+/** @type {{(arg1: string): void; foo: number;}} */
+function Named2(arg) {
+>Named2 : typeof Named2
+>arg : string
+
+	this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+
+};
+Named2.foo = 10;
+>Named2.foo = 10 : 10
+>Named2.foo : number
+>Named2 : typeof Named2
+>foo : number
+>10 : 10
+

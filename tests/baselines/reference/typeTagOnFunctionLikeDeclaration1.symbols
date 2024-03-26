@@ -1,0 +1,75 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionLikeDeclaration1.ts] ////
+
+=== index.js ===
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test1() {
+>test1 : Symbol(test1, Decl(index.js, 0, 0))
+
+    return {
+        /** @type {{(arg: string): void}} */
+        doStuff(arg) { }
+>doStuff : Symbol(doStuff, Decl(index.js, 2, 12))
+>arg : Symbol(arg, Decl(index.js, 4, 16))
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test2() {
+>test2 : Symbol(test2, Decl(index.js, 6, 1))
+
+    return {
+        /** @type {{(arg: string): void; bar: string}} */
+        doStuff(arg) { }
+>doStuff : Symbol(doStuff, Decl(index.js, 10, 12))
+>arg : Symbol(arg, Decl(index.js, 12, 16))
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test3() {
+>test3 : Symbol(test3, Decl(index.js, 14, 1))
+
+    return {
+        /** @type {{(arg: string): void}} */
+        doStuff: (arg) => { }
+>doStuff : Symbol(doStuff, Decl(index.js, 18, 12))
+>arg : Symbol(arg, Decl(index.js, 20, 18))
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test4() {
+>test4 : Symbol(test4, Decl(index.js, 22, 1))
+
+    return {
+        /** @type {{(arg: string): void; bar: string}} */
+        doStuff: (arg) => { }
+>doStuff : Symbol(doStuff, Decl(index.js, 26, 12))
+>arg : Symbol(arg, Decl(index.js, 28, 18))
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test5() {
+>test5 : Symbol(test5, Decl(index.js, 30, 1))
+
+    return {
+        /** @type {{(arg: string): void}} */
+        doStuff: function (arg) { }
+>doStuff : Symbol(doStuff, Decl(index.js, 34, 12))
+>arg : Symbol(arg, Decl(index.js, 36, 27))
+    }
+}
+
+/** @type {{(): { doStuff(arg: 'a'): void }}}  */
+function test6() {
+>test6 : Symbol(test6, Decl(index.js, 38, 1))
+
+    return {
+        /** @type {{(arg: string): void; bar: string}} */
+        doStuff: function (arg) { }
+>doStuff : Symbol(doStuff, Decl(index.js, 42, 12))
+>arg : Symbol(arg, Decl(index.js, 44, 27))
+    }
+}
+

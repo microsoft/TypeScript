@@ -11426,14 +11426,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const getFunc = getTypeOfPropertyOfType(objectLitType, "get" as __String);
             if (getFunc) {
-                const getSig = getSingleCallSignature(getFunc);
+                const getSig = getSingleSignature(getFunc, SignatureKind.Call, /*allowMembers*/ true);
                 if (getSig) {
                     return getReturnTypeOfSignature(getSig);
                 }
             }
             const setFunc = getTypeOfPropertyOfType(objectLitType, "set" as __String);
             if (setFunc) {
-                const setSig = getSingleCallSignature(setFunc);
+                const setSig = getSingleSignature(setFunc, SignatureKind.Call, /*allowMembers*/ true);
                 if (setSig) {
                     return getTypeOfFirstParameterOfSignature(setSig);
                 }
@@ -15424,7 +15424,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // should be attached to a function declaration or expression
         if (!(isInJSFile(node) && isFunctionLikeDeclaration(node))) return undefined;
         const typeTag = getJSDocTypeTag(node);
-        return typeTag?.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+        return typeTag?.typeExpression && getSingleSignature(getTypeFromTypeNode(typeTag.typeExpression), SignatureKind.Call, /*allowMembers*/ true);
     }
 
     function getParameterTypeOfTypeTag(func: FunctionLikeDeclaration, parameter: ParameterDeclaration) {

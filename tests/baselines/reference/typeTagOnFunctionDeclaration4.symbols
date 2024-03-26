@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration4.ts] ////
+
+=== index.js ===
+/** @type {{(arg1: string): void;}} */
+function Named1(arg) {
+>Named1 : Symbol(Named1, Decl(index.js, 0, 0), Decl(index.js, 3, 2))
+>arg : Symbol(arg, Decl(index.js, 1, 16))
+
+	this.x = 1;
+>this.x : Symbol(Named1.x, Decl(index.js, 1, 22))
+>this : Symbol(Named1, Decl(index.js, 0, 0), Decl(index.js, 3, 2))
+>x : Symbol(Named1.x, Decl(index.js, 1, 22))
+
+};
+Named1.foo = 10;
+>Named1.foo : Symbol(Named1.foo, Decl(index.js, 3, 2))
+>Named1 : Symbol(Named1, Decl(index.js, 0, 0), Decl(index.js, 3, 2))
+>foo : Symbol(Named1.foo, Decl(index.js, 3, 2))
+
+/** @type {{(arg1: string): void; foo: number;}} */
+function Named2(arg) {
+>Named2 : Symbol(Named2, Decl(index.js, 4, 16), Decl(index.js, 9, 2))
+>arg : Symbol(arg, Decl(index.js, 7, 16))
+
+	this.x = 1;
+>this.x : Symbol(Named2.x, Decl(index.js, 7, 22))
+>this : Symbol(Named2, Decl(index.js, 4, 16), Decl(index.js, 9, 2))
+>x : Symbol(Named2.x, Decl(index.js, 7, 22))
+
+};
+Named2.foo = 10;
+>Named2.foo : Symbol(Named2.foo, Decl(index.js, 9, 2))
+>Named2 : Symbol(Named2, Decl(index.js, 4, 16), Decl(index.js, 9, 2))
+>foo : Symbol(Named2.foo, Decl(index.js, 9, 2))
+

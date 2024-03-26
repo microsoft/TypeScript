@@ -1,0 +1,63 @@
+index.js(13,9): error TS2741: Property 'bar' is missing in type '(arg: string) => void' but required in type '{ (arg: string): void; bar: string; }'.
+index.js(29,9): error TS2741: Property 'bar' is missing in type '(arg: string) => void' but required in type '{ (arg: string): void; bar: string; }'.
+index.js(45,9): error TS2741: Property 'bar' is missing in type '(arg: string) => void' but required in type '{ (arg: string): void; bar: string; }'.
+
+
+==== index.js (3 errors) ====
+    /** @type {{(): { doStuff(arg: 'a'): void }}}  */
+    function test1() {
+        return {
+            /** @type {{(arg: string): void}} */
+            doStuff(arg) { }
+        }
+    }
+    
+    /** @type {{(): { doStuff(arg: 'a'): void }}}  */
+    function test2() {
+        return {
+            /** @type {{(arg: string): void; bar: string}} */
+            doStuff(arg) { }
+            ~~~~~~~
+!!! error TS2741: Property 'bar' is missing in type '(arg: string) => void' but required in type '{ (arg: string): void; bar: string; }'.
+!!! related TS2728 index.js:12:42: 'bar' is declared here.
+        }
+    }
+    
+    /** @type {{(): { doStuff(arg: 'a'): void }}}  */
+    function test3() {
+        return {
+            /** @type {{(arg: string): void}} */
+            doStuff: (arg) => { }
+        }
+    }
+    
+    /** @type {{(): { doStuff(arg: 'a'): void }}}  */
+    function test4() {
+        return {
+            /** @type {{(arg: string): void; bar: string}} */
+            doStuff: (arg) => { }
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'bar' is missing in type '(arg: string) => void' but required in type '{ (arg: string): void; bar: string; }'.
+!!! related TS2728 index.js:28:42: 'bar' is declared here.
+        }
+    }
+    
+    /** @type {{(): { doStuff(arg: 'a'): void }}}  */
+    function test5() {
+        return {
+            /** @type {{(arg: string): void}} */
+            doStuff: function (arg) { }
+        }
+    }
+    
+    /** @type {{(): { doStuff(arg: 'a'): void }}}  */
+    function test6() {
+        return {
+            /** @type {{(arg: string): void; bar: string}} */
+            doStuff: function (arg) { }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'bar' is missing in type '(arg: string) => void' but required in type '{ (arg: string): void; bar: string; }'.
+!!! related TS2728 index.js:44:42: 'bar' is declared here.
+        }
+    }
+    

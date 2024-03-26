@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnFunctionDeclaration6.ts] ////
+
+=== index.js ===
+/** @type {{(this: { name: string }, arg: boolean): void}} */
+function fn1(arg) {
+>fn1 : Symbol(fn1, Decl(index.js, 0, 0))
+>arg : Symbol(arg, Decl(index.js, 1, 13))
+
+    this
+>this : Symbol(__type, Decl(index.js, 0, 18))
+}
+
+/** @type {{(this: { name: string }, arg: boolean): void; bar: string}} */
+function fn2(arg) {
+>fn2 : Symbol(fn2, Decl(index.js, 3, 1), Decl(index.js, 8, 1))
+>arg : Symbol(arg, Decl(index.js, 6, 13))
+
+    this
+>this : Symbol(__type, Decl(index.js, 5, 18))
+}
+
+fn2.bar = ''
+>fn2.bar : Symbol(fn2.bar, Decl(index.js, 8, 1))
+>fn2 : Symbol(fn2, Decl(index.js, 3, 1), Decl(index.js, 8, 1))
+>bar : Symbol(fn2.bar, Decl(index.js, 8, 1))
+
