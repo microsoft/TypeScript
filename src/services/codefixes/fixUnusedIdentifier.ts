@@ -27,6 +27,7 @@ import {
     isComputedPropertyName,
     isDeclarationWithTypeParameterChildren,
     isExpressionStatement,
+    isFunctionDeclaration,
     isIdentifier,
     isImportClause,
     isImportDeclaration,
@@ -127,6 +128,10 @@ registerCodeFix({
             return [
                 createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement),
             ];
+        }
+
+        if (isIdentifier(token) && isFunctionDeclaration(token.parent)) {
+            return [createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteFunctionLikeDeclaration(t, sourceFile, token.parent as FunctionLikeDeclaration)), [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)])];
         }
 
         const result: CodeFixAction[] = [];
@@ -430,4 +435,13 @@ function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDecl
 function mayDeleteExpression(node: Node) {
     return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
         ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
+}
+
+function deleteFunctionLikeDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: FunctionLikeDeclaration) {
+    const declarations = node.symbol.declarations;
+    if (declarations) {
+        for (const declaration of declarations) {
+            changes.delete(sourceFile, declaration);
+        }
+    }
 }
