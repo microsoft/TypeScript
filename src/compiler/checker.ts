@@ -47331,7 +47331,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (links.potentialWeakMapSetCollisions || (links.potentialWeakMapSetCollisions = [])).push(...potentialWeakMapSetCollisions);
             (links.potentialReflectCollisions || (links.potentialReflectCollisions = [])).push(...potentialReflectCollisions);
             (links.potentialUnusedRenamedBindingElementsInTypes || (links.potentialUnusedRenamedBindingElementsInTypes = [])).push(
-                ...potentialUnusedRenamedBindingElementsInTypes);
+                ...potentialUnusedRenamedBindingElementsInTypes,
+            );
 
             links.flags |= NodeCheckFlags.PartiallyTypeChecked;
         }
