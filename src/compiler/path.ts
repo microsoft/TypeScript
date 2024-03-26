@@ -158,6 +158,8 @@ function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
     return -1;
 }
 
+const dataApplicationRegex = /^(data:(?:[a-z0-9]+(?:\/[a-z0-9]+))?(?:;base64)?,)./;
+
 /**
  * Returns length of the root part of a path or URL (i.e. length of "/", "x:/", "//server/share/, file:///user/files").
  * If the root is part of a URL, the twos-complement of the root length is returned.
@@ -214,6 +216,12 @@ function getEncodedRootLength(path: string): number {
             return ~(authorityEnd + 1); // URL: "file://server/", "http://server/"
         }
         return ~path.length; // URL: "file://server", "http://server"
+    }
+
+    // Data: "data:application/typescript,42"
+    const match = dataApplicationRegex.exec(path);
+    if (match) {
+        return ~match[1].length;
     }
 
     // relative
@@ -705,7 +713,7 @@ export function ensureTrailingDirectorySeparator(path: Path): Path;
 export function ensureTrailingDirectorySeparator(path: string): string;
 /** @internal */
 export function ensureTrailingDirectorySeparator(path: string) {
-    if (!hasTrailingDirectorySeparator(path)) {
+    if (!hasTrailingDirectorySeparator(path) && !path.startsWith("data:")) {
         return path + directorySeparator;
     }
 
