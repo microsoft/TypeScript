@@ -13369,7 +13369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (elementFlag & ElementFlags.Variable) {
                 // they definitely won't match at the next iteration
-                // it's impossible to have a non-dotDotDot element after a dotDotDot element
+                // it's not valid to have a non-dotDotDot element after a dotDotDot element
                 structuresMatch = false;
                 if (nameElement.kind === SyntaxKind.BindingElement && nameElement.name.kind === SyntaxKind.Identifier && nameElement.dotDotDotToken) {
                     return nameElement.name.escapedText;

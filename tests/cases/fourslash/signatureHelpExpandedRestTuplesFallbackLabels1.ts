@@ -30,6 +30,13 @@
 //// function logFruitTuple5(...[fruit, ...fruitInfo]: FruitAndInfo2) {}
 //// logFruitTuple5(/*8*/);
 //// logFruitTuple5("apple", /*9*/);
+////
+//// type FruitAndInfo3 = ["apple", ...AppleInfo[], number] | ["banana", ...BananaInfo[], number];
+////
+//// function logFruitTuple6(...[fruit, fruitInfoOrNumber, secondFruitInfoOrNumber]: FruitAndInfo3) {}
+//// logFruitTuple6(/*10*/);
+//// logFruitTuple6("apple", /*11*/);
+//// logFruitTuple6("apple", { color: "red" }, /*12*/);
 
 verify.signatureHelp(
     {
@@ -112,5 +119,32 @@ verify.signatureHelp(
         parameterName: "fruitInfo",
         parameterSpan: "...fruitInfo: AppleInfo[]",
         isVariadic: true,
+    },
+    {
+        marker: "10",
+        text: `logFruitTuple6(fruit: "apple", ...__0_1: AppleInfo[], __0_2: number): void`,
+        overloadsCount: 2,
+        parameterCount: 3,
+        parameterName: "fruit",
+        parameterSpan: `fruit: "apple"`,
+        isVariadic: false,
+    },
+    {
+        marker: "11",
+        text: `logFruitTuple6(fruit: "apple", ...__0_1: AppleInfo[], __0_2: number): void`,
+        overloadsCount: 2,
+        parameterCount: 3,
+        parameterName: "__0_1",
+        parameterSpan: `...__0_1: AppleInfo[]`,
+        isVariadic: false,
+    },
+    {
+        marker: "12",
+        text: `logFruitTuple6(fruit: "apple", ...__0_1: AppleInfo[], __0_2: number): void`,
+        overloadsCount: 2,
+        parameterCount: 3,
+        parameterName: "__0_2",
+        parameterSpan: `__0_2: number`,
+        isVariadic: false,
     },
 );
