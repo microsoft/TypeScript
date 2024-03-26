@@ -14115,7 +14115,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getModifiersTypeOptionality(type: Type): number {
-        return type.flags & TypeFlags.Intersection ? Math.max(...map((type as IntersectionType).types, getModifiersTypeOptionality)) :
+        return type.flags & TypeFlags.Intersection ? Math.min(...map((type as IntersectionType).types, getModifiersTypeOptionality)) :
             getObjectFlags(type) & ObjectFlags.Mapped ? getCombinedMappedTypeOptionality(type as MappedType) :
             0;
     }
