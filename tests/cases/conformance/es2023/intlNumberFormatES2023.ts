@@ -24,3 +24,11 @@ new Intl.NumberFormat('en-GB').formatRange(10, 100);
 new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
 new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
 new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
+
+// Arbitrary-precision string arguments
+new Intl.NumberFormat('en-GB').format('-12.3E-4');
+new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8');
+new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8');
+new Intl.NumberFormat('en-GB').format('Infinity');
+new Intl.NumberFormat('en-GB').format('-Infinity');
+new Intl.NumberFormat('en-GB').format('+Infinity');
