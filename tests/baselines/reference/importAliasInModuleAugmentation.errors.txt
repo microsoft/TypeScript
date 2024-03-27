@@ -1,0 +1,26 @@
+importAliasInModuleAugmentation.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+importAliasInModuleAugmentation.ts(12,24): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+
+
+==== importAliasInModuleAugmentation.ts (2 errors) ====
+    export { }
+    
+    namespace A {
+        export const y = 34;
+        export interface y { s: string }
+    }
+    
+    declare global {
+        export import x = A.y;
+    
+        // Should still error
+        import f = require("fs");
+        ~~~~~~
+!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+                           ~~~~
+!!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+    }
+    
+    const m: number = x;
+    let s: x = { s: "" };
+    void s.s;

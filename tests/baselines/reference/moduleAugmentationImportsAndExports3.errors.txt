@@ -1,7 +1,5 @@
 f3.ts(11,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 f3.ts(11,21): error TS2307: Cannot find module './f2' or its corresponding type declarations.
-f3.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-f3.ts(13,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 
 
 ==== f1.ts (0 errors) ====
@@ -12,7 +10,7 @@ f3.ts(13,5): error TS2667: Imports are not permitted in module augmentations. Co
         n: number;
     }
     
-==== f3.ts (4 errors) ====
+==== f3.ts (2 errors) ====
     import {A} from "./f1";
     
     A.prototype.foo = function () { return undefined; }
@@ -29,11 +27,7 @@ f3.ts(13,5): error TS2667: Imports are not permitted in module augmentations. Co
                         ~~~~~~
 !!! error TS2307: Cannot find module './f2' or its corresponding type declarations.
         import I = N.Ifc;
-        ~~~~~~
-!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
         import C = N.Cls;
-        ~~~~~~
-!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
         interface A {
             foo(): B;
             bar(): I;
