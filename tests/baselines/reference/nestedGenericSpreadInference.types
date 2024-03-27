@@ -2,12 +2,12 @@
 
 === nestedGenericSpreadInference.ts ===
 declare function wrap<X>(x: X): { x: X };
->wrap : <X>(x: X) => {    x: X;}
+>wrap : <X>(x: X) => { x: X; }
 >x : X
 >x : X
 
 declare function call<A extends unknown[], T>(x: { x: (...args: A) => T }, ...args: A): T;
->call : <A extends unknown[], T>(x: {    x: (...args: A) => T;}, ...args: A) => T
+>call : <A extends unknown[], T>(x: { x: (...args: A) => T; }, ...args: A) => T
 >x : { x: (...args: A) => T; }
 >x : (...args: A) => T
 >args : A
