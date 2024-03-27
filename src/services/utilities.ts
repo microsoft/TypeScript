@@ -96,6 +96,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForEmit,
     getImpliedNodeFormatForFile,
     getIndentString,
     getJSDocEnumTag,
@@ -124,7 +125,6 @@ import {
     identity,
     idText,
     IfStatement,
-    impliedNodeFormatForEmit,
     ImportClause,
     ImportDeclaration,
     ImportSpecifier,
@@ -4252,7 +4252,7 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
         fileName: file,
         impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
     } : file;
-    const impliedNodeFormat = impliedNodeFormatForEmit(sourceFileLike, compilerOptions);
+    const impliedNodeFormat = getImpliedNodeFormatForEmit(sourceFileLike, compilerOptions);
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

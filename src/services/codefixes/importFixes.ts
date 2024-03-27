@@ -43,6 +43,7 @@ import {
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExportInfoMap,
+    getImpliedNodeFormatForEmit,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
     getNameForExportedSymbol,
@@ -58,7 +59,6 @@ import {
     getUniqueSymbolId,
     hostGetCanonicalFileName,
     Identifier,
-    impliedNodeFormatForEmit,
     ImportClause,
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
@@ -855,8 +855,8 @@ function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
     // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
     //    whatever syntax Node expects based on the detected module kind
     //    TODO: consider removing `impliedNodeFormatForEmit`
-    if (impliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.CommonJS) return true;
-    if (impliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.ESNext) return false;
+    if (getImpliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.CommonJS) return true;
+    if (getImpliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.ESNext) return false;
 
     // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
@@ -1166,7 +1166,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
             return ImportKind.Namespace;
         case ModuleKind.Node16:
         case ModuleKind.NodeNext:
-            return impliedNodeFormatForEmit(importingFile, compilerOptions) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
+            return getImpliedNodeFormatForEmit(importingFile, compilerOptions) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
             return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
     }

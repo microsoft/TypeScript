@@ -8574,7 +8574,7 @@ function isFileForcedToBeModuleByFormat(file: SourceFile, options: CompilerOptio
     // that aren't esm-mode (meaning not in a `type: module` scope).
     //
     // TODO: extension check never considered compilerOptions; should impliedNodeFormat?
-    return (impliedNodeFormatForEmit(file, options) === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
+    return (getImpliedNodeFormatForEmit(file, options) === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
 }
 
 /** @internal */
@@ -8625,11 +8625,11 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions) {
  * `program.getModeForUsageLocation` should be used instead.
  */
 export function getDefaultResolutionModeForFile(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
-    return importSyntaxAffectsModuleResolution(options) ? impliedNodeFormatForEmit(sourceFile, options) : undefined;
+    return importSyntaxAffectsModuleResolution(options) ? getImpliedNodeFormatForEmit(sourceFile, options) : undefined;
 }
 
 /** @internal */
-export function impliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
+export function getImpliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
     const moduleKind = getEmitModuleKind(options);
     if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
         return sourceFile.impliedNodeFormat;
@@ -8662,7 +8662,7 @@ export function shouldTransformImportCall(sourceFile: Pick<SourceFile, "fileName
 
 /** @internal */
 export function getEmitModuleFormatOfFile(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ModuleKind {
-    return impliedNodeFormatForEmit(sourceFile, options) ?? getEmitModuleKind(options);
+    return getImpliedNodeFormatForEmit(sourceFile, options) ?? getEmitModuleKind(options);
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };

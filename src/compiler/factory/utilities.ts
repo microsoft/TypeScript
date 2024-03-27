@@ -58,6 +58,7 @@ import {
     getESModuleInterop,
     getExternalModuleName,
     getExternalModuleNameFromPath,
+    getImpliedNodeFormatForEmit,
     getJSDocType,
     getJSDocTypeTag,
     getModifiers,
@@ -72,7 +73,6 @@ import {
     HasIllegalTypeParameters,
     Identifier,
     idText,
-    impliedNodeFormatForEmit,
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -714,7 +714,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || impliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.ESNext) {
+        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.ESNext) {
             // use named imports
             const helpers = getEmitHelpers(sourceFile);
             if (helpers) {

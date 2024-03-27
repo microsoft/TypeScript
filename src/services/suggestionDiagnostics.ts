@@ -23,10 +23,10 @@ import {
     getAllowSyntheticDefaultImports,
     getAssignmentDeclarationKind,
     getFunctionFlags,
+    getImpliedNodeFormatForEmit,
     hasInitializer,
     hasPropertyAccessExpressionWithName,
     Identifier,
-    impliedNodeFormatForEmit,
     importFromModuleSpecifier,
     isAsyncFunction,
     isBinaryExpression,
@@ -67,7 +67,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
     const diags: DiagnosticWithLocation[] = [];
     const checker = program.getTypeChecker();
-    const isCommonJSFile = impliedNodeFormatForEmit(sourceFile, program.getCompilerOptions()) === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
+    const isCommonJSFile = getImpliedNodeFormatForEmit(sourceFile, program.getCompilerOptions()) === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
 
     if (
         !isCommonJSFile &&

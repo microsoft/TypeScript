@@ -301,6 +301,7 @@ import {
     getIdentifierGeneratedImportReference,
     getIdentifierTypeArguments,
     getImmediatelyInvokedFunctionExpression,
+    getImpliedNodeFormatForEmit,
     getInitializerOfBinaryExpression,
     getInterfaceBaseTypeNodes,
     getInvokedExpression,
@@ -411,7 +412,6 @@ import {
     IdentifierTypePredicate,
     idText,
     IfStatement,
-    impliedNodeFormatForEmit,
     ImportAttribute,
     ImportAttributes,
     ImportCall,
@@ -4100,7 +4100,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
         const usageMode = file && getEmitSyntaxForModuleSpecifierExpression(usage);
         if (file && usageMode !== undefined) {
-            const targetMode = impliedNodeFormatForEmit(file, compilerOptions);
+            const targetMode = getImpliedNodeFormatForEmit(file, compilerOptions);
             if (usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS && ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
                 // In Node.js, CommonJS modules always have a synthetic default when imported into ESM
                 return true;
@@ -5333,7 +5333,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
-                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getEmitSyntaxForModuleSpecifierExpression(reference), impliedNodeFormatForEmit(targetFile, compilerOptions));
+                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getEmitSyntaxForModuleSpecifierExpression(reference), getImpliedNodeFormatForEmit(targetFile, compilerOptions));
                 if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
                     let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
                     if (!sigs || !sigs.length) {
@@ -46772,8 +46772,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (
                 moduleKind >= ModuleKind.ES2015 &&
                 moduleKind !== ModuleKind.Preserve &&
-                ((node.flags & NodeFlags.Ambient && impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.ESNext) ||
-                    (!(node.flags & NodeFlags.Ambient) && impliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) !== ModuleKind.CommonJS))
+                ((node.flags & NodeFlags.Ambient && getImpliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) === ModuleKind.ESNext) ||
+                    (!(node.flags & NodeFlags.Ambient) && getImpliedNodeFormatForEmit(getSourceFileOfNode(node), compilerOptions) !== ModuleKind.CommonJS))
             ) {
                 // export assignment is not supported in es6 modules
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead);
