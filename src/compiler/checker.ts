@@ -109,6 +109,7 @@ import {
     createDiagnosticForNodeFromMessageChain,
     createDiagnosticMessageChainFromDiagnostic,
     createEmptyExports,
+    createEvaluator,
     createFileDiagnostic,
     createGetCanonicalFileName,
     createGetSymbolWalker,
@@ -1474,6 +1475,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
     var nodeBuilder = createNodeBuilder();
+    var evaluate = createEvaluator({
+        evaluateElementAccessExpression,
+        evaluateEntityNameExpression,
+        onNumericLiteral: checkGrammarNumericLiteral,
+    });
 
     var globals = createSymbolTable();
     var undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
@@ -39279,7 +39285,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType)) {
             return getTemplateLiteralType(texts, types);
         }
-        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluateTemplateExpression(node);
+        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluate(node);
         return evaluated ? getFreshTypeOfLiteralType(getStringLiteralType(evaluated)) : stringType;
     }
 
@@ -45773,108 +45779,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
-        switch (expr.kind) {
-            case SyntaxKind.PrefixUnaryExpression:
-                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
-                if (typeof value === "number") {
-                    switch ((expr as PrefixUnaryExpression).operator) {
-                        case SyntaxKind.PlusToken:
-                            return value;
-                        case SyntaxKind.MinusToken:
-                            return -value;
-                        case SyntaxKind.TildeToken:
-                            return ~value;
-                    }
-                }
-                break;
-            case SyntaxKind.BinaryExpression:
-                const left = evaluate((expr as BinaryExpression).left, location);
-                const right = evaluate((expr as BinaryExpression).right, location);
-                if (typeof left === "number" && typeof right === "number") {
-                    switch ((expr as BinaryExpression).operatorToken.kind) {
-                        case SyntaxKind.BarToken:
-                            return left | right;
-                        case SyntaxKind.AmpersandToken:
-                            return left & right;
-                        case SyntaxKind.GreaterThanGreaterThanToken:
-                            return left >> right;
-                        case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            return left >>> right;
-                        case SyntaxKind.LessThanLessThanToken:
-                            return left << right;
-                        case SyntaxKind.CaretToken:
-                            return left ^ right;
-                        case SyntaxKind.AsteriskToken:
-                            return left * right;
-                        case SyntaxKind.SlashToken:
-                            return left / right;
-                        case SyntaxKind.PlusToken:
-                            return left + right;
-                        case SyntaxKind.MinusToken:
-                            return left - right;
-                        case SyntaxKind.PercentToken:
-                            return left % right;
-                        case SyntaxKind.AsteriskAsteriskToken:
-                            return left ** right;
-                    }
-                }
-                else if (
-                    (typeof left === "string" || typeof left === "number") &&
-                    (typeof right === "string" || typeof right === "number") &&
-                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
-                ) {
-                    return "" + left + right;
-                }
-                break;
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return (expr as StringLiteralLike).text;
-            case SyntaxKind.TemplateExpression:
-                return evaluateTemplateExpression(expr as TemplateExpression, location);
-            case SyntaxKind.NumericLiteral:
-                checkGrammarNumericLiteral(expr as NumericLiteral);
-                return +(expr as NumericLiteral).text;
-            case SyntaxKind.ParenthesizedExpression:
-                return evaluate((expr as ParenthesizedExpression).expression, location);
-            case SyntaxKind.Identifier: {
-                const identifier = expr as Identifier;
-                if (isInfinityOrNaNString(identifier.escapedText) && (resolveEntityName(identifier, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
-                    return +(identifier.escapedText);
-                }
-                // falls through
+    function evaluateEntityNameExpression(expr: EntityNameExpression, location?: Declaration) {
+        const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
+        if (!symbol) return undefined;
+
+        if (expr.kind === SyntaxKind.Identifier) {
+            const identifier = expr;
+            if (isInfinityOrNaNString(identifier.escapedText) && (symbol === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
+                return +(identifier.escapedText);
             }
-            case SyntaxKind.PropertyAccessExpression:
-                if (isEntityNameExpression(expr)) {
-                    const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
-                    if (symbol) {
-                        if (symbol.flags & SymbolFlags.EnumMember) {
-                            return location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
-                        }
-                        if (isConstantVariable(symbol)) {
-                            const declaration = symbol.valueDeclaration;
-                            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
-                                return evaluate(declaration.initializer, declaration);
-                            }
-                        }
-                    }
-                }
-                break;
-            case SyntaxKind.ElementAccessExpression:
-                const root = (expr as ElementAccessExpression).expression;
-                if (isEntityNameExpression(root) && isStringLiteralLike((expr as ElementAccessExpression).argumentExpression)) {
-                    const rootSymbol = resolveEntityName(root, SymbolFlags.Value, /*ignoreErrors*/ true);
-                    if (rootSymbol && rootSymbol.flags & SymbolFlags.Enum) {
-                        const name = escapeLeadingUnderscores(((expr as ElementAccessExpression).argumentExpression as StringLiteralLike).text);
-                        const member = rootSymbol.exports!.get(name);
-                        if (member) {
-                            return location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
-                        }
-                    }
-                }
-                break;
         }
-        return undefined;
+
+        if (symbol.flags & SymbolFlags.EnumMember) {
+            return location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
+        }
+        if (isConstantVariable(symbol)) {
+            const declaration = symbol.valueDeclaration;
+            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
+                return evaluate(declaration.initializer, declaration);
+            }
+        }
+    }
+
+    function evaluateElementAccessExpression(expr: ElementAccessExpression, location?: Declaration) {
+        const root = expr.expression;
+        if (isEntityNameExpression(root) && isStringLiteralLike(expr.argumentExpression)) {
+            const rootSymbol = resolveEntityName(root, SymbolFlags.Value, /*ignoreErrors*/ true);
+            if (rootSymbol && rootSymbol.flags & SymbolFlags.Enum) {
+                const name = escapeLeadingUnderscores(expr.argumentExpression.text);
+                const member = rootSymbol.exports!.get(name);
+                if (member) {
+                    return location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
+                }
+            }
+        }
     }
 
     function evaluateEnumMember(expr: Expression, symbol: Symbol, location: Declaration) {
@@ -45888,19 +45826,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return 0;
         }
         return getEnumMemberValue(declaration as EnumMember);
-    }
-
-    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
-        let result = expr.head.text;
-        for (const span of expr.templateSpans) {
-            const value = evaluate(span.expression, location);
-            if (value === undefined) {
-                return undefined;
-            }
-            result += value;
-            result += span.literal.text;
-        }
-        return result;
     }
 
     function checkEnumDeclaration(node: EnumDeclaration) {
