@@ -3,13 +3,16 @@
 === file.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x: number;
 >x : number
+>  : ^^^^^^
 }
 
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     var module: any; // Just here to remove unrelated error from test
 >module : any
@@ -17,6 +20,7 @@ declare global {
 
 export = Foo;
 >Foo : Foo
+>    : ^^^
 
 === something.js ===
 /** @typedef {typeof import("./file")} Foo */
@@ -25,10 +29,17 @@ export = Foo;
 
 module.exports = /** @type {FooFun} */(void 0);
 >module.exports = /** @type {FooFun} */(void 0) : (foo: Foo) => string
+>                                               : ^^^^^^   ^^^^^      
 >module.exports : (foo: typeof import("file")) => string
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: (foo: typeof import("file")) => string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : (foo: typeof import("file")) => string
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(void 0) : FooFun
+>         : ^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 

@@ -3,21 +3,32 @@
 === topLevelAwaitNonModule.ts ===
 await x;
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 
 const arr = [Promise.resolve()];
 >arr : Promise<void>[]
+>    : ^^^^^^^^^^^^^^^
 >[Promise.resolve()] : Promise<void>[]
+>                    : ^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 for await (const item of arr) {
 >item : void
+>     : ^^^^
 >arr : Promise<void>[]
+>    : ^^^^^^^^^^^^^^^
 
   item;
 >item : void
+>     : ^^^^
 }
 

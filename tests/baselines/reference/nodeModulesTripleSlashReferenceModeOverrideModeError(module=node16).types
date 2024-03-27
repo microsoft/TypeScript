@@ -4,16 +4,20 @@
 /// <reference types="pkg" resolution-mode="esm"/>
 foo; // bad resolution mode, which resolves is arbitrary
 >foo : any
+>    : ^^^
 
 bar;
 >bar : number
+>    : ^^^^^^
 
 export {};
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     var bar: number;
 >bar : number
+>    : ^^^^^^
 }

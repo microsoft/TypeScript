@@ -3,10 +3,13 @@
 === /app/lib/bar.d.ts ===
 declare const y: number;
 >y : number
+>  : ^^^^^^
 
 === /app/src/index.ts ===
 /// <reference path="../lib/bar.d.ts" preserve="true" />
 export const x = y;
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 

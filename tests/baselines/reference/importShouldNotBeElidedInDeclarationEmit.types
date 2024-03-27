@@ -3,23 +3,31 @@
 === node_modules/umd.d.ts ===
 export as namespace UMD;
 >UMD : typeof import("node_modules/umd")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type Thing = {
->Thing : { a: number; }
+>Thing : Thing
+>      : ^^^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 export declare function makeThing(): Thing;
 >makeThing : () => Thing
+>          : ^^^^^^     
 
 === index.ts ===
 import { makeThing } from "umd";
 >makeThing : () => import("node_modules/umd").Thing
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const thing = makeThing();
 >thing : import("node_modules/umd").Thing
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeThing() : import("node_modules/umd").Thing
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeThing : () => import("node_modules/umd").Thing
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

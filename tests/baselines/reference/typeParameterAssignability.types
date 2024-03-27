@@ -5,16 +5,25 @@
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
+>    : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t; // error
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 }

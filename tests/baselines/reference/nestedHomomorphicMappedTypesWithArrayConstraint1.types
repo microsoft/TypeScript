@@ -5,6 +5,7 @@
 
 type MatchArguments<T> = {
 >MatchArguments : MatchArguments<T>
+>               : ^^^^^^^^^^^^^^^^^
 
     [K in keyof T]: T[K];
 };
@@ -12,5 +13,7 @@ type MatchArguments<T> = {
 interface SinonSpyCallApi<TArgs extends any[] = any[]> {
     calledWith(...args: Partial<MatchArguments<TArgs>>): boolean;
 >calledWith : (...args: Partial<MatchArguments<TArgs>>) => boolean
+>           : ^^^^^^^^^^                              ^^^^^       
 >args : Partial<MatchArguments<TArgs>>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -7,20 +7,27 @@ export interface Foo {}
 === b.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
   namespace teams {
 >teams : typeof teams
+>      : ^^^^^^^^^^^^
 
     export namespace calling {
 >calling : typeof calling
+>        : ^^^^^^^^^^^^^^
 
       export import Foo = a.Foo;
 >Foo : any
+>    : ^^^
 >a : typeof a
+>  : ^^^^^^^^
 >Foo : Foo
+>    : ^^^
     }
   }
 }
@@ -28,11 +35,17 @@ declare global {
 === c.ts ===
 type Foo = teams.calling.Foo;
 >Foo : import("a").Foo
+>    : ^^^^^^^^^^^^^^^
 >teams : any
+>      : ^^^
 >calling : any
+>        : ^^^
 
 export const bar = (p?: Foo) => {}
 >bar : (p?: Foo) => void
+>    : ^^^^^   ^^^^^^^^^
 >(p?: Foo) => {} : (p?: Foo) => void
+>                : ^^^^^   ^^^^^^^^^
 >p : import("a").Foo | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

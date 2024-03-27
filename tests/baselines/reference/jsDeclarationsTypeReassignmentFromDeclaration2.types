@@ -3,26 +3,39 @@
 === index.js ===
 const items = require("./some-mod")();
 >items : Item[]
+>      : ^^^^^^
 >require("./some-mod")() : Item[]
+>                        : ^^^^^^
 >require("./some-mod") : () => Item[]
+>                      : ^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >"./some-mod" : "./some-mod"
+>             : ^^^^^^^^^^^^
 
 module.exports = items;
 >module.exports = items : Item[]
+>                       : ^^^^^^
 >module.exports : Item[]
+>               : ^^^^^^
 >module : { exports: Item[]; }
+>       : ^^^^^^^^^^^^^^^^^^^^
 >exports : Item[]
+>        : ^^^^^^
 >items : Item[]
+>      : ^^^^^^
 
 === some-mod.d.ts ===
 interface Item {
     x: string;
 >x : string
+>  : ^^^^^^
 }
 declare function getItems(): Item[];
 >getItems : () => Item[]
+>         : ^^^^^^      
 
 export = getItems;
 >getItems : () => Item[]
+>         : ^^^^^^^^^^^^
 

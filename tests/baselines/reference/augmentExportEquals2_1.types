@@ -3,33 +3,42 @@
 === file3.ts ===
 import x = require("file1");
 >x : () => void
+>  : ^^^^^^^^^^
 
 import "file2";
 let a: x.A; // should not work
 >a : x.A
+>  : ^^^
 >x : any
+>  : ^^^
 
 === file1.d.ts ===
 declare module "file1" {
 >"file1" : typeof import("file1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     function foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 
     export = foo;
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 === file2.ts ===
 /// <reference path="file1.d.ts"/> 
 import x = require("file1"); 
 >x : () => void
+>  : ^^^^^^^^^^
 
 // should error since './file1' does not have namespace meaning
 declare module "file1" {
 >"file1" : any
+>        : ^^^
 
     interface A { a }
 >a : any
+>  : ^^^
 }
 

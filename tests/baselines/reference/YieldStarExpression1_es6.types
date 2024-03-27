@@ -3,6 +3,9 @@
 === YieldStarExpression1_es6.ts ===
 yield * [];
 >yield * [] : number
+>           : ^^^^^^
 >yield : any
+>      : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

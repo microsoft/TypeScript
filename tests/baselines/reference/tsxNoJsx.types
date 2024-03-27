@@ -4,4 +4,5 @@
 <nope />;
 ><nope /> : error
 >nope : any
+>     : ^^^
 

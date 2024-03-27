@@ -3,54 +3,81 @@
 === global.ts ===
 namespace n {
 >n : typeof n
+>  : ^^^^^^^^
 
     function id<T>(x: T): T {
 >id : <T>(x: T) => T
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
+>  : ^
 
         return x;
 >x : T
+>  : ^
     }
 
     function templateObjectFactory() {
 >templateObjectFactory : () => TemplateStringsArray
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return id`hello world`;
 >id`hello world` : TemplateStringsArray
+>                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
+>   : ^^^^^^^^^^^^^^
 >`hello world` : "hello world"
+>              : ^^^^^^^^^^^^^
     }
     let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
+>       : ^^^^^^^
 >templateObjectFactory() === templateObjectFactory() : boolean
+>                                                    : ^^^^^^^
 >templateObjectFactory() : TemplateStringsArray
+>                        : ^^^^^^^^^^^^^^^^^^^^
 >templateObjectFactory : () => TemplateStringsArray
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >templateObjectFactory() : TemplateStringsArray
+>                        : ^^^^^^^^^^^^^^^^^^^^
 >templateObjectFactory : () => TemplateStringsArray
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 === module.ts ===
 export { }
 function id<T>(x: T): T {
 >id : <T>(x: T) => T
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 function templateObjectFactory() {
 >templateObjectFactory : () => TemplateStringsArray
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return id`hello world`;
 >id`hello world` : TemplateStringsArray
+>                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
+>   : ^^^^^^^^^^^^^^
 >`hello world` : "hello world"
+>              : ^^^^^^^^^^^^^
 }
 let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
+>       : ^^^^^^^
 >templateObjectFactory() === templateObjectFactory() : boolean
+>                                                    : ^^^^^^^
 >templateObjectFactory() : TemplateStringsArray
+>                        : ^^^^^^^^^^^^^^^^^^^^
 >templateObjectFactory : () => TemplateStringsArray
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >templateObjectFactory() : TemplateStringsArray
+>                        : ^^^^^^^^^^^^^^^^^^^^
 >templateObjectFactory : () => TemplateStringsArray
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

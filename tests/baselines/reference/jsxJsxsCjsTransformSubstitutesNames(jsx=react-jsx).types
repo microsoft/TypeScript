@@ -10,8 +10,12 @@ Symbol count: 66,500 / 66,500 (nearest 500)
 /// <reference path="react16.d.ts" />
 const a = <div></div>
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 export {};
