@@ -192,4 +192,35 @@ function g<T>() {
 >x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
 }
 
+// https://github.com/microsoft/TypeScript/issues/57827
+
+type StringKeys<T> = Extract<
+>StringKeys : Symbol(StringKeys, Decl(keyRemappingKeyofResult.ts, 68, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 72, 16))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+
+  keyof {
+    [P in keyof T as T[P] extends string ? P : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 74, 5))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 72, 16))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 72, 16))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 74, 5))
+>P : Symbol(P, Decl(keyRemappingKeyofResult.ts, 74, 5))
+
+  },
+  string
+>;
+
+function test_57827<T>(z: StringKeys<T>) {
+>test_57827 : Symbol(test_57827, Decl(keyRemappingKeyofResult.ts, 77, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 79, 20))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 79, 23))
+>StringKeys : Symbol(StringKeys, Decl(keyRemappingKeyofResult.ts, 68, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 79, 20))
+
+  const f: string = z;
+>f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 80, 7))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 79, 23))
+}
+
 export {};

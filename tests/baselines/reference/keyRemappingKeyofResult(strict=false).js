@@ -71,6 +71,19 @@ function g<T>() {
     x = "str";
 }
 
+// https://github.com/microsoft/TypeScript/issues/57827
+
+type StringKeys<T> = Extract<
+  keyof {
+    [P in keyof T as T[P] extends string ? P : never]: any;
+  },
+  string
+>;
+
+function test_57827<T>(z: StringKeys<T>) {
+  const f: string = z;
+}
+
 export {};
 
 //// [keyRemappingKeyofResult.js]
@@ -97,5 +110,8 @@ function g() {
     let x;
     x = sym;
     x = "str";
+}
+function test_57827(z) {
+    const f = z;
 }
 export {};
