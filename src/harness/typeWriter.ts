@@ -48,7 +48,7 @@ const createSyntheticNodeUnderliningPrinter = memoize((): { printer: ts.Printer;
     let underlining = false;
     const printer = createPrinter({ removeComments: true }, {
         onEmitNode: (hint, node, cb) => {
-            if (ts.nodeIsSynthesized(node) === underlining) {
+            if (ts.nodeIsSynthesized(node) !== underlining) {
                 // either node is synthetic and underlining needs to be disabled, or node is not synthetic and
                 // underlining needs to be enabled
                 underlining = !underlining;
