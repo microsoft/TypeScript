@@ -68,8 +68,8 @@ class C {
 >  : ^^^^^^
     }
     explicitProperty(this: {n: number}, m: number): number {
->explicitProperty : (this: {    n: number;}, m: number) => number
->                 : ^^^^^^^                ^^^^^      ^^^^^      
+>explicitProperty : (this: { n: number; }, m: number) => number
+>                 : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -177,8 +177,8 @@ interface I {
 >     : ^^^^
 
     explicitStructural(this: {a: number}): number;
->explicitStructural : (this: {    a: number;}) => number
->                   : ^^^^^^^                ^^^^^      
+>explicitStructural : (this: { a: number; }) => number
+>                   : ^^^^^^^              ^^^^^      
 >this : { a: number; }
 >     : ^^^^^      ^^^
 >a : number
@@ -296,8 +296,8 @@ implExplicitInterface(); // error, no 'a' in 'void'
 >                      : ^^^^^^^^^^^^^^^^^^^
 
 function explicitStructural(this: { y: number }, x: number): number {
->explicitStructural : (this: {    y: number;}, x: number) => number
->                   : ^^^^^^^                ^^^^^      ^^^^^      
+>explicitStructural : (this: { y: number; }, x: number) => number
+>                   : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { y: number; }
 >     : ^^^^^      ^^^
 >y : number
@@ -318,8 +318,8 @@ function explicitStructural(this: { y: number }, x: number): number {
 >  : ^^^^^^
 }
 function propertyName(this: { y: number }, x: number): number {
->propertyName : (this: {    y: number;}, x: number) => number
->             : ^^^^^^^                ^^^^^      ^^^^^      
+>propertyName : (this: { y: number; }, x: number) => number
+>             : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { y: number; }
 >     : ^^^^^      ^^^
 >y : number
@@ -360,12 +360,12 @@ function voidThisSpecified(this: void, x: number): number {
 >             : ^^^
 }
 let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, explicitStructural };
->ok : { y: number; f: (this: {    y: number;}, x: number) => number; }
->   : ^^^^^      ^^^^^                                             ^^^
+>ok : { y: number; f: (this: { y: number; }, x: number) => number; }
+>   : ^^^^^      ^^^^^                                           ^^^
 >y : number
 >  : ^^^^^^
->f : (this: {    y: number;}, x: number) => number
->  : ^^^^^^^                ^^^^^      ^^^^^      
+>f : (this: { y: number; }, x: number) => number
+>  : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { y: number; }
 >     : ^^^^^      ^^^
 >y : number
@@ -382,12 +382,12 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, ex
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number} = { y: 'foo', explicitStructural };
->wrongPropertyType : { y: string; f: (this: {    y: number;}, x: number) => number; }
->                  : ^^^^^      ^^^^^                                             ^^^
+>wrongPropertyType : { y: string; f: (this: { y: number; }, x: number) => number; }
+>                  : ^^^^^      ^^^^^                                           ^^^
 >y : string
 >  : ^^^^^^
->f : (this: {    y: number;}, x: number) => number
->  : ^^^^^^^                ^^^^^      ^^^^^      
+>f : (this: { y: number; }, x: number) => number
+>  : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { y: number; }
 >     : ^^^^^      ^^^
 >y : number
@@ -404,12 +404,12 @@ let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) => number} = { wrongName: 12, explicitStructural };
->wrongPropertyName : { wrongName: number; f: (this: {    y: number;}, x: number) => number; }
->                  : ^^^^^^^^^^^^^      ^^^^^                                             ^^^
+>wrongPropertyName : { wrongName: number; f: (this: { y: number; }, x: number) => number; }
+>                  : ^^^^^^^^^^^^^      ^^^^^                                           ^^^
 >wrongName : number
 >          : ^^^^^^
->f : (this: {    y: number;}, x: number) => number
->  : ^^^^^^^                ^^^^^      ^^^^^      
+>f : (this: { y: number; }, x: number) => number
+>  : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { y: number; }
 >     : ^^^^^      ^^^
 >y : number
@@ -649,8 +649,8 @@ let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let reconstructed: { 
->reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: {    n: number;}, m: number) => number; explicitVoid(this: void, m: number): number; }
->              : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^^      ^^^
+>reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
+>              : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^^      ^^^
 
     n: number,
 >n : number
@@ -673,8 +673,8 @@ let reconstructed: {
 >  : ^^^^^^
 
     explicitProperty: (this: {n : number}, m: number) => number,
->explicitProperty : (this: {    n: number;}, m: number) => number
->                 : ^^^^^^^                ^^^^^      ^^^^^      
+>explicitProperty : (this: { n: number; }, m: number) => number
+>                 : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -752,8 +752,8 @@ let d = new D();
 >  : ^^^^^^^^
 
 let explicitXProperty: (this: { x: number }, m: number) => number;
->explicitXProperty : (this: {    x: number;}, m: number) => number
->                  : ^^^^^^^                ^^^^^      ^^^^^      
+>explicitXProperty : (this: { x: number; }, m: number) => number
+>                  : ^^^^^^^              ^^^^^      ^^^^^      
 >this : { x: number; }
 >     : ^^^^^      ^^^
 >x : number
@@ -1272,10 +1272,10 @@ c.explicitProperty = (this, m) => m + this.n;
 >  : ^^^
 
 const f2 = <T>(this: {n: number}, m: number) => m + this.n;
->f2 : <T>(this: {    n: number;}, m: number) => any
->   : ^^^^^^^^^^                ^^^^^      ^^^^^^^^
-><T>(this: {n: number}, m: number) => m + this.n : <T>(this: {    n: number;}, m: number) => any
->                                                : ^^^^^^^^^^                ^^^^^      ^^^^^^^^
+>f2 : <T>(this: { n: number; }, m: number) => any
+>   : ^^^^^^^^^^              ^^^^^      ^^^^^^^^
+><T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => any
+>                                                : ^^^^^^^^^^              ^^^^^      ^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -1294,10 +1294,10 @@ const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 >  : ^^^
 
 const f3 = async (this: {n: number}, m: number) => m + this.n;
->f3 : (this: {    n: number;}, m: number) => Promise<any>
->   : ^^^^^^^                ^^^^^      ^^^^^^^^^^^^^^^^^
->async (this: {n: number}, m: number) => m + this.n : (this: {    n: number;}, m: number) => Promise<any>
->                                                   : ^^^^^^^                ^^^^^      ^^^^^^^^^^^^^^^^^
+>f3 : (this: { n: number; }, m: number) => Promise<any>
+>   : ^^^^^^^              ^^^^^      ^^^^^^^^^^^^^^^^^
+>async (this: {n: number}, m: number) => m + this.n : (this: { n: number; }, m: number) => Promise<any>
+>                                                   : ^^^^^^^              ^^^^^      ^^^^^^^^^^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -1316,10 +1316,10 @@ const f3 = async (this: {n: number}, m: number) => m + this.n;
 >  : ^^^
 
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
->f4 : <T>(this: {    n: number;}, m: number) => Promise<any>
->   : ^^^^^^^^^^                ^^^^^      ^^^^^^^^^^^^^^^^^
->async <T>(this: {n: number}, m: number) => m + this.n : <T>(this: {    n: number;}, m: number) => Promise<any>
->                                                      : ^^^^^^^^^^                ^^^^^      ^^^^^^^^^^^^^^^^^
+>f4 : <T>(this: { n: number; }, m: number) => Promise<any>
+>   : ^^^^^^^^^^              ^^^^^      ^^^^^^^^^^^^^^^^^
+>async <T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => Promise<any>
+>                                                      : ^^^^^^^^^^              ^^^^^      ^^^^^^^^^^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number

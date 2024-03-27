@@ -7,8 +7,8 @@ import a = require('moduleAliasAsFunctionArgument_0');
 >  : ^^^^^^^^
 
 function fn(arg: { x: number }) {
->fn : (arg: {    x: number;}) => void
->   : ^^^^^^                ^^^^^^^^^
+>fn : (arg: { x: number; }) => void
+>   : ^^^^^^              ^^^^^^^^^
 >arg : { x: number; }
 >    : ^^^^^      ^^^
 >x : number

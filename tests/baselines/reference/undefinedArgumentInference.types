@@ -2,8 +2,8 @@
 
 === undefinedArgumentInference.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
->foo1 : <T>(f1: {    x: T;    y: T;}) => T
->     : ^^^^^^^^        ^        ^  ^^^^^^
+>foo1 : <T>(f1: { x: T; y: T; }) => T
+>     : ^^^^^^^^     ^     ^   ^^^^^^
 >f1 : { x: T; y: T; }
 >   : ^^^^^^^^^^^^^^^
 >x : T

@@ -111,10 +111,10 @@ module Errors {
 >a2 : any
 
     declare function foo11(a2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a2;
->foo11 : { (a2: new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base): new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base; (a2: any): any; }
->      : ^^^^^^^                                                                      ^^^^^^^^^^^^^^^                  ^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a2 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
->   : ^^^^^^^^                  ^^^^^                                  ^^^^^^^^^
+>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
+>      : ^^^^^^^                                                               ^^^^^^^^^^^^^^^                ^^^^^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>   : ^^^^^^^^                ^^^^^                             ^^^^^^^^^
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -151,10 +151,10 @@ module Errors {
 >a2 : any
 
     declare function foo15(a2: new (x: { a: string; b: number }) => number): typeof a2;
->foo15 : { (a2: new (x: {    a: string;    b: number;}) => number): new (x: {    a: string;    b: number;}) => number; (a2: any): any; }
->      : ^^^^^^^                                                 ^^^^^^^^^^^                              ^^^^^      ^^^^^^^^^^^^^^^^^^^
->a2 : new (x: {    a: string;    b: number;}) => number
->   : ^^^^^^^^                              ^^^^^      
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
+>      : ^^^^^^^                                            ^^^^^^^^^^^                         ^^^^^      ^^^^^^^^^^^^^^^^^^^
+>a2 : new (x: { a: string; b: number; }) => number
+>   : ^^^^^^^^                         ^^^^^      
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -170,10 +170,10 @@ module Errors {
 >a2 : any
 
     declare function foo16(a2: {
->foo16 : { (a2: {    new (x: {        new (a: number): number;        new (a?: number): number;    }): number[];    new (x: {        new (a: boolean): boolean;        new (a?: boolean): boolean;    }): boolean[];}): { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }; (a2: any): any; }
->      : ^^^^^^^                                                                                                                                                                                                     ^^^^^^^^^^^^^                                                           ^^^        ^^^^^^^^^^                                                               ^^^         ^^^^^^^^^^^^^^^^^^^^^^
->a2 : { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }
->   : ^^^^^^^^^^                                                           ^^^        ^^^^^^^^^^                                                               ^^^         ^^^
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
+>      : ^^^^^^^                                                                                                                                                              ^^^^^^^^^^^^^                                                      ^^^        ^^^^^^^^^^                                                          ^^^         ^^^^^^^^^^^^^^^^^^^^^^
+>a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>   : ^^^^^^^^^^                                                      ^^^        ^^^^^^^^^^                                                          ^^^         ^^^
 
         // type of parameter is overload set which means we can't do inference based on this type
         new (x: {
@@ -345,14 +345,14 @@ module Errors {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var r3arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U;
->r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: {    foo: number;}) => U) => new (r: T) => U
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^                              ^^^^^^        ^     ^
+>r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^                            ^^^^^^        ^     ^
 >x : new (arg: T) => U
 >  : ^^^^^^^^^^^^^^^^^
 >arg : T
 >    : ^
->y : (arg2: {    foo: number;}) => U
->  : ^^^^^^^                  ^^^^^^
+>y : (arg2: { foo: number; }) => U
+>  : ^^^^^^^                ^^^^^^
 >arg2 : { foo: number; }
 >     : ^^^^^^^      ^^^
 >foo : number
@@ -453,8 +453,8 @@ module Errors {
 >  : ^
 
     var r5arg2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->r5arg2 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
->       : ^^^^^^^^                  ^^^^^                                  ^^^^^^^^^
+>r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>       : ^^^^^^^^                ^^^^^                             ^^^^^^^^^
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -543,8 +543,8 @@ module Errors {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var r7arg1: new <T>(x: { a: T; b: T }) => T;
->r7arg1 : new <T>(x: {    a: T;    b: T;}) => T
->       : ^^^^^^^^^^^        ^        ^  ^^^^^^
+>r7arg1 : new <T>(x: { a: T; b: T; }) => T
+>       : ^^^^^^^^^^^     ^     ^   ^^^^^^
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -553,8 +553,8 @@ module Errors {
 >  : ^
 
     var r7arg2: new (x: { a: string; b: number }) => number;
->r7arg2 : new (x: {    a: string;    b: number;}) => number
->       : ^^^^^^^^                              ^^^^^      
+>r7arg2 : new (x: { a: string; b: number; }) => number
+>       : ^^^^^^^^                         ^^^^^      
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -591,8 +591,8 @@ module Errors {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var r7arg3: new <T extends Base>(x: { a: T; b: T }) => number;
->r7arg3 : new <T extends Base>(x: {    a: T;    b: T;}) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^      
+>r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^      
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T

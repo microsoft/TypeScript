@@ -28,10 +28,10 @@ o2?.b();
 >  : ^^^^^^^^^^^^
 
 declare const o3: { b: (() => { c: string }) | undefined };
->o3 : { b: (() => {    c: string;}) | undefined; }
->   : ^^^^^                                    ^^^
->b : () => {    c: string;}
->  : ^^^^^^                
+>o3 : { b: (() => { c: string; }) | undefined; }
+>   : ^^^^^                                  ^^^
+>b : () => { c: string; }
+>  : ^^^^^^              
 >c : string
 >  : ^^^^^^
 

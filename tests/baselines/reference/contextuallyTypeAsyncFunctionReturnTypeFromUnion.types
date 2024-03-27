@@ -15,8 +15,8 @@ declare class StateMachine<T> {
 }
 
 declare function createMachine<T>(implementations: {
->createMachine : <T>(implementations: {    services: Record<string, () => Promise<T> | StateMachine<T>>;}) => void
->              : ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^               ^^^^^^^ ^    ^^^^^^^^^^^^ ^    ^^^^^    
+>createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
+>              : ^^^^^^^^^^^^^^^^^^^^^            ^^^^^^               ^^^^^^^ ^    ^^^^^^^^^^^^ ^     ^^^^^    
 >implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
 >                : ^^^^^^^^^^^^^^^^^^               ^^^^^^^ ^    ^^^^^^^^^^^^ ^  ^^^
 
@@ -79,8 +79,8 @@ createMachine<{ count: number }>({
 });
 
 function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number }> {
->fn1 : () => () => Promise<{    count: number;}> | StateMachine<{    count: number;}>
->    : ^^^^^^      ^^^^^^^                         ^^^^^^^^^^^^                      
+>fn1 : () => () => Promise<{ count: number; }> | StateMachine<{ count: number; }>
+>    : ^^^^^^      ^^^^^^^                       ^^^^^^^^^^^^                    
 >count : number
 >      : ^^^^^^
 >count : number

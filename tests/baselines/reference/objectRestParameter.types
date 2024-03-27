@@ -2,8 +2,8 @@
 
 === objectRestParameter.ts ===
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
->cloneAgain : ({ a, ...clone }: {    a: number;    b: string;}) => void
->           : ^^^^^^^^^^^^^^^^^^                              ^^^^^    
+>cloneAgain : ({ a, ...clone }: { a: number; b: string; }) => void
+>           : ^^^^^^^^^^^^^^^^^^                         ^^^^^    
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }
@@ -15,12 +15,12 @@ function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 }
 
 declare function suddenly(f: (a: { x: { z, ka }, y: string }) => void);
->suddenly : (f: (a: {    x: {        z: any;        ka: any;    };    y: string;}) => void) => any
->         : ^^^^                        ^^^             ^^^                               ^^^^^^^^
->f : (a: {    x: {        z: any;        ka: any;    };    y: string;}) => void
->  : ^^^^                    ^^^             ^^^                      ^^^^^    
->a : { x: {    z: any;    ka: any;}; y: string; }
->  : ^^^^^        ^^^         ^^^  ^^^^^      ^^^
+>suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
+>         : ^^^^              ^^^      ^^^                          ^^^^^^^^
+>f : (a: { x: { z: any; ka: any; }; y: string; }) => void
+>  : ^^^^          ^^^      ^^^                 ^^^^^    
+>a : { x: { z: any; ka: any; }; y: string; }
+>  : ^^^^^     ^^^      ^^^   ^^^^^      ^^^
 >x : { z: any; ka: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^
 >z : any
@@ -100,8 +100,8 @@ class C {
 >  : ^
 
     m({ a, ...clone }: { a: number, b: string}): void {
->m : ({ a, ...clone }: {    a: number;    b: string;}) => void
->  : ^^^^^^^^^^^^^^^^^^                              ^^^^^    
+>m : ({ a, ...clone }: { a: number; b: string; }) => void
+>  : ^^^^^^^^^^^^^^^^^^                         ^^^^^    
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }

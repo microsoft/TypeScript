@@ -18,8 +18,8 @@ interface FullRule {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     normalize?: (match: {x: string}) => void;
->normalize : ((match: {    x: string;}) => void) | undefined
->          : ^^^^^^^^^                ^^^^^    ^^^^^^^^^^^^^
+>normalize : ((match: { x: string; }) => void) | undefined
+>          : ^^^^^^^^^              ^^^^^    ^^^^^^^^^^^^^
 >match : { x: string; }
 >      : ^^^^^      ^^^
 >x : string

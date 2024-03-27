@@ -46,8 +46,8 @@ class AsyncLoader<TResult extends {}> {
 }
 
 function load(): Box<{ success: true } | ErrorResult> {
->load : () => Box<{    success: true;} | ErrorResult>
->     : ^^^^^^^^^                        ^^^^^^^^^^^ 
+>load : () => Box<{ success: true; } | ErrorResult>
+>     : ^^^^^^^^^                      ^^^^^^^^^^^ 
 >success : true
 >        : ^^^^
 >true : true

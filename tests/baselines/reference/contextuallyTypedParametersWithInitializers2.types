@@ -35,8 +35,8 @@ test1(
 
   },
   {
->{    checkLimit: (ctx, max = 500) => {},    hasAccess: (ctx, user: { name: string }) => {},  } : { checkLimit: (ctx: { count: number; }, max?: number) => void; hasAccess: (ctx: { count: number; }, user: {    name: string;}) => void; }
->                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^
+>{    checkLimit: (ctx, max = 500) => {},    hasAccess: (ctx, user: { name: string }) => {},  } : { checkLimit: (ctx: { count: number; }, max?: number) => void; hasAccess: (ctx: { count: number; }, user: { name: string; }) => void; }
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^
 
     checkLimit: (ctx, max = 500) => {},
 >checkLimit : (ctx: { count: number; }, max?: number) => void
@@ -51,10 +51,10 @@ test1(
 >    : ^^^
 
     hasAccess: (ctx, user: { name: string }) => {},
->hasAccess : (ctx: { count: number; }, user: {    name: string;}) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^
->(ctx, user: { name: string }) => {} : (ctx: { count: number; }, user: {    name: string;}) => void
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^
+>hasAccess : (ctx: { count: number; }, user: { name: string; }) => void
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
+>(ctx, user: { name: string }) => {} : (ctx: { count: number; }, user: { name: string; }) => void
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >user : { name: string; }

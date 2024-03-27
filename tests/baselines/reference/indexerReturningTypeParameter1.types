@@ -3,8 +3,8 @@
 === indexerReturningTypeParameter1.ts ===
 interface f {
     groupBy<T>(): { [key: string]: T[]; };
->groupBy : <T>() => {    [key: string]: T[];}
->        : ^^^^^^^^^                    ^    
+>groupBy : <T>() => { [key: string]: T[]; }
+>        : ^^^^^^^^^                 ^     
 >key : string
 >    : ^^^^^^
 }
@@ -29,8 +29,8 @@ class c {
 >  : ^
 
     groupBy<T>(): { [key: string]: T[]; } {
->groupBy : <T>() => {    [key: string]: T[];}
->        : ^^^^^^^^^                    ^    
+>groupBy : <T>() => { [key: string]: T[]; }
+>        : ^^^^^^^^^                 ^     
 >key : string
 >    : ^^^^^^
 

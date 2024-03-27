@@ -2,8 +2,8 @@
 
 === strictOptionalProperties1.ts ===
 function f1(obj: { a?: string, b?: string | undefined }) {
->f1 : (obj: {    a?: string;    b?: string | undefined;}) => void
->   : ^^^^^^                                            ^^^^^^^^^
+>f1 : (obj: { a?: string; b?: string | undefined; }) => void
+>   : ^^^^^^                                       ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
@@ -81,8 +81,8 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 }
 
 function f2(obj: { a?: string, b?: string | undefined }) {
->f2 : (obj: {    a?: string;    b?: string | undefined;}) => void
->   : ^^^^^^                                            ^^^^^^^^^
+>f2 : (obj: { a?: string; b?: string | undefined; }) => void
+>   : ^^^^^^                                       ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
@@ -369,8 +369,8 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 }
 
 function f3(obj: Partial<{ a: string, b: string | undefined }>) {
->f3 : (obj: Partial<{    a: string;    b: string | undefined;}>) => void
->   : ^^^^^^^^^^^^^                                            ^^^^^^^^^
+>f3 : (obj: Partial<{ a: string; b: string | undefined; }>) => void
+>   : ^^^^^^^^^^^^^                                       ^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
 >    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
@@ -888,8 +888,8 @@ declare let tx4: [(string | undefined)?];
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f11<T>(x: { p?: T }): T;
->f11 : <T>(x: {    p?: T;}) => T
->    : ^^^^^^^         ^  ^^^^^^
+>f11 : <T>(x: { p?: T; }) => T
+>    : ^^^^^^^      ^   ^^^^^^
 >x : { p?: T; }
 >  : ^^^^^^^^^^
 >p : T | undefined

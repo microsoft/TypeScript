@@ -86,8 +86,8 @@ declare function isA(obj: unknown): obj is { a: false } | { b: 0 };
 >  : ^
 
 function fx4(obj: { b: number }) {
->fx4 : (obj: {    b: number;}) => void
->    : ^^^^^^                ^^^^^^^^^
+>fx4 : (obj: { b: number; }) => void
+>    : ^^^^^^              ^^^^^^^^^
 >obj : { b: number; }
 >    : ^^^^^      ^^^
 >b : number
@@ -879,8 +879,8 @@ type Union =
 >     : ^^^
 
 function example1(value: Union): { type: 'a'; variant: 2 } | null {
->example1 : (value: Union) => {    type: 'a';    variant: 2;} | null
->         : ^^^^^^^^^^^^^^^^^^                                      
+>example1 : (value: Union) => { type: 'a'; variant: 2; } | null
+>         : ^^^^^^^^^^^^^^^^^^                                 
 >value : Union
 >      : ^^^^^
 >type : "a"
@@ -922,8 +922,8 @@ function example1(value: Union): { type: 'a'; variant: 2 } | null {
 }
 
 function example2(value: Union): { type: 'a'; variant: 2 } | null {
->example2 : (value: Union) => {    type: 'a';    variant: 2;} | null
->         : ^^^^^^^^^^^^^^^^^^                                      
+>example2 : (value: Union) => { type: 'a'; variant: 2; } | null
+>         : ^^^^^^^^^^^^^^^^^^                                 
 >value : Union
 >      : ^^^^^
 >type : "a"
@@ -977,8 +977,8 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
 }
 
 function example3(value: Union): { type: 'a'; variant: 2 } | null {
->example3 : (value: Union) => {    type: 'a';    variant: 2;} | null
->         : ^^^^^^^^^^^^^^^^^^                                      
+>example3 : (value: Union) => { type: 'a'; variant: 2; } | null
+>         : ^^^^^^^^^^^^^^^^^^                                 
 >value : Union
 >      : ^^^^^
 >type : "a"

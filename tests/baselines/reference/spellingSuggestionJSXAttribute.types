@@ -13,8 +13,8 @@ import * as React from "react";
 >      : ^^^^^^^^^^^^
 
 function MyComp2(props: { className?: string, htmlFor?: string }) {
->MyComp2 : (props: {    className?: string;    htmlFor?: string;}) => any
->        : ^^^^^^^^                                              ^^^^^^^^
+>MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+>        : ^^^^^^^^                                         ^^^^^^^^
 >props : { className?: string; htmlFor?: string; }
 >      : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >className : string

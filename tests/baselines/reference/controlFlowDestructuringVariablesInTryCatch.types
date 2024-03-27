@@ -10,8 +10,8 @@ declare function f2(): [b: string];
 >   : ^^^^^^           
 
 declare function f3(): { c: string };
->f3 : () => {    c: string;}
->   : ^^^^^^                
+>f3 : () => { c: string; }
+>   : ^^^^^^              
 >c : string
 >  : ^^^^^^
 

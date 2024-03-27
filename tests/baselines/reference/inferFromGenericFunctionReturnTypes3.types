@@ -790,8 +790,8 @@ class ClassWithConvert<T> {
 >    : ^
 
   convert(converter: { to: (v: T) => T; }) { }
->convert : (converter: {    to: (v: T) => T;}) => void
->        : ^^^^^^^^^^^^             ^     ^  ^^^^^^^^^
+>convert : (converter: { to: (v: T) => T; }) => void
+>        : ^^^^^^^^^^^^          ^     ^   ^^^^^^^^^
 >converter : { to: (v: T) => T; }
 >          : ^^^^^^    ^     ^^^^
 >to : (v: T) => T

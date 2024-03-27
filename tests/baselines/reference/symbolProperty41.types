@@ -6,8 +6,8 @@ class C {
 >  : ^
 
     [Symbol.iterator](x: string): { x: string };
->[Symbol.iterator] : { (x: string): {    x: string;}; (x: "hello"): { x: string; hello: string; }; }
->                  : ^^^^^^      ^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
+>                  : ^^^^^^      ^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -20,8 +20,8 @@ class C {
 >  : ^^^^^^
 
     [Symbol.iterator](x: "hello"): { x: string; hello: string };
->[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): {    x: string;    hello: string;}; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                  ^^^
+>[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                             ^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

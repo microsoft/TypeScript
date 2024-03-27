@@ -136,8 +136,8 @@ let createElement = Element.createElement;
 >              : ^^^^^^^^^^^^^^^^^^^
 
 let c: {
->c : { a?: {    b: string;}; }
->  : ^^^^^^                ^^^
+>c : { a?: { b: string; }; }
+>  : ^^^^^^              ^^^
 
 	a?: {
 >a : { b: string; }

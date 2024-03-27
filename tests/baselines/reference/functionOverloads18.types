@@ -2,8 +2,8 @@
 
 === functionOverloads18.ts ===
 function foo(bar:{a:number;});
->foo : (bar: {    a: number;}) => any
->    : ^^^^^^                ^^^^^^^^
+>foo : (bar: { a: number; }) => any
+>    : ^^^^^^              ^^^^^^^^
 >bar : { a: number; }
 >    : ^^^^^      ^^^
 >a : number

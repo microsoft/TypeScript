@@ -210,10 +210,10 @@ import React from "react";
 >      : ^^^^^^^^^^^^
 
 const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
->TabbedShowLayout : { (prop: {    className: string;}): JSX.Element; defaultProps: { tabs: string; }; }
->                 : ^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: {    className: string;}): JSX.Element; defaultProps: { tabs: string; }; }
->                                                                                                                                           : ^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>                 : ^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>                                                                                                                                           : ^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : { className: string; }
 >     : ^^^^^^^^^^^^^      ^^^
 

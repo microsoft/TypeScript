@@ -126,8 +126,8 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 >              : ^^^^^^^^^^^^^
 
 function del(options: ConfigurableStartEnd = {},
->del : (options?: ConfigurableStartEnd, error?: {    error?: number;}) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^^^^^
+>del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^
 >options : ConfigurableStartEnd
 >        : ^^^^^^^^^^^^^^^^^^^^
 >{} : {}
@@ -218,8 +218,8 @@ type Weak = {
     }
 }
 declare let propertiesWrong: {
->propertiesWrong : { properties: {    wrong: string;}; }
->                : ^^^^^^^^^^^^^^                    ^^^
+>propertiesWrong : { properties: { wrong: string; }; }
+>                : ^^^^^^^^^^^^^^                  ^^^
 
     properties: {
 >properties : { wrong: string; }

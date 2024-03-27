@@ -10,8 +10,8 @@ module M {
 >  : ^
 
         m(fn:{ (n:number):string; },n2:number):string {
->m : (fn: {    (n: number): string;}, n2: number) => string
->  : ^^^^^                          ^^^^^^      ^^^^^      
+>m : (fn: { (n: number): string; }, n2: number) => string
+>  : ^^^^^                        ^^^^^^      ^^^^^      
 >fn : (n: number) => string
 >   : ^^^^      ^^^^^      
 >n : number

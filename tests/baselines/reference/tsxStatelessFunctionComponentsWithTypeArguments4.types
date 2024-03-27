@@ -12,8 +12,8 @@ declare function OverloadComponent<U>(): JSX.Element;
 >    : ^^^
 
 declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
->OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: {    b: U;    a: string;    "ignore-prop": boolean;}): JSX.Element; <T, U_2>(attr: { b: U_2; a: T; }): JSX.Element; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^                                           ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U_2>(attr: { b: U_2; a: T; }): JSX.Element; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^                                      ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >attr : { b: U; a: string; "ignore-prop": boolean; }
 >     : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^       ^^^
 >b : U
@@ -26,8 +26,8 @@ declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boo
 >    : ^^^
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
->OverloadComponent : { <U_1>(): JSX.Element; <U_2>(attr: { b: U_2; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: {    b: U;    a: T;}): JSX.Element; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^ ^^^^^^^^^^
+>OverloadComponent : { <U_1>(): JSX.Element; <U_2>(attr: { b: U_2; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^ ^^^^^^^^^^
 >attr : { b: U; a: T; }
 >     : ^^^^^^^^^^^^^^^
 >b : U

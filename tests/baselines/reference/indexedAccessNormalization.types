@@ -48,8 +48,8 @@ function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
 }
 
 function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
->f2 : <M extends object>(mymap: MyMap<M>, k: keyof M, z: {    x: number;}) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^      ^^^^^^                ^^^^^^^^^
+>f2 : <M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number; }) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^      ^^^^^^              ^^^^^^^^^
 >mymap : MyMap<M>
 >      : ^^^^^^^^
 >k : keyof M

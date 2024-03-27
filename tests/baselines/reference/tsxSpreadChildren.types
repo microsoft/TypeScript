@@ -27,8 +27,8 @@ interface TodoListProps {
 >      : ^^^^^^^^^^
 }
 function Todo(prop: { key: number, todo: string }) {
->Todo : (prop: {    key: number;    todo: string;}) => JSX.Element
->     : ^^^^^^^                                   ^^^^^^^^^^^^^^^^
+>Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>     : ^^^^^^^                              ^^^^^^^^^^^^^^^^
 >prop : { key: number; todo: string; }
 >     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number

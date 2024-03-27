@@ -2,8 +2,8 @@
 
 === index.d.ts ===
 export declare function foo({a}?: {
->foo : ({ a }?: {    a?: string;}) => void
->    : ^^^^^^^^^                 ^^^^^    
+>foo : ({ a }?: { a?: string; }) => void
+>    : ^^^^^^^^^               ^^^^^    
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -13,8 +13,8 @@ export declare function foo({a}?: {
 
 }): void;
 export declare function foo2({a}: {
->foo2 : ({ a }: {    a?: string | undefined;} | undefined, b: string) => void
->     : ^^^^^^^^                                         ^^^^^      ^^^^^    
+>foo2 : ({ a }: { a?: string | undefined; } | undefined, b: string) => void
+>     : ^^^^^^^^                                       ^^^^^      ^^^^^    
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -27,8 +27,8 @@ export declare function foo2({a}: {
 >  : ^^^^^^
 
 export declare function foo3({a, b: {c}}: {
->foo3 : ({ a, b: { c } }: {    a?: string | undefined;    b?: {        c?: string | undefined;    } | undefined;} | undefined, b: string) => void
->     : ^^^^^^^^^^^^^^^^^^                                                                                                   ^^^^^      ^^^^^    
+>foo3 : ({ a, b: { c } }: { a?: string | undefined; b?: { c?: string | undefined; } | undefined; } | undefined, b: string) => void
+>     : ^^^^^^^^^^^^^^^^^^                                                                                    ^^^^^      ^^^^^    
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : any

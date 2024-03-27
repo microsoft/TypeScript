@@ -608,8 +608,8 @@ declare const prop2: string | undefined;
 >      : ^^^^^^^^^^^^^^^^^^
 
 function F1(_arg: { props: Properties }) { }
->F1 : (_arg: {    props: Properties;}) => void
->   : ^^^^^^^            ^^^^^^^^^^  ^^^^^^^^^
+>F1 : (_arg: { props: Properties; }) => void
+>   : ^^^^^^^         ^^^^^^^^^^   ^^^^^^^^^
 >_arg : { props: Properties; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 >props : Properties

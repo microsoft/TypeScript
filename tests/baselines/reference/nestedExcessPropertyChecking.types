@@ -99,8 +99,8 @@ type OverridesInput = {
 }
 
 const foo1: Partial<{ something: any }> & { variables: {
->foo1 : Partial<{ something: any; }> & { variables: {    overrides?: OverridesInput;} & Partial<{    overrides?: OverridesInput;}>; }
->     : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^^^     ^^^^^^^                  ^^^^^^^^^^^^^^   ^^^
+>foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^      ^^^^^^^               ^^^^^^^^^^^^^^    ^^^
 >something : any
 >          : ^^^
 >variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
@@ -169,8 +169,8 @@ type T1 = {
 >   : ^^
 
     primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
->primary : { __typename?: "Feature" | undefined; } & { colors: {    light: number;    dark: number;}; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^
+>primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; dark: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                ^^^
 >__typename : "Feature" | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >colors : { light: number; dark: number; }
@@ -187,8 +187,8 @@ type T2 = {
 >   : ^^
 
     primary: { __typename?: 'Feature' } & { colors: { light: number } },
->primary : { __typename?: "Feature" | undefined; } & { colors: {    light: number;}; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^
+>primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^
 >__typename : "Feature" | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >colors : { light: number; }

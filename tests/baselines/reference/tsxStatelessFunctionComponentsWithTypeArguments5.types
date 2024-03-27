@@ -45,8 +45,8 @@ function createComponent<T extends { prop: number }>(arg: T) {
 }
 
 declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
->ComponentSpecific : <U>(l: {    prop: U;}) => JSX.Element
->                  : ^^^^^^^           ^  ^^^^^^^^ ^^^^^^^
+>ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
+>                  : ^^^^^^^        ^   ^^^^^^^^ ^^^^^^^
 >l : { prop: U; }
 >  : ^^^^^^^^^^^^
 >prop : U
@@ -55,8 +55,8 @@ declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
 >    : ^^^
 
 declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
->ComponentSpecific1 : <U>(l: {    prop: U;    "ignore-prop": number;}) => JSX.Element
->                   : ^^^^^^^           ^                            ^^^^^^^^ ^^^^^^^
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
+>                   : ^^^^^^^        ^                          ^^^^^^^^ ^^^^^^^
 >l : { prop: U; "ignore-prop": number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >prop : U

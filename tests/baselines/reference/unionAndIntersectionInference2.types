@@ -70,8 +70,8 @@ f1(e1); // number | boolean
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f2<T>(x: T & { name: string }): T;
->f2 : <T>(x: T & {    name: string;}) => T
->   : ^^^^^^^^                      ^^^^^^
+>f2 : <T>(x: T & { name: string; }) => T
+>   : ^^^^^^^^                    ^^^^^^
 >x : T & { name: string; }
 >  : ^^^^^^^^^^^^      ^^^
 >name : string

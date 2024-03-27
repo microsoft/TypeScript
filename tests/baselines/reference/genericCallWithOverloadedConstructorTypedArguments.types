@@ -68,8 +68,8 @@ module GenericParameter {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
->foo5 : <T>(cb: {    new (x: T): string;    new (x: number): T;}) => { new (x: T): string; new (x: number): T; }
->     : ^^^^^^^^             ^                               ^  ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^
+>foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
+>     : ^^^^^^^^          ^                            ^   ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^
 >cb : { new (x: T): string; new (x: number): T; }
 >   : ^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^
 >x : T
@@ -123,8 +123,8 @@ module GenericParameter {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
->foo6 : <T>(cb: {    new (x: T): string;    new (x: T, y?: T): string;}) => { new (x: T): string; new (x: T, y?: T): string; }
->     : ^^^^^^^^             ^                      ^      ^           ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
+>     : ^^^^^^^^          ^                   ^      ^            ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
 >   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
 >x : T
@@ -160,8 +160,8 @@ module GenericParameter {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
->foo7 : <T>(x: T, cb: {    new (x: T): string;    new (x: T, y?: T): string;}) => { new (x: T): string; new (x: T, y?: T): string; }
->     : ^^^^^^^^^^^^^^             ^                      ^      ^           ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
+>     : ^^^^^^^^^^^^^^          ^                   ^      ^            ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
 >x : T
 >  : ^
 >cb : { new (x: T): string; new (x: T, y?: T): string; }

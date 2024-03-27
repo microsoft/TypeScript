@@ -129,8 +129,8 @@ type Union = A & B;
 >      : ^^^^^
 
 function func(): { value: Union[] } {
->func : () => {    value: Union[];}
->     : ^^^^^^            ^^^^^    
+>func : () => { value: Union[]; }
+>     : ^^^^^^         ^^^^^     
 >value : never[]
 >      : ^^^^^^^
 

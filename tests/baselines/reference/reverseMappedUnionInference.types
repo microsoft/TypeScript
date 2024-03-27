@@ -28,8 +28,8 @@ interface Extractor<T, Result> {
 }
 
 declare function createExtractor<T, Result>(params: {
->createExtractor : <T, Result>(params: {    matcher: (node: unknown) => node is T;    extract: (node: T) => Result;}) => Extractor<T, Result>
->                : ^^^^^^^^^^^^^^^^^^^^                                         ^                     ^     ^^^^^^  ^^^^^^^^^^^^^^ ^  ^^^^^^ 
+>createExtractor : <T, Result>(params: { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }) => Extractor<T, Result>
+>                : ^^^^^^^^^^^^^^^^^^^^                                      ^                  ^     ^^^^^^   ^^^^^^^^^^^^^^ ^  ^^^^^^ 
 >params : { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }
 >       : ^^^^^^^^^^^                           ^^^^^^^^^^^^       ^     ^^^^^^^^^
 

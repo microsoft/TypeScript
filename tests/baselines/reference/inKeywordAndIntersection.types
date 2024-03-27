@@ -18,8 +18,8 @@ class B { b = 0 }
 >  : ^
 
 function f10(obj: A & { x: string } | B) {
->f10 : (obj: (A & {    x: string;}) | B) => void
->    : ^^^^^^^^                   ^   ^^^^^^^^^^
+>f10 : (obj: (A & { x: string; }) | B) => void
+>    : ^^^^^^^^                 ^   ^^^^^^^^^^
 >obj : B | (A & { x: string; })
 >    : ^^^^^^^^^^^^^^      ^^^^
 >x : string

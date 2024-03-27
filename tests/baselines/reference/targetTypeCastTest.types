@@ -2,8 +2,8 @@
 
 === targetTypeCastTest.ts ===
 declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
->Point : new (x: number, y: number) => {    x: number;    y: number;}
->      : ^^^^^^^^      ^^^^^      ^^^^^                              
+>Point : new (x: number, y: number) => { x: number; y: number; }
+>      : ^^^^^^^^      ^^^^^      ^^^^^                         
 >x : number
 >  : ^^^^^^
 >y : number

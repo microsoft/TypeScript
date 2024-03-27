@@ -2,8 +2,8 @@
 
 === functionOverloads15.ts ===
 function foo(foo:{a:string; b:number;}):string;
->foo : { (foo: {    a: string;    b: number;}): string; (foo: { a: string; b: number; }): number; }
->    : ^^^^^^^^                              ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { (foo: { a: string; b: number; }): string; (foo: { a: string; b: number; }): number; }
+>    : ^^^^^^^^                         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { a: string; b: number; }
 >    : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -12,8 +12,8 @@ function foo(foo:{a:string; b:number;}):string;
 >  : ^^^^^^
 
 function foo(foo:{a:string; b:number;}):number;
->foo : { (foo: { a: string; b: number; }): string; (foo: {    a: string;    b: number;}): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                              ^^^      ^^^
+>foo : { (foo: { a: string; b: number; }): string; (foo: { a: string; b: number; }): number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^      ^^^
 >foo : { a: string; b: number; }
 >    : ^^^^^      ^^^^^      ^^^
 >a : string

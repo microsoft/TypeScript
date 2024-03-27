@@ -319,8 +319,8 @@ declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: 
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function bar(props: {x: number, y: string}) {
->bar : (props: {    x: number;    y: string;}) => void
->    : ^^^^^^^^                              ^^^^^^^^^
+>bar : (props: { x: number; y: string; }) => void
+>    : ^^^^^^^^                         ^^^^^^^^^
 >props : { x: number; y: string; }
 >      : ^^^^^      ^^^^^      ^^^
 >x : number
@@ -570,8 +570,8 @@ type NoExtra<T> = {
 }
 
 declare function createXMachine<
->createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: {    actors: ProvidedActor;}; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   const TConfig extends MachineConfig<TActor>,
   TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
@@ -601,20 +601,20 @@ const child = () => Promise.resolve("foo");
 >      : ^^^^^
 
 const config = createXMachine({
->config : { types: {    actors: {        src: "str";        logic: typeof child;    };}; invoke: { readonly src: "str"; }; }
->       : ^^^^^^^^^                                                       ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: {    actors: {        src: "str";        logic: typeof child;    };}; invoke: { readonly src: "str"; }; }
->                                                                                                                                              : ^^^^^^^^^                                                       ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>config : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
+>       : ^^^^^^^^^                                      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
+>                                                                                                                                              : ^^^^^^^^^                                      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: {    actors: {        src: "str";        logic: typeof child;    };}; invoke: { src: "str"; }; extra: number; }
->                                                                                                                              : ^^^^^^^^^                                                       ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { src: "str"; }; extra: number; }
+>                                                                                                                              : ^^^^^^^^^                                      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   types: {} as {
->types : { actors: {    src: "str";    logic: typeof child;}; }
->      : ^^^^^^^^^^                                  ^^^^^  ^^^
->{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: {    src: "str";    logic: typeof child;}; }
->                                                                         : ^^^^^^^^^^                                  ^^^^^  ^^^
+>types : { actors: { src: "str"; logic: typeof child; }; }
+>      : ^^^^^^^^^^                            ^^^^^   ^^^
+>{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: typeof child; }; }
+>                                                                         : ^^^^^^^^^^                            ^^^^^   ^^^
 >{} : {}
 >   : ^^
 

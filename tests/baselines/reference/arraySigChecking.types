@@ -74,8 +74,8 @@ myArray = [[1, 2]];
 >  : ^
 
 function isEmpty(l: { length: number }) {
->isEmpty : (l: {    length: number;}) => boolean
->        : ^^^^                     ^^^^^^^^^^^^
+>isEmpty : (l: { length: number; }) => boolean
+>        : ^^^^                   ^^^^^^^^^^^^
 >l : { length: number; }
 >  : ^^^^^^^^^^      ^^^
 >length : number

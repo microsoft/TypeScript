@@ -7,8 +7,8 @@ interface Mover {
 >     : ^^^^^^    
 
     getStatus(): { speed: number; };
->getStatus : () => {    speed: number;}
->          : ^^^^^^                    
+>getStatus : () => { speed: number; }
+>          : ^^^^^^                  
 >speed : number
 >      : ^^^^^^
 }
@@ -18,8 +18,8 @@ interface Shaker {
 >      : ^^^^^^    
 
     getStatus(): { frequency: number; };
->getStatus : () => {    frequency: number;}
->          : ^^^^^^                        
+>getStatus : () => { frequency: number; }
+>          : ^^^^^^                      
 >frequency : number
 >          : ^^^^^^
 }
@@ -42,8 +42,8 @@ declare module MoversAndShakers {
 >     : ^^^^^^    
 
         getStatus(): { speed: number; };
->getStatus : () => {    speed: number;}
->          : ^^^^^^                    
+>getStatus : () => { speed: number; }
+>          : ^^^^^^                  
 >speed : number
 >      : ^^^^^^
     }
@@ -53,8 +53,8 @@ declare module MoversAndShakers {
 >      : ^^^^^^    
 
         getStatus(): { frequency: number; };
->getStatus : () => {    frequency: number;}
->          : ^^^^^^                        
+>getStatus : () => { frequency: number; }
+>          : ^^^^^^                      
 >frequency : number
 >          : ^^^^^^
     }
@@ -73,8 +73,8 @@ interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     getStatus(): { speed: number; frequency: number; }; // ok because this getStatus overrides the conflicting ones above
->getStatus : () => {    speed: number;    frequency: number;}
->          : ^^^^^^                                          
+>getStatus : () => { speed: number; frequency: number; }
+>          : ^^^^^^                                     
 >speed : number
 >      : ^^^^^^
 >frequency : number

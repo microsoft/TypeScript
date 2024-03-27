@@ -222,8 +222,8 @@ const x42 = f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]);
 >    : ^^^
 
 declare function f5<const T>(obj: { x: T, y: T }): T;
->f5 : <const T>(obj: {    x: T;    y: T;}) => T
->   : ^^^^^^^^^^^^^^^        ^        ^  ^^^^^^
+>f5 : <const T>(obj: { x: T; y: T; }) => T
+>   : ^^^^^^^^^^^^^^^     ^     ^   ^^^^^^
 >obj : { x: T; y: T; }
 >    : ^^^^^^^^^^^^^^^
 >x : T
@@ -535,8 +535,8 @@ type T5 = { new <const T>(x: T): T };
 type Obj = { a: { b: { c: "123" } } };
 >Obj : Obj
 >    : ^^^
->a : { b: {    c: "123";}; }
->  : ^^^^^               ^^^
+>a : { b: { c: "123"; }; }
+>  : ^^^^^             ^^^
 >b : { c: "123"; }
 >  : ^^^^^     ^^^
 >c : "123"
@@ -759,8 +759,8 @@ const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
->                                       : ^^^^                   ^^^^^      ^^^^^^^^^
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
+>                                       : ^^^^                 ^^^^^      ^^^^^^^^^
 >a : { test: number; }
 >  : ^^^^^^^^      ^^^
 >test : number
@@ -791,8 +791,8 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
->                                       : ^^^^                   ^^^^^      ^^^^^^^^^
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
+>                                       : ^^^^                 ^^^^^      ^^^^^^^^^
 >a : { test: number; }
 >  : ^^^^^^^^      ^^^
 >test : number
@@ -852,8 +852,8 @@ const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
->                                       : ^^^^                   ^^^^^      ^^^^^^^^^
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
+>                                       : ^^^^                 ^^^^^      ^^^^^^^^^
 >a : { test: number; }
 >  : ^^^^^^^^      ^^^
 >test : number
@@ -884,8 +884,8 @@ const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
->                                       : ^^^^                   ^^^^^      ^^^^^^^^^
+>(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
+>                                       : ^^^^                 ^^^^^      ^^^^^^^^^
 >a : { test: number; }
 >  : ^^^^^^^^      ^^^
 >test : number

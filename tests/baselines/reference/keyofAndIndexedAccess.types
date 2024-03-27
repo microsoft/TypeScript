@@ -1025,8 +1025,8 @@ function f51<T, K extends keyof T>(k: K, s: string) {
 }
 
 function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
->f52 : <T>(obj: {    [x: string]: boolean;}, k: Exclude<keyof T, symbol>, s: string, n: number) => void
->    : ^^^^^^^^^                           ^^^^^^^^^^^^       ^         ^^^^^      ^^^^^      ^^^^^^^^^
+>f52 : <T>(obj: { [x: string]: boolean; }, k: Exclude<keyof T, symbol>, s: string, n: number) => void
+>    : ^^^^^^^^^                         ^^^^^^^^^^^^       ^         ^^^^^      ^^^^^      ^^^^^^^^^
 >obj : { [x: string]: boolean; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -1070,8 +1070,8 @@ function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: s
 }
 
 function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
->f53 : <T, K extends Exclude<keyof T, symbol>>(obj: {    [x: string]: boolean;}, k: K, s: string, n: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>f53 : <T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
 >obj : { [x: string]: boolean; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -1592,8 +1592,8 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 }
 
 function f80<T extends { a: { x: any } }>(obj: T) {
->f80 : <T extends { a: {    x: any;}; }>(obj: T) => void
->    : ^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^
+>f80 : <T extends { a: { x: any; }; }>(obj: T) => void
+>    : ^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
 >a : { x: any; }
 >  : ^^^^^   ^^^
 >x : any
@@ -1679,8 +1679,8 @@ function f80<T extends { a: { x: any } }>(obj: T) {
 }
 
 function f81<T extends { a: { x: any } }>(obj: T) {
->f81 : <T extends { a: {    x: any;}; }>(obj: T) => T["a"]["x"]
->    : ^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>    : ^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: any; }
 >  : ^^^^^   ^^^
 >x : any
@@ -2753,8 +2753,8 @@ type Handler<T> = {
 };
 
 function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
->onChangeGenericFunction : <T>(handler: Handler<T & {    preset: number;}>) => void
->                        : ^^^^^^^^^^^^^^^^^^^^ ^                         ^^^^^^^^^
+>onChangeGenericFunction : <T>(handler: Handler<T & { preset: number; }>) => void
+>                        : ^^^^^^^^^^^^^^^^^^^^ ^                       ^^^^^^^^^
 >handler : Handler<T & { preset: number; }>
 >        : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >preset : number
@@ -2837,8 +2837,8 @@ function updateIds<T extends Record<K, string>, K extends string>(
 // Repro from #13285
 
 function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
->updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: {    [oldId: string]: string;}) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                              ^^^^^^^^^
+>updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -3131,8 +3131,8 @@ type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[
 >     : ^^^
 
 type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
->Result : Example<{ a: {    prop: string;}; b: {    prop: number;}; }>
->       : ^^^^^^^^^^^^^                   ^^^^^                   ^^^^
+>Result : Example<{ a: { prop: string; }; b: { prop: number; }; }>
+>       : ^^^^^^^^^^^^^                 ^^^^^                 ^^^^
 >a : { prop: string; }
 >  : ^^^^^^^^      ^^^
 >prop : string
@@ -3153,8 +3153,8 @@ type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
 >         : ^^^^^^^^^^^
 
 type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
->Result2 : Example2<{ 1: {    prop: string;}; 2: {    prop: number;}; }>
->        : ^^^^^^^^^^^^^^                   ^^^^^                   ^^^^
+>Result2 : Example2<{ 1: { prop: string; }; 2: { prop: number; }; }>
+>        : ^^^^^^^^^^^^^^                 ^^^^^                 ^^^^
 >1 : { prop: string; }
 >  : ^^^^^^^^      ^^^
 >prop : string

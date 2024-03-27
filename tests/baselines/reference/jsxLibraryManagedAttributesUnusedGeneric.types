@@ -50,8 +50,8 @@ namespace jsx {
 }
 
 declare const Comp: (p: { className?: string }) => null
->Comp : (p: {    className?: string;}) => null
->     : ^^^^                         ^^^^^    
+>Comp : (p: { className?: string; }) => null
+>     : ^^^^                       ^^^^^    
 >p : { className?: string; }
 >  : ^^^^^^^^^^^^^^      ^^^
 >className : string

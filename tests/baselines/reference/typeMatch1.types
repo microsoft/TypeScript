@@ -24,8 +24,8 @@ var x1: { z: number; f(n: number): string; f(s: string): number; }
 >  : ^^^^^^
 
 var x2: { z:number;f:{(n:number):string;(s:string):number;}; } = x1;
->x2 : { z: number; f: {    (n: number): string;    (s: string): number;}; }
->   : ^^^^^      ^^^^^                                                  ^^^
+>x2 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>   : ^^^^^      ^^^^^                                             ^^^
 >z : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }

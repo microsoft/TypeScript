@@ -1430,8 +1430,8 @@ const ce0 = class {
 };
 
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: {    method(p: typeof s): void;}) => { method(p: typeof s): void; }
->                       : ^^^^^^                      ^         ^^^^^^^^^^^^^^^^^       ^^^^    ^^^
+>funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
+>                       : ^^^^^^                   ^          ^^^^^^^^^^^^^^^^^       ^^^^    ^^^
 >obj : { method(p: typeof s): void; }
 >    : ^^^^^^^^^^^^       ^^^^    ^^^
 >method : (p: typeof s) => void

@@ -48,8 +48,8 @@ function foo(animals: IAnimal[]) { }
 >        : ^^^^^^^^^
 
 function bar(animals: { [n: number]: IAnimal }) { }
->bar : (animals: {    [n: number]: IAnimal;}) => void
->    : ^^^^^^^^^^                  ^^^^^^^  ^^^^^^^^^
+>bar : (animals: { [n: number]: IAnimal; }) => void
+>    : ^^^^^^^^^^               ^^^^^^^   ^^^^^^^^^
 >animals : { [n: number]: IAnimal; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number

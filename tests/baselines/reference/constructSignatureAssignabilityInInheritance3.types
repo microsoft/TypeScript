@@ -78,8 +78,8 @@ module Errors {
 >  : ^^^^^^
 
             a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->a11 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
->    : ^^^^^^^^                  ^^^^^                                  ^^^^^^^^^
+>a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>    : ^^^^^^^^                ^^^^^                             ^^^^^^^^^
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -113,8 +113,8 @@ module Errors {
 
             };
             a15: new (x: { a: string; b: number }) => number;
->a15 : new (x: {    a: string;    b: number;}) => number
->    : ^^^^^^^^                              ^^^^^      
+>a15 : new (x: { a: string; b: number; }) => number
+>    : ^^^^^^^^                         ^^^^^      
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -123,8 +123,8 @@ module Errors {
 >  : ^^^^^^
 
             a16: {
->a16 : { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }
->    : ^^^^^^^^^^                                                           ^^^        ^^^^^^^^^^                                                               ^^^         ^^^
+>a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>    : ^^^^^^^^^^                                                      ^^^        ^^^^^^^^^^                                                          ^^^         ^^^
 
                 // type of parameter is overload set which means we can't do inference based on this type
                 new (x: {
@@ -187,14 +187,14 @@ module Errors {
 
         interface I4 extends A {
             a8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; // error, type mismatch
->a8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: number;}) => U) => (r: T) => U
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^     ^^^^^^                              ^^^^^^    ^     ^
+>a8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^     ^^^^^^                            ^^^^^^    ^     ^
 >x : (arg: T) => U
 >  : ^^^^^^^^^^^^^
 >arg : T
 >    : ^
->y : (arg2: {    foo: number;}) => U
->  : ^^^^^^^                  ^^^^^^
+>y : (arg2: { foo: number; }) => U
+>  : ^^^^^^^                ^^^^^^
 >arg2 : { foo: number; }
 >     : ^^^^^^^      ^^^
 >foo : number
@@ -233,8 +233,8 @@ module Errors {
 
         interface I6 extends A {
             a15: new <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
->a15 : new <T>(x: {    a: T;    b: T;}) => T
->    : ^^^^^^^^^^^        ^        ^  ^^^^^^
+>a15 : new <T>(x: { a: T; b: T; }) => T
+>    : ^^^^^^^^^^^     ^     ^   ^^^^^^
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -245,8 +245,8 @@ module Errors {
 
         interface I7 extends A {
             a15: new <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
->a15 : new <T extends Base>(x: {    a: T;    b: T;}) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^      
+>a15 : new <T extends Base>(x: { a: T; b: T; }) => number
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^      
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T

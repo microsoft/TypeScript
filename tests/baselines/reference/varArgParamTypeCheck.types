@@ -2,8 +2,8 @@
 
 === varArgParamTypeCheck.ts ===
 function sequence(...sequences:{():void;}[]) {
->sequence : (...sequences: {    (): void;}[]) => void
->         : ^^^^^^^^^^^^^^^                 ^^^^^^^^^
+>sequence : (...sequences: { (): void; }[]) => void
+>         : ^^^^^^^^^^^^^^^               ^^^^^^^^^
 >sequences : (() => void)[]
 >          : ^^^^^^^    ^^^
 }

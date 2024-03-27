@@ -14,10 +14,10 @@ declare function unboxify<T>(obj: Boxified<T>): T;
 >    : ^^^^^^^^^^^
 
 function foo<U, V>(obj: { u: { value: U }, v: { value: V } }) {
->foo : <U, V>(obj: {    u: {        value: U;    };    v: {        value: V;    };}) => { u: U; v: V; }
->    : ^^^^^^^^^^^^                        ^                              ^        ^^^^^^^^^^^^^^^^^^^^
->obj : { u: {    value: U;}; v: {    value: V;}; }
->    : ^^^^^            ^  ^^^^^            ^  ^^^
+>foo : <U, V>(obj: { u: { value: U; }; v: { value: V; }; }) => { u: U; v: V; }
+>    : ^^^^^^^^^^^^              ^                 ^      ^^^^^^^^^^^^^^^^^^^^
+>obj : { u: { value: U; }; v: { value: V; }; }
+>    : ^^^^^         ^   ^^^^^         ^   ^^^
 >u : { value: U; }
 >  : ^^^^^^^^^^^^^
 >value : U

@@ -126,8 +126,8 @@ import { Element} from './Element';
 >        : ^^^^^^^^^^^^^^
 
 let c: {
->c : { a?: {    b: string;}; }
->  : ^^^^^^                ^^^
+>c : { a?: { b: string; }; }
+>  : ^^^^^^              ^^^
 
 	a?: {
 >a : { b: string; }

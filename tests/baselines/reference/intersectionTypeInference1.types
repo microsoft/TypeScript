@@ -10,10 +10,10 @@ function alert(s: string) {}
 >  : ^^^^^^
 
 const parameterFn = (props:{store:string}) => alert(props.store)
->parameterFn : (props: {    store: string;}) => void
->            : ^^^^^^^^                    ^^^^^^^^^
->(props:{store:string}) => alert(props.store) : (props: {    store: string;}) => void
->                                             : ^^^^^^^^                    ^^^^^^^^^
+>parameterFn : (props: { store: string; }) => void
+>            : ^^^^^^^^                  ^^^^^^^^^
+>(props:{store:string}) => alert(props.store) : (props: { store: string; }) => void
+>                                             : ^^^^^^^^                  ^^^^^^^^^
 >props : { store: string; }
 >      : ^^^^^^^^^      ^^^
 >store : string
@@ -30,12 +30,12 @@ const parameterFn = (props:{store:string}) => alert(props.store)
 >      : ^^^^^^
 
 const brokenFunction = <OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o
->brokenFunction : <OwnProps>(f: (p: {    dispatch: number;} & OwnProps) => void) => (o: OwnProps) => OwnProps
->               : ^^^^^^^^^^^^^^                              ^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: {    dispatch: number;} & OwnProps) => void) => (o: OwnProps) => OwnProps
->                                                                                : ^^^^^^^^^^^^^^                              ^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f : (p: {    dispatch: number;} & OwnProps) => void
->  : ^^^^                          ^^^^^^^^^^^^^    
+>brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+>               : ^^^^^^^^^^^^^^                            ^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+>                                                                                : ^^^^^^^^^^^^^^                            ^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (p: { dispatch: number; } & OwnProps) => void
+>  : ^^^^                        ^^^^^^^^^^^^^    
 >p : { dispatch: number; } & OwnProps
 >  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >dispatch : number

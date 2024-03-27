@@ -76,8 +76,8 @@ class E { x: string | undefined }
 >  : ^^^^^^^^^^^^^^^^^^
 
 function f3<T extends E>(v: T | { x: string }) {
->f3 : <T extends E>(v: T | {    x: string;}) => void
->   : ^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^
+>f3 : <T extends E>(v: T | { x: string; }) => void
+>   : ^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >v : T | { x: string; }
 >  : ^^^^^^^^^      ^^^
 >x : string

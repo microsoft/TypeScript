@@ -57,8 +57,8 @@ var a2: I<string> = function (): { x: A<number> } {
 >   : ^^^^^^^^^
 >function (): { x: A<number> } {   var z = { x: new A<number>() }; return z;} () : { x: A<number>; }
 >                                                                                : ^^^^^^        ^^^
->function (): { x: A<number> } {   var z = { x: new A<number>() }; return z;} : () => {    x: A<number>;}
->                                                                             : ^^^^^^        ^          
+>function (): { x: A<number> } {   var z = { x: new A<number>() }; return z;} : () => { x: A<number>; }
+>                                                                             : ^^^^^^     ^           
 >x : A<number>
 >  : ^^^^^^^^^
 

@@ -2,8 +2,8 @@
 
 === functionOverloads17.ts ===
 function foo():{a:number;}
->foo : () => {    a: number;}
->    : ^^^^^^                
+>foo : () => { a: number; }
+>    : ^^^^^^              
 >a : number
 >  : ^^^^^^
 

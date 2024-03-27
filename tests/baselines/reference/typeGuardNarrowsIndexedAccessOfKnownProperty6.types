@@ -53,8 +53,8 @@ declare const bIndex: "key";
 >       : ^^^^^
 
 const b: { key: { x?: number } } = { key: {} };
->b : { key: {    x?: number;}; }
->  : ^^^^^^^                 ^^^
+>b : { key: { x?: number; }; }
+>  : ^^^^^^^               ^^^
 >key : { x?: number | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | undefined

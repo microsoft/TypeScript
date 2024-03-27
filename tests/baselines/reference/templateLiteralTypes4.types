@@ -4,7 +4,7 @@
 Assignability cache: 1,400 / 1,400 (nearest 100)
 Type Count: 900 / 900 (nearest 100)
 Instantiation count: 1,000 / 1,500 (nearest 500)
-Symbol count: 29,500 / 29,500 (nearest 500)
+Symbol count: 30,000 / 30,000 (nearest 500)
 
 === templateLiteralTypes4.ts ===
 // infer from number
@@ -613,16 +613,16 @@ type TypedObjectOrdinalMembers<TDef extends readonly FieldDefinition[]> = {
 interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
     // get/set a field by name
     get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
->get : <K extends TDef[number]["name"]>(key: K) => FieldType<Extract<TDef[number], {    readonly name: K;}>["type"]>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^                              ^            
+>get : <K extends TDef[number]["name"]>(key: K) => FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^                           ^             
 >key : K
 >    : ^
 >name : K
 >     : ^
 
     set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
->set : <K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], {    readonly name: K;}>["type"]>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^                              ^            ^^^^^    
+>set : <K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^                           ^             ^^^^^    
 >key : K
 >    : ^
 >value : FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>

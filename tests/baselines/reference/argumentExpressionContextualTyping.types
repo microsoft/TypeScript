@@ -83,8 +83,8 @@ var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 >  : ^
 
 var o1: { x: [string, number], y: { c: boolean, d: string, e: number } } = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
->o1 : { x: [string, number]; y: {    c: boolean;    d: string;    e: number;}; }
->   : ^^^^^                ^^^^^                                             ^^^
+>o1 : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
+>   : ^^^^^                ^^^^^                                     ^^^
 >x : [string, number]
 >  : ^^^^^^^^^^^^^^^^
 >y : { c: boolean; d: string; e: number; }

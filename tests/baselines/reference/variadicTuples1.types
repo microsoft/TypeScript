@@ -2196,8 +2196,8 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 // Repro from #39607
 
 declare function getUser(id: string, options?: { x?: string }): string;
->getUser : (id: string, options?: {    x?: string;}) => string
->        : ^^^^^      ^^^^^^^^^^^^                 ^^^^^      
+>getUser : (id: string, options?: { x?: string; }) => string
+>        : ^^^^^      ^^^^^^^^^^^^               ^^^^^      
 >id : string
 >   : ^^^^^^
 >options : { x?: string | undefined; } | undefined
@@ -2206,8 +2206,8 @@ declare function getUser(id: string, options?: { x?: string }): string;
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
->getOrgUser : (id: string, orgId: number, options?: {    y?: number;    z?: boolean;}) => void
->           : ^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^                                 ^^^^^    
+>getOrgUser : (id: string, orgId: number, options?: { y?: number; z?: boolean; }) => void
+>           : ^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^                            ^^^^^    
 >id : string
 >   : ^^^^^^
 >orgId : number

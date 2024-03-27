@@ -52,8 +52,8 @@ let value = "";
 
 // 2.Can change in meaning for typeof value if we remove alias
 function shadowedVariable({ value: alias }: { value: string }): typeof value { return value }
->shadowedVariable : ({ value: alias }: {    value: string;}) => typeof value
->                 : ^^^^^^^^^^^^^^^^^^^                    ^^^^^       ^^^^^
+>shadowedVariable : ({ value: alias }: { value: string; }) => typeof value
+>                 : ^^^^^^^^^^^^^^^^^^^                  ^^^^^       ^^^^^
 >value : any
 >      : ^^^
 >alias : string
@@ -75,8 +75,8 @@ function notReferenced({ name: alias }: Named) {
 
 }
 function notReferencedNestedAlias({ p: { name: alias } }: { p: Named }) {
->notReferencedNestedAlias : ({ p: { name: alias } }: {    p: Named;}) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^  ^^^^^^^^^
+>notReferencedNestedAlias : ({ p: { name: alias } }: { p: Named; }) => void
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^
 >p : any
 >  : ^^^
 >name : any
@@ -128,8 +128,8 @@ function referencedInSignarture({ name: alias }: Named): typeof alias {
 }
 
 function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
->referencedInSignartureKeyword : ({ function: alias }: {    function: string;}) => typeof alias
->                              : ^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^       ^^^^^
+>referencedInSignartureKeyword : ({ function: alias }: { function: string; }) => typeof alias
+>                              : ^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^       ^^^^^
 >function : any
 >         : ^^^
 >alias : string
@@ -187,8 +187,8 @@ function referencedInNestedFunction({ name: alias }: Named) {
 }
 
 function referencedNestedAlias({ p: { name: alias } }: { p: Named }): typeof alias {
->referencedNestedAlias : ({ p: { name: alias } }: {    p: Named;}) => typeof alias
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^  ^^^^^       ^^^^^
+>referencedNestedAlias : ({ p: { name: alias } }: { p: Named; }) => typeof alias
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^       ^^^^^
 >p : any
 >  : ^^^
 >name : any

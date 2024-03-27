@@ -77,8 +77,8 @@ export const classExpression = class {
 };
 
 export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: {    method(p: typeof s): void;}) => { method(p: typeof s): void; }
->                       : ^^^^^^                      ^         ^^^^^^^^^^^^^^^^^       ^^^^    ^^^
+>funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
+>                       : ^^^^^^                   ^          ^^^^^^^^^^^^^^^^^       ^^^^    ^^^
 >obj : { method(p: typeof s): void; }
 >    : ^^^^^^^^^^^^       ^^^^    ^^^
 >method : (p: typeof s) => void

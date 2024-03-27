@@ -12,8 +12,8 @@ declare function f(a:number,b:number): void;
 >  : ^^^^^^
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
->func1 : ({ a, b }?: {    a: number;    b?: number;}) => void
->      : ^^^^^^^^^^^^                               ^^^^^^^^^
+>func1 : ({ a, b }?: { a: number; b?: number; }) => void
+>      : ^^^^^^^^^^^^                          ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -47,8 +47,8 @@ function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
 }
 
 function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
->func2 : ({ a, b }?: {    a: number;    b?: number;}) => void
->      : ^^^^^^^^^^^^                               ^^^^^^^^^
+>func2 : ({ a, b }?: { a: number; b?: number; }) => void
+>      : ^^^^^^^^^^^^                          ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -84,8 +84,8 @@ function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
 }
 
 function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
->func3 : ({ a, b }?: {    a: number;    b?: number;}) => void
->      : ^^^^^^^^^^^^                               ^^^^^^^^^
+>func3 : ({ a, b }?: { a: number; b?: number; }) => void
+>      : ^^^^^^^^^^^^                          ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -115,8 +115,8 @@ function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
 }
 
 function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
->func4 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^^^^^^^
+>func4 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -166,8 +166,8 @@ function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 
 }
 
 function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
->func5 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^^^^^^^
+>func5 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -219,8 +219,8 @@ function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {
 }
 
 function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1,c: 2}, d: 3} ) {
->func6 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^^^^^^^
+>func6 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -280,8 +280,8 @@ function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: n
 }
 
 function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1, c: 2}, d: 3} ) {
->func7 : ({ a: { b, c }, d }?: {    a: {        b: number;        c?: number;    };    d: number;}) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^^^^^^^
+>func7 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
+>      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number

@@ -7,8 +7,8 @@
  * @param {string} x
  */
 function good1({a, b}, x) {}
->good1 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
->      : ^^^^^^^^^^^                              ^^^^^      ^^^^^^^^^
+>good1 : ({ a, b }: { a: string; b: string; }, x: string) => void
+>      : ^^^^^^^^^^^                         ^^^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -21,8 +21,8 @@ function good1({a, b}, x) {}
  * @param {{c: number, d: number}} OBJECTION
  */
 function good2({a, b}, {c, d}) {}
->good2 : ({ a, b }: {    a: string;    b: string;}, { c, d }: {    c: number;    d: number;}) => void
->      : ^^^^^^^^^^^                              ^^^^^^^^^^^^                              ^^^^^^^^^
+>good2 : ({ a, b }: { a: string; b: string; }, { c, d }: { c: number; d: number; }) => void
+>      : ^^^^^^^^^^^                         ^^^^^^^^^^^^                         ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -38,8 +38,8 @@ function good2({a, b}, {c, d}) {}
  * @param {string} y
  */
 function good3(x, {a, b}, y) {}
->good3 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
->      : ^^^^      ^^^^^^^^^^^^                              ^^^^^      ^^^^^^^^^
+>good3 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
+>      : ^^^^      ^^^^^^^^^^^^                         ^^^^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >a : string
@@ -53,8 +53,8 @@ function good3(x, {a, b}, y) {}
  * @param {{a: string, b: string}} obj
  */
 function good4({a, b}) {}
->good4 : ({ a, b }: {    a: string;    b: string;}) => void
->      : ^^^^^^^^^^^                              ^^^^^^^^^
+>good4 : ({ a, b }: { a: string; b: string; }) => void
+>      : ^^^^^^^^^^^                         ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -133,8 +133,8 @@ function good8({a, b}) {}
  * @param {{ a: string }} argument
  */
 function good9({ a }) {
->good9 : ({ a }: {    a: string;}, ...args: any[]) => void
->      : ^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^
+>good9 : ({ a }: { a: string; }, ...args: any[]) => void
+>      : ^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -174,8 +174,8 @@ function bad1(x, {a, b}) {}
  * @param {{a: string, b: string}} obj
  */
 function bad2(x, {a, b}) {}
->bad2 : (x: any, { a, b }: {    a: string;    b: string;}) => void
->     : ^^^^^^^^^^^^^^^^^^^                              ^^^^^^^^^
+>bad2 : (x: any, { a, b }: { a: string; b: string; }) => void
+>     : ^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^
 >x : any
 >  : ^^^
 >a : string

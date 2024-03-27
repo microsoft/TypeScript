@@ -214,8 +214,8 @@ type T15 = Extract<Options, { q: "a" }>;  // never
 >  : ^^^
 
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
->f5 : <T extends Options, K extends string>(p: K) => Extract<T, {    k: K;}>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^          ^   
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^       ^    
 >p : K
 >  : ^
 >k : K

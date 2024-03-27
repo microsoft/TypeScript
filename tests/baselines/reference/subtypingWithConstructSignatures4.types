@@ -118,10 +118,10 @@ declare function foo6(a: any): any;
 >a : any
 
 declare function foo11(a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base);
->foo11 : { (a11: new <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base): any; (a: any): any; }
->      : ^^^^^^^^^^^^^^^^^^^          ^  ^^^^^          ^          ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a11 : new <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
->    : ^^^^^^^^^^^          ^  ^^^^^          ^          ^  ^^^^^^^^^
+>foo11 : { (a11: new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base): any; (a: any): any; }
+>      : ^^^^^^^^^^^^^^^^^^^       ^   ^^^^^       ^       ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>    : ^^^^^^^^^^^       ^   ^^^^^       ^       ^   ^^^^^^^^^
 >x : { foo: T; }
 >  : ^^^^^^^^^^^
 >foo : T
@@ -139,10 +139,10 @@ declare function foo11(a: any): any;
 >a : any
 
 declare function foo15(a15: new <T>(x: { a: T; b: T }) => T[]);
->foo15 : { (a15: new <T>(x: {    a: T;    b: T;}) => T[]): any; (a: any): any; }
->      : ^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
->a15 : new <T>(x: {    a: T;    b: T;}) => T[]
->    : ^^^^^^^^^^^        ^        ^  ^^^^^^  
+>foo15 : { (a15: new <T>(x: { a: T; b: T; }) => T[]): any; (a: any): any; }
+>      : ^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>a15 : new <T>(x: { a: T; b: T; }) => T[]
+>    : ^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -156,10 +156,10 @@ declare function foo15(a: any): any;
 >a : any
 
 declare function foo16(a16: new <T extends Base>(x: { a: T; b: T }) => T[]);
->foo16 : { (a16: new <T extends Base>(x: {    a: T;    b: T;}) => T[]): any; (a: any): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
->a16 : new <T extends Base>(x: {    a: T;    b: T;}) => T[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^  
+>foo16 : { (a16: new <T extends Base>(x: { a: T; b: T; }) => T[]): any; (a: any): any; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -487,8 +487,8 @@ var r6b = [r6arg2, r6arg];
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r11arg: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base;
->r11arg : new <T, U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
->       : ^^^^^^^^^^^^^^          ^  ^^^^^          ^          ^  ^^^^^^^^^
+>r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>       : ^^^^^^^^^^^^^^       ^   ^^^^^       ^       ^   ^^^^^^^^^
 >x : { foo: T; }
 >  : ^^^^^^^^^^^
 >foo : T
@@ -501,8 +501,8 @@ var r11arg: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base;
 >    : ^
 
 var r11arg2: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->r11arg2 : new <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
->        : ^^^^^^^^^^^          ^  ^^^^^          ^          ^  ^^^^^^^^^
+>r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>        : ^^^^^^^^^^^       ^   ^^^^^       ^       ^   ^^^^^^^^^
 >x : { foo: T; }
 >  : ^^^^^^^^^^^
 >foo : T
@@ -543,8 +543,8 @@ var r11b = [r11arg2, r11arg];
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r15arg: new <U, V>(x: { a: U; b: V; }) => U[];
->r15arg : new <U, V>(x: {    a: U;    b: V;}) => U[]
->       : ^^^^^^^^^^^^^^        ^        ^  ^^^^^^  
+>r15arg : new <U, V>(x: { a: U; b: V; }) => U[]
+>       : ^^^^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: U; b: V; }
 >  : ^^^^^^^^^^^^^^^
 >a : U
@@ -553,8 +553,8 @@ var r15arg: new <U, V>(x: { a: U; b: V; }) => U[];
 >  : ^
 
 var r15arg2: new <T>(x: { a: T; b: T }) => T[];
->r15arg2 : new <T>(x: {    a: T;    b: T;}) => T[]
->        : ^^^^^^^^^^^        ^        ^  ^^^^^^  
+>r15arg2 : new <T>(x: { a: T; b: T; }) => T[]
+>        : ^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -591,8 +591,8 @@ var r15b = [r15arg2, r15arg];
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r16arg: new <T extends Base>(x: { a: T; b: T }) => T[];
->r16arg : new <T extends Base>(x: {    a: T;    b: T;}) => T[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^  
+>r16arg : new <T extends Base>(x: { a: T; b: T; }) => T[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -601,8 +601,8 @@ var r16arg: new <T extends Base>(x: { a: T; b: T }) => T[];
 >  : ^
 
 var r16arg2: new <T extends Base>(x: { a: T; b: T }) => T[];
->r16arg2 : new <T extends Base>(x: {    a: T;    b: T;}) => T[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^  
+>r16arg2 : new <T extends Base>(x: { a: T; b: T; }) => T[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T

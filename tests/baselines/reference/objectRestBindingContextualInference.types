@@ -22,8 +22,8 @@ type SetupImages<K extends string> = SetupImageRefs<K> & {
 >            : ^^^^^^^^^^^^^^
 
   prepare: () => { type: K };
->prepare : () => {    type: K;}
->        : ^^^^^^           ^  
+>prepare : () => { type: K; }
+>        : ^^^^^^        ^   
 >type : K
 >     : ^
 

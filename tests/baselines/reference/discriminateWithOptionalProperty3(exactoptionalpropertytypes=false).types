@@ -53,8 +53,8 @@ type CoercedVariableValues =
 >       : ^^^^^^^^^
 
 declare function getVariableValues(inputs: {
->getVariableValues : (inputs: {    readonly [variable: string]: unknown;}) => CoercedVariableValues
->                  : ^^^^^^^^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
+>                  : ^^^^^^^^^                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inputs : { readonly [variable: string]: unknown; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

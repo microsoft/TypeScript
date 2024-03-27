@@ -2,8 +2,8 @@
 
 === contextualTyping25.ts ===
 function foo(param:{id:number;}){}; foo(<{id:number;}>({}));
->foo : (param: {    id: number;}) => void
->    : ^^^^^^^^                 ^^^^^^^^^
+>foo : (param: { id: number; }) => void
+>    : ^^^^^^^^               ^^^^^^^^^
 >param : { id: number; }
 >      : ^^^^^^      ^^^
 >id : number

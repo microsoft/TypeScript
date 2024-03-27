@@ -2,8 +2,8 @@
 
 === intersectionPropertyCheck.ts ===
 let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
->obj : { a: {    x: string;}; } & { c: number; }
->    : ^^^^^                ^^^^^^^^^^^      ^^^
+>obj : { a: { x: string; }; } & { c: number; }
+>    : ^^^^^              ^^^^^^^^^^^      ^^^
 >a : { x: string; }
 >  : ^^^^^      ^^^
 >x : string
@@ -30,8 +30,8 @@ let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 
 >  : ^
 
 declare let wrong: { a: { y: string } };
->wrong : { a: {    y: string;}; }
->      : ^^^^^                ^^^
+>wrong : { a: { y: string; }; }
+>      : ^^^^^              ^^^
 >a : { y: string; }
 >  : ^^^^^      ^^^
 >y : string
@@ -50,8 +50,8 @@ let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak objec
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 
 function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
->foo : <T extends object>(x: {    a?: string;}, y: T & {    a: boolean;}) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^                    ^^^^^^^^^
+>foo : <T extends object>(x: { a?: string; }, y: T & { a: boolean; }) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^                  ^^^^^^^^^
 >x : { a?: string | undefined; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | undefined

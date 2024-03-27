@@ -78,8 +78,8 @@ interface A { // T
 >    : ^
 
     a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : new <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
->    : ^^^^^^^^^^^          ^  ^^^^^          ^          ^  ^^^^^^^^^
+>a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>    : ^^^^^^^^^^^       ^   ^^^^^       ^       ^   ^^^^^^^^^
 >x : { foo: T; }
 >  : ^^^^^^^^^^^
 >foo : T
@@ -92,8 +92,8 @@ interface A { // T
 >    : ^
 
     a15: new <T>(x: { a: T; b: T }) => T[];
->a15 : new <T>(x: {    a: T;    b: T;}) => T[]
->    : ^^^^^^^^^^^        ^        ^  ^^^^^^  
+>a15 : new <T>(x: { a: T; b: T; }) => T[]
+>    : ^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -102,8 +102,8 @@ interface A { // T
 >  : ^
 
     a16: new <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : new <T extends Base>(x: {    a: T;    b: T;}) => T[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^  
+>a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -233,8 +233,8 @@ interface I extends A {
 >    : ^
 
     a11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; // ok
->a11 : new <T, U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
->    : ^^^^^^^^^^^^^^          ^  ^^^^^          ^          ^  ^^^^^^^^^
+>a11 : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>    : ^^^^^^^^^^^^^^       ^   ^^^^^       ^       ^   ^^^^^^^^^
 >x : { foo: T; }
 >  : ^^^^^^^^^^^
 >foo : T
@@ -247,8 +247,8 @@ interface I extends A {
 >    : ^
 
     a15: new <U, V>(x: { a: U; b: V; }) => U[]; // ok, T = U, T = V
->a15 : new <U, V>(x: {    a: U;    b: V;}) => U[]
->    : ^^^^^^^^^^^^^^        ^        ^  ^^^^^^  
+>a15 : new <U, V>(x: { a: U; b: V; }) => U[]
+>    : ^^^^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: U; b: V; }
 >  : ^^^^^^^^^^^^^^^
 >a : U
@@ -257,8 +257,8 @@ interface I extends A {
 >  : ^
 
     a16: new <T>(x: { a: T; b: T }) => T[]; // ok, more general parameter type
->a16 : new <T>(x: {    a: T;    b: T;}) => T[]
->    : ^^^^^^^^^^^        ^        ^  ^^^^^^  
+>a16 : new <T>(x: { a: T; b: T; }) => T[]
+>    : ^^^^^^^^^^^     ^     ^   ^^^^^^  
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T

@@ -79,8 +79,8 @@ module Errors {
 >  : ^^^^^^
 
         var a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
->a11 : new (x: {    foo: string;}, y: {    foo: string;    bar: string;}) => Base
->    : ^^^^^^^^                  ^^^^^                                  ^^^^^^^^^
+>a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>    : ^^^^^^^^                ^^^^^                             ^^^^^^^^^
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -114,8 +114,8 @@ module Errors {
 
             };
         var a15: new (x: { a: string; b: number }) => number;
->a15 : new (x: {    a: string;    b: number;}) => number
->    : ^^^^^^^^                              ^^^^^      
+>a15 : new (x: { a: string; b: number; }) => number
+>    : ^^^^^^^^                         ^^^^^      
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -124,8 +124,8 @@ module Errors {
 >  : ^^^^^^
 
         var a16: {
->a16 : { new (x: {    new (a: number): number;    new (a?: number): number;}): number[]; new (x: {    new (a: boolean): boolean;    new (a?: boolean): boolean;}): boolean[]; }
->    : ^^^^^^^^^^                                                           ^^^        ^^^^^^^^^^                                                               ^^^         ^^^
+>a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>    : ^^^^^^^^^^                                                      ^^^        ^^^^^^^^^^                                                          ^^^         ^^^
 
                 new (x: {
 >x : { new (a: number): number; new (a?: number): number; }
@@ -235,14 +235,14 @@ module Errors {
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
->b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: {    foo: number;}) => U) => (r: T) => U
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^     ^^^^^^                              ^^^^^^    ^     ^
+>b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^     ^^^^^^                            ^^^^^^    ^     ^
 >x : (arg: T) => U
 >  : ^^^^^^^^^^^^^
 >arg : T
 >    : ^
->y : (arg2: {    foo: number;}) => U
->  : ^^^^^^^                  ^^^^^^
+>y : (arg2: { foo: number; }) => U
+>  : ^^^^^^^                ^^^^^^
 >arg2 : { foo: number; }
 >     : ^^^^^^^      ^^^
 >foo : number
@@ -338,8 +338,8 @@ module Errors {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         var b15: new <T>(x: { a: T; b: T }) => T; 
->b15 : new <T>(x: {    a: T;    b: T;}) => T
->    : ^^^^^^^^^^^        ^        ^  ^^^^^^
+>b15 : new <T>(x: { a: T; b: T; }) => T
+>    : ^^^^^^^^^^^     ^     ^   ^^^^^^
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T
@@ -364,8 +364,8 @@ module Errors {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
->b15a : new <T extends Base>(x: {    a: T;    b: T;}) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^      
+>b15a : new <T extends Base>(x: { a: T; b: T; }) => number
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^      
 >x : { a: T; b: T; }
 >  : ^^^^^^^^^^^^^^^
 >a : T

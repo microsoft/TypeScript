@@ -12,8 +12,8 @@ declare function OverloadComponent<U>(): JSX.Element;
 >    : ^^^
 
 declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": boolean}): JSX.Element;
->OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: {    b: U;    a?: string;    "ignore-prop": boolean;}): JSX.Element; <T, U_2>(attr: { b: U_2; a: T; }): JSX.Element; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^                                            ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U_2>(attr: { b: U_2; a: T; }): JSX.Element; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^                                       ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >attr : { b: U; a?: string; "ignore-prop": boolean; }
 >     : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^       ^^^
 >b : U
@@ -26,8 +26,8 @@ declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": bo
 >    : ^^^
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
->OverloadComponent : { <U_1>(): JSX.Element; <U_2>(attr: { b: U_2; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: {    b: U;    a: T;}): JSX.Element; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^        ^  ^^^^^^ ^^^^^^^^^^
+>OverloadComponent : { <U_1>(): JSX.Element; <U_2>(attr: { b: U_2; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^^ ^^^^^^^^^^
 >attr : { b: U; a: T; }
 >     : ^^^^^^^^^^^^^^^
 >b : U
@@ -138,8 +138,8 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 }
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
->Link : { <U>(l: {    func: (arg: U) => void;}): JSX.Element; <U_1>(l: { func: (arg1: U_1, arg2: string) => void; }): JSX.Element; }
->     : ^^^^^^^^^                 ^           ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U_1>(l: { func: (arg1: U_1, arg2: string) => void; }): JSX.Element; }
+>     : ^^^^^^^^^              ^            ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : { func: (arg: U) => void; }
 >  : ^^^^^^^^      ^         ^^^
 >func : (arg: U) => void
@@ -150,8 +150,8 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >    : ^^^
 
 declare function Link<U>(l: {func: (arg1:U, arg2: string)=>void}): JSX.Element;
->Link : { <U_1>(l: { func: (arg: U_1) => void; }): JSX.Element; <U>(l: {    func: (arg1: U, arg2: string) => void;}): JSX.Element; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^                         ^^^^^^ ^^^^^^^^^^
+>Link : { <U_1>(l: { func: (arg: U_1) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^                          ^^^^^^ ^^^^^^^^^^
 >l : { func: (arg1: U, arg2: string) => void; }
 >  : ^^^^^^^^       ^                       ^^^
 >func : (arg1: U, arg2: string) => void

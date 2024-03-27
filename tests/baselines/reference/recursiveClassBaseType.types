@@ -10,8 +10,8 @@ declare const p: <T>(fn: () => T) => T;
 >   : ^^^^^^^
 
 declare const Base: <T>(val: T) => { new(): T };
->Base : <T>(val: T) => {    new (): T;}
->     : ^^^^^^^^^^^^^^^             ^  
+>Base : <T>(val: T) => { new (): T; }
+>     : ^^^^^^^^^^^^^^^          ^   
 >val : T
 >    : ^
 

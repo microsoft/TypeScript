@@ -231,8 +231,8 @@ function f12(f: { <T>(a: T): T, x: string }) {
 }
 
 function f13(f: { x: string, y: string }) {
->f13 : (f: {    x: string;    y: string;}) => void
->    : ^^^^                              ^^^^^^^^^
+>f13 : (f: { x: string; y: string; }) => void
+>    : ^^^^                         ^^^^^^^^^
 >f : { x: string; y: string; }
 >  : ^^^^^      ^^^^^      ^^^
 >x : string
@@ -395,8 +395,8 @@ function f22(f: (<T>(a: T) => T) & { x: string }) {
 }
 
 function f23(f: { x: string } & { y: string }) {
->f23 : (f: {    x: string;} & {    y: string;}) => void
->    : ^^^^                                   ^^^^^^^^^
+>f23 : (f: { x: string; } & { y: string; }) => void
+>    : ^^^^                               ^^^^^^^^^
 >f : { x: string; } & { y: string; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : string
@@ -559,8 +559,8 @@ function f32(f: (<T>(a: T) => T) | { x: string }) {
 }
 
 function f33(f: { x: string } | { y: string }) {
->f33 : (f: {    x: string;} | {    y: string;}) => void
->    : ^^^^                                   ^^^^^^^^^
+>f33 : (f: { x: string; } | { y: string; }) => void
+>    : ^^^^                               ^^^^^^^^^
 >f : { x: string; } | { y: string; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : string
@@ -722,8 +722,8 @@ type A<U> = InstanceType<typeof Array<U>>;  // U[]
 >      : ^^^^^^^^^^^^^^^^
 
 declare const g1: {
->g1 : { <T>(a: T): {    a: T;}; new <U>(b: U): {    b: U;}; }
->   : ^^^^^^^^^^^^^        ^  ^^^^^^^^^^^^^^^^^        ^  ^^^
+>g1 : { <T>(a: T): { a: T; }; new <U>(b: U): { b: U; }; }
+>   : ^^^^^^^^^^^^^     ^   ^^^^^^^^^^^^^^^^^     ^   ^^^
 
     <T>(a: T): { a: T };
 >a : T

@@ -184,8 +184,8 @@ function test2(arg: string | undefined) {
 }
 
 function test3(
->test3 : (foo: {    kind: "a";    prop: string;} | {    kind: "b";    prop: number;} | {    kind: "c";    prop: boolean;}, bar?: {    type: "b";}) => void
->      : ^^^^^^                                                                                                          ^^^^^^^^                ^^^^^^^^^
+>test3 : (foo: { kind: "a"; prop: string; } | { kind: "b"; prop: number; } | { kind: "c"; prop: boolean; }, bar?: { type: "b"; }) => void
+>      : ^^^^^^                                                                                           ^^^^^^^^              ^^^^^^^^^
 
   foo:
 >foo : { kind: "a"; prop: string; } | { kind: "b"; prop: number; } | { kind: "c"; prop: boolean; }

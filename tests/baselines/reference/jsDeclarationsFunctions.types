@@ -97,8 +97,8 @@ f.self = f;
  * @param {{y: typeof b}} b
  */
 function g(a, b) {
->g : (a: {    x: string;}, b: { y: typeof import("index").b; }) => void
->  : ^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>  : ^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: typeof import("index").b; }
@@ -132,8 +132,8 @@ export { g };
  * @param {{y: typeof b}} b
  */
 function hh(a, b) {
->hh : (a: {    x: string;}, b: { y: typeof import("index").b; }) => void
->   : ^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
+>   : ^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: typeof import("index").b; }

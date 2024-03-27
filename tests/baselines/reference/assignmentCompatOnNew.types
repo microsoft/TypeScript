@@ -6,8 +6,8 @@ class Foo{};
 >    : ^^^
 
 function bar(x: {new(): Foo;}){}
->bar : (x: {    new (): Foo;}) => void
->    : ^^^^             ^^^  ^^^^^^^^^
+>bar : (x: { new (): Foo; }) => void
+>    : ^^^^          ^^^   ^^^^^^^^^
 >x : new () => Foo
 >  : ^^^^^^^^^^^^^
 

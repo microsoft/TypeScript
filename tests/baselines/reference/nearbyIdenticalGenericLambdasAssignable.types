@@ -2,8 +2,8 @@
 
 === nearbyIdenticalGenericLambdasAssignable.ts ===
 declare const fA: <T>() => { v: T };
->fA : <T>() => {    v: T;}
->   : ^^^^^^^^^        ^  
+>fA : <T>() => { v: T; }
+>   : ^^^^^^^^^     ^   
 >v : T
 >  : ^
 

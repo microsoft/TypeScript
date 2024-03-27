@@ -96,16 +96,16 @@ var { d: renamed, ...d } = o2;
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
->nestedrest : { x: number; n1: {    y: number;    n2: {        z: number;        n3: {            n4: number;        };    };}; rest: number; restrest: number; }
->           : ^^^^^      ^^^^^^                                                                                               ^^^^^^^^      ^^^^^^^^^^^^      ^^^
+>nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
+>           : ^^^^^      ^^^^^^                                                       ^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->n1 : { y: number; n2: {    z: number;    n3: {        n4: number;    };}; }
->   : ^^^^^      ^^^^^^                                                  ^^^
+>n1 : { y: number; n2: { z: number; n3: { n4: number; }; }; }
+>   : ^^^^^      ^^^^^^                                   ^^^
 >y : number
 >  : ^^^^^^
->n2 : { z: number; n3: {    n4: number;}; }
->   : ^^^^^      ^^^^^^                 ^^^
+>n2 : { z: number; n3: { n4: number; }; }
+>   : ^^^^^      ^^^^^^               ^^^
 >z : number
 >  : ^^^^^^
 >n3 : { n4: number; }
@@ -138,8 +138,8 @@ var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let complex: { x: { ka, ki }, y: number };
->complex : { x: {    ka: any;    ki: any;}; y: number; }
->        : ^^^^^         ^^^         ^^^  ^^^^^      ^^^
+>complex : { x: { ka: any; ki: any; }; y: number; }
+>        : ^^^^^      ^^^      ^^^   ^^^^^      ^^^
 >x : { ka: any; ki: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >ka : any

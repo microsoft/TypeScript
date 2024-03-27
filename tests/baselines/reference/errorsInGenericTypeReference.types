@@ -60,14 +60,14 @@ class testClass3 {
 >           : ^^^^^^^^^^
 
     testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
->testMethod1 : () => Foo<{    x: V;}>
->            : ^^^^^^^^^             
+>testMethod1 : () => Foo<{ x: V; }>
+>            : ^^^^^^^^^           
 >x : V
 >  : ^
 
     static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
->testMethod2 : () => Foo<{    x: V;}>
->            : ^^^^^^^^^             
+>testMethod2 : () => Foo<{ x: V; }>
+>            : ^^^^^^^^^           
 >x : V
 >  : ^
 
@@ -89,16 +89,16 @@ class testClass3 {
 
 // in function return type annotation
 function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
->testFunction1 : () => Foo<{    x: V;}>
->              : ^^^^^^^^^             
+>testFunction1 : () => Foo<{ x: V; }>
+>              : ^^^^^^^^^           
 >x : V
 >  : ^
 
 
 // in paramter types
 function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
->testFunction2 : (p: Foo<{    x: V;}>) => void
->              : ^^^^^^^             ^^^^^^^^^
+>testFunction2 : (p: Foo<{ x: V; }>) => void
+>              : ^^^^^^^           ^^^^^^^^^
 >p : Foo<{ x: V; }>
 >  : ^^^^^^^^^^^^^^
 >x : V
@@ -179,8 +179,8 @@ interface testInterface2 {
 >  : ^
 
     method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
->method : (a: Foo<{    x: V;}>) => Foo<{    x: V;}>
->       : ^^^^^^^             ^^^^^^^^             
+>method : (a: Foo<{ x: V; }>) => Foo<{ x: V; }>
+>       : ^^^^^^^           ^^^^^^^^           
 >a : Foo<{ x: V; }>
 >  : ^^^^^^^^^^^^^^
 >x : V

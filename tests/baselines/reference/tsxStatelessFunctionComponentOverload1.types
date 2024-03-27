@@ -6,8 +6,8 @@ import React = require('react')
 >      : ^^^^^^^^^^^^
 
 declare function OneThing(k: {yxx: string}): JSX.Element;
->OneThing : { (k: {    yxx: string;}): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
->         : ^^^^^^                  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
+>         : ^^^^^^                ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : { yxx: string; }
 >  : ^^^^^^^      ^^^
 >yxx : string
@@ -16,8 +16,8 @@ declare function OneThing(k: {yxx: string}): JSX.Element;
 >    : ^^^
 
 declare function OneThing(k: {yxx1: string, children: string}): JSX.Element;
->OneThing : { (k: { yxx: string; }): JSX.Element; (k: {    yxx1: string;    children: string;}): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                        ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : { yxx1: string; children: string; }
 >  : ^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >yxx1 : string
@@ -28,8 +28,8 @@ declare function OneThing(k: {yxx1: string, children: string}): JSX.Element;
 >    : ^^^
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
->OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: {    yy: number;    yy1: string;}): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                 ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : { yy: number; yy1: string; }
 >  : ^^^^^^      ^^^^^^^      ^^^
 >yy : number
@@ -40,8 +40,8 @@ declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >    : ^^^
 
 declare function OneThing(l: {yy: number, yy1: string, yy2: boolean}): JSX.Element;
->OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: {    yy: number;    yy1: string;    yy2: boolean;}): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : { yy: number; yy1: string; yy2: boolean; }
 >  : ^^^^^^      ^^^^^^^      ^^^^^^^       ^^^
 >yy : number
@@ -54,8 +54,8 @@ declare function OneThing(l: {yy: number, yy1: string, yy2: boolean}): JSX.Eleme
 >    : ^^^
 
 declare function OneThing(l1: {data: string, "data-prop": boolean}): JSX.Element;
->OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: {    data: string;    "data-prop": boolean;}): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^ ^^^^^^^^^^
+>OneThing : { (k: { yxx: string; }): JSX.Element; (k: { yxx1: string; children: string; }): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; (l: { yy: number; yy1: string; yy2: boolean; }): JSX.Element; (l1: { data: string; "data-prop": boolean; }): JSX.Element; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^ ^^^^^^^^^^
 >l1 : { data: string; "data-prop": boolean; }
 >   : ^^^^^^^^      ^^^^^^^^^^^^^^^       ^^^
 >data : string
@@ -138,8 +138,8 @@ declare function TestingOneThing({y1: string}): JSX.Element;
 >    : ^^^
 
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
->TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: {    "extra-data": string;    yy?: string;}): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                      ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >j : { "extra-data": string; yy?: string; }
 >  : ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >"extra-data" : string
@@ -150,8 +150,8 @@ declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.El
 >    : ^^^
 
 declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
->TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: {    yy: number;    direction?: number;}): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                        ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : { yy: number; direction?: number; }
 >  : ^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >yy : number
@@ -162,8 +162,8 @@ declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Eleme
 >    : ^^^
 
 declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;
->TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: {    yy: string;    name: string;}): JSX.Element; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                  ^^^^^^ ^^^^^^^^^^
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                             ^^^^^^ ^^^^^^^^^^
 >n : { yy: string; name: string; }
 >  : ^^^^^^      ^^^^^^^^      ^^^
 >yy : string
@@ -242,8 +242,8 @@ const d5 = <TestingOneThing extra-data="hello" yy="hello" name="Bob" />;
 
 
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
->TestingOptional : { (a: {    y1?: string;    y2?: number;}): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->                : ^^^^^^                                  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>                : ^^^^^^                             ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { y1?: string; y2?: number; }
 >  : ^^^^^^^      ^^^^^^^      ^^^
 >y1 : string
@@ -254,8 +254,8 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >    : ^^^
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: {    y1: boolean;    y2?: number;    y3: boolean;}): JSX.Element; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                  ^^^^^^ ^^^^^^^^^^
+>TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^ ^^^^^^^^^^
 >a : { y1: boolean; y2?: number; y3: boolean; }
 >  : ^^^^^^       ^^^^^^^      ^^^^^^       ^^^
 >y1 : boolean

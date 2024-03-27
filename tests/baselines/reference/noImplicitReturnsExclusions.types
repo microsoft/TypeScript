@@ -190,8 +190,8 @@ declare class HistoryItem {
 >            : ^^^^^^^^^^^
 
   input: {
->input : { location: {    uri: string;}; }
->      : ^^^^^^^^^^^^                  ^^^
+>input : { location: { uri: string; }; }
+>      : ^^^^^^^^^^^^                ^^^
 
     location: {
 >location : { uri: string; }

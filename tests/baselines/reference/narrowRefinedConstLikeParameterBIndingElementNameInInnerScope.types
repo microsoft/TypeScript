@@ -2,8 +2,8 @@
 
 === narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts ===
 function ff({ a, b }: { a: string | undefined, b: () => void }) {
->ff : ({ a, b }: {    a: string | undefined;    b: () => void;}) => void
->   : ^^^^^^^^^^^                                              ^^^^^^^^^
+>ff : ({ a, b }: { a: string | undefined; b: () => void; }) => void
+>   : ^^^^^^^^^^^                                         ^^^^^^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : () => void

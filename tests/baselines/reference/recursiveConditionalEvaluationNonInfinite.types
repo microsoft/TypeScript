@@ -14,8 +14,8 @@ declare const x: Test<number[]>;
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const y: { array: { notArray: number } } = x; // Error
->y : { array: {    notArray: number;}; }
->  : ^^^^^^^^^                       ^^^
+>y : { array: { notArray: number; }; }
+>  : ^^^^^^^^^                     ^^^
 >array : { notArray: number; }
 >      : ^^^^^^^^^^^^      ^^^
 >notArray : number

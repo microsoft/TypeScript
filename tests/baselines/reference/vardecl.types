@@ -106,12 +106,12 @@ var c : {
     }
 
 var d: {
->d : { foo?(): {    x: number;}; }
->  : ^^^^^^^^^^                ^^^
+>d : { foo?(): { x: number; }; }
+>  : ^^^^^^^^^^              ^^^
 
     foo? (): {
->foo : () => {    x: number;}
->    : ^^^^^^                
+>foo : () => { x: number; }
+>    : ^^^^^^              
 
         x: number;
 >x : number
@@ -121,12 +121,12 @@ var d: {
 }
 
 var d3: {
->d3 : { foo(): {    x: number;    y: number;}; }
->   : ^^^^^^^^^                              ^^^
+>d3 : { foo(): { x: number; y: number; }; }
+>   : ^^^^^^^^^                         ^^^
 
     foo(): {
->foo : () => {    x: number;    y: number;}
->    : ^^^^^^                              
+>foo : () => { x: number; y: number; }
+>    : ^^^^^^                         
 
         x: number;
 >x : number
@@ -140,12 +140,12 @@ var d3: {
 }
 
 var d2: {
->d2 : { foo(): {    x: number;}; }
->   : ^^^^^^^^^                ^^^
+>d2 : { foo(): { x: number; }; }
+>   : ^^^^^^^^^              ^^^
 
     foo (): {
->foo : () => {    x: number;}
->    : ^^^^^^                
+>foo : () => { x: number; }
+>    : ^^^^^^              
 
         x: number;
 >x : number
@@ -168,12 +168,12 @@ var n4: {
 }[];
 
 var d4: {
->d4 : { foo(n: string, x: {    x: number;    y: number;}): {    x: number;    y: number;}; }
->   : ^^^^^^^^^      ^^^^^                              ^^^                              ^^^
+>d4 : { foo(n: string, x: { x: number; y: number; }): { x: number; y: number; }; }
+>   : ^^^^^^^^^      ^^^^^                         ^^^                         ^^^
 
     foo(n: string, x: { x: number; y: number; }): {
->foo : (n: string, x: {    x: number;    y: number;}) => {    x: number;    y: number;}
->    : ^^^^      ^^^^^                              ^^^^^                              
+>foo : (n: string, x: { x: number; y: number; }) => { x: number; y: number; }
+>    : ^^^^      ^^^^^                         ^^^^^                         
 >n : string
 >  : ^^^^^^
 >x : { x: number; y: number; }

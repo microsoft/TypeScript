@@ -54,8 +54,8 @@ type Results = Result[];
 >        : ^^^^^^^
 
 function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
->isResponseInData : <T>(value: T | {    data: T;}) => value is { data: T; }
->                 : ^^^^^^^^^^^^              ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
+>                 : ^^^^^^^^^^^^           ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T | { data: T; }
 >      : ^^^^^^^^^^^^^^^^
 >data : T
@@ -77,8 +77,8 @@ function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 }
 
 function getResults1(value: Results | { data: Results }): Results {
->getResults1 : (value: Results | {    data: Results;}) => Results
->            : ^^^^^^^^^^^^^^^              ^^^^^^^  ^^^^^^^^^^^^
+>getResults1 : (value: Results | { data: Results; }) => Results
+>            : ^^^^^^^^^^^^^^^           ^^^^^^^   ^^^^^^^^^^^^
 >value : Results | { data: Results; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : Results
@@ -104,8 +104,8 @@ function getResults1(value: Results | { data: Results }): Results {
 }
 
 function isPlainResponse<T>(value: T | { data: T}): value is T {
->isPlainResponse : <T>(value: T | {    data: T;}) => value is T
->                : ^^^^^^^^^^^^              ^  ^^^^^^^^^^^^^^^
+>isPlainResponse : <T>(value: T | { data: T; }) => value is T
+>                : ^^^^^^^^^^^^           ^   ^^^^^^^^^^^^^^^
 >value : T | { data: T; }
 >      : ^^^^^^^^^^^^^^^^
 >data : T
@@ -127,8 +127,8 @@ function isPlainResponse<T>(value: T | { data: T}): value is T {
 }
 
 function getResults2(value: Results | { data: Results }): Results {
->getResults2 : (value: Results | {    data: Results;}) => Results
->            : ^^^^^^^^^^^^^^^              ^^^^^^^  ^^^^^^^^^^^^
+>getResults2 : (value: Results | { data: Results; }) => Results
+>            : ^^^^^^^^^^^^^^^           ^^^^^^^   ^^^^^^^^^^^^
 >value : Results | { data: Results; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : Results

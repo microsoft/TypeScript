@@ -52,8 +52,8 @@ module WinJS {
 >      : ^^^
 
         static join(promises: { [name: string]: Promise; }): Promise;
->join : { (promises: {    [name: string]: Promise;}): Promise; (promises: Promise[]): Promise; }
->     : ^^^^^^^^^^^^^                     ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>join : { (promises: { [name: string]: Promise; }): Promise; (promises: Promise[]): Promise; }
+>     : ^^^^^^^^^^^^^                  ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >promises : { [name: string]: Promise; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string

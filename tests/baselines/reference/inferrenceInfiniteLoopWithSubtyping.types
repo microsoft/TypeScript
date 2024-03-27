@@ -20,8 +20,8 @@ export class EnumTypeComposer {
 >                 : ^^^^^^^^^^^^^^^^
 
   public setFields(fields: { [name: string]: { [key: string]: any } }): this;
->setFields : (fields: {    [name: string]: {        [key: string]: any;    };}) => this
->          : ^^^^^^^^^                                                        ^^^^^    
+>setFields : (fields: { [name: string]: { [key: string]: any; }; }) => this
+>          : ^^^^^^^^^                                            ^^^^^    
 >fields : { [name: string]: { [key: string]: any; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -41,8 +41,8 @@ export class ObjectTypeComposer<TSource, TContext> {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
->addResolver : <TResolverSource>(opts: {    type?: Thunk<ComposeOutputTypeDefinition>;}) => this
->            : ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => this
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >     : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >type : Thunk<ComposeOutputTypeDefinition>
@@ -54,12 +54,12 @@ export class Resolver {
 >         : ^^^^^^^^
 
   public wrapArgs<NewContext>(
->wrapArgs : <NewContext>(cb: () => {    [argName: string]: Thunk<Readonly<EnumTypeComposer>>;}) => void
->         : ^^^^^^^^^^^^^^^^^                              ^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^    ^^^^^    
+>wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
+>         : ^^^^^^^^^^^^^^^^^                           ^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^     ^^^^^    
 
     cb: () => {
->cb : () => {    [argName: string]: Thunk<Readonly<EnumTypeComposer>>;}
->   : ^^^^^^                        ^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^    
+>cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
+>   : ^^^^^^                     ^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^     
 
       [argName: string]: Thunk<Readonly<EnumTypeComposer>>;
 >argName : string

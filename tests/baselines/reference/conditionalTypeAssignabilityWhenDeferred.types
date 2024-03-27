@@ -24,8 +24,8 @@ function select<
 >          : ^^^^^^^^^^
 
 export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
->func : <XX extends string>(x: XX, tipos: {    value: XX;}[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^    ^^^^^^^^^
+>func : <XX extends string>(x: XX, tipos: { value: XX; }[]) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^     ^^^^^^^^^
 >x : XX
 >  : ^^
 >tipos : { value: XX; }[]
@@ -149,8 +149,8 @@ function f<T>(t: T) {
 }
 
 function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
->f2 : <T>(t1: {    x: T;    y: T;}, t2: T extends T ? {    x: T;    y: T;} : never) => void
->   : ^^^^^^^^        ^        ^  ^^^^^^^         ^           ^        ^          ^^^^^^^^^
+>f2 : <T>(t1: { x: T; y: T; }, t2: T extends T ? { x: T; y: T; } : never) => void
+>   : ^^^^^^^^     ^     ^   ^^^^^^^         ^        ^     ^           ^^^^^^^^^
 >t1 : { x: T; y: T; }
 >   : ^^^^^^^^^^^^^^^
 >x : T

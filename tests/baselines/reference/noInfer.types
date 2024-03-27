@@ -104,8 +104,8 @@ declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 >  : ^^^^^^^^^^^^
 
 declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
->foo4 : <T extends string>(a: T, b: {    x: NoInfer<T>;}) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^ ^   ^^^^^    
+>foo4 : <T extends string>(a: T, b: { x: NoInfer<T>; }) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^ ^    ^^^^^    
 >a : T
 >  : ^
 >b : { x: NoInfer<T>; }
@@ -114,8 +114,8 @@ declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
 >  : ^^^^^^^^^^
 
 declare function foo5<T extends string>(a: T, b: NoInfer<{ x: T }>): void
->foo5 : <T extends string>(a: T, b: NoInfer<{    x: T;}>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^   ^^^^^    
+>foo5 : <T extends string>(a: T, b: NoInfer<{ x: T; }>) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^    ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<{ x: T; }>
@@ -330,8 +330,8 @@ declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
 >      : ^^^^^^^^^^
 
 declare function test(value: { x: number; }): number;
->test : (value: {    x: number;}) => number
->     : ^^^^^^^^                ^^^^^      
+>test : (value: { x: number; }) => number
+>     : ^^^^^^^^              ^^^^^      
 >value : { x: number; }
 >      : ^^^^^      ^^^
 >x : number

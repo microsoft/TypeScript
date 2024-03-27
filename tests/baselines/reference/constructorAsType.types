@@ -2,8 +2,8 @@
 
 === constructorAsType.ts ===
 var Person:new () => {name: string;} = function () {return {name:"joe"};};
->Person : new () => {    name: string;}
->       : ^^^^^^^^^^                   
+>Person : new () => { name: string; }
+>       : ^^^^^^^^^^                 
 >name : string
 >     : ^^^^^^
 >function () {return {name:"joe"};} : () => { name: string; }
@@ -16,8 +16,8 @@ var Person:new () => {name: string;} = function () {return {name:"joe"};};
 >      : ^^^^^
 
 var Person2:{new() : {name:string;};};
->Person2 : new () => {    name: string;}
->        : ^^^^^^^^^^                   
+>Person2 : new () => { name: string; }
+>        : ^^^^^^^^^^                 
 >name : string
 >     : ^^^^^^
 

@@ -589,8 +589,8 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 type Schema = { a: { b: { c: number } } };
 >Schema : Schema
 >       : ^^^^^^
->a : { b: {    c: number;}; }
->  : ^^^^^                ^^^
+>a : { b: { c: number; }; }
+>  : ^^^^^              ^^^
 >b : { c: number; }
 >  : ^^^^^      ^^^
 >c : number
