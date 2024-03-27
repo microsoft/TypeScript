@@ -41,7 +41,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2792: [0mCannot find module './yX/a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
@@ -56,7 +56,7 @@ b.ts
   Matched by default include pattern '**/*'
 XY/a.ts
   Matched by default include pattern '**/*'
-[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -177,7 +177,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2792: [0mCannot find module './yX/a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
@@ -192,7 +192,7 @@ b.ts
   Matched by default include pattern '**/*'
 XY/a.ts
   Matched by default include pattern '**/*'
-[[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

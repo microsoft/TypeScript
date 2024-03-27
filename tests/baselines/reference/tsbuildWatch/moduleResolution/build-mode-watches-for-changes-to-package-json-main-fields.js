@@ -66,15 +66,15 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -b packages/pkg1 --verbose -w --traceResolution
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:44 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/pkg2/tsconfig.json
     * packages/pkg1/tsconfig.json
 
-[[90m12:00:45 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:46 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -82,9 +82,9 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-[[90m12:01:07 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
 
-[[90m12:01:08 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -115,7 +115,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -344,11 +344,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:20 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
 
-[[90m12:01:21 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -375,7 +375,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m              ~~~~~~[0m
 
-[[90m12:01:22 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -426,11 +426,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:27 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
 
-[[90m12:01:28 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -461,7 +461,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

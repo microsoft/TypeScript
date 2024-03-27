@@ -66,15 +66,15 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -b packages/pkg1 -w --verbose --traceResolution
 Output::
 >> Screen clear
-[[90m12:00:41 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:42 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/pkg2/tsconfig.json
     * packages/pkg1/tsconfig.json
 
-[[90m12:00:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:44 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
@@ -87,9 +87,9 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:01 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
 
-[[90m12:01:02 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -125,7 +125,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -343,11 +343,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:14 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:15 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -392,7 +392,7 @@ File '/package.json' does not exist.
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:01:16 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -444,11 +444,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -484,7 +484,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -537,11 +537,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:33 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -586,7 +586,7 @@ File '/package.json' does not exist.
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:01:34 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -642,11 +642,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
 
-[[90m12:01:44 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.cts'. ========
 Module resolution kind is not specified, using 'Node16'.
@@ -794,9 +794,9 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:56 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
 
-[[90m12:01:57 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
@@ -832,7 +832,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

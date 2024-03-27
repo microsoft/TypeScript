@@ -80,22 +80,22 @@ declare const console: { log(msg: any): void; };
 /a/lib/tsc.js -b -w -verbose src
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:36 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/pure/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
 
-[[90m12:00:58 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -315,11 +315,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:10 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
 
-[[90m12:01:11 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
 
@@ -407,9 +407,9 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:28 AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
 
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 [96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
@@ -421,7 +421,7 @@ Output::
     [7m [0m [96m    ~~~[0m
     'bar' is declared here.
 
-[[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -500,11 +500,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
 
-[[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
 
@@ -595,13 +595,13 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:53 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+[[90mHH:MM:SS AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
-[[90m12:01:54 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

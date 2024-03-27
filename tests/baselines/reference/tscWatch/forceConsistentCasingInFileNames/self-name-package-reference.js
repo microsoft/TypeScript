@@ -44,7 +44,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Found 'package.json' at '/Users/name/projects/web/package.json'.
 ======== Resolving module '@this/package' from '/Users/name/projects/web/index.ts'. ========
@@ -64,7 +64,7 @@ index.ts
   Matched by default include pattern '**/*'
   Imported via "@this/package" from file 'index.ts'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

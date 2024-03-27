@@ -30,9 +30,9 @@ const y = 20;
 /a/lib/tsc.js -w -p tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -183,9 +183,9 @@ FsWatchesRecursive *deleted*::
 
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

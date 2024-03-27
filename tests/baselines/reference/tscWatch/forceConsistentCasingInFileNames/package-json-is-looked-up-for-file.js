@@ -43,7 +43,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/Users/name/projects/lib-boilerplate/src/package.json' does not exist.
 Found 'package.json' at '/Users/name/projects/lib-boilerplate/package.json'.
@@ -70,7 +70,7 @@ src/index.ts
 test/basic.spec.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
