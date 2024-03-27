@@ -1,10 +1,8 @@
 foo.ts(11,8): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
 foo.ts(12,8): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
-foo.ts(14,7): error TS18055: 'Foo.F' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
-foo.ts(15,7): error TS18055: 'Foo.G' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
 
 
-==== ./foo.ts (4 errors) ====
+==== ./foo.ts (2 errors) ====
     import { BAR } from './bar';
     const LOCAL = 'LOCAL';
     
@@ -23,11 +21,7 @@ foo.ts(15,7): error TS18055: 'Foo.G' has a string type, but must have syntactica
 !!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
     
       F = BAR,
-          ~~~
-!!! error TS18055: 'Foo.F' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
       G = 2 + BAR,
-          ~~~~~~~
-!!! error TS18055: 'Foo.G' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
     
       H = A,
       I = H + BAR,

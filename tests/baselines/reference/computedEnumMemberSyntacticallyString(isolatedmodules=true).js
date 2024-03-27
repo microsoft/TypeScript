@@ -7,8 +7,6 @@ enum Foo {
     A = `${BAR}`,
     B = "2" + BAR,
     C = (`${BAR}`),
-    D = (`${BAR}}`) as string,
-    E = `${BAR}`!,
 
     F = BAR,
     G = 2 + BAR,
@@ -26,8 +24,6 @@ var Foo;
     Foo["A"] = `${BAR}`;
     Foo["B"] = "2" + BAR;
     Foo["C"] = (`${BAR}`);
-    Foo["D"] = (`${BAR}}`);
-    Foo["E"] = `${BAR}`;
     Foo[Foo["F"] = BAR] = "F";
     Foo[Foo["G"] = 2 + BAR] = "G";
     Foo["H"] = Foo.A;

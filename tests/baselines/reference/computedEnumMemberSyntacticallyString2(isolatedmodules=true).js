@@ -11,6 +11,9 @@ enum Foo {
   C = B,
   D = C + 'BAR',
 
+  E1 = (`${BAR}`) as string, // We could recognize these,
+  E2 = `${BAR}`!,             // but Babel doesn't
+
   F = BAR,
   G = 2 + BAR,
 
@@ -33,8 +36,10 @@ var Foo;
     Foo["B"] = "LOCAL";
     Foo["C"] = "LOCAL";
     Foo["D"] = "LOCALBAR";
-    Foo[Foo["F"] = "bar"] = "F";
-    Foo[Foo["G"] = "2bar"] = "G";
+    Foo[Foo["E1"] = (`${BAR}`)] = "E1";
+    Foo[Foo["E2"] = `${BAR}`] = "E2";
+    Foo["F"] = "bar";
+    Foo["G"] = "2bar";
     Foo["H"] = "bar";
     Foo["I"] = "barbar";
     Foo["J"] = "bar";

@@ -1923,7 +1923,7 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = evaluated?.isSyntacticallyString ?
+        const outerAssignment = typeof evaluated?.value === "string" || evaluated?.isSyntacticallyString ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(
