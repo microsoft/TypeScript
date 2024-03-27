@@ -34519,10 +34519,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const arg = args[i];
                 // We can call checkExpressionCached because spread expressions never have a contextual type.
                 const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
+                const constraint = spreadType && getConstraintOfType(spreadType);
                 if (spreadType && isTupleType(spreadType)) {
                     forEach(getElementTypes(spreadType), (t, i) => {
                         const flags = spreadType.target.elementFlags[i];
                         const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t, !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
+                        effectiveArgs.push(syntheticArg);
+                    });
+                }
+                else if (constraint && isTupleType(constraint)) {
+                    forEach(getTypeArguments(constraint), (_, i) => {
+                        const isVariable = !!(constraint.target.elementFlags[i] & ElementFlags.Variable);
+                        const syntheticArg = createSyntheticExpression(arg, !isVariable ? getIndexedAccessType(spreadType, getStringLiteralType("" + i))! : spreadType,
+                            /*isSpread*/ isVariable, constraint.target.labeledElementDeclarations?.[i]);
                         effectiveArgs.push(syntheticArg);
                     });
                 }
