@@ -23,7 +23,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w /users/username/projects/project/d/f0.ts
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/users/username/projects/project/f1.ts' is not a module.
 
@@ -35,7 +35,7 @@ Output::
 [7m1[0m foo()
 [7m [0m [91m~~~[0m
 
-[[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -104,7 +104,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/users/username/projects/project/f1.ts' is not a module.
 
@@ -121,7 +121,7 @@ Output::
 [7m1[0m foo()
 [7m [0m [91m~~~[0m
 
-[[90m12:00:36 AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -171,14 +171,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 [7m1[0m import {x} from "f2"
 [7m [0m [91m                ~~~~[0m
 
-[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -240,7 +240,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96musers/username/projects/project/d/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/users/username/projects/project/f1.ts' is not a module.
 
@@ -252,7 +252,7 @@ Output::
 [7m1[0m foo()
 [7m [0m [91m~~~[0m
 
-[[90m12:00:55 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 

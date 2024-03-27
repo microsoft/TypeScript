@@ -192,6 +192,7 @@ import {
     isImportTypeNode,
     isIncrementalCompilation,
     isInJSFile,
+    isJSDocImportTag,
     isLiteralImportTypeNode,
     isModifier,
     isModuleDeclaration,
@@ -205,6 +206,7 @@ import {
     isStringLiteral,
     isStringLiteralLike,
     isTraceEnabled,
+    JSDocImportTag,
     JsonSourceFile,
     JsxEmit,
     length,
@@ -868,7 +870,7 @@ export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: 
 }
 
 /** @internal */
-export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration) {
+export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration | JSDocImportTag) {
     if (isExportDeclaration(decl)) {
         return decl.isTypeOnly;
     }
@@ -3346,7 +3348,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-            collectDynamicImportOrRequireCalls(file);
+            collectDynamicImportOrRequireOrJsDocImportCalls(file);
         }
 
         file.imports = imports || emptyArray;
@@ -3403,7 +3405,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        function collectDynamicImportOrRequireCalls(file: SourceFile) {
+        function collectDynamicImportOrRequireOrJsDocImportCalls(file: SourceFile) {
             const r = /import|require/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                 const node = getNodeAtPosition(file, r.lastIndex);
@@ -3419,6 +3421,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 else if (isLiteralImportTypeNode(node)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.argument.literal);
+                }
+                else if (isJavaScriptFile && isJSDocImportTag(node)) {
+                    const moduleNameExpr = getExternalModuleName(node);
+                    if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
+                        setParentRecursive(node, /*incremental*/ false);
+                        imports = append(imports, moduleNameExpr);
+                    }
                 }
             }
         }

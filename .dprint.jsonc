@@ -44,6 +44,7 @@
         "trailingCommas": "never"
     },
     "excludes": [
+        "**/.git",
         "**/node_modules",
         "**/*-lock.json",
         "coverage/**",

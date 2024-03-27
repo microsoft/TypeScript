@@ -243,6 +243,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocNameReference,
     JSDocNonNullableType,
     JSDocNullableType,
@@ -1826,6 +1827,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocSeeTag:
                     return emitJSDocSeeTag(node as JSDocSeeTag);
+                case SyntaxKind.JSDocImportTag:
+                    return emitJSDocImportTag(node as JSDocImportTag);
                 // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
 
                 // Transformation nodes
@@ -4006,6 +4009,25 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitJSDocComment(tag.comment);
     }
 
+    function emitJSDocImportTag(tag: JSDocImportTag) {
+        emitJSDocTagName(tag.tagName);
+        writeSpace();
+
+        if (tag.importClause) {
+            emit(tag.importClause);
+            writeSpace();
+
+            emitTokenWithComment(SyntaxKind.FromKeyword, tag.importClause.end, writeKeyword, tag);
+            writeSpace();
+        }
+
+        emitExpression(tag.moduleSpecifier);
+        if (tag.attributes) {
+            emitWithLeadingSpace(tag.attributes);
+        }
+        emitJSDocComment(tag.comment);
+    }
+
     function emitJSDocNameReference(node: JSDocNameReference) {
         writeSpace();
         writePunctuation("{");
@@ -4183,10 +4205,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         function writeDirectives(kind: "path" | "types" | "lib", directives: readonly FileReference[]) {
             for (const directive of directives) {
-                const preserve = directive.preserve ? `preserve="true" ` : "";
-                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+                const resolutionMode = directive.resolutionMode
                     ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
                     : "";
+                const preserve = directive.preserve ? `preserve="true" ` : "";
                 writeComment(`/// <reference ${kind}="${directive.fileName}" ${resolutionMode}${preserve}/>`);
                 writeLine();
             }

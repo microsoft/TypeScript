@@ -11,8 +11,8 @@ import {
     AmbientModuleDeclaration,
     and,
     AnonymousType,
+    AnyImportOrJsDocImport,
     AnyImportOrReExport,
-    AnyImportSyntax,
     append,
     appendIfUnique,
     ArrayBindingPattern,
@@ -581,6 +581,7 @@ import {
     isJSDocCallbackTag,
     isJSDocConstructSignature,
     isJSDocFunctionType,
+    isJSDocImportTag,
     isJSDocIndexSignature,
     isJSDocLinkLike,
     isJSDocMemberName,
@@ -770,6 +771,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -1763,12 +1765,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getExactOptionalProperties,
         getAllPossiblePropertiesOfTypes,
         getSuggestedSymbolForNonexistentProperty,
-        getSuggestionForNonexistentProperty,
         getSuggestedSymbolForNonexistentJSXAttribute,
         getSuggestedSymbolForNonexistentSymbol: (location, name, meaning) => getSuggestedSymbolForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
-        getSuggestionForNonexistentSymbol: (location, name, meaning) => getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning),
         getSuggestedSymbolForNonexistentModule,
-        getSuggestionForNonexistentExport,
         getSuggestedSymbolForNonexistentClassMember,
         getBaseConstraintOfType,
         getDefaultFromTypeParameter: type => type && type.flags & TypeFlags.TypeParameter ? getDefaultFromTypeParameter(type as TypeParameter) : undefined,
@@ -2841,7 +2840,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const container = findAncestor(usage, n =>
                     n === declaration ? "quit" :
                         isComputedPropertyName(n) ? n.parent.parent === declaration :
-                        isDecorator(n) && (n.parent === declaration ||
+                        !legacyDecorators && isDecorator(n) && (n.parent === declaration ||
                             isMethodDeclaration(n.parent) && n.parent.parent === declaration ||
                             isGetOrSetAccessorDeclaration(n.parent) && n.parent.parent === declaration ||
                             isPropertyDeclaration(n.parent) && n.parent.parent === declaration ||
@@ -2849,7 +2848,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!container) {
                     return true;
                 }
-                if (isDecorator(container)) {
+                if (!legacyDecorators && isDecorator(container)) {
                     return !!findAncestor(usage, n => n === container ? "quit" : isFunctionLike(n) && !getImmediatelyInvokedFunctionExpression(n));
                 }
                 return false;
@@ -3385,6 +3384,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
+                case SyntaxKind.JSDocImportTag:
                     // js type aliases do not resolve names from their host, so skip past it
                     const root = getJSDocRoot(location);
                     if (root) {
@@ -3953,7 +3953,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || (getFunctionFlags(n) & FunctionFlags.AsyncGenerator)) ? "quit" : false));
     }
 
-    function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
+    function getAnyImportSyntax(node: Node): AnyImportOrJsDocImport | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return node as ImportEqualsDeclaration;
@@ -4291,8 +4291,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
-        const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration).moduleSpecifier!;
+    function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration | JSDocImportTag, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
+        const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration | JSDocImportTag).moduleSpecifier!;
         const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
         const name = !isPropertyAccessExpression(specifier) && specifier.propertyName || specifier.name;
         if (!isIdentifier(name)) {
@@ -5017,6 +5017,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
+                (isInJSFile(location) && isJSDocImportTag(location) ? location.moduleSpecifier : undefined) ||
                 (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
@@ -6311,7 +6312,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
+    function getMeaningOfEntityNameReference(entityName: EntityNameOrEntityNameExpression): SymbolFlags {
         // get symbol of the first identifier of the entityName
         let meaning: SymbolFlags;
         if (
@@ -6324,7 +6325,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else if (
             entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
-            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration
+            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ||
+            (entityName.parent.kind === SyntaxKind.QualifiedName && (entityName.parent as QualifiedName).left === entityName) ||
+            (entityName.parent.kind === SyntaxKind.PropertyAccessExpression && (entityName.parent as PropertyAccessExpression).expression === entityName) ||
+            (entityName.parent.kind === SyntaxKind.ElementAccessExpression && (entityName.parent as ElementAccessExpression).expression === entityName)
         ) {
             // Left identifier from type reference or TypeAlias
             // Entity name of the import declaration
@@ -6334,7 +6338,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Type Reference or TypeAlias entity = Identifier
             meaning = SymbolFlags.Type;
         }
+        return meaning;
+    }
 
+    function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
+        const meaning = getMeaningOfEntityNameReference(entityName);
         const firstIdentifier = getFirstIdentifier(entityName);
         const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
         if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
@@ -8579,15 +8587,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 introducesError = true;
                 return { introducesError, node };
             }
-            const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
+            const meaning = getMeaningOfEntityNameReference(node);
+            const sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
             if (sym) {
-                if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                if (isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                     if (!isDeclarationName(node)) {
                         introducesError = true;
                     }
                 }
                 else {
-                    context.tracker.trackSymbol(sym, context.enclosingDeclaration, SymbolFlags.All);
+                    context.tracker.trackSymbol(sym, context.enclosingDeclaration, meaning);
                     includePrivateSymbol?.(sym);
                 }
                 if (isIdentifier(node)) {
@@ -9795,12 +9804,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportClause: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
+                        const attributes = isImportDeclaration(node.parent) ? node.parent.attributes : undefined;
+                        const isTypeOnly = isJSDocImportTag((node as ImportClause).parent);
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
+                                factory.createImportClause(isTypeOnly, factory.createIdentifier(localName), /*namedBindings*/ undefined),
                                 specifier,
-                                (node as ImportClause).parent.attributes,
+                                attributes,
                             ),
                             ModifierFlags.None,
                         );
@@ -9809,10 +9820,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.NamespaceImport: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
+                        const isTypeOnly = isJSDocImportTag((node as NamespaceImport).parent.parent);
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
+                                factory.createImportClause(isTypeOnly, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
                                 specifier,
                                 (node as ImportClause).parent.attributes,
                             ),
@@ -9834,11 +9846,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportSpecifier: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
+                        const isTypeOnly = isJSDocImportTag((node as ImportSpecifier).parent.parent.parent);
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(
-                                    /*isTypeOnly*/ false,
+                                    isTypeOnly,
                                     /*name*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
@@ -13068,12 +13081,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let lateSymbol = lateSymbols.get(memberName);
                 if (!lateSymbol) lateSymbols.set(memberName, lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late));
 
-                // Report an error if a late-bound member has the same name as an early-bound member,
-                // or if we have another early-bound symbol declaration with the same name and
-                // conflicting flags.
+                // Report an error if there's a symbol declaration with the same name and conflicting flags.
                 const earlySymbol = earlySymbols && earlySymbols.get(memberName);
                 // Duplicate property declarations of classes are checked in checkClassForDuplicateDeclarations.
-                if (!(parent.flags & SymbolFlags.Class) && (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol)) {
+                if (!(parent.flags & SymbolFlags.Class) && lateSymbol.flags & getExcludedSymbolFlags(symbolFlags)) {
                     // If we have an existing early-bound member, combine its declarations so that we can
                     // report an error at each declaration.
                     const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
@@ -17765,6 +17776,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (every(typeSet, t => !!(t.flags & TypeFlags.Union && ((t as UnionType).types[0].flags & TypeFlags.Null || (t as UnionType).types[1].flags & TypeFlags.Null)))) {
                     removeFromEach(typeSet, TypeFlags.Null);
                     result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                }
+                else if (typeSet.length >= 4) {
+                    // When we have four or more constituents, some of which are unions, we employ a "divide and conquer" strategy
+                    // where A & B & C & D is processed as (A & B) & (C & D). Since intersections of unions often produce far smaller
+                    // unions of intersections than the full cartesian product (due to some intersections becoming `never`), this can
+                    // dramatically reduce the overall work.
+                    const middle = Math.floor(typeSet.length / 2);
+                    result = getIntersectionType([getIntersectionType(typeSet.slice(0, middle)), getIntersectionType(typeSet.slice(middle))], aliasSymbol, aliasTypeArguments);
                 }
                 else {
                     // We are attempting to construct a type of the form X & (A | B) & (C | D). Transform this into a type of
@@ -26611,13 +26630,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getFlowCacheKey((node as NonNullExpression | ParenthesizedExpression).expression, declaredType, initialType, flowContainer);
             case SyntaxKind.QualifiedName:
                 const left = getFlowCacheKey((node as QualifiedName).left, declaredType, initialType, flowContainer);
-                return left && left + "." + (node as QualifiedName).right.escapedText;
+                return left && `${left}.${(node as QualifiedName).right.escapedText}`;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const propName = getAccessedPropertyName(node as AccessExpression);
                 if (propName !== undefined) {
                     const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
-                    return key && key + "." + propName;
+                    return key && `${key}.${propName}`;
+                }
+                if (isElementAccessExpression(node) && isIdentifier(node.argumentExpression)) {
+                    const symbol = getResolvedSymbol(node.argumentExpression);
+                    if (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol)) {
+                        const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
+                        return key && `${key}.@${getSymbolId(symbol)}`;
+                    }
                 }
                 break;
             case SyntaxKind.ObjectBindingPattern:
@@ -26663,9 +26689,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
-                const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
-                return sourcePropertyName !== undefined && targetPropertyName !== undefined && targetPropertyName === sourcePropertyName &&
-                    isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                if (sourcePropertyName !== undefined) {
+                    const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
+                    if (targetPropertyName !== undefined) {
+                        return targetPropertyName === sourcePropertyName && isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                    }
+                }
+                if (isElementAccessExpression(source) && isElementAccessExpression(target) && isIdentifier(source.argumentExpression) && isIdentifier(target.argumentExpression)) {
+                    const symbol = getResolvedSymbol(source.argumentExpression);
+                    if (symbol === getResolvedSymbol(target.argumentExpression) && (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol))) {
+                        return isMatchingReference(source.expression, target.expression);
+                    }
+                }
+                break;
             case SyntaxKind.QualifiedName:
                 return isAccessExpression(target) &&
                     (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
@@ -29801,12 +29837,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.EnumDeclaration:
                     error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
                     // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-                    break;
-                case SyntaxKind.Constructor:
-                    if (isInConstructorArgumentInitializer(node, container)) {
-                        error(node, Diagnostics.this_cannot_be_referenced_in_constructor_arguments);
-                        // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-                    }
                     break;
             }
         }
@@ -33519,18 +33549,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getSuggestionForNonexistentSymbol(location: Node | undefined, outerName: __String, meaning: SymbolFlags): string | undefined {
-        const symbolResult = getSuggestedSymbolForNonexistentSymbol(location, outerName, meaning);
-        return symbolResult && symbolName(symbolResult);
-    }
-
     function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
         return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
-    }
-
-    function getSuggestionForNonexistentExport(name: Identifier, targetModule: Symbol): string | undefined {
-        const suggestion = getSuggestedSymbolForNonexistentModule(name, targetModule);
-        return suggestion && symbolName(suggestion);
     }
 
     function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
@@ -42181,6 +42201,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkJSDocImportTag(node: JSDocImportTag) {
+        checkImportAttributes(node);
+    }
+
     function checkJSDocImplementsTag(node: JSDocImplementsTag): void {
         const classLike = getEffectiveJSDocHost(node);
         if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -46390,7 +46414,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration) {
+    function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration | JSDocImportTag) {
         const node = declaration.attributes;
         if (node) {
             const importAttributesType = getGlobalImportAttributesType(/*reportErrors*/ true);
@@ -46417,7 +46441,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnNode(node, message);
             }
 
-            if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
+            const isTypeOnly = isJSDocImportTag(declaration) || (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly);
+            if (isTypeOnly) {
                 return grammarErrorOnNode(node, isImportAttributes ? Diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports : Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
             }
 
@@ -46945,6 +46970,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
             case SyntaxKind.JSDocThisTag:
                 return checkJSDocThisTag(node as JSDocThisTag);
+            case SyntaxKind.JSDocImportTag:
+                return checkJSDocImportTag(node as JSDocImportTag);
             case SyntaxKind.IndexedAccessType:
                 return checkIndexedAccessType(node as IndexedAccessTypeNode);
             case SyntaxKind.MappedType:
@@ -47901,6 +47928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                     ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (node.parent as ImportDeclaration).moduleSpecifier === node) ||
+                    (isInJSFile(node) && isJSDocImportTag(node.parent) && node.parent.moduleSpecifier === node) ||
                     ((isInJSFile(node) && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
                     (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                 ) {

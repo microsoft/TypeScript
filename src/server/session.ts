@@ -15,7 +15,6 @@ import {
     CompletionEntryData,
     CompletionEntryDetails,
     CompletionInfo,
-    CompletionTriggerKind,
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     concatenate,
@@ -2309,7 +2308,7 @@ export class Session<TMessage = string> implements EventSender {
             {
                 ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
-                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
+                triggerKind: args.triggerKind,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions,
             },
@@ -2802,7 +2801,7 @@ export class Session<TMessage = string> implements EventSender {
         const changes = project.getLanguageService().organizeImports(
             {
                 fileName: file,
-                mode: args.mode as OrganizeImportsMode | undefined ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
+                mode: args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
                 type: "file",
             },
             this.getFormatOptions(file),

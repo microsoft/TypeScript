@@ -60,14 +60,14 @@ class Test {
 >[] : never[]
         }
         this.entries[name]?.push(entry);
->this.entries[name]?.push(entry) : number | undefined
->this.entries[name]?.push : ((...items: Types[T][]) => number) | undefined
->this.entries[name] : Types[T][] | undefined
+>this.entries[name]?.push(entry) : number
+>this.entries[name]?.push : (...items: Types[T][]) => number
+>this.entries[name] : Types[T][]
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
 >this : this
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
 >name : T
->push : ((...items: Types[T][]) => number) | undefined
+>push : (...items: Types[T][]) => number
 >entry : Types[T]
     }
 }
