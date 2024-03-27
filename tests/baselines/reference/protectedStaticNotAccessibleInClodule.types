@@ -5,26 +5,38 @@
 
 class C {
 >C : C
+>  : ^
 
     public static foo: string;
 >foo : string
+>    : ^^^^^^
 
     protected static bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export var f = C.foo; // OK
 >f : string
+>  : ^^^^^^
 >C.foo : string
+>      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
     export var b = C.bar; // error
 >b : string
+>  : ^^^^^^
 >C.bar : string
+>      : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >bar : string
+>    : ^^^^^^
 }

@@ -3,28 +3,40 @@
 === classExtendsNull.ts ===
 class C extends null {
 >C : C
+>  : ^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
         return Object.create(null);
 >Object.create(null) : any
+>                    : ^^^
 >Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 class D extends null {
 >D : D
+>  : ^
 
     constructor() {
         return Object.create(null);
 >Object.create(null) : any
+>                    : ^^^
 >Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

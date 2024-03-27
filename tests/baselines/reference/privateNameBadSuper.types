@@ -3,20 +3,27 @@
 === privateNameBadSuper.ts ===
 class B {};
 >B : B
+>  : ^
 
 class A extends B {
 >A : A
+>  : ^
 >B : B
+>  : ^
 
   #x;
 >#x : any
+>   : ^^^
 
   constructor() {
     this;
 >this : this
+>     : ^^^^
 
     super();
 >super() : void
+>        : ^^^^
 >super : typeof B
+>      : ^^^^^^^^
   }
 }

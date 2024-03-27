@@ -3,6 +3,7 @@
 === types.d.ts ===
 declare module "tslib" { export const __exportStar: any; export const __importDefault: any; export const __importStar: any; }
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >__exportStar : any
 >__importDefault : any
 >__importStar : any
@@ -10,8 +11,11 @@ declare module "tslib" { export const __exportStar: any; export const __importDe
 === utils/username.ts ===
 export const username = () => 'username';
 >username : () => string
+>         : ^^^^^^^^^^^^
 >() => 'username' : () => string
+>                 : ^^^^^^^^^^^^
 >'username' : "username"
+>           : ^^^^^^^^^^
 
 === utils/index.ts ===
 
@@ -19,26 +23,39 @@ export * from './username';
 === hello.ts ===
 const sayHello = (name?: string) => void (`Hello, ${name}!`);
 >sayHello : (name?: string) => any
+>         : ^^^^^^^^      ^^^^^^^^
 >(name?: string) => void (`Hello, ${name}!`) : (name?: string) => any
+>                                            : ^^^^^^^^      ^^^^^^^^
 >name : string
+>     : ^^^^^^
 >void (`Hello, ${name}!`) : undefined
+>                         : ^^^^^^^^^
 >(`Hello, ${name}!`) : string
+>                    : ^^^^^^
 >`Hello, ${name}!` : string
+>                  : ^^^^^^
 >name : string
+>     : ^^^^^^
 
 export default sayHello;
 >sayHello : (name?: string) => any
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 
 === index.ts ===
 import sayHello from "./hello";
 >sayHello : (name?: string) => any
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 
 import { username } from './utils';
 >username : () => string
+>         : ^^^^^^^^^^^^
 
 sayHello(username());
 >sayHello(username()) : any
 >sayHello : (name?: string) => any
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >username() : string
+>           : ^^^^^^
 >username : () => string
+>         : ^^^^^^^^^^^^
 

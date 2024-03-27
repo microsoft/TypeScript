@@ -3,16 +3,21 @@
 === parser553699.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   constructor() { }
   public banana (x: public) { }
 >banana : (x: public) => void
+>       : ^^^^^^^^^^^^^^^^^^^
 >x : public
+>  : ^^^^^^
 }
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
   constructor(c: Bar) { }
 >c : Bar
+>  : ^^^
 }

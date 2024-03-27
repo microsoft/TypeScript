@@ -8,8 +8,10 @@ export * from "./c";
 === b.ts ===
 export function __foo(): number | void {}
 >__foo : () => number | void
+>      : ^^^^^^             
 
 === c.ts ===
 export function __foo(): string | void {}
 >__foo : () => string | void
+>      : ^^^^^^             
 
