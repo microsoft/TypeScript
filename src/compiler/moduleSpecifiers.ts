@@ -550,7 +550,8 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
 
         const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
         const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
-        if (nearestSourcePackageJson !== nearestTargetPackageJson) {
+        const ignoreCase = !hostUsesCaseSensitiveFileNames(host);
+        if (!packageJsonPathsAreEqual(nearestTargetPackageJson, nearestSourcePackageJson, ignoreCase)) {
             // 2. The importing and imported files are part of different packages.
             //
             //      packages/a/
@@ -568,6 +569,12 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
 
     // Prefer a relative import over a baseUrl import if it has fewer components.
     return isPathRelativeToParent(maybeNonRelative) || countPathComponents(relativePath) < countPathComponents(maybeNonRelative) ? relativePath : maybeNonRelative;
+}
+
+function packageJsonPathsAreEqual(a: string | undefined, b: string | undefined, ignoreCase?: boolean) {
+    if (a === b) return true;
+    if (a === undefined || b === undefined) return false;
+    return comparePaths(a, b, ignoreCase) === Comparison.EqualTo;
 }
 
 /** @internal */
