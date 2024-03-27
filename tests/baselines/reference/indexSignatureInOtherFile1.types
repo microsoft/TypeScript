@@ -33,7 +33,7 @@ interface Array1<T> {
    * when they will be absent when used in a 'with' statement.
    */
   [Symbol.unscopables](): {
->[Symbol.unscopables] : () => {    copyWithin: boolean;    entries: boolean;    fill: boolean;    find: boolean;    findIndex: boolean;    keys: boolean;    values: boolean;}
+>[Symbol.unscopables] : () => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }
 >Symbol.unscopables : unique symbol
 >Symbol : SymbolConstructor
 >unscopables : unique symbol

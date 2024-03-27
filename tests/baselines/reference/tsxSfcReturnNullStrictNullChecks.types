@@ -10,7 +10,7 @@ const Foo = (props: any) => null;
 >props : any
 
 function Greet(x: {name?: string}) {
->Greet : (x: {    name?: string;}) => null
+>Greet : (x: { name?: string; }) => null
 >x : { name?: string | undefined; }
 >name : string | undefined
 

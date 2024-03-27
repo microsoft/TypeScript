@@ -10,7 +10,7 @@ declare function checkTruths(x: Facts): void;
 >x : Facts
 
 declare function checkM(x: { m: boolean }): void;
->checkM : (x: {    m: boolean;}) => void
+>checkM : (x: { m: boolean; }) => void
 >x : { m: boolean; }
 >m : boolean
 

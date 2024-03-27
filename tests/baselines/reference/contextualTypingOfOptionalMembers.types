@@ -174,7 +174,7 @@ interface ActionsObjectOr<State> {
 }
 
 declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State }): JSX.Element;
->App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & {    state: State;}) => JSX.Element
+>App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
 >props : (string | Actions) & { state: State; }
 >state : State
 >JSX : any

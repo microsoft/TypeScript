@@ -30,7 +30,7 @@ var x = id1(function (n) { return this.length + n });
  * @return {function(new: { length: number }, number): number}
  */
 function id2(c) {
->id2 : (c: new (arg1: number) => {    length: number;}) => new (arg1: number) => {    length: number;}
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >c : new (arg1: number) => { length: number; }
 
     return c

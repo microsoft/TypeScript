@@ -2,7 +2,7 @@
 
 === staticInheritance.ts ===
 function doThing(x: { n: string }) { }
->doThing : (x: {    n: string;}) => void
+>doThing : (x: { n: string; }) => void
 >x : { n: string; }
 >n : string
 
