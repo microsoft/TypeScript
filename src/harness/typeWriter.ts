@@ -280,10 +280,9 @@ export class TypeWriterWalker {
 
                 const { printer, writer, underliner, reset } = createSyntheticNodeUnderliningPrinter();
                 printer.writeNode(ts.EmitHint.Unspecified, typeNode, this.currentSourceFile, writer);
-                const result = writer.getText();
+                typeString = writer.getText();
                 underline = underliner.getText();
                 reset();
-                typeString = result;
             }
             return {
                 line: lineAndCharacter.line,
