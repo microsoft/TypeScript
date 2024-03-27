@@ -17,7 +17,7 @@ interface ComponentProps {
 
 export default function Component(props: ComponentProps) {
 >Component : (props: ComponentProps) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^              ^^^^^^^^^^^^^^^^
 >props : ComponentProps
 >      : ^^^^^^^^^^^^^^
 
@@ -56,7 +56,7 @@ interface AnotherComponentProps {
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
 >AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^^
 >property1 : string
 >          : ^^^^^^
 

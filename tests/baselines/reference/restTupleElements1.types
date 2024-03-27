@@ -241,7 +241,7 @@ let ex = t[x];  // number | string | boolean
 
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^^^^^^^^^^ ^     ^   ^^^^^ ^  ^ 
+>   : ^ ^^ ^^^^^           ^^^^^      
 >x : [T, ...U[]]
 >  : ^^^^^^^^^^^
 

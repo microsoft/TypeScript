@@ -18,7 +18,7 @@ declare var window: Window;
 interface Window {
     onmousemove: (ev: MouseEvent) => any;
 >onmousemove : (ev: MouseEvent) => any
->            : ^^^^^^^^^^^^^^^^^^^^   
+>            : ^^^^^          ^^^^^   
 >ev : MouseEvent
 >   : ^^^^^^^^^^
     

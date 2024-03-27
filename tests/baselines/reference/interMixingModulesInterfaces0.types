@@ -11,7 +11,7 @@ module A {
 
         export function createB(): B {
 >createB : () => B
->        : ^^^^^^^
+>        : ^^^^^^ 
 
             return null;
         }

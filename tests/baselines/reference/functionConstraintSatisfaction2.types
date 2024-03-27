@@ -5,7 +5,7 @@
 
 function foo<T extends Function>(x: T): T { return x; }
 >foo : <T extends Function>(x: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -41,7 +41,7 @@ foo(1, () => { });
 
 function foo2<T extends (x: string) => string>(x: T): T { return x; }
 >foo2 : <T extends (x: string) => string>(x: T) => T
->     : ^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^      ^^^^^      ^^^^^ ^^^^^ 
 >x : string
 >  : ^^^^^^
 >x : T
@@ -75,7 +75,7 @@ class C2<T> {
 
 var b2: { new <T>(x: T): T };
 >b2 : new <T>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -127,13 +127,13 @@ var r7 = foo2(b);
 
 var r8 = foo2(<U>(x: U) => x); // no error expected
 >r8 : <U>(x: U) => U
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^^
 >foo2(<U>(x: U) => x) : <U>(x: U) => U
->                     : ^^^^^^^^^^^^^^
+>                     : ^ ^^^^^ ^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U>(x: U) => x : <U>(x: U) => U
->               : ^^^^^^^^^^^^^^
+>               : ^ ^^^^^ ^^^^^^
 >x : U
 >  : ^
 >x : U
@@ -147,7 +147,7 @@ var r11 = foo2(<U, V>(x: U, y: V) => x);
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^ ^^^^^ ^^^^^ ^^^^^^
 >x : U
 >  : ^
 >y : V
@@ -195,7 +195,7 @@ var r16 = foo2(f2);
 
 function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 >fff : <T extends () => void, U extends T>(x: T, y: U) => void
->    : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

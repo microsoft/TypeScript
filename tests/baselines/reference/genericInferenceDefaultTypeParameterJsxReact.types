@@ -29,7 +29,7 @@ type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { child
 
 function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
 >props : ButtonBaseProps<T>
 >      : ^^^^^^^^^^^^^^^^^^
 

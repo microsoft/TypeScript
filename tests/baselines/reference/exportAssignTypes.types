@@ -65,7 +65,7 @@ import iGeneric = require('./expGeneric');
 
 var v7: {<x>(p1: x): x} = iGeneric;
 >v7 : <x>(p1: x) => x
->   : ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^ ^^^^^ 
 >p1 : x
 >   : ^
 >iGeneric : <T>(a: T) => T
@@ -149,7 +149,7 @@ export = x;
 === expGeneric.ts ===
 function x<T>(a: T){
 >x : <T>(a: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^ ^^^^^^
 >a : T
 >  : ^
 

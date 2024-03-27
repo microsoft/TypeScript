@@ -128,7 +128,7 @@ Object.defineProperty(module.exports, "d", { value: d });
  */
 function e(a, b) { return /** @type {*} */(null); }
 >e : <T, U>(a: T, b: U) => T & U
->  : ^^^^^^^^^^^^^^^^^^^^^^^   ^
+>  : ^ ^^ ^^^^^ ^^^^^ ^^^^^     
 >a : T
 >  : ^
 >b : U
@@ -165,7 +165,7 @@ Object.defineProperty(module.exports, "e", { value: e });
  */
 function f(a) {
 >f : <T>(a: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^ ^^^^^^
 >a : T
 >  : ^
 

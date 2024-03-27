@@ -9,7 +9,7 @@ import { test1, test2 } from "./other";
 
 export function wrappedTest1<T, K extends string>(obj: T, k: K) {
 >wrappedTest1 : <T, K extends string>(obj: T, k: K) => Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 >k : K
@@ -28,7 +28,7 @@ export function wrappedTest1<T, K extends string>(obj: T, k: K) {
 
 export function wrappedTest2<T, K extends string>(obj: T, k: K) {
 >wrappedTest2 : <T, K extends string>(obj: T, k: K) => { [P in Exclude<keyof T, K>]: T[P]; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 >k : K
@@ -103,7 +103,7 @@ type OmitUnveiled<T, K extends string | number | symbol> = {
 
 export function test1<T, K extends string>(obj: T, k: K): OmitReal<T, K> {
 >test1 : <T, K extends string>(obj: T, k: K) => OmitReal<T, K>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^              
 >obj : T
 >    : ^
 >k : K
@@ -117,7 +117,7 @@ export function test1<T, K extends string>(obj: T, k: K): OmitReal<T, K> {
 
 export function test2<T, K extends string>(obj: T, k: K): OmitUnveiled<T, K> {
 >test2 : <T, K extends string>(obj: T, k: K) => OmitUnveiled<T, K>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^                  
 >obj : T
 >    : ^
 >k : K

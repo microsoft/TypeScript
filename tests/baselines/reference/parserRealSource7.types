@@ -748,7 +748,7 @@ module TypeScript {
 
     function findTypeSymbolInScopeChain(name: string, scopeChain: ScopeChain): Symbol {
 >findTypeSymbolInScopeChain : (name: string, scopeChain: ScopeChain) => Symbol
->                           : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >name : string
 >     : ^^^^^^
 >scopeChain : ScopeChain
@@ -816,7 +816,7 @@ module TypeScript {
 
     function findSymbolFromAlias(alias: AST, context: IAliasScopeContext): Symbol {
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^      
 >alias : AST
 >      : ^^^
 >context : IAliasScopeContext

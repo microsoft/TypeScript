@@ -25,7 +25,7 @@ declare var Array1: ArrayConstructor1;
 interface Array1<T> {
   [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T>
->                  : ^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                  : ^^^^^^                   
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

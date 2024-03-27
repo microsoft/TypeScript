@@ -19,7 +19,7 @@ export interface Interface {
 
 export function createInstance(): Interface {
 >createInstance : () => Interface
->               : ^^^^^^^^^^^^^^^
+>               : ^^^^^^         
 
   return {
 >{    [SYMBOL]: ''  } : { [SYMBOL]: string; }

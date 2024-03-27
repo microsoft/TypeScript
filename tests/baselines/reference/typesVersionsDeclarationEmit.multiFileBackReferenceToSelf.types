@@ -29,7 +29,7 @@ export const vb = fb();
 export interface B {}
 export function fb(): B;
 >fb : () => B
->   : ^^^^^^^
+>   : ^^^^^^ 
 
 === node_modules/ext/ts3.1/index.d.ts ===
 

@@ -15,7 +15,7 @@ module Underscore {
     export interface Static {
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
 >all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
->    : ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^ ^          ^^^^^^^^^^^^   ^^^^^       
+>    : ^ ^^^^^^^^   ^^^^^^^^^^^^^                    ^^^^^^^^^^^^   ^^^^^       
 >list : T[]
 >     : ^^^
 >iterator : Iterator<T, boolean>
@@ -25,7 +25,7 @@ module Underscore {
 
         identity<T>(value: T): T;
 >identity : <T>(value: T) => T
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
     }

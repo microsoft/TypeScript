@@ -20,7 +20,7 @@ export interface publicInterfaceWithPrivateParmeterTypes {
 
     myMethod(): privateClass; // Error
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
 }
 
 export interface publicInterfaceWithPublicParmeterTypes {
@@ -32,7 +32,7 @@ export interface publicInterfaceWithPublicParmeterTypes {
 
     myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
 }
 
 interface privateInterfaceWithPrivateParmeterTypes {
@@ -44,7 +44,7 @@ interface privateInterfaceWithPrivateParmeterTypes {
 
     myMethod(): privateClass;
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
 }
 
 interface privateInterfaceWithPublicParmeterTypes {
@@ -56,7 +56,7 @@ interface privateInterfaceWithPublicParmeterTypes {
 
     myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
 }
 
 export class publicClassWithWithPrivateParmeterTypes {
@@ -65,25 +65,25 @@ export class publicClassWithWithPrivateParmeterTypes {
 
     static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
         return null;
     }
     private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
         return null;
     }
     myPublicMethod(): privateClass { // Error
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
         return null;
     }
     private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
         return null;
     }
@@ -135,25 +135,25 @@ export class publicClassWithWithPublicParmeterTypes {
 
     static myPublicStaticMethod(): publicClass { 
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
         return null;
     }
     private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
         return null;
     }
     myPublicMethod(): publicClass { 
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
         return null;
     }
     private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
         return null;
     }
@@ -205,25 +205,25 @@ class privateClassWithWithPrivateParmeterTypes {
 
     static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
         return null;
     }
     private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
         return null;
     }
     myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
         return null;
     }
     private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
         return null;
     }
@@ -275,25 +275,25 @@ class privateClassWithWithPublicParmeterTypes {
 
     static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
         return null;
     }
     private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
         return null;
     }
     myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
         return null;
     }
     private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
         return null;
     }
@@ -341,25 +341,25 @@ class privateClassWithWithPublicParmeterTypes {
 
 export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->                                       : ^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^            
 
     return null;
 }
 export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->                                      : ^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^           
 
     return null;
 }
 function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->                                        : ^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^            
 
     return null;
 }
 function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->                                       : ^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^           
 
     return null;
 }
@@ -406,19 +406,19 @@ function privateFunctionWithPublicParmeterTypes1() {
 
 export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                              : ^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^            
 
 export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                             : ^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^           
 
 declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                               : ^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^            
 
 declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^           
 
 export interface publicInterfaceWithPrivateModuleParameterTypes {
     new (): privateModule.publicClass; // Error
@@ -437,7 +437,7 @@ export interface publicInterfaceWithPrivateModuleParameterTypes {
 
     myMethod(): privateModule.publicClass; // Error
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 }
@@ -447,7 +447,7 @@ export class publicClassWithPrivateModuleParameterTypes {
 
     static myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -455,7 +455,7 @@ export class publicClassWithPrivateModuleParameterTypes {
     }
     myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -492,7 +492,7 @@ export class publicClassWithPrivateModuleParameterTypes {
 }
 export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                              : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -514,7 +514,7 @@ export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
 }
 export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -535,7 +535,7 @@ interface privateInterfaceWithPrivateModuleParameterTypes {
 
     myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 }
@@ -545,7 +545,7 @@ class privateClassWithPrivateModuleParameterTypes {
 
     static myPublicStaticMethod(): privateModule.publicClass { 
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -553,7 +553,7 @@ class privateClassWithPrivateModuleParameterTypes {
     }
     myPublicMethod(): privateModule.publicClass { 
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -590,7 +590,7 @@ class privateClassWithPrivateModuleParameterTypes {
 }
 function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -612,7 +612,7 @@ function privateFunctionWithPrivateModuleParameterTypes1() {
 }
 declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                      : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                      : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -639,7 +639,7 @@ export module publicModule {
 
         myMethod(): privateClass; // Error
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -651,7 +651,7 @@ export module publicModule {
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
@@ -663,7 +663,7 @@ export module publicModule {
 
         myMethod(): privateClass;
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -675,7 +675,7 @@ export module publicModule {
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
     }
 
     export class publicClassWithWithPrivateParmeterTypes {
@@ -684,25 +684,25 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
             return null;
         }
         myPublicMethod(): privateClass { // Error
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
             return null;
         }
@@ -754,25 +754,25 @@ export module publicModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
             return null;
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return null;
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
             return null;
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
             return null;
         }
@@ -824,25 +824,25 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
             return null;
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
             return null;
         }
@@ -894,25 +894,25 @@ export module publicModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
             return null;
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return null;
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
             return null;
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
             return null;
         }
@@ -960,25 +960,25 @@ export module publicModule {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->                                       : ^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^            
 
         return null;
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->                                      : ^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^           
 
         return null;
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->                                        : ^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^            
 
         return null;
     }
     function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->                                       : ^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^           
 
         return null;
     }
@@ -1025,19 +1025,19 @@ export module publicModule {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                              : ^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^            
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                             : ^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^           
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                               : ^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^            
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^           
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (): privateModule.publicClass; // Error
@@ -1056,7 +1056,7 @@ export module publicModule {
 
         myMethod(): privateModule.publicClass; // Error
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -1066,7 +1066,7 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1074,7 +1074,7 @@ export module publicModule {
         }
         myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1111,7 +1111,7 @@ export module publicModule {
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                              : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1133,7 +1133,7 @@ export module publicModule {
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1154,7 +1154,7 @@ export module publicModule {
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -1164,7 +1164,7 @@ export module publicModule {
 
         static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1172,7 +1172,7 @@ export module publicModule {
         }
         myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1209,7 +1209,7 @@ export module publicModule {
     }
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1231,7 +1231,7 @@ export module publicModule {
     }
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                      : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                      : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 }
@@ -1259,7 +1259,7 @@ module privateModule {
 
         myMethod(): privateClass; 
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -1271,7 +1271,7 @@ module privateModule {
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
@@ -1283,7 +1283,7 @@ module privateModule {
 
         myMethod(): privateClass;
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -1295,7 +1295,7 @@ module privateModule {
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
     }
 
     export class publicClassWithWithPrivateParmeterTypes {
@@ -1304,25 +1304,25 @@ module privateModule {
 
         static myPublicStaticMethod(): privateClass { 
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
             return null;
         }
         myPublicMethod(): privateClass { 
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
             return null;
         }
@@ -1374,25 +1374,25 @@ module privateModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
             return null;
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return null;
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
             return null;
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
             return null;
         }
@@ -1444,25 +1444,25 @@ module privateModule {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
             return null;
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
             return null;
         }
@@ -1514,25 +1514,25 @@ module privateModule {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
             return null;
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return null;
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
             return null;
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
             return null;
         }
@@ -1580,25 +1580,25 @@ module privateModule {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { 
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->                                       : ^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^            
 
         return null;
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->                                      : ^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^           
 
         return null;
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->                                        : ^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^            
 
         return null;
     }
     function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->                                       : ^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^           
 
         return null;
     }
@@ -1645,19 +1645,19 @@ module privateModule {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; 
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                              : ^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^            
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                             : ^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^           
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                               : ^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^            
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^           
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (): privateModule.publicClass;
@@ -1676,7 +1676,7 @@ module privateModule {
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -1686,7 +1686,7 @@ module privateModule {
 
         static myPublicStaticMethod(): privateModule.publicClass { 
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1694,7 +1694,7 @@ module privateModule {
         }
         myPublicMethod(): privateModule.publicClass { 
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1731,7 +1731,7 @@ module privateModule {
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                              : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1753,7 +1753,7 @@ module privateModule {
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1774,7 +1774,7 @@ module privateModule {
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -1784,7 +1784,7 @@ module privateModule {
 
         static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1792,7 +1792,7 @@ module privateModule {
         }
         myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1829,7 +1829,7 @@ module privateModule {
     }
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -1851,7 +1851,7 @@ module privateModule {
     }
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                      : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                      : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 }
@@ -1870,7 +1870,7 @@ interface publicInterfaceWithPublicParmeterTypesInGlobal {
 
     myMethod(): publicClassInGlobal;
 >myMethod : () => publicClassInGlobal
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                   
 }
 class publicClassWithWithPublicParmeterTypesInGlobal {
 >publicClassWithWithPublicParmeterTypesInGlobal : publicClassWithWithPublicParmeterTypesInGlobal
@@ -1878,25 +1878,25 @@ class publicClassWithWithPublicParmeterTypesInGlobal {
 
     static myPublicStaticMethod(): publicClassInGlobal {
 >myPublicStaticMethod : () => publicClassInGlobal
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^                   
 
         return null;
     }
     private static myPrivateStaticMethod(): publicClassInGlobal {
 >myPrivateStaticMethod : () => publicClassInGlobal
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^                   
 
         return null;
     }
     myPublicMethod(): publicClassInGlobal {
 >myPublicMethod : () => publicClassInGlobal
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^                   
 
         return null;
     }
     private myPrivateMethod(): publicClassInGlobal {
 >myPrivateMethod : () => publicClassInGlobal
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^                   
 
         return null;
     }
@@ -1943,7 +1943,7 @@ class publicClassWithWithPublicParmeterTypesInGlobal {
 }
 function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal {
 >publicFunctionWithPublicParmeterTypesInGlobal : () => publicClassInGlobal
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^                   
 
     return null;
 }
@@ -1959,7 +1959,7 @@ function publicFunctionWithPublicParmeterTypesInGlobal1() {
 }
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
 >publicAmbientFunctionWithPublicParmeterTypesInGlobal : () => publicClassInGlobal
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                     : ^^^^^^                   
 
 module publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
@@ -1998,7 +1998,7 @@ module publicModuleInGlobal {
 
             myMethod(): privateClass;
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
         }
 
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -2010,7 +2010,7 @@ module publicModuleInGlobal {
 
             myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
         }
 
         interface privateInterfaceWithPrivateParmeterTypes {
@@ -2022,7 +2022,7 @@ module publicModuleInGlobal {
 
             myMethod(): privateClass;
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
         }
 
         interface privateInterfaceWithPublicParmeterTypes {
@@ -2034,7 +2034,7 @@ module publicModuleInGlobal {
 
             myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
         }
 
         export class publicClassWithWithPrivateParmeterTypes {
@@ -2043,25 +2043,25 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
                 return null;
             }
             myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
                 return null;
             }
             private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
                 return null;
             }
@@ -2113,25 +2113,25 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
                 return null;
             }
             private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
                 return null;
             }
             myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
                 return null;
             }
             private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
                 return null;
             }
@@ -2183,25 +2183,25 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
                 return null;
             }
             private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
                 return null;
             }
             myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
                 return null;
             }
             private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
                 return null;
             }
@@ -2253,25 +2253,25 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
                 return null;
             }
             private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
                 return null;
             }
             myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
                 return null;
             }
             private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
                 return null;
             }
@@ -2319,25 +2319,25 @@ module publicModuleInGlobal {
 
         export function publicFunctionWithPrivateParmeterTypes(): privateClass {
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->                                       : ^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^            
 
             return null;
         }
         export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->                                      : ^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^           
 
             return null;
         }
         function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->                                        : ^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^            
 
             return null;
         }
         function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->                                       : ^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^           
 
             return null;
         }
@@ -2384,19 +2384,19 @@ module publicModuleInGlobal {
 
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                              : ^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^            
 
         export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                             : ^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^           
 
         declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                               : ^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^            
 
         declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^           
 
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass;
@@ -2415,7 +2415,7 @@ module publicModuleInGlobal {
 
             myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
         }
@@ -2425,7 +2425,7 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2433,7 +2433,7 @@ module publicModuleInGlobal {
             }
             myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2470,7 +2470,7 @@ module publicModuleInGlobal {
         }
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                              : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2492,7 +2492,7 @@ module publicModuleInGlobal {
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2513,7 +2513,7 @@ module publicModuleInGlobal {
 
             myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
         }
@@ -2523,7 +2523,7 @@ module publicModuleInGlobal {
 
             static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2531,7 +2531,7 @@ module publicModuleInGlobal {
             }
             myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2568,7 +2568,7 @@ module publicModuleInGlobal {
         }
         function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -2590,7 +2590,7 @@ module publicModuleInGlobal {
         }
         declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                      : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                      : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -2604,7 +2604,7 @@ module publicModuleInGlobal {
 
         myMethod(): privateClass; // Error
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -2616,7 +2616,7 @@ module publicModuleInGlobal {
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
@@ -2628,7 +2628,7 @@ module publicModuleInGlobal {
 
         myMethod(): privateClass;
 >myMethod : () => privateClass
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^            
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -2640,7 +2640,7 @@ module publicModuleInGlobal {
 
         myMethod(): publicClass;
 >myMethod : () => publicClass
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
     }
 
     export class publicClassWithWithPrivateParmeterTypes {
@@ -2649,25 +2649,25 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
             return null;
         }
         myPublicMethod(): privateClass { // Error
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
             return null;
         }
@@ -2719,25 +2719,25 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
             return null;
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return null;
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
             return null;
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
             return null;
         }
@@ -2789,25 +2789,25 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : () => privateClass
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^            
 
             return null;
         }
         private static myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : () => privateClass
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^            
 
             return null;
         }
         myPublicMethod(): privateClass {
 >myPublicMethod : () => privateClass
->               : ^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^            
 
             return null;
         }
         private myPrivateMethod(): privateClass {
 >myPrivateMethod : () => privateClass
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 
             return null;
         }
@@ -2859,25 +2859,25 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : () => publicClass
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^           
 
             return null;
         }
         private static myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : () => publicClass
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return null;
         }
         myPublicMethod(): publicClass {
 >myPublicMethod : () => publicClass
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 
             return null;
         }
         private myPrivateMethod(): publicClass {
 >myPrivateMethod : () => publicClass
->                : ^^^^^^^^^^^^^^^^^
+>                : ^^^^^^           
 
             return null;
         }
@@ -2925,25 +2925,25 @@ module publicModuleInGlobal {
 
     export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
 >publicFunctionWithPrivateParmeterTypes : () => privateClass
->                                       : ^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^            
 
         return null;
     }
     export function publicFunctionWithPublicParmeterTypes(): publicClass {
 >publicFunctionWithPublicParmeterTypes : () => publicClass
->                                      : ^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^           
 
         return null;
     }
     function privateFunctionWithPrivateParmeterTypes(): privateClass {
 >privateFunctionWithPrivateParmeterTypes : () => privateClass
->                                        : ^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^            
 
         return null;
     }
     function privateFunctionWithPublicParmeterTypes(): publicClass {
 >privateFunctionWithPublicParmeterTypes : () => publicClass
->                                       : ^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^           
 
         return null;
     }
@@ -2990,19 +2990,19 @@ module publicModuleInGlobal {
 
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                              : ^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^            
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >publicAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                             : ^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^           
 
     declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
 >privateAmbientFunctionWithPrivateParmeterTypes : () => privateClass
->                                               : ^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^            
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^           
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (): privateModule.publicClass; // Error
@@ -3021,7 +3021,7 @@ module publicModuleInGlobal {
 
         myMethod(): privateModule.publicClass; // Error
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -3031,7 +3031,7 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3039,7 +3039,7 @@ module publicModuleInGlobal {
         }
         myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3076,7 +3076,7 @@ module publicModuleInGlobal {
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
 >publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                              : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3098,7 +3098,7 @@ module publicModuleInGlobal {
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
 >publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3119,7 +3119,7 @@ module publicModuleInGlobal {
 
         myMethod(): privateModule.publicClass;
 >myMethod : () => privateModule.publicClass
->         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>         : ^^^^^^                         
 >privateModule : any
 >              : ^^^
     }
@@ -3129,7 +3129,7 @@ module publicModuleInGlobal {
 
         static myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : () => privateModule.publicClass
->                     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                     : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3137,7 +3137,7 @@ module publicModuleInGlobal {
         }
         myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : () => privateModule.publicClass
->               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3174,7 +3174,7 @@ module publicModuleInGlobal {
     }
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
 >privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                               : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                               : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 
@@ -3196,7 +3196,7 @@ module publicModuleInGlobal {
     }
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 >privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
->                                                      : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>                                                      : ^^^^^^                         
 >privateModule : any
 >              : ^^^
 }

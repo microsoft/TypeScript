@@ -8,7 +8,7 @@ interface A {
 }
 declare var A: {
 >A : { new (): A; prototype: A; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^
 
     prototype: A;
 >prototype : A

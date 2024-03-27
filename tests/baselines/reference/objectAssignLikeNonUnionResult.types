@@ -18,7 +18,7 @@ const defaultValue: Interface = { field: 1 };
 
 declare function assign<T, U>(target: T, source: U): T & U;
 >assign : <T, U>(target: T, source: U) => T & U
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^
+>       : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^     
 >target : T
 >       : ^
 >source : U

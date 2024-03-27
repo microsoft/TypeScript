@@ -30,7 +30,7 @@ type UseQueryResult<T> = {
 
 function useQuery(): UseQueryResult<number> {
 >useQuery : () => UseQueryResult<number>
->         : ^^^^^^^^^^^^^^^^^^^^        
+>         : ^^^^^^                      
 
     return {
 >{        isSuccess: false,        data: undefined,    } : { isSuccess: false; data: undefined; }
@@ -597,7 +597,7 @@ type Nested = {
 
 function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
 >bindingPatternInParameter : ({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^
 >data : any
 >     : ^^^
 >data1 : number | undefined

@@ -4,13 +4,13 @@
 interface JQuery {
     each<T>(
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
->     : ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^       ^       ^     ^^^^^^^  
+>     : ^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^^                      ^^^^^   
 
         collection: T[], callback: (this: T, dit: T) => T
 >collection : T[]
 >           : ^^^
 >callback : (this: T, dit: T) => T
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^ ^^^^^^^ ^^^^^ 
 >this : T
 >     : ^
 >dit : T

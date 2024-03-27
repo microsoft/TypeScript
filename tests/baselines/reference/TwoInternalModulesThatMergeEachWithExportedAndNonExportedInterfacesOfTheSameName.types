@@ -13,7 +13,7 @@ module A {
 
         toCarth(): Point;
 >toCarth : () => Point
->        : ^^^^^^^^^^^
+>        : ^^^^^^     
     }
 }
 
@@ -21,20 +21,20 @@ module A {
     interface Point {
         fromCarth(): Point;
 >fromCarth : () => Point
->          : ^^^^^^^^^^^
+>          : ^^^^^^     
     }
 }
 
 // ensure merges as expected
 var p: { x: number; y: number; toCarth(): A.Point; };
 >p : { x: number; y: number; toCarth(): A.Point; }
->  : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^
 >x : number
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
 >toCarth : () => A.Point
->        : ^^^^^^^      
+>        : ^^^^^^       
 >A : any
 >  : ^^^
 
@@ -79,7 +79,7 @@ module X {
 // ensure merges as expected
 var l: { new (s: A.Point, e: A.Point); }
 >l : new (s: A.Point, e: A.Point) => any
->  : ^^^^^^^^^      ^^^^^^      ^^^^^^^^
+>  : ^^^^^^^^       ^^^^^       ^^^^^^^^
 >s : A.Point
 >  : ^^^^^^^
 >A : any

@@ -12,7 +12,7 @@ class Foo {
 
 declare function getFooOrNull(): Foo | null;
 >getFooOrNull : () => Foo | null
->             : ^^^^^^^^^       
+>             : ^^^^^^          
 
 declare function getStringOrNumberOrNull(): string | number | null;
 >getStringOrNumberOrNull : () => string | number | null

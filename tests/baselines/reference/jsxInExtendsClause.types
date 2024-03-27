@@ -13,9 +13,9 @@ declare namespace React {
 }
 declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
 >createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
->                     : ^^^^^^^^^^^^^      ^^^^^                ^ ^^^^^^^^^^                ^ 
+>                     : ^ ^^^^^^^^^^^                             ^^^^^                       
 >factory : () => React.ComponentClass<P>
->        : ^^^^^^^^^^^                ^ 
+>        : ^^^^^^                       
 >React : any
 >      : ^^^
 >React : any

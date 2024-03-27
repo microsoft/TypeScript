@@ -105,13 +105,13 @@ new Cls1(obj1 satisfies unknown);
 
 function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
 >fn2 : <T extends { a: true; }[]>(f: (...args: T) => void) => void
->    : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^          ^         ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^                    ^^^^^^^^^
 >a : true
 >  : ^^^^
 >true : true
 >     : ^^^^
 >f : (...args: T) => void
->  : ^^^^^^^^^^^^^^^^    
+>  : ^^^^^^^^^^ ^^^^^    
 >args : T
 >     : ^
 

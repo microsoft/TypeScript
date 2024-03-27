@@ -13,7 +13,7 @@ type JoinedPath = `${Path}/${Path}`;
 
 declare function joinedPath(p: JoinedPath): void;
 >joinedPath : (p: JoinedPath) => void
->           : ^^^^^^^^^^^^^^^^^^^    
+>           : ^^^^          ^^^^^    
 >p : `${Path}/${Path}`
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -53,7 +53,7 @@ type EndsWithA = `${string}a`;
 
 declare function withinAs(p: StartsWithA & EndsWithA): void;
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^    
+>         : ^^^^                       ^^^^^    
 >p : `a${string}` & `${string}a`
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

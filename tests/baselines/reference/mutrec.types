@@ -15,7 +15,7 @@ interface B {
 
 function f(p: A) { return p };
 >f : (p: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^^
 >p : A
 >  : ^
 >p : A
@@ -53,7 +53,7 @@ interface I3 {
 
 function g(p: I1) { return p };
 >g : (p: I1) => I1
->  : ^^^^^^^^^^^^^
+>  : ^^^^  ^^^^^^^
 >p : I1
 >  : ^^
 >p : I1

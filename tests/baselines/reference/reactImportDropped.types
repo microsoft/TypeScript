@@ -15,7 +15,7 @@ declare namespace React {
 
     function createClass(spec: any): ClassicComponentClass;
 >createClass : (spec: any) => ClassicComponentClass
->            : ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^   ^^^^^                     
 >spec : any
 
     interface ClassicComponentClass {

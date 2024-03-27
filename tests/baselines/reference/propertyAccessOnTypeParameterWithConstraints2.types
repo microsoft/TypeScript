@@ -71,7 +71,7 @@ class C<U extends A, T extends A> {
 
     g(x: U) {
 >g : (x: U) => string
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^^^
 >x : U
 >  : ^
 
@@ -197,7 +197,7 @@ var r2b = i.foo['foo']();
 
 var a: {
 >a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     <U extends A, T extends A>(): U;
     <U extends A, T extends A>(x: U): U;
@@ -290,15 +290,15 @@ var r3d = a(aB, aB)['foo']();
 
 var b = {
 >b : { foo: <U extends A, T extends A>(x: U, y: T) => string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
 >{    foo: <U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    }} : { foo: <U extends A, T extends A>(x: U, y: T) => string; }
->                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                      : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
 
     foo: <U extends A, T extends A>(x: U, y: T) => {
 >foo : <U extends A, T extends A>(x: U, y: T) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 ><U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends A>(x: U, y: T) => string
->                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                           : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 >x : U
 >  : ^
 >y : T

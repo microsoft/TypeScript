@@ -65,7 +65,7 @@ class BugExhibition3<T> {
 
         function localGenericFunction<U>(u?: U) { }
 >localGenericFunction : <U>(u?: U) => void
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^ ^^^^^^^^^
 >u : U
 >  : ^
 
@@ -93,9 +93,9 @@ class C {
 
         var funcExpr = <U>(u?: U) => { };
 >funcExpr : <U>(u?: U) => void
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^ ^^^^^^^^^
 ><U>(u?: U) => { } : <U>(u?: U) => void
->                  : ^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^ ^^^^^^^^^
 >u : U
 >  : ^
 

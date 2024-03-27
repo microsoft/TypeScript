@@ -3,13 +3,13 @@
 === decls.d.ts ===
 declare function f0<T>(x?: T): T;
 >f0 : <T>(x?: T) => T
->   : ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function f1<T, U = number>(x?: T): [T, U];
 >f1 : <T, U = number>(x?: T) => [T, U]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>   : ^ ^^ ^^^^^^^^^^^^^^^ ^^^^^      
 >x : T
 >  : ^
 

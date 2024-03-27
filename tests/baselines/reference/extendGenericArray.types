@@ -4,7 +4,7 @@
 interface Array<T> {
     foo(): T;
 >foo : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 }
 
 var arr: string[] = [];

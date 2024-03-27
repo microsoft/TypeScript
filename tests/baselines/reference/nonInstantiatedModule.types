@@ -69,7 +69,7 @@ module M2 {
 
         export function Origin(): Point {
 >Origin : () => Point
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }

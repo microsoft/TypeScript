@@ -26,9 +26,9 @@ interface C {
 interface Q<T> {
     each(action: (item: T, index: number) => void): void;
 >each : (action: (item: T, index: number) => void) => void
->     : ^^^^^^^^^       ^                        ^^^^^    
+>     : ^^^^^^^^^                                ^^^^^    
 >action : (item: T, index: number) => void
->       : ^^^^^^^^^^^^^^^^^      ^^^^^    
+>       : ^^^^^^^ ^^^^^^^^^      ^^^^^    
 >item : T
 >     : ^
 >index : number

@@ -21,7 +21,7 @@ export type Blah =
 
 declare function thing(blah: Blah): void;
 >thing : (blah: Blah) => void
->      : ^^^^^^^^^^^^^^^^    
+>      : ^^^^^^^    ^^^^^    
 >blah : Blah
 >     : ^^^^
 

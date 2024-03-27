@@ -50,19 +50,19 @@ interface SimpleInterface {
 }
 declare function extend1(args: IndexedWithThis): void;
 >extend1 : (args: IndexedWithThis) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>        : ^^^^^^^               ^^^^^    
 >args : IndexedWithThis
 >     : ^^^^^^^^^^^^^^^
 
 declare function extend2(args: IndexedWithoutThis): void;
 >extend2 : (args: IndexedWithoutThis) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>        : ^^^^^^^                  ^^^^^    
 >args : IndexedWithoutThis
 >     : ^^^^^^^^^^^^^^^^^^
 
 declare function simple(arg: SimpleInterface): void;
 >simple : (arg: SimpleInterface) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>       : ^^^^^^               ^^^^^    
 >arg : SimpleInterface
 >    : ^^^^^^^^^^^^^^^
 

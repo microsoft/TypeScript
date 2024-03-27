@@ -5,7 +5,7 @@
 interface ErrorConstructor {
   captureStackTrace(targetObject: Object, constructorOpt?: Function): void;
 >captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                  : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^        ^^^^^    
 >targetObject : Object
 >             : ^^^^^^
 >constructorOpt : Function

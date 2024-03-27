@@ -3,7 +3,7 @@
 === unionAndIntersectionInference2.ts ===
 declare function f1<T>(x: T | string): T;
 >f1 : <T>(x: T | string) => T
->   : ^^^^^^^^         ^^^^^^
+>   : ^ ^^^^^          ^^^^^ 
 >x : string | T
 >  : ^^^^^^^^^^
 
@@ -71,7 +71,7 @@ f1(e1); // number | boolean
 
 declare function f2<T>(x: T & { name: string }): T;
 >f2 : <T>(x: T & { name: string; }) => T
->   : ^^^^^^^^                    ^^^^^^
+>   : ^ ^^^^^                     ^^^^^ 
 >x : T & { name: string; }
 >  : ^^^^^^^^^^^^      ^^^
 >name : string

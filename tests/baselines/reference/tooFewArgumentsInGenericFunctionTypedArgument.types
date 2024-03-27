@@ -8,7 +8,7 @@ interface Collection<T, U> {
 
     add(x: T, y: U): void;
 >add : (x: T, y: U) => void
->    : ^^^^^^^^^^^^^^^^    
+>    : ^^^^ ^^^^^ ^^^^^    
 >x : T
 >  : ^
 >y : U
@@ -16,7 +16,7 @@ interface Collection<T, U> {
 
     remove(x: T, y: U): boolean;
 >remove : (x: T, y: U) => boolean
->       : ^^^^^^^^^^^^^^^^       
+>       : ^^^^ ^^^^^ ^^^^^       
 >x : T
 >  : ^
 >y : U
@@ -25,11 +25,11 @@ interface Collection<T, U> {
 interface Combinators {
     map<T, U, V>(c: Collection<T,U>, f: (x: T, y: U) => V): Collection<T, V>;
 >map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^    ^     ^     ^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^ ^^ ^^^^^                ^^^^^                 ^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : Collection<T, U>
 >  : ^^^^^^^^^^^^^^^^
 >f : (x: T, y: U) => V
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -37,11 +37,11 @@ interface Combinators {
 
     map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
 >map : { <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^    ^     ^        ^^^^^^^^^^^^^          ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^                ^^^^^                   ^^^                    ^^^
 >c : Collection<T, U>
 >  : ^^^^^^^^^^^^^^^^
 >f : (x: T, y: U) => any
->  : ^^^^^^^^^^^^^^^^   
+>  : ^^^^ ^^^^^ ^^^^^   
 >x : T
 >  : ^
 >y : U

@@ -355,7 +355,7 @@ module TypeScript {
 
         public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
 >walk : (ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => AST
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^                ^^^^^^^^^                ^^^^^^^^^^^^              ^^^^^^^^^^   ^^^^^^^^
 >ast : AST
 >    : ^^^
 >pre : IAstWalkCallback
@@ -396,7 +396,7 @@ module TypeScript {
 
         public getWalker(pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): IAstWalker {
 >getWalker : (pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => IAstWalker
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>          : ^^^^^^                ^^^^^^^^^                ^^^^^^^^^^^^              ^^^^^^^^^^   ^^^^^          
 >pre : IAstWalkCallback
 >    : ^^^^^^^^^^^^^^^^
 >post : IAstWalkCallback
@@ -427,7 +427,7 @@ module TypeScript {
 
         private getSlowWalker(pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): IAstWalker {
 >getSlowWalker : (pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => IAstWalker
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>              : ^^^^^^                ^^^^^^^^^                ^^^^^^^^^^^^              ^^^^^^^^^^   ^^^^^          
 >pre : IAstWalkCallback
 >    : ^^^^^^^^^^^^^^^^
 >post : IAstWalkCallback
@@ -3100,7 +3100,7 @@ module TypeScript {
 
     export function getAstWalkerFactory(): AstWalkerFactory {
 >getAstWalkerFactory : () => AstWalkerFactory
->                    : ^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^                
 
         if (!globalAstWalkerFactory) {
 >!globalAstWalkerFactory : boolean
@@ -3129,7 +3129,7 @@ module TypeScript {
 
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
 >walkNone : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ASTList
 >       : ^^^^^^^
 >parent : AST
@@ -3142,7 +3142,7 @@ module TypeScript {
 
         export function walkListChildren(preAst: ASTList, parent: AST, walker: IAstWalker): void {
 >walkListChildren : (preAst: ASTList, parent: AST, walker: IAstWalker) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ASTList
 >       : ^^^^^^^
 >parent : AST
@@ -3313,7 +3313,7 @@ module TypeScript {
 
         export function walkUnaryExpressionChildren(preAst: UnaryExpression, parent: AST, walker: IAstWalker): void {
 >walkUnaryExpressionChildren : (preAst: UnaryExpression, parent: AST, walker: IAstWalker) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : UnaryExpression
 >       : ^^^^^^^^^^^^^^^
 >parent : AST
@@ -3393,7 +3393,7 @@ module TypeScript {
 
         export function walkBinaryExpressionChildren(preAst: BinaryExpression, parent: AST, walker: IAstWalker): void {
 >walkBinaryExpressionChildren : (preAst: BinaryExpression, parent: AST, walker: IAstWalker) => void
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : BinaryExpression
 >       : ^^^^^^^^^^^^^^^^
 >parent : AST
@@ -3587,7 +3587,7 @@ module TypeScript {
 
         export function walkTypeReferenceChildren(preAst: TypeReference, parent: AST, walker: IAstWalker): void {
 >walkTypeReferenceChildren : (preAst: TypeReference, parent: AST, walker: IAstWalker) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : TypeReference
 >       : ^^^^^^^^^^^^^
 >parent : AST
@@ -3633,7 +3633,7 @@ module TypeScript {
 
         export function walkCallExpressionChildren(preAst: CallExpression, parent: AST, walker: IAstWalker): void {
 >walkCallExpressionChildren : (preAst: CallExpression, parent: AST, walker: IAstWalker) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : CallExpression
 >       : ^^^^^^^^^^^^^^
 >parent : AST
@@ -3789,7 +3789,7 @@ module TypeScript {
 
         export function walkTrinaryExpressionChildren(preAst: ConditionalExpression, parent: AST, walker: IAstWalker): void {
 >walkTrinaryExpressionChildren : (preAst: ConditionalExpression, parent: AST, walker: IAstWalker) => void
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ConditionalExpression
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >parent : AST
@@ -3931,7 +3931,7 @@ module TypeScript {
 
         export function walkFuncDeclChildren(preAst: FuncDecl, parent: AST, walker: IAstWalker): void {
 >walkFuncDeclChildren : (preAst: FuncDecl, parent: AST, walker: IAstWalker) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : FuncDecl
 >       : ^^^^^^^^
 >parent : AST
@@ -4171,7 +4171,7 @@ module TypeScript {
 
         export function walkBoundDeclChildren(preAst: BoundDecl, parent: AST, walker: IAstWalker): void {
 >walkBoundDeclChildren : (preAst: BoundDecl, parent: AST, walker: IAstWalker) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : BoundDecl
 >       : ^^^^^^^^^
 >parent : AST
@@ -4303,7 +4303,7 @@ module TypeScript {
 
         export function walkReturnStatementChildren(preAst: ReturnStatement, parent: AST, walker: IAstWalker): void {
 >walkReturnStatementChildren : (preAst: ReturnStatement, parent: AST, walker: IAstWalker) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ReturnStatement
 >       : ^^^^^^^^^^^^^^^
 >parent : AST
@@ -4349,7 +4349,7 @@ module TypeScript {
 
         export function walkForStatementChildren(preAst: ForStatement, parent: AST, walker: IAstWalker): void {
 >walkForStatementChildren : (preAst: ForStatement, parent: AST, walker: IAstWalker) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ForStatement
 >       : ^^^^^^^^^^^^
 >parent : AST
@@ -4536,7 +4536,7 @@ module TypeScript {
 
         export function walkForInStatementChildren(preAst: ForInStatement, parent: AST, walker: IAstWalker): void {
 >walkForInStatementChildren : (preAst: ForInStatement, parent: AST, walker: IAstWalker) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ForInStatement
 >       : ^^^^^^^^^^^^^^
 >parent : AST
@@ -4660,7 +4660,7 @@ module TypeScript {
 
         export function walkIfStatementChildren(preAst: IfStatement, parent: AST, walker: IAstWalker): void {
 >walkIfStatementChildren : (preAst: IfStatement, parent: AST, walker: IAstWalker) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : IfStatement
 >       : ^^^^^^^^^^^
 >parent : AST
@@ -4794,7 +4794,7 @@ module TypeScript {
 
         export function walkWhileStatementChildren(preAst: WhileStatement, parent: AST, walker: IAstWalker): void {
 >walkWhileStatementChildren : (preAst: WhileStatement, parent: AST, walker: IAstWalker) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : WhileStatement
 >       : ^^^^^^^^^^^^^^
 >parent : AST
@@ -4880,7 +4880,7 @@ module TypeScript {
 
         export function walkDoWhileStatementChildren(preAst: DoWhileStatement, parent: AST, walker: IAstWalker): void {
 >walkDoWhileStatementChildren : (preAst: DoWhileStatement, parent: AST, walker: IAstWalker) => void
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : DoWhileStatement
 >       : ^^^^^^^^^^^^^^^^
 >parent : AST
@@ -4966,7 +4966,7 @@ module TypeScript {
 
         export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
 >walkBlockChildren : (preAst: Block, parent: AST, walker: IAstWalker) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : Block
 >       : ^^^^^
 >parent : AST
@@ -5014,7 +5014,7 @@ module TypeScript {
 
         export function walkCaseStatementChildren(preAst: CaseStatement, parent: AST, walker: IAstWalker): void {
 >walkCaseStatementChildren : (preAst: CaseStatement, parent: AST, walker: IAstWalker) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : CaseStatement
 >       : ^^^^^^^^^^^^^
 >parent : AST
@@ -5109,7 +5109,7 @@ module TypeScript {
 
         export function walkSwitchStatementChildren(preAst: SwitchStatement, parent: AST, walker: IAstWalker): void {
 >walkSwitchStatementChildren : (preAst: SwitchStatement, parent: AST, walker: IAstWalker) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : SwitchStatement
 >       : ^^^^^^^^^^^^^^^
 >parent : AST
@@ -5206,7 +5206,7 @@ module TypeScript {
 
         export function walkTryChildren(preAst: Try, parent: AST, walker: IAstWalker): void {
 >walkTryChildren : (preAst: Try, parent: AST, walker: IAstWalker) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : Try
 >       : ^^^
 >parent : AST
@@ -5252,7 +5252,7 @@ module TypeScript {
 
         export function walkTryCatchChildren(preAst: TryCatch, parent: AST, walker: IAstWalker): void {
 >walkTryCatchChildren : (preAst: TryCatch, parent: AST, walker: IAstWalker) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : TryCatch
 >       : ^^^^^^^^
 >parent : AST
@@ -5351,7 +5351,7 @@ module TypeScript {
 
         export function walkTryFinallyChildren(preAst: TryFinally, parent: AST, walker: IAstWalker): void {
 >walkTryFinallyChildren : (preAst: TryFinally, parent: AST, walker: IAstWalker) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : TryFinally
 >       : ^^^^^^^^^^
 >parent : AST
@@ -5446,7 +5446,7 @@ module TypeScript {
 
         export function walkFinallyChildren(preAst: Finally, parent: AST, walker: IAstWalker): void {
 >walkFinallyChildren : (preAst: Finally, parent: AST, walker: IAstWalker) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : Finally
 >       : ^^^^^^^
 >parent : AST
@@ -5492,7 +5492,7 @@ module TypeScript {
 
         export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
 >walkCatchChildren : (preAst: Catch, parent: AST, walker: IAstWalker) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : Catch
 >       : ^^^^^
 >parent : AST
@@ -5589,7 +5589,7 @@ module TypeScript {
 
         export function walkRecordChildren(preAst: NamedDeclaration, parent: AST, walker: IAstWalker): void {
 >walkRecordChildren : (preAst: NamedDeclaration, parent: AST, walker: IAstWalker) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : NamedDeclaration
 >       : ^^^^^^^^^^^^^^^^
 >parent : AST
@@ -5678,7 +5678,7 @@ module TypeScript {
 
         export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
 >walkNamedTypeChildren : (preAst: TypeDeclaration, parent: AST, walker: IAstWalker) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : TypeDeclaration
 >       : ^^^^^^^^^^^^^^^
 >parent : AST
@@ -5701,7 +5701,7 @@ module TypeScript {
 
         export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
 >walkClassDeclChildren : (preAst: ClassDeclaration, parent: AST, walker: IAstWalker) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ClassDeclaration
 >       : ^^^^^^^^^^^^^^^^
 >parent : AST
@@ -5822,7 +5822,7 @@ module TypeScript {
 
         export function walkScriptChildren(preAst: Script, parent: AST, walker: IAstWalker): void {
 >walkScriptChildren : (preAst: Script, parent: AST, walker: IAstWalker) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : Script
 >       : ^^^^^^
 >parent : AST
@@ -5870,7 +5870,7 @@ module TypeScript {
 
         export function walkTypeDeclChildren(preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker): void {
 >walkTypeDeclChildren : (preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : InterfaceDeclaration
 >       : ^^^^^^^^^^^^^^^^^^^^
 >parent : AST
@@ -5992,7 +5992,7 @@ module TypeScript {
 
         export function walkModuleDeclChildren(preAst: ModuleDeclaration, parent: AST, walker: IAstWalker): void {
 >walkModuleDeclChildren : (preAst: ModuleDeclaration, parent: AST, walker: IAstWalker) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ModuleDeclaration
 >       : ^^^^^^^^^^^^^^^^^
 >parent : AST
@@ -6015,7 +6015,7 @@ module TypeScript {
 
         export function walkImportDeclChildren(preAst: ImportDeclaration, parent: AST, walker: IAstWalker): void {
 >walkImportDeclChildren : (preAst: ImportDeclaration, parent: AST, walker: IAstWalker) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : ImportDeclaration
 >       : ^^^^^^^^^^^^^^^^^
 >parent : AST
@@ -6097,7 +6097,7 @@ module TypeScript {
 
         export function walkWithStatementChildren(preAst: WithStatement, parent: AST, walker: IAstWalker): void {
 >walkWithStatementChildren : (preAst: WithStatement, parent: AST, walker: IAstWalker) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : WithStatement
 >       : ^^^^^^^^^^^^^
 >parent : AST
@@ -6190,7 +6190,7 @@ module TypeScript {
 
         export function walkLabelChildren(preAst: Label, parent: AST, walker: IAstWalker): void {
 >walkLabelChildren : (preAst: Label, parent: AST, walker: IAstWalker) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : Label
 >       : ^^^^^
 >parent : AST
@@ -6203,7 +6203,7 @@ module TypeScript {
 
         export function walkLabeledStatementChildren(preAst: LabeledStatement, parent: AST, walker: IAstWalker): void {
 >walkLabeledStatementChildren : (preAst: LabeledStatement, parent: AST, walker: IAstWalker) => void
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^    
 >preAst : LabeledStatement
 >       : ^^^^^^^^^^^^^^^^
 >parent : AST

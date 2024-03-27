@@ -9,9 +9,9 @@
 
 declare function foo<T>(cb: (x: number, y: string) => T): T;
 >foo : <T>(cb: (x: number, y: string) => T) => T
->    : ^^^^^^^^                          ^^^^^^^
+>    : ^ ^^^^^^                           ^^^^^ 
 >cb : (x: number, y: string) => T
->   : ^^^^      ^^^^^      ^^^^^^
+>   : ^^^^      ^^^^^      ^^^^^ 
 >x : number
 >  : ^^^^^^
 >y : string
@@ -19,13 +19,13 @@ declare function foo<T>(cb: (x: number, y: string) => T): T;
 
 declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^     ^^^^^^^
+>    : ^ ^^ ^^ ^^^^^ ^^^^^ ^^^^^^                 ^^^^^ 
 >x : T
 >  : ^
 >y : U
 >  : ^
 >cb : (x: T, y: U) => V
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -33,13 +33,13 @@ declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
 
 declare function baz<T, U>(x: T, y: T, cb: (x: T, y: T) => U): U;
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^    ^     ^     ^^^^^^^
+>    : ^ ^^ ^^^^^ ^^^^^ ^^^^^^                 ^^^^^ 
 >x : T
 >  : ^
 >y : T
 >  : ^
 >cb : (x: T, y: T) => U
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -47,7 +47,7 @@ declare function baz<T, U>(x: T, y: T, cb: (x: T, y: T) => U): U;
 
 declare function g<T>(x: T, y: T): T;
 >g : <T>(x: T, y: T) => T
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -55,7 +55,7 @@ declare function g<T>(x: T, y: T): T;
 
 declare function h<T, U>(x: T, y: U): T[] | U[];
 >h : <T, U>(x: T, y: U) => T[] | U[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^     ^  
+>  : ^ ^^ ^^^^^ ^^^^^ ^^^^^         
 >x : T
 >  : ^
 >y : U

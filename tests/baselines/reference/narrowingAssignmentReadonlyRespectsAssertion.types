@@ -21,7 +21,7 @@ interface MultiCaseFixture<T> {
 
 function subDataFunc(): TestCase<string | number>[] {
 >subDataFunc : () => TestCase<string | number>[]
->            : ^^^^^^^^^^^^^^                   
+>            : ^^^^^^                           
 
   return [
 >[      { val1: "a", val2: ["a", "b", "c"] },      { val1: 2, val2: [1, 2, 3] },      { val1: ["a", "z"], val2: ["x", "y", "z"] },      { val1: [5, 10], val2: [10, 100, 1000] },  ] : ({ val1: string; val2: string[]; } | { val1: number; val2: number[]; } | { val1: string[]; val2: string[]; } | { val1: number[]; val2: number[]; })[]
@@ -112,9 +112,9 @@ function subDataFunc(): TestCase<string | number>[] {
 
 function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
 >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
->         : ^^^^^^^^^^^^^      ^  ^^^^^^^^^^^^^^^^^^^^^ ^ 
+>         : ^ ^^^^^^^^^^^         ^^^^^                   
 >subFunc : () => T[]
->        : ^^^^^^^  
+>        : ^^^^^^   
 
   return { cases: subFunc() };
 >{ cases: subFunc() } : { cases: T[]; }

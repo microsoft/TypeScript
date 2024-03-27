@@ -58,7 +58,7 @@ noGenericParams<{}>(''); // Error
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U extends T>(n: T, m: number) { }
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^^^^^^^
 >n : T
 >  : ^
 >m : number
@@ -107,9 +107,9 @@ someGenerics1<number, number>(3, 4);
 // Generic call with argument of function type whose parameter is of type parameter type
 function someGenerics2a<T extends string>(n: (x: T) => void) { }
 >someGenerics2a : <T extends string>(n: (x: T) => void) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^    ^         ^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^
 >n : (x: T) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : T
 >  : ^
 
@@ -159,9 +159,9 @@ someGenerics2a<string>((n) => n.substr(0));
 
 function someGenerics2b<T extends string, U extends number>(n: (x: T, y: U) => void) { }
 >someGenerics2b : <T extends string, U extends number>(n: (x: T, y: U) => void) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^         ^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^
 >n : (x: T, y: U) => void
->  : ^^^^^^^^^^^^^^^^    
+>  : ^^^^ ^^^^^ ^^^^^    
 >x : T
 >  : ^
 >y : U
@@ -224,9 +224,9 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3<T extends Window>(producer: () => T) { }
 >someGenerics3 : <T extends Window>(producer: () => T) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
 >producer : () => T
->         : ^^^^^^^
+>         : ^^^^^^ 
 
 someGenerics3(() => ''); // Error
 >someGenerics3(() => '') : void
@@ -261,11 +261,11 @@ someGenerics3<number>(() => 3); // Error
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4<T, U extends number>(n: T, f: (x: U) => void) { }
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^         ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^              ^^^^^^^^^
 >n : T
 >  : ^
 >f : (x: U) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : U
 >  : ^
 
@@ -314,11 +314,11 @@ someGenerics4<string, number>(null, null);
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5<U extends number, T>(n: T, f: (x: U) => void) { }
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^         ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^              ^^^^^^^^^
 >n : T
 >  : ^
 >f : (x: U) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : U
 >  : ^
 
@@ -367,17 +367,17 @@ someGenerics5<string, number>(null, null); // Error
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6<A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^    ^     ^^^^^^    ^     ^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^           ^^^^^           ^^^^^           ^^^^^^^^^
 >a : (a: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >b : (b: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >b : A
 >  : ^
 >c : (c: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >c : A
 >  : ^
 
@@ -480,17 +480,17 @@ someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 // Generic call with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^    ^     ^^^^^^    ^     ^^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^^^^           ^^^^^           ^^^^^           ^^^^^^^^^
 >a : (a: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >b : (b: B) => B
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >b : B
 >  : ^
 >c : (c: C) => C
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >c : C
 >  : ^
 
@@ -569,7 +569,7 @@ someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: nu
 // Generic call with argument of generic function type
 function someGenerics8<T extends string>(n: T): T { return n; }
 >someGenerics8 : <T extends string>(n: T) => T
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >n : T
 >  : ^
 >n : T
@@ -594,7 +594,7 @@ x<string, string, string>(null, null, null); // Error
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9<T extends any>(a: T, b: T, c: T): T {
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ 
 >a : T
 >  : ^
 >b : T

@@ -15,7 +15,7 @@ class Baz { z: number }
 
 function* g(): IterableIterator<Foo> {
 >g : () => IterableIterator<Foo>
->  : ^^^^^^^^^^^^^^^^^^^^^^ ^^^ 
+>  : ^^^^^^                     
 
     yield;
 >yield : undefined

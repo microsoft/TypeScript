@@ -21,7 +21,7 @@ declare class Point
 
       public add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
->    : ^^^^^      ^^^^^^      ^^^^^^^^^^
+>    : ^^^^^      ^^^^^^      ^^^^^     
 >dx : number
 >   : ^^^^^^
 >dy : number

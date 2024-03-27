@@ -7,7 +7,7 @@ class GenericObject<T extends {} = {}> {
 
   give(value: T) {
 >give : (value: T) => T
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^^^^^
 >value : T
 >      : ^
 
@@ -22,7 +22,7 @@ class GenericNumber<T extends number> {
 
   give(value: T) {
 >give : (value: T) => T
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^^^^^
 >value : T
 >      : ^
 
@@ -37,7 +37,7 @@ class GenericNumberOrString<T extends number | string> {
 
   give(value: T) {
 >give : (value: T) => T
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^^^^^
 >value : T
 >      : ^
 
@@ -49,9 +49,9 @@ class GenericNumberOrString<T extends number | string> {
 
 function g<T>(type: new () => T): T {
 >g : <T>(type: new () => T) => T
->  : ^^^^^^^^^^          ^^^^^^^
+>  : ^ ^^^^^^^^           ^^^^^ 
 >type : new () => T
->     : ^^^^^^^^^^^
+>     : ^^^^^^^^^^ 
 
     return new type();
 >new type() : T

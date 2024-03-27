@@ -116,7 +116,7 @@ var c3t3: number[] = [];
 
 var c3t4: () => IFoo = function() { return <IFoo>({}) };
 >c3t4 : () => IFoo
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >function() { return <IFoo>({}) } : () => IFoo
 >                                 : ^^^^^^^^^^
 ><IFoo>({}) : IFoo
@@ -128,7 +128,7 @@ var c3t4: () => IFoo = function() { return <IFoo>({}) };
 
 var c3t5: (n: number) => IFoo = function(n) { return <IFoo>({}) };
 >c3t5 : (n: number) => IFoo
->     : ^^^^      ^^^^^^^^^
+>     : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >function(n) { return <IFoo>({}) } : (n: number) => IFoo
@@ -144,7 +144,7 @@ var c3t5: (n: number) => IFoo = function(n) { return <IFoo>({}) };
 
 var c3t6: (n: number, s: string) => IFoo = function(n, s) { return <IFoo>({}) };
 >c3t6 : (n: number, s: string) => IFoo
->     : ^^^^      ^^^^^      ^^^^^^^^^
+>     : ^^^^      ^^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string
@@ -246,7 +246,7 @@ var c3t12: IBar = {
 >c3t12 : IBar
 >      : ^^^^
 >{    foo: <IFoo>({})} : { foo: IFoo; }
->                      : ^^^^^^^^^^^^^^
+>                      : ^^^^^^^    ^^^
 
     foo: <IFoo>({})
 >foo : IFoo
@@ -370,17 +370,17 @@ module C5T5 {
 // CONTEXT: Variable assignment
 var c6t5: (n: number) => IFoo;
 >c6t5 : (n: number) => IFoo
->     : ^^^^      ^^^^^^^^^
+>     : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
 c6t5 = <(n: number) => IFoo>function(n) { return <IFoo>({}) };
 >c6t5 = <(n: number) => IFoo>function(n) { return <IFoo>({}) } : (n: number) => IFoo
->                                                              : ^^^^      ^^^^^^^^^
+>                                                              : ^^^^      ^^^^^    
 >c6t5 : (n: number) => IFoo
 >     : ^^^^^^^^^^^^^^^^^^^
 ><(n: number) => IFoo>function(n) { return <IFoo>({}) } : (n: number) => IFoo
->                                                       : ^^^^      ^^^^^^^^^
+>                                                       : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >function(n) { return <IFoo>({}) } : (n: number) => IFoo
@@ -437,17 +437,17 @@ interface IPlaceHolder {
 
     t4: () => IFoo;
 >t4 : () => IFoo
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 
     t5: (n: number) => IFoo;
 >t5 : (n: number) => IFoo
->   : ^^^^      ^^^^^^^^^
+>   : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
     t6: (n: number, s: string) => IFoo;
 >t6 : (n: number, s: string) => IFoo
->   : ^^^^      ^^^^^      ^^^^^^^^^
+>   : ^^^^      ^^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string
@@ -504,7 +504,7 @@ interface IPlaceHolder {
 
 var objc8: {
 >objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: { (n: number, s: string): number; }; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: { (n: number, s: string): string; }[]; t12: IBar; t13: IFoo; t14: IFoo; }
->      : ^^^^^^                     ^^^^^^^^^^^^^^^^        ^^^^^^      ^^^^^^^^^^               ^^^^^^^^^^                          ^^^^^^^^^^                                   ^^^^^^                                ^^^^^^          ^^^^^^^^^^^  ^^^^^^^                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                     ^^^^^^    ^^^^^^        ^^^^^^          ^^^^^^                   ^^^^^^                              ^^^^^^                                   ^^^^^^                                ^^^^^^          ^^^^^^^      ^^^^^^^                                     ^^^^^^^    ^^^^^^^    ^^^^^^^    ^^^
 
     t1: (s: string) => string;
 >t1 : (s: string) => string
@@ -522,17 +522,17 @@ var objc8: {
 
     t4: () => IFoo;
 >t4 : () => IFoo
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 
     t5: (n: number) => IFoo;
 >t5 : (n: number) => IFoo
->   : ^^^^      ^^^^^^^^^
+>   : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
     t6: (n: number, s: string) => IFoo;
 >t6 : (n: number, s: string) => IFoo
->   : ^^^^      ^^^^^      ^^^^^^^^^
+>   : ^^^^      ^^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string
@@ -801,7 +801,7 @@ objc8.t11 = [function(n, s) { return s; }];
 
 objc8.t12 = {
 >objc8.t12 = {    foo: <IFoo>({})} : { foo: IFoo; }
->                                  : ^^^^^^^^^^^^^^
+>                                  : ^^^^^^^    ^^^
 >objc8.t12 : IBar
 >          : ^^^^
 >objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: (n: number, s: string) => number; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: ((n: number, s: string) => string)[]; t12: IBar; t13: IFoo; t14: IFoo; }
@@ -809,7 +809,7 @@ objc8.t12 = {
 >t12 : IBar
 >    : ^^^^
 >{    foo: <IFoo>({})} : { foo: IFoo; }
->                      : ^^^^^^^^^^^^^^
+>                      : ^^^^^^^    ^^^
 
     foo: <IFoo>({})
 >foo : IFoo
@@ -876,9 +876,9 @@ objc8.t14 = <IFoo>({
 // CONTEXT: Function call
 function c9t5(f: (n: number) => IFoo) {};
 >c9t5 : (f: (n: number) => IFoo) => void
->     : ^^^^               ^^^^^^^^^^^^^
+>     : ^^^^                   ^^^^^^^^^
 >f : (n: number) => IFoo
->  : ^^^^      ^^^^^^^^^
+>  : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
@@ -905,7 +905,7 @@ c9t5(function(n) {
 // CONTEXT: Return statement
 var c10t5: () => (n: number) => IFoo = function() { return function(n) { return <IFoo>({}) } };
 >c10t5 : () => (n: number) => IFoo
->      : ^^^^^^               ^^^^
+>      : ^^^^^^                   
 >n : number
 >  : ^^^^^^
 >function() { return function(n) { return <IFoo>({}) } } : () => (n: number) => IFoo
@@ -926,7 +926,7 @@ class C11t5 { constructor(f: (n: number) => IFoo) { } };
 >C11t5 : C11t5
 >      : ^^^^^
 >f : (n: number) => IFoo
->  : ^^^^      ^^^^^^^^^
+>  : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
@@ -992,9 +992,9 @@ var c12t3 = <number[]> [];
 
 var c12t4 = <() => IFoo> function() { return <IFoo>({}) };
 >c12t4 : () => IFoo
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 ><() => IFoo> function() { return <IFoo>({}) } : () => IFoo
->                                              : ^^^^^^^^^^
+>                                              : ^^^^^^    
 >function() { return <IFoo>({}) } : () => IFoo
 >                                 : ^^^^^^^^^^
 ><IFoo>({}) : IFoo
@@ -1006,9 +1006,9 @@ var c12t4 = <() => IFoo> function() { return <IFoo>({}) };
 
 var c12t5 = <(n: number) => IFoo> function(n) { return <IFoo>({}) };
 >c12t5 : (n: number) => IFoo
->      : ^^^^      ^^^^^^^^^
+>      : ^^^^      ^^^^^    
 ><(n: number) => IFoo> function(n) { return <IFoo>({}) } : (n: number) => IFoo
->                                                        : ^^^^      ^^^^^^^^^
+>                                                        : ^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >function(n) { return <IFoo>({}) } : (n: number) => IFoo
@@ -1024,9 +1024,9 @@ var c12t5 = <(n: number) => IFoo> function(n) { return <IFoo>({}) };
 
 var c12t6 = <(n: number, s: string) => IFoo> function(n, s) { return <IFoo>({}) };
 >c12t6 : (n: number, s: string) => IFoo
->      : ^^^^      ^^^^^      ^^^^^^^^^
+>      : ^^^^      ^^^^^      ^^^^^    
 ><(n: number, s: string) => IFoo> function(n, s) { return <IFoo>({}) } : (n: number, s: string) => IFoo
->                                                                      : ^^^^      ^^^^^      ^^^^^^^^^
+>                                                                      : ^^^^      ^^^^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string
@@ -1139,7 +1139,7 @@ var c12t12 = <IBar> {
 ><IBar> {    foo: <IFoo>({})} : IBar
 >                             : ^^^^
 >{    foo: <IFoo>({})} : { foo: IFoo; }
->                      : ^^^^^^^^^^^^^^
+>                      : ^^^^^^^    ^^^
 
     foo: <IFoo>({})
 >foo : IFoo
@@ -1251,7 +1251,7 @@ declare class Point
 
       add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
->    : ^^^^^      ^^^^^^      ^^^^^^^^^^
+>    : ^^^^^      ^^^^^^      ^^^^^     
 >dx : number
 >   : ^^^^^^
 >dy : number

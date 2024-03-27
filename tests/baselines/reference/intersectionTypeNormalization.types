@@ -161,7 +161,7 @@ type IntersectionInline = { kind: 'int',    num: number } & ToString
 
 function getValueAsString(value: IntersectionFail): string {
 >getValueAsString : (value: IntersectionFail) => string
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>                 : ^^^^^^^^                ^^^^^      
 >value : IntersectionFail
 >      : ^^^^^^^^^^^^^^^^
 

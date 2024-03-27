@@ -55,7 +55,7 @@ class Class<T> {
 
 var a1: (c: Class<Number>) => number = (a1) => {
 >a1 : (c: Class<Number>) => number
->   : ^^^^^^^^^ ^^^^^^ ^^^^^      
+>   : ^^^^             ^^^^^      
 >c : Class<Number>
 >  : ^^^^^^^^^^^^^
 >(a1) => {    a1.foo();    return 1;} : (a1: Class<Number>) => number
@@ -173,7 +173,7 @@ b3 = (name, number) => { };
 
 var b4: (n: E) => string = (number = 1) => { return "hello"; };
 >b4 : (n: E) => string
->   : ^^^^^^^^^^      
+>   : ^^^^ ^^^^^      
 >n : E
 >  : ^
 >(number = 1) => { return "hello"; } : (number?: E) => string
@@ -276,7 +276,7 @@ class C<T, U> {
     constructor() {
         var k: ((j: T, k: U) => (T|U)[]) | ((j: number,k :U) => number[]) = (j, k) => {
 >k : ((j: T, k: U) => (T | U)[]) | ((j: number, k: U) => number[])
->  : ^^^^^^^^^^^^^^^^^ ^   ^   ^^^^^^^^^      ^^^^^^^^^^^        ^
+>  : ^^^^^ ^^^^^ ^^^^^         ^^^^^^^^^      ^^^^^ ^^^^^        ^
 >j : T
 >  : ^
 >k : U

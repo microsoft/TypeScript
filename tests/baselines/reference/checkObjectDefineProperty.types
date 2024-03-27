@@ -384,7 +384,7 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
  */
 function match(a, b) {}
 >match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
->      : ^^^^       ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^                     ^^^^^                    ^^^^^^^^^
 >a : () => typeof x
 >  : ^^^^^^^^^^^^^^
 >b : (_?: typeof x) => undefined

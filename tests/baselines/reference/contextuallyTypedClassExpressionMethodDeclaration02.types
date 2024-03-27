@@ -20,20 +20,20 @@ interface Foo {
 interface Bar {
     method1(arg: A): void;
 >method1 : (arg: A) => void
->        : ^^^^^^^^^^^^    
+>        : ^^^^^^ ^^^^^    
 >arg : A
 >    : ^
 
     method2(arg: B): void;
 >method2 : (arg: B) => void
->        : ^^^^^^^^^^^^    
+>        : ^^^^^^ ^^^^^    
 >arg : B
 >    : ^
 }
 
 function getFoo1(): Foo {
 >getFoo1 : () => Foo
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
     return class {
 >class {        method1(arg) {            arg.numProp = 10;        }        method2(arg) {            arg.strProp = "hello";        }    } : typeof (Anonymous class)
@@ -80,7 +80,7 @@ function getFoo1(): Foo {
 
 function getFoo2(): Foo {
 >getFoo2 : () => Foo
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
     return class {
 >class {        method1 = (arg) => {            arg.numProp = 10;        }        method2 = (arg) => {            arg.strProp = "hello";        }    } : typeof (Anonymous class)
@@ -131,7 +131,7 @@ function getFoo2(): Foo {
 
 function getFoo3(): Foo {
 >getFoo3 : () => Foo
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
     return class {
 >class {        method1 = function (arg) {            arg.numProp = 10;        }        method2 = function (arg) {            arg.strProp = "hello";        }    } : typeof (Anonymous class)

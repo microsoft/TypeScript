@@ -84,7 +84,7 @@ declare module "./main" {
     interface Cls {
         foo(): Lib;
 >foo : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
     }
     namespace Cls {
 >Cls : typeof Cls
@@ -92,7 +92,7 @@ declare module "./main" {
 
         function bar(): Lib;
 >bar : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
     }
 }
 

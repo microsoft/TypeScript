@@ -216,7 +216,7 @@ interface Big {
 }
 declare function getCtor<T extends keyof Big>(comp: T): CtorOf<Big[T]>
 >getCtor : <T extends keyof Big>(comp: T) => CtorOf<Big[T]>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^  
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^              
 >comp : T
 >     : ^
 

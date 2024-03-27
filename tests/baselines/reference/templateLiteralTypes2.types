@@ -3,7 +3,7 @@
 === templateLiteralTypes2.ts ===
 function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
 >ft1 : <T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^                     ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^                     ^^^^^ ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -328,13 +328,13 @@ function ft12(s: string) {
 
 declare function widening<T>(x: T): T;
 >widening : <T>(x: T) => T
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -452,13 +452,13 @@ function ft14(t: `foo${number}`) {
 
 declare function g1<T>(x: T): T;
 >g1 : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g2<T extends string>(x: T): T;
 >g2 : <T extends string>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -497,7 +497,7 @@ function ft20(s: string) {
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >literal : T
 >        : ^
 

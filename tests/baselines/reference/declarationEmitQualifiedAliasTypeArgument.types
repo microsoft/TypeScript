@@ -9,7 +9,7 @@ export interface INode<T> {
 
 export function create<T>(): () => INode<T>;
 >create : <T>() => () => INode<T>
->       : ^^^^^^^^^      ^^^^^ ^ 
+>       : ^ ^^^^^^^              
 
 === lib.d.ts ===
 export type G<T extends string> = { [P in T]: string };

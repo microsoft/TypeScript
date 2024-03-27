@@ -186,9 +186,9 @@ z2.length;
  */
 var construct = function(dref) { return new dref(33); }
 >construct : (dref: new (arg1: number) => D) => D
->          : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^^
 >function(dref) { return new dref(33); } : (dref: new (arg1: number) => D) => D
->                                        : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^^
 >dref : new (arg1: number) => D
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >new dref(33) : D

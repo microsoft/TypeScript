@@ -3,7 +3,7 @@
 === functionAssignment.ts ===
 function f(n: Function) { }
 >f : (n: Function) => void
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^        ^^^^^^^^^
 >n : Function
 >  : ^^^^^^^^
 
@@ -28,7 +28,7 @@ interface foo {
 interface baz {
     get(callback: Function): number;
 >get : (callback: Function) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^      
+>    : ^^^^^^^^^^^        ^^^^^      
 >callback : Function
 >         : ^^^^^^^^
 }

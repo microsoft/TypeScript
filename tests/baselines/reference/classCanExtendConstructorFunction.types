@@ -26,15 +26,15 @@ function Wagon(numberOxen) {
 /** @param {Wagon[]=} wagons */
 Wagon.circle = function (wagons) {
 >Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
->                                                                             : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                             : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Wagon.circle : (wagons?: Wagon[] | undefined) => number
->             : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Wagon : typeof Wagon
 >      : ^^^^^^^^^^^^
 >circle : (wagons?: Wagon[]) => number
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
->                                                              : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                              : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >wagons : Wagon[]
 >       : ^^^^^^^
 
@@ -171,7 +171,7 @@ class Sql extends Wagon {
      */
     load(files, format) {
 >load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
->     : ^^^^^^^^^^^^^        ^^^^^^^^^^                              ^^^^^^^^^
+>     : ^^^^^^^^             ^^^^^^^^^^                              ^^^^^^^^^
 >files : string[]
 >      : ^^^^^^^^
 >format : "csv" | "json" | "xmlolololol"
@@ -318,7 +318,7 @@ class Conestoga extends Wagon {
     // should error since others is not optional
     static circle(others: (typeof Wagon)[]) {
 >circle : (others: (typeof Wagon)[]) => number
->       : ^^^^^^^^^        ^^^^^   ^^^^^^^^^^^
+>       : ^^^^^^^^^                ^^^^^^^^^^^
 >others : (typeof Wagon)[]
 >       : ^^^^^^^^^^^^^^^^
 >Wagon : typeof Wagon

@@ -20,7 +20,7 @@ declare module "m2" {
 
     function Z(): X.I;
 >Z : () => X.I
->  : ^^^^^^^  
+>  : ^^^^^^   
 >X : any
 >  : ^^^
 }

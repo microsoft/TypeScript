@@ -26,7 +26,7 @@ class GenericClass<T extends MyTuple> {
 
 function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> {
 >createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^ ^ 
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^               
 >f : GenericFunction<T>
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -39,7 +39,7 @@ function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> 
 
 function consumeClass(c: GenericClass<[string, boolean]>) { }
 >consumeClass : (c: GenericClass<[string, boolean]>) => void
->             : ^^^^^^^^^^^^^^^^                   ^^^^^^^^^
+>             : ^^^^                               ^^^^^^^^^
 >c : GenericClass<[string, boolean]>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

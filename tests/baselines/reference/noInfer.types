@@ -81,7 +81,7 @@ type T32 = { [K in keyof NoInfer<{ a: string, b: string }>]: K };
 
 declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 >foo1 : <T extends string>(a: T, b: NoInfer<T>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^          ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<T>
@@ -89,7 +89,7 @@ declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 
 declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 >foo2 : <T extends string>(a: T, b: NoInfer<T>[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^   ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^            ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<T>[]
@@ -97,7 +97,7 @@ declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 
 declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 >foo3 : <T extends string>(a: T, b: NoInfer<T[]>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^   ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^            ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<T[]>
@@ -105,21 +105,21 @@ declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 
 declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
 >foo4 : <T extends string>(a: T, b: { x: NoInfer<T>; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^ ^    ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^                  ^^^^^    
 >a : T
 >  : ^
 >b : { x: NoInfer<T>; }
->  : ^^^^^^^^^^^^ ^ ^^^
+>  : ^^^^^          ^^^
 >x : NoInfer<T>
 >  : ^^^^^^^^^^
 
 declare function foo5<T extends string>(a: T, b: NoInfer<{ x: T }>): void
 >foo5 : <T extends string>(a: T, b: NoInfer<{ x: T; }>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^    ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^                  ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<{ x: T; }>
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^ ^^^^
 >x : T
 >  : ^
 
@@ -211,11 +211,11 @@ declare class Dog extends Animal { woof(): void }
 
 declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
 >doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^ ^ ^^^^^    
+>            : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^                ^^^^^    
 >value : T
 >      : ^
 >getDefault : () => NoInfer<T>
->           : ^^^^^^^^^^^^^ ^ 
+>           : ^^^^^^          
 
 doSomething(new Animal(), () => new Animal()); // ok
 >doSomething(new Animal(), () => new Animal()) : void
@@ -267,7 +267,7 @@ doSomething(new Dog(), () => new Animal()); // error
 
 declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
 >assertEqual : <T>(actual: T, expected: NoInfer<T>) => boolean
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^       
+>            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^          ^^^^^       
 >actual : T
 >       : ^
 >expected : NoInfer<T>
@@ -321,9 +321,9 @@ assertEqual(g, { x: 3 }); // error
 
 declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
 >invoke : <T, R>(func: (value: T) => R, value: NoInfer<T>) => R
->       : ^^^^^^^^^^^^^        ^     ^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>       : ^ ^^ ^^^^^^^^               ^^^^^^^^^          ^^^^^ 
 >func : (value: T) => R
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 >value : NoInfer<T>
@@ -379,7 +379,7 @@ type Component<Props> = { props: Props; };
 
 declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
 >doWork : <Props>(Component: Component<Props>, props: NoInfer<Props>) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^    
+>       : ^     ^^^^^^^^^^^^^                ^^^^^^^^^              ^^^^^    
 >Component : Component<Props>
 >          : ^^^^^^^^^^^^^^^^
 >props : NoInfer<Props>
@@ -417,9 +417,9 @@ doWork(comp, {}); // error
 
 declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
 >mutate : <T>(callback: (a: NoInfer<T>, b: number) => T) => T
->       : ^^^^^^^^^^^^^^    ^^^^^^^ ^                 ^^^^^^^
+>       : ^ ^^^^^^^^^^^^                               ^^^^^ 
 >callback : (a: NoInfer<T>, b: number) => T
->         : ^^^^^^^^^^^ ^ ^^^^^      ^^^^^^
+>         : ^^^^          ^^^^^      ^^^^^ 
 >a : NoInfer<T>
 >  : ^^^^^^^^^^
 >b : number

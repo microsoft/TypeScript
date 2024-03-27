@@ -3,7 +3,7 @@
 === decoratorOnClassAccessor7.ts ===
 declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->     : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                          ^^^^^                          
 >target : any
 >       : ^^^
 >propertyKey : string
@@ -13,7 +13,7 @@ declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedProp
 
 declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->     : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                          ^^^^^                          
 >target : any
 >       : ^^^
 >propertyKey : string

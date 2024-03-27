@@ -16,7 +16,7 @@ interface Options<State, Actions> {
 
     view?: (state: State, actions: Actions) => any;
 >view : ((state: State, actions: Actions) => any) | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^^^^^^^^^^       ^^^^^   ^^^^^^^^^^^^^
 >state : State
 >      : ^^^^^
 >actions : Actions
@@ -29,7 +29,7 @@ interface Options<State, Actions> {
 
 declare function app<State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>): void;
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^^ ^^^^^    
+>    : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^    
 >obj : Options<State, Actions>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -90,7 +90,7 @@ interface Bar {
 
 declare function foo<T extends Bar>(x: string | T): T;
 >foo : <T extends Bar>(x: string | T) => T
->    : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^          ^^^^^ 
 >x : string | T
 >  : ^^^^^^^^^^
 
@@ -119,7 +119,7 @@ interface Options2<State, Actions> {
 
     view?: (state: State, actions: Actions) => any;
 >view : ((state: State, actions: Actions) => any) | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^^^^^^^^^^       ^^^^^   ^^^^^^^^^^^^^
 >state : State
 >      : ^^^^^
 >actions : Actions
@@ -132,7 +132,7 @@ interface Options2<State, Actions> {
 
 declare function app2<State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>): void;
 >app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^^ ^^^^^    
+>     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^    
 >obj : Options2<State, Actions>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -191,7 +191,7 @@ type ActionsArray<State> = ((state: State) => State)[];
 
 declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>): void;
 >app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^^ ^^^^^    
+>     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^    
 >obj : Options<State, Actions>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -254,9 +254,9 @@ interface ActionsObjectOr<State> {
 
 declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State }): JSX.Element;
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^^                        ^^^^^   ^^^^^^^^ ^^^^^^^
+>     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^           
 >props : (string | Actions) & { state: State; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
 >state : State
 >      : ^^^^^
 >JSX : any

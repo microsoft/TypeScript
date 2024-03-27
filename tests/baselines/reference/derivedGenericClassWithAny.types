@@ -15,7 +15,7 @@ class C<T extends number> {
 
     foo(): T {
 >foo : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
         return null;
     }
@@ -83,7 +83,7 @@ class E<T extends string> extends D {
 
     foo(): T {
 >foo : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
         return ''; // error
 >'' : ""

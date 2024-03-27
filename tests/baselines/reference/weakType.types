@@ -33,7 +33,7 @@ interface CtorOnly {
 
 function doSomething(settings: Settings) { /* ... */ }
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^        ^^^^^^^^^
 >settings : Settings
 >         : ^^^^^^^^
 
@@ -127,7 +127,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 
 function del(options: ConfigurableStartEnd = {},
 >del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^
+>    : ^^^^^^^^^^^                    ^^^^^^^^^^                   ^^^^^^^^^
 >options : ConfigurableStartEnd
 >        : ^^^^^^^^^^^^^^^^^^^^
 >{} : {}

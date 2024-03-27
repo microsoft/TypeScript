@@ -55,7 +55,7 @@ module Generic {
     interface Base1<T> {
         x: {
 >x : { a: T; }
->  : ^^^^^^^^^
+>  : ^^^^^ ^^^
 
             a: T;
 >a : T
@@ -66,7 +66,7 @@ module Generic {
     interface Base2<T> {
         x: {
 >x : { b: T; }
->  : ^^^^^^^^^
+>  : ^^^^^ ^^^
 
             b: T;
 >b : T
@@ -90,7 +90,7 @@ module Generic {
     interface Derived2<T, U> extends Base1<T>, Base2<U> {
         x: {
 >x : { a: T; b: U; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 
             a: T; b: U;
 >a : T
@@ -105,7 +105,7 @@ module Generic {
     interface Derived4<T> extends Base1<number>, Base2<number> { // error
         x: {
 >x : { a: T; b: T; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 
             a: T; b: T;
 >a : T

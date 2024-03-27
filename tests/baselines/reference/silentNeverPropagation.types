@@ -35,7 +35,7 @@ type MoreState = {
 
 declare function createModule<TState, TActions>(state: TState, actions: TActions): ModuleWithState<TState> & TActions;
 >createModule : <TState, TActions>(state: TState, actions: TActions) => ModuleWithState<TState> & TActions
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^
+>             : ^      ^^        ^^^^^^^^^      ^^^^^^^^^^^        ^^^^^                                  
 >state : TState
 >      : ^^^^^^
 >actions : TActions
@@ -43,7 +43,7 @@ declare function createModule<TState, TActions>(state: TState, actions: TActions
 
 declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions): ModuleWithState<TState & MoreState> & TActions;
 >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^   ^^^^^^^^^    ^^^^^^^^
+>        : ^      ^^        ^^^^^                                  ^^^^^                                              
 >m : ModuleWithState<TState> & TActions
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -14,7 +14,7 @@ export default class Operation {
 
     validateParameters(parameterValues: any) : IValidationError[] | null {
 >validateParameters : (parameterValues: any) => IValidationError[] | null
->                   : ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^         
+>                   : ^^^^^^^^^^^^^^^^^^   ^^^^^                         
 >parameterValues : any
 
         let result: IValidationError[] | null = null;

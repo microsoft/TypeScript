@@ -7,7 +7,7 @@ interface Obj { key: "value"; }
 
 async function fn1(): Promise<Obj> {
 >fn1 : () => Promise<Obj>
->    : ^^^^^^^^^^^^^ ^^^ 
+>    : ^^^^^^            
 
     const obj1: Obj = await { key: "value" };
 >obj1 : Obj

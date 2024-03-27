@@ -450,7 +450,7 @@ let p4: Point | null | undefined = {
 
 declare function f1(p: Point): void;
 >f1 : (p: Point) => void
->   : ^^^^^^^^^^^^^^    
+>   : ^^^^     ^^^^^    
 >p : Point
 >  : ^^^^^
 
@@ -537,7 +537,7 @@ f1({
 
 declare function f2(p: Point | null | undefined): void;
 >f2 : (p: Point | null | undefined) => void
->   : ^^^^^^^^^                   ^^^^^    
+>   : ^^^^                        ^^^^^    
 >p : Point | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -640,7 +640,7 @@ type ObjectDescriptor<D, M> = {
 
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^   ^
+>           : ^ ^^ ^^^^^^^^                      ^^^^^     
 >desc : ObjectDescriptor<D, M>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -727,7 +727,7 @@ type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 
 declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^   ^
+>            : ^ ^^ ^^^^^^^^                      ^^^^^     
 >desc : ObjectDescriptor<D, M>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -808,11 +808,11 @@ type PropDesc<T> = {
 
     get?(): T;
 >get : (() => T) | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^^^^^
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
->    : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^
+>    : ^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -826,7 +826,7 @@ type PropDescMap<T> = {
 
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^    ^^^^^^^^ ^ ^^^^^^   ^^^^^^ ^  ^ 
+>           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^ ^^^^^^^^                         ^^^^^                
 >obj : T
 >    : ^
 >name : K
@@ -836,7 +836,7 @@ declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropD
 
 declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^    ^^^^^^^^ ^ ^^^^^^   ^
+>            : ^ ^^ ^^^^^^^ ^^^^^^^^^                            ^^^^^     
 >obj : T
 >    : ^
 >descs : PropDescMap<U> & ThisType<T>
@@ -1068,11 +1068,11 @@ type Computed<T> = {
 
     get?(): T;
 >get : (() => T) | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^^^^^
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
->    : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^
+>    : ^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -1083,7 +1083,7 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 
     data?: D | (() => D);
 >data : D | (() => D) | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^ ^^^^^^^^^^^^^
 
     methods?: M;
 >methods : M | undefined
@@ -1096,7 +1096,7 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^ ^^^^^^   ^   ^
+>    : ^^^^^ ^^ ^^ ^^^^^^^^^^^                   ^^^^^         
 >options : VueOptions<D, M, P>
 >        : ^^^^^^^^^^^^^^^^^^^
 

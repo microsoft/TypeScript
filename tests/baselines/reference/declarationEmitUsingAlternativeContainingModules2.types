@@ -121,7 +121,7 @@ interface QueryObserverOptions<
 
   select?: (data: TQueryData) => TData;
 >select : ((data: TQueryData) => TData) | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^          ^^^^^     ^^^^^^^^^^^^^
 >data : TQueryData
 >     : ^^^^^^^^^^
 }
@@ -339,7 +339,7 @@ type UseBaseQueryReturnType<
 } & {
   suspense: () => Promise<Result>;
 >suspense : () => Promise<Result>
->         : ^^^^^^^^^^^^^ ^^^^^^ 
+>         : ^^^^^^               
 
 };
 
@@ -349,7 +349,7 @@ type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
 
 declare function useQuery<
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^^^^^  ^^^^^  ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^ 
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                    ^^^^^                                 
 
   TQueryFnData = unknown,
   TError = DefaultError,
@@ -426,15 +426,15 @@ interface IEntry {
 
 const testApi = {
 >testApi : { getEntries: () => Promise<IEntry[]>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^   ^^^
+>        : ^^^^^^^^^^^^^^^^^^^^                 ^^^
 >{  getEntries: (): Promise<IEntry[]> => {    return fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err))  }} : { getEntries: () => Promise<IEntry[]>; }
->                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^   ^^^
+>                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^                 ^^^
 
   getEntries: (): Promise<IEntry[]> => {
 >getEntries : () => Promise<IEntry[]>
->           : ^^^^^^^^^^^^^ ^^^^^^   
+>           : ^^^^^^                 
 >(): Promise<IEntry[]> => {    return fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err))  } : () => Promise<IEntry[]>
->                                                                                                                                                                             : ^^^^^^^^^^^^^ ^^^^^^   
+>                                                                                                                                                                             : ^^^^^^                 
 
     return fetch(baseUrl + 'entries')
 >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err)) : Promise<any>

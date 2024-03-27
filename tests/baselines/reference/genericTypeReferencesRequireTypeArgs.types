@@ -7,12 +7,12 @@ class C<T> {
 
    foo(): T { return null }
 >foo : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 }
 interface I<T> {
    bar(): T;
 >bar : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 }
 var c1: C; // error
 >c1 : any

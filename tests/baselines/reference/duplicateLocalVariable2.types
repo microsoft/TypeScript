@@ -33,7 +33,7 @@ export class TestRunner {
 
     public addTest(test: TestCase) {
 >addTest : (test: TestCase) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^        ^^^^^^^^^
 >test : TestCase
 >     : ^^^^^^^^
     }

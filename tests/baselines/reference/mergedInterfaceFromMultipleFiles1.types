@@ -10,7 +10,7 @@ interface D { bar(): number; }
 interface C extends D {
 	b(): Date;
 >b : () => Date
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 }
 
 var c:C;

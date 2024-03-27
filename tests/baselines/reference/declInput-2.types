@@ -49,31 +49,31 @@ module M {
 
         public m232(): E { return null;}
 >m232 : () => E
->     : ^^^^^^^
+>     : ^^^^^^ 
 
         public m242(): I1 { return null; }
 >m242 : () => I1
->     : ^^^^^^^^
+>     : ^^^^^^  
 
         public m252(): I2 { return null; } // don't generate
 >m252 : () => I2
->     : ^^^^^^^^
+>     : ^^^^^^  
 
         public m26(i:I1) {}
 >m26 : (i: I1) => void
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^  ^^^^^^^^^
 >i : I1
 >  : ^^
 
         public m262(i:I2) {}
 >m262 : (i: I2) => void
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^  ^^^^^^^^^
 >i : I2
 >  : ^^
 
         public m3():C { return new C(); }
 >m3 : () => C
->   : ^^^^^^^
+>   : ^^^^^^ 
 >new C() : C
 >        : ^
 >C : typeof C

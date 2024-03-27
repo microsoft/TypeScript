@@ -9,7 +9,7 @@ declare class DecoratorProvider {
 
     decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
 >decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^                 ^^^^^ ^^^^^^^                ^^^^^ 
 >this : DecoratorProvider
 >     : ^^^^^^^^^^^^^^^^^
 >v : T

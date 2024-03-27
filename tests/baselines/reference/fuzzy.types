@@ -8,15 +8,15 @@ module M {
     export interface I {
         works:()=>R;
 >works : () => R
->      : ^^^^^^^
+>      : ^^^^^^ 
 
         alsoWorks:()=>R;
 >alsoWorks : () => R
->          : ^^^^^^^
+>          : ^^^^^^ 
 
         doesntWork:()=>R;
 >doesntWork : () => R
->           : ^^^^^^^
+>           : ^^^^^^ 
     }
 
     export interface R {
@@ -39,7 +39,7 @@ module M {
         }
         works():R {
 >works : () => R
->      : ^^^^^^^
+>      : ^^^^^^ 
 
             return <R>({ anything: 1 });
 ><R>({ anything: 1 }) : R
@@ -56,7 +56,7 @@ module M {
 
         doesntWork():R {
 >doesntWork : () => R
->           : ^^^^^^^
+>           : ^^^^^^ 
 
             return { anything:1, oneI:this };
 >{ anything:1, oneI:this } : { anything: number; oneI: this; }
@@ -73,7 +73,7 @@ module M {
 
         worksToo():R {
 >worksToo : () => R
->         : ^^^^^^^
+>         : ^^^^^^ 
 
             return <R>({ oneI: this });
 ><R>({ oneI: this }) : R

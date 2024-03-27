@@ -34,7 +34,7 @@ module M {
 
         [Symbol.isConcatSpreadable](): I {
 >[Symbol.isConcatSpreadable] : () => I
->                            : ^^^^^^^
+>                            : ^^^^^^ 
 >Symbol.isConcatSpreadable : unique symbol
 >                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

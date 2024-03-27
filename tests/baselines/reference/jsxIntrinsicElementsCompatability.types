@@ -14,7 +14,7 @@ import * as React from "react";
 
 function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
 >SomeComponent : <T extends "a" | "button">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^      ^^^                   ^ ^^^^^^^^ ^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                           ^^^^^           
 >props : { element?: T | undefined; } & JSX.IntrinsicElements[T]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >element : T | undefined
@@ -34,7 +34,7 @@ function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.In
 
 function Test<T extends 'button' | 'a'>(el: T) {
 >Test : <T extends "a" | "button">(el: T) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >el : T
 >   : ^
 

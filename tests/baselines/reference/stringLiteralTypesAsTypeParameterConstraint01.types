@@ -3,9 +3,9 @@
 === stringLiteralTypesAsTypeParameterConstraint01.ts ===
 function foo<T extends "foo">(f: (x: T) => T) {
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^ ^^^^^ 
 >f : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -16,9 +16,9 @@ function foo<T extends "foo">(f: (x: T) => T) {
 
 function bar<T extends "foo" | "bar">(f: (x: T) => T) {
 >bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^ ^^^^^ 
 >f : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 

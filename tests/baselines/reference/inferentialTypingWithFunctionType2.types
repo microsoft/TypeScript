@@ -3,7 +3,7 @@
 === inferentialTypingWithFunctionType2.ts ===
 function identity<A>(a: A): A {
 >identity : <A>(a: A) => A
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^^^^ ^^^^^ 
 >a : A
 >  : ^
 

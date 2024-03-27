@@ -33,7 +33,7 @@ interface Entry {
  
  function makeEntityStore<T extends Record<string, Entity>>(config: T): Nodes<T> {
 >makeEntityStore : <T extends Record<string, Entity>>(config: T) => Nodes<T>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^        
 >config : T
 >       : ^
 

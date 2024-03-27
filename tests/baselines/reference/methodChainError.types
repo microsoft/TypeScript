@@ -11,7 +11,7 @@ class Builder {
 
     method(param: string): Builder {
 >method : (param: string) => Builder
->       : ^^^^^^^^      ^^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^^^       
 >param : string
 >      : ^^^^^^
 

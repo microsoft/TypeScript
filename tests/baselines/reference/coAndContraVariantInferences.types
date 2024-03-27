@@ -23,21 +23,21 @@ declare const b: B;
 
 declare function fab(arg: A | B): void;
 >fab : (arg: A | B) => void
->    : ^^^^^^^   ^^^^^^    
+>    : ^^^^^^     ^^^^^    
 >arg : A | B
 >    : ^^^^^
 
 declare function foo<T>(x: { kind: T }, f: (arg: { kind: T }) => void): void;
 >foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
->    : ^^^^^^^        ^   ^^^^^              ^            ^^^^^    
+>    : ^ ^^^^^            ^^^^^                           ^^^^^    
 >x : { kind: T; }
->  : ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^
 >kind : T
 >     : ^
 >f : (arg: { kind: T; }) => void
->  : ^^^^^^        ^   ^^^^^    
+>  : ^^^^^^            ^^^^^    
 >arg : { kind: T; }
->    : ^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^
 >kind : T
 >     : ^
 
@@ -99,7 +99,7 @@ const actionB = { payload: true } as Action<'ACTION_B', boolean>;
 
 function call<TName extends string,TPayload>(
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^^^ ^^^^^^         ^^^^^^ ^^^^^  ^^^^^^^^         ^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^        ^^^^^^^^^^                       ^^^^^^                                        ^^^^^^^^^
 
   action: Action<TName,TPayload>,
 >action : Action<TName, TPayload>
@@ -107,7 +107,7 @@ function call<TName extends string,TPayload>(
 
   fn: (action: Action<TName,TPayload>)=> any,
 >fn : (action: Action<TName, TPayload>) => any
->   : ^^^^^^^^^^^^^^^ ^^^^^  ^^^^^^^^ ^^^^^   
+>   : ^^^^^^^^^                       ^^^^^   
 >action : Action<TName, TPayload>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -122,9 +122,9 @@ function call<TName extends string,TPayload>(
 
 const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
 >printFn : (action: typeof actionA | typeof actionB) => void
->        : ^^^^^^^^^       ^^^^^^^          ^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^                               ^^^^^^^^^
 >(action: typeof actionA | typeof actionB)=> console.log(action) : (action: typeof actionA | typeof actionB) => void
->                                                                : ^^^^^^^^^       ^^^^^^^          ^^^^^^^^^^^^^^^^
+>                                                                : ^^^^^^^^^                               ^^^^^^^^^
 >action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >actionA : Action<"ACTION_A", string>

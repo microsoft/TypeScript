@@ -29,11 +29,11 @@ export const vb = fb();
 export interface A {}
 export function fa(): A;
 >fa : () => A
->   : ^^^^^^^
+>   : ^^^^^^ 
 
 === node_modules/ext/ts3.1/other.d.ts ===
 export interface B {}
 export function fb(): B;
 >fb : () => B
->   : ^^^^^^^
+>   : ^^^^^^ 
 

@@ -40,7 +40,7 @@ export type SubType<A> = { value: A }
 
 export declare function of<A>(value: A): Something<A>
 >of : <A>(value: A) => Something<A>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>   : ^ ^^^^^^^^^ ^^^^^            
 >value : A
 >      : ^
 

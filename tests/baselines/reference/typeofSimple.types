@@ -39,7 +39,7 @@ var numberI: I<typeof v2>;
 
 var fun: () => I<number>;
 >fun : () => I<number>
->    : ^^^^^^^        
+>    : ^^^^^^         
 
 numberI = fun();
 >numberI = fun() : I<number>

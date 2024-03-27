@@ -31,7 +31,7 @@ module __test2__ {
 
     export var aa:{ new <Tstring>(param: Tstring); };;
 >aa : new <Tstring>(param: Tstring) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^       ^^^^^^^^^       ^^^^^^^^
 >param : Tstring
 >      : ^^^^^^^
 

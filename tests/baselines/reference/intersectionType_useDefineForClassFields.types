@@ -10,7 +10,7 @@ type Foo<T> = {
 
 function bar<T>(_p: T): { new(): Foo<T> } {
 >bar : <T>(_p: T) => { new (): Foo<T>; }
->    : ^^^^^^^^^^^^^^          ^^^ ^    
+>    : ^ ^^^^^^ ^^^^^                   
 >_p : T
 >   : ^
 

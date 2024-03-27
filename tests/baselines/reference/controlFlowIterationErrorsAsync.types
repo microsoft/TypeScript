@@ -108,13 +108,13 @@ async function f2() {
 
 declare function foo(x: string): Promise<number>;
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
->    : ^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
 declare function foo(x: number): Promise<string>;
 >foo : { (x: string): Promise<number>; (x: number): Promise<string>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^        ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^               ^^^
 >x : number
 >  : ^^^^^^
 
@@ -206,7 +206,7 @@ async function g2() {
 
 async function asNumber(x: string | number): Promise<number> {
 >asNumber : (x: string | number) => Promise<number>
->         : ^^^^               ^^^^^^^^^^^^        
+>         : ^^^^               ^^^^^               
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -476,7 +476,7 @@ async function foobar() {
 
 declare function foox(x: string | undefined): Promise<string>
 >foox : (x: string | undefined) => Promise<string>
->     : ^^^^                  ^^^^^^^^^^^^        
+>     : ^^^^                  ^^^^^               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -520,7 +520,7 @@ async () => {
 
 declare function myQuery(input: { lastId: number | undefined }): Promise<{ entities: number[] }>;
 >myQuery : (input: { lastId: number | undefined; }) => Promise<{ entities: number[]; }>
->        : ^^^^^^^^                               ^^^^^^^^^^^^                         
+>        : ^^^^^^^^                               ^^^^^                                
 >input : { lastId: number | undefined; }
 >      : ^^^^^^^^^^                  ^^^
 >lastId : number | undefined
@@ -530,7 +530,7 @@ declare function myQuery(input: { lastId: number | undefined }): Promise<{ entit
 
 async function myFunc(): Promise<void> {
 >myFunc : () => Promise<void>
->       : ^^^^^^^^^^^^^      
+>       : ^^^^^^             
 
   let lastId: number | undefined = undefined;
 >lastId : number | undefined

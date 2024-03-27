@@ -16,7 +16,7 @@ export module Foo {
 
 	function Bar() : C {
 >Bar : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 		if (true) { return Bar();}
 >true : true
@@ -35,7 +35,7 @@ export module Foo {
 
 	function Baz() : C {
 >Baz : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 		var c = Baz();
 >c : C

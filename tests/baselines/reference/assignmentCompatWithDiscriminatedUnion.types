@@ -430,7 +430,7 @@ namespace GH30170 {
     }
     function draw(val: Blue | Yellow) { }
 >draw : (val: Blue | Yellow) => void
->     : ^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>     : ^^^^^^             ^^^^^^^^^
 >val : Blue | Yellow
 >    : ^^^^^^^^^^^^^
 
@@ -477,7 +477,7 @@ namespace GH12052 {
 
     function getAxisType(): IAxisType {
 >getAxisType : () => IAxisType
->            : ^^^^^^^^^^^^^^^
+>            : ^^^^^^         
 
         if (1 == 1) {
 >1 == 1 : boolean
@@ -562,7 +562,7 @@ namespace GH18421 {
 
     function makeNewThing(thingType: ThingType): Thing {
 >makeNewThing : (thingType: ThingType) => Thing
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^         ^^^^^     
 >thingType : ThingType
 >          : ^^^^^^^^^
 
@@ -595,7 +595,7 @@ namespace GH15907 {
 
     function dispatchAction(action: Action): void {
 >dispatchAction : (action: Action) => void
->               : ^^^^^^^^^^^^^^^^^^^^    
+>               : ^^^^^^^^^      ^^^^^    
 >action : Action
 >       : ^^^^^^
 
@@ -649,7 +649,7 @@ namespace GH20889 {
 
     function foo(obj1: AU) {
 >foo : (obj1: AU) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^  ^^^^^^^^^
 >obj1 : AU
 >     : ^^
 

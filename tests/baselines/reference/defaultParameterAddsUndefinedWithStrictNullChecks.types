@@ -205,7 +205,7 @@ type OptionalNullableString = string | null | undefined;
 
 function allowsNull(val: OptionalNullableString = "") {
 >allowsNull : (val?: OptionalNullableString) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^                      ^^^^^^^^^
 >val : OptionalNullableString
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""

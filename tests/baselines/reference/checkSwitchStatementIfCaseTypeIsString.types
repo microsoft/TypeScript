@@ -12,7 +12,7 @@ class A {
 
     doIt(x: Array<string>): void {
 >doIt : (x: Array<string>) => void
->     : ^^^^^^^^^        ^^^^^    
+>     : ^^^^             ^^^^^    
 >x : string[]
 >  : ^^^^^^^^
 

@@ -14,7 +14,7 @@ module ts {
     interface Equals<T> {
         equals(other: T): boolean;
 >equals : (other: T) => boolean
->       : ^^^^^^^^^^^^^^       
+>       : ^^^^^^^^ ^^^^^       
 >other : T
 >      : ^
     }
@@ -32,7 +32,7 @@ module ts {
 
         equals(that: Type): boolean {
 >equals : (that: Type) => boolean
->       : ^^^^^^^^^^^^^^^^       
+>       : ^^^^^^^    ^^^^^       
 >that : Type
 >     : ^^^^
 
@@ -263,7 +263,7 @@ module ts {
         }
         getProperties(): Property[] {
 >getProperties : () => Property[]
->              : ^^^^^^^^^^^^^^  
+>              : ^^^^^^          
 
             return [];
 >[] : undefined[]
@@ -271,7 +271,7 @@ module ts {
         }
         getProperty(index: number): Property {
 >getProperty : (index: number) => Property
->            : ^^^^^^^^      ^^^^^^^^^^^^^
+>            : ^^^^^^^^      ^^^^^        
 >index : number
 >      : ^^^^^^
 
@@ -281,7 +281,7 @@ module ts {
         }
         getPropertyByName(name: string): Property {
 >getPropertyByName : (name: string) => Property
->                  : ^^^^^^^      ^^^^^^^^^^^^^
+>                  : ^^^^^^^      ^^^^^        
 >name : string
 >     : ^^^^^^
 
@@ -299,7 +299,7 @@ module ts {
         }
         getSignature(index: number): Signature {
 >getSignature : (index: number) => Signature
->             : ^^^^^^^^      ^^^^^^^^^^^^^^
+>             : ^^^^^^^^      ^^^^^         
 >index : number
 >      : ^^^^^^
 
@@ -317,7 +317,7 @@ module ts {
         }
         getSignatures(): Signature[] {
 >getSignatures : () => Signature[]
->              : ^^^^^^^^^^^^^^^  
+>              : ^^^^^^           
 
             return [];
 >[] : undefined[]
@@ -349,7 +349,7 @@ module ts {
         }
         isSubTypeOf(type: Type) {
 >isSubTypeOf : (type: Type) => void
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^    ^^^^^^^^^
 >type : Type
 >     : ^^^^
         }
@@ -377,7 +377,7 @@ module ts {
         }
         equals(other: Property): boolean {
 >equals : (other: Property) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^       
+>       : ^^^^^^^^        ^^^^^       
 >other : Property
 >      : ^^^^^^^^
 
@@ -478,7 +478,7 @@ module ts {
         }
         equalsNoReturn(other: Signature): boolean {
 >equalsNoReturn : (other: Signature) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^       
+>               : ^^^^^^^^         ^^^^^       
 >other : Signature
 >      : ^^^^^^^^^
 
@@ -574,7 +574,7 @@ module ts {
         }
         equals(other: Signature): boolean {
 >equals : (other: Signature) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^       
+>       : ^^^^^^^^         ^^^^^       
 >other : Signature
 >      : ^^^^^^^^^
 
@@ -636,7 +636,7 @@ module ts {
         }
         equals(other: Parameter) {
 >equals : (other: Parameter) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^         ^^^^^^^^^^^^
 >other : Parameter
 >      : ^^^^^^^^^
 
@@ -732,7 +732,7 @@ module ts {
 
     function getProperty<T>(map: Map<T>, key: string): T {
 >getProperty : <T>(map: Map<T>, key: string) => T
->            : ^^^^^^^^^^^^ ^ ^^^^^^^      ^^^^^^
+>            : ^ ^^^^^^^      ^^^^^^^      ^^^^^ 
 >map : Map<T>
 >    : ^^^^^^
 >key : string
@@ -767,7 +767,7 @@ module ts {
 
     function hasProperty<T>(map: Map<T>, key: string): boolean {
 >hasProperty : <T>(map: Map<T>, key: string) => boolean
->            : ^^^^^^^^^^^^ ^ ^^^^^^^      ^^^^^       
+>            : ^ ^^^^^^^      ^^^^^^^      ^^^^^       
 >map : Map<T>
 >    : ^^^^^^
 >key : string
@@ -790,7 +790,7 @@ module ts {
 
     function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
 >arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^       
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^       
 >a : T[]
 >  : ^^^
 >item : T
@@ -847,7 +847,7 @@ module ts {
 
     function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^       
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^       
 >a : T[]
 >  : ^^^
 >b : T[]
@@ -924,7 +924,7 @@ module ts {
 
     function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^       
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^       
 >a : T[]
 >  : ^^^
 >b : T[]

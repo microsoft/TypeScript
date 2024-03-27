@@ -10,7 +10,7 @@ declare namespace N {
     interface AT<T> {
         gen(): T;
 >gen : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
     }
 }
 === /a.js ===

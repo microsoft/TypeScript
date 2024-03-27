@@ -30,7 +30,7 @@ export type Constructor<T> = {
 }
 export function Configurable<T extends Constructor<{}>>(base: T): T {
 >Configurable : <T extends Constructor<{}>>(base: T) => T
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >base : T
 >     : ^
 

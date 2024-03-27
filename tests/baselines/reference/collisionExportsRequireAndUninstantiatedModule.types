@@ -7,7 +7,7 @@ export module require { // no error
 }
 export function foo(): require.I {
 >foo : () => require.I
->    : ^^^^^^^^^^^^^  
+>    : ^^^^^^         
 >require : any
 >        : ^^^
 
@@ -19,7 +19,7 @@ export module exports { // no error
 }
 export function foo2(): exports.I {
 >foo2 : () => exports.I
->     : ^^^^^^^^^^^^^  
+>     : ^^^^^^         
 >exports : any
 >        : ^^^
 

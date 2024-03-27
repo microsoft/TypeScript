@@ -13,7 +13,7 @@ module TypeScript.Parser {
 
         public currentNode(): SyntaxNode {
 >currentNode : () => SyntaxNode
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
             return null;
         }
@@ -33,7 +33,7 @@ module TypeScript {
 
         public childIndex(child: ISyntaxElement) {
 >childIndex : (child: ISyntaxElement) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^              ^^^^^^^^^
 >child : ISyntaxElement
 >      : ^^^^^^^^^^^^^^
 
@@ -74,7 +74,7 @@ module TypeScript {
 
         public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
 >findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken
->          : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^               
 >position : number
 >         : ^^^^^^
 >includeSkippedTokens : boolean
@@ -126,7 +126,7 @@ module TypeScript.Syntax {
 
         private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
 >findTokenInternal : (parent: PositionedElement, position: number, fullStart: number) => PositionedToken
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^                 ^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >parent : PositionedElement
 >       : ^^^^^^^^^^^^^^^^^
 >position : number

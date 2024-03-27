@@ -9,25 +9,25 @@ type Mapper<T, U> = (x: T) => U;
 
 declare function wrap<T, U>(cb: Mapper<T, U>): Mapper<T, U>;
 >wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
->     : ^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^^^ ^  ^ 
+>     : ^ ^^ ^^^^^^            ^^^^^            
 >cb : Mapper<T, U>
 >   : ^^^^^^^^^^^^
 
 declare function arrayize<T, U>(cb: Mapper<T, U>): Mapper<T, U[]>;
 >arrayize : <T, U>(cb: Mapper<T, U>) => Mapper<T, U[]>
->         : ^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^^^ ^  ^   
+>         : ^ ^^ ^^^^^^            ^^^^^              
 >cb : Mapper<T, U>
 >   : ^^^^^^^^^^^^
 
 declare function combine<A, B, C>(f: (x: A) => B, g: (x: B) => C): (x: A) => C;
 >combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
->        : ^^^^^^^^^^^^^    ^     ^^^^^^    ^     ^^^^^^    ^     ^
+>        : ^ ^^ ^^ ^^^^^           ^^^^^           ^^^^^           
 >f : (x: A) => B
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : A
 >  : ^
 >g : (x: B) => C
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : B
 >  : ^
 >x : A
@@ -35,7 +35,7 @@ declare function combine<A, B, C>(f: (x: A) => B, g: (x: B) => C): (x: A) => C;
 
 declare function foo(f: Mapper<string, number>): void;
 >foo : (f: Mapper<string, number>) => void
->    : ^^^^^^^^^^                ^^^^^    
+>    : ^^^^                      ^^^^^    
 >f : Mapper<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -370,7 +370,7 @@ class SetOf<A> {
 
   add(a: A) {
 >add : (a: A) => void
->    : ^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^
 >a : A
 >  : ^
 
@@ -393,9 +393,9 @@ class SetOf<A> {
 
   transform<B>(transformer: (a: SetOf<A>) => SetOf<B>): SetOf<B> {
 >transform : <B>(transformer: (a: SetOf<A>) => SetOf<B>) => SetOf<B>
->          : ^^^^^^^^^^^^^^^^^    ^^^^^ ^      ^^^^^ ^ ^^^^^^^^^^ ^ 
+>          : ^ ^^^^^^^^^^^^^^^                         ^^^^^        
 >transformer : (a: SetOf<A>) => SetOf<B>
->            : ^^^^^^^^^ ^ ^^^^^^^^^^ ^ 
+>            : ^^^^        ^^^^^        
 >a : SetOf<A>
 >  : ^^^^^^^^
 
@@ -410,9 +410,9 @@ class SetOf<A> {
 
   forEach(fn: (a: A, index: number) => void) {
 >forEach : (fn: (a: A, index: number) => void) => void
->        : ^^^^^    ^                        ^^^^^^^^^
+>        : ^^^^^                             ^^^^^^^^^
 >fn : (a: A, index: number) => void
->   : ^^^^^^^^^^^^^^      ^^^^^    
+>   : ^^^^ ^^^^^^^^^      ^^^^^    
 >a : A
 >  : ^
 >index : number
@@ -450,29 +450,29 @@ class SetOf<A> {
 
 function compose<A, B, C, D, E>(
 >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
->        : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^ ^      ^^^^^ ^ ^^^^^^^    ^^^^^ ^      ^^^^^ ^ ^^^^^^^    ^^^^^ ^      ^^^^^ ^ ^^^^^^^    ^^^^^ ^      ^^^^^ ^ ^^^^^    ^^^^^ ^      ^^^^^ ^ 
+>        : ^ ^^ ^^ ^^ ^^ ^^^^^^^                         ^^^^^^^                         ^^^^^^^                         ^^^^^^^                         ^^^^^                         
 
   fnA: (a: SetOf<A>) => SetOf<B>, 
 >fnA : (a: SetOf<A>) => SetOf<B>
->    : ^^^^^^^^^ ^ ^^^^^^^^^^ ^ 
+>    : ^^^^        ^^^^^        
 >a : SetOf<A>
 >  : ^^^^^^^^
 
   fnB: (b: SetOf<B>) => SetOf<C>, 
 >fnB : (b: SetOf<B>) => SetOf<C>
->    : ^^^^^^^^^ ^ ^^^^^^^^^^ ^ 
+>    : ^^^^        ^^^^^        
 >b : SetOf<B>
 >  : ^^^^^^^^
 
   fnC: (c: SetOf<C>) => SetOf<D>,
 >fnC : (c: SetOf<C>) => SetOf<D>
->    : ^^^^^^^^^ ^ ^^^^^^^^^^ ^ 
+>    : ^^^^        ^^^^^        
 >c : SetOf<C>
 >  : ^^^^^^^^
 
   fnD: (c: SetOf<D>) => SetOf<E>,
 >fnD : (c: SetOf<D>) => SetOf<E>
->    : ^^^^^^^^^ ^ ^^^^^^^^^^ ^ 
+>    : ^^^^        ^^^^^        
 >c : SetOf<D>
 >  : ^^^^^^^^
 
@@ -485,7 +485,7 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
 >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fns : ((x: T) => T)[]
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^ ^^^^^ ^^^
 >x : T
 >  : ^
 >x : T
@@ -493,7 +493,7 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
 
   return (x: T) => fns.reduce((prev, fn) => fn(prev), x);
 >(x: T) => fns.reduce((prev, fn) => fn(prev), x) : (x: T) => T
->                                                : ^^^^^^^^^^^
+>                                                : ^^^^ ^^^^^^
 >x : T
 >  : ^
 >fns.reduce((prev, fn) => fn(prev), x) : T
@@ -522,9 +522,9 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
 
 function map<A, B>(fn: (a: A) => B): (s: SetOf<A>) => SetOf<B> {
 >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
->    : ^^^^^^^^^^^    ^     ^^^^^^    ^^^^^ ^      ^^^^^ ^ 
+>    : ^ ^^ ^^^^^^           ^^^^^                         
 >fn : (a: A) => B
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >s : SetOf<A>
@@ -532,7 +532,7 @@ function map<A, B>(fn: (a: A) => B): (s: SetOf<A>) => SetOf<B> {
 
   return (a: SetOf<A>) => {
 >(a: SetOf<A>) => {    const b: SetOf<B> = new SetOf();    a.forEach(x => b.add(fn(x)));    return b;  } : (a: SetOf<A>) => SetOf<B>
->                                                                                                        : ^^^^^^^^^ ^ ^^^^^^^^^^^^^
+>                                                                                                        : ^^^^        ^^^^^^^^^^^^^
 >a : SetOf<A>
 >  : ^^^^^^^^
 
@@ -580,9 +580,9 @@ function map<A, B>(fn: (a: A) => B): (s: SetOf<A>) => SetOf<B> {
 
 function filter<A>(predicate: (a: A) => boolean): (s: SetOf<A>) => SetOf<A> {
 >filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
->       : ^^^^^^^^^^^^^^^    ^            ^^^^^    ^^^^^ ^      ^^^^^ ^ 
+>       : ^ ^^^^^^^^^^^^^                 ^^^^^                         
 >predicate : (a: A) => boolean
->          : ^^^^^^^^^^       
+>          : ^^^^ ^^^^^       
 >a : A
 >  : ^
 >s : SetOf<A>
@@ -590,7 +590,7 @@ function filter<A>(predicate: (a: A) => boolean): (s: SetOf<A>) => SetOf<A> {
 
   return (a: SetOf<A>) => {
 >(a: SetOf<A>) => {    const result = new SetOf<A>();    a.forEach(x => {      if (predicate(x)) result.add(x);    });   return result;  } : (a: SetOf<A>) => SetOf<A>
->                                                                                                                                          : ^^^^^^^^^ ^ ^^^^^^^^^^^^^
+>                                                                                                                                          : ^^^^        ^^^^^^^^^^^^^
 >a : SetOf<A>
 >  : ^^^^^^^^
 
@@ -778,7 +778,7 @@ const t1 = testSet.transform(
 
 declare function identity<T>(x: T): T;
 >identity : <T>(x: T) => T
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 

@@ -18,7 +18,7 @@ declare module 'connect' {
 
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^             ^^^^^             
 >mod : connectModule
 >    : ^^^^^^^^^^^^^
 
@@ -32,7 +32,7 @@ declare module 'connect' {
 
     var server: {
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             ^^^^^^^^^             ^^^^^^^^^^^             ^^^
 
         (): connectExport;
 
@@ -42,7 +42,7 @@ declare module 'connect' {
 
         test2(): connectModule; // ERROR: Return type of method from exported interface has or is using private type ''connect'.connectModule'.
 >test2 : () => connectModule
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^             
 
     };
 }

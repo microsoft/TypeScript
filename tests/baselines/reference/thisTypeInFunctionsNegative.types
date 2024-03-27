@@ -49,7 +49,7 @@ class C {
     }
     explicitC(this: C, m: number): number {
 >explicitC : (this: C, m: number) => number
->          : ^^^^^^^^^^^^^      ^^^^^      
+>          : ^^^^^^^ ^^^^^      ^^^^^      
 >this : C
 >     : ^
 >m : number
@@ -140,7 +140,7 @@ class D {
 	}
 	explicitD(this: D, m: number): number {
 >explicitD : (this: D, m: number) => number
->          : ^^^^^^^^^^^^^      ^^^^^      
+>          : ^^^^^^^ ^^^^^      ^^^^^      
 >this : D
 >     : ^
 >m : number
@@ -186,7 +186,7 @@ interface I {
 
     explicitInterface(this: I): number;
 >explicitInterface : (this: I) => number
->                  : ^^^^^^^^^^^^^      
+>                  : ^^^^^^^ ^^^^^      
 >this : I
 >     : ^
 
@@ -650,7 +650,7 @@ let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
 
 let reconstructed: { 
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
->              : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^^      ^^^
+>              : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^^      ^^^
 
     n: number,
 >n : number
@@ -658,7 +658,7 @@ let reconstructed: {
 
     explicitThis(this: C, m: number): number, // note: this: this is not allowed in an object literal type.
 >explicitThis : (this: C, m: number) => number
->             : ^^^^^^^^^^^^^      ^^^^^      
+>             : ^^^^^^^ ^^^^^      ^^^^^      
 >this : C
 >     : ^
 >m : number
@@ -666,7 +666,7 @@ let reconstructed: {
 
     explicitC(this: C, m: number): number,
 >explicitC : (this: C, m: number) => number
->          : ^^^^^^^^^^^^^      ^^^^^      
+>          : ^^^^^^^ ^^^^^      ^^^^^      
 >this : C
 >     : ^
 >m : number
@@ -764,7 +764,7 @@ let explicitXProperty: (this: { x: number }, m: number) => number;
 // from differing object types
 c.explicitC = function(this: D, m: number) { return this.x + m };
 >c.explicitC = function(this: D, m: number) { return this.x + m } : (this: D, m: number) => number
->                                                                 : ^^^^^^^^^^^^^      ^^^^^^^^^^^
+>                                                                 : ^^^^^^^ ^^^^^      ^^^^^^^^^^^
 >c.explicitC : (this: C, m: number) => number
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
@@ -772,7 +772,7 @@ c.explicitC = function(this: D, m: number) { return this.x + m };
 >explicitC : (this: C, m: number) => number
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function(this: D, m: number) { return this.x + m } : (this: D, m: number) => number
->                                                   : ^^^^^^^^^^^^^      ^^^^^^^^^^^
+>                                                   : ^^^^^^^ ^^^^^      ^^^^^^^^^^^
 >this : D
 >     : ^
 >m : number
@@ -952,7 +952,7 @@ class Base1 {
 
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
->         : ^^^^^^^^^^^^^^^^^      
+>         : ^^^^^^^     ^^^^^      
 >this : Base1
 >     : ^^^^^
 >this.x : number
@@ -964,7 +964,7 @@ class Base1 {
 
     static explicitStatic(this: typeof Base1): number { return this.x; }
 >explicitStatic : (this: typeof Base1) => number
->               : ^^^^^^^       ^^^^^^^^^^      
+>               : ^^^^^^^            ^^^^^      
 >this : typeof Base1
 >     : ^^^^^^^^^^^^
 >Base1 : typeof Base1
@@ -1008,7 +1008,7 @@ class Base2 {
 
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
->         : ^^^^^^^^^^^^^^^^^      
+>         : ^^^^^^^     ^^^^^      
 >this : Base1
 >     : ^^^^^
 >this.x : number
@@ -1153,7 +1153,7 @@ var thisConstructorType: new (this: number) => number;
 
 function notFirst(a: number, this: C): number { return this.n; }
 >notFirst : (a: number, this: C) => number
->         : ^^^^      ^^^^^^^^^^^^^^      
+>         : ^^^^      ^^^^^^^^ ^^^^^      
 >a : number
 >  : ^^^^^^
 >this : C
@@ -1168,7 +1168,7 @@ function notFirst(a: number, this: C): number { return this.n; }
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
 >modifiers : (this: C) => number
->          : ^^^^^^^^^^^^^      
+>          : ^^^^^^^ ^^^^^      
 >this : C
 >     : ^
 >this.n : number
@@ -1180,7 +1180,7 @@ function modifiers(async this: C): number { return this.n; }
 
 function restParam(...this: C): number { return this.n; }
 >restParam : (...: any[], this: C) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>          : ^^^^^^^^^^^^^^^^^^^ ^^^^^      
 > : any[]
 > : ^^^^^
 >this : C
@@ -1194,7 +1194,7 @@ function restParam(...this: C): number { return this.n; }
 
 function optional(this?: C): number { return this.n; }
 >optional : (this: any, ?: C) => number
->         : ^^^^^^^^^^^^^^^^^^^^^      
+>         : ^^^^^^^^^^^^^^^ ^^^^^      
 >this : any
 >     : ^^^
 > : C
@@ -1208,7 +1208,7 @@ function optional(this?: C): number { return this.n; }
 
 function decorated(@deco() this: C): number { return this.n; }
 >decorated : (this: C) => number
->          : ^^^^^^^^^^^^^      
+>          : ^^^^^^^ ^^^^^      
 >deco() : any
 >       : ^^^
 >deco : any
@@ -1224,7 +1224,7 @@ function decorated(@deco() this: C): number { return this.n; }
 
 function initializer(this: C = new C()): number { return this.n; }
 >initializer : (this: C, : any, C: any) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >this : C
 >     : ^
 > : any

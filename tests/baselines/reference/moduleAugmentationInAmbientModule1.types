@@ -61,7 +61,7 @@ declare module "Map" {
         interface Observable {
             foo(): Cls;
 >foo : () => Cls
->    : ^^^^^^^^^
+>    : ^^^^^^   
         }
     }
 }

@@ -3,7 +3,7 @@
 === generatorExplicitReturnType.ts ===
 function* g1(): Generator<number, boolean, string> {
 >g1 : () => Generator<number, boolean, string>
->   : ^^^^^^^^^^^^^^^                         
+>   : ^^^^^^                                  
 
     yield; // error
 >yield : string
@@ -30,7 +30,7 @@ function* g1(): Generator<number, boolean, string> {
 
 function* g2(): Generator<number, boolean, string> {
 >g2 : () => Generator<number, boolean, string>
->   : ^^^^^^^^^^^^^^^                         
+>   : ^^^^^^                                  
 
     const x = yield 1;
 >x : string
@@ -51,7 +51,7 @@ declare const generator: Generator<number, symbol, string>;
 
 function* g3(): Generator<number, boolean, string> {
 >g3 : () => Generator<number, boolean, string>
->   : ^^^^^^^^^^^^^^^                         
+>   : ^^^^^^                                  
 
     const x: number = yield* generator; // error
 >x : number
@@ -68,7 +68,7 @@ function* g3(): Generator<number, boolean, string> {
 
 function* g4(): Generator<number, boolean, string> {
 >g4 : () => Generator<number, boolean, string>
->   : ^^^^^^^^^^^^^^^                         
+>   : ^^^^^^                                  
 
     const x = yield* generator;
 >x : symbol

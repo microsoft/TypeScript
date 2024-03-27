@@ -18,7 +18,7 @@ interface Item {
 
 declare function foo(item: Item): string;
 >foo : { (item: Item): string; (item: any): number; }
->    : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^    ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Item
 >     : ^^^^
 
@@ -110,9 +110,9 @@ var w: number;
 
 declare function bar<T>(param: { x?: T }): T;
 >bar : <T>(param: { x?: T; }) => T
->    : ^^^^^^^^^^^      ^   ^^^^^^
+>    : ^ ^^^^^^^^^          ^^^^^ 
 >param : { x?: T; }
->      : ^^^^^^^^^^
+>      : ^^^^^^ ^^^
 >x : T
 >  : ^
 

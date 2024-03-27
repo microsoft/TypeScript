@@ -565,7 +565,7 @@ let q5 = <const> { x: 10, y: 20 };
 
 declare function id<T>(x: T): T;
 >id : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -670,7 +670,7 @@ function ff1(x: 'foo' | 'bar', y: 1 | 2) {
 
 function ff2<T extends string, U extends string>(x: T, y: U) {
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -884,7 +884,7 @@ function ff5(verify: boolean, contentMatches: boolean) {
 
 function accessorNames<S extends string>(propName: S) {
 >accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >propName : S
 >         : ^
 

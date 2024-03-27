@@ -265,7 +265,7 @@ class Foo {
 // Test for GH-35557 where ids were not assigned for a symbol.
 function A(stats: StatsBase<any>) {
 >A : (stats: StatsBase<any>) => void
->  : ^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>  : ^^^^^^^^              ^^^^^^^^^
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 
@@ -299,7 +299,7 @@ function A(stats: StatsBase<any>) {
 
 function B(a: Nested, b: Nested) {
 >B : (a: Nested, b: Nested) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^      ^^^^^      ^^^^^^^^^
 >a : Nested
 >  : ^^^^^^
 >b : Nested

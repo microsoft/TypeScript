@@ -7,9 +7,9 @@ declare class P<R> {
 
     constructor(callback: (resolve: (value: R) => void) => void);
 >callback : (resolve: (value: R) => void) => void
->         : ^^^^^^^^^^        ^         ^^^^^    
+>         : ^^^^^^^^^^                  ^^^^^    
 >resolve : (value: R) => void
->        : ^^^^^^^^^^^^^^    
+>        : ^^^^^^^^ ^^^^^    
 >value : R
 >      : ^
 }

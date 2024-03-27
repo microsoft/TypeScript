@@ -4,9 +4,9 @@
 interface IPromise<T> {
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 >then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
->     : ^^^^^^^^^^^^^^^^^^               ^        ^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^     
+>     : ^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^                    ^^^^^             
 >successCallback : (promiseValue: T) => any
->                : ^^^^^^^^^^^^^^^^^^^^^   
+>                : ^^^^^^^^^^^^^^^ ^^^^^   
 >promiseValue : T
 >             : ^
 >errorCallback : (reason: any) => any
@@ -36,9 +36,9 @@ function f() {
 
 function b(): IPromise<void> { return null; }
 >b : () => IPromise<void>
->  : ^^^^^^^^^^^^^^      
+>  : ^^^^^^              
 
 function d(): IPromise<any> { return null; }
 >d : () => IPromise<any>
->  : ^^^^^^^^^^^^^^     
+>  : ^^^^^^             
 

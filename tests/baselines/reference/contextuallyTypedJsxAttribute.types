@@ -27,7 +27,7 @@ type Props<C extends keyof Elements> = { as?: C } & Elements[C];
 
 declare function Test<C extends keyof Elements>(props: Props<C>): null;
 >Test : <C extends keyof Elements>(props: Props<C>) => null
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^    
 >props : Props<C>
 >      : ^^^^^^^^
 

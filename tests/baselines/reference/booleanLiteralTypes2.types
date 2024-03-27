@@ -402,7 +402,7 @@ type Item =
 
 function f20(x: Item) {
 >f20 : (x: Item) => string
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -438,7 +438,7 @@ function f20(x: Item) {
 
 function f21(x: Item) {
 >f21 : (x: Item) => string
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^
 >x : Item
 >  : ^^^^
 

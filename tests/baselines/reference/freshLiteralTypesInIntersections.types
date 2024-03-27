@@ -5,7 +5,7 @@
 
 declare function func<A extends string, B extends A>(a: A, b: B[]): (ab: A & B) => void;
 >func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^     ^   ^         
+>     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^   ^^^^^                   
 >a : A
 >  : ^
 >b : B[]

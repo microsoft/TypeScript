@@ -48,7 +48,7 @@ interface TestProps<T> {
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^            ^^^^^^^^^^^^^^^^
 >props : TestProps<T>
 >      : ^^^^^^^^^^^^
 ><></> : JSX.Element

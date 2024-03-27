@@ -47,7 +47,7 @@ const uniqueSymbol1 = Symbol.for("");
 
 function getUniqueSymbol0(): typeof uniqueSymbol0 {
 >getUniqueSymbol0 : () => typeof uniqueSymbol0
->                 : ^^^^^^       ^^^^^^^^^^^^^
+>                 : ^^^^^^                    
 >uniqueSymbol0 : unique symbol
 >              : ^^^^^^^^^^^^^
 
@@ -58,7 +58,7 @@ function getUniqueSymbol0(): typeof uniqueSymbol0 {
 
 function getUniqueSymbol1(): typeof uniqueSymbol1 {
 >getUniqueSymbol1 : () => typeof uniqueSymbol1
->                 : ^^^^^^       ^^^^^^^^^^^^^
+>                 : ^^^^^^                    
 >uniqueSymbol1 : unique symbol
 >              : ^^^^^^^^^^^^^
 

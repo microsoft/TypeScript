@@ -338,13 +338,13 @@ function f5() {
 
 declare function widening<T>(x: T): T;
 >widening : <T>(x: T) => T
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -445,7 +445,7 @@ type Result<T> = T | FAILURE;
 
 function doWork<T>(): Result<T> {
 >doWork : <T>() => Result<T>
->       : ^^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^^^         
 
   return FAILURE;
 >FAILURE : "FAILURE"
@@ -454,7 +454,7 @@ function doWork<T>(): Result<T> {
 
 function isSuccess<T>(result: Result<T>): result is T {
 >isSuccess : <T>(result: Result<T>) => result is T
->          : ^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^         ^^^^^^^^^^^^^^^^
 >result : Result<T>
 >       : ^^^^^^^^^
 
@@ -471,7 +471,7 @@ function isSuccess<T>(result: Result<T>): result is T {
 
 function isFailure<T>(result: Result<T>): result is FAILURE {
 >isFailure : <T>(result: Result<T>) => result is "FAILURE"
->          : ^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^
 >result : Result<T>
 >       : ^^^^^^^^^
 
@@ -532,7 +532,7 @@ type TestEvent = "onmouseover" | "onmouseout";
 
 function onMouseOver(): TestEvent { return "onmouseover"; }
 >onMouseOver : () => TestEvent
->            : ^^^^^^^^^^^^^^^
+>            : ^^^^^^         
 >"onmouseover" : "onmouseover"
 >              : ^^^^^^^^^^^^^
 
@@ -548,7 +548,7 @@ let x = onMouseOver();
 
 export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
 >Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^ ^                   
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^                           
 >keys : K[]
 >     : ^^^
 >true : true
@@ -595,7 +595,7 @@ export function Set<K extends string>(...keys: K[]): Record<K, true | undefined>
 
 export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^  
+>     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^            ^^^^^   
 >obj : Record<K, V>
 >    : ^^^^^^^^^^^^
 
@@ -680,7 +680,7 @@ const arr: Obj[] = langCodes.map(code => ({ code }))
 
 function test<T extends { a: string, b: string }>(obj: T): T {
 >test : <T extends { a: string; b: string; }>(obj: T) => T
->     : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^ ^^^^^ 
 >a : string
 >  : ^^^^^^
 >b : string
@@ -713,7 +713,7 @@ function test<T extends { a: string, b: string }>(obj: T): T {
 
 declare function f<T>(x: T): NonNullable<T>;
 >f : <T>(x: T) => NonNullable<T>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>  : ^ ^^^^^ ^^^^^              
 >x : T
 >  : ^
 

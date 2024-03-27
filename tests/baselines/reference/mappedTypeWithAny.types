@@ -105,7 +105,7 @@ type IndirectArrayish<U extends unknown[]> = Objectish<U>;
 
 function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
 >bar : (arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) => void
->    : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>    : ^^^^^^^^^^^             ^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^                     ^^^^^^^^^
 >arrayish : any[]
 >         : ^^^^^
 >objectish : Objectish<any>
@@ -144,7 +144,7 @@ function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayis
 
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
 >stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^          ^            
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                     
 >arr : T
 >    : ^
 
@@ -164,7 +164,7 @@ let abc: any[] = stringifyArray(void 0 as any);
 
 declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
 >stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^          ^            
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                     
 >arr : T
 >    : ^
 

@@ -57,7 +57,7 @@ var withparamsVar = withParams;
 
 function withMultiParams(a : number, b, c: Object) {
 >withMultiParams : (a: number, b: any, c: Object) => number
->                : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : any

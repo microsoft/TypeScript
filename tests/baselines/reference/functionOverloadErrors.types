@@ -36,7 +36,7 @@ function fn2b(n: number[]);
 
 function fn2b(n: Array<number>);
 >fn2b : { (n: number[]): any; (n: Array<number>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^
 >n : number[]
 >  : ^^^^^^^^
 
@@ -123,13 +123,13 @@ function fn8() { }
 //Function overloads that differ only by type parameter name when used in parameter type annotations
 function fn9<T>(n: T);
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : T
 >  : ^
 
 function fn9<S>(n: S);
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
 >n : S
 >  : ^
 
@@ -326,11 +326,11 @@ function fn14() {
 //Function overloads where return types are different infinitely recursive type reference
 function fn15<T extends List<List<any>>>(): T;
 >fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function fn15<T extends List<any>>(): T;
 >fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 
 function fn15() {
 >fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }

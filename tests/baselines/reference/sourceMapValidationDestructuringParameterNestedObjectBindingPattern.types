@@ -54,7 +54,7 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 
 function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 >foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >skills : any
 >       : ^^^
 >primary : any
@@ -80,7 +80,7 @@ function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 }
 function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) {
 >foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >name : any
 >     : ^^^
 >nameC : string
@@ -110,7 +110,7 @@ function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB 
 }
 function foo3({ skills }: Robot) {
 >foo3 : ({ skills }: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^     ^^^^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

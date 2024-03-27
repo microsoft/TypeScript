@@ -51,21 +51,21 @@ const f22: () => number = () => {
 
 async function f30(): Promise<undefined> {
 >f30 : () => Promise<undefined>
->    : ^^^^^^^^^^^^^           
+>    : ^^^^^^                  
 
     // Ok, return type allows implicit return of undefined
 }
 
 async function f31(): Promise<undefined | number> {
 >f31 : () => Promise<undefined | number>
->    : ^^^^^^^^^^^^^                    
+>    : ^^^^^^                           
 
     // Error, return type isn't just undefined
 }
 
 async function f32(): Promise<number> {
 >f32 : () => Promise<number>
->    : ^^^^^^^^^^^^^        
+>    : ^^^^^^               
 
     // Error, return type doesn't include undefined
 }

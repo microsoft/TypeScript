@@ -16,7 +16,7 @@ class C<T, U> {
 
 function getClass<T>(c: T) {
 >getClass : <T>(c: T) => typeof C
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^ ^^^^^^^^^^^^^
 >c : T
 >  : ^
 

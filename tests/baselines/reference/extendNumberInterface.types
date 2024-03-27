@@ -8,7 +8,7 @@ interface Number {
 
     doOtherStuff<T>(x:T): T;
 >doOtherStuff : <T>(x: T) => T
->             : ^^^^^^^^^^^^^^
+>             : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 }

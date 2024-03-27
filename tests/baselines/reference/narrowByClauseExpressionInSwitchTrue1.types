@@ -21,9 +21,9 @@ type AorB = A | B;
 
 const isA = (x: AorB): x is A => x.type === "A";
 >isA : (x: AorB) => x is A
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^
 >(x: AorB): x is A => x.type === "A" : (x: AorB) => x is A
->                                    : ^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^    ^^^^^^^^^^^
 >x : AorB
 >  : ^^^^
 >x.type === "A" : boolean
@@ -39,9 +39,9 @@ const isA = (x: AorB): x is A => x.type === "A";
 
 const isB = (x: AorB): x is B => x.type === "B";
 >isB : (x: AorB) => x is B
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^
 >(x: AorB): x is B => x.type === "B" : (x: AorB) => x is B
->                                    : ^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^    ^^^^^^^^^^^
 >x : AorB
 >  : ^^^^
 >x.type === "B" : boolean
@@ -57,7 +57,7 @@ const isB = (x: AorB): x is B => x.type === "B";
 
 function test1(x: AorB) {
 >test1 : (x: AorB) => void
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^^^^^^^^
 >x : AorB
 >  : ^^^^
 
@@ -96,7 +96,7 @@ function test1(x: AorB) {
 
 function test2(x: AorB) {
 >test2 : (x: AorB) => void
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^^^^^^^^
 >x : AorB
 >  : ^^^^
 
@@ -176,7 +176,7 @@ declare function isSomeType(x: unknown): x is SomeType;
 
 function processInput(input: string | RegExp | SomeType) {
 >processInput : (input: string | RegExp | SomeType) => void
->             : ^^^^^^^^         ^^^^^^   ^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^                          ^^^^^^^^^
 >input : string | RegExp | SomeType
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

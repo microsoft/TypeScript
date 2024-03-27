@@ -64,7 +64,7 @@ class FooArrayIterator {
 
 function fun([[a], b]: Bar[][]) { }
 >fun : ([[a], b]: Bar[][]) => void
->    : ^^^^^^^^^^^^^^    ^^^^^^^^^
+>    : ^^^^^^^^^^^       ^^^^^^^^^
 >a : Bar
 >  : ^^^
 >b : Bar[]

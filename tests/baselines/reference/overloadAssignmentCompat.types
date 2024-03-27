@@ -14,7 +14,7 @@ function attr(name: string): string;
 
 function attr(name: string, value: string): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >value : string
@@ -22,7 +22,7 @@ function attr(name: string, value: string): Accessor;
 
 function attr(map: any): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^        ^^^
 >map : any
 >    : ^^^
 
@@ -72,7 +72,7 @@ function attr2(name: string): string;
 
 function attr2(name: string, value: string): Accessor;
 >attr2 : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >value : string
@@ -80,7 +80,7 @@ function attr2(name: string, value: string): Accessor;
 
 function attr2(map: any): Accessor;
 >attr2 : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^        ^^^
 >map : any
 >    : ^^^
 

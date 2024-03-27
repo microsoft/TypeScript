@@ -17,7 +17,7 @@ interface I {
 
 declare function f(i: I): void;
 >f : (i: I) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >i : I
 >  : ^
 

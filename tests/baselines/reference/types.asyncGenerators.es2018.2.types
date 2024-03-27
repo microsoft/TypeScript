@@ -47,7 +47,7 @@ async function * inferReturnType3() {
 }
 const assignability1: () => AsyncIterableIterator<number> = async function * () {
 >assignability1 : () => AsyncIterableIterator<number>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                             
 >async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -60,7 +60,7 @@ const assignability1: () => AsyncIterableIterator<number> = async function * () 
 };
 const assignability2: () => AsyncIterableIterator<number> = async function * () {
 >assignability2 : () => AsyncIterableIterator<number>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                             
 >async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, undefined>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -77,7 +77,7 @@ const assignability2: () => AsyncIterableIterator<number> = async function * () 
 };
 const assignability3: () => AsyncIterableIterator<number> = async function * () {
 >assignability3 : () => AsyncIterableIterator<number>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                             
 >async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, undefined>
 >                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -98,7 +98,7 @@ const assignability3: () => AsyncIterableIterator<number> = async function * () 
 };
 const assignability4: () => AsyncIterable<number> = async function * () {
 >assignability4 : () => AsyncIterable<number>
->               : ^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                     
 >async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -111,7 +111,7 @@ const assignability4: () => AsyncIterable<number> = async function * () {
 };
 const assignability5: () => AsyncIterable<number> = async function * () {
 >assignability5 : () => AsyncIterable<number>
->               : ^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                     
 >async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, undefined>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -128,7 +128,7 @@ const assignability5: () => AsyncIterable<number> = async function * () {
 };
 const assignability6: () => AsyncIterable<number> = async function * () {
 >assignability6 : () => AsyncIterable<number>
->               : ^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                     
 >async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, undefined>
 >                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -149,7 +149,7 @@ const assignability6: () => AsyncIterable<number> = async function * () {
 };
 const assignability7: () => AsyncIterator<number> = async function * () {
 >assignability7 : () => AsyncIterator<number>
->               : ^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                     
 >async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -162,7 +162,7 @@ const assignability7: () => AsyncIterator<number> = async function * () {
 };
 const assignability8: () => AsyncIterator<number> = async function * () {
 >assignability8 : () => AsyncIterator<number>
->               : ^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                     
 >async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, undefined>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -179,7 +179,7 @@ const assignability8: () => AsyncIterator<number> = async function * () {
 };
 const assignability9: () => AsyncIterator<number> = async function * () {
 >assignability9 : () => AsyncIterator<number>
->               : ^^^^^^^^^^^^^^^^^^^        
+>               : ^^^^^^                     
 >async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, undefined>
 >                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -200,7 +200,7 @@ const assignability9: () => AsyncIterator<number> = async function * () {
 };
 async function * explicitReturnType1(): AsyncIterableIterator<number> {
 >explicitReturnType1 : () => AsyncIterableIterator<number>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                             
 
     yield "a";
 >yield "a" : undefined
@@ -210,7 +210,7 @@ async function * explicitReturnType1(): AsyncIterableIterator<number> {
 }
 async function * explicitReturnType2(): AsyncIterableIterator<number> {
 >explicitReturnType2 : () => AsyncIterableIterator<number>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                             
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -224,7 +224,7 @@ async function * explicitReturnType2(): AsyncIterableIterator<number> {
 }
 async function * explicitReturnType3(): AsyncIterableIterator<number> {
 >explicitReturnType3 : () => AsyncIterableIterator<number>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                             
 
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
@@ -242,7 +242,7 @@ async function * explicitReturnType3(): AsyncIterableIterator<number> {
 }
 async function * explicitReturnType4(): AsyncIterable<number> {
 >explicitReturnType4 : () => AsyncIterable<number>
->                    : ^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                     
 
     yield "a";
 >yield "a" : undefined
@@ -252,7 +252,7 @@ async function * explicitReturnType4(): AsyncIterable<number> {
 }
 async function * explicitReturnType5(): AsyncIterable<number> {
 >explicitReturnType5 : () => AsyncIterable<number>
->                    : ^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                     
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -266,7 +266,7 @@ async function * explicitReturnType5(): AsyncIterable<number> {
 }
 async function * explicitReturnType6(): AsyncIterable<number> {
 >explicitReturnType6 : () => AsyncIterable<number>
->                    : ^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                     
 
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
@@ -284,7 +284,7 @@ async function * explicitReturnType6(): AsyncIterable<number> {
 }
 async function * explicitReturnType7(): AsyncIterator<number> {
 >explicitReturnType7 : () => AsyncIterator<number>
->                    : ^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                     
 
     yield "a";
 >yield "a" : undefined
@@ -294,7 +294,7 @@ async function * explicitReturnType7(): AsyncIterator<number> {
 }
 async function * explicitReturnType8(): AsyncIterator<number> {
 >explicitReturnType8 : () => AsyncIterator<number>
->                    : ^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                     
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -308,7 +308,7 @@ async function * explicitReturnType8(): AsyncIterator<number> {
 }
 async function * explicitReturnType9(): AsyncIterator<number> {
 >explicitReturnType9 : () => AsyncIterator<number>
->                    : ^^^^^^^^^^^^^^^^^^^        
+>                    : ^^^^^^                     
 
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
@@ -326,7 +326,7 @@ async function * explicitReturnType9(): AsyncIterator<number> {
 }
 async function * explicitReturnType10(): IterableIterator<number> {
 >explicitReturnType10 : () => IterableIterator<number>
->                     : ^^^^^^^^^^^^^^^^^^^^^^        
+>                     : ^^^^^^                        
 
     yield 1;
 >yield 1 : undefined
@@ -336,7 +336,7 @@ async function * explicitReturnType10(): IterableIterator<number> {
 }
 async function * explicitReturnType11(): Iterable<number> {
 >explicitReturnType11 : () => Iterable<number>
->                     : ^^^^^^^^^^^^^^        
+>                     : ^^^^^^                
 
     yield 1;
 >yield 1 : any
@@ -346,7 +346,7 @@ async function * explicitReturnType11(): Iterable<number> {
 }
 async function * explicitReturnType12(): Iterator<number> {
 >explicitReturnType12 : () => Iterator<number>
->                     : ^^^^^^^^^^^^^^        
+>                     : ^^^^^^                
 
     yield 1;
 >yield 1 : undefined

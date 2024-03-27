@@ -11,7 +11,7 @@ module M {
 
    function f(p: I) { return f };
 >f : (p: I) => typeof f
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^^^^^
 >p : I
 >  : ^
 >f : (p: I) => typeof f

@@ -11,7 +11,7 @@ interface Named {
 
 function parrot<T extends Named>(obj: T): T {
 >parrot : <T extends Named>(obj: T) => T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >obj : T
 >    : ^
 

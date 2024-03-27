@@ -21,7 +21,7 @@ interface MyProps {
 
 function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {
 >MyComp4 : (props: MyProps, context: any, bad: any, verybad: any) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^
 >props : MyProps
 >      : ^^^^^^^
 >context : any
@@ -41,7 +41,7 @@ function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {
 }
 function MyComp3(props: MyProps, context: any, bad: any) {
 >MyComp3 : (props: MyProps, context: any, bad: any) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^^^
 >props : MyProps
 >      : ^^^^^^^
 >context : any
@@ -59,7 +59,7 @@ function MyComp3(props: MyProps, context: any, bad: any) {
 }
 function MyComp2(props: MyProps, context: any) {
 >MyComp2 : (props: MyProps, context: any) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^
 >props : MyProps
 >      : ^^^^^^^
 >context : any
@@ -112,7 +112,7 @@ const c  = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react ru
 
 declare function MyTagWithOptionalNonJSXBits(props: MyProps, context: any, nonReactArg?: string): JSX.Element;
 >MyTagWithOptionalNonJSXBits : (props: MyProps, context: any, nonReactArg?: string) => JSX.Element
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^^^^^
+>                            : ^^^^^^^^       ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^      ^^^^^           
 >props : MyProps
 >      : ^^^^^^^
 >context : any

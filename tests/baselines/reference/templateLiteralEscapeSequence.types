@@ -3,7 +3,7 @@
 === templateLiteralEscapeSequence.ts ===
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
 >tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      
+>    : ^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^     ^^^^^      
 >template : TemplateStringsArray
 >         : ^^^^^^^^^^^^^^^^^^^^
 >substitutions : any[]

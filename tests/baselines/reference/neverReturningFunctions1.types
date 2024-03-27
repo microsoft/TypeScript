@@ -742,7 +742,7 @@ export interface Component<T extends object = any> {
 
 	init(data?: T): void;
 >init : (data?: T) => void
->     : ^^^^^^^^^^^^^^    
+>     : ^^^^^^^^ ^^^^^    
 >data : T | undefined
 >     : ^^^^^^^^^^^^^
 
@@ -768,7 +768,7 @@ export interface Component<T extends object = any> {
 
 	update(oldData: T): void;
 >update : (oldData: T) => void
->       : ^^^^^^^^^^^^^^^^    
+>       : ^^^^^^^^^^ ^^^^^    
 >oldData : T
 >        : ^
 
@@ -821,7 +821,7 @@ export interface ComponentConstructor<T extends object> {
 
 declare function registerComponent<T extends object>(
 >registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                      ^^^^^                       
 
     name: string,
 >name : string
@@ -1065,7 +1065,7 @@ interface Services {
 
 function foo(services: Readonly<Services>, s: string | null): string {
 >foo : (services: Readonly<Services>, s: string | null) => string
->    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^             ^^^^^      
+>    : ^^^^^^^^^^^                  ^^^^^             ^^^^^      
 >services : Readonly<Services>
 >         : ^^^^^^^^^^^^^^^^^^
 >s : string | null

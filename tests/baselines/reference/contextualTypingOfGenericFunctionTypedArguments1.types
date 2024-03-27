@@ -8,13 +8,13 @@ interface Collection<T> {
 
     add(x: T): void;
 >add : (x: T) => void
->    : ^^^^^^^^^^    
+>    : ^^^^ ^^^^^    
 >x : T
 >  : ^
 
     remove(x: T): boolean;
 >remove : (x: T) => boolean
->       : ^^^^^^^^^^       
+>       : ^^^^ ^^^^^       
 >x : T
 >  : ^
 }
@@ -22,11 +22,11 @@ interface Collection<T> {
 interface Combinators {
     forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->        : ^^^^^^^^^^^^^^^^^ ^ ^^^^^    ^     ^^^^^^^^^    
+>        : ^ ^^^^^             ^^^^^              ^^^^^    
 >c : Collection<T>
 >  : ^^^^^^^^^^^^^
 >f : (x: T) => Date
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^    
 >x : T
 >  : ^
 }

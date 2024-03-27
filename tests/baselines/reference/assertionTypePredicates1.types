@@ -37,7 +37,7 @@ declare function assertIsArrayOfStrings(value: unknown): asserts value is string
 
 declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 
@@ -446,7 +446,7 @@ namespace Debug {
 
     export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -824,7 +824,7 @@ class Derived extends Test {
 
 function f11(items: Test[]) {
 >f11 : (items: Test[]) => void
->    : ^^^^^^^^^^^^  ^^^^^^^^^
+>    : ^^^^^^^^      ^^^^^^^^^
 >items : Test[]
 >      : ^^^^^^
 
@@ -1046,7 +1046,7 @@ interface GoodThing {
 
 function example1(things: Thing[]) {
 >example1 : (things: Thing[]) => void
->         : ^^^^^^^^^^^^^^  ^^^^^^^^^
+>         : ^^^^^^^^^       ^^^^^^^^^
 >things : Thing[]
 >       : ^^^^^^^
 

@@ -19,7 +19,7 @@ var x: { y; z; }             // error at "y,z"
 
 var x1: { y1: C; z1; };      // error at "z1" 
 >x1 : { y1: C; z1: any; }
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^ ^^^^^^^^^^^^
 >y1 : C
 >   : ^
 >z1 : any
@@ -54,7 +54,7 @@ var bar: { a: number; b: number };
 
 var foo: { littleC: C; c: string };
 >foo : { littleC: C; c: string; }
->    : ^^^^^^^^^^^^^^^^^      ^^^
+>    : ^^^^^^^^^^^ ^^^^^      ^^^
 >littleC : C
 >        : ^
 >c : string

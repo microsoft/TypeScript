@@ -19,11 +19,11 @@ type Z<A, B> = X<A> | Y<B>;
 
 declare function f1<A>(): Z<A, number>;
 >f1 : <A>() => Z<A, number>
->   : ^^^^^^^^^^ ^         
+>   : ^ ^^^^^^^            
 
 declare function f2<A, B, C, D, E>(a: A, b: B, c: C, d: D): Z<A, string[]>;
 >f2 : <A, B, C, D, E>(a: A, b: B, c: C, d: D) => Z<A, string[]>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^           
+>   : ^ ^^ ^^ ^^ ^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^              
 >a : A
 >  : ^
 >b : B

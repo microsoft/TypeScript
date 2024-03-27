@@ -59,7 +59,7 @@ new AA;
 
 function constructB(Factory : typeof B) {
 >constructB : (Factory: typeof B) => void
->           : ^^^^^^^^^^       ^^^^^^^^^^
+>           : ^^^^^^^^^^        ^^^^^^^^^
 >Factory : typeof B
 >        : ^^^^^^^^
 >B : typeof B

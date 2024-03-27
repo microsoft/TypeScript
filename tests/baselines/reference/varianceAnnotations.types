@@ -40,7 +40,7 @@ type Contravariant<in T> = {
 
     f: (x: T) => void;
 >f : (x: T) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : T
 >  : ^
 }
@@ -75,7 +75,7 @@ type Invariant<in out T> = {
 
     f: (x: T) => T;
 >f : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -143,7 +143,7 @@ type Contravariant2<out T> = {  // Error
 
     f: (x: T) => void;
 >f : (x: T) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : T
 >  : ^
 }
@@ -154,7 +154,7 @@ type Invariant1<in T> = {  // Error
 
     f: (x: T) => T;
 >f : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -165,7 +165,7 @@ type Invariant2<out T> = {  // Error
 
     f: (x: T) => T;
 >f : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -276,13 +276,13 @@ type T23<out in T> = T;  // Error
 
 declare function f1<in T>(x: T): void;  // Error
 >f1 : <in T>(x: T) => void
->   : ^^^^^^^^^^^^^^^^    
+>   : ^^^^ ^^^^^ ^^^^^    
 >x : T
 >  : ^
 
 declare function f2<out T>(): T;  // Error
 >f2 : <out T>() => T
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^^^ 
 
 class C {
 >C : C
@@ -354,7 +354,7 @@ interface Child<A, B = unknown> extends Parent<A> {
 
 function fn<A>(inp: Child<A>) {
 >fn : <A>(inp: Child<A>) => void
->   : ^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>   : ^ ^^^^^^^        ^^^^^^^^^
 >inp : Child<A, unknown>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -422,14 +422,14 @@ interface ActionObject<TEvent extends { type: string }> {
 
     exec: (meta: StateNode<any, TEvent>) => void;
 >exec : (meta: StateNode<any, TEvent>) => void
->     : ^^^^^^^^^^^^^^^^      ^^^^^^ ^^^^^    
+>     : ^^^^^^^                      ^^^^^    
 >meta : StateNode<any, TEvent>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare function createMachine<TEvent extends { type: string }>(action: ActionObject<TEvent>): StateNode<any, any>;
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^          
+>              : ^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                    ^^^^^                   
 >type : string
 >     : ^^^^^^
 >action : ActionObject<TEvent>
@@ -437,7 +437,7 @@ declare function createMachine<TEvent extends { type: string }>(action: ActionOb
 
 declare function interpret<TContext>(machine: StateNode<TContext, any>): void;
 >interpret : <TContext>(machine: StateNode<TContext, any>) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^      ^^^^^    
+>          : ^        ^^^^^^^^^^^                        ^^^^^    
 >machine : StateNode<TContext, any>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -493,7 +493,7 @@ let Anon = class <out T> {
 
     foo(): InstanceType<(typeof Anon<T>)> {
 >foo : () => InstanceType<(typeof Anon<T>)>
->    : ^^^^^^^^^^^^^^^^^^         ^^^^ ^   
+>    : ^^^^^^                              
 >Anon : typeof Anon
 >     : ^^^^^^^^^^^
 

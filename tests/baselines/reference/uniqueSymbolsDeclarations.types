@@ -152,7 +152,7 @@ function funcReturnVarCall() { return varCall; }
 // function return value with type query
 function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall; }
 >funcReturnConstCallWithTypeQuery : () => typeof constCall
->                                 : ^^^^^^       ^^^^^^^^^
+>                                 : ^^^^^^                
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 >constCall : unique symbol
@@ -183,7 +183,7 @@ function* genFuncYieldVarCall() { yield varCall; }
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 >genFuncYieldConstCallWithTypeQuery : () => IterableIterator<typeof constCall>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^ 
+>                                   : ^^^^^^                                  
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 >yield constCall : undefined
@@ -669,13 +669,13 @@ declare const o: { [s]: "a", [N.s]: "b" };
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g(x: typeof s): void;
 >g : { (x: typeof s): void; (x: unique symbol): void; }
->  : ^^^^^^       ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^        ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -683,7 +683,7 @@ declare function g(x: typeof s): void;
 
 declare function g(x: typeof N.s): void;
 >g : { (x: unique symbol): void; (x: typeof N.s): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^  ^^^    ^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^    ^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >N.s : unique symbol
@@ -1259,31 +1259,31 @@ class C1 {
 interface Context {
     method1(): typeof s;
 >method1 : () => typeof s
->        : ^^^^^^       ^
+>        : ^^^^^^        
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     method2(): Promise<typeof s>;
 >method2 : () => Promise<typeof s>
->        : ^^^^^^^^^^^^^        ^ 
+>        : ^^^^^^                 
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     method3(): AsyncIterableIterator<typeof s>;
 >method3 : () => AsyncIterableIterator<typeof s>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^ 
+>        : ^^^^^^                               
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     method4(): IterableIterator<typeof s>;
 >method4 : () => IterableIterator<typeof s>
->        : ^^^^^^^^^^^^^^^^^^^^^^        ^ 
+>        : ^^^^^^                          
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     method5(p?: typeof s): typeof s;
 >method5 : (p?: typeof s) => typeof s
->        : ^^^^^       ^^^^^^       ^
+>        : ^^^^^        ^^^^^        
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol

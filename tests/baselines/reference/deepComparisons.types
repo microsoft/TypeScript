@@ -119,7 +119,7 @@ type F<T> = {} & (
 
 declare function f<T = any>(): F<T>;
 >f : <T = any>() => F<T>
->  : ^^^^^^^^^^^^^^^^ ^ 
+>  : ^ ^^^^^^^^^^^^^    
 
 function g() {
 >g : () => F<any>

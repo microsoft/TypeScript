@@ -42,14 +42,14 @@ module server {
     export interface connectExport {
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^             ^^^^^             
 >mod : connectModule
 >    : ^^^^^^^^^^^^^
     }
 }
 var server: {
 >server : { (): server.connectExport; foo: Date; }
->       : ^^^^^^^^^^^^              ^^^^^^^^^^^^^^
+>       : ^^^^^^                    ^^^^^^^    ^^^
 
     (): server.connectExport;
 >server : any

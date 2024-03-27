@@ -4,11 +4,11 @@
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 export function safeInvoke<A1, R>(
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->           : ^^^^^^^^^^^^^^        ^^     ^                    ^^^^^^^^^^^^^^^^            
+>           : ^  ^^ ^^^^^^^^                                    ^^^^^^^^  ^^^^^             
 
     func: ((arg1: A1) => R) | null | undefined,
 >func : ((arg1: A1) => R) | null | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^  ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >arg1 : A1
 >     : ^^
 
@@ -52,7 +52,7 @@ interface Props {
 
 function bad<P extends Props>(props: Readonly<P>) {
 >bad : <P extends Props>(props: Readonly<P>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 

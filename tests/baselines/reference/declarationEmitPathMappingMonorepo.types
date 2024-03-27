@@ -35,7 +35,7 @@ declare module "@ts-bug/a" {
     };
     export function a(text: string): AText;
 >a : (text: string) => AText
->  : ^^^^^^^      ^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^     
 >text : string
 >     : ^^^^^^
   }

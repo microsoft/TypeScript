@@ -36,7 +36,7 @@ import X from "x";
 
 export function a(x: X): void;
 >a : (x: X) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : X
 >  : ^
 

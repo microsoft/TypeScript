@@ -18,15 +18,15 @@ namespace JSX {
 }
 const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^        ^                ^     ^   ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^
 ><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->                                                                  : ^^^^^^^^^^^^^^^^^^        ^                ^     ^   ^^^^^^^^^^^^^^^^
+>                                                                  : ^ ^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^
 >p : { prop: T; children: (t: T) => T; }
->  : ^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^
+>  : ^^^^^^^^ ^^^^^^^^^^^^           ^^^
 >prop : T
 >     : ^
 >children : (t: T) => T
->         : ^^^^^^^^^^^
+>         : ^^^^ ^^^^^ 
 >t : T
 >  : ^
 ><div></div> : JSX.Element
@@ -130,15 +130,15 @@ interface LitProps<T> { prop: T, children: (x: this) => T }
 >prop : T
 >     : ^
 >children : (x: this) => T
->         : ^^^^    ^^^^^^
+>         : ^^^^    ^^^^^ 
 >x : this
 >  : ^^^^
 
 const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^
 ><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => JSX.Element
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^
+>                                                  : ^ ^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^
 >p : LitProps<T>
 >  : ^^^^^^^^^^^
 ><div></div> : JSX.Element

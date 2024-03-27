@@ -22,11 +22,11 @@ var genericObject = new GenericClass<{ greeting: string }>();
 
 function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
 >genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^          ^         ^^^^^^^^^
+>                : ^ ^^^^^^^^^^               ^^^^^^^^^^^^                    ^^^^^^^^^
 >object : GenericClass<T>
 >       : ^^^^^^^^^^^^^^^
 >callback : (payload: T) => void
->         : ^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^^ ^^^^^    
 >payload : T
 >        : ^
 

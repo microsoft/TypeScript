@@ -1098,7 +1098,7 @@ module TypeScript {
 
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
 >netFreeUses : (container: Symbol, freeUses: StringHashTable) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >container : Symbol
 >          : ^^^^^^
 >freeUses : StringHashTable
@@ -1537,7 +1537,7 @@ module TypeScript {
 
         public append(ast: AST) {
 >append : (ast: AST) => this
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^   ^^^^^^^^^
 >ast : AST
 >    : ^^^
 
@@ -1572,7 +1572,7 @@ module TypeScript {
 
         public appendAll(ast: AST) {
 >appendAll : (ast: AST) => this
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^   ^^^^^^^^^
 >ast : AST
 >    : ^^^
 
@@ -2065,7 +2065,7 @@ module TypeScript {
 
         public static fromToken(token: Token): Identifier {
 >fromToken : (token: Token) => Identifier
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^          
 >token : Token
 >      : ^^^^^
 
@@ -6593,7 +6593,7 @@ module TypeScript {
 
         public getAliasName(aliasAST?: AST = this.alias) : string {
 >getAliasName : (aliasAST?: AST) => string
->             : ^^^^^^^^^^^^^^^^^^^^      
+>             : ^^^^^^^^^^^^   ^^^^^      
 >aliasAST : AST
 >         : ^^^
 >this.alias : AST
@@ -7484,7 +7484,7 @@ module TypeScript {
 
         public addCloRef(id: Identifier, sym: Symbol): number {
 >addCloRef : (id: Identifier, sym: Symbol) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>          : ^^^^^          ^^^^^^^      ^^^^^      
 >id : Identifier
 >   : ^^^^^^^^^^
 >sym : Symbol
@@ -7626,7 +7626,7 @@ module TypeScript {
 
         public addJumpRef(sym: Symbol): void {
 >addJumpRef : (sym: Symbol) => void
->           : ^^^^^^^^^^^^^^^^^    
+>           : ^^^^^^      ^^^^^    
 >sym : Symbol
 >    : ^^^^^^
 
@@ -7763,9 +7763,9 @@ module TypeScript {
 
             var controlFlowPrefix = (ast: AST, parent: AST, walker: IAstWalker) => {
 >controlFlowPrefix : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(ast: AST, parent: AST, walker: IAstWalker) => {                ast.addToControlFlow(walker.state);                return ast;            } : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                            : ^^^^^^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -10527,7 +10527,7 @@ module TypeScript {
 
         public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
 >setResolvedTarget : (parser: Parser, stmt: Statement) => boolean
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^       
 >parser : Parser
 >       : ^^^^^^
 >stmt : Statement

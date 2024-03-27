@@ -76,7 +76,7 @@ declare module "Map" {
         interface Observable {
             foo(): Cls;
 >foo : () => Cls
->    : ^^^^^^^^^
+>    : ^^^^^^   
         }
     }
 }
@@ -98,7 +98,7 @@ declare module "Map" {
         interface Observable {
             foo2(): Cls2;
 >foo2 : () => Cls2
->     : ^^^^^^^^^^
+>     : ^^^^^^    
         }
     }
 }

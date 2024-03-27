@@ -15,7 +15,7 @@ namespace X {
 
 async function f(): X.MyPromise<void> {
 >f : () => X.MyPromise<void>
->  : ^^^^^^^                
+>  : ^^^^^^                 
 >X : any
 >  : ^^^
 }

@@ -26,7 +26,7 @@ class Foo {
 
     public static func(): Foo {
 >func : () => Foo
->     : ^^^^^^^^^
+>     : ^^^^^^   
 
         return new Foo();
 >new Foo() : Foo

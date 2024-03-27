@@ -79,7 +79,7 @@ type MappedPayload2 = {
 
     [K in Type]?: (data: (Payload & { dataType: K })["data"]) => void
 >data : (Payload & { dataType: K; })["data"]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
 >dataType : K
 >         : ^
 }

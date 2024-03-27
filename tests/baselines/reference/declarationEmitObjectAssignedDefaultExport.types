@@ -51,7 +51,7 @@ export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme,
 export interface StyledInterface {
     div: (a: TemplateStringsArray) => StyledComponent<"div">;
 >div : (a: TemplateStringsArray) => StyledComponent<"div">
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>    : ^^^^                    ^^^^^                      
 >a : TemplateStringsArray
 >  : ^^^^^^^^^^^^^^^^^^^^
 }

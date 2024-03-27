@@ -11,7 +11,7 @@ class C<T> {
 
     foo(x: T): T { return null; }
 >foo : (x: T) => T
->    : ^^^^^^^^^^^
+>    : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 }

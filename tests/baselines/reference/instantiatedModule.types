@@ -91,7 +91,7 @@ module M2 {
 
         static Origin(): Point {
 >Origin : () => Point
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }

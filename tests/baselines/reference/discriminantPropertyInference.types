@@ -43,7 +43,7 @@ type Props = DiscriminatorTrue | DiscriminatorFalse;
 
 declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
 >f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^   
+>  : ^^^^^^^^^^                                      ^^^^^   
 >options : DiscriminatorTrue | DiscriminatorFalse
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

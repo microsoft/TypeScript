@@ -28,7 +28,7 @@ type BoxFactoryFactory<TBox> = TBox extends Box<infer T> ? {
 interface BoxFactory<A> {
   getBox(): A,
 >getBox : () => A
->       : ^^^^^^^
+>       : ^^^^^^ 
 }
 
 declare const f: BoxFactoryFactory<BoxTypes>;

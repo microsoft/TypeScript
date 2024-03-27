@@ -7,11 +7,11 @@ class BaseClass<T> {
 
     public _getValue1: { (): T; };
 >_getValue1 : () => T
->           : ^^^^^^^
+>           : ^^^^^^ 
 
     public _getValue2: () => T;
 >_getValue2 : () => T
->           : ^^^^^^^
+>           : ^^^^^^ 
 }
 
 class SubClass extends BaseClass<number> {

@@ -15,7 +15,7 @@ declare module "foo" {
 
         method(): C;
 >method : () => C
->       : ^^^^^^^
+>       : ^^^^^^ 
     }
 
     export var after: C;

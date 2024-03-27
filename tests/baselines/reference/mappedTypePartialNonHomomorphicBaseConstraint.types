@@ -11,7 +11,7 @@ class Model<D> {
 
   getErrors(): Errors<D> {
 >getErrors : () => Errors<D>
->          : ^^^^^^^^^^^^ ^ 
+>          : ^^^^^^         
 
     return { base: ["some base error"] };
 >{ base: ["some base error"] } : { base: string[]; }

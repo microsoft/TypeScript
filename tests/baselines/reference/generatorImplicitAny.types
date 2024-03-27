@@ -12,7 +12,7 @@ declare function noop(): void;
 
 declare function f<T>(value: T): void;
 >f : <T>(value: T) => void
->  : ^^^^^^^^^^^^^^^^^    
+>  : ^ ^^^^^^^^^ ^^^^^    
 >value : T
 >      : ^
 

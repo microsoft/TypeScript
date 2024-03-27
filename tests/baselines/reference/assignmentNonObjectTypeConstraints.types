@@ -13,7 +13,7 @@ const enum E { A, B, C }
 
 function foo<T extends number>(x: T) {
 >foo : <T extends number>(x: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -56,7 +56,7 @@ class B { b }
 
 function bar<T extends A | B>(x: T) {
 >bar : <T extends A | B>(x: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 

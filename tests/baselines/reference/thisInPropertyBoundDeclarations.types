@@ -13,11 +13,11 @@ class Bug {
 >func : Function[]
 >     : ^^^^^^^^^^
 >[     (that: Bug, name: string) => {         that.foo(name);     }    ] : ((that: Bug, name: string) => void)[]
->                                                                        : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                                                        : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^
 
      (that: Bug, name: string) => {
 >(that: Bug, name: string) => {         that.foo(name);     } : (that: Bug, name: string) => void
->                                                             : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                             : ^^^^^^^   ^^^^^^^^      ^^^^^^^^^
 >that : Bug
 >     : ^^^
 >name : string

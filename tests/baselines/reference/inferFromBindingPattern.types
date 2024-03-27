@@ -3,15 +3,15 @@
 === inferFromBindingPattern.ts ===
 declare function f1<T extends string>(): T;
 >f1 : <T extends string>() => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^ 
 
 declare function f2<T extends string>(): [T];
 >f2 : <T extends string>() => [T]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^   
 
 declare function f3<T extends string>(): { x: T };
 >f3 : <T extends string>() => { x: T; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^     ^   
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^         
 >x : T
 >  : ^
 
@@ -45,7 +45,7 @@ let { x: x3 } = f3();  // string
 
 function foo<T = number>(): [T] {
 >foo : <T = number>() => [T]
->    : ^^^^^^^^^^^^^^^^^^ ^ 
+>    : ^ ^^^^^^^^^^^^^^^^   
 
 	return [42 as any]
 >[42 as any] : [any]
@@ -67,7 +67,7 @@ const [x] = foo();  // [number]
 interface SelectProps<T, K> {
   selector?: (obj: T) => K;
 >selector : ((obj: T) => K) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^
 >obj : T
 >    : ^
 }
@@ -88,7 +88,7 @@ interface Person {
 
 declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
 >selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^ ^^^^^^^^^^^^^^^^^ ^^^^^^  ^ 
+>           : ^ ^^^^^^^^^^^^^^^^^^^                      ^^^^^                       
 >props : SelectProps<Person, K> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -130,13 +130,13 @@ const [personAgain, nufinspecial] = john;
 
 declare function makeTuple<T1>(arg: T1): [T1];
 >makeTuple : <T1>(arg: T1) => [T1]
->          : ^^^^^^^^^^^^^^^^^ ^^ 
+>          : ^  ^^^^^^^  ^^^^^    
 >arg : T1
 >    : ^^
 
 declare function stringy<T = string>(arg?: T): T;
 >stringy : <T = string>(arg?: T) => T
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^ ^^^^^ 
 >arg : T | undefined
 >    : ^^^^^^^^^^^^^
 

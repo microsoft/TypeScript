@@ -65,7 +65,7 @@ x = f;
 
 function fn(c: Callable) { }
 >fn : (c: Callable) => void
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^        ^^^^^^^^^
 >c : Callable
 >  : ^^^^^^^^
 

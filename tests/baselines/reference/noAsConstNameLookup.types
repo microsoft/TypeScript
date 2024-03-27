@@ -27,7 +27,7 @@ export class FeatureRunner<W extends Store> {
 
     async runFeature(): Promise<any> {
 >runFeature : () => Promise<any>
->           : ^^^^^^^^^^^^^     
+>           : ^^^^^^            
 
         const objectWhichShouldBeConst = {
 >objectWhichShouldBeConst : { readonly flags: {}; readonly settings: {}; }
@@ -57,7 +57,7 @@ export class FeatureRunner<W extends Store> {
 
     async run(): Promise<any> {
 >run : () => Promise<any>
->    : ^^^^^^^^^^^^^     
+>    : ^^^^^^            
 
         const result = {}
 >result : {}

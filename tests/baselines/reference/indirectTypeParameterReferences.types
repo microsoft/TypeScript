@@ -11,9 +11,9 @@ type B = {b: string}
 
 const flowtypes = <A>(b: B) => {
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^         ^   ^         ^^^^^^^^^^^
+>          : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^^^
 ><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^         ^   ^         ^^^^^^^^^^^
+>                                                                                                                                                                                       : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^^^
 >b : B
 >  : ^
 
@@ -33,11 +33,11 @@ const flowtypes = <A>(b: B) => {
 
   const literal = (fn: (aPlusB: A & B) => void) => null
 >literal : (fn: (aPlusB: A & B) => void) => any
->        : ^^^^^         ^   ^         ^^^^^^^^
+>        : ^^^^^                       ^^^^^^^^
 >(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => any
->                                      : ^^^^^         ^   ^         ^^^^^^^^
+>                                      : ^^^^^                       ^^^^^^^^
 >fn : (aPlusB: A & B) => void
->   : ^^^^^^^^^^   ^^^^^^    
+>   : ^^^^^^^^^     ^^^^^    
 >aPlusB : A & B
 >       : ^^^^^
 
@@ -126,7 +126,7 @@ combined(comb => {
 
 declare function f<T>(a: T): { a: typeof a };
 >f : <T>(a: T) => { a: typeof a; }
->  : ^^^^^^^^^^^^^            ^   
+>  : ^ ^^^^^ ^^^^^                
 >a : T
 >  : ^
 >a : T

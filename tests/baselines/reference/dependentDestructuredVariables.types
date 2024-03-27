@@ -25,7 +25,7 @@ type Action =
 
 function f10({ kind, payload }: Action) {
 >f10 : ({ kind, payload }: Action) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >payload : string | number
@@ -71,7 +71,7 @@ function f10({ kind, payload }: Action) {
 
 function f11(action: Action) {
 >f11 : (action: Action) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^      ^^^^^^^^^
 >action : Action
 >       : ^^^^^^
 
@@ -123,7 +123,7 @@ function f11(action: Action) {
 
 function f12({ kind, payload }: Action) {
 >f12 : ({ kind, payload }: Action) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >payload : string | number
@@ -173,7 +173,7 @@ function f12({ kind, payload }: Action) {
 // repro #50206
 function f13<T extends Action>({ kind, payload }: T) {
 >f13 : <T extends Action>({ kind, payload }: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >payload : string | number
@@ -219,7 +219,7 @@ function f13<T extends Action>({ kind, payload }: T) {
 
 function f14<T extends Action>(t: T) {
 >f14 : <T extends Action>(t: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -287,7 +287,7 @@ type Action2 =
 
 function f20({ kind, payload }: Action2) {
 >f20 : ({ kind, payload }: Action2) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >payload : string | number | undefined
@@ -338,7 +338,7 @@ function f20({ kind, payload }: Action2) {
 
 function f21(action: Action2) {
 >f21 : (action: Action2) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^       ^^^^^^^^^
 >action : Action2
 >       : ^^^^^^^
 
@@ -395,7 +395,7 @@ function f21(action: Action2) {
 
 function f22(action: Action2) {
 >f22 : (action: Action2) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^       ^^^^^^^^^
 >action : Action2
 >       : ^^^^^^^
 
@@ -456,7 +456,7 @@ function f22(action: Action2) {
 
 function f23({ kind, payload }: Action2) {
 >f23 : ({ kind, payload }: Action2) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >payload : string | number | undefined
@@ -538,7 +538,7 @@ type Foo =
 
 function f30({ kind, isA }: Foo) {
 >f30 : ({ kind, isA }: Foo) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >kind : "A" | "B" | "C"
 >     : ^^^^^^^^^^^^^^^
 >isA : boolean
@@ -601,7 +601,7 @@ type Args = ['A', number] | ['B', string]
 
 function f40(...[kind, data]: Args) {
 >f40 : (...[kind, data]: Args) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >data : string | number
@@ -665,19 +665,19 @@ type AB<T> = A<T> | B<T>;
 
 declare function printValue<T>(t: T): void;
 >printValue : <T>(t: T) => void
->           : ^^^^^^^^^^^^^    
+>           : ^ ^^^^^ ^^^^^    
 >t : T
 >  : ^
 
 declare function printValueList<T>(t: Array<T>): void;
 >printValueList : <T>(t: Array<T>) => void
->               : ^^^^^^^^^^^^ ^ ^^^^^    
+>               : ^ ^^^^^        ^^^^^    
 >t : T[]
 >  : ^^^
 
 function unrefined1<T>(ab: AB<T>): void {
 >unrefined1 : <T>(ab: AB<T>) => void
->           : ^^^^^^^^^^ ^ ^^^^^    
+>           : ^ ^^^^^^     ^^^^^    
 >ab : AB<T>
 >   : ^^^^^
 
@@ -740,9 +740,9 @@ type Action3 =
 
 const reducerBroken = (state: number, { type, payload }: Action3) => {
 >reducerBroken : (state: number, { type, payload }: Action3) => number
->              : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
 >(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
->                                                                                                                                                                                                        : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                        : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
 >state : number
 >      : ^^^^^^
 >type : "add" | "remove"
@@ -823,9 +823,9 @@ if (!done) {
 
 declare function f50(cb: (...args: Args) => void): void
 >f50 : (cb: (...args: Args) => void) => void
->    : ^^^^^          ^^^^         ^^^^^    
+>    : ^^^^^                       ^^^^^    
 >cb : (...args: Args) => void
->   : ^^^^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^^^    ^^^^^    
 >args : Args
 >     : ^^^^
 
@@ -968,11 +968,11 @@ const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
 
 declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
 >readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
->         : ^^^^^^^      ^^^^^^^^^^^^                                               ^^^^^                           ^^^^^    
+>         : ^^^^^^^      ^^^^^^^^^^^^                                                                               ^^^^^    
 >path : string
 >     : ^^^^^^
 >callback : (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void
->         : ^^^^^^^^^^                                     ^^^^^                  ^^^^^    
+>         : ^^^^^^^^^^                                                            ^^^^^    
 >args : [err: null, data: unknown[]] | [err: Error, data: undefined]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1029,7 +1029,7 @@ type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: an
 
 const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >reducer : (...args: ReducerArgs) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>        : ^^^^^^^^^^           ^^^^^    
 >args : ReducerArgs
 >     : ^^^^^^^^^^^
 >(op, args) => {    switch (op) {        case "add":            console.log(args.a + args.b);            break;        case "concat":            console.log(args.firstArr.concat(args.secondArr));            break;    }} : (op: "add" | "concat", args: { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }) => void
@@ -1223,7 +1223,7 @@ type FooAsyncMethod = {
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
->       : ^^^^^^^^^^                                                                               ^^^^^^^^^^^^     
+>       : ^^^^^^^^^^                                                                               ^^^^^            
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 >     : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^
 
@@ -1286,7 +1286,7 @@ type FooGenMethod = {
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
->       : ^^^^^^^^^^                                                                               ^^^^^^^^^^^^^^               
+>       : ^^^^^^^^^^                                                                               ^^^^^                        
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 >     : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^
 
@@ -1349,7 +1349,7 @@ type FooAsyncGenMethod = {
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
->       : ^^^^^^^^^^                                                                               ^^^^^^^^^^^^^^^^^^^               
+>       : ^^^^^^^^^^                                                                               ^^^^^                             
 >args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 >     : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^
 
@@ -1722,11 +1722,11 @@ declare class Client {
 
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^ ^          ^^^^^    
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^                                  ^^^^^    
 >event : K
 >      : ^
 >listener : (...args: ClientEvents[K]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>         : ^^^^^^^^^^               ^^^^^    
 >args : ClientEvents[K]
 >     : ^^^^^^^^^^^^^^^
 }

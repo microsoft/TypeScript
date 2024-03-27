@@ -15,7 +15,7 @@ interface Elephant extends Animal { z }
 
 function f<T extends Animal>(x: T, y: T): T { return undefined; }
 >f : <T extends Animal>(x: T, y: T) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T

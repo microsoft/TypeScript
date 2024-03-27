@@ -47,7 +47,7 @@ import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-sty
 
 export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
 >styled : (tag: string) => (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>
->       : ^^^^^^      ^^^^^               ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^             
+>       : ^^^^^^      ^^^^^                                                                             
 >tag : string
 >    : ^^^^^^
 >o : object

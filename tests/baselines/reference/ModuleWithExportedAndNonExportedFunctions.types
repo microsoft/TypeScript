@@ -18,7 +18,7 @@ module A {
 
     export function fng<T, U>(s: T): U {
 >fng : <T, U>(s: T) => U
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^ ^^^^^ 
 >s : T
 >  : ^
 
@@ -38,7 +38,7 @@ module A {
 
     function fng2<T, U>(s: T): U {
 >fng2 : <T, U>(s: T) => U
->     : ^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^ ^^^^^ 
 >s : T
 >  : ^
 
@@ -65,7 +65,7 @@ var fn = A.fn;
 
 var fng: <T, U>(s: T) => U;
 >fng : <T, U>(s: T) => U
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^ ^^^^^ 
 >s : T
 >  : ^
 

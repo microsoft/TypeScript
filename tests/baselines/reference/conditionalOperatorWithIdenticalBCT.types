@@ -147,7 +147,7 @@ var resultIsX1: X = true ? x : a;
 
 var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >result4 : (t: A) => any
->        : ^^^^^^^^^^   
+>        : ^^^^ ^^^^^   
 >t : A
 >  : ^
 >true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
@@ -282,7 +282,7 @@ var resultIsX2: X = true ? x : a;
 
 var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >result8 : (t: A) => any
->        : ^^^^^^^^^^   
+>        : ^^^^ ^^^^^   
 >t : A
 >  : ^
 >true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
@@ -325,7 +325,7 @@ var resultIsX3: X = true ? a : b;
 
 var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result10 : (t: X) => any
->         : ^^^^^^^^^^   
+>         : ^^^^ ^^^^^   
 >t : X
 >  : ^
 >true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)

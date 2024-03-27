@@ -23,13 +23,13 @@ var xs2: typeof Array;
 
 var xs3: typeof Array<number>;
 >xs3 : typeof Array<number>
->    :        ^^^^^        
+>    :                     
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 
 var xs4: typeof Array<typeof x>;
 >xs4 : typeof Array<typeof x>
->    :        ^^^^^        ^ 
+>    :                       
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >x : number

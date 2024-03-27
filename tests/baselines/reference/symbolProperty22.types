@@ -4,7 +4,7 @@
 interface I<T, U> {
     [Symbol.unscopables](x: T): U;
 >[Symbol.unscopables] : (x: T) => U
->                     : ^^^^^^^^^^^
+>                     : ^^^^ ^^^^^ 
 >Symbol.unscopables : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -17,7 +17,7 @@ interface I<T, U> {
 
 declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
->    : ^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^
+>    : ^ ^^ ^^^^^^ ^^^^^^       ^^^^^ 
 >p1 : T
 >   : ^
 >p2 : I<T, U>

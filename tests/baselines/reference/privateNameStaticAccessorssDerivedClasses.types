@@ -13,7 +13,7 @@ class Base {
 
     static method(x: typeof Derived) {
 >method : (x: typeof Derived) => void
->       : ^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^^              ^^^^^^^^^
 >x : typeof Derived
 >  : ^^^^^^^^^^^^^^
 >Derived : typeof Derived
@@ -42,7 +42,7 @@ class Derived extends Base {
 
     static method(x: typeof Derived) {
 >method : (x: typeof Derived) => void
->       : ^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^^              ^^^^^^^^^
 >x : typeof Derived
 >  : ^^^^^^^^^^^^^^
 >Derived : typeof Derived

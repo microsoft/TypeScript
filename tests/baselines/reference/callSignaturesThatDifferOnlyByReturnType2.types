@@ -7,7 +7,7 @@
 interface I<T> {
     foo(x: number): T;
 >foo : (x: number) => T
->    : ^^^^      ^^^^^^
+>    : ^^^^      ^^^^^ 
 >x : number
 >  : ^^^^^^
 }

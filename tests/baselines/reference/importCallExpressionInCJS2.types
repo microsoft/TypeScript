@@ -17,7 +17,7 @@ export function backup() { return "backup"; }
 === 2.ts ===
 async function compute(promise: Promise<any>) {
 >compute : (promise: Promise<any>) => Promise<any>
->        : ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^
 >promise : Promise<any>
 >        : ^^^^^^^^^^^^
 

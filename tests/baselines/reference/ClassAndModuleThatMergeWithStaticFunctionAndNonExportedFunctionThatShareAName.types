@@ -13,7 +13,7 @@ class Point {
 
     static Origin(): Point { return { x: 0, y: 0 }; }
 >Origin : () => Point
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -54,7 +54,7 @@ module A {
 
         static Origin(): Point { return { x: 0, y: 0 }; }
 >Origin : () => Point
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

@@ -32,7 +32,7 @@ type BB = {
 
 function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
 >foo : (x: A | B | C, A: AA, B: BB, AB: AA | BB) => void
->    : ^^^^^   ^   ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>    : ^^^^         ^^^^^  ^^^^^  ^^^^^^       ^^^^^^^^^
 >x : A | B | C
 >  : ^^^^^^^^^
 >A : AA
@@ -215,7 +215,7 @@ class Car {
 
 function test(o: Person | Car) {
 >test : (o: Person | Car) => void
->     : ^^^^^^^^^^   ^^^^^^^^^^^^
+>     : ^^^^            ^^^^^^^^^
 >o : Person | Car
 >  : ^^^^^^^^^^^^
 

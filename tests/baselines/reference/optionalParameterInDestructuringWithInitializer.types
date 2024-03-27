@@ -350,7 +350,7 @@ interface Foo {
 
 function performFoo({ bar }: Foo = {}) {
 >performFoo : ({ bar }?: Foo) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^   ^^^^^^^^^
 >bar : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
@@ -379,7 +379,7 @@ performFoo();
 
 function performFoo2({ bar = null }: Foo = {}) {
 >performFoo2 : ({ bar }?: Foo) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^   ^^^^^^^^^
 >bar : number
 >    : ^^^^^^
 >{} : {}

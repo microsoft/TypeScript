@@ -15,11 +15,11 @@ interface ErrorResult { error: true }
 interface AsyncLoaderProps<TResult> {
     readonly prop1: () => Promise<TResult>;
 >prop1 : () => Promise<TResult>
->      : ^^^^^^^^^^^^^ ^^^^^^^ 
+>      : ^^^^^^                
 
     readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
 >prop2 : (result: Exclude<TResult, ErrorResult>) => any
->      : ^^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^^^^^^^ ^^^^^   
+>      : ^^^^^^^^^                             ^^^^^   
 >result : Exclude<TResult, ErrorResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -41,7 +41,7 @@ class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 
 async function load(): Promise<{ success: true } | ErrorResult> {
 >load : () => Promise<{ success: true; } | ErrorResult>
->     : ^^^^^^^^^^^^^                      ^^^^^^^^^^^ 
+>     : ^^^^^^                                         
 >success : true
 >        : ^^^^
 >true : true

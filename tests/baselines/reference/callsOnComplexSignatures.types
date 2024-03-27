@@ -584,7 +584,7 @@ function test5() {
     // Pair of non-like intrinsics
     function render(url?: string): React.ReactNode {
 >render : (url?: string) => React.ReactNode
->       : ^^^^^^^      ^^^^^^^^^^          
+>       : ^^^^^^^      ^^^^^               
 >url : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >React : any
@@ -614,9 +614,9 @@ function test5() {
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
 >App : (props: { component: React.ReactType; }) => JSX.Element
->    : ^^^^^^^^             ^^^^^             ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^                               ^^^^^^^^^^^^^^^^
 >props : { component: React.ReactType; }
->      : ^^^^^^^^^^^^^^^^^^          ^^^
+>      : ^^^^^^^^^^^^^               ^^^
 >component : React.ReactType<any>
 >          : ^^^^^^^^^^^^^^^^^^^^
 >React : any

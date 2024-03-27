@@ -17,9 +17,9 @@ declare module "bar" {
 
     export default function func(): typeof func;
 >func : () => typeof func
->     : ^^^^^^       ^^^^
+>     : ^^^^^^           
 >func : () => typeof func
->     : ^^^^^^       ^^^^
+>     : ^^^^^^           
 
     var after: typeof func;
 >after : () => typeof func

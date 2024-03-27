@@ -4,7 +4,7 @@
 interface Comparer<T> {
     compareTo<U>(x: T, y: U): U;
 >compareTo : <U>(x: T, y: U) => U
->          : ^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U

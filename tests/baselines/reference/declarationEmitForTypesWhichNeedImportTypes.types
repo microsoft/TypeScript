@@ -5,7 +5,7 @@ export interface Named {}
 
 export function createNamed(): Named {
 >createNamed : () => Named
->            : ^^^^^^^^^^^
+>            : ^^^^^^     
 
   return {};
 >{} : {}

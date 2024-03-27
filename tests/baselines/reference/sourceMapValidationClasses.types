@@ -45,7 +45,7 @@ module Foo.Bar {
 
     function foo(greeting: string): Greeter {
 >foo : (greeting: string) => Greeter
->    : ^^^^^^^^^^^      ^^^^^^^^^^^^
+>    : ^^^^^^^^^^^      ^^^^^       
 >greeting : string
 >         : ^^^^^^
 

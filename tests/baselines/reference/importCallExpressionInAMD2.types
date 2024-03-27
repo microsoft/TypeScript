@@ -16,7 +16,7 @@ export class B {
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x: Promise<any>) {
 >foo : (x: Promise<any>) => void
->    : ^^^^^^^^^^^     ^^^^^^^^^
+>    : ^^^^            ^^^^^^^^^
 >x : Promise<any>
 >  : ^^^^^^^^^^^^
 

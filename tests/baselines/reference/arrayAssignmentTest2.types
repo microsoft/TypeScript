@@ -17,7 +17,7 @@ class C1 implements I1 {
 
 	C1M1():C1[] {return null;}
 >C1M1 : () => C1[]
->     : ^^^^^^^^  
+>     : ^^^^^^    
  }
 class C2 extends C1 {
 >C2 : C2
@@ -27,7 +27,7 @@ class C2 extends C1 {
 
 	C2M1():C2[] { return null;}
 >C2M1 : () => C2[]
->     : ^^^^^^^^  
+>     : ^^^^^^    
 }
 
 class C3 {

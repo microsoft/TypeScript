@@ -22,7 +22,7 @@ type Deep<T> = { [K in keyof T]: Deep<T[K]> }
 
 declare function foo<T>(deep: Deep<T>): T;
 >foo : <T>(deep: Deep<T>) => T
->    : ^^^^^^^^^^^^^^ ^ ^^^^^^
+>    : ^ ^^^^^^^^       ^^^^^ 
 >deep : Deep<T>
 >     : ^^^^^^^
 

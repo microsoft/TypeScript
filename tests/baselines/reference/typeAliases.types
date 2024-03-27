@@ -164,7 +164,7 @@ var x13_2: T13
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
 >foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^   ^^^^^    
 >t1 : T1
 >   : ^^
 >t2 : I13
@@ -200,7 +200,7 @@ var x14: T14;
 
 declare function foo14_1(x: T14): void;
 >foo14_1 : (x: T14) => void
->        : ^^^^^^^^^^^^    
+>        : ^^^^   ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -212,7 +212,7 @@ declare function foo14_2(x: "click"): void;
 
 declare function foo14_2(x: T14): void;
 >foo14_2 : { (x: "click"): void; (x: T14): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^    ^^^
 >x : string
 >  : ^^^^^^
 
@@ -236,7 +236,7 @@ declare function f15(a: string): boolean;
 
 declare function f15(a: Meters): string;
 >f15 : { (a: string): boolean; (a: Meters): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 

@@ -29,7 +29,7 @@ class B<T> {
 
     foo(): T {
 >foo : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
         return this.x;
 >this.x : T

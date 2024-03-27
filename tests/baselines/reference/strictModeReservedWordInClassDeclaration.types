@@ -29,7 +29,7 @@ class Foo {
     }
     public banana(x: public) { }
 >banana : (x: public) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^^^^      ^^^^^^^^^
 >x : public
 >  : ^^^^^^
 }

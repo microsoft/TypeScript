@@ -11,7 +11,7 @@ interface ObservableArray<T> extends Observable<T[]>
 
     push(...values: T[]);
 >push : (...values: T[]) => any
->     : ^^^^^^^^^^^^^  ^^^^^^^^
+>     : ^^^^^^^^^^^^   ^^^^^^^^
 >values : T[]
 >       : ^^^
 
@@ -21,7 +21,7 @@ interface ObservableArray<T> extends Observable<T[]>
 
 function observableArray<T>(): ObservableArray<T> { return null;}
 >observableArray : <T>() => ObservableArray<T>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                : ^ ^^^^^^^                  
 
  
 

@@ -30,7 +30,7 @@ type Arg = {
 
 declare function foo(arg: Arg): void;
 >foo : (arg: Arg) => void
->    : ^^^^^^^^^^^^^^    
+>    : ^^^^^^   ^^^^^    
 >arg : Arg
 >    : ^^^
 

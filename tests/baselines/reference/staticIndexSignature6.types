@@ -19,7 +19,7 @@ function foo () {
 
         foo(v: T) { return v }
 >foo : (v: T) => T
->    : ^^^^^^^^^^^
+>    : ^^^^ ^^^^^^
 >v : T
 >  : ^
 >v : T

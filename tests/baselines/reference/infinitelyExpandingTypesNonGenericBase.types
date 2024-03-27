@@ -38,9 +38,9 @@ interface Options<T> extends OptionsBase<T> {
 
 function o(type: new () => Base) {
 >o : (type: new () => Base) => void
->  : ^^^^^^^          ^^^^^^^^^^^^^
+>  : ^^^^^^^              ^^^^^^^^^
 >type : new () => Base
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^    
 }
 
 o(A);

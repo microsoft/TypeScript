@@ -15,7 +15,7 @@ export class B {
 === 2.ts ===
 function foo(x: Promise<any>) {
 >foo : (x: Promise<any>) => void
->    : ^^^^^^^^^^^     ^^^^^^^^^
+>    : ^^^^            ^^^^^^^^^
 >x : Promise<any>
 >  : ^^^^^^^^^^^^
 

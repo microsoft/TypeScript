@@ -10,7 +10,7 @@ interface A {
 // This is invalid
 const A: {new(): A} = class {}
 >A : new () => A
->  : ^^^^^^^^^^^
+>  : ^^^^^^^^^^ 
 >class {} : typeof A
 >         : ^^^^^^^^
 

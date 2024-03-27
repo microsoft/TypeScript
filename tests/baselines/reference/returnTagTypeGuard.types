@@ -64,7 +64,7 @@ class Group {
 /** @param {Entry | Group} chunk */
 function f(chunk) {
 >f : (chunk: Entry | Group) => string | number
->  : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^
 >chunk : Entry | Group
 >      : ^^^^^^^^^^^^^
 

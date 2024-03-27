@@ -21,7 +21,7 @@ function MyClass() {
  */
 MyClass.prototype.optionalParam = function(required, notRequired) {
 >MyClass.prototype.optionalParam = function(required, notRequired) {    return this;} : (required: string, notRequired?: string) => MyClass
->                                                                                     : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                                                                     : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^       
 >MyClass.prototype.optionalParam : any
 >MyClass.prototype : any
 >                  : ^^^

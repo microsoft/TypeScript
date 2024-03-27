@@ -44,7 +44,7 @@ class LazySet {
      */
     addAll(iterable) {}
 >addAll : (iterable: LazySet) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^       ^^^^^^^^^
 >iterable : import("LazySet")
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 

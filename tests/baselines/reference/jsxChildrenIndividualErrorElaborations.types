@@ -22,7 +22,7 @@ interface Props {
 
 export function Blah(props: Props) {
 >Blah : (props: Props) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 
@@ -113,7 +113,7 @@ interface PropsArr {
 
 export function Blah2(props: PropsArr) {
 >Blah2 : (props: PropsArr) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^        ^^^^^^^^^^^^^^^^
 >props : PropsArr
 >      : ^^^^^^^^
 
@@ -200,7 +200,7 @@ interface PropsMixed {
 
 export function Blah3(props: PropsMixed) {
 >Blah3 : (props: PropsMixed) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^          ^^^^^^^^^^^^^^^^
 >props : PropsMixed
 >      : ^^^^^^^^^^
 

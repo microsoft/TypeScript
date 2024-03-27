@@ -13,7 +13,7 @@ interface MyComponentProp {
 
 function MyComponent1<T extends MyComponentProp>(attr: T) {
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >attr : T
 >     : ^
 

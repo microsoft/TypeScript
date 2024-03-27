@@ -8,11 +8,11 @@
  */
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T;
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^^^^^^^^^^^                    ^^^^^           ^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tempStrs : TemplateStringsArray
 >         : ^^^^^^^^^^^^^^^^^^^^
 >g : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -20,15 +20,15 @@ function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T;
 
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T;
 >tempFun : { <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, x: T_1): T_1; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^    ^     ^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^                    ^^^^^           ^^^^^           ^^^^^ ^^^ ^^^
 >tempStrs : TemplateStringsArray
 >         : ^^^^^^^^^^^^^^^^^^^^
 >g : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 >h : (y: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >y : T
 >  : ^
 >x : T
@@ -40,7 +40,7 @@ function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T {
 >tempStrs : TemplateStringsArray
 >         : ^^^^^^^^^^^^^^^^^^^^
 >g : (x: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T

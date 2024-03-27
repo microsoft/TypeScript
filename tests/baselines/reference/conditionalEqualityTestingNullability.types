@@ -12,7 +12,7 @@ export type Equals<A1 extends any, A2 extends any> =
 interface Foo<T> {
     x : () => T
 >x : () => T
->  : ^^^^^^^
+>  : ^^^^^^ 
 }
 
 declare const a: Foo<Date>;

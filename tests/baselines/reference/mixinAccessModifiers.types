@@ -103,7 +103,7 @@ class Public2 {
 
 function f1(x: Private & Private2) {
 >f1 : (x: Private & Private2) => void
->   : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>   : ^^^^                  ^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -118,7 +118,7 @@ function f1(x: Private & Private2) {
 
 function f2(x: Private & Protected) {
 >f2 : (x: Private & Protected) => void
->   : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>   : ^^^^                   ^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -133,7 +133,7 @@ function f2(x: Private & Protected) {
 
 function f3(x: Private & Public) {
 >f3 : (x: Private & Public) => void
->   : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^^                ^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -148,7 +148,7 @@ function f3(x: Private & Public) {
 
 function f4(x: Protected & Protected2) {
 >f4 : (x: Protected & Protected2) => void
->   : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+>   : ^^^^                      ^^^^^^^^^
 >x : Protected & Protected2
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -163,7 +163,7 @@ function f4(x: Protected & Protected2) {
 
 function f5(x: Protected & Public) {
 >f5 : (x: Protected & Public) => void
->   : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^^                  ^^^^^^^^^
 >x : Protected & Public
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -178,7 +178,7 @@ function f5(x: Protected & Public) {
 
 function f6(x: Public & Public2) {
 >f6 : (x: Public & Public2) => void
->   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>   : ^^^^                ^^^^^^^^^
 >x : Public & Public2
 >  : ^^^^^^^^^^^^^^^^
 
@@ -193,7 +193,7 @@ function f6(x: Public & Public2) {
 
 declare function Mix<T, U>(c1: T, c2: U): T & U;
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^
+>    : ^ ^^ ^^^^^^ ^^^^^^ ^^^^^     
 >c1 : T
 >   : ^
 >c2 : U
@@ -251,7 +251,7 @@ class C4 extends Mix(Protected, Protected2) {
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
 >c4 : C4
 >   : ^^
 >c5 : C5
@@ -327,7 +327,7 @@ class C5 extends Mix(Protected, Public) {
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
 >c4 : C4
 >   : ^^
 >c5 : C5
@@ -403,7 +403,7 @@ class C6 extends Mix(Public, Public2) {
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
 >c4 : C4
 >   : ^^
 >c5 : C5
@@ -493,7 +493,7 @@ class ProtectedGeneric2<T> {
 
 function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 >f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
->   : ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^    ^^^^^^^^^
+>   : ^^^^                                           ^^^^^^^^^
 >x : ProtectedGeneric<{}>
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -520,7 +520,7 @@ function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 
 function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
 >f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
->   : ^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>   : ^^^^                                                                         ^^^^^^^^^
 >x : never
 >  : ^^^^^
 >a : void
@@ -553,7 +553,7 @@ function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}
 
 function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
 >f9 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>) => void
->   : ^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>   : ^^^^                                                                        ^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >a : void

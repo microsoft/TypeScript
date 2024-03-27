@@ -11,7 +11,7 @@ declare var p: Promise<boolean>;
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
->     : ^^^^^^^^^^^^^      
+>     : ^^^^^^             
 
     "use strict";
 >"use strict" : "use strict"

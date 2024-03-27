@@ -41,7 +41,7 @@ export { x } from "./other.js";
 export interface Thing {}
 export const x: () => Thing = null as any;
 >x : () => Thing
->  : ^^^^^^^^^^^
+>  : ^^^^^^     
 >null as any : any
 >            : ^^^
 

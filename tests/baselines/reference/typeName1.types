@@ -121,7 +121,7 @@ var x7:(s:string)=>boolean=3;
 
 var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
 >x8 : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
->   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >z : I
 >  : ^
 >s : string
@@ -153,7 +153,7 @@ var x10:I[][][][]=3;
 
 var x11:{z:I;x:boolean;}[][]=3;
 >x11 : { z: I; x: boolean; }[][]
->    : ^^^^^^^^^^^       ^^^^^^^
+>    : ^^^^^ ^^^^^       ^^^^^^^
 >z : I
 >  : ^
 >x : boolean
@@ -163,7 +163,7 @@ var x11:{z:I;x:boolean;}[][]=3;
 
 var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
 >x12 : { z: I; x: boolean; y: (s: string) => boolean; w: { z: I; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; (): boolean; }; }[][]
->    : ^^^^^^^^^^^       ^^^^^                      ^^^^^     ^                    ^^^     ^^^                       ^^^     ^^^                   ^^^^^^^
+>    : ^^^^^ ^^^^^       ^^^^^                      ^^^^^                          ^^^     ^^^                       ^^^     ^^^                   ^^^^^^^
 >z : I
 >  : ^
 >x : boolean
@@ -173,7 +173,7 @@ var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:num
 >s : string
 >  : ^^^^^^
 >w : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
->  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >z : I
 >  : ^
 >s : string

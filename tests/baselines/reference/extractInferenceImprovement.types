@@ -4,7 +4,7 @@
 // repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
 function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[K] {
 >getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^         ^^^^^^ ^ 
+>             : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^                  ^^^^^    
 >obj : T
 >    : ^
 >key : Extract<K, string>
@@ -21,7 +21,7 @@ function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[
 
 function getProperty3<T, K extends Extract<keyof T, string>>(obj: T, key: K): T[K] {
 >getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>             : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^    
 >obj : T
 >    : ^
 >key : K

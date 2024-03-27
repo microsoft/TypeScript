@@ -23,7 +23,7 @@ type SetupImages<K extends string> = SetupImageRefs<K> & {
 
   prepare: () => { type: K };
 >prepare : () => { type: K; }
->        : ^^^^^^        ^   
+>        : ^^^^^^            
 >type : K
 >     : ^
 
@@ -41,7 +41,7 @@ interface TestInterface {
 
 declare function setupImages<R extends ImageHolder<K>, K extends string>(
 >setupImages : <R extends ImageHolder<K>, K extends string>(item: R, keys: K[]) => SetupImages<K>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^ ^ 
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^   ^^^^^              
 
   item: R,
 >item : R

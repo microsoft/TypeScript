@@ -35,17 +35,17 @@ interface I2<T> {
 
 var a: { new(x: Date): string }
 >a : new (x: Date) => string
->  : ^^^^^^^^^^^^^^^^^      
+>  : ^^^^^^^^    ^^^^^      
 >x : Date
 >  : ^^^^
 
 var b = { new(x: RegExp) { return ''; } }; // not a construct signature, function called new
 >b : { "new"(x: RegExp): string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^^
 >{ new(x: RegExp) { return ''; } } : { "new"(x: RegExp): string; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^      ^^^^^^^^^^^^
 >new : (x: RegExp) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^^^^^^^^^^
 >x : RegExp
 >  : ^^^^^^
 >'' : ""
@@ -53,13 +53,13 @@ var b = { new(x: RegExp) { return ''; } }; // not a construct signature, functio
 
 function foo1b(x: B);
 >foo1b : { (x: B): any; (x: B): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : B
 >  : ^
 
 function foo1b(x: B); // error
 >foo1b : { (x: B): any; (x: B): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : B
 >  : ^
 
@@ -70,13 +70,13 @@ function foo1b(x: any) { }
 
 function foo1c(x: C<string>);
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
->      : ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 
 function foo1c(x: C<string>); // error
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 
@@ -87,13 +87,13 @@ function foo1c(x: any) { }
 
 function foo2(x: I);
 >foo2 : { (x: I): any; (x: I): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : I
 >  : ^
 
 function foo2(x: I); // error
 >foo2 : { (x: I): any; (x: I): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : I
 >  : ^
 
@@ -104,7 +104,7 @@ function foo2(x: any) { }
 
 function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: new (x: Date) => string): any; }
->     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : new (x: Date) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : new (x: Date) => string
@@ -112,7 +112,7 @@ function foo3(x: typeof a);
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: new (x: Date) => string): any; (x: typeof a): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : new (x: Date) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : new (x: Date) => string
@@ -125,7 +125,7 @@ function foo3(x: any) { }
 
 function foo4(x: typeof b);
 >foo4 : { (x: typeof b): any; (x: { "new"(x: RegExp): string; }): any; }
->     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { "new"(x: RegExp): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"(x: RegExp): string; }
@@ -133,7 +133,7 @@ function foo4(x: typeof b);
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: { "new"(x: RegExp): string; }): any; (x: typeof b): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : { "new"(x: RegExp): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"(x: RegExp): string; }
@@ -146,13 +146,13 @@ function foo4(x: any) { }
 
 function foo8(x: B);
 >foo8 : { (x: B): any; (x: I): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : B
 >  : ^
 
 function foo8(x: I); // ok
 >foo8 : { (x: B): any; (x: I): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : I
 >  : ^
 
@@ -163,13 +163,13 @@ function foo8(x: any) { }
 
 function foo9(x: B);
 >foo9 : { (x: B): any; (x: C<string>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B
 >  : ^
 
 function foo9(x: C<string>); // error, types are structurally equal
 >foo9 : { (x: B): any; (x: C<string>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 
@@ -180,13 +180,13 @@ function foo9(x: any) { }
 
 function foo10(x: B);
 >foo10 : { (x: B): any; (x: new (x: Date) => string): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B
 >  : ^
 
 function foo10(x: typeof a); // ok
 >foo10 : { (x: B): any; (x: typeof a): any; }
->      : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : new (x: Date) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : new (x: Date) => string
@@ -199,13 +199,13 @@ function foo10(x: any) { }
 
 function foo11(x: B);
 >foo11 : { (x: B): any; (x: { "new"(x: RegExp): string; }): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B
 >  : ^
 
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B): any; (x: typeof b): any; }
->      : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : { "new"(x: RegExp): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"(x: RegExp): string; }
@@ -218,13 +218,13 @@ function foo11(x: any) { }
 
 function foo12(x: I);
 >foo12 : { (x: I): any; (x: C<string>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I
 >  : ^
 
 function foo12(x: C<string>); // ok
 >foo12 : { (x: I): any; (x: C<string>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 
@@ -235,13 +235,13 @@ function foo12(x: any) { }
 
 function foo12b(x: I2<string>);
 >foo12b : { (x: I2<string>): any; (x: C<string>): any; }
->       : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I2<string>
 >  : ^^^^^^^^^^
 
 function foo12b(x: C<string>); // ok
 >foo12b : { (x: I2<string>): any; (x: C<string>): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 
@@ -252,13 +252,13 @@ function foo12b(x: any) { }
 
 function foo13(x: I);
 >foo13 : { (x: I): any; (x: new (x: Date) => string): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I
 >  : ^
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I): any; (x: typeof a): any; }
->      : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : new (x: Date) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : new (x: Date) => string
@@ -271,13 +271,13 @@ function foo13(x: any) { }
 
 function foo14(x: I);
 >foo14 : { (x: I): any; (x: { "new"(x: RegExp): string; }): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I
 >  : ^
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I): any; (x: typeof b): any; }
->      : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : { "new"(x: RegExp): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"(x: RegExp): string; }
@@ -290,13 +290,13 @@ function foo14(x: any) { }
 
 function foo15(x: I2<string>);
 >foo15 : { (x: I2<string>): any; (x: C<number>): any; }
->      : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I2<string>
 >  : ^^^^^^^^^^
 
 function foo15(x: C<number>); // ok
 >foo15 : { (x: I2<string>): any; (x: C<number>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >x : C<number>
 >  : ^^^^^^^^^
 

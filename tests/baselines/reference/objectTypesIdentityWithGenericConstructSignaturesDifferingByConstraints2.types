@@ -56,7 +56,7 @@ interface I2 {
 
 var a: { new<T extends U, U extends Array<string>>(x: T, y: U): string }
 >a : new <T extends U, U extends string[]>(x: T, y: U) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 >y : U
@@ -64,11 +64,11 @@ var a: { new<T extends U, U extends Array<string>>(x: T, y: U): string }
 
 var b = { new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } }; // not a construct signature, function called new
 >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^
 >{ new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } } : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
->                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^
 >new : <T extends U, U extends RegExp>(x: T, y: U) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -78,13 +78,13 @@ var b = { new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } }; // no
 
 function foo1b(x: B<Array<number>, Array<number>>);
 >foo1b : { (x: B<Array<number>, Array<number>>): any; (x: B<number[], number[]>): any; }
->      : ^^^^^^^ ^^^^^          ^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B<number[], number[]>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
 function foo1b(x: B<Array<number>, Array<number>>); // error
 >foo1b : { (x: B<number[], number[]>): any; (x: B<Array<number>, Array<number>>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^          ^^^^^         ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^^^^^^
 >x : B<number[], number[]>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -95,13 +95,13 @@ function foo1b(x: any) { }
 
 function foo1c(x: C<String, String>);
 >foo1c : { (x: C<String, String>): any; (x: C<String, String>): any; }
->      : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo1c(x: C<String, String>); // error
 >foo1c : { (x: C<String, String>): any; (x: C<String, String>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -112,13 +112,13 @@ function foo1c(x: any) { }
 
 function foo2(x: I<Number, Number>);
 >foo2 : { (x: I<Number, Number>): any; (x: I<Number, Number>): any; }
->     : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo2(x: I<Number, Number>); // error
 >foo2 : { (x: I<Number, Number>): any; (x: I<Number, Number>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : I<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -129,7 +129,7 @@ function foo2(x: any) { }
 
 function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: new <T extends U, U extends string[]>(x: T, y: U) => string): any; }
->     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : new <T extends U, U extends string[]>(x: T, y: U) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : new <T extends U, U extends string[]>(x: T, y: U) => string
@@ -137,7 +137,7 @@ function foo3(x: typeof a);
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: new <T extends U, U extends string[]>(x: T, y: U) => string): any; (x: typeof a): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : new <T extends U, U extends string[]>(x: T, y: U) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : new <T extends U, U extends string[]>(x: T, y: U) => string
@@ -150,7 +150,7 @@ function foo3(x: any) { }
 
 function foo4(x: typeof b);
 >foo4 : { (x: typeof b): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
->     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
@@ -158,7 +158,7 @@ function foo4(x: typeof b);
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; (x: typeof b): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
@@ -171,13 +171,13 @@ function foo4(x: any) { }
 
 function foo5c(x: C<String, String>);
 >foo5c : { (x: C<String, String>): any; (x: D<Number, Number>): any; }
->      : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo5c(x: D<Number, Number>); // ok
 >foo5c : { (x: C<String, String>): any; (x: D<Number, Number>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : D<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -188,13 +188,13 @@ function foo5c(x: any) { }
 
 function foo6c(x: C<String, String>);
 >foo6c : { (x: C<String, String>): any; (x: D<any, Number>): any; }
->      : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo6c(x: D<any, Number>); // ok
 >foo6c : { (x: C<String, String>): any; (x: D<any, Number>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^ ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^
 >x : D<any, Number>
 >  : ^^^^^^^^^^^^^^
 
@@ -205,13 +205,13 @@ function foo6c(x: any) { }
 
 function foo8(x: B<Array<number>, Array<number>>);
 >foo8 : { (x: B<Array<number>, Array<number>>): any; (x: I<Number, Number>): any; }
->     : ^^^^^^^ ^^^^^          ^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B<number[], number[]>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
 function foo8(x: I<Number, Number>); // ok
 >foo8 : { (x: B<number[], number[]>): any; (x: I<Number, Number>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : I<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -222,13 +222,13 @@ function foo8(x: any) { }
 
 function foo9(x: B<Array<number>, Array<number>>);
 >foo9 : { (x: B<Array<number>, Array<number>>): any; (x: C<String, String>): any; }
->     : ^^^^^^^ ^^^^^          ^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B<number[], number[]>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
 function foo9(x: C<String, String>); // error, types are structurally equal
 >foo9 : { (x: B<number[], number[]>): any; (x: C<String, String>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -239,13 +239,13 @@ function foo9(x: any) { }
 
 function foo10(x: B<Array<number>, Array<number>>);
 >foo10 : { (x: B<Array<number>, Array<number>>): any; (x: new <T extends U, U extends string[]>(x: T, y: U) => string): any; }
->      : ^^^^^^^ ^^^^^          ^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B<number[], number[]>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
 function foo10(x: typeof a); // ok
 >foo10 : { (x: B<number[], number[]>): any; (x: typeof a): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : new <T extends U, U extends string[]>(x: T, y: U) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : new <T extends U, U extends string[]>(x: T, y: U) => string
@@ -258,13 +258,13 @@ function foo10(x: any) { }
 
 function foo11(x: B<Array<number>, Array<number>>);
 >foo11 : { (x: B<Array<number>, Array<number>>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
->      : ^^^^^^^ ^^^^^          ^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B<number[], number[]>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B<number[], number[]>): any; (x: typeof b): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
@@ -277,13 +277,13 @@ function foo11(x: any) { }
 
 function foo12(x: I<Number, Number>);
 >foo12 : { (x: I<Number, Number>): any; (x: C<String, String>): any; }
->      : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo12(x: C<String, String>); // ok
 >foo12 : { (x: I<Number, Number>): any; (x: C<String, String>): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -294,13 +294,13 @@ function foo12(x: any) { }
 
 function foo12b(x: I2);
 >foo12b : { (x: I2): any; (x: C<String, String>): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I2
 >  : ^^
 
 function foo12b(x: C<String, String>); // ok
 >foo12b : { (x: I2): any; (x: C<String, String>): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >x : C<String, String>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -311,13 +311,13 @@ function foo12b(x: any) { }
 
 function foo13(x: I<Number, Number>);
 >foo13 : { (x: I<Number, Number>): any; (x: new <T extends U, U extends string[]>(x: T, y: U) => string): any; }
->      : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I<Number, Number>): any; (x: typeof a): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : new <T extends U, U extends string[]>(x: T, y: U) => string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : new <T extends U, U extends string[]>(x: T, y: U) => string
@@ -330,13 +330,13 @@ function foo13(x: any) { }
 
 function foo14(x: I<Number, Number>);
 >foo14 : { (x: I<Number, Number>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
->      : ^^^^^^^ ^^^^^^  ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<Number, Number>
 >  : ^^^^^^^^^^^^^^^^^
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I<Number, Number>): any; (x: typeof b): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }

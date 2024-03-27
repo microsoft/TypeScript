@@ -38,9 +38,9 @@ export class MyObservable<T> {
 
     subscribe(next: (val: T) => void) {
 >subscribe : (next: (val: T) => void) => void
->          : ^^^^^^^      ^         ^^^^^^^^^
+>          : ^^^^^^^                ^^^^^^^^^
 >next : (val: T) => void
->     : ^^^^^^^^^^^^    
+>     : ^^^^^^ ^^^^^    
 >val : T
 >    : ^
 
@@ -75,7 +75,7 @@ type InteropObservable<T> = {
 
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
 >[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
->             : ^^^^^^                        ^                   
+>             : ^^^^^^                                            
 >Symbol.obs : unique symbol
 >           : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -83,16 +83,16 @@ type InteropObservable<T> = {
 >obs : unique symbol
 >    : ^^^^^^^^^^^^^
 >subscribe : (next: (val: T) => void) => void
->          : ^^^^^^^      ^         ^^^^^    
+>          : ^^^^^^^                ^^^^^    
 >next : (val: T) => void
->     : ^^^^^^^^^^^^    
+>     : ^^^^^^ ^^^^^    
 >val : T
 >    : ^
 }
 
 function from<T>(obs: InteropObservable<T>) {
 >from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obs : InteropObservable<T>
 >    : ^^^^^^^^^^^^^^^^^^^^
 

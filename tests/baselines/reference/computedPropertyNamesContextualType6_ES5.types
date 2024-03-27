@@ -9,7 +9,7 @@ interface I<T> {
 
 declare function foo<T>(obj: I<T>): T
 >foo : <T>(obj: I<T>) => T
->    : ^^^^^^^^^^ ^ ^^^^^^
+>    : ^ ^^^^^^^    ^^^^^ 
 >obj : I<T>
 >    : ^^^^
 

@@ -17,7 +17,7 @@ class D { bar: string }
 
 var a: {
 >a : { new (x: boolean): C; new (x: string): D; }
->  : ^^^^^^^^^^       ^^^^^^^^^^^^^^      ^^^^^^^
+>  : ^^^^^^^^^^       ^^^ ^^^^^^^^^^      ^^^ ^^^
 
     new(x: boolean): C;
 >x : boolean
@@ -30,9 +30,9 @@ var a: {
 
 function foo4<T, U>(cb: new(x: T) => U) {
 >foo4 : <T, U>(cb: new (x: T) => U) => U
->     : ^^^^^^^^^^^        ^     ^^^^^^^
+>     : ^ ^^ ^^^^^^               ^^^^^^
 >cb : new (x: T) => U
->   : ^^^^^^^^^^^^^^^
+>   : ^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -57,7 +57,7 @@ var r = foo4(a); // T is {} (candidates boolean and string), U is {} (candidates
 
 var b: {
 >b : { new <T>(x: boolean): T; new <T_1>(x: T_1): any; }
->  : ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
+>  : ^^^^^^^ ^^^^^       ^^^ ^^^^^^^   ^^^^^^^^^^^   ^^^
 
     new<T>(x: boolean): T;
 >x : boolean

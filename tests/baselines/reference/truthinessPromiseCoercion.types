@@ -11,13 +11,13 @@ declare const p2: null | Promise<number>
 
 declare const obj: { p: Promise<unknown> }
 >obj : { p: Promise<unknown>; }
->    : ^^^^^^^^^^^^         ^^^
+>    : ^^^^^                ^^^
 >p : Promise<unknown>
 >  : ^^^^^^^^^^^^^^^^
 
 declare function pf(): Promise<boolean>
 >pf : () => Promise<boolean>
->   : ^^^^^^^^^^^^^         
+>   : ^^^^^^                
 
 async function f() {
 >f : () => Promise<void>
@@ -218,7 +218,7 @@ async function h() {
 
 async function i(): Promise<string> {
 >i : () => Promise<string>
->  : ^^^^^^^^^^^^^        
+>  : ^^^^^^               
 
     if (pf()) { // error
 >pf() : Promise<boolean>

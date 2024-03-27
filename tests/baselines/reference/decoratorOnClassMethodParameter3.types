@@ -10,7 +10,7 @@ declare function dec(a: any): any;
 
 function fn(value: Promise<number>): any {
 >fn : (value: Promise<number>) => any
->   : ^^^^^^^^^^^^^^^        ^^^^^   
+>   : ^^^^^^^^               ^^^^^   
 >value : Promise<number>
 >      : ^^^^^^^^^^^^^^^
 

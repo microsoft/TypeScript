@@ -7,9 +7,9 @@ import React = require('react')
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
->                           : ^^^^^^^^^^        ^         ^   ^^^^^^^^ ^^^^^^^
+>                           : ^ ^^ ^^^^^                      ^^^^^           
 >l : { key1: K; value: V; }
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^^
 >key1 : K
 >     : ^
 >value : V
@@ -20,7 +20,7 @@ declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.El
 // OK
 function Baz<T,U>(key1: T, value: U) {
 >Baz : <T, U>(key1: T, value: U) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^
 >key1 : T
 >     : ^
 >value : U
@@ -63,11 +63,11 @@ function Baz<T,U>(key1: T, value: U) {
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
->     : ^^^^^^^              ^            ^^^^^^^^ ^^^^^^^
+>     : ^ ^^^^^                           ^^^^^           
 >l : { func: (arg: U) => void; }
->  : ^^^^^^^^      ^         ^^^
+>  : ^^^^^^^^                ^^^
 >func : (arg: U) => void
->     : ^^^^^^^^^^^^    
+>     : ^^^^^^ ^^^^^    
 >arg : U
 >    : ^
 >JSX : any
@@ -123,14 +123,14 @@ interface InferParamProp<T> {
 
     selectHandler: (selectedVal: T) => void;
 >selectHandler : (selectedVal: T) => void
->              : ^^^^^^^^^^^^^^^^^^^^    
+>              : ^^^^^^^^^^^^^^ ^^^^^    
 >selectedVal : T
 >            : ^
 }
 
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^ ^^^^^^^
+>                    : ^ ^^^^^^^^                 ^^^^^           
 >attr : InferParamProp<T>
 >     : ^^^^^^^^^^^^^^^^^
 >JSX : any

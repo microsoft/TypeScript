@@ -90,17 +90,17 @@ type UnwrapContainers<T extends Container<unknown>[]> = { [K in keyof T]: T[K]['
 
 declare function createContainer<T extends unknown>(value: T): Container<T>;
 >createContainer : <T extends unknown>(value: T) => Container<T>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^            
 >value : T
 >      : ^
 
 declare function f<T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void): void;
 >f : <T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^ ^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^ ^          ^^^^^    
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^                                        ^^^^^    
 >containers : [...T]
 >           : ^^^^^^
 >callback : (...values: UnwrapContainers<T>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>         : ^^^^^^^^^^^^                   ^^^^^    
 >values : UnwrapContainers<T>
 >       : ^^^^^^^^^^^^^^^^^^^
 

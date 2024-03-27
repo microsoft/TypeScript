@@ -100,7 +100,7 @@ interface F {
 
 function foo(): F {
 >foo : () => F
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     return {
 >{        1: true    } : { 1: true; }
@@ -117,7 +117,7 @@ function foo(): F {
 
 function bar(): F {
 >bar : () => F
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     return {
 >{        2: true    } : { 2: true; }
@@ -158,7 +158,7 @@ interface F1 {
 
 function foo1(): F1 {
 >foo1 : () => F1
->     : ^^^^^^^^
+>     : ^^^^^^  
 
     return {
 >{        "prop1": 2    } : { prop1: number; }
