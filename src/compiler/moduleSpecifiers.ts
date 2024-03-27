@@ -548,8 +548,10 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             return maybeNonRelative;
         }
 
-        const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
-        const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
+        let nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
+        let nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
+        nearestTargetPackageJson &&= toPath(nearestTargetPackageJson, projectDirectory, getCanonicalFileName);
+        nearestSourcePackageJson &&= toPath(nearestSourcePackageJson, projectDirectory, getCanonicalFileName);
         if (nearestSourcePackageJson !== nearestTargetPackageJson) {
             // 2. The importing and imported files are part of different packages.
             //

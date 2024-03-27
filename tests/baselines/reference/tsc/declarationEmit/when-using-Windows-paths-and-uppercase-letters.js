@@ -181,7 +181,7 @@ exports.Sub = Sub;
 //# sourceMappingURL=main.js.map
 
 //// [D:/Work/pkg1/dist/main.d.ts]
-declare const Sub_base: import("src/utils/type-helpers").MyReturnType;
+declare const Sub_base: import("./utils/type-helpers").MyReturnType;
 export declare class Sub extends Sub_base {
     id: string;
 }
