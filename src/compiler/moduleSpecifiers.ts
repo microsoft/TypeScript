@@ -548,8 +548,8 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             return maybeNonRelative;
         }
 
-        const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath), true);
-        const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory, true);
+        const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath), { returnAsBooleanIfHostMethodMissing: true });
+        const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory, { returnAsBooleanIfHostMethodMissing: true });
         if (nearestSourcePackageJson !== nearestTargetPackageJson) {
             // 2. The importing and imported files are part of different packages.
             //
@@ -583,9 +583,9 @@ function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: 
     return compareBooleans(b.isRedirect, a.isRedirect) || compareNumberOfDirectorySeparators(a.path, b.path);
 }
 
-function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string): string | undefined;
-function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, returnAsBooleanIfHostMethodMissing: true): boolean | string | undefined;
-function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, returnAsBooleanIfHostMethodMissing: boolean = false) {
+function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, options?: { returnAsBooleanIfHostMethodMissing?: false }): string | undefined;
+function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, options?: { returnAsBooleanIfHostMethodMissing: true }): boolean | string | undefined;
+function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, { returnAsBooleanIfHostMethodMissing }: { returnAsBooleanIfHostMethodMissing?: boolean } = {}) {
     if (host.getNearestAncestorDirectoryWithPackageJson) {
         return host.getNearestAncestorDirectoryWithPackageJson(fileName);
     }
