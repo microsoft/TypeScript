@@ -17,6 +17,7 @@ import {
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts";
 
 // branded string type used to store absolute, normalized and canonicalized paths
 // arbitrary file name can be converted to Path via toPath function
@@ -6993,8 +6994,18 @@ export enum ModuleDetectionKind {
     Force = 3,
 }
 
+export type PluginConfig = PluginImport | TransformerPluginImport;
+
 export interface PluginImport {
+    type?: undefined;
     name: string;
+    /** @internal */
+    global?: boolean;
+}
+
+export interface TransformerPluginImport {
+    type: "transformer";
+    path: string;
 }
 
 export interface ProjectReference {
@@ -7031,7 +7042,7 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginConfig[] | ProjectReference[] | null | undefined;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7138,7 +7149,7 @@ export interface CompilerOptions {
      * @internal
      */
     pathsBasePath?: string;
-    /** @internal */ plugins?: PluginImport[];
+    /** @internal */ plugins?: PluginConfig[];
     preserveConstEnums?: boolean;
     noImplicitOverride?: boolean;
     preserveSymlinks?: boolean;
@@ -7187,6 +7198,8 @@ export interface CompilerOptions {
     esModuleInterop?: boolean;
     /** @internal */ showConfig?: boolean;
     useDefineForClassFields?: boolean;
+    customTransformers?: string[];
+    allowPlugins?: boolean;
 
     [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
 }
@@ -7794,6 +7807,7 @@ export interface CompilerHost extends ModuleResolutionHost {
     createHash?(data: string): string;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+    /** @internal */ require?(baseDir: string, moduleName: string): ModuleImportResult;
 
     // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
     /** @internal */ createDirectory?(directory: string): void;
@@ -10055,4 +10069,20 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
+}
+
+export type CustomTransformersModuleFactory = (mod: { typescript: typeof ts; }) => CustomTransformersModule;
+
+export interface CustomTransformersModuleWithName {
+    name: string;
+    module: CustomTransformersModule;
+}
+
+export interface CustomTransformersModule {
+    create(createInfo: CustomTransformersCreateInfo): CustomTransformers;
+}
+
+export interface CustomTransformersCreateInfo {
+    program: Program;
+    config: any;
 }

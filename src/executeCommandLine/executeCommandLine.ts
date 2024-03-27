@@ -85,6 +85,7 @@ import {
     validateLocaleAndSetLanguage,
     version,
     WatchCompilerHost,
+    WatchOfConfigFile,
     WatchOptions,
 } from "./_namespaces/ts";
 
@@ -743,7 +744,7 @@ export function executeCommandLine(
     system: System,
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
-) {
+): void | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> {
     if (isBuild(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {

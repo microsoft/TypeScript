@@ -10,3 +10,6 @@ export * from "../../deprecatedCompat/_namespaces/ts";
 export * from "../../harness/_namespaces/ts";
 import * as server from "./ts.server";
 export { server };
+
+import * as ts from "./ts";
+ts.setTypeScriptNamespace("testRunner", ts);

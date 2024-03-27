@@ -5,4 +5,7 @@ export * from "../../jsTyping/_namespaces/ts";
 export * from "../../services/_namespaces/ts";
 export * from "../../server/_namespaces/ts";
 import * as server from "./ts.server";
+
+import * as ts from "./ts";
+ts.setTypeScriptNamespace("typescript", ts);
 export { server };
