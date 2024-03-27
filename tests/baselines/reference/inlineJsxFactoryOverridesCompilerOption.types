@@ -3,37 +3,48 @@
 === renderer.d.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: any;
 >e : string
+>  : ^^^^^^
         }
     }
 }
 export function dom(): void;
 >dom : () => void
+>    : ^^^^^^    
 
 export { dom as p };
 >dom : () => void
+>    : ^^^^^^^^^^
 >p : () => void
+>  : ^^^^^^^^^^
 
 === reacty.tsx ===
 /** @jsx dom */
 import {dom} from "./renderer";
 >dom : () => void
+>    : ^^^^^^^^^^
 
 <h></h>
 ><h></h> : error
 >h : any
+>  : ^^^
 >h : any
+>  : ^^^
 
 === index.tsx ===
 import { p } from "./renderer";
 >p : () => void
+>  : ^^^^^^^^^^
 
 <h></h>
 ><h></h> : error
 >h : any
+>  : ^^^
 >h : any
+>  : ^^^
 

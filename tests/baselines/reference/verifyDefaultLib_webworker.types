@@ -9,4 +9,5 @@ Symbol count: 14,500 / 14,500 (nearest 500)
 === verifyDefaultLib_webworker.ts ===
 var x: Worker;
 >x : Worker
+>  : ^^^^^^
 

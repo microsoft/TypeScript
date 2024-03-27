@@ -3,9 +3,12 @@
 === crashOnMethodSignatures.ts ===
 class A {
 >A : A
+>  : ^
 
     a(completed: () => any): void;
 >a : (completed: () => any) => void
+>  : ^^^^^^^^^^^^         ^^^^^    
 >completed : () => any
+>          : ^^^^^^   
 }
 

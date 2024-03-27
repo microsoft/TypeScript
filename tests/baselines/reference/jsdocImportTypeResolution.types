@@ -3,6 +3,7 @@
 === module.js ===
 export class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 }
 
 === usage.js ===
@@ -13,4 +14,5 @@ export class MyClass {
 /** @type {options} */
 let v;
 >v : options
+>  : ^^^^^^^
 

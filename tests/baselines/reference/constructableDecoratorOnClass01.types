@@ -3,12 +3,15 @@
 === constructableDecoratorOnClass01.ts ===
 class CtorDtor {}
 >CtorDtor : CtorDtor
+>         : ^^^^^^^^
 
 @CtorDtor
 >CtorDtor : typeof CtorDtor
+>         : ^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
 }
 

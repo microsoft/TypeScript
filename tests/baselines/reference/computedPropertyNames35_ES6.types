@@ -3,14 +3,20 @@
 === computedPropertyNames35_ES6.ts ===
 function foo<T>() { return '' }
 >foo : <T>() => string
+>    : ^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 interface I<T> {
     bar(): string;
 >bar : () => string
+>    : ^^^^^^      
 
     [foo<T>()](): void;
 >[foo<T>()] : () => void
+>           : ^^^^^^    
 >foo<T>() : string
+>         : ^^^^^^
 >foo : <T>() => string
+>    : ^^^^^^^^^^^^^^^
 }

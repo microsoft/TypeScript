@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInTemplates17_ES5.ts ===
 var x = `\u{r}\u{n}\u{t}`;
 >x : string
+>  : ^^^^^^
 >`\u{r}\u{n}\u{t}` : "\\u{r}\\u{n}\\u{t}"
+>                  : ^^^^^^^^^^^^^^^^^^^^
 

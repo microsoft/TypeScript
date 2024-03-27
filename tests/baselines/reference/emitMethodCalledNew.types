@@ -5,36 +5,58 @@
 
 export const a = {
 >a : { "new"(x: number): number; }
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^^
 >{  new(x: number) { return x + 1 }} : { "new"(x: number): number; }
+>                                    : ^^^^^^^^^^^      ^^^^^^^^^^^^
 
   new(x: number) { return x + 1 }
 >new : (x: number) => number
+>    : ^^^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 export const b = {
 >b : { "new"(x: number): number; }
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^^
 >{  "new"(x: number) { return x + 1 }} : { "new"(x: number): number; }
+>                                      : ^^^^^^^^^^^      ^^^^^^^^^^^^
 
   "new"(x: number) { return x + 1 }
 >"new" : (x: number) => number
+>      : ^^^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 export const c = {
 >c : { "new"(x: number): number; }
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^^
 >{  ["new"](x: number) { return x + 1 }} : { "new"(x: number): number; }
+>                                        : ^^^^^^^^^^^      ^^^^^^^^^^^^
 
   ["new"](x: number) { return x + 1 }
 >["new"] : (x: number) => number
+>        : ^^^^      ^^^^^^^^^^^
 >"new" : "new"
+>      : ^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
