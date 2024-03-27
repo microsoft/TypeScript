@@ -310,80 +310,119 @@ const resolveMapper2 = <K extends keyof typeof mapper>(
 // Repro from #57860
 
 type Obj1 = {
->Obj1 : { a: string; b: number; }
+>Obj1 : Obj1
+>     : ^^^^
 
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
 };
 
 type Obj2 = {
->Obj2 : { b: number; c: boolean; }
+>Obj2 : Obj2
+>     : ^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
 };
 
 declare const mapIntersection: {
 >mapIntersection : { a?: number | undefined; b: number; c: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
 };
 
 const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
 >accessMapped : <K extends keyof Obj2>(key: K) => string
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
 ><K extends keyof Obj2>(key: K) => mapIntersection[key].toString() : <K extends keyof Obj2>(key: K) => string
+>                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
 >key : K
+>    : ^
 >mapIntersection[key].toString() : string
+>                                : ^^^^^^
 >mapIntersection[key].toString : (radix?: number | undefined) => string
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapIntersection[key] : { a?: number | undefined; b: number; c: number; }[K]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapIntersection : { a?: number | undefined; b: number; c: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >toString : (radix?: number | undefined) => string
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const resolved: { a?: number | undefined; b: number; c: number };
 >resolved : { a?: number | undefined; b: number; c: number; }
+>         : ^^^^^^                  ^^^^^      ^^^^^      ^^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
 >accessResolved : <K extends keyof Obj2>(key: K) => string
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
 ><K extends keyof Obj2>(key: K) => resolved[key].toString() : <K extends keyof Obj2>(key: K) => string
+>                                                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
 >key : K
+>    : ^
 >resolved[key].toString() : string
+>                         : ^^^^^^
 >resolved[key].toString : (radix?: number | undefined) => string
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolved[key] : { a?: number | undefined; b: number; c: number; }[K]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolved : { a?: number | undefined; b: number; c: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >toString : (radix?: number | undefined) => string
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Additional repro from #57860
 
 type Foo = {
->Foo : { prop: string; }
+>Foo : Foo
+>    : ^^^
 
     prop: string;
 >prop : string
+>     : ^^^^^^
 }
 
 function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
 >test : <K extends "prop">(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^ ^^^^^^^^^
 >obj : Pick<Required<Foo> & Partial<Foo>, K>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 
     obj[key].length;
 >obj[key].length : number
+>                : ^^^^^^
 >obj[key] : Pick<Required<Foo> & Partial<Foo>, K>[K]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Pick<Required<Foo> & Partial<Foo>, K>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
+>    : ^
 >length : number
+>       : ^^^^^^
 }
 
