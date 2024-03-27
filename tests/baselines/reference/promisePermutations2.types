@@ -4,7 +4,7 @@
 Subtype cache: 200 / 200 (nearest 100)
 Assignability cache: 200 / 200 (nearest 100)
 Type Count: 800 / 900 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
+Instantiation count: 2,500 / 3,000 (nearest 500)
 Symbol count: 27,000 / 27,000 (nearest 500)
 
 === promisePermutations2.ts ===
