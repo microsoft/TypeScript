@@ -4682,7 +4682,6 @@ export class ProjectService {
                 (fileName, eventKind) => {
                     switch (eventKind) {
                         case FileWatcherEventKind.Created:
-                            return Debug.fail();
                         case FileWatcherEventKind.Changed:
                             this.packageJsonCache.addOrUpdate(fileName, path);
                             this.onPackageJsonChange(result);
