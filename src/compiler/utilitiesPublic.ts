@@ -32,10 +32,8 @@ import {
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
-    CommentRange,
     compareDiagnostics,
     CompilerOptions,
-    concatenate,
     ConciseBody,
     ConstructorDeclaration,
     ConstructorTypeNode,
@@ -64,7 +62,6 @@ import {
     filter,
     find,
     flatMap,
-    forEach,
     ForInitializer,
     ForInOrOfStatement,
     FunctionBody,
@@ -84,10 +81,7 @@ import {
     getJSDocCommentsAndTags,
     getJSDocRoot,
     getJSDocTypeParameterDeclarations,
-    getLeadingCommentRanges,
-    getLeadingCommentRangesOfNode,
     getSourceFileOfNode,
-    getTrailingCommentRanges,
     hasAccessorModifier,
     HasDecorators,
     hasDecorators,
@@ -140,6 +134,7 @@ import {
     isJSDocEnumTag,
     isJSDocFunctionType,
     isJSDocImplementsTag,
+    isJSDocInternalTag,
     isJSDocOverloadTag,
     isJSDocOverrideTag,
     isJSDocParameterTag,
@@ -185,6 +180,7 @@ import {
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocImplementsTag,
+    JSDocInternalTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -211,7 +207,6 @@ import {
     JsxTagNameExpression,
     KeywordSyntaxKind,
     LabeledStatement,
-    last,
     lastOrUndefined,
     LeftHandSideExpression,
     length,
@@ -266,7 +261,6 @@ import {
     setUILocale,
     SignatureDeclaration,
     skipOuterExpressions,
-    skipTrivia,
     some,
     sortAndDeduplicate,
     SortedReadonlyArray,
@@ -1142,6 +1136,10 @@ export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
 
 export function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined {
     return getFirstJSDocTag(node, isJSDocSatisfiesTag);
+}
+
+export function getJSDocInternalTag(node: Node): JSDocInternalTag | undefined {
+    return getFirstJSDocTag(node, isJSDocInternalTag);
 }
 
 /** Gets the JSDoc type tag for the node if present and valid */
@@ -2596,31 +2594,8 @@ export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag):
     return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
 }
 
-function hasInternalAnnotation(range: CommentRange, sourceFile: SourceFile) {
-    const comment = sourceFile.text.substring(range.pos, range.end);
-    return comment.includes("@internal");
-}
-
 export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     sourceFile ??= getSourceFileOfNode(node);
     const parseTreeNode = getParseTreeNode(node);
-    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
-        const text = sourceFile.text;
-        const commentRanges = previousSibling
-            ? concatenate(
-                // to handle
-                // ... parameters, /** @internal */
-                // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
-                getLeadingCommentRanges(text, node.pos),
-            )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
-        return some(commentRanges) && hasInternalAnnotation(last(commentRanges), sourceFile);
-    }
-    const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, sourceFile);
-    return !!forEach(leadingCommentRanges, range => {
-        return hasInternalAnnotation(range, sourceFile);
-    });
+    return parseTreeNode && !!getJSDocInternalTag(parseTreeNode);
 }

@@ -9087,6 +9087,9 @@ namespace Parser {
                     case "satisfies":
                         tag = parseSatisfiesTag(start, tagName, margin, indentText);
                         break;
+                    case "internal":
+                        tag = parseSimpleTag(start, factory.createJSDocInternalTag, tagName, margin, indentText);
+                        break;
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);
                         break;

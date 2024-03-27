@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/stripInternal2.ts] ////
+
+=== stripInternal2.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(stripInternal2.ts, 0, 0))
+
+  /**
+   * Should be stripped
+   * @internal
+   */
+  shouldBeStripped = 1;
+>shouldBeStripped : Symbol(Foo.shouldBeStripped, Decl(stripInternal2.ts, 0, 18))
+
+  // TODO: maybe make this @internal?
+  /**
+   * Should *not* be stripped
+   */
+  shouldNotBeStripped = 2;
+>shouldNotBeStripped : Symbol(Foo.shouldNotBeStripped, Decl(stripInternal2.ts, 5, 23))
+}

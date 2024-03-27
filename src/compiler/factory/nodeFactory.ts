@@ -227,6 +227,7 @@ import {
     JSDocFunctionType,
     JSDocImplementsTag,
     JSDocImportTag,
+    JSDocInternalTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -948,6 +949,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         },
         get updateJSDocSatisfiesTag() {
             return getJSDocTypeLikeTagUpdateFunction<JSDocSatisfiesTag>(SyntaxKind.JSDocSatisfiesTag);
+        },
+        get createJSDocInternalTag() {
+            return getJSDocSimpleTagCreateFunction<JSDocInternalTag>(SyntaxKind.JSDocInternalTag);
+        },
+        get updateJSDocInternalTag() {
+            return getJSDocSimpleTagUpdateFunction<JSDocInternalTag>(SyntaxKind.JSDocInternalTag);
         },
 
         createJSDocEnumTag,
