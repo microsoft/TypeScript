@@ -14120,16 +14120,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return modifiers & MappedTypeModifiers.ExcludeOptional ? -1 : modifiers & MappedTypeModifiers.IncludeOptional ? 1 : 0;
     }
 
-    function getModifiersTypeOptionality(type: Type): number {
-        return type.flags & TypeFlags.Intersection ? Math.min(...map((type as IntersectionType).types, getModifiersTypeOptionality)) :
-            getObjectFlags(type) & ObjectFlags.Mapped ? getCombinedMappedTypeOptionality(type as MappedType) :
-            0;
-    }
-
     // Return -1, 0, or 1, for stripped, unchanged, or added optionality respectively. When a homomorphic mapped type doesn't
     // modify optionality, recursively consult the optionality of the type being mapped over to see if it strips or adds optionality.
-    function getCombinedMappedTypeOptionality(type: MappedType): number {
-        return getMappedTypeOptionality(type) || getModifiersTypeOptionality(getModifiersTypeFromMappedType(type));
+    // For intersections, return -1 or 1 when all constituents strip or add optionality, otherwise return 0.
+    function getCombinedMappedTypeOptionality(type: Type): number {
+        if (getObjectFlags(type) & ObjectFlags.Mapped) {
+            return getMappedTypeOptionality(type as MappedType) || getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(type as MappedType));
+        }
+        if (type.flags & TypeFlags.Intersection) {
+            const optionality = getCombinedMappedTypeOptionality((type as IntersectionType).types[0]);
+            return every((type as IntersectionType).types, (t, i) => i === 0 || getCombinedMappedTypeOptionality(t) === optionality) ? optionality : 0;
+        }
+        return 0;
     }
 
     function isPartialMappedType(type: Type) {
@@ -18651,7 +18653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateMapper = combineTypeMappers(objectType.mapper, mapper);
         const instantiatedTemplateType = instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
         const isOptional = getMappedTypeOptionality(objectType) > 0 || (isGenericType(objectType) ?
-            getModifiersTypeOptionality(getModifiersTypeFromMappedType(objectType)) > 0 :
+            getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(objectType)) > 0 :
             couldAccessOptionalProperty(objectType, index));
         return addOptionality(instantiatedTemplateType, /*isProperty*/ true, isOptional);
     }
