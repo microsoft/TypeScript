@@ -972,34 +972,32 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
             },
         };
     }
-    function onWatchChange({ id, path, eventType }: protocol.WatchChangeRequestArgs) {
-        onFileWatcherCallback(id, path, eventType);
-        onDirectoryWatcherCallback(watchedDirectories, id, path);
-        onDirectoryWatcherCallback(watchedDirectoriesRecursive, id, path);
+    function onWatchChange(args: protocol.WatchChangeRequestArgs | readonly protocol.WatchChangeRequestArgs[]) {
+        if (isArray(args)) args.forEach(onWatchChangeRequestArgs);
+        else onWatchChangeRequestArgs(args);
     }
 
-    function onFileWatcherCallback(
-        id: number,
-        eventPath: string,
-        eventType: "create" | "delete" | "update",
-    ) {
-        watchedFiles.idToCallbacks.get(id)?.forEach(callback => {
-            const eventKind = eventType === "create" ?
-                FileWatcherEventKind.Created :
-                eventType === "delete" ?
-                FileWatcherEventKind.Deleted :
-                FileWatcherEventKind.Changed;
-            callback(eventPath, eventKind);
-        });
+    function onWatchChangeRequestArgs({ id, created, deleted, updated }: protocol.WatchChangeRequestArgs) {
+        onWatchEventType(id, created, FileWatcherEventKind.Created);
+        onWatchEventType(id, deleted, FileWatcherEventKind.Deleted);
+        onWatchEventType(id, updated, FileWatcherEventKind.Changed);
     }
 
-    function onDirectoryWatcherCallback(
-        { idToCallbacks }: HostWatcherMap<DirectoryWatcherCallback>,
+    function onWatchEventType(id: number, paths: readonly string[] | undefined, eventKind: FileWatcherEventKind) {
+        if (!paths?.length) return;
+        forEachCallback(watchedFiles, id, paths, (callback, eventPath) => callback(eventPath, eventKind));
+        forEachCallback(watchedDirectories, id, paths, (callback, eventPath) => callback(eventPath));
+        forEachCallback(watchedDirectoriesRecursive, id, paths, (callback, eventPath) => callback(eventPath));
+    }
+
+    function forEachCallback<T>(
+        hostWatcherMap: HostWatcherMap<T>,
         id: number,
-        eventPath: string,
+        eventPaths: readonly string[],
+        cb: (callback: T, eventPath: string) => void,
     ) {
-        idToCallbacks.get(id)?.forEach(callback => {
-            callback(eventPath);
+        hostWatcherMap.idToCallbacks.get(id)?.forEach(callback => {
+            eventPaths.forEach(eventPath => cb(callback, eventPath));
         });
     }
 }

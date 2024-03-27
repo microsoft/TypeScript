@@ -276,7 +276,7 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts create
+Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts created
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
@@ -395,8 +395,8 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Custom watch:: /user/username/projects/myproject/b.ts update
-Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/b.ts update
+Custom watch:: /user/username/projects/myproject/b.ts /user/username/projects/myproject/b.ts updated
+Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/b.ts updated
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
@@ -566,8 +566,9 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "watchChange",
       "arguments": {
         "id": 1,
-        "path": "/user/username/projects/myproject/b.ts",
-        "eventType": "update"
+        "updated": [
+          "/user/username/projects/myproject/b.ts"
+        ]
       },
       "seq": 4,
       "type": "request"
@@ -577,8 +578,9 @@ Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
       "command": "watchChange",
       "arguments": {
         "id": 1,
-        "path": "/user/username/projects/myproject/b.ts",
-        "eventType": "update"
+        "updated": [
+          "/user/username/projects/myproject/b.ts"
+        ]
       },
       "seq": 4,
       "type": "request"
@@ -715,8 +717,8 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Custom watch:: /user/username/projects/myproject/c.ts update
-Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts update
+Custom watch:: /user/username/projects/myproject/c.ts /user/username/projects/myproject/c.ts updated
+Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts updated
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
@@ -729,7 +731,7 @@ export const x = 10;export const y = 20;
 
 After running Timeout callback:: count: 0
 
-Custom watch:: /user/username/projects/myproject/node_modules /user/username/projects/myproject/node_modules/something/index.d.ts update
+Custom watch:: /user/username/projects/myproject/node_modules /user/username/projects/myproject/node_modules/something/index.d.ts updated
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0

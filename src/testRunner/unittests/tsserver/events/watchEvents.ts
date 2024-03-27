@@ -4,6 +4,7 @@ import {
 } from "../../../../harness/tsserverLogger";
 import {
     createWatchUtils,
+    Watches,
     WatchUtils,
 } from "../../../../harness/watchUtils";
 import * as ts from "../../../_namespaces/ts";
@@ -97,43 +98,109 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         session.host.runQueuedTimeoutCallbacks();
     }
 
-    function invokeDirectoryWatcher(session: TestSession, dir: string, path: string, eventType: ts.server.protocol.WatchChangeRequestArgs["eventType"]) {
-        session.logger.log(`Custom watch:: ${dir} ${path} ${eventType}`);
-        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive.forEach(
-            dir,
+    function collectWatchChanges<T extends ts.server.protocol.CreateFileWatcherEventBody | ts.server.protocol.CreateDirectoryWatcherEventBody>(
+        session: TestSession,
+        watches: Watches<T>,
+        path: string,
+        eventPath: string,
+        eventType: "created" | "deleted" | "updated",
+        ignoreUpdate?: (data: T) => boolean,
+    ) {
+        session.logger.log(`Custom watch:: ${path} ${eventPath} ${eventType}`);
+        let result: ts.server.protocol.WatchChangeRequestArgs[] | undefined;
+        watches.forEach(
+            path,
             data => {
-                if (!data.ignoreUpdate || eventType !== "update") {
-                    session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                        command: ts.server.protocol.CommandTypes.WatchChange,
-                        arguments: { id: data.id, path, eventType },
-                    });
+                if (ignoreUpdate?.(data)) return;
+                switch (eventType) {
+                    case "created":
+                        (result ??= []).push({ id: data.id, created: [eventPath] });
+                        break;
+                    case "deleted":
+                        (result ??= []).push({ id: data.id, deleted: [eventPath] });
+                        break;
+                    case "updated":
+                        (result ??= []).push({ id: data.id, updated: [eventPath] });
+                        break;
+                    default:
+                        ts.Debug.assertNever(eventType);
                 }
             },
         );
+        return result;
     }
 
-    function invokeFileWatcher(session: TestSession, path: string, eventType: ts.server.protocol.WatchChangeRequestArgs["eventType"]) {
-        session.logger.log(`Custom watch:: ${path} ${eventType}`);
-        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches.forEach(
-            path,
-            data =>
-                session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                    command: ts.server.protocol.CommandTypes.WatchChange,
-                    arguments: { id: data.id, path, eventType },
-                }),
+    function collectDirectoryWatcherChanges(
+        session: TestSession,
+        dir: string,
+        eventPath: string,
+        eventType: "created" | "deleted" | "updated",
+    ) {
+        return collectWatchChanges(
+            session,
+            (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive,
+            dir,
+            eventPath,
+            eventType,
+            data => !!data.ignoreUpdate && eventType === "updated",
         );
+    }
+
+    function collectFileWatcherChanges(
+        session: TestSession,
+        file: string,
+        eventType: "created" | "deleted" | "updated",
+    ) {
+        return collectWatchChanges(
+            session,
+            (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches,
+            file,
+            file,
+            eventType,
+        );
+    }
+
+    function invokeWatchChange(
+        session: TestSession,
+        ...args: (ts.server.protocol.WatchChangeRequestArgs[] | undefined)[]
+    ) {
+        let result: Map<number, ts.server.protocol.WatchChangeRequestArgs> | undefined;
+        args.forEach(arg =>
+            arg?.forEach(value => {
+                result ??= new Map();
+                const valueInResult = result.get(value.id);
+                if (!valueInResult) result.set(value.id, value);
+                else {
+                    valueInResult.created = ts.combine(valueInResult.created, value.created);
+                    valueInResult.deleted = ts.combine(valueInResult.deleted, value.deleted);
+                    valueInResult.updated = ts.combine(valueInResult.updated, value.updated);
+                }
+            })
+        );
+        if (result) {
+            session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+                command: ts.server.protocol.CommandTypes.WatchChange,
+                arguments: ts.singleOrMany(ts.arrayFrom(result.values())),
+            });
+        }
     }
 
     function addFile(session: TestSession, path: string) {
         updateFileOnHost(session, path, "Add file");
-        invokeDirectoryWatcher(session, "/user/username/projects/myproject", path, "create");
+        invokeWatchChange(
+            session,
+            collectDirectoryWatcherChanges(session, "/user/username/projects/myproject", path, "created"),
+        );
         session.host.runQueuedTimeoutCallbacks();
     }
 
     function changeFile(session: TestSession, path: string, content?: string) {
         updateFileOnHost(session, path, "Change File", content);
-        invokeFileWatcher(session, path, "update");
-        invokeDirectoryWatcher(session, ts.getDirectoryPath(path), path, "update");
+        invokeWatchChange(
+            session,
+            collectFileWatcherChanges(session, path, "updated"),
+            collectDirectoryWatcherChanges(session, ts.getDirectoryPath(path), path, "updated"),
+        );
         session.host.runQueuedTimeoutCallbacks();
     }
 
@@ -141,7 +208,15 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         session.logger.log("update with npm install");
         session.host.appendFile("/user/username/projects/myproject/node_modules/something/index.d.ts", `export const y = 20;`);
         session.host.runQueuedTimeoutCallbacks();
-        invokeDirectoryWatcher(session, "/user/username/projects/myproject/node_modules", "/user/username/projects/myproject/node_modules/something/index.d.ts", "update");
+        invokeWatchChange(
+            session,
+            collectDirectoryWatcherChanges(
+                session,
+                "/user/username/projects/myproject/node_modules",
+                "/user/username/projects/myproject/node_modules/something/index.d.ts",
+                "updated",
+            ),
+        );
         session.host.runQueuedTimeoutCallbacks();
     }
 
@@ -181,6 +256,20 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
         // Update with npm install
         npmInstall(session);
+        host.runQueuedTimeoutCallbacks();
+
+        // Add and change multiple files - combine and send multiple requests together
+        updateFileOnHost(session, "/user/username/projects/myproject/d.ts", "Add file");
+        updateFileOnHost(session, "/user/username/projects/myproject/c.ts", "Change File", `export const z = 30;`);
+        updateFileOnHost(session, "/user/username/projects/myproject/e.ts", "Add File");
+        invokeWatchChange(
+            session,
+            collectDirectoryWatcherChanges(session, "/user/username/projects/myproject", "/user/username/projects/myproject/d.ts", "created"),
+            collectFileWatcherChanges(session, "/user/username/projects/myproject/c.ts", "updated"),
+            collectDirectoryWatcherChanges(session, "/user/username/projects/myproject", "/user/username/projects/myproject/c.ts", "updated"),
+            collectDirectoryWatcherChanges(session, "/user/username/projects/myproject", "/user/username/projects/myproject/e.ts", "created"),
+        );
+        session.host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("events/watchEvents", `canUseWatchEvents`, session);
         function handleWatchEvents(event: ts.server.ProjectServiceEvent) {
@@ -221,7 +310,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         logger.msg = (s, type) => logger.info(`${type}:: ${s}`);
         session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
             command: ts.server.protocol.CommandTypes.WatchChange,
-            arguments: { id: 1, path: "/user/username/projects/myproject/b.ts", eventType: "update" },
+            arguments: { id: 1, updated: ["/user/username/projects/myproject/b.ts"] },
         });
 
         // Update c.ts
