@@ -548,8 +548,8 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             return maybeNonRelative;
         }
 
-        const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
-        const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
+        const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath), true);
+        const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory, true);
         if (nearestSourcePackageJson !== nearestTargetPackageJson) {
             // 2. The importing and imported files are part of different packages.
             //
@@ -583,13 +583,17 @@ function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: 
     return compareBooleans(b.isRedirect, a.isRedirect) || compareNumberOfDirectorySeparators(a.path, b.path);
 }
 
-function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string) {
+function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string): string | undefined;
+function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, returnAsBooleanIfHostMethodMissing: true): boolean | string | undefined;
+function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string, returnAsBooleanIfHostMethodMissing: boolean = false) {
     if (host.getNearestAncestorDirectoryWithPackageJson) {
         return host.getNearestAncestorDirectoryWithPackageJson(fileName);
     }
-    return forEachAncestorDirectory(fileName, directory => {
+    const result = forEachAncestorDirectory(fileName, directory => {
         return host.fileExists(combinePaths(directory, "package.json")) ? directory : undefined;
     });
+
+    return returnAsBooleanIfHostMethodMissing ? !!result : result;
 }
 
 /** @internal */
