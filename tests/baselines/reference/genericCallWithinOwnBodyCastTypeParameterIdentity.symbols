@@ -1,0 +1,104 @@
+//// [tests/cases/compiler/genericCallWithinOwnBodyCastTypeParameterIdentity.ts] ////
+
+=== genericCallWithinOwnBodyCastTypeParameterIdentity.ts ===
+interface Thenable<Value> {
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>Value : Symbol(Value, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 19))
+
+    then<V>(
+>then : Symbol(Thenable.then, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 27))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 1, 9))
+
+        onFulfilled: (value: Value) => V | Thenable<V>,
+>onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 1, 12))
+>value : Symbol(value, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 2, 22))
+>Value : Symbol(Value, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 19))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 1, 9))
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 1, 9))
+
+    ): Thenable<V>;
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 1, 9))
+}
+
+const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>
+>toThenable : Symbol(toThenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 5))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+>Input : Symbol(Input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 27))
+>fn : Symbol(fn, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 35))
+>input : Symbol(input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 40))
+>Input : Symbol(Input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 27))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+
+    (input: Input): Thenable<Result> => {
+>input : Symbol(input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 7, 5))
+>Input : Symbol(Input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 27))
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+
+        const result = fn(input)
+>result : Symbol(result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 8, 13))
+>fn : Symbol(fn, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 35))
+>input : Symbol(input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 7, 5))
+
+        return {
+            then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {
+>then : Symbol(then, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 9, 16))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 17))
+>onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 20))
+>value : Symbol(value, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 34))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 17))
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 17))
+
+                return toThenable<V, Result>(onFulfilled)(result as Result)
+>toThenable : Symbol(toThenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 5))
+>V : Symbol(V, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 17))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+>onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 10, 20))
+>result : Symbol(result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 8, 13))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 20))
+            }
+        };
+    }
+
+const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>
+>toThenableInferred : Symbol(toThenableInferred, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 5))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 28))
+>Input : Symbol(Input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 35))
+>fn : Symbol(fn, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 43))
+>input : Symbol(input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 48))
+>Input : Symbol(Input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 35))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 28))
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 28))
+
+    (input: Input): Thenable<Result> => {
+>input : Symbol(input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 17, 5))
+>Input : Symbol(Input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 35))
+>Thenable : Symbol(Thenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 0, 0))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 28))
+
+        const result = fn(input)
+>result : Symbol(result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 18, 13))
+>fn : Symbol(fn, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 43))
+>input : Symbol(input, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 17, 5))
+
+        return {
+            then(onFulfilled) {
+>then : Symbol(then, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 19, 16))
+>onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 20, 17))
+
+                return toThenableInferred(onFulfilled)(result as Result)
+>toThenableInferred : Symbol(toThenableInferred, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 5))
+>onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 20, 17))
+>result : Symbol(result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 18, 13))
+>Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 28))
+            }
+        };
+    }
+
