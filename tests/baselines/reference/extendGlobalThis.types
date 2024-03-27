@@ -3,12 +3,15 @@
 === extension.d.ts ===
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     namespace globalThis  {
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 
         var test: string;
 >test : string
+>     : ^^^^^^
     }
 }
 
@@ -19,21 +22,36 @@ import "./extention";
 
 globalThis.tests = "a-b";
 >globalThis.tests = "a-b" : "a-b"
+>                         : ^^^^^
 >globalThis.tests : any
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >tests : any
+>      : ^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 
 console.log(globalThis.test.split("-"));
 >console.log(globalThis.test.split("-")) : void
+>                                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >globalThis.test.split("-") : string[]
+>                           : ^^^^^^^^
 >globalThis.test.split : (separator: string | RegExp, limit?: number) => string[]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >globalThis.test : string
+>                : ^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >test : string
+>     : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"-" : "-"
+>    : ^^^
 

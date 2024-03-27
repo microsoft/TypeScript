@@ -4,20 +4,29 @@
 /// <reference path="foo_0.ts"/>
 import foo = require("foo");
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 var z = foo.x + 10;
 >z : number
+>  : ^^^^^^
 >foo.x + 10 : number
+>           : ^^^^^^
 >foo.x : number
+>      : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 === foo_0.ts ===
 declare module "foo" {
 >"foo" : typeof import("foo")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
 	export var x: number;
 >x : number
+>  : ^^^^^^
 }
 

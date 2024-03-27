@@ -4,6 +4,7 @@
 export interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 === /foo.js ===
@@ -16,5 +17,7 @@ export interface Foo {
  */
 function f(foo) {}
 >f : (foo: Foo) => void
+>  : ^^^^^^^^^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 

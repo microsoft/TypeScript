@@ -4,7 +4,11 @@
 interface I {
     [Symbol.iterator]: string;
 >[Symbol.iterator] : string
+>                  : ^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 }

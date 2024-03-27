@@ -3,18 +3,24 @@
 === file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 <div>
 ><div>    // Not Comment</div> : JSX.Element
+>                              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     // Not Comment
 </div>;
 >div : any
+>    : ^^^
 
 <div>
 ><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : JSX.Element
+>                                                                                             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     // Not Comment
     {
@@ -23,31 +29,40 @@ import React = require('react');
     // Another not Comment
 </div>;
 >div : any
+>    : ^^^
 
 <div>
 ><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : JSX.Element
+>                                                                                                         : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     // Not Comment
     {
         //Comment just Fine
         "Hi"
 >"Hi" : "Hi"
+>     : ^^^^
     }
     // Another not Comment
 </div>;
 >div : any
+>    : ^^^
 
 <div>
 ><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : JSX.Element
+>                                                                                  : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     /* Not Comment */
     {
         //Comment just Fine
         "Hi"
 >"Hi" : "Hi"
+>     : ^^^^
     }
 </div>;
 >div : any
+>    : ^^^
 

@@ -6,18 +6,23 @@
 // my class comments
 class MyClass
 >MyClass : MyClass
+>        : ^^^^^^^
 {
     // my function comments
     public Count(): number
 >Count : () => number
+>      : ^^^^^^      
     {
         return 42;
 >42 : 42
+>   : ^^
     }
 
     public SetCount(value: number)
 >SetCount : (value: number) => void
+>         : ^^^^^^^^      ^^^^^^^^^
 >value : number
+>      : ^^^^^^
     {
         //
     }

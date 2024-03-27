@@ -3,8 +3,11 @@
 === ES3For-ofTypeCheck4.ts ===
 var union: string | string[];
 >union : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
 
 for (const v of union) { }
 >v : string
+>  : ^^^^^^
 >union : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
 

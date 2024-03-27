@@ -3,4 +3,5 @@
 === exportDefaultMissingName.ts ===
 export default xyzzy;
 >xyzzy : any
+>      : ^^^
 
