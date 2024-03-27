@@ -18,7 +18,7 @@ class B<T> extends A<T> {
 
     method(): string | (this extends C ? undefined : null) {
 >method : () => string | (this extends C ? undefined : null)
->       : ^^^^^^                       ^                    
+>       : ^^^^^^                                            
 
         return "";
 >"" : ""

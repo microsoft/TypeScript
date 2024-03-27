@@ -50,7 +50,7 @@ async function test4(isError: boolean = true) {
 // should not be error, Promise<any> currently working correctly 
 async function test5(isError: boolean = true): Promise<any> { //should not be error
 >test5 : (isError?: boolean) => Promise<any>
->      : ^^^^^^^^^^^       ^^^^^^^^^^^^     
+>      : ^^^^^^^^^^^       ^^^^^            
 >isError : boolean
 >        : ^^^^^^^
 >true : true
@@ -74,7 +74,7 @@ async function test5(isError: boolean = true): Promise<any> { //should not be er
 // should be error, currently reported correctly 
 async function test6(isError: boolean = true): Promise<number> { 
 >test6 : (isError?: boolean) => Promise<number>
->      : ^^^^^^^^^^^       ^^^^^^^^^^^^        
+>      : ^^^^^^^^^^^       ^^^^^               
 >isError : boolean
 >        : ^^^^^^^
 >true : true

@@ -16,7 +16,7 @@ export class Bar {
 
     private bar({ a, }: Arg): number {
 >bar : ({ a, }: Arg) => number
->    : ^^^^^^^^^^^^^^^^^      
+>    : ^^^^^^^^^   ^^^^^      
 >a : number
 >  : ^^^^^^
 

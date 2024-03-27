@@ -4,9 +4,9 @@
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
 >IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
->                        : ^^^^^^^^^^^^^^^                ^^^^^^^                        ^^^ ^^^^^^^            ^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^^                                                                      ^^^^^^^^^
 >({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
->                                                                                                                      : ^^^^^^^^^^^^^^^                ^^^^^^^                        ^^^ ^^^^^^^            ^^^^^^^^^
+>                                                                                                                      : ^^^^^^^^^^^^^^^                                                                      ^^^^^^^^^
 >ref : WeakRef<object>
 >    : ^^^^^^^^^^^^^^^
 >set : Set<WeakRef<object>>
@@ -52,9 +52,9 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     #weakMap = new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>();
 >#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>() : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >WeakMap : WeakMapConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >ref : WeakRef<K>
@@ -117,7 +117,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     set(key: K, value: V): this {
 >set : (key: K, value: V) => this
->    : ^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^^^^^^ ^^^^^^^^^ ^^^^^    
 >key : K
 >    : ^
 >value : V
@@ -243,7 +243,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     has(key: K): boolean {
 >has : (key: K) => boolean
->    : ^^^^^^^^^^^^       
+>    : ^^^^^^ ^^^^^       
 >key : K
 >    : ^
 
@@ -264,7 +264,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     get(key: K): V | undefined {
 >get : (key: K) => V | undefined
->    : ^^^^^^^^^^^^^            
+>    : ^^^^^^ ^^^^^             
 >key : K
 >    : ^
 
@@ -289,7 +289,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     delete(key: K): boolean {
 >delete : (key: K) => boolean
->       : ^^^^^^^^^^^^       
+>       : ^^^^^^ ^^^^^       
 >key : K
 >    : ^
 
@@ -387,7 +387,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     *entries(): Generator<[key: K, value: V], void> {
 >entries : () => Generator<[key: K, value: V], void>
->        : ^^^^^^^^^^^^^^^       ^         ^        
+>        : ^^^^^^                                   
 
         for (const ref of this.#refSet) {
 >ref : WeakRef<K>

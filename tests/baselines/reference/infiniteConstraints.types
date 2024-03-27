@@ -29,7 +29,7 @@ type AProp<T extends { a: string }> = T
 
 declare function myBug<
 >myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 
   T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
 >(arg: T): T
@@ -60,13 +60,13 @@ type Value<V extends string = string> = Record<"val", V>;
 
 declare function value<V extends string>(val: V): Value<V>;
 >value : <V extends string>(val: V) => Value<V>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^        
 >val : V
 >    : ^
 
 declare function ensureNoDuplicates<
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^    
 
   T extends {
     [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
@@ -155,7 +155,7 @@ type Cond<T> = T extends number ? number : never;
 
 declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
 >function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^        
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 
 
 // Repro from #31823
 

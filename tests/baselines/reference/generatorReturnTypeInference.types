@@ -208,7 +208,7 @@ function* g203() { // Generator<number, void, string>
 
 declare function f2<T>(x: T): T;
 >f2 : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -360,7 +360,7 @@ function* g307<T>() { // Generator<number, T, T>
 
 function* g308<T>(x: T) { // Generator<T, T, T>
 >g308 : <T>(x: T) => Generator<T, T, T>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -379,7 +379,7 @@ function* g308<T>(x: T) { // Generator<T, T, T>
 
 function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
 >g309 : <T, U, V>(x: T, y: U) => Generator<T, U, V>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >y : U

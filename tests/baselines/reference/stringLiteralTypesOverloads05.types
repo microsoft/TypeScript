@@ -19,19 +19,19 @@ interface Moose extends Animal { moose: {} }
 
 function doThing(x: "dog"): Dog;
 >doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
->        : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "dog"
 >  : ^^^^^
 
 function doThing(x: "cat"): Cat;
 >doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "cat"
 >  : ^^^^^
 
 function doThing(x: string): Animal;
 >doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 

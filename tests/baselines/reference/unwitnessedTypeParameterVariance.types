@@ -6,7 +6,7 @@
 export interface CalcObj<O> {
     read: (origin: O) => CalcValue<O>;
 >read : (origin: O) => CalcValue<O>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>     : ^^^^^^^^^ ^^^^^            
 >origin : O
 >       : ^
 }

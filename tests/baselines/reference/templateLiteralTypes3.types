@@ -53,13 +53,13 @@ type T11 = Foo1<`**${boolean}**${boolean}**`>;
 
 declare function foo1<V extends string>(arg: `*${V}*`): V;
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^^^^^^^^^^^^^^^^^^^^^^^^    ^   ^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^        ^^^^^ 
 >arg : `*${V}*`
 >    : ^^^^^^^^
 
 function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >f1 : <T extends string>(s: string, n: number, b: boolean, t: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^^^ ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -286,7 +286,7 @@ function f2() {
 
 function f3<T extends string>(s: string, n: number, b: boolean, t: T) {
 >f3 : <T extends string>(s: string, n: number, b: boolean, t: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^^^ ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -387,7 +387,7 @@ function f3<T extends string>(s: string, n: number, b: boolean, t: T) {
 
 function f4<T extends number>(s: string, n: number, b: boolean, t: T) {
 >f4 : <T extends number>(s: string, n: number, b: boolean, t: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^^^ ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -598,7 +598,7 @@ type Schema = { a: { b: { c: number } } };
 
 declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 >chain : <F extends "a">(field: F | `${F}.${F}`) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^      ^    ^  ^^^^^    
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^               ^^^^^    
 >field : F | `${F}.${F}`
 >      : ^^^^^^^^^^^^^^^
 
@@ -646,7 +646,7 @@ function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
 
 function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
 >ff2 : <T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^       ^  ^^^^^   ^      ^^^^^       ^  ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^          ^^^^^          ^^^^^          ^^^^^^^^^
 >x : `foo-${T}`
 >  : ^^^^^^^^^^
 >y : `${T}-bar`
@@ -750,7 +750,7 @@ type Action =
 
 function reducer(action: Action) {
 >reducer : (action: Action) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^^^^^
 >action : Action
 >       : ^^^^^^
 
@@ -792,13 +792,13 @@ type DotString = `${string}.${string}.${string}`;
 
 declare function noSpread<P extends DotString>(args: P[]): P;
 >noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^ 
 >args : P[]
 >     : ^^^
 
 declare function spread<P extends DotString>(...args: P[]): P;
 >spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^ 
 >args : P[]
 >     : ^^^
 
@@ -872,7 +872,7 @@ spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 
 function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
 >ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^      ^     ^^^^^^^^^^^^^^^      ^     ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^            ^^^^^^                     ^^^^^^                     ^^^^^^^^^
 >t : T
 >  : ^
 >u : Uppercase<T>

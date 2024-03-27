@@ -21,7 +21,7 @@ module M {
 
     export function f(y:Y) { }
 >f : (y: Y) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >y : Y
 >  : ^
 

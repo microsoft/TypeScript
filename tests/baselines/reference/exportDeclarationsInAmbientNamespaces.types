@@ -7,7 +7,7 @@ declare namespace Q {
 
     function _try(method: Function, ...args: any[]): any;
 >_try : (method: Function, ...args: any[]) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   
+>     : ^^^^^^^^^        ^^^^^^^^^^^     ^^^^^   
 >method : Function
 >       : ^^^^^^^^
 >args : any[]

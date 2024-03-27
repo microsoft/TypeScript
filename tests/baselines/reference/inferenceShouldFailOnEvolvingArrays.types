@@ -5,7 +5,7 @@
 // The type of `arg` blocks inference but simplifies to T.
 function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]): T {
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^    ^   ^    ^ ^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^ 
 >arg : { [K in U]: T; }[U]
 >    : ^^^^^^^^^^^^^^^^^^^
 
@@ -55,7 +55,7 @@ z = logLength(42);  // no error; T is inferred as `any`
 
 function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T }[U]): T {
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^    ^   ^    ^ ^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^ 
 >arg : { [K in U]: T; }[U]
 >    : ^^^^^^^^^^^^^^^^^^^
 

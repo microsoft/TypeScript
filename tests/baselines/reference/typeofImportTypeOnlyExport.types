@@ -24,11 +24,11 @@ export type {ClassMapDirective};
 
 export const directive =
 >directive : <C>(class_: C) => () => { directive: C; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   <C>(class_: C) =>
 ><C>(class_: C) =>  () => ({    directive: class_,  }) : <C>(class_: C) => () => { directive: C; }
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class_ : C
 >       : ^
 

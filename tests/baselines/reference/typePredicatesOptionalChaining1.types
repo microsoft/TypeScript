@@ -31,7 +31,7 @@ const x: X = {
 // type guard
 function isNotNull<A>(x: A): x is NonNullable<A> {
 >isNotNull : <A>(x: A) => x is NonNullable<A>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : A
 >  : ^
 

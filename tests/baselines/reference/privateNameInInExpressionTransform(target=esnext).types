@@ -205,7 +205,7 @@ class Bar {
 
 function syntaxError(v: Foo) {
 >syntaxError : (v: Foo) => boolean
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^^^^   ^^^^^^^^^^^^
 >v : Foo
 >  : ^^^
 

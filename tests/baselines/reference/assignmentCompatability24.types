@@ -31,11 +31,11 @@ module __test2__ {
 
     export var obj = function f<Tstring>(a: Tstring) { return a; };;
 >obj : <Tstring>(a: Tstring) => Tstring
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^       ^^^^^^^^^^^^
 >function f<Tstring>(a: Tstring) { return a; } : <Tstring>(a: Tstring) => Tstring
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^       ^^^^^       ^^^^^^^^^^^^
 >f : <Tstring>(a: Tstring) => Tstring
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^       ^^^^^       ^^^^^^^^^^^^
 >a : Tstring
 >  : ^^^^^^^
 >a : Tstring

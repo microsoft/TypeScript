@@ -14,7 +14,7 @@ type WatchHandler<T> = (val: T) => void;
 
 declare function extend(options: ComponentOptions<{}>): void;
 >extend : (options: ComponentOptions<{}>) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    
+>       : ^^^^^^^^^^                    ^^^^^    
 >options : ComponentOptions<{}>
 >        : ^^^^^^^^^^^^^^^^^^^^
 

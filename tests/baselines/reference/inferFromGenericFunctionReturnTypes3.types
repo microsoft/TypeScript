@@ -5,7 +5,7 @@
 
 function truePromise(): Promise<true> {
 >truePromise : () => Promise<true>
->            : ^^^^^^^^^^^^^      
+>            : ^^^^^^             
 >true : true
 >     : ^^^^
 
@@ -30,7 +30,7 @@ interface Wrap<T> {
 
 function wrap<T>(value: T): Wrap<T> {
 >wrap : <T>(value: T) => Wrap<T>
->     : ^^^^^^^^^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^ ^^^^^       
 >value : T
 >      : ^
 
@@ -43,7 +43,7 @@ function wrap<T>(value: T): Wrap<T> {
 
 function wrappedFoo(): Wrap<'foo'> {
 >wrappedFoo : () => Wrap<'foo'>
->           : ^^^^^^^^^^       
+>           : ^^^^^^           
 
     return wrap('foo');
 >wrap('foo') : Wrap<"foo">
@@ -56,7 +56,7 @@ function wrappedFoo(): Wrap<'foo'> {
 
 function wrapBar(value: 'bar'): Wrap<'bar'> {
 >wrapBar : (value: 'bar') => Wrap<'bar'>
->        : ^^^^^^^^     ^^^^^^^^^       
+>        : ^^^^^^^^     ^^^^^           
 >value : "bar"
 >      : ^^^^^
 
@@ -69,7 +69,7 @@ function wrapBar(value: 'bar'): Wrap<'bar'> {
 
 function wrappedBar(): Wrap<'bar'> {
 >wrappedBar : () => Wrap<'bar'>
->           : ^^^^^^^^^^       
+>           : ^^^^^^           
 
     const value = 'bar';
 >value : "bar"
@@ -124,7 +124,7 @@ function wrappedBar(): Wrap<'bar'> {
 
 function wrappedBaz(): Wrap<'baz'> {
 >wrappedBaz : () => Wrap<'baz'>
->           : ^^^^^^^^^^       
+>           : ^^^^^^           
 
     const value: 'baz' = 'baz';
 >value : "baz"
@@ -288,7 +288,7 @@ export interface Diagnostic {
 
 function bug(): Diagnostic[] {
 >bug : () => Diagnostic[]
->    : ^^^^^^^^^^^^^^^^  
+>    : ^^^^^^            
 
 	let values: any[] = [];
 >values : any[]
@@ -395,7 +395,7 @@ interface Person {
 
 function createPerson(): Person {
 >createPerson : () => Person
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
   return {
 >{    phoneNumbers: [1].map(() => ({      __typename: 'PhoneNumber'    }))  } : { phoneNumbers: { __typename: "PhoneNumber"; }[]; }
@@ -441,7 +441,7 @@ type Box<T> = { value: T };
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
->    : ^^^^^^^^^^^^^^^^^^^^ ^ 
+>    : ^ ^^^^^^^^^ ^^^^^      
 >value : T
 >      : ^
 
@@ -500,7 +500,7 @@ interface OK<T> {
 }
 export function ok<T>(value: T): OK<T> {
 >ok : <T>(value: T) => OK<T>
->   : ^^^^^^^^^^^^^^^^^^^ ^ 
+>   : ^ ^^^^^^^^^ ^^^^^     
 >value : T
 >      : ^
 
@@ -677,11 +677,11 @@ const f1: F = () => {
 
 declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
->         : ^^^^^^^^^^^^^      ^                 ^^^^^^^
+>         : ^ ^^^^^ ^^^^^                         ^^^^^ 
 >z : U
 >  : ^
 >f : (acc: U, t: boolean) => U
->  : ^^^^^^^^^^^^       ^^^^^^
+>  : ^^^^^^ ^^^^^       ^^^^^ 
 >acc : U
 >    : ^
 >t : boolean
@@ -725,9 +725,9 @@ type Foo = { state: State }
 
 declare function bar<T>(f: () => T[]): T[];
 >bar : <T>(f: () => T[]) => T[]
->    : ^^^^^^^      ^  ^^^^^^  
+>    : ^ ^^^^^         ^^^^^   
 >f : () => T[]
->  : ^^^^^^^  
+>  : ^^^^^^   
 
 let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
 >x : Foo[]
@@ -791,22 +791,22 @@ class ClassWithConvert<T> {
 
   convert(converter: { to: (v: T) => T; }) { }
 >convert : (converter: { to: (v: T) => T; }) => void
->        : ^^^^^^^^^^^^          ^     ^   ^^^^^^^^^
+>        : ^^^^^^^^^^^^                    ^^^^^^^^^
 >converter : { to: (v: T) => T; }
->          : ^^^^^^    ^     ^^^^
+>          : ^^^^^^           ^^^
 >to : (v: T) => T
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >v : T
 >  : ^
 }
 
 function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
 >fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^      ^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>   : ^ ^^^^^^^                   ^^^^^                         ^^^^^^^^^
 >arg : ClassWithConvert<T>
 >    : ^^^^^^^^^^^^^^^^^^^
 >f : () => ClassWithConvert<T>
->  : ^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>  : ^^^^^^                   
 
 fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
 >fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A)) : void
@@ -844,13 +844,13 @@ type Func<T> = (x: T) => T;
 
 declare function makeFoo<T>(x: T): Func<T>;
 >makeFoo : <T>(x: T) => Func<T>
->        : ^^^^^^^^^^^^^^^^^ ^ 
+>        : ^ ^^^^^ ^^^^^       
 >x : T
 >  : ^
 
 declare function baz<U>(x: Func<U>, y: Func<U>): void;
 >baz : <U>(x: Func<U>, y: Func<U>) => void
->    : ^^^^^^^^^^^ ^ ^^^^^^^^^ ^ ^^^^^    
+>    : ^ ^^^^^       ^^^^^       ^^^^^    
 >x : Func<U>
 >  : ^^^^^^^
 >y : Func<U>

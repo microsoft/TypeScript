@@ -22,7 +22,7 @@ interface Props {
 
 function Wrapper(props: Props) {
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 

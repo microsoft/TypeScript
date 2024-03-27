@@ -451,7 +451,7 @@ ft2(0, 'abc', 'def', true);  // Error
 
 function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
 >ft3 : <T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^            ^ ^^^^^                ^^^^^                     ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^                ^^^^^                     ^^^^^^^^^
 >x : [number, ...T]
 >  : ^^^^^^^^^^^^^^
 >y : [number, number]
@@ -507,17 +507,17 @@ let tt4: [number, ...number[]] = tt3  // Error
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^              ^          ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                              ^^^^^^^^^
 >args : [...T, (...values: T) => void]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^    ^
+>     : ^^^^^^^^^^^^^^^^^^^ ^^^^^    ^
 >values : T
 >       : ^
 
     const callback = args[args.length - 1] as (...values: T) => void;
 >callback : (...values: T) => void
->         : ^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^^^^ ^^^^^    
 >args[args.length - 1] as (...values: T) => void : (...values: T) => void
->                                                : ^^^^^^^^^^^^^^^^^^    
+>                                                : ^^^^^^^^^^^^ ^^^^^    
 >args[args.length - 1] : [...T, (...values: T) => void][number]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : [...T, (...values: T) => void]
@@ -726,7 +726,7 @@ pipe(...sa);  // Error
 
 declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
->    : ^^^^^^^^^^               ^  ^ ^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^                    ^^^^^      
 >t : [...unknown[], T, U]
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -776,7 +776,7 @@ fn1([1, 'abc', true]);  // [string, boolean]
 
 declare function fn2<T, U>(t: [T, ...unknown[], U]): [T, U];
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
->    : ^^^^^^^^^^ ^                ^ ^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^                    ^^^^^      
 >t : [T, ...unknown[], U]
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -828,7 +828,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^         ^^^^^    ^         
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^              
 >stringsAndNumber : readonly [...S, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

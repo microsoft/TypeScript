@@ -3,7 +3,7 @@
 === objectBindingPatternContextuallyTypesArgument.ts ===
 declare function id<T>(x: T): T;
 >id : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 

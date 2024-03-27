@@ -3,13 +3,13 @@
 === contextuallyTypedParametersWithInitializers1.ts ===
 declare function id1<T>(input: T): T;
 >id1 : <T>(input: T) => T
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^^^^ 
 >input : T
 >      : ^
 
 declare function id2<T extends (x: any) => any>(input: T): T;
 >id2 : <T extends (x: any) => any>(input: T) => T
->    : ^^^^^^^^^^^^^^^   ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^   ^^^^^   ^^^^^^^^^ ^^^^^ 
 >x : any
 >  : ^^^
 >input : T
@@ -17,7 +17,7 @@ declare function id2<T extends (x: any) => any>(input: T): T;
 
 declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
 >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
->    : ^^^^^^^^^^^^^^^             ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^             ^^^^^   ^^^^^^^^^ ^^^^^ 
 >x : { foo: any; }
 >  : ^^^^^^^   ^^^
 >foo : any
@@ -27,7 +27,7 @@ declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
 
 declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 >id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
->    : ^^^^^^^^^^^^^^^                 ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^                 ^^^^^   ^^^^^^^^^ ^^^^^ 
 >x : { foo?: number | undefined; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number | undefined
@@ -37,7 +37,7 @@ declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 
 declare function id5<T extends (x?: number) => any>(input: T): T;
 >id5 : <T extends (x?: number) => any>(input: T) => T
->    : ^^^^^^^^^^^^^^^^      ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^      ^^^^^   ^^^^^^^^^ ^^^^^ 
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >input : T
@@ -275,31 +275,31 @@ const f8: () => any = (...x) => 0;  // []
 
 declare function g1<T>(x: T): T;
 >g1 : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g2<T extends any>(x: T): T;
 >g2 : <T extends unknown>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g3<T extends unknown>(x: T): T;
 >g3 : <T extends unknown>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g4<T extends Function>(x: T): T;
 >g4 : <T extends Function>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g5<T extends (...args: any[]) => any>(x: T): T;
 >g5 : <T extends (...args: any[]) => any>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^ ^^^^^ 
 >args : any[]
 >     : ^^^^^
 >x : T
@@ -307,7 +307,7 @@ declare function g5<T extends (...args: any[]) => any>(x: T): T;
 
 declare function g6<T extends () => any>(x: T): T;
 >g6 : <T extends () => any>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^   ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -423,7 +423,7 @@ g6((...x) => 0);   // []
 
 function id<T>(input: T): T { return input }
 >id : <T>(input: T) => T
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^^^^ 
 >input : T
 >      : ^
 >input : T
@@ -478,7 +478,7 @@ const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
 
 declare function memoize<F extends Function>(func: F): F;
 >memoize : <F extends Function>(func: F) => F
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >func : F
 >     : ^
 
@@ -564,7 +564,7 @@ const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
 
 declare function execute(script: string | Function): Promise<string>;
 >execute : (script: string | Function) => Promise<string>
->        : ^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^        
+>        : ^^^^^^^^^                 ^^^^^               
 >script : string | Function
 >       : ^^^^^^^^^^^^^^^^^
   
@@ -578,7 +578,7 @@ export function executeSomething() {
 >execute : (script: string | Function) => Promise<string>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(root: HTMLElement, debug = true) => {        if (debug) {            root.innerHTML = '';        }    } : (root: HTMLElement, debug?: boolean) => void
->                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                         : ^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >root : HTMLElement
 >     : ^^^^^^^^^^^
 >debug : boolean

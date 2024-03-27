@@ -34,7 +34,7 @@ module consumer {
                 
                 function use():provider.UsefulClass { 
 >use : () => provider.UsefulClass
->    : ^^^^^^^^^^^^^^            
+>    : ^^^^^^                    
 >provider : any
 >         : ^^^
 

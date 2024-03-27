@@ -16,7 +16,7 @@ function fn3(): boolean { }
 
 function fn4(): Date {  }
 >fn4 : () => Date
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 function fn7(): any {  } // should be valid: any includes void
 >fn7 : () => any
@@ -50,7 +50,7 @@ class D extends C {
 }
 function fn10(): D { return { id: 12 }; } 
 >fn10 : () => D
->     : ^^^^^^^
+>     : ^^^^^^ 
 >{ id: 12 } : { id: number; }
 >           : ^^^^^^^^^^^^^^^
 >id : number
@@ -60,7 +60,7 @@ function fn10(): D { return { id: 12 }; }
 
 function fn11(): D { return new C(); }
 >fn11 : () => D
->     : ^^^^^^^
+>     : ^^^^^^ 
 >new C() : C
 >        : ^
 >C : typeof C

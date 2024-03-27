@@ -18,7 +18,7 @@ abstract class AbstractBase {
 
 function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
 >Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 >baseClass : TBase

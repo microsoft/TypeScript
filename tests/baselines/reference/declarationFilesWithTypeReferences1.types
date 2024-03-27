@@ -10,7 +10,7 @@ interface Error {
 === /app.ts ===
 function foo(): Error {
 >foo : () => Error
->    : ^^^^^^^^^^^
+>    : ^^^^^^     
 
     return undefined;
 >undefined : undefined

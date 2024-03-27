@@ -92,7 +92,7 @@ type D = { done: true, value: 1 } | { done: false, value: 2 };
 
 declare function fn(): D;
 >fn : () => D
->   : ^^^^^^^
+>   : ^^^^^^ 
 
 let o: D;
 >o : D

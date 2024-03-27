@@ -46,7 +46,7 @@ export class A {
 
     getA(): ITest {
 >getA : () => ITest
->     : ^^^^^^^^^^^
+>     : ^^^^^^     
 
         return {
 >{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { "123123": string; "12312312312": string; }

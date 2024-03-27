@@ -11,7 +11,7 @@ type ObjectType<Source> = {
 
   __source: (source: Source) => void;
 >__source : (source: Source) => void
->         : ^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^      ^^^^^    
 >source : Source
 >       : ^^^^^^
 
@@ -23,13 +23,13 @@ type Field<Source, Key extends string> = {
 
   __key: (key: Key) => void;
 >__key : (key: Key) => void
->      : ^^^^^^^^^^^^^^    
+>      : ^^^^^^   ^^^^^    
 >key : Key
 >    : ^^^
 
   __source: (source: Source) => void;
 >__source : (source: Source) => void
->         : ^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^      ^^^^^    
 >source : Source
 >       : ^^^^^^
 
@@ -37,14 +37,14 @@ type Field<Source, Key extends string> = {
 
 declare const object: <Source>() => <
 >object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^          ^^^^^^    ^^^^^^^^^^^^^^^ ^^^^^^ 
+>       : ^      ^^^^^^^^      ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                  ^^^^^                  
 
   Fields extends {
     [Key in keyof Fields]: Field<Source, Key & string>;
   }
 >(config: {
 >config : { name: string; fields: Fields | (() => Fields); }
->       : ^^^^^^^^      ^^^^^^^^^^^^^^^^          ^^^^^^ ^^^
+>       : ^^^^^^^^      ^^^^^^^^^^                       ^^^
 
   name: string;
 >name : string
@@ -52,7 +52,7 @@ declare const object: <Source>() => <
 
   fields: Fields | (() => Fields);
 >fields : Fields | (() => Fields)
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^      ^
 
 }) => ObjectType<Source>;
 
@@ -88,7 +88,7 @@ type FieldFuncArgs<Source, Type extends ObjectType<any>> = {
 
 declare const field: <Source, Type extends ObjectType<any>, Key extends string>(
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^ ^^^^^^^^^^ ^^^^^^  ^^^ 
+>      : ^      ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^                  
 
   field: FieldFuncArgs<Source, Type>
 >field : FieldFuncArgs<Source, Type>

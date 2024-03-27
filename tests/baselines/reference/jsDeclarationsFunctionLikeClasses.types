@@ -68,7 +68,7 @@ import {Point} from "./source";
  */
 export function magnitude(p) {
 >magnitude : (p: Point) => number
->          : ^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 

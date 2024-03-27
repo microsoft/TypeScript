@@ -59,7 +59,7 @@ type R = ReturnType<typeof mul>;
 
 function mul(input: Input): R {
 >mul : (input: Input) => any
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^     ^^^^^^^^
 >input : Input
 >      : ^^^^^
 

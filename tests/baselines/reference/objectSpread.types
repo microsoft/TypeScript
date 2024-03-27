@@ -298,9 +298,9 @@ type Header = { head: string, body: string, authToken: string }
 
 function from16326(this: { header: Header }, header: Header, authToken: string): Header {
 >from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
->          : ^^^^^^^          ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>          : ^^^^^^^                   ^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^      
 >this : { header: Header; }
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^      ^^^
 >header : Header
 >       : ^^^^^^
 >header : Header
@@ -807,7 +807,7 @@ let spreadNonPrimitive = { ...<object>{}};
 
 function f<T, U>(t: T, u: U) {
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -964,7 +964,7 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 
 function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
 >genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^                 ^^^^^^^              ^^^^^^^^^
+>              : ^ ^^ ^^^^^ ^^^^^ ^^^^^     ^^^^^                  ^^^^^^^              ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

@@ -12,18 +12,18 @@ declare class Class<T> {
 
 declare function fn<T>(): T;
 >fn : <T>() => T
->   : ^^^^^^^^^^
+>   : ^ ^^^^^^^ 
 
 
 type ClassAlias<T> = typeof Class<T>;
 >ClassAlias : typeof Class<T>
->           :        ^^^^^ ^ 
+>           :                
 >Class : typeof Class
 >      : ^^^^^^^^^^^^
 
 type FnAlias<T> = typeof fn<T>;
 >FnAlias : typeof fn<T>
->        :        ^^ ^ 
+>        :             
 >fn : <T_1>() => T_1
 >   : ^^^^^^^^^^^^^^
 

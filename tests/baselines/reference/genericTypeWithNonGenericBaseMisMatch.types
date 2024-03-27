@@ -18,7 +18,7 @@ class X<T extends { a: string }> implements I {
 
 	f(a: T): void { }
 >f : (a: T) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >a : T
 >  : ^
 }

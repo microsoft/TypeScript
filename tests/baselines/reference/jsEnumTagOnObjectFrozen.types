@@ -115,7 +115,7 @@ exports.Thing = Thing;
  */
 function useThing(x) {}
 >useThing : (x: Thing) => void
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -136,7 +136,7 @@ exports.useThing = useThing;
  */
 function cbThing(x) {}
 >cbThing : (x: (x: Thing) => void) => void
->        : ^^^^    ^^^^^         ^^^^^^^^^
+>        : ^^^^                  ^^^^^^^^^
 >x : (x: string) => void
 >  : ^^^^^^^^^^^^^^^^^^^
 

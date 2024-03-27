@@ -15,7 +15,7 @@ interface I {
 
 function f2(args: I) { }
 >f2 : (args: I) => void
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^
 >args : I
 >     : ^
 

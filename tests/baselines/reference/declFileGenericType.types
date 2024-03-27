@@ -15,13 +15,13 @@ export module C {
     
     export function F<T>(x: T): A<B> { return null; }
 >F : <T>(x: T) => A<B>
->  : ^^^^^^^^^^^^^^ ^ 
+>  : ^ ^^^^^ ^^^^^    
 >x : T
 >  : ^
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
 >F2 : <T>(x: T) => C.A<C.B>
->   : ^^^^^^^^^^^^^^ ^ ^ ^ 
+>   : ^ ^^^^^ ^^^^^        
 >x : T
 >  : ^
 >C : any
@@ -31,7 +31,7 @@ export module C {
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
 >F3 : <T>(x: T) => C.A<C.B>[]
->   : ^^^^^^^^^^^^^^ ^ ^ ^   
+>   : ^ ^^^^^ ^^^^^          
 >x : T
 >  : ^
 >C : any
@@ -41,7 +41,7 @@ export module C {
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
 >F4 : <T extends A<B>>(x: T) => Array<C.A<C.B>>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^ ^ ^  
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^               
 >x : T
 >  : ^
 >C : any
@@ -51,11 +51,11 @@ export module C {
 
     export function F5<T>(): T { return null; }
 >F5 : <T>() => T
->   : ^^^^^^^^^^
+>   : ^ ^^^^^^^ 
 
     export function F6<T extends A<B>>(x: T): T { return null; }
 >F6 : <T extends A<B>>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 

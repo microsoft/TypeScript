@@ -20,7 +20,7 @@ declare function isNil(value: unknown): value is undefined | null;
 
 function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
 >getBreedSizeWithoutFunction : (animal: Animal) => string | undefined
->                            : ^^^^^^^^^^^^^^^^^^^^                  
+>                            : ^^^^^^^^^      ^^^^^                  
 >animal : Animal
 >       : ^^^^^^
 
@@ -59,7 +59,7 @@ function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
 
 function getBreedSizeWithFunction(animal: Animal): string | undefined {
 >getBreedSizeWithFunction : (animal: Animal) => string | undefined
->                         : ^^^^^^^^^^^^^^^^^^^^                  
+>                         : ^^^^^^^^^      ^^^^^                  
 >animal : Animal
 >       : ^^^^^^
 

@@ -38,7 +38,7 @@ class C {
 
     private f(): Function {
 >f : () => Function
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^        
 
         let f: Function;
 >f : Function

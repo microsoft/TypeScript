@@ -22,7 +22,7 @@ interface IHasVisualizationModel {
 }
 var a: { x: typeof moduleA } = { x: moduleA };
 >a : { x: typeof moduleA; }
->  : ^^^^^       ^^^^^^^^^^
+>  : ^^^^^              ^^^
 >x : typeof moduleA
 >  : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
@@ -36,7 +36,7 @@ var a: { x: typeof moduleA } = { x: moduleA };
 
 var b: { x: IHasVisualizationModel } = { x: moduleA };
 >b : { x: IHasVisualizationModel; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                      ^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >{ x: moduleA } : { x: typeof moduleA; }
@@ -48,9 +48,9 @@ var b: { x: IHasVisualizationModel } = { x: moduleA };
 
 var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
 >c : { y: { z: IHasVisualizationModel; }; }
->  : ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^   ^^^
+>  : ^^^^^                              ^^^
 >y : { z: IHasVisualizationModel; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                      ^^^
 >z : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >{ y: { z: moduleA } } : { y: { z: typeof moduleA; }; }

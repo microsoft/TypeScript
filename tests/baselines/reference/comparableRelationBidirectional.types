@@ -60,11 +60,11 @@ interface ExtensionData {
 
 export function getMockData(): ExtensionData {
 >getMockData : () => ExtensionData
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^             
 
     return {
 >{        settings: {            presets: [],            automation: {                mode: "",            },        } as UserSettings,    } : { settings: UserSettings; }
->                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                            : ^^^^^^^^^^^^            ^^^
 
         settings: {
 >settings : UserSettings

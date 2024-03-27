@@ -542,7 +542,7 @@ do { }while(k)
 
 function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
->   : ^^^^^      ^^^^^^
+>   : ^^^^^      ^^^^^ 
 >x : string
 >  : ^^^^^^
 

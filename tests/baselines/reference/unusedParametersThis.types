@@ -26,7 +26,7 @@ class A {
 
     public method2(this: A): number {
 >method2 : (this: A) => number
->        : ^^^^^^^^^^^^^      
+>        : ^^^^^^^ ^^^^^      
 >this : A
 >     : ^
 
@@ -66,7 +66,7 @@ class A {
 
     public method4(this: A): number {
 >method4 : (this: A) => number
->        : ^^^^^^^^^^^^^      
+>        : ^^^^^^^ ^^^^^      
 >this : A
 >     : ^
 
@@ -91,7 +91,7 @@ class A {
 
     static staticMethod(this: A): number {
 >staticMethod : (this: A) => number
->             : ^^^^^^^^^^^^^      
+>             : ^^^^^^^ ^^^^^      
 >this : A
 >     : ^
 
@@ -107,7 +107,7 @@ class A {
 
 function f(this: A): number {
 >f : (this: A) => number
->  : ^^^^^^^^^^^^^      
+>  : ^^^^^^^ ^^^^^      
 >this : A
 >     : ^
 
@@ -122,11 +122,11 @@ function f(this: A): number {
 
 var f2 = function f2(this: A): number {
 >f2 : (this: A) => number
->   : ^^^^^^^^^^^^^      
+>   : ^^^^^^^ ^^^^^      
 >function f2(this: A): number {    return this.a;} : (this: A) => number
->                                                  : ^^^^^^^^^^^^^      
+>                                                  : ^^^^^^^ ^^^^^      
 >f2 : (this: A) => number
->   : ^^^^^^^^^^^^^      
+>   : ^^^^^^^ ^^^^^      
 >this : A
 >     : ^
 

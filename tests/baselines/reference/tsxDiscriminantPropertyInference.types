@@ -46,7 +46,7 @@ type Props = DiscriminatorTrue | DiscriminatorFalse;
 
 declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
 >Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^
+>     : ^^^^^^^^                                      ^^^^^           
 >props : DiscriminatorTrue | DiscriminatorFalse
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any

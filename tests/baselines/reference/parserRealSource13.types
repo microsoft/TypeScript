@@ -872,7 +872,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
     export function walk(script: Script, callback: AstWalkerDetailCallback): void {
 >walk : (script: Script, callback: AstWalkerDetailCallback) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^    
 >script : Script
 >       : ^^^^^^
 >callback : AstWalkerDetailCallback
@@ -981,7 +981,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
     function AstWalkerCallback(pre: boolean, ast: AST, callback: AstWalkerDetailCallback): boolean {
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>                  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^       
 >pre : boolean
 >    : ^^^^^^^
 >ast : AST

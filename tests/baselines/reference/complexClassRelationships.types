@@ -10,7 +10,7 @@ class Derived extends Base {
 
     public static createEmpty(): Derived {
 >createEmpty : () => Derived
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
 
         var item = new Derived();
 >item : Derived
@@ -31,11 +31,11 @@ class BaseCollection<T extends Base> {
 
     constructor(f: () => T) {
 >f : () => T
->  : ^^^^^^^
+>  : ^^^^^^ 
 
         (item: Thing) => { return [item.Components]; };
 >(item: Thing) => { return [item.Components]; } : (item: Thing) => ComponentCollection<any>[]
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Thing
 >     : ^^^^^
 >[item.Components] : ComponentCollection<any>[]
@@ -72,7 +72,7 @@ class ComponentCollection<T> {
 
     private static sortComponents(p: Foo) {
 >sortComponents : (p: Foo) => GenericType<string>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Foo
 >  : ^^^
 

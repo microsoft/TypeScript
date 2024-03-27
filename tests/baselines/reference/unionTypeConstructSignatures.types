@@ -17,7 +17,7 @@ var strOrNum: string | number;
 // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
 var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
 >unionOfDifferentReturnType : (new (a: number) => number) | (new (a: number) => Date)
->                           : ^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^
+>                           : ^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^      ^^^^^    ^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -57,7 +57,7 @@ new unionOfDifferentReturnType1(true); // error in type of parameter
 
 var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; };
 >unionOfDifferentReturnType1 : { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; }
->                            : ^^^^^^^^^^      ^^^      ^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^       ^^^
+>                            : ^^^^^^^^^^      ^^^      ^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^      ^^^    ^^^^^^^^^^      ^^^       ^^^
 >a : number
 >  : ^^^^^^
 >a : string
@@ -107,7 +107,7 @@ new unionOfDifferentReturnType1(); // error missing parameter
 
 var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };
 >unionOfDifferentParameterTypes : (new (a: number) => number) | (new (a: string) => Date)
->                               : ^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^
+>                               : ^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^      ^^^^^    ^
 >a : number
 >  : ^^^^^^
 >a : string
@@ -137,7 +137,7 @@ new unionOfDifferentParameterTypes();// error - no call signatures
 
 var unionOfDifferentNumberOfSignatures: { new (a: number): number; } | { new (a: number): Date; new (a: string): boolean; };
 >unionOfDifferentNumberOfSignatures : (new (a: number) => number) | { new (a: number): Date; new (a: string): boolean; }
->                                   : ^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^       ^^^
+>                                   : ^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^      ^^^    ^^^^^^^^^^      ^^^       ^^^
 >a : number
 >  : ^^^^^^
 >a : number

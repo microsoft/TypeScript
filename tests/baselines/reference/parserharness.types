@@ -255,7 +255,7 @@ declare module process {
 
     export function on(event: string, listener: Function);
 >on : (event: string, listener: Function) => any
->   : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^      ^^^^^^^^^^^^        ^^^^^^^^
 >event : string
 >      : ^^^^^^
 >listener : Function
@@ -367,9 +367,9 @@ module Harness {
 
         export var throwAssertError = (error: Error) => {
 >throwAssertError : (error: Error) => never
->                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^     ^^^^^^^^^^
 >(error: Error) => {            throw error;        } : (error: Error) => never
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                     : ^^^^^^^^     ^^^^^^^^^^
 >error : Error
 >      : ^^^^^
 
@@ -705,7 +705,7 @@ module Harness {
 
         export function compilerWarning(result: Compiler.CompilerResult, line: number, column: number, desc: string) {
 >compilerWarning : (result: Compiler.CompilerResult, line: number, column: number, desc: string) => void
->                : ^^^^^^^^^^^^^^^^^               ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^
+>                : ^^^^^^^^^                       ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^
 >result : Compiler.CompilerResult
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
 >Compiler : any
@@ -1421,13 +1421,13 @@ module Harness {
 
         scenarioStart: (scenario: IScenarioMetadata) => void;
 >scenarioStart : (scenario: IScenarioMetadata) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^^^^^^^^^^^                 ^^^^^    
 >scenario : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 
         scenarioEnd: (scenario: IScenarioMetadata, error?: Error) => void;
 >scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>            : ^^^^^^^^^^^                 ^^^^^^^^^^     ^^^^^    
 >scenario : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 >error : Error
@@ -1435,31 +1435,31 @@ module Harness {
 
         testStart: (test: ITestMetadata) => void;
 >testStart : (test: ITestMetadata) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>          : ^^^^^^^             ^^^^^    
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         pass: (test: ITestMetadata) => void;
 >pass : (test: ITestMetadata) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^^^^^^^             ^^^^^    
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         bug: (test: ITestMetadata) => void;
 >bug : (test: ITestMetadata) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^^^^^^^             ^^^^^    
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         fail: (test: ITestMetadata) => void;
 >fail : (test: ITestMetadata) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^^^^^^^             ^^^^^    
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         error: (test: ITestMetadata, error: Error) => void;
 >error : (test: ITestMetadata, error: Error) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>      : ^^^^^^^             ^^^^^^^^^     ^^^^^    
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 >error : Error
@@ -1473,7 +1473,7 @@ module Harness {
 
         verify: (test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) => void;
 >verify : (test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^      ^^^^^    
+>       : ^^^^^^^             ^^^^^^^^^^       ^^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^      ^^^^^    
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 >passed : boolean
@@ -1506,13 +1506,13 @@ module Harness {
 
         public scenarioStart(scenario: IScenarioMetadata) { }
 >scenarioStart : (scenario: IScenarioMetadata) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^                 ^^^^^^^^^
 >scenario : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 
         public scenarioEnd(scenario: IScenarioMetadata, error?: Error) { }
 >scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^                 ^^^^^^^^^^     ^^^^^^^^^
 >scenario : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 >error : Error
@@ -1520,31 +1520,31 @@ module Harness {
 
         public testStart(test: ITestMetadata) { }
 >testStart : (test: ITestMetadata) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^             ^^^^^^^^^
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         public pass(test: ITestMetadata) { }
 >pass : (test: ITestMetadata) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^             ^^^^^^^^^
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         public bug(test: ITestMetadata) { }
 >bug : (test: ITestMetadata) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^             ^^^^^^^^^
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         public fail(test: ITestMetadata) { }
 >fail : (test: ITestMetadata) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^             ^^^^^^^^^
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 
         public error(test: ITestMetadata, error: Error) { }
 >error : (test: ITestMetadata, error: Error) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^             ^^^^^^^^^     ^^^^^^^^^
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 >error : Error
@@ -1558,7 +1558,7 @@ module Harness {
 
         public verify(test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) { }
 >verify : (test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^      ^^^^^^^^^
+>       : ^^^^^^^             ^^^^^^^^^^       ^^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^      ^^^^^^^^^
 >test : ITestMetadata
 >     : ^^^^^^^^^^^^^
 >passed : boolean
@@ -1580,7 +1580,7 @@ module Harness {
 
     export function registerLogger(logger: ILogger) {
 >registerLogger : (logger: ILogger) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^       ^^^^^^^^^
 >logger : ILogger
 >       : ^^^^^^^
 
@@ -1720,7 +1720,7 @@ module Harness {
 
         public addChild(child: Runnable): void {
 >addChild : (child: Runnable) => void
->         : ^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^        ^^^^^    
 >child : Runnable
 >      : ^^^^^^^^
 
@@ -1747,9 +1747,9 @@ module Harness {
          */
         public call(fn: (done?: IDone) => void , done: IDone) {
 >call : (fn: (done?: IDone) => void, done: IDone) => boolean
->     : ^^^^^        ^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^                      ^^^^^^^^     ^^^^^^^^^^^^
 >fn : (done?: IDone) => void
->   : ^^^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^     ^^^^^    
 >done : IDone
 >     : ^^^^^
 >done : IDone
@@ -1865,13 +1865,13 @@ module Harness {
 
         public run(done: IDone) { }
 >run : (done: IDone) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^     ^^^^^^^^^
 >done : IDone
 >     : ^^^^^
 
         public runBlock(done: IDone) {
 >runBlock : (done: IDone) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^     ^^^^^^^^^^^^
 >done : IDone
 >     : ^^^^^
 
@@ -1896,7 +1896,7 @@ module Harness {
 
         public runChild(index: number, done: IDone) {
 >runChild : (index: number, done: IDone) => boolean
->         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^      ^^^^^^^^     ^^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
 >done : IDone
@@ -1943,7 +1943,7 @@ module Harness {
 
         static errorHandlerStack: { (e: Error): void; }[] = [];
 >errorHandlerStack : ((e: Error) => void)[]
->                  : ^^^^^^^^^^^^^^^    ^^^
+>                  : ^^^^^     ^^^^^    ^^^
 >e : Error
 >  : ^^^^^
 >[] : undefined[]
@@ -1951,7 +1951,7 @@ module Harness {
 
         static pushGlobalErrorHandler(done: IDone) {
 >pushGlobalErrorHandler : (done: IDone) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^     ^^^^^^^^^
 >done : IDone
 >     : ^^^^^
 
@@ -1997,7 +1997,7 @@ module Harness {
 
         static handleError(e: Error) {
 >handleError : (e: Error) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^
 >e : Error
 >  : ^^^^^
 
@@ -2109,7 +2109,7 @@ module Harness {
 
         public addChild(child: Runnable): void {
 >addChild : (child: Runnable) => void
->         : ^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^        ^^^^^    
 >child : Runnable
 >      : ^^^^^^^^
 
@@ -2125,7 +2125,7 @@ module Harness {
         /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
         public run(done: IDone) {
 >run : (done: IDone) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^     ^^^^^^^^^
 >done : IDone
 >     : ^^^^^
 
@@ -2367,7 +2367,7 @@ module Harness {
         /** Run the block, and if the block doesn't raise an error, run the children. */
         public run(done: IDone) {
 >run : (done: IDone) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^     ^^^^^^^^^
 >done : IDone
 >     : ^^^^^
 
@@ -2582,7 +2582,7 @@ module Harness {
          */
         public runChildren(done: IDone, index = 0) {
 >runChildren : (done: IDone, index?: number) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^
 >done : IDone
 >     : ^^^^^
 >index : number
@@ -3671,13 +3671,13 @@ module Harness {
 
         export var benchmarks: { new (): Benchmark; }[] = [];
 >benchmarks : (new () => Benchmark)[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^         ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
         var timeFunction: (
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^                               ^^^^^    
+>             : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^                               ^^^^^    
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -3701,11 +3701,11 @@ module Harness {
 
         timeFunction = function (
 >timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -4447,7 +4447,7 @@ module Harness {
 
             public toArray(): { filename: string; file: WriterAggregator; }[] {
 >toArray : () => { filename: string; file: WriterAggregator; }[]
->        : ^^^^^^                          ^^^^^^^^^^^^^^^^     
+>        : ^^^^^^                                               
 >filename : string
 >         : ^^^^^^
 >file : WriterAggregator
@@ -4455,7 +4455,7 @@ module Harness {
 
                 var result: { filename: string; file: WriterAggregator; }[] = [];
 >result : { filename: string; file: WriterAggregator; }[]
->       : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
 >filename : string
 >         : ^^^^^^
 >file : WriterAggregator
@@ -5120,7 +5120,7 @@ module Harness {
 
             public isSubtypeOf(other: Type) {
 >isSubtypeOf : (other: Type) => boolean
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^    ^^^^^^^^^^^^
 >other : Type
 >      : ^^^^
 
@@ -5500,7 +5500,7 @@ module Harness {
 
             public isAssignmentCompatibleWith(other: Type) {
 >isAssignmentCompatibleWith : (other: Type) => boolean
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^^    ^^^^^^^^^^^^
 >other : Type
 >      : ^^^^
 
@@ -7420,7 +7420,7 @@ module Harness {
           */
         export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
 >generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => string
->                 : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^      
+>                 : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^                           ^^^^^      
 >code : string
 >     : ^^^^^^
 >verifyNoDeclFile : boolean
@@ -7885,7 +7885,7 @@ module Harness {
             /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
             constructor(public fileResults: { filename: string; file: WriterAggregator; }[], errorLines: string[], public scripts: TypeScript.Script[]) {
 >fileResults : { filename: string; file: WriterAggregator; }[]
->            : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
 >filename : string
 >         : ^^^^^^
 >file : WriterAggregator
@@ -8728,11 +8728,11 @@ module Harness {
 
         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 >compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->            : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^
+>            : ^^^^^^^      ^^^^^^^^^^^^                             ^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^                           ^^^^^^^^^
 >path : string
 >     : ^^^^^^
 >callback : (res: CompilerResult) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^              ^^^^^    
 >res : CompilerResult
 >    : ^^^^^^^^^^^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
@@ -8809,13 +8809,13 @@ module Harness {
 
         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 >compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->            : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^
+>            : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^                             ^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^                           ^^^^^^^^^
 >code : string
 >     : ^^^^^^
 >filename : string
 >         : ^^^^^^
 >callback : (res: CompilerResult) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^              ^^^^^    
 >res : CompilerResult
 >    : ^^^^^^^^^^^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
@@ -9037,13 +9037,13 @@ module Harness {
 
         export function compileUnits(units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void , settingsCallback?: () => void ) {
 >compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void, settingsCallback?: () => void) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^      ^^^^^^^^ ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
+>             : ^^^^^^^^                             ^^^^^^^^^^^^                                      ^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
 >units : TestCaseParser.TestUnitData[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TestCaseParser : any
 >               : ^^^
 >callback : (res: Compiler.CompilerResult) => void
->         : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^                       ^^^^^    
 >res : CompilerResult
 >    : ^^^^^^^^^^^^^^
 >Compiler : any
@@ -9168,7 +9168,7 @@ module Harness {
 
         export function emitToOutfile(outfile: WriterAggregator) {
 >emitToOutfile : (outfile: WriterAggregator) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^                ^^^^^^^^^
 >outfile : WriterAggregator
 >        : ^^^^^^^^^^^^^^^^
 
@@ -9212,13 +9212,13 @@ module Harness {
 
         export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 >compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->              : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^ ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^
+>              : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^                                      ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^                           ^^^^^^^^^
 >code : string
 >     : ^^^^^^
 >unitName : string
 >         : ^^^^^^
 >callback : (res: Compiler.CompilerResult) => void
->         : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^                       ^^^^^    
 >res : CompilerResult
 >    : ^^^^^^^^^^^^^^
 >Compiler : any
@@ -9447,7 +9447,7 @@ module Harness {
          */
         export function defineCompilationContextForTest(filename: string, dependencies: TestCaseParser.TestUnitData[]): CompilationContext {
 >defineCompilationContextForTest : (filename: string, dependencies: TestCaseParser.TestUnitData[]) => CompilationContext
->                                : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^                             ^^^^^                  
 >filename : string
 >         : ^^^^^^
 >dependencies : TestCaseParser.TestUnitData[]
@@ -9691,7 +9691,7 @@ module Harness {
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 >extractCompilerSettings : (content: string) => CompilerSetting[]
->                        : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^  
+>                        : ^^^^^^^^^^      ^^^^^                 
 >content : string
 >        : ^^^^^^
 
@@ -9762,7 +9762,7 @@ module Harness {
         /** Given a test file containing // @Filename directives, return an array of named units of code to be added to an existing compiler instance */
         export function makeUnitsFromTest(code: string, filename: string): { settings: CompilerSetting[]; testUnitData: TestUnitData[]; } {
 >makeUnitsFromTest : (code: string, filename: string) => { settings: CompilerSetting[]; testUnitData: TestUnitData[]; }
->                  : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^            ^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^     
+>                  : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^                                                              
 >code : string
 >     : ^^^^^^
 >filename : string
@@ -12767,11 +12767,11 @@ module Harness {
 
         export function runCollateral(path: string, callback: (error: Error, result: any) => void ) {
 >runCollateral : (path: string, callback: (error: Error, result: any) => void) => void
->              : ^^^^^^^      ^^^^^^^^^^^^        ^^^^^                      ^^^^^^^^^
+>              : ^^^^^^^      ^^^^^^^^^^^^                                   ^^^^^^^^^
 >path : string
 >     : ^^^^^^
 >callback : (error: Error, result: any) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>         : ^^^^^^^^     ^^^^^^^^^^   ^^^^^    
 >error : Error
 >      : ^^^^^
 >result : any
@@ -12820,11 +12820,11 @@ module Harness {
 
         export function runJSString(code: string, callback: (error: Error, result: any) => void ) {
 >runJSString : (code: string, callback: (error: Error, result: any) => void) => void
->            : ^^^^^^^      ^^^^^^^^^^^^        ^^^^^                      ^^^^^^^^^
+>            : ^^^^^^^      ^^^^^^^^^^^^                                   ^^^^^^^^^
 >code : string
 >     : ^^^^^^
 >callback : (error: Error, result: any) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>         : ^^^^^^^^     ^^^^^^^^^^   ^^^^^    
 >error : Error
 >      : ^^^^^
 >result : any
@@ -12977,13 +12977,13 @@ module Harness {
 
         export function runString(code: string, unitName: string, callback: (error: Error, result: any) => void ) {
 >runString : (code: string, unitName: string, callback: (error: Error, result: any) => void) => void
->          : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^        ^^^^^                      ^^^^^^^^^
+>          : ^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^                                   ^^^^^^^^^
 >code : string
 >     : ^^^^^^
 >unitName : string
 >         : ^^^^^^
 >callback : (error: Error, result: any) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>         : ^^^^^^^^     ^^^^^^^^^^   ^^^^^    
 >error : Error
 >      : ^^^^^
 >result : any
@@ -13557,7 +13557,7 @@ module Harness {
 
         function compareToBaseline(actual: string, relativeFilename: string, opts: BaselineOptions) {
 >compareToBaseline : (actual: string, relativeFilename: string, opts: BaselineOptions) => { expected: string; actual: string; }
->                  : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >actual : string
 >       : ^^^^^^
 >relativeFilename : string
@@ -13895,7 +13895,7 @@ module Harness {
 
         export function runBaseline(
 >runBaseline : (descriptionForDescribe: string, relativeFilename: string, generateContent: () => string, runImmediately?: boolean, opts?: BaselineOptions) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^
 
             descriptionForDescribe: string,
 >descriptionForDescribe : string

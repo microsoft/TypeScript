@@ -30,7 +30,7 @@ export type Constructor<T = {}> = new (...args: any[]) => T;
 
 export function Timestamped<TBase extends Constructor>(Base: TBase) {
 >Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : TBase
 >     : ^^^^^
 

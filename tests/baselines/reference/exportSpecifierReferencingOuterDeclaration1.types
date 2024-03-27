@@ -12,7 +12,7 @@ declare module "m" {
 
     export function foo(): X.bar;
 >foo : () => X.bar
->    : ^^^^^^^    
+>    : ^^^^^^     
 >X : any
 >  : ^^^
 }

@@ -33,7 +33,7 @@ declare module "ext" {
     export interface A {}
     export function fa(): A;
 >fa : () => A
->   : ^^^^^^^
+>   : ^^^^^^ 
 }
 declare module "ext/other" {
 >"ext/other" : typeof import("ext/other")
@@ -42,6 +42,6 @@ declare module "ext/other" {
     export interface B {}
     export function fb(): B;
 >fb : () => B
->   : ^^^^^^^
+>   : ^^^^^^ 
 }
 

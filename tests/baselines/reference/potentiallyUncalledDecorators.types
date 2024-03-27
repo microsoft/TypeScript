@@ -84,23 +84,23 @@ interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorat
 
 declare function noArgs(): OmniDecorator;
 >noArgs : () => OmniDecorator
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             
 
 declare function allRest(...args: any[]): OmniDecorator;
 >allRest : (...args: any[]) => OmniDecorator
->        : ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^     ^^^^^             
 >args : any[]
 >     : ^^^^^
 
 declare function oneOptional(x?: any): OmniDecorator;
 >oneOptional : (x?: any) => OmniDecorator
->            : ^^^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^^^^^   ^^^^^             
 >x : any
 >  : ^^^
 
 declare function twoOptional(x?: any, y?: any): OmniDecorator;
 >twoOptional : (x?: any, y?: any) => OmniDecorator
->            : ^^^^^   ^^^^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^^^^^   ^^^^^^   ^^^^^             
 >x : any
 >  : ^^^
 >y : any
@@ -108,7 +108,7 @@ declare function twoOptional(x?: any, y?: any): OmniDecorator;
 
 declare function threeOptional(x?: any, y?: any, z?: any): OmniDecorator;
 >threeOptional : (x?: any, y?: any, z?: any) => OmniDecorator
->              : ^^^^^   ^^^^^^   ^^^^^^   ^^^^^^^^^^^^^^^^^^
+>              : ^^^^^   ^^^^^^   ^^^^^^   ^^^^^             
 >x : any
 >  : ^^^
 >y : any
@@ -118,7 +118,7 @@ declare function threeOptional(x?: any, y?: any, z?: any): OmniDecorator;
 
 declare function oneOptionalWithRest(x?: any, ...args: any[]): OmniDecorator;
 >oneOptionalWithRest : (x?: any, ...args: any[]) => OmniDecorator
->                    : ^^^^^   ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^   ^^^^^^^^^^^     ^^^^^             
 >x : any
 >  : ^^^
 >args : any[]

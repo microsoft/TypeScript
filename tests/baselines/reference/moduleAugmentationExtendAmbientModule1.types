@@ -64,9 +64,9 @@ declare module "observable" {
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => Observable<U>
->    : ^^^^^^^^^^    ^     ^^^^^^^^^^^^^^^^ ^ 
+>    : ^ ^^^^^^^^           ^^^^^             
 >proj : (e: T) => U
->     : ^^^^^^^^^^^
+>     : ^^^^ ^^^^^ 
 >e : T
 >  : ^
     }
@@ -91,9 +91,9 @@ declare module "observable" {
 
         filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
->       : ^^^^^^^    ^            ^^^^^^^^^^^^^^^ ^ 
+>       : ^^^^^^^                 ^^^^^             
 >pred : (e: T) => boolean
->     : ^^^^^^^^^^       
+>     : ^^^^ ^^^^^       
 >e : T
 >  : ^
     }

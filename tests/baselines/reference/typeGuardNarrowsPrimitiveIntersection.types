@@ -14,7 +14,7 @@ declare function isNonBlank(value: string) : value is (string & Tag);
 
 declare function doThis(value: string & Tag): void;
 >doThis : (value: string & Tag) => void
->       : ^^^^^^^^         ^^^^^^^^    
+>       : ^^^^^^^^            ^^^^^    
 >value : string & Tag
 >      : ^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ declare function isNonBlank2(value: string) : value is (string & Tag2);
 
 declare function doThis2(value: string & Tag2): void;
 >doThis2 : (value: string & Tag2) => void
->        : ^^^^^^^^         ^^^^^^^^^    
+>        : ^^^^^^^^             ^^^^^    
 >value : never
 >      : ^^^^^
 

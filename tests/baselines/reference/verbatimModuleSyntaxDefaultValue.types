@@ -7,7 +7,7 @@ class Task {}
 
 function task(): Task { return new Task(); }
 >task : () => Task
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >new Task() : Task
 >           : ^^^^
 >Task : typeof Task

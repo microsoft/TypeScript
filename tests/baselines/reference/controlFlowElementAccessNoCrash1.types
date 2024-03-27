@@ -37,13 +37,13 @@ interface VerifyTscEditDiscrepanciesInput {
 
 function testTscCompile(input: TestTscCompile) {}
 >testTscCompile : (input: TestTscCompile) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^              ^^^^^^^^^
 >input : TestTscCompile
 >      : ^^^^^^^^^^^^^^
 
 function verifyTscEditDiscrepancies({
 >verifyTscEditDiscrepancies : ({ index, edits, commandLineArgs, }: VerifyTscEditDiscrepanciesInput) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^^^^^^
 
   index,
 >index : number

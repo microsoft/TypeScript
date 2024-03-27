@@ -370,7 +370,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 
 function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >f3 : (obj: Partial<{ a: string; b: string | undefined; }>) => void
->   : ^^^^^^^^^^^^^                                       ^^^^^^^^^
+>   : ^^^^^^                                              ^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
 >    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
@@ -889,9 +889,9 @@ declare let tx4: [(string | undefined)?];
 
 declare function f11<T>(x: { p?: T }): T;
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^^^^      ^   ^^^^^^
+>    : ^ ^^^^^          ^^^^^ 
 >x : { p?: T; }
->  : ^^^^^^^^^^
+>  : ^^^^^^ ^^^
 >p : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -929,7 +929,7 @@ f11(ox4);  // string | undefined
 
 declare function f12<T>(x: [T?]): T;
 >f12 : <T>(x: [T?]) => T
->    : ^^^^^^^ ^  ^^^^^^
+>    : ^ ^^^^^    ^^^^^ 
 >x : [T?]
 >  : ^^^^
 
@@ -967,7 +967,7 @@ f12(tx4);  // string | undefined
 
 declare function f13<T>(x: Partial<T>): T;
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^ ^ ^^^^^^
+>    : ^ ^^^^^          ^^^^^ 
 >x : Partial<T>
 >  : ^^^^^^^^^^
 
@@ -1043,7 +1043,7 @@ type Undefinable<T> = T | undefined;
 
 function expectNotUndefined<T>(value: Undefinable<T>): T {
 >expectNotUndefined : <T>(value: Undefinable<T>) => T
->                   : ^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>                   : ^ ^^^^^^^^^              ^^^^^ 
 >value : Undefinable<T>
 >      : ^^^^^^^^^^^^^^
 
@@ -1076,7 +1076,7 @@ interface Bar {
 
 function aa(input: Bar): void {
 >aa : (input: Bar) => void
->   : ^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^   ^^^^^    
 >input : Bar
 >      : ^^^
 

@@ -10,7 +10,7 @@ interface Test {
 
     then(p: string): Date; // Error: Overloads cannot differ only by return type
 >then : { <U>(p: string): string; (p: string): Date; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^    ^^^
 >p : string
 >  : ^^^^^^
 }

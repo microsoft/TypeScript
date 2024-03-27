@@ -223,7 +223,7 @@ export type ExampleState = {
 
 export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
 >createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^                     ^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^^^
 >selectors : [...selectors: S, f: (x: any) => any]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^
 >x : any

@@ -93,7 +93,7 @@ class MyGenericClass<T> {
 
 MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
 >MyClass.prototype.extension1 = function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
->                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                                   : ^^^^^^^       ^^^^^      ^^^^^^^^^
 >MyClass.prototype.extension1 : (p: number) => void
 >                             : ^^^^^^^^^^^^^^^^^^^
 >MyClass.prototype : MyClass
@@ -105,7 +105,7 @@ MyClass.prototype.extension1 = function (this: MyClass, p: number) {
 >extension1 : (p: number) => void
 >           : ^^^^^^^^^^^^^^^^^^^
 >function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
->                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                    : ^^^^^^^       ^^^^^      ^^^^^^^^^
 >this : MyClass
 >     : ^^^^^^^
 >p : number
@@ -186,7 +186,7 @@ MyClass.prototype.extension1 = function (this: MyClass, p: number) {
 
 MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) { 
 >MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(this: T, p: number) => void
->                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^^^^^^^
 >MyClass.prototype.extension2 : (p: number) => void
 >                             : ^^^^^^^^^^^^^^^^^^^
 >MyClass.prototype : MyClass
@@ -198,7 +198,7 @@ MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) 
 >extension2 : (p: number) => void
 >           : ^^^^^^^^^^^^^^^^^^^
 >function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(this: T, p: number) => void
->                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^^^^^^^
 >this : T
 >     : ^
 >p : number
@@ -279,7 +279,7 @@ MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) 
 
 function extension3<T extends MyClass> (this: T, p: number) { 
 >extension3 : <T extends MyClass>(this: T, p: number) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^^^^^^^
 >this : T
 >     : ^
 >p : number
@@ -376,7 +376,7 @@ MyClass.prototype.extension3 = extension3;
 
 function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
 >extension4 : <T extends number>(this: MyGenericClass<T>, p: T) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^ ^^^^^^^^^
 >this : MyGenericClass<T>
 >     : ^^^^^^^^^^^^^^^^^
 >p : T

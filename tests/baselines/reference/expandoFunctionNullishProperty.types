@@ -12,7 +12,7 @@ interface TestNull {
 
 export function testNull(): TestNull {
 >testNull : () => TestNull
->         : ^^^^^^^^^^^^^^
+>         : ^^^^^^        
 
   function inner() {}
 >inner : { (): void; prop: null; }
@@ -42,7 +42,7 @@ interface TestNull2 {
 
 export function testNull2(): TestNull2 {
 >testNull2 : () => TestNull2
->          : ^^^^^^^^^^^^^^^
+>          : ^^^^^^         
 
   function inner() {}
 >inner : { (): void; prop: null; }
@@ -72,7 +72,7 @@ interface TestUndefined {
 
 export function testUndefined(): TestUndefined {
 >testUndefined : () => TestUndefined
->              : ^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^             
 
   function inner() {}
 >inner : { (): void; prop: undefined; }

@@ -18,19 +18,19 @@ interface I2 {
 
 var a: { <Z, A, B, C, D>(x: Z): Z }
 >a : <Z, A, B, C, D>(x: Z) => Z
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : Z
 >  : ^
 
 function foo1(x: I<string, boolean, number, string>);
 >foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
->     : ^^^^^^^                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<string, boolean, number, string>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo1(x: I<string, boolean, number, string>); // error
 >foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                 ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                  ^^^^^^^^^
 >x : I<string, boolean, number, string>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -41,13 +41,13 @@ function foo1(x: any) { }
 
 function foo2(x: I2);
 >foo2 : { (x: I2): any; (x: I2): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >x : I2
 >  : ^^
 
 function foo2(x: I2); // error
 >foo2 : { (x: I2): any; (x: I2): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
 >x : I2
 >  : ^^
 
@@ -58,7 +58,7 @@ function foo2(x: any) { }
 
 function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
->     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : <Z, A, B, C, D>(x: Z) => Z
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : <Z, A, B, C, D>(x: Z) => Z
@@ -66,7 +66,7 @@ function foo3(x: typeof a);
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: typeof a): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : <Z, A, B, C, D>(x: Z) => Z
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : <Z, A, B, C, D>(x: Z) => Z
@@ -79,13 +79,13 @@ function foo3(x: any) { }
 
 function foo13(x: I<boolean, string, number, Date>);
 >foo13 : { (x: I<boolean, string, number, Date>): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
->      : ^^^^^^^                          ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<boolean, string, number, Date>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I<boolean, string, number, Date>): any; (x: typeof a): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
 >x : <Z, A, B, C, D>(x: Z) => Z
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : <Z, A, B, C, D>(x: Z) => Z
@@ -98,13 +98,13 @@ function foo13(x: any) { }
 
 function foo14(x: I<boolean, string, number, Date>);
 >foo14 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
->      : ^^^^^^^                          ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                                ^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<boolean, string, number, Date>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo14(x: I2); // error
 >foo14 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
 >x : I2
 >  : ^^
 
@@ -115,7 +115,7 @@ function foo14(x: any) { }
 
 function foo14b(x: typeof a);
 >foo14b : { (x: typeof a): any; (x: I2): any; }
->       : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >x : <Z, A, B, C, D>(x: Z) => Z
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : <Z, A, B, C, D>(x: Z) => Z
@@ -123,7 +123,7 @@ function foo14b(x: typeof a);
 
 function foo14b(x: I2); // ok
 >foo14b : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: I2): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
 >x : I2
 >  : ^^
 
@@ -134,13 +134,13 @@ function foo14b(x: any) { }
 
 function foo15(x: I<boolean, string, number, Date>);
 >foo15 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
->      : ^^^^^^^                          ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                                ^^^^^^^^^^^^^^^^^^^^^^^
 >x : I<boolean, string, number, Date>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo15(x: I2); // ok
 >foo15 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
 >x : I2
 >  : ^^
 

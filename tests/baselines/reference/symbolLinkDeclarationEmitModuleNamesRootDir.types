@@ -53,7 +53,7 @@ export declare class BindingKey<T> {
 
   static create<T extends Constructor<any>>(ctor: T): BindingKey<T>;
 >create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^             
 >ctor : T
 >     : ^
 }

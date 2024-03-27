@@ -12,7 +12,7 @@ type Experiment<Name> = {
 };
 declare const createExperiment: <Name extends string>(
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^^^ ^^^^ 
+>                 : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^                
 
     options: Experiment<Name>
 >options : Experiment<Name>

@@ -28,7 +28,7 @@ type Meta<TContext> = {
 
   action: (ctx: TContext) => void
 >action : (ctx: TContext) => void
->       : ^^^^^^^^^^^^^^^^^^^    
+>       : ^^^^^^        ^^^^^    
 >ctx : TContext
 >    : ^^^^^^^^
 }
@@ -47,7 +47,7 @@ interface AssignAction<TContext> {
 
 declare function assign<TContext>(
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^^^^  ^^^^^^^^^^^^^^^^^ ^^^^^^^^ 
+>       : ^        ^^^^^^^^^^^^^^                                    ^^^^^                      
 
   assignment: PropertyAssigner<LowInfer<TContext>>
 >assignment : PropertyAssigner<LowInfer<TContext>>
@@ -71,7 +71,7 @@ type Config<TContext> = {
 
 declare function createMachine<TContext>(config: Config<TContext>): void;
 >createMachine : <TContext>(config: Config<TContext>) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^    
+>              : ^        ^^^^^^^^^^                ^^^^^    
 >config : Config<TContext>
 >       : ^^^^^^^^^^^^^^^^
 

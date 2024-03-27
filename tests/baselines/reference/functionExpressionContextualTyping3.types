@@ -4,7 +4,7 @@
 // #31114
 declare function f<T>(value: T | number): void;
 >f : <T>(value: T | number) => void
->  : ^^^^^^^^^^^^         ^^^^^    
+>  : ^ ^^^^^^^^^          ^^^^^    
 >value : number | T
 >      : ^^^^^^^^^^
 

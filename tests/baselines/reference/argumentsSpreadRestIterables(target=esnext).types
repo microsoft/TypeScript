@@ -59,7 +59,7 @@ declare const itNum: Iterable<number>
 
 declare function fn1<const T extends readonly unknown[]>(...args: T): T;
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -118,7 +118,7 @@ const res4 = fn1(true, ...itNum);
 // repro from #52781
 declare function foo<T extends unknown[]>(...args: T): T;
 >foo : <T extends unknown[]>(...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 

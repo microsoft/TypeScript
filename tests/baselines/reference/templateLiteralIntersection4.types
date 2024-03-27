@@ -25,7 +25,7 @@ type StoreUtils<Store extends { [K: string]: any }> = Omit<{
 
 declare function createStore<Store extends { [K: string]: any }>(store: Store): StoreUtils<Store>;
 >createStore : <Store extends { [K: string]: any; }>(store: Store) => StoreUtils<Store>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^                 
 >K : string
 >  : ^^^^^^
 >store : Store

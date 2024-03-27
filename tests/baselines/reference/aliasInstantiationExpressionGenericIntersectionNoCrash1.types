@@ -12,7 +12,7 @@ class ErrImpl<E> {
 
 declare const Err: typeof ErrImpl & (<T>() => T);
 >Err : typeof ErrImpl & (<T>() => T)
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^
 >ErrImpl : typeof ErrImpl
 >        : ^^^^^^^^^^^^^^
 

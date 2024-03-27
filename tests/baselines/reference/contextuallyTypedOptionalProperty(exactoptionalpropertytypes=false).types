@@ -5,9 +5,9 @@
 
 declare function match<T>(cb: (value: T) => boolean): T;
 >match : <T>(cb: (value: T) => boolean) => T
->      : ^^^^^^^^        ^            ^^^^^^
+>      : ^ ^^^^^^                     ^^^^^ 
 >cb : (value: T) => boolean
->   : ^^^^^^^^^^^^^^       
+>   : ^^^^^^^^ ^^^^^       
 >value : T
 >      : ^
 

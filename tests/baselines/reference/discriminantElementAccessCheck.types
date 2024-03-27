@@ -37,7 +37,7 @@ function assertNever(x: never) {
 
 function IfWithString(val: U) {
 >IfWithString : (val: U) => string | number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -74,7 +74,7 @@ function IfWithString(val: U) {
 
 function SwitchWithString(val: U) {
 >SwitchWithString : (val: U) => string | number
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -123,7 +123,7 @@ function SwitchWithString(val: U) {
 
 function IfWithTemplate(val: U) {
 >IfWithTemplate : (val: U) => string | number
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -160,7 +160,7 @@ function IfWithTemplate(val: U) {
 
 function SwitchWithTemplate(val: U) {
 >SwitchWithTemplate : (val: U) => string | number
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 

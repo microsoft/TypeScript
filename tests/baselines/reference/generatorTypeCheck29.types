@@ -3,7 +3,7 @@
 === generatorTypeCheck29.ts ===
 function* g2(): Iterator<Iterable<(x: string) => number>> {
 >g2 : () => Iterator<Iterable<(x: string) => number>>
->   : ^^^^^^^^^^^^^^ ^^^^^^^^                        
+>   : ^^^^^^                                         
 >x : string
 >  : ^^^^^^
 

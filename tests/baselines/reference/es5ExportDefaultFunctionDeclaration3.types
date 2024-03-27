@@ -13,9 +13,9 @@ var before: typeof func = func();
 
 export default function func(): typeof func {
 >func : () => typeof func
->     : ^^^^^^       ^^^^
+>     : ^^^^^^           
 >func : () => typeof func
->     : ^^^^^^       ^^^^
+>     : ^^^^^^           
 
     return func;
 >func : () => typeof func

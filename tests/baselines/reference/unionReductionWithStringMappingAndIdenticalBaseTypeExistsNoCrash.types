@@ -169,7 +169,7 @@ import React from 'react'
 
 declare function upperFirst<T extends string>(str: T): Capitalize<T>
 >upperFirst : <T extends string>(str: T) => Capitalize<T>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^             
 >str : T
 >    : ^
 

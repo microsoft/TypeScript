@@ -8,7 +8,7 @@ declare var document: Document;
 interface Document {
     getElementById(elementId: string): HTMLElement;
 >getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^           ^^^
 >elementId : string
 >          : ^^^^^^
 }

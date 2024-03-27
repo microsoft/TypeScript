@@ -313,7 +313,7 @@ type Foo = { prop: number, [x: string]: number };
 
 function f1(x: Partial<Foo>) {
 >f1 : (x: Partial<Foo>) => void
->   : ^^^^^^^^^^^ ^^^ ^^^^^^^^^
+>   : ^^^^            ^^^^^^^^^
 >x : Partial<Foo>
 >  : ^^^^^^^^^^^^
 
@@ -348,7 +348,7 @@ function f1(x: Partial<Foo>) {
 
 function f2(x: Readonly<Foo>) {
 >f2 : (x: Readonly<Foo>) => void
->   : ^^^^^^^^^^^^ ^^^ ^^^^^^^^^
+>   : ^^^^             ^^^^^^^^^
 >x : Readonly<Foo>
 >  : ^^^^^^^^^^^^^
 
@@ -377,7 +377,7 @@ function f2(x: Readonly<Foo>) {
 
 function f3(x: Boxified<Foo>) {
 >f3 : (x: Boxified<Foo>) => void
->   : ^^^^^^^^^^^^ ^^^ ^^^^^^^^^
+>   : ^^^^             ^^^^^^^^^
 >x : Boxified<Foo>
 >  : ^^^^^^^^^^^^^
 

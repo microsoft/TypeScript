@@ -6,9 +6,9 @@
 interface Mapper<T> {
     map<U extends T, V extends U[]>(f: (item: T) => U): V;
 >map : <U extends T, V extends U[]>(f: (item: T) => U) => V
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^     ^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^              ^^^^^ 
 >f : (item: T) => U
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^ ^^^^^ 
 >item : T
 >     : ^
 }

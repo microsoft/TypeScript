@@ -3,7 +3,7 @@
 === decoratorMetadataConditionalType.ts ===
 declare function d(): PropertyDecorator;
 >d : () => PropertyDecorator
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                 
 
 abstract class BaseEntity<T> {
 >BaseEntity : BaseEntity<T>
@@ -17,7 +17,7 @@ abstract class BaseEntity<T> {
 
     public attributes: T extends { attributes: infer A } ? A : undefined;
 >attributes : T extends { attributes: infer A; } ? A : undefined
->           : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^
 >attributes : A
 >           : ^
 }

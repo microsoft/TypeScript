@@ -43,7 +43,7 @@ ab = {};
 
 function f1(node: A | B) {
 >f1 : (node: A | B) => void
->   : ^^^^^^^^   ^^^^^^^^^^
+>   : ^^^^^^^     ^^^^^^^^^
 >node : A | B
 >     : ^^^^^
 
@@ -145,7 +145,7 @@ class Foo {
 
   private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
 >foo : (node: CommitFileNode | ResultsFileNode | StashFileNode) => Promise<void>
->    : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^                                                ^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -211,7 +211,7 @@ class Foo {
 
   private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
 >bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^                                                                 ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : {} | undefined

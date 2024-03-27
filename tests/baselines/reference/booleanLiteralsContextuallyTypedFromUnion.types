@@ -115,9 +115,9 @@ type ComponentProps =
 
 let Funk = (_props: ComponentProps) => <div>Hello</div>;
 >Funk : (_props: ComponentProps) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^              ^^^^^^^^^^^^^^^^
 >(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => JSX.Element
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^              ^^^^^^^^^^^^^^^^
 >_props : ComponentProps
 >       : ^^^^^^^^^^^^^^
 ><div>Hello</div> : JSX.Element

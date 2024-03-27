@@ -107,7 +107,7 @@ var paramedObject = {valueOf: 1};
  */
 function returnNotAnyObject(obj) {
 >returnNotAnyObject : (obj: Object) => Object
->                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^      ^^^^^      
 >obj : Object
 >    : ^^^^^^
 

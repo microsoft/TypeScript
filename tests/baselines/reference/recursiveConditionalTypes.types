@@ -24,9 +24,9 @@ type MyPromise<T> = {
 
     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 >then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
->     : ^^^^^^^         ^     ^   ^^^^^^^^^^^ ^                     ^^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^                                                     ^^^^^            
 >f : ((value: T) => U | PromiseLike<U>) | null | undefined
->  : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^                  ^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -49,7 +49,7 @@ type P2 = __Awaited<InfinitePromise<number>>;  // Error
 
 function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
 >f11 : <T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^^^ ^^^^^^            ^^^^^^ ^^^^^^            ^^^^^^^^^
 >tx : T
 >   : ^
 >ta : __Awaited<T>
@@ -158,7 +158,7 @@ type TT5 = TupleOf<number, 1000>;  // Depth error
 
 function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
 >f22 : <N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^ ^^^^^^^^^^^^^         ^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^                  ^^^^^^                  ^^^^^^^^^
 >tn : TupleOf<number, N>
 >   : ^^^^^^^^^^^^^^^^^^
 >tm : TupleOf<number, M>
@@ -183,7 +183,7 @@ function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<
 
 declare function f23<T>(t: TupleOf<T, 3>): T;
 >f23 : <T>(t: [T, T, T]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ 
 >t : [T, T, T]
 >  : ^^^^^^^^^
 
@@ -217,7 +217,7 @@ type InfBox<T> = Box<InfBox<T>>;
 
 declare function unbox<T>(box: RecBox<T>): T
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^ ^ ^^^^^^
+>      : ^ ^^^^^^^         ^^^^^ 
 >box : RecBox<T>
 >    : ^^^^^^^^^
 
@@ -259,13 +259,13 @@ declare let b3: InfBox<string>;
 
 declare let b4: { value: { value: { value: typeof b4 }}};
 >b4 : { value: { value: { value: typeof b4; }; }; }
->   : ^^^^^^^^^                         ^^      ^^^
+>   : ^^^^^^^^^                                 ^^^
 >value : { value: { value: typeof b4; }; }
->      : ^^^^^^^^^                ^^   ^^^
+>      : ^^^^^^^^^                     ^^^
 >value : { value: typeof b4; }
->      : ^^^^^^^^^       ^^^^^
+>      : ^^^^^^^^^         ^^^
 >value : { value: { value: { value: typeof b4; }; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >b4 : { value: { value: { value: any; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -369,7 +369,7 @@ type Box2<T> = { value: T };
 
 declare function foo<T>(x: Box1<Box1<T>>): T;
 >foo : <T>(x: Box1<Box1<T>>) => T
->    : ^^^^^^^^^^^ ^^^^ ^  ^^^^^^
+>    : ^ ^^^^^             ^^^^^ 
 >x : Box1<Box1<T>>
 >  : ^^^^^^^^^^^^^
 
@@ -407,7 +407,7 @@ type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
 
 function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^ ^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^          ^^^^^          ^^^^^^^^^
 >x : Unpack1<T>
 >  : ^^^^^^^^^^
 >y : Unpack2<T>
@@ -450,7 +450,7 @@ type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : 
 
 function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >f21 : <T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^ ^^^^^^^^^^     ^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^            ^^^^^            ^^^^^^^^^
 >x : Grow1<[], T>
 >  : ^^^^^^^^^^^^
 >y : Grow2<[], T>
@@ -550,7 +550,7 @@ type Enumerate<N extends number> = number extends N
 
 function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
 >foo2 : <T extends unknown[]>(value: T) => Enumerate<T['length']>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^           
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                      
 >value : T
 >      : ^
 

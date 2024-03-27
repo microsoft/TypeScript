@@ -62,7 +62,7 @@ class NumCoercible {
  */
 export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
 >extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^   ^^^^^^^^^ ^^^^^ ^   ^^^^^^^^^  ^   ^^^^^^^^^                          
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^                                                       
 >array : (Primitive | T)[]
 >      : ^^^^^^^^^^^^^^^^^
 

@@ -174,7 +174,7 @@ module TypeScript {
 
         public clone(): AstPath {
 >clone : () => AstPath
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
             var clone = new AstPath();
 >clone : AstPath
@@ -6947,7 +6947,7 @@ module TypeScript {
     ///
     export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
 >getAstPathToPosition : (script: TypeScript.AST, pos: number, options?: GetAstPathOptions) => TypeScript.AstPath
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  
 >script : TypeScript.AST
 >       : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -6967,9 +6967,9 @@ module TypeScript {
 
         var lookInComments = (comments: TypeScript.Comment[]) => {
 >lookInComments : (comments: TypeScript.Comment[]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^^^^^
+>               : ^^^^^^^^^^^                    ^^^^^^^^^
 >(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: TypeScript.Comment[]) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^                    ^^^^^^^^^
 >comments : TypeScript.Comment[]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7607,13 +7607,13 @@ module TypeScript {
     ///
     export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
 >walkAST : (ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^          ^^^^^^^^^^                    ^^^^^    
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                      ^^^^^    
 >ast : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
 >           : ^^^
 >callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >path : AstPath
 >     : ^^^^^^^
 >walker : TypeScript.IAstWalker

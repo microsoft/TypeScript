@@ -28,7 +28,7 @@ declare function callsCallback(cb: (name: string)=>void)
 
 function problemFunction(this: CorrectObject | WrongObject): void {
 >problemFunction : (this: CorrectObject | WrongObject) => void
->                : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^    
+>                : ^^^^^^^                           ^^^^^    
 >this : WrongObject | CorrectObject
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

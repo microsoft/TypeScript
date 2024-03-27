@@ -113,7 +113,7 @@ export class Vector implements Point {
 
 	translate(dx: number, dy: number): Vector;
 >translate : (dx: number, dy: number) => Vector
->          : ^^^^^      ^^^^^^      ^^^^^^^^^^^
+>          : ^^^^^      ^^^^^^      ^^^^^      
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -122,7 +122,7 @@ export class Vector implements Point {
 
 export function getLength(p: Vector): number;
 >getLength : (p: Vector) => number
->          : ^^^^^^^^^^^^^^^      
+>          : ^^^^      ^^^^^      
 >p : Vector
 >  : ^^^^^^
 
@@ -140,7 +140,7 @@ declare module 'math2d' {
 	interface Vector {
 		reverse(): Math2d.Point;
 >reverse : () => Math2d.Point
->        : ^^^^^^^^^^^^ ^^^^^
+>        : ^^^^^^            
 >Math2d : any
 >       : ^^^
 	}

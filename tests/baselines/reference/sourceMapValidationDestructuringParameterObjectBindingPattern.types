@@ -42,7 +42,7 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 
 function foo1({ name: nameA }: Robot) {
 >foo1 : ({ name: nameA }: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >name : any
 >     : ^^^
 >nameA : string
@@ -62,7 +62,7 @@ function foo1({ name: nameA }: Robot) {
 }
 function foo2({ name: nameB, skill: skillB }: Robot) {
 >foo2 : ({ name: nameB, skill: skillB }: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >name : any
 >     : ^^^
 >nameB : string
@@ -86,7 +86,7 @@ function foo2({ name: nameB, skill: skillB }: Robot) {
 }
 function foo3({ name }: Robot) {
 >foo3 : ({ name }: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^     ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 

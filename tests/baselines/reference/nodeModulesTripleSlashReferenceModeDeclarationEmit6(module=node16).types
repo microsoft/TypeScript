@@ -24,7 +24,7 @@ declare global {
     interface RequireInterface {}
     function getInterR(): RequireInterface;
 >getInterR : () => RequireInterface
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^                
 }
 === /uses.ts ===
 /// <reference types="pkg" preserve="true" />

@@ -7,30 +7,30 @@ declare class CPromise<T> {
 
     then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
 >then : <U>(success?: (value: T) => CPromise<U>) => CPromise<U>
->     : ^^^^^^^^^^^^^^        ^     ^^^^^^^^ ^ ^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^^^                         ^^^^^           
 >success : (value: T) => CPromise<U>
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>        : ^^^^^^^^ ^^^^^           
 >value : T
 >      : ^
 }
 interface IPromise<T> {
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 >then : <U>(success?: (value: T) => IPromise<U>) => IPromise<U>
->     : ^^^^^^^^^^^^^^        ^     ^^^^^^^^ ^ ^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^^^                         ^^^^^           
 >success : (value: T) => IPromise<U>
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>        : ^^^^^^^^ ^^^^^           
 >value : T
 >      : ^
 }
 declare function load(name: string): CPromise<string>;
 >load : (name: string) => CPromise<string>
->     : ^^^^^^^      ^^^^^^^^^^^^^        
+>     : ^^^^^^^      ^^^^^                
 >name : string
 >     : ^^^^^^
 
 declare function convert(s: string): IPromise<number>;
 >convert : (s: string) => IPromise<number>
->        : ^^^^      ^^^^^^^^^^^^^        
+>        : ^^^^      ^^^^^                
 >s : string
 >  : ^^^^^^
 

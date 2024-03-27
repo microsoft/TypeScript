@@ -12,7 +12,7 @@ export { X };
 
 export declare function foo(): X.foo;
 >foo : () => X.foo
->    : ^^^^^^^    
+>    : ^^^^^^     
 >X : any
 >  : ^^^
 

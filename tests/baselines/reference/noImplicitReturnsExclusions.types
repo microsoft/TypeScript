@@ -208,28 +208,28 @@ declare class HistoryItem {
 interface Thenable<T> {
   then<TResult>(
 >then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: ((value: T) => TResult_1 | Thenable<TResult_1>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult_1>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^        ^     ^^^^^^^   ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^                 ^^^^^^^   ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^       ^^^^^^^^^^^^^^^^                                         ^^^^^^^^^^^^^^^                                            ^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
+>            : ^^^^^^^^^ ^^^^^                           ^^^^^^^^^^^^^
 >value : T
 >      : ^
 
     onrejected?: (reason: any) => TResult | Thenable<TResult>
 >onrejected : ((reason: any) => TResult | Thenable<TResult>) | undefined
->           : ^^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
+>           : ^^^^^^^^^^   ^^^^^                           ^^^^^^^^^^^^^
 >reason : any
 >       : ^^^
 
   ): Thenable<TResult>;
   then<TResult>(
 >then : { <TResult_1>(onfulfilled?: ((value: T) => TResult_1 | Thenable<TResult_1>) | undefined, onrejected?: ((reason: any) => TResult_1 | Thenable<TResult_1>) | undefined): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^     ^^^^^^^   ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^                     ^^^^^^^^^^^ ^^^^^^^ ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^                                         ^^^^^^^^^^^^^^^                     ^^^                 ^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
+>            : ^^^^^^^^^ ^^^^^                           ^^^^^^^^^^^^^
 >value : T
 >      : ^
 
@@ -244,7 +244,7 @@ interface Thenable<T> {
 
 export declare function executeCommand<T = unknown>(
 >executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^     ^^^^^^^^^^^^^ ^ 
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^     ^^^^^           
 
   command: string,
 >command : string

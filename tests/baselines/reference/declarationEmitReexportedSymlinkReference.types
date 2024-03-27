@@ -63,7 +63,7 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 
     static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
 >create : <T, D extends IdType = IdType>(key: string) => MetadataAccessor<T, D>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>       : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                      
 >key : string
 >    : ^^^^^^
 }

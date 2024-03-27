@@ -17,7 +17,7 @@ type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
 
 function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
 >fn : <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>
->   : ^^^^^^^^^^^^^^^^^^^ ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^      
+>   : ^ ^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^ ^^^^^              
 >x : Map<T["x"]>
 >  : ^^^^^^^^^^^
 >sliceIndex : T

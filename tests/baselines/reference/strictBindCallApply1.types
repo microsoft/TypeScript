@@ -23,7 +23,7 @@ declare function overloaded(n: number): string;
 
 declare function generic<T>(x: T): T;
 >generic : <T>(x: T) => T
->        : ^^^^^^^^^^^^^^
+>        : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -319,7 +319,7 @@ class C {
 
     generic<T>(x: T): T { return x }
 >generic : <T>(x: T) => T
->        : ^^^^^^^^^^^^^^
+>        : ^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -904,9 +904,9 @@ C.apply(c, [10, "hello", 30]);  // Error
 
 function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 >bar : <T extends unknown[]>(callback: (this: 1, ...args: T) => void) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^         ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                             ^^^^^^^^^
 >callback : (this: 1, ...args: T) => void
->         : ^^^^^^^ ^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^ ^^^^^^^^^^^ ^^^^^    
 >this : 1
 >     : ^
 >args : T
@@ -939,9 +939,9 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 
 function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
 >baz : <T extends 2 | 1>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^                                                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                        ^^^^^^^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->         : ^^^^^^^ ^^^^^^^^^^^^                                           ^^^^^    
+>         : ^^^^^^^ ^^^^^^^^^^^                                            ^^^^^    
 >this : 1
 >     : ^
 >args : T extends 1 ? [unknown] : [unknown, unknown]
@@ -997,7 +997,7 @@ class Foo<T extends unknown[]> {
 
     fn(...args: T): void {}
 >fn : (...args: T) => void
->   : ^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^^^ ^^^^^    
 >args : T
 >     : ^
 }
@@ -1026,7 +1026,7 @@ class Bar<T extends 1 | 2> {
 
     fn(...args: T extends 1 ? [unknown] : [unknown, unknown]) {}
 >fn : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->   : ^^^^^^^^^^^                                           ^^^^^^^^^
+>   : ^^^^^^^^^^                                            ^^^^^^^^^
 >args : T extends 1 ? [unknown] : [unknown, unknown]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

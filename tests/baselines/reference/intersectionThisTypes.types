@@ -31,7 +31,7 @@ type Thing4 = Thing3 & string[];
 
 function f1(t: Thing3) {
 >f1 : (t: Thing3) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^^^^      ^^^^^^^^^
 >t : Thing3
 >  : ^^^^^^
 
@@ -84,7 +84,7 @@ interface Thing5 extends Thing4 {
 
 function f2(t: Thing5) {
 >f2 : (t: Thing5) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^^^^      ^^^^^^^^^
 >t : Thing5
 >  : ^^^^^^
 
@@ -132,7 +132,7 @@ function f2(t: Thing5) {
 interface Component {
     extend<T>(props: T): this & T;
 >extend : <T>(props: T) => this & T
->       : ^^^^^^^^^^^^^^^^^       ^
+>       : ^ ^^^^^^^^^ ^^^^^        
 >props : T
 >      : ^
 }
@@ -145,7 +145,7 @@ interface Label extends Component {
 
 function test(label: Label) {
 >test : (label: Label) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^^^
 >label : Label
 >      : ^^^^^
 

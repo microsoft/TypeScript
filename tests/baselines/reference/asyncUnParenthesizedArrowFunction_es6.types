@@ -3,7 +3,7 @@
 === asyncUnParenthesizedArrowFunction_es6.ts ===
 declare function someOtherFunction(i: any): Promise<void>;
 >someOtherFunction : (i: any) => Promise<void>
->                  : ^^^^   ^^^^^^^^^^^^      
+>                  : ^^^^   ^^^^^             
 >i : any
 
 const x = async i => await someOtherFunction(i)

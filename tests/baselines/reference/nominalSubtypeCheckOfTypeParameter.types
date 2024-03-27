@@ -18,11 +18,11 @@ interface Sequence<T> {
 
     pop(): T
 >pop : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     zip<S>(seq: Sequence<S>): Sequence<BinaryTuple<T, S>>
 >zip : <S>(seq: Sequence<S>) => Sequence<BinaryTuple<T, S>>
->    : ^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^ ^  ^  
+>    : ^ ^^^^^^^           ^^^^^                           
 >seq : Sequence<S>
 >    : ^^^^^^^^^^^
 }
@@ -36,7 +36,7 @@ interface List<T> extends Sequence<T> {
 
     zip<S>(seq: Sequence<S>): List<BinaryTuple<T, S>>
 >zip : <S>(seq: Sequence<S>) => List<BinaryTuple<T, S>>
->    : ^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^ ^^^^^^^^^^^ ^  ^  
+>    : ^ ^^^^^^^           ^^^^^                       
 >seq : Sequence<S>
 >    : ^^^^^^^^^^^
 }

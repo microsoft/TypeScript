@@ -5,9 +5,9 @@ export { };
 
 function defered<T>(a: () => T): T {
 >defered : <T>(a: () => T) => T
->        : ^^^^^^^      ^^^^^^^
+>        : ^ ^^^^^       ^^^^^ 
 >a : () => T
->  : ^^^^^^^
+>  : ^^^^^^ 
 
     return a();
 >a() : T

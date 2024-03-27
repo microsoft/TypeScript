@@ -17,7 +17,7 @@ export type ExtendedCtor<T> = {x: number, ext: T};
 export interface CtorConstructor {
     extends<T>(x: T): ExtendedCtor<T extends unknown ? Ctor : undefined>;
 >extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^ ^                   ^^^^             
+>        : ^ ^^^^^ ^^^^^                                                  
 >x : T
 >  : ^
 }

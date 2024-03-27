@@ -3,9 +3,9 @@
 === contextualSignatureInstantiation1.ts ===
 declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
 >map : <S, T>(f: (x: S) => T) => (a: S[]) => T[]
->    : ^^^^^^^^^^    ^     ^^^^^^    ^       ^  
+>    : ^ ^^ ^^^^^           ^^^^^               
 >f : (x: S) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : S
 >  : ^
 >a : S[]
@@ -13,9 +13,9 @@ declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
 
 var e = <K>(x: string, y?: K) => x.length;
 >e : <K>(x: string, y?: K) => number
->  : ^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^      ^^^^^^ ^^^^^^^^^^^
 ><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
->                                  : ^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>                                  : ^ ^^^^^      ^^^^^^ ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : K
@@ -39,11 +39,11 @@ var r99 = map(e); // should be {}[] for S since a generic lambda is not inferent
 
 declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[]) => T[];
 >map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^    ^     ^^^^^^    ^       ^  
+>     : ^ ^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^           ^^^^^               
 >length : number
 >       : ^^^^^^
 >f : (x: S) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : S
 >  : ^
 >a : S[]
@@ -51,9 +51,9 @@ declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[])
 
 var e2 = <K>(x: string, y?: K) => x.length;
 >e2 : <K>(x: string, y?: K) => number
->   : ^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^      ^^^^^^ ^^^^^^^^^^^
 ><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
->                                  : ^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>                                  : ^ ^^^^^      ^^^^^^ ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : K

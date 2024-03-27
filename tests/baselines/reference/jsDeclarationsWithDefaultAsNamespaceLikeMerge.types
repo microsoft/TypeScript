@@ -21,7 +21,7 @@ interface NamespacedMappers {
 }
 export declare function createNamespacedHelpers(): NamespacedMappers;
 >createNamespacedHelpers : () => NamespacedMappers
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^                 
 
 === /index.js ===
 import { createNamespacedHelpers } from './helper'

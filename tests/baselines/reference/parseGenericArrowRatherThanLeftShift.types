@@ -13,7 +13,7 @@ declare const a: Bar;
 
 function foo<T>(_x: T) {}
 >foo : <T>(_x: T) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^ ^^^^^^^^^
 >_x : T
 >   : ^
 

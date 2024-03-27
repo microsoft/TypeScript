@@ -21,7 +21,7 @@ module Test {
  
  export function F(func: MyFunc) { }
 >F : (func: MyFunc) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^^^^^
 >func : MyFunc
 >     : ^^^^^^
 }

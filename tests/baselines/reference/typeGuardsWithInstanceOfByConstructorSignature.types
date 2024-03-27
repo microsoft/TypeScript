@@ -312,7 +312,7 @@ interface D {
 }
 declare var D: { new (): D; };
 >D : new () => D
->  : ^^^^^^^^^^^
+>  : ^^^^^^^^^^ 
 
 var obj7: D | string;
 >obj7 : string | D

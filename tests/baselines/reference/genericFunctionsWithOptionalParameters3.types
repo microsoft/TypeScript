@@ -7,18 +7,18 @@ class Collection<T> {
 
     public add(x: T) { }
 >add : (x: T) => void
->    : ^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 }
 interface Utils {
     fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
 >fold : <T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S) => T
->     : ^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^    ^     ^     ^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^             ^^^^^^^^^^^                 ^^^^^^^^^ ^^^^^ 
 >c : Collection<T>
 >  : ^^^^^^^^^^^^^
 >folder : (s: S, t: T) => T
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^ ^^^^^ ^^^^^ 
 >s : S
 >  : ^
 >t : T
@@ -28,15 +28,15 @@ interface Utils {
 
     mapReduce<T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V): Collection<V>;
 >mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->          : ^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^    ^     ^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^^^^ ^ 
+>          : ^ ^^ ^^ ^^^^^             ^^^^^^^^^^           ^^^^^^^^^^^           ^^^^^             
 >c : Collection<T>
 >  : ^^^^^^^^^^^^^
 >mapper : (x: T) => U
->       : ^^^^^^^^^^^
+>       : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 >reducer : (y: U) => V
->        : ^^^^^^^^^^^
+>        : ^^^^ ^^^^^ 
 >y : U
 >  : ^
 }

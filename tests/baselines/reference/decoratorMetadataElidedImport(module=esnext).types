@@ -23,7 +23,7 @@ class Test {
 
     foo(
 >foo : (arg1: string, arg2: number) => Observable<string>
->    : ^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^        
+>    : ^^^^^^^      ^^^^^^^^      ^^^^^                  
 
         @whatever arg1: string,
 >whatever : (a: any, b: any, c: any) => void

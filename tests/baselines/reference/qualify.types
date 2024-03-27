@@ -139,7 +139,7 @@ module Everest {
 
         var v4:()=>K1.I3=v1;
 >v4 : () => K1.I3
->   : ^^^^^^^^   
+>   : ^^^^^^     
 >K1 : any
 >   : ^^^
 >v1 : I4
@@ -147,7 +147,7 @@ module Everest {
 
         var v5:(k:K1.I3)=>void=v1;
 >v5 : (k: K1.I3) => void
->   : ^^^^^^   ^^^^^    
+>   : ^^^^     ^^^^^    
 >k : K1.I3
 >  : ^^^^^
 >K1 : any
@@ -157,7 +157,7 @@ module Everest {
 
         var v6:{k:K1.I3;}=v1;
 >v6 : { k: K1.I3; }
->   : ^^^^^^^   ^^^
+>   : ^^^^^     ^^^
 >k : K1.I3
 >  : ^^^^^
 >K1 : any

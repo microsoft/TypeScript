@@ -8,16 +8,16 @@ module m1 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
->     : ^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^                    ^^^^^          
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : (n: number) => Promise<number>
->             : ^^^^      ^^^^^^^^^^^^        
+>             : ^^^^      ^^^^^               
 >n : number
 >  : ^^^^^^
 
@@ -49,22 +49,22 @@ module m2 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
->     : ^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^                    ^^^^^          
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
->             : ^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^        ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^               ^^^
 >s : string
 >  : ^^^^^^
 
@@ -96,28 +96,28 @@ module m3 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; }
->     : ^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^                    ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^                ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^                    ^^^^^^^^^^                          ^^^          ^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >error : (error: any) => Promise<U>
->      : ^^^^^^^^   ^^^^^^^^^^^^ ^ 
+>      : ^^^^^^^^   ^^^^^          
 >error : any
 >      : ^^^
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : (n: number) => Promise<number>
->             : ^^^^      ^^^^^^^^^^^^        
+>             : ^^^^      ^^^^^               
 >n : number
 >  : ^^^^^^
 
@@ -149,34 +149,34 @@ module m4 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; }
->     : ^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^                    ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^                ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^                    ^^^^^^^^^^                          ^^^          ^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >error : (error: any) => Promise<U>
->      : ^^^^^^^^   ^^^^^^^^^^^^ ^ 
+>      : ^^^^^^^^   ^^^^^          
 >error : any
 >      : ^^^
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
->             : ^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^        ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^               ^^^
 >s : string
 >  : ^^^^^^
 
@@ -208,33 +208,33 @@ module m5 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (preservation: any) => void): Promise<U_2>; }
->     : ^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^                    ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U_2>(cb: (x: T) => Promise<U_2>, error?: (error: any) => U_2, progress?: (preservation: any) => void): Promise<U_2>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^                ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^                    ^^^^^^^^^^                          ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >error : (error: any) => Promise<U>
->      : ^^^^^^^^   ^^^^^^^^^^^^ ^ 
+>      : ^^^^^^^^   ^^^^^          
 >error : any
 >      : ^^^
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>;
 >then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_2>(cb: (x: T) => Promise<U_2>, error?: (error: any) => Promise<U_2>): Promise<U_2>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^                ^^^^^^^^^^^^^^                           ^^^^^^^^^^ ^ ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^                    ^^^^^^^^^^                 ^^^^^^^^^^^^^                           ^^^          ^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >error : (error: any) => U
->      : ^^^^^^^^   ^^^^^^
+>      : ^^^^^^^^   ^^^^^ 
 >error : any
 >      : ^^^
 >progress : (preservation: any) => void
@@ -245,13 +245,13 @@ module m5 {
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
->             : ^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^        ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^               ^^^
 >s : string
 >  : ^^^^^^
 
@@ -283,40 +283,40 @@ module m6 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; }
->     : ^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^                    ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^ ^ ^^^^^^^^^^                ^^^^^^^ ^ ^^^^^^^^^^ ^ ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^                    ^^^^^^^^^^                          ^^^          ^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^^^^^^^^^^^^^^ ^ 
+>   : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >error : (error: any) => Promise<U>
->      : ^^^^^^^^   ^^^^^^^^^^^^ ^ 
+>      : ^^^^^^^^   ^^^^^          
 >error : any
 >      : ^^^
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
->             : ^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
     declare function testFunction(b: boolean): Promise<boolean>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^         ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                ^^^
 >b : boolean
 >  : ^^^^^^^
 

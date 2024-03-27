@@ -126,7 +126,7 @@ const result4: A[] = Array.from(inputB, ({ b }): A => ({ a: b }));
 >inputB : B[]
 >       : ^^^
 >({ b }): A => ({ a: b }) : ({ b }: B) => A
->                         : ^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^^^^ 
 >b : string
 >  : ^^^^^^
 >({ a: b }) : { a: string; }
@@ -180,7 +180,7 @@ const result7: B[] = Array.from(inputALike, ({ a }): B => ({ b: a }));
 >inputALike : ArrayLike<A>
 >           : ^^^^^^^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
->                         : ^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^^^^ 
 >a : string
 >  : ^^^^^^
 >({ b: a }) : { b: string; }
@@ -220,7 +220,7 @@ const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
 >inputARand : ArrayLike<A> | Iterable<A>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
->                         : ^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^^^^ 
 >a : string
 >  : ^^^^^^
 >({ b: a }) : { b: string; }
@@ -262,7 +262,7 @@ const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 >inputASet : Set<A>
 >          : ^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
->                         : ^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^^^^ 
 >a : string
 >  : ^^^^^^
 >({ b: a }) : { b: string; }
@@ -279,7 +279,7 @@ const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 // even when the type is written as : Iterable<T>|ArrayLike<T>
 function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
 >getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
->          : ^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^           ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >in1 : Iterable<T>
 >    : ^^^^^^^^^^^
 >in2 : ArrayLike<T>

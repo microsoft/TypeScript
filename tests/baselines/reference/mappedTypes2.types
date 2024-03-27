@@ -44,11 +44,11 @@ type Proxy<T> = {
 
     get(): T;
 >get : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     set(value: T): void;
 >set : (value: T) => void
->    : ^^^^^^^^^^^^^^    
+>    : ^^^^^^^^ ^^^^^    
 >value : T
 >      : ^
 }
@@ -69,7 +69,7 @@ type DeepReadonly<T> = {
 
 declare function assign<T>(obj: T, props: Partial<T>): void;
 >assign : <T>(obj: T, props: Partial<T>) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>       : ^ ^^^^^^^ ^^^^^^^^^          ^^^^^    
 >obj : T
 >    : ^
 >props : Partial<T>
@@ -77,13 +77,13 @@ declare function assign<T>(obj: T, props: Partial<T>): void;
 
 declare function freeze<T>(obj: T): Readonly<T>;
 >freeze : <T>(obj: T) => Readonly<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^^^ ^^^^^           
 >obj : T
 >    : ^
 
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 >pick : <T, K extends keyof T>(obj: T, ...keys: K[]) => Pick<T, K>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^ ^  ^ 
+>     : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^   ^^^^^          
 >obj : T
 >    : ^
 >keys : K[]
@@ -91,17 +91,17 @@ declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 
 declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 >mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^    ^     ^^^^^^^^^^^^ ^  ^ 
+>          : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^            ^^^^^           ^^^^^            
 >obj : Record<K, T>
 >    : ^^^^^^^^^^^^
 >f : (x: T) => U
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function proxify<T>(obj: T): Proxify<T>;
 >proxify : <T>(obj: T) => Proxify<T>
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>        : ^ ^^^^^^^ ^^^^^          
 >obj : T
 >    : ^
 
@@ -171,7 +171,7 @@ interface ReadonlyShape {
 
 function f0(s1: Shape, s2: Shape) {
 >f0 : (s1: Shape, s2: Shape) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^     ^^^^^^     ^^^^^^^^^
 >s1 : Shape
 >   : ^^^^^
 >s2 : Shape
@@ -212,7 +212,7 @@ function f0(s1: Shape, s2: Shape) {
 
 function f1(shape: Shape) {
 >f1 : (shape: Shape) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^     ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 
@@ -237,7 +237,7 @@ function f1(shape: Shape) {
 
 function f2(shape: Shape) {
 >f2 : (shape: Shape) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^     ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 
@@ -258,7 +258,7 @@ function f2(shape: Shape) {
 
 function f3(shape: Shape) {
 >f3 : (shape: Shape) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^     ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 
@@ -322,7 +322,7 @@ function f4() {
 
 function f5(shape: Shape) {
 >f5 : (shape: Shape) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^     ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 
@@ -371,7 +371,7 @@ function f5(shape: Shape) {
 
 function f6(shape: DeepReadonly<Shape>) {
 >f6 : (shape: DeepReadonly<Shape>) => void
->   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^^^^^^^^                   ^^^^^^^^^
 >shape : DeepReadonly<Shape>
 >      : ^^^^^^^^^^^^^^^^^^^
 

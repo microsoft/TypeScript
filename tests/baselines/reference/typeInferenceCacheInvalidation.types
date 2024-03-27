@@ -13,7 +13,7 @@ type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any
 
 declare function example<TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^    ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^         ^^^^^^^    ^^^^^         
 
     foo: TFoo,
 >foo : TFoo

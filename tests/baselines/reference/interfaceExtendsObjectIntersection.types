@@ -69,7 +69,7 @@ type Constructor<T> = new () => T;
 
 declare function Constructor<T>(): Constructor<T>;
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^ ^ 
+>            : ^ ^^^^^^^              
 
 class C1 extends Constructor<I1>() { x: string }
 >C1 : C1

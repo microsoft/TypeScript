@@ -11,7 +11,7 @@ export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expressi
 
 export function evaluate(expression: Expression): boolean {
 >evaluate : (expression: Expression) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>         : ^^^^^^^^^^^^^          ^^^^^       
 >expression : Expression
 >           : ^^^^^^^^^^
 

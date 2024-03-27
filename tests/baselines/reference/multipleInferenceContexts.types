@@ -21,14 +21,14 @@ interface ComponentOptionsProperties<Data> {
 interface Instance<Data> {
     get<K extends keyof Data>(name: K): unknown;
 >get : <K extends keyof Data>(name: K) => unknown
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^       
 >name : K
 >     : ^
 }
 
 declare var Moon: {
 >Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^ ^^^^ 
+>     : ^    ^^^^^^^^^^^^                        ^^^^^              
 
     <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
 >options : ConstructorOptions<Data> | undefined

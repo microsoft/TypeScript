@@ -118,7 +118,7 @@ class Render {
      */
     addRectangle() {
 >addRectangle : () => Rectangle
->             : ^^^^^^^^^^^^^^^
+>             : ^^^^^^         
 
         const obj = new Rectangle();
 >obj : Rectangle

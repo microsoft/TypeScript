@@ -47,15 +47,15 @@ interface Square {
 interface Subshape {
     "0": {
 >"0" : { sub: { under: { shape: Shape; }; }; }
->    : ^^^^^^^                  ^^^^^      ^^^
+>    : ^^^^^^^                             ^^^
 
         sub: {
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^         ^^^^^   ^^^
+>    : ^^^^^^^^^                 ^^^
 
             under: {
 >under : { shape: Shape; }
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^     ^^^
 
                 shape: Shape;
 >shape : Shape
@@ -66,7 +66,7 @@ interface Subshape {
 }
 function area(s: Shape): number {
 >area : (s: Shape) => number
->     : ^^^^^^^^^^^^^^      
+>     : ^^^^     ^^^^^      
 >s : Shape
 >  : ^^^^^
 
@@ -143,7 +143,7 @@ function area(s: Shape): number {
 }
 function subarea(s: Subshape): number {
 >subarea : (s: Subshape) => number
->        : ^^^^^^^^^^^^^^^^^      
+>        : ^^^^        ^^^^^      
 >s : Subshape
 >  : ^^^^^^^^
 
@@ -369,7 +369,7 @@ type C = A | B;
 
 function check(z: Z, c: C) {
 >check : (z: Z, c: C) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^ ^^^^^ ^^^^^^^^^
 >z : Z
 >  : ^
 >c : C

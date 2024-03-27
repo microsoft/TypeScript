@@ -27,11 +27,11 @@ namespace Test
 
 	export function getClass<T>() : new() => T
 >getClass : <T>() => new () => T
->         : ^^^^^^^^^          ^
+>         : ^ ^^^^^^^           
 	{
 		return SomeClass as (new() => T);
 >SomeClass as (new() => T) : new () => T
->                          : ^^^^^^^^^^^
+>                          : ^^^^^^^^^^ 
 >SomeClass : typeof SomeClass
 >          : ^^^^^^^^^^^^^^^^
 	}

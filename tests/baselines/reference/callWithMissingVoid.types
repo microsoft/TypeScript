@@ -8,7 +8,7 @@ class X<T> {
 
     f(t: T) {
 >f : (t: T) => { a: T; }
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^^^^^^
 >t : T
 >  : ^
 
@@ -113,9 +113,9 @@ class MyPromise<X> {
 
     constructor(executor: (resolve: (value: X) => void) => void) {
 >executor : (resolve: (value: X) => void) => void
->         : ^^^^^^^^^^        ^         ^^^^^    
+>         : ^^^^^^^^^^                  ^^^^^    
 >resolve : (value: X) => void
->        : ^^^^^^^^^^^^^^    
+>        : ^^^^^^^^ ^^^^^    
 >value : X
 >      : ^
 
@@ -360,11 +360,11 @@ c(); // ok
 
 declare function call<TS extends unknown[]>(
 >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^            ^^^^^^^^^^^^^^^^^^    
+>     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^  ^^^^^    
 
     handler: (...args: TS) => unknown,
 >handler : (...args: TS) => unknown
->        : ^^^^^^^^^^^^^^^^^       
+>        : ^^^^^^^^^^  ^^^^^       
 >args : TS
 >     : ^^
 

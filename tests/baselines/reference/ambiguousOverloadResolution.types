@@ -15,7 +15,7 @@ class B extends A { x: number; }
 
 declare function f(p: A, q: B): number;
 >f : { (p: A, q: B): number; (p: B, q: A): string; }
->  : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : A
 >  : ^
 >q : B
@@ -23,7 +23,7 @@ declare function f(p: A, q: B): number;
 
 declare function f(p: B, q: A): string;
 >f : { (p: A, q: B): number; (p: B, q: A): string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^      ^^^
 >p : B
 >  : ^
 >q : A

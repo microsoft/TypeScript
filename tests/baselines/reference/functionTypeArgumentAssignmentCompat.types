@@ -3,7 +3,7 @@
 === functionTypeArgumentAssignmentCompat.ts ===
 var f : {
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^ ^^^^^ 
 
  <T>(x:T): T;
 >x : T
@@ -12,7 +12,7 @@ var f : {
 
 var g : {
 >g : <S>() => S[]
->  : ^^^^^^^^^^  
+>  : ^ ^^^^^^^   
 
  <S>() : S[];
 } = () => [];

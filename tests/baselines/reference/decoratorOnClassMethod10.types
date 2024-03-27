@@ -3,7 +3,7 @@
 === decoratorOnClassMethod10.ts ===
 declare function dec(target: Function, paramIndex: number): void;
 >dec : (target: Function, paramIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
+>    : ^^^^^^^^^        ^^^^^^^^^^^^^^      ^^^^^    
 >target : Function
 >       : ^^^^^^^^
 >paramIndex : number

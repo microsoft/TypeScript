@@ -46,7 +46,7 @@ export type Props =
 
 export declare function Foo(props: Props): JSX.Element;
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^
+>    : ^^^^^^^^     ^^^^^           
 >props : Props
 >      : ^^^^^
 >JSX : any

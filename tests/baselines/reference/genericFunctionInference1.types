@@ -10,9 +10,9 @@ Symbol count: 32,500 / 33,000 (nearest 500)
 === genericFunctionInference1.ts ===
 declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A_1 extends any[], B_1, C>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C): (...args: A_1) => C; <A_2 extends any[], B_2, C_1, D>(ab: (...args: A_2) => B_2, bc: (b: B_2) => C_1, cd: (c: C_1) => D): (...args: A_2) => D; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^          ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^ ^^^^^^                 ^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ab : (...args: A) => B
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^^^^ 
 >args : A
 >     : ^
 >args : A
@@ -20,13 +20,13 @@ declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) =
 
 declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;
 >pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A_2 extends any[], B_2, C_1, D>(ab: (...args: A_2) => B_2, bc: (b: B_2) => C_1, cd: (c: C_1) => D): (...args: A_2) => D; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^^    ^     ^^^^          ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^                 ^^^^^^           ^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ab : (...args: A) => B
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^^^^ 
 >args : A
 >     : ^
 >bc : (b: B) => C
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >b : B
 >  : ^
 >args : A
@@ -34,17 +34,17 @@ declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) =
 
 declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D;
 >pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A_2 extends any[], B_2, C_1>(ab: (...args: A_2) => B_2, bc: (b: B_2) => C_1): (...args: A_2) => C_1; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^^    ^     ^^^^^^^    ^     ^^^^          ^     ^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^                 ^^^^^^           ^^^^^^           ^^^                 ^^^
 >ab : (...args: A) => B
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^^^^ 
 >args : A
 >     : ^
 >bc : (b: B) => C
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >b : B
 >  : ^
 >cd : (c: C) => D
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >c : C
 >  : ^
 >args : A
@@ -52,13 +52,13 @@ declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B
 
 declare function list<T>(a: T): T[];
 >list : <T>(a: T) => T[]
->     : ^^^^^^^^^^^^^^  
+>     : ^ ^^^^^ ^^^^^   
 >a : T
 >  : ^
 
 declare function box<V>(x: V): { value: V };
 >box : <V>(x: V) => { value: V; }
->    : ^^^^^^^^^^^^^         ^   
+>    : ^ ^^^^^ ^^^^^             
 >x : V
 >  : ^
 >value : V
@@ -66,7 +66,7 @@ declare function box<V>(x: V): { value: V };
 
 declare function foo<T extends { value: T }>(x: T): T;
 >foo : <T extends { value: T; }>(x: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 >x : T
@@ -290,7 +290,7 @@ const f11 = pipe(foo, foo);
 
 const g00: <T>(x: T) => T[] = pipe(list);
 >g00 : <T>(x: T) => T[]
->    : ^^^^^^^^^^^^^^  
+>    : ^ ^^^^^ ^^^^^   
 >x : T
 >  : ^
 >pipe(list) : (a: T) => T[]
@@ -302,7 +302,7 @@ const g00: <T>(x: T) => T[] = pipe(list);
 
 const g01: <T>(x: T) => { value: T[] } = pipe(list, box);
 >g01 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -318,7 +318,7 @@ const g01: <T>(x: T) => { value: T[] } = pipe(list, box);
 
 const g02: <T>(x: T) => { value: T }[] = pipe(box, list);
 >g02 : <T>(x: T) => { value: T; }[]
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T
@@ -334,7 +334,7 @@ const g02: <T>(x: T) => { value: T }[] = pipe(box, list);
 
 const g03: <T>(x: T) => { value: T[] } = pipe(x => list(x), box);
 >g03 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -358,7 +358,7 @@ const g03: <T>(x: T) => { value: T[] } = pipe(x => list(x), box);
 
 const g04: <T>(x: T) => { value: T[] } = pipe(list, x => box(x));
 >g04 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -382,7 +382,7 @@ const g04: <T>(x: T) => { value: T[] } = pipe(list, x => box(x));
 
 const g05: <T>(x: T) => { value: T[] } = pipe(x => list(x), x => box(x))
 >g05 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -414,7 +414,7 @@ const g05: <T>(x: T) => { value: T[] } = pipe(x => list(x), x => box(x))
 
 const g06: <T>(x: T) => { value: T[] } = pipe(list, pipe(box));
 >g06 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -434,7 +434,7 @@ const g06: <T>(x: T) => { value: T[] } = pipe(list, pipe(box));
 
 const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
 >g07 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -462,7 +462,7 @@ const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
 
 const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
 >g08 : <T>(x: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^         ^     
+>    : ^ ^^^^^ ^^^^^               
 >x : T
 >  : ^
 >value : T[]
@@ -498,7 +498,7 @@ const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
 
 const g09: <T>(x: T) => number = pipe(list, x => x.length);
 >g09 : <T>(x: T) => number
->    : ^^^^^^^^^^^^^      
+>    : ^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 >pipe(list, x => x.length) : (a: T) => number
@@ -520,7 +520,7 @@ const g09: <T>(x: T) => number = pipe(list, x => x.length);
 
 const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
 >g10 : <T extends { value: T; }>(x: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 >x : T
@@ -534,7 +534,7 @@ const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
 
 const g12: <T extends { value: T }>(x: T) => T = pipe(foo, foo);
 >g12 : <T extends { value: T; }>(x: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 >x : T
@@ -550,13 +550,13 @@ const g12: <T extends { value: T }>(x: T) => T = pipe(foo, foo);
 
 declare function pipe2<A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D): (a: [A, C]) => [B, D];
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
->      : ^^^^^^^^^^^^^^^^^    ^     ^^^^^^^    ^     ^^^^^^     ^  ^       ^  ^ 
+>      : ^ ^^ ^^ ^^ ^^^^^^           ^^^^^^           ^^^^^                     
 >ab : (a: A) => B
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >cd : (c: C) => D
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >c : C
 >  : ^
 >a : [A, C]
@@ -648,13 +648,13 @@ const f26 = pipe2(f25, f25);
 
 declare function pipe3<A, B, C>(ab: (a: A) => B, ac: (a: A) => C): (a: A) => [B, C];
 >pipe3 : <A, B, C>(ab: (a: A) => B, ac: (a: A) => C) => (a: A) => [B, C]
->      : ^^^^^^^^^^^^^^    ^     ^^^^^^^    ^     ^^^^^^    ^      ^  ^ 
+>      : ^ ^^ ^^ ^^^^^^           ^^^^^^           ^^^^^                
 >ab : (a: A) => B
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >ac : (a: A) => C
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >a : A
@@ -698,9 +698,9 @@ const f32 = pipe3(list, list);
 
 declare function pipe4<A, B, C>(funcs: [(a: A) => B, (b: B) => C]): (a: A) => C;
 >pipe4 : <A, B, C>(funcs: [(a: A) => B, (b: B) => C]) => (a: A) => C
->      : ^^^^^^^^^^^^^^^^^     ^     ^      ^     ^ ^^^^^    ^     ^
+>      : ^ ^^ ^^ ^^^^^^^^^                          ^^^^^           
 >funcs : [(a: A) => B, (b: B) => C]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^ ^^^^^ ^^^^^^ ^^^^^ ^
 >a : A
 >  : ^
 >b : B
@@ -738,13 +738,13 @@ const f41 = pipe4([box, list]);
 
 declare function pipe5<A, B>(f: (a: A) => B): { f: (a: A) => B };
 >pipe5 : <A, B>(f: (a: A) => B) => { f: (a: A) => B; }
->      : ^^^^^^^^^^    ^     ^^^^^^         ^     ^   
+>      : ^ ^^ ^^^^^           ^^^^^                   
 >f : (a: A) => B
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >f : (a: A) => B
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -760,9 +760,9 @@ const f50 = pipe5(list);  // No higher order inference
 
 declare function wrap3<A, B, C>(f: (a: A, b1: B, b2: B) => C): (a: A, b1: B, b2: B) => C;
 >wrap3 : <A, B, C>(f: (a: A, b1: B, b2: B) => C) => (a: A, b1: B, b2: B) => C
->      : ^^^^^^^^^^^^^    ^      ^      ^     ^^^^^^    ^      ^      ^     ^
+>      : ^ ^^ ^^ ^^^^^                         ^^^^^                         
 >f : (a: A, b1: B, b2: B) => C
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^ ^^^^^^ ^^^^^ 
 >a : A
 >  : ^
 >b1 : B
@@ -778,7 +778,7 @@ declare function wrap3<A, B, C>(f: (a: A, b1: B, b2: B) => C): (a: A, b1: B, b2:
 
 declare function baz<T, U extends T>(t1: T, t2: T, u: U): [T, U];
 >baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^ ^^^^^      
 >t1 : T
 >   : ^
 >t2 : T
@@ -798,7 +798,7 @@ let f60 = wrap3(baz);
 
 declare const list2: {
 >list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
->      : ^^^^^^^^^^^^^^  ^^^^^^^      ^^^^^^^^^      ^^^
+>      : ^^^ ^^^^^ ^^^   ^^^^^^^      ^^^^^^^^^      ^^^
 
     <T>(a: T): T[];
 >a : T
@@ -866,7 +866,7 @@ declare class Bag<T> {
 
     contains(value: T): boolean;
 >contains : (value: T) => boolean
->         : ^^^^^^^^^^^^^^       
+>         : ^^^^^^^^ ^^^^^       
 >value : T
 >      : ^
 
@@ -877,15 +877,15 @@ declare class Bag<T> {
 
 function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
 >asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^              ^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^ ^^^^^^                     ^^^^^^^^^^^^^^^ ^^^^^^
 >cf : new (...args: A) => B
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^ ^^^^^ 
 >args : A
 >     : ^
 
     return (...args: A) => new cf(...args);
 >(...args: A) => new cf(...args) : (...args: A) => B
->                                : ^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^^^^^ ^^^^^^
 >args : A
 >     : ^
 >new cf(...args) : B
@@ -991,7 +991,7 @@ type CompClass<P> = new (props: P) => Comp<P>;
 
 declare function myHoc<P>(C: CompClass<P>): CompClass<P>;
 >myHoc : <P>(C: CompClass<P>) => CompClass<P>
->      : ^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^ ^ 
+>      : ^ ^^^^^            ^^^^^            
 >C : CompClass<P>
 >  : ^^^^^^^^^^^^
 
@@ -1023,9 +1023,9 @@ const GenericComp2 = myHoc(GenericComp);
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
 >mirror : <A, B>(f: (a: A) => B) => (a: A) => B
->       : ^^^^^^^^^^    ^     ^^^^^^    ^     ^
+>       : ^ ^^ ^^^^^           ^^^^^           
 >f : (a: A) => B
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >a : A
@@ -1073,9 +1073,9 @@ var z = identityM(x);
 
 export function keyOf<a>(value: { key: a; }): a {
 >keyOf : <a>(value: { key: a; }) => a
->      : ^^^^^^^^^^^       ^   ^^^^^^
+>      : ^ ^^^^^^^^^           ^^^^^ 
 >value : { key: a; }
->      : ^^^^^^^^^^^
+>      : ^^^^^^^ ^^^
 >key : a
 >    : ^
 
@@ -1105,11 +1105,11 @@ var data: Data[] = [];
 
 declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
 >toKeys : <a>(values: a[], toKey: (value: a) => string) => string[]
->       : ^^^^^^^^^^^^^  ^^^^^^^^^        ^           ^^^^^        
+>       : ^ ^^^^^^^^^^   ^^^^^^^^^                    ^^^^^        
 >values : a[]
 >       : ^^^
 >toKey : (value: a) => string
->      : ^^^^^^^^^^^^^^      
+>      : ^^^^^^^^ ^^^^^      
 >value : a
 >      : ^
 
@@ -1127,9 +1127,9 @@ toKeys(data, keyOf);  // Error
 
 function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
 >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
->     : ^^^^^^^^^^^^^ ^  ^  ^  ^     ^^^^^^ ^  ^  ^  ^     ^
+>     : ^ ^^ ^^ ^^^^^                 ^^^^^                 
 >f : (a: a, b: b) => c
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^ ^^^^^ 
 >a : a
 >  : ^
 >b : b
@@ -1141,7 +1141,7 @@ function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
 
   return (b: b, a: a) => f(a, b);
 >(b: b, a: a) => f(a, b) : (b: b, a: a) => c
->                        : ^^^^^^^^^^^^^^^^^
+>                        : ^^^^ ^^^^^ ^^^^^^
 >b : b
 >  : ^
 >a : a
@@ -1157,7 +1157,7 @@ function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
 }
 function zip<T, U>(x: T, y: U): [T, U] {
 >zip : <T, U>(x: T, y: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 >y : U
@@ -1174,7 +1174,7 @@ function zip<T, U>(x: T, y: U): [T, U] {
 
 var expected: <T, U>(y: U, x: T) => [T, U] = flip(zip);
 >expected : <T, U>(y: U, x: T) => [T, U]
->         : ^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>         : ^ ^^ ^^^^^ ^^^^^ ^^^^^      
 >y : U
 >  : ^
 >x : T
@@ -1200,17 +1200,17 @@ var actual = flip(zip);
 
 const map = <T, U>(transform: (t: T) => U) =>
 >map : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
->    : ^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^  ^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^           ^^^^^^^^^^^   ^^^^^^^^
 ><T, U>(transform: (t: T) => U) =>    (arr: T[]) => arr.map(transform) : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
->                                                                      : ^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^  ^^^^^^^^
+>                                                                      : ^ ^^ ^^^^^^^^^^^^^           ^^^^^^^^^^^   ^^^^^^^^
 >transform : (t: T) => U
->          : ^^^^^^^^^^^
+>          : ^^^^ ^^^^^ 
 >t : T
 >  : ^
 
     (arr: T[]) => arr.map(transform)
 >(arr: T[]) => arr.map(transform) : (arr: T[]) => U[]
->                                 : ^^^^^^^  ^^^^^^^^
+>                                 : ^^^^^^   ^^^^^^^^
 >arr : T[]
 >    : ^^^
 >arr.map(transform) : U[]
@@ -1270,7 +1270,7 @@ const arr1: string[] = map(identity)(['a']);
 
 function of2<a, b>(one: a, two: b): [a, b] {
 >of2 : <a, b>(one: a, two: b) => [a, b]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^ ^^^^^^^ ^^^^^      
 >one : a
 >    : ^
 >two : b
@@ -1305,13 +1305,13 @@ type Component<P> = (props: P) => {};
 
 declare const myHoc1: <P>(C: Component<P>) => Component<P>;
 >myHoc1 : <P>(C: Component<P>) => Component<P>
->       : ^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^            ^^^^^            
 >C : Component<P>
 >  : ^^^^^^^^^^^^
 
 declare const myHoc2: <P>(C: Component<P>) => Component<P>;
 >myHoc2 : <P>(C: Component<P>) => Component<P>
->       : ^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^            ^^^^^            
 >C : Component<P>
 >  : ^^^^^^^^^^^^
 
@@ -1478,7 +1478,7 @@ declare const orUndefined: (name: string) => string | undefined;
 
 declare const identity: <T>(value: T) => T;
 >identity : <T>(value: T) => T
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 
@@ -1520,7 +1520,7 @@ declare const getArray: () => string[];
 
 declare const first: <T>(ts: T[]) => T;
 >first : <T>(ts: T[]) => T
->      : ^^^^^^^^^  ^^^^^^
+>      : ^ ^^^^^^   ^^^^^ 
 >ts : T[]
 >   : ^^^
 
@@ -1610,7 +1610,7 @@ const fn62 = pipe(
 
 declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
 >foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>     : ^ ^^ ^^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^      
 >fn : T
 >   : ^
 >a : U | undefined
@@ -1648,9 +1648,9 @@ foo2(identity, 1);
 
 declare function times<T>(fn: (i: number) => T): (n: number) => T[];
 >times : <T>(fn: (i: number) => T) => (n: number) => T[]
->      : ^^^^^^^^               ^^^^^^               ^  
+>      : ^ ^^^^^^                ^^^^^                  
 >fn : (i: number) => T
->   : ^^^^      ^^^^^^
+>   : ^^^^      ^^^^^ 
 >i : number
 >  : ^^^^^^
 >n : number

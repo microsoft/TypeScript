@@ -17,7 +17,7 @@ import { SomeClass } from './auxiliry';
 
 function annotation(): PropertyDecorator {
 >annotation : () => PropertyDecorator
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void

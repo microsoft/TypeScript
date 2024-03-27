@@ -11,7 +11,7 @@ interface Dog {
 
 declare function getRover(): Dog
 >getRover : () => Dog
->         : ^^^^^^^^^
+>         : ^^^^^^   
     
 export let x:Dog = getRover;
 >x : Dog

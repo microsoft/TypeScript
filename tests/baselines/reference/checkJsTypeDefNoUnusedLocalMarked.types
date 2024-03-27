@@ -29,7 +29,7 @@ export = Foo;
 
 module.exports = /** @type {FooFun} */(void 0);
 >module.exports = /** @type {FooFun} */(void 0) : (foo: Foo) => string
->                                               : ^^^^^^^^^^^^^^      
+>                                               : ^^^^^^   ^^^^^      
 >module.exports : (foo: typeof import("file")) => string
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: (foo: typeof import("file")) => string; }

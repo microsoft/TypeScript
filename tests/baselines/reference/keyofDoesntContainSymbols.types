@@ -45,7 +45,7 @@ const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
 
 function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^ ^ 
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^    ^^^^^    
 >obj : T
 >    : ^
 >key : K

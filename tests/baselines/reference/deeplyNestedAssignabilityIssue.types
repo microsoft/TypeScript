@@ -10,15 +10,15 @@ interface A {
 interface Large {
     something: {
 >something : { another: { more: { thing: A; }; yetstill: { another: A; }; }; }
->          : ^^^^^^^^^^^                 ^                          ^      ^^^
+>          : ^^^^^^^^^^^                                                   ^^^
 
         another: {
 >another : { more: { thing: A; }; yetstill: { another: A; }; }
->        : ^^^^^^^^         ^   ^^^^^^^^^^^^           ^   ^^^
+>        : ^^^^^^^^             ^^^^^^^^^^^^               ^^^
 
             more: {
 >more : { thing: A; }
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^^^^ ^^^
 
                 thing: A;
 >thing : A
@@ -26,7 +26,7 @@ interface Large {
             }
             yetstill: {
 >yetstill : { another: A; }
->         : ^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^ ^^^
 
                 another: A;
 >another : A

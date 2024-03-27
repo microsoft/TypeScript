@@ -73,7 +73,7 @@ interface FunctionComponent2<P> {
 
 function needsComponentOfSomeProps3(...x: SomePropsClone[]): void {}
 >needsComponentOfSomeProps3 : (...x: SomePropsClone[]) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^  ^^^^^    
+>                           : ^^^^^^^                ^^^^^    
 >x : SomePropsClone[]
 >  : ^^^^^^^^^^^^^^^^
 
@@ -96,7 +96,7 @@ needsComponentOfSomeProps3({ renderAs: comp3 });
 
 function needsComponentOfSomeProps2(...x: SomeProps[]): void {}
 >needsComponentOfSomeProps2 : (...x: SomeProps[]) => void
->                           : ^^^^^^^^^^^^^^^^  ^^^^^    
+>                           : ^^^^^^^           ^^^^^    
 >x : SomeProps[]
 >  : ^^^^^^^^^^^
 

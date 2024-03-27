@@ -7,7 +7,7 @@
  */
 function normal(notSpecial) {
 >normal : (notSpecial: Object) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^      ^^^^^^^^^
 >notSpecial : Object
 >           : ^^^^^^
 

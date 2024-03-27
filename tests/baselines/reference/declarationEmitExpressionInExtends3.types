@@ -37,7 +37,7 @@ interface LocalInterface {
 
 function getLocalClass<T>(c: T) {
 >getLocalClass : <T>(c: T) => typeof LocalClass
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >c : T
 >  : ^
 
@@ -48,7 +48,7 @@ function getLocalClass<T>(c: T) {
 
 function getExportedClass<T>(c: T) {
 >getExportedClass : <T>(c: T) => typeof ExportedClass
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : T
 >  : ^
 

@@ -29,7 +29,7 @@ interface Fake {
 }
 function test(r: Real | Fake) {
 >test : (r: Real | Fake) => void
->     : ^^^^^^^^   ^^^^^^^^^^^^^
+>     : ^^^^           ^^^^^^^^^
 >r : Real | Fake
 >  : ^^^^^^^^^^^
 

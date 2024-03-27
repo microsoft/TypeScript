@@ -15,7 +15,7 @@ interface Parsers {
 
     readline(delimiter?: string): ParserFunc;
 >readline : (delimiter?: string) => ParserFunc
->         : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^      ^^^^^          
 >delimiter : string
 >          : ^^^^^^
 }

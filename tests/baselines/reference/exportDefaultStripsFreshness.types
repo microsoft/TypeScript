@@ -39,7 +39,7 @@ interface IFoo {
 
 function nFoo(x: IFoo) {}
 >nFoo : (x: IFoo) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : IFoo
 >  : ^^^^
 

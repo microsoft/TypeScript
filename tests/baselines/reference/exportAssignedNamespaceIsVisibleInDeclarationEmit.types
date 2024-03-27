@@ -8,7 +8,7 @@ declare namespace Foo {
     export interface Bar {}
     export function f(): Bar;
 >f : () => Bar
->  : ^^^^^^^^^
+>  : ^^^^^^   
 }
 export = Foo;
 >Foo : typeof Foo

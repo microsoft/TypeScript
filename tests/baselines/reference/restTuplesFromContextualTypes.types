@@ -93,7 +93,7 @@ declare const t1: [number, boolean, string];
 
 declare function f1(cb: (...args: typeof t1) => void): void;
 >f1 : (cb: (...args: typeof t1) => void) => void
->   : ^^^^^                 ^^         ^^^^^    
+>   : ^^^^^                            ^^^^^    
 >cb : (args_0: number, args_1: boolean, args_2: string) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, string]
@@ -259,7 +259,7 @@ declare const t2: [number, boolean, ...string[]];
 
 declare function f2(cb: (...args: typeof t2) => void): void;
 >f2 : (cb: (...args: typeof t2) => void) => void
->   : ^^^^^                 ^^         ^^^^^    
+>   : ^^^^^                            ^^^^^    
 >cb : (args_0: number, args_1: boolean, ...args_2: string[]) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, ...string[]]
@@ -435,7 +435,7 @@ declare const t3: [boolean, ...string[]];
 
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
->   : ^^^^^                            ^^         ^^^^^    
+>   : ^^^^^                                       ^^^^^    
 >cb : (x: number, args_0: boolean, ...args_1: string[]) => void
 >   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >x : number
@@ -513,7 +513,7 @@ f3((a, b, c, ...x) => {})
 
 function f4<T extends any[]>(t: T) {
 >f4 : <T extends any[]>(t: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -571,9 +571,9 @@ function f4<T extends any[]>(t: T) {
 
     function f(cb: (x: number, ...args: T) => void) {}
 >f : (cb: (x: number, ...args: T) => void) => void
->  : ^^^^^                     ^         ^^^^^^^^^
+>  : ^^^^^                               ^^^^^^^^^
 >cb : (x: number, ...args: T) => void
->   : ^^^^      ^^^^^^^^^^^^^^^^^    
+>   : ^^^^      ^^^^^^^^^^^ ^^^^^    
 >x : number
 >  : ^^^^^^
 >args : T
@@ -618,9 +618,9 @@ function f4<T extends any[]>(t: T) {
 
 declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->   : ^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^          ^     ^
+>   : ^ ^^^^^^^^^^^^^^^^ ^^^^^                 ^^^^^                 
 >f : (...args: T) => U
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 >args : T
@@ -706,13 +706,13 @@ let g4 = f5((...args) => true);
 
 declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^    ^     ^^^^^^          ^     ^
+>     : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^                 ^^^^^           ^^^^^                 
 >f : (...args: A) => B
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^ 
 >args : A
 >     : ^
 >g : (x: B) => C
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : B
 >  : ^
 >args : A

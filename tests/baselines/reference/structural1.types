@@ -17,7 +17,7 @@ module M {
 
     export function f(i:I) {
 >f : (i: I) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >i : I
 >  : ^
     }

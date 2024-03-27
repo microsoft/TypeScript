@@ -299,7 +299,7 @@ f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number he
 
 declare function f10<T extends unknown[]>(...args: T): T;
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -423,7 +423,7 @@ const x18 = f10(...ns, true);  // (string | number | boolean)[]
 
 function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >g10 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
 >u : U
 >  : ^
 >v : V
@@ -486,7 +486,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 
 declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -610,7 +610,7 @@ const z18 = f11(...ns, true);  // (string | number | true)[]
 
 function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >g11 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
 >u : U
 >  : ^
 >v : V
@@ -673,9 +673,9 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 
 function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^                 ^^^^^^^^^^^ ^^^^^^
 >f : (...args: T) => U
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 >args : T
@@ -694,11 +694,11 @@ function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 
 function callr<T extends unknown[], U>(args: T, f: (...args: T) => U) {
 >callr : <T extends unknown[], U>(args: T, f: (...args: T) => U) => U
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^     ^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^                 ^^^^^^
 >args : T
 >     : ^
 >f : (...args: T) => U
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -723,7 +723,7 @@ declare function f15(a: string, b: number): string | number;
 
 declare function f16<A, B>(a: A, b: B): A | B;
 >f16 : <A, B>(a: A, b: B) => A | B
->    : ^^^^^^^^^^^^^^^^^^^^^^^   ^
+>    : ^ ^^ ^^^^^ ^^^^^ ^^^^^     
 >a : A
 >  : ^
 >b : B
@@ -867,9 +867,9 @@ let x32 = callr(sn, f16);  // string | number
 
 function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^           ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^                       ^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^
 >f : (x: T, ...rest: U) => V
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >rest : U
@@ -879,7 +879,7 @@ function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
 
     return (...rest: U) => f(x, ...rest);
 >(...rest: U) => f(x, ...rest) : (...rest: U) => V
->                              : ^^^^^^^^^^^^^^^^^
+>                              : ^^^^^^^^^^ ^^^^^^
 >rest : U
 >     : ^
 >f(x, ...rest) : V
@@ -1098,7 +1098,7 @@ g23();
 
 declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^ ^^^^^   ^^^^^^^^ ^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -1223,7 +1223,7 @@ type EventType<T> = {
 
   emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
 >emit : <K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^                  ^ ^     ^ ^  ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^                                  ^^^^^    
 >e : K
 >  : ^
 >payload : T[K] extends any[] ? T[K] : [T[K]]

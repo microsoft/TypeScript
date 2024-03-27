@@ -105,9 +105,9 @@ type DefaultsDeep<T, U extends T> = {
 interface _Array<T> {
   find<S extends T>(predicate: (value: T) => boolean): void;
 >find : <S extends T>(predicate: (value: T) => boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^        ^            ^^^^^    
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^    
 >predicate : (value: T) => boolean
->          : ^^^^^^^^^^^^^^       
+>          : ^^^^^^^^ ^^^^^       
 >value : T
 >      : ^
 }

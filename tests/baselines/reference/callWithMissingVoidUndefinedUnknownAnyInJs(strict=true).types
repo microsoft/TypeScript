@@ -27,7 +27,7 @@ declare function f4(p: any): void;
 
 interface I<T> { m(p: T): void; }
 >m : (p: T) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >p : T
 >  : ^
 

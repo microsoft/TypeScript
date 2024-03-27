@@ -53,7 +53,7 @@ interface Item2 extends Base {
 
 function goo1(x: Item) {
 >goo1 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -97,7 +97,7 @@ function goo1(x: Item) {
 
 function goo2(x: Item) {
 >goo2 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -141,7 +141,7 @@ function goo2(x: Item) {
 
 function foo1(x: Item) {
 >foo1 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -181,7 +181,7 @@ function foo1(x: Item) {
 
 function foo2(x: Item) {
 >foo2 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -221,7 +221,7 @@ function foo2(x: Item) {
 
 function foo3(x: Item) {
 >foo3 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -261,7 +261,7 @@ function foo3(x: Item) {
 
 function foo4(x: Item) {
 >foo4 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -301,7 +301,7 @@ function foo4(x: Item) {
 
 function foo5(x: Item) {
 >foo5 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -341,7 +341,7 @@ function foo5(x: Item) {
 
 function foo6(x: Item) {
 >foo6 : (x: Item) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -427,7 +427,7 @@ interface NumType {
 
 function func2(inst: Instance) {
 >func2 : (inst: Instance) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^        ^^^^^^^^^
 >inst : Instance
 >     : ^^^^^^^^
 
@@ -630,7 +630,7 @@ type Obj = AdditiveObj | MultiplicativeObj
 
 export function foo(obj: Obj) {
 >foo : (obj: Obj) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^   ^^^^^^^^^
 >obj : Obj
 >    : ^^^
 
@@ -721,7 +721,7 @@ type TypeBar2 = { type: BarEnum.bar2 };
 
 function func3(value: Partial<UnionOfBar>) {
 >func3 : (value: Partial<UnionOfBar>) => void
->      : ^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^
+>      : ^^^^^^^^                   ^^^^^^^^^
 >value : Partial<UnionOfBar>
 >      : ^^^^^^^^^^^^^^^^^^^
 
@@ -813,7 +813,7 @@ declare function isType(x: unknown): x is Type;
 
 function WorksProperly(data: Type) {
 >WorksProperly : (data: Type) => void
->              : ^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^    ^^^^^^^^^
 >data : Type
 >     : ^^^^
 
@@ -918,9 +918,9 @@ type MapOfAllTests = Record<string, AllTests>;
 
 const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>               : ^^^^^^^^^^^^^             ^^^^^^^        ^^^^^^^^^
 >(mapOfTests: MapOfAllTests, ids: string[]) => {    ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    });} : (mapOfTests: MapOfAllTests, ids: string[]) => void
->                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^             ^^^^^^^        ^^^^^^^^^
 >mapOfTests : MapOfAllTests
 >           : ^^^^^^^^^^^^^
 >ids : string[]

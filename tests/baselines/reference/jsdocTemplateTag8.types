@@ -161,7 +161,7 @@ sub_invariant = super_invariant;  // Error
  */
 function f(x) {}
 >f : <in T>(x: T) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 

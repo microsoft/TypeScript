@@ -21,7 +21,7 @@ interface Props {
 
 function TabLayout(props: Props) {
 >TabLayout : (props: Props) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 

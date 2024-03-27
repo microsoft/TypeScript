@@ -3,7 +3,7 @@
 === widenToAny2.ts ===
 function foo3<T>(x: T[]): T {
 >foo3 : <T>(x: T[]) => T
->     : ^^^^^^^^  ^^^^^^
+>     : ^ ^^^^^   ^^^^^ 
 >x : T[]
 >  : ^^^
 

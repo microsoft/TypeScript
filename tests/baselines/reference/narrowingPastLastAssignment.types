@@ -3,7 +3,7 @@
 === narrowingPastLastAssignment.ts ===
 function action(f: Function) {}
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^        ^^^^^^^^^
 >f : Function
 >  : ^^^^^^^^
 

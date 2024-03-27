@@ -7,7 +7,7 @@ class List<T> {
 
    add(item: T) { }
 >add : (item: T) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^
 >item : T
 >     : ^
 }

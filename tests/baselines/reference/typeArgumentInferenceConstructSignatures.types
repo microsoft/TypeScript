@@ -107,7 +107,7 @@ new someGenerics1<number, {}>(3, 4);
 interface someGenerics2a {
     new <T>(n: (x: T) => void);
 >n : (x: T) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : T
 >  : ^
 }
@@ -162,7 +162,7 @@ new someGenerics2a<string>((n) => n.substr(0));
 interface someGenerics2b {
     new <T, U>(n: (x: T, y: U) => void);
 >n : (x: T, y: U) => void
->  : ^^^^^^^^^^^^^^^^    
+>  : ^^^^ ^^^^^ ^^^^^    
 >x : T
 >  : ^
 >y : U
@@ -230,7 +230,7 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 interface someGenerics3 {
     new <T>(producer: () => T);
 >producer : () => T
->         : ^^^^^^^
+>         : ^^^^^^ 
 }
 var someGenerics3: someGenerics3;
 >someGenerics3 : someGenerics3
@@ -272,7 +272,7 @@ interface someGenerics4 {
 >n : T
 >  : ^
 >f : (x: U) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : U
 >  : ^
 }
@@ -328,7 +328,7 @@ interface someGenerics5 {
 >n : T
 >  : ^
 >f : (x: U) => void
->  : ^^^^^^^^^^    
+>  : ^^^^ ^^^^^    
 >x : U
 >  : ^
 }
@@ -382,15 +382,15 @@ new someGenerics5<string, number>(null, null);
 interface someGenerics6 {
     new <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A);
 >a : (a: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >b : (b: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >b : A
 >  : ^
 >c : (c: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >c : A
 >  : ^
 }
@@ -498,15 +498,15 @@ new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 interface someGenerics7 {
     new <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C);
 >a : (a: A) => A
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 >b : (b: B) => B
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >b : B
 >  : ^
 >c : (c: C) => C
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >c : C
 >  : ^
 }

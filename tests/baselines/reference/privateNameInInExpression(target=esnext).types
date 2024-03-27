@@ -192,7 +192,7 @@ class Foo {
     }
     flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
 >flow : (u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) => void
->     : ^^^^       ^^^^^     ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^   ^^^^^^^^^^^^
+>     : ^^^^       ^^^^^     ^^^^^^         ^^^^^^      ^^^^^   ^^^^^^^            ^^^^^^^^                  ^^^^^^^^^
 >u : unknown
 >  : ^^^^^^^
 >n : never
@@ -451,7 +451,7 @@ class Bar { notFoo = true }
 
 function badSyntax(v: Foo) {
 >badSyntax : (v: Foo) => boolean
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^^^^   ^^^^^^^^^^^^
 >v : Foo
 >  : ^^^
 

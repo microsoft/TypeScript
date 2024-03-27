@@ -29,7 +29,7 @@ interface Bar extends Base {
 
 function getV(): Foo | Bar {
 >getV : () => Foo | Bar
->     : ^^^^^^^^^   ^^^
+>     : ^^^^^^         
 
   return null!;
 >null! : never

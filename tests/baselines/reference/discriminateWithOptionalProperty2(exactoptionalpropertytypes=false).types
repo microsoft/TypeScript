@@ -9,7 +9,7 @@ type PromiseOrValue<T> = Promise<T> | T;
 
 function mapAsyncIterable<T, U, R = undefined>(
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^          ^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^        ^     ^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^ ^  ^       
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^^^^                               ^^^^^                          
 
   iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>,
 >iterable : AsyncGenerator<T, R, void> | AsyncIterable<T>
@@ -17,7 +17,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 
   callback: (value: T) => PromiseOrValue<U>,
 >callback : (value: T) => PromiseOrValue<U>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>         : ^^^^^^^^ ^^^^^                 
 >value : T
 >      : ^
 
@@ -40,7 +40,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 
   async function mapResult(
 >mapResult : (result: IteratorResult<T, R>) => Promise<IteratorResult<U, R>>
->          : ^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^  ^  
+>          : ^^^^^^^^^                    ^^^^^                             
 
     result: IteratorResult<T, R>,
 >result : IteratorResult<T, R>
@@ -126,7 +126,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 
   return {
 >{    async next() {      return mapResult(await iterator.next());    },    async return(): Promise<IteratorResult<U, R>> {      return typeof iterator.return === "function"        ? mapResult(await iterator.return())        : { value: undefined as any, done: true };    },    async throw(error?: unknown) {      if (typeof iterator.throw === "function") {        return mapResult(await iterator.throw(error));      }      throw error;    },    [Symbol.asyncIterator]() {      return this;    },  } : { next(): Promise<IteratorResult<U, R>>; return(): Promise<IteratorResult<U, R>>; throw(error?: unknown): Promise<IteratorResult<U, R>>; [Symbol.asyncIterator](): AsyncGenerator<U, R, void>; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^  ^  ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                             ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async next() {
 >next : () => Promise<IteratorResult<U, R>>
@@ -151,7 +151,7 @@ function mapAsyncIterable<T, U, R = undefined>(
     },
     async return(): Promise<IteratorResult<U, R>> {
 >return : () => Promise<IteratorResult<U, R>>
->       : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^  ^  
+>       : ^^^^^^                             
 
       return typeof iterator.return === "function"
 >typeof iterator.return === "function"        ? mapResult(await iterator.return())        : { value: undefined as any, done: true } : Promise<IteratorResult<U, R>> | { value: any; done: true; }

@@ -3,7 +3,7 @@
 === typeArgumentConstraintResolution1.ts ===
 function foo1<T extends Date>(test: T);
 >foo1 : { <T extends Date>(test: T): any; <T_1 extends Number>(test: string): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : T
 >     : ^
 
@@ -31,13 +31,13 @@ foo1<Date>(""); // should error
 
 function foo2<T extends Date>(test: T): T;
 >foo2 : { <T extends Date>(test: T): T; <T_1 extends Number>(test: string): T_1; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : T
 >     : ^
 
 function foo2<T extends Number>(test: string): T; 
 >foo2 : { <T_1 extends Date>(test: T_1): T_1; <T extends Number>(test: string): T; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^
 >test : string
 >     : ^^^^^^
 

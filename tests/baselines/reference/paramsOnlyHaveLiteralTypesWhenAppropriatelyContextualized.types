@@ -11,7 +11,7 @@ type Lower<T> = { [K in keyof T]: T[K] };
 
 export function appendToOptionalArray<
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^    ^    ^^^^^ ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^                          ^^^^^^^ ^^^^^^^^^ ^^^^^^^^^
 
   K extends string | number | symbol,
   T

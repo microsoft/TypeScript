@@ -6,7 +6,7 @@
 
 function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an error
 >foo : <T, U extends T>(x: T, y: U) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -57,7 +57,7 @@ var r3 = foo(1, n);
 
 function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^ ^^^^^^
 >length : T
 >       : ^
 >x : T

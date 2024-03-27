@@ -3,7 +3,7 @@
 === contextuallyTypedParametersWithInitializers4.ts ===
 declare function test<
 >test : <TContext, TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>>(context: TContext, methods: TMethods) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^         ^^^^^       ^^^^^^^^^^^^        ^^^^^^^^^^^        ^^^^^    
 
   TContext,
   TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>,

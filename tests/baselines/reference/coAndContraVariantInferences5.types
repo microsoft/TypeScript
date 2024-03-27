@@ -7,7 +7,7 @@ type Thing = 'a' | 'b';
 
 function f(
 >f : (options: SelectOptions<Thing>, onChange: (status: Thing | null) => void) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^         ^^^^^                ^^^^^    
+>  : ^^^^^^^^^^                    ^^^^^^^^^^^^                              ^^^^^    
 
     options: SelectOptions<Thing>,
 >options : SelectOptions<Thing>
@@ -15,7 +15,7 @@ function f(
 
     onChange: (status: Thing | null) => void,
 >onChange : (status: Thing | null) => void
->         : ^^^^^^^^^^^^^^       ^^^^^    
+>         : ^^^^^^^^^            ^^^^^    
 >status : Thing | null
 >       : ^^^^^^^^^^^^
 
@@ -41,7 +41,7 @@ function f(
 
 declare function select<KeyT extends string>(props: SelectProps<KeyT>): void;
 >select : <KeyT extends string>(props: SelectProps<KeyT>) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^ ^^^^^    
+>       : ^    ^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^    
 >props : SelectProps<KeyT>
 >      : ^^^^^^^^^^^^^^^^^
 
@@ -55,7 +55,7 @@ type SelectProps<KeyT extends string> = {
 
     onChange: (key: KeyT) => void;
 >onChange : (key: KeyT) => void
->         : ^^^^^^^^^^^^^^^    
+>         : ^^^^^^    ^^^^^    
 >key : KeyT
 >    : ^^^^
 

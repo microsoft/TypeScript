@@ -9,7 +9,7 @@ declare function invariant(condition: boolean): asserts condition;
 
 function f1(obj: Record<string, string>) {
 >f1 : (obj: Record<string, string>) => string
->   : ^^^^^^^^^^^^                ^^^^^^^^^^^
+>   : ^^^^^^                      ^^^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -36,7 +36,7 @@ function f1(obj: Record<string, string>) {
 
 function f2(obj: Record<string, string>) {
 >f2 : (obj: Record<string, string>) => string
->   : ^^^^^^^^^^^^                ^^^^^^^^^^^
+>   : ^^^^^^                      ^^^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ function f2(obj: Record<string, string>) {
 
 function f3(obj: Record<string, string>) {
 >f3 : (obj: Record<string, string>) => void
->   : ^^^^^^^^^^^^                ^^^^^^^^^
+>   : ^^^^^^                      ^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -104,7 +104,7 @@ function f3(obj: Record<string, string>) {
 
 function f4(obj: Record<string, string>) {
 >f4 : (obj: Record<string, string>) => void
->   : ^^^^^^^^^^^^                ^^^^^^^^^
+>   : ^^^^^^                      ^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 

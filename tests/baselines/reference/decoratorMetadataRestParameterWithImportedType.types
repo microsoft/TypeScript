@@ -40,7 +40,7 @@ import { SomeClass1 } from './aux1';
 
 function annotation(): ClassDecorator {
 >annotation : () => ClassDecorator
->           : ^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^              
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void
@@ -50,7 +50,7 @@ function annotation(): ClassDecorator {
 
 function annotation1(): MethodDecorator {
 >annotation1 : () => MethodDecorator
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^               
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void
@@ -97,7 +97,7 @@ export class ClassA {
 
     foo(... args: SomeClass1[]) {
 >foo : (...args: SomeClass1[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>    : ^^^^^^^^^^            ^^^^^^^^^
 >args : SomeClass1[]
 >     : ^^^^^^^^^^^^
     }

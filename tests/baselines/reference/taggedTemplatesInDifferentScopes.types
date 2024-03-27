@@ -3,7 +3,7 @@
 === taggedTemplatesInDifferentScopes.ts ===
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^
+>    : ^^^^^^^^                    ^^^^^^^^^^^^^     ^^^^^^^^^^^
 >parts : TemplateStringsArray
 >      : ^^^^^^^^^^^^^^^^^^^^
 >values : any[]

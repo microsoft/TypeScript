@@ -14,7 +14,7 @@ declare class C<T> { t: T }
 /** @param {C.<number,>} skipped */
 function f(x, y, skipped) {
 >f : (x: any, y: any, skipped: C<number>) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^
 >x : any
 >  : ^^^
 >y : any

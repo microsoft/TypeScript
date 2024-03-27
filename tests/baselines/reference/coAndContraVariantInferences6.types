@@ -51,7 +51,7 @@ type JSXElementConstructor<P> =
 
 declare function createElementIsolated<P extends {}>(
 >createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^    ^^^^^^^^^^^^^^ ^          ^^^^^^^^^^^       ^^^^^    
+>                      : ^ ^^^^^^^^^^^^^^^^^^^                                                 ^^^^^^^^^^        ^^^^^    
 
   type: FunctionComponent<P> | ComponentClass<P> | string,
 >type : string | FunctionComponent<P> | ComponentClass<P>

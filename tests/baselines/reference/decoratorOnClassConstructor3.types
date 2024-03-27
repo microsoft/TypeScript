@@ -7,7 +7,7 @@ export class base { }
 
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^^^^^^^^^      ^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >target : Object
 >       : ^^^^^^
 >propertyKey : string | symbol

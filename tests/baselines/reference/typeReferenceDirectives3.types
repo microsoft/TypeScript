@@ -6,7 +6,7 @@
 interface A {
     x: () => $
 >x : () => $
->  : ^^^^^^^
+>  : ^^^^^^ 
 }
 === /ref.d.ts ===
 interface $ { x }

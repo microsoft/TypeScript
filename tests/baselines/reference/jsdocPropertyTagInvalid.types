@@ -9,7 +9,7 @@
 /** @param {MyType} p  */
 export function f(p) { }
 >f : (p: MyType) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^      ^^^^^^^^^
 >p : MyType
 >  : ^^^^^^
 

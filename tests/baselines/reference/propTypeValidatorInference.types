@@ -100,13 +100,13 @@ export const number: Requireable<number>;
 
 export function shape<P extends ValidationMap<any>>(type: P): Requireable<InferProps<P>>;
 >shape : <P extends ValidationMap<any>>(type: P) => Requireable<InferProps<P>>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^  
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                          
 >type : P
 >     : ^
 
 export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<NonNullable<InferType<T>>>;
 >oneOfType : <T extends Validator<any>>(types: T[]) => Requireable<NonNullable<InferType<T>>>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^ ^   
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^                                      
 >types : T[]
 >      : ^^^
 

@@ -9,7 +9,7 @@ interface Base {
 interface Derived extends Base {
     toBase(): Base;
 >toBase : () => Base
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 }
 
 var derived: Derived;
@@ -18,11 +18,11 @@ var derived: Derived;
 
 declare function foo<T>(x: T, func: (p: T) => T): T;
 >foo : <T>(x: T, func: (p: T) => T) => T
->    : ^^^^^^^^^^^^^^^^    ^     ^^^^^^^
+>    : ^ ^^^^^ ^^^^^^^^           ^^^^^ 
 >x : T
 >  : ^
 >func : (p: T) => T
->     : ^^^^^^^^^^^
+>     : ^^^^ ^^^^^ 
 >p : T
 >  : ^
 
@@ -52,21 +52,21 @@ var result = foo(derived, d => d.toBase());
 // The same error should be observed in both cases.
 declare function bar<T>(x: T, func: (p: T) => T): T;
 >bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
->    : ^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^ ^^^^^^^^           ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >func : (p: T) => T
->     : ^^^^^^^^^^^
+>     : ^^^^ ^^^^^ 
 >p : T
 >  : ^
 
 declare function bar<T>(x: T, func: (p: T) => T): T;
 >bar : { <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; <T>(x: T, func: (p: T) => T): T; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^           ^^^ ^^^
 >x : T
 >  : ^
 >func : (p: T) => T
->     : ^^^^^^^^^^^
+>     : ^^^^ ^^^^^ 
 >p : T
 >  : ^
 

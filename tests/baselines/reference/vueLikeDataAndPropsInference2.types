@@ -58,13 +58,13 @@ type ThisTypedOptions<Data, Props> =
 
 declare function test<Data, Props>(fn: ThisTypedOptions<Data, Props>): void;
 >test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<object | ((this: Instance) => object), PropsDefinition<Record<string, any>>>): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^  ^^^^^ ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^    ^^     ^^^^^^                             ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : ThisTypedOptions<Data, Props>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function test(fn: Options): void;
 >test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^    ^^^
 >fn : Options<object | ((this: Instance) => object), PropsDefinition<Record<string, any>>>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

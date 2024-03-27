@@ -30,7 +30,7 @@ export class Foo {
 
   foo(): Promise<void> {
 >foo : () => Promise<void>
->    : ^^^^^^^^^^^^^      
+>    : ^^^^^^             
 
     return (
 >(      /* TODO: Avoid using type assertions, please refactor. */ this.client        .getThing() as unknown as Promise<void>    ) : Promise<void>

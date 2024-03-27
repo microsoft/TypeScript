@@ -225,7 +225,7 @@ var r3d = i['hm'];
 
 var b: {
 >b : { [x: string]: any; valueOf(): void; data: B; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^ ^^^
 
     valueOf(): void;
 >valueOf : () => void

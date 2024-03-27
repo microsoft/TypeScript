@@ -8,7 +8,7 @@ type ConditionalType<T> = T extends string ? string : number;
 
 function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
 >ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^ ^             
+>                       : ^ ^^^^^^^                              
 
     return 0 as any;
 >0 as any : any
@@ -18,7 +18,7 @@ function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
 
 function JustConditional<T>(): ConditionalType<T> {
 >JustConditional : <T>() => ConditionalType<T>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                : ^ ^^^^^^^                  
 
     return ConditionalOrUndefined<T>()!; // shouldn't error
 >ConditionalOrUndefined<T>()! : ConditionalType<T>
@@ -33,7 +33,7 @@ function JustConditional<T>(): ConditionalType<T> {
 // For comparison...
 function genericOrUndefined<T>(): T | undefined {
 >genericOrUndefined : <T>() => T | undefined
->                   : ^^^^^^^^^^            
+>                   : ^ ^^^^^^^             
 
     return 0 as any;
 >0 as any : any
@@ -43,7 +43,7 @@ function genericOrUndefined<T>(): T | undefined {
 
 function JustGeneric<T>(): T {
 >JustGeneric : <T>() => T
->            : ^^^^^^^^^^
+>            : ^ ^^^^^^^ 
 
     return genericOrUndefined<T>()!; // no error
 >genericOrUndefined<T>()! : NonNullable<T>

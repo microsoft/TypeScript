@@ -8,11 +8,11 @@
 interface Controller<out T> {
 	createAnimal: () => T;
 >createAnimal : () => T
->             : ^^^^^^^
+>             : ^^^^^^ 
 
 	run: (animal: T) => void;
 >run : (animal: T) => void
->    : ^^^^^^^^^^^^^^^    
+>    : ^^^^^^^^^ ^^^^^    
 >animal : T
 >       : ^
 }

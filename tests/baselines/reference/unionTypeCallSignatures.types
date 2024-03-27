@@ -17,7 +17,7 @@ var strOrNum: string | number;
 // U has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in U.
 var unionOfDifferentReturnType: { (a: number): number; } | { (a: number): Date; };
 >unionOfDifferentReturnType : ((a: number) => number) | ((a: number) => Date)
->                           : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^^^^^^
+>                           : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^    ^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -57,7 +57,7 @@ unionOfDifferentReturnType1(true); // error in type of parameter
 
 var unionOfDifferentReturnType1: { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; };
 >unionOfDifferentReturnType1 : { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; }
->                            : ^^^^^^      ^^^      ^^^^^^      ^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^       ^^^
+>                            : ^^^^^^      ^^^      ^^^^^^      ^^^      ^^^^^^^^^^^^      ^^^    ^^^^^^      ^^^       ^^^
 >a : number
 >  : ^^^^^^
 >a : string
@@ -107,7 +107,7 @@ unionOfDifferentReturnType1(); // error missing parameter
 
 var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
 >unionOfDifferentParameterTypes : ((a: number) => number) | ((a: string) => Date)
->                               : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^^^^^^
+>                               : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^    ^
 >a : number
 >  : ^^^^^^
 >a : string
@@ -137,7 +137,7 @@ unionOfDifferentParameterTypes();// error - no call signatures
 
 var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
 >unionOfDifferentNumberOfSignatures : ((a: number) => number) | { (a: number): Date; (a: string): boolean; }
->                                   : ^^^^^      ^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^       ^^^
+>                                   : ^^^^^      ^^^^^      ^^^^^^^^^^      ^^^    ^^^^^^      ^^^       ^^^
 >a : number
 >  : ^^^^^^
 >a : number

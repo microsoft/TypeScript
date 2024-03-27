@@ -39,7 +39,7 @@ interface Refinement<A, B extends A> {
 
 declare const filter: {
 >filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>; <A_1>(predicate: Predicate<A_1>): <B_1 extends A_1>(bs: readonly B_1[]) => readonly B_1[]; <A_2>(predicate: Predicate<A_2>): (as: readonly A_2[]) => readonly A_2[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^     ^^^^^^^^^^^^^ ^      ^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^                ^^^                                          ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>
 >refinement : Refinement<A, B>
@@ -63,17 +63,17 @@ declare const filter: {
 
 declare function pipe<A, B>(a: A, ab: (a: A) => B): B;
 >pipe : <A, B>(a: A, ab: (a: A) => B) => B
->     : ^^^^^^^^^^^^^^^^^    ^     ^^^^^^^
+>     : ^ ^^ ^^^^^ ^^^^^^           ^^^^^ 
 >a : A
 >  : ^
 >ab : (a: A) => B
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >a : A
 >  : ^
 
 declare function exists<A>(predicate: Predicate<A>): <E>(ma: Either<E, A>) => boolean;
 >exists : <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^       
+>       : ^ ^^^^^^^^^^^^^            ^^^^^^ ^^^^^^            ^^^^^       
 >predicate : Predicate<A>
 >          : ^^^^^^^^^^^^
 >ma : Either<E, A>

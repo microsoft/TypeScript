@@ -13,7 +13,7 @@ interface ISomething {
 
 function foo({}, {foo, bar}: ISomething) {}
 >foo : ({}: {}, { foo, bar }: ISomething) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >bar : string
@@ -21,7 +21,7 @@ function foo({}, {foo, bar}: ISomething) {}
 
 function baz([], {foo, bar}: ISomething) {}
 >baz : ([]: any[], { foo, bar }: ISomething) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >bar : string

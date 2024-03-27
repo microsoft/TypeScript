@@ -23,7 +23,7 @@ export interface IAB {
 
 export function F(x: IA | IAB) {
 >F : (x: IA | IAB) => void
->  : ^^^^^^   ^^^^^^^^^^^^
+>  : ^^^^        ^^^^^^^^^
 >x : IA | IAB
 >  : ^^^^^^^^
 

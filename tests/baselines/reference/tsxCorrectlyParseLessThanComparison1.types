@@ -41,7 +41,7 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 
     public render(): JSX.Element {
 >render : () => JSX.Element
->       : ^^^^^^^^^ ^^^^^^^
+>       : ^^^^^^           
 >JSX : any
 >    : ^^^
 

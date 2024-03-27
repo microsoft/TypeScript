@@ -94,9 +94,9 @@ type TNullOrUndefined = Awaited<null | undefined>;
 
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 >then : (cb: (value: BadPromise) => void) => void
->     : ^^^^^        ^^^^^^^^^^         ^^^^^    
+>     : ^^^^^                           ^^^^^    
 >cb : (value: BadPromise) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^          ^^^^^    
 >value : BadPromise
 >      : ^^^^^^^^^^
 
@@ -106,17 +106,17 @@ type T16 = Awaited<BadPromise>; // error
 
 interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
 >then : (cb: (value: BadPromise2) => void) => void
->     : ^^^^^        ^^^^^^^^^^^         ^^^^^    
+>     : ^^^^^                            ^^^^^    
 >cb : (value: BadPromise2) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^           ^^^^^    
 >value : BadPromise2
 >      : ^^^^^^^^^^^
 
 interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
 >then : (cb: (value: BadPromise1) => void) => void
->     : ^^^^^        ^^^^^^^^^^^         ^^^^^    
+>     : ^^^^^                            ^^^^^    
 >cb : (value: BadPromise1) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^           ^^^^^    
 >value : BadPromise1
 >      : ^^^^^^^^^^^
 
@@ -144,7 +144,7 @@ type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 
 declare function MaybePromise<T>(value: T): MaybePromise<T>;
 >MaybePromise : <T>(value: T) => MaybePromise<T>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>             : ^ ^^^^^^^^^ ^^^^^               
 >value : T
 >      : ^
 
@@ -235,7 +235,7 @@ class Api<D = {}> {
 
 	async request<D>(): Promise<D> { throw new Error(); }
 >request : <D>() => Promise<D>
->        : ^^^^^^^^^^^^^^^^ ^ 
+>        : ^ ^^^^^^^          
 >new Error() : Error
 >            : ^^^^^
 >Error : ErrorConstructor
@@ -252,7 +252,7 @@ interface Obj { x: number }
 
 async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
 >fn : <T>() => Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
->   : ^^^^^^^^^^^^^^^^ ^                     ^          ^   ^^^      ^^^ 
+>   : ^ ^^^^^^^                                                          
 
 	// Per #45924, this was failing due to incorrect inference both above and here.
 	// Should not error.

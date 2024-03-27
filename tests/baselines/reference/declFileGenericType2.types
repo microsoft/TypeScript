@@ -37,7 +37,7 @@ declare module templa.mvc.composite {
 
         getControllers(): mvc.IController<mvc.IModel>[];
 >getControllers : () => mvc.IController<mvc.IModel>[]
->               : ^^^^^^^^^ ^^^^^^^^^^^ ^^^ ^^^^^^   
+>               : ^^^^^^                             
 >mvc : any
 >    : ^^^
 >mvc : any

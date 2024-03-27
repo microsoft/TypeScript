@@ -7,7 +7,7 @@ interface Constructor<C> { new (...args: any[]): C; }
 
 function mixin<B extends Constructor<{}>>(Base: B) {
 >mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : B
 >     : ^
 
@@ -51,7 +51,7 @@ export const Mixed = mixin(Unmixed);
 
 function Filter<C extends Constructor<{}>>(ctor: C) {
 >Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ctor : C
 >     : ^
 

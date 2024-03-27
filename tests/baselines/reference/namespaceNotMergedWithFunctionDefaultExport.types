@@ -7,7 +7,7 @@ declare module 'replace-in-file' {
 
   export function replaceInFile(config: unknown): Promise<unknown[]>;
 >replaceInFile : (config: unknown) => Promise<unknown[]>
->              : ^^^^^^^^^       ^^^^^^^^^^^^           
+>              : ^^^^^^^^^       ^^^^^                  
 >config : unknown
 >       : ^^^^^^^
 

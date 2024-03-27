@@ -53,7 +53,7 @@ MyComponent2.defaultProps = {
 >MyComponent2.defaultProps : MyComponentProps
 >                          : ^^^^^^^^^^^^^^^^
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 >defaultProps : MyComponentProps
 >             : ^^^^^^^^^^^^^^^^
 >{    color: "red"} : { color: "red"; }
@@ -81,7 +81,7 @@ const check = MyComponent2;
  */
 function expectLiteral(p) {}
 >expectLiteral : (p: { props: MyComponentProps; }) => void
->              : ^^^^         ^^^^^^^^^^^^^^^^   ^^^^^^^^^
+>              : ^^^^                            ^^^^^^^^^
 >p : { props: MyComponentProps; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

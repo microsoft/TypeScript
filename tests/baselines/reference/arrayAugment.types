@@ -4,7 +4,7 @@
 interface Array<T> {
     split: (parts: number) => T[][];
 >split : (parts: number) => T[][]
->      : ^^^^^^^^      ^^^^^^    
+>      : ^^^^^^^^      ^^^^^     
 >parts : number
 >      : ^^^^^^
 }

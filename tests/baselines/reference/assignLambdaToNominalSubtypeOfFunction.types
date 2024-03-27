@@ -9,7 +9,7 @@ interface IResultCallback extends Function {
 
 function fn(cb: IResultCallback) { }
 >fn : (cb: IResultCallback) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^               ^^^^^^^^^
 >cb : IResultCallback
 >   : ^^^^^^^^^^^^^^^
 

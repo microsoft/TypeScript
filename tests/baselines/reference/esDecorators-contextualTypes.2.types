@@ -53,7 +53,7 @@ export { C };
 
 function boundMethodLogger<This, Args extends any[], Return>(source: string, bound = true) {
 >boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^         ^^^^           ^^^^     ^^^^^^ ^^^^^        ^^^^           ^^^^     ^^^^^^ 
+>                  : ^    ^^    ^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^^^^^                                                                        ^^^^^                                       
 >source : string
 >       : ^^^^^^
 >bound : boolean
@@ -63,13 +63,13 @@ function boundMethodLogger<This, Args extends any[], Return>(source: string, bou
 
     return function loggedDecorator(
 >function loggedDecorator(        target: (this: This, ...args: Args) => Return,        context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>    ): ((this: This, ...args: Args) => Return) {        if (bound) {            context.addInitializer(function () {                (this as any)[context.name] = (this as any)[context.name].bind(this);            });        }        return function (this, ...args) {            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);            return target.apply(this, args);        }    } : (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^       ^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^         ^^^^           ^^^^     ^^^^^^ ^^^^^        ^^^^           ^^^^     ^^^^^^ 
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^                                     ^^^^^^^^^^^                                                                        ^^^^^                                       
 >loggedDecorator : (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
->                : ^^^^^^^^^       ^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^         ^^^^           ^^^^     ^^^^^^ ^^^^^        ^^^^           ^^^^     ^^^^^^ 
+>                : ^^^^^^^^^                                     ^^^^^^^^^^^                                                                        ^^^^^                                       
 
         target: (this: This, ...args: Args) => Return,
 >target : (this: This, ...args: Args) => Return
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^    ^^^^^^^^^^^    ^^^^^      
 >this : This
 >     : ^^^^
 >args : Args
@@ -77,7 +77,7 @@ function boundMethodLogger<This, Args extends any[], Return>(source: string, bou
 
         context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
 >context : ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^^^^^      ^
 >this : This
 >     : ^^^^
 >args : Args

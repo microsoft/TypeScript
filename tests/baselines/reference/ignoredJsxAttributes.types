@@ -27,7 +27,7 @@ interface Props {
 
 declare function Yadda(props: Props): JSX.Element;
 >Yadda : (props: Props) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^
+>      : ^^^^^^^^     ^^^^^           
 >props : Props
 >      : ^^^^^
 >JSX : any

@@ -23,15 +23,15 @@ class Derived extends Base {
 
 var a1: { new (): Base };
 >a1 : new () => Base
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^    
 
 var b1: { new (): Base };
 >b1 : new () => Base
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^    
 
 var a2: { new (a: number, b: string): Base };
 >a2 : new (a: number, b: string) => Base
->   : ^^^^^^^^      ^^^^^      ^^^^^^^^^
+>   : ^^^^^^^^      ^^^^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : string
@@ -39,7 +39,7 @@ var a2: { new (a: number, b: string): Base };
 
 var b2: { new (a: number, b: string): Base };
 >b2 : new (a: number, b: string) => Base
->   : ^^^^^^^^      ^^^^^      ^^^^^^^^^
+>   : ^^^^^^^^      ^^^^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : string
@@ -47,7 +47,7 @@ var b2: { new (a: number, b: string): Base };
 
 var a3: { new (a: number, b: string): Base };
 >a3 : new (a: number, b: string) => Base
->   : ^^^^^^^^      ^^^^^      ^^^^^^^^^
+>   : ^^^^^^^^      ^^^^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : string
@@ -55,13 +55,13 @@ var a3: { new (a: number, b: string): Base };
 
 var b3: { new (a: number): Base };
 >b3 : new (a: number) => Base
->   : ^^^^^^^^      ^^^^^^^^^
+>   : ^^^^^^^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 
 var a4: { new (a: number, b: string): Base };
 >a4 : new (a: number, b: string) => Base
->   : ^^^^^^^^      ^^^^^      ^^^^^^^^^
+>   : ^^^^^^^^      ^^^^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : string
@@ -69,23 +69,23 @@ var a4: { new (a: number, b: string): Base };
 
 var b4: { new (): Base };
 >b4 : new () => Base
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^    
 
 var a5: { new (a: Base): Base };
 >a5 : new (a: Base) => Base
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^    ^^^^^    
 >a : Base
 >  : ^^^^
 
 var b5: { new (a: Derived): Base };
 >b5 : new (a: Derived) => Base
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^       ^^^^^    
 >a : Derived
 >  : ^^^^^^^
 
 var a6: { new (a: Derived, b: Base): Base };
 >a6 : new (a: Derived, b: Base) => Base
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^       ^^^^^    ^^^^^    
 >a : Derived
 >  : ^^^^^^^
 >b : Base
@@ -93,7 +93,7 @@ var a6: { new (a: Derived, b: Base): Base };
 
 var b6: { new (a: Base, b: Derived): Base };
 >b6 : new (a: Base, b: Derived) => Base
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^    ^^^^^       ^^^^^    
 >a : Base
 >  : ^^^^
 >b : Derived
@@ -101,33 +101,33 @@ var b6: { new (a: Base, b: Derived): Base };
 
 var a7: { new (): Base };
 >a7 : new () => Base
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^    
 
 var b7: { new (): Derived };
 >b7 : new () => Derived
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^       
 
 var a8: { new (a?: Base): Base };
 >a8 : new (a?: Base) => Base
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^    ^^^^^    
 >a : Base
 >  : ^^^^
 
 var b8: { new (a?: Derived): Base };
 >b8 : new (a?: Derived) => Base
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^       ^^^^^    
 >a : Derived
 >  : ^^^^^^^
 
 var a9: { new (...a: Base[]): Base };
 >a9 : new (...a: Base[]) => Base
->   : ^^^^^^^^^^^^^^^  ^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^    
 >a : Base[]
 >  : ^^^^^^
 
 var b9: { new (...a: Derived[]): Base };
 >b9 : new (...a: Derived[]) => Base
->   : ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>   : ^^^^^^^^^^^         ^^^^^    
 >a : Derived[]
 >  : ^^^^^^^^^
 

@@ -3,7 +3,7 @@
 === decoratorsOnComputedProperties.ts ===
 function x(o: object, k: PropertyKey) { }
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^      ^^^^^           ^^^^^^^^^
 >o : object
 >  : ^^^^^^
 >k : PropertyKey

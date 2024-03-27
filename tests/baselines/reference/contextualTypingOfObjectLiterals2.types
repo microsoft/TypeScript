@@ -10,7 +10,7 @@ interface Foo {
 }
 function f2(args: Foo) { }
 >f2 : (args: Foo) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^   ^^^^^^^^^
 >args : Foo
 >     : ^^^
 

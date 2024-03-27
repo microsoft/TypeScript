@@ -13,7 +13,7 @@ interface connectModule {
 interface connectExport {
     use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^             ^^^^^             
 >mod : connectModule
 >    : ^^^^^^^^^^^^^
 
@@ -25,7 +25,7 @@ interface connectExport {
 }
 var server: {
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             ^^^^^^^^^             ^^^^^^^^^^^             ^^^
 
     (): connectExport;
     test1: connectModule;
@@ -34,7 +34,7 @@ var server: {
 
     test2(): connectModule;
 >test2 : () => connectModule
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^             
 
 };
 export = server;

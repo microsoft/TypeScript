@@ -4,7 +4,7 @@
 interface A<T> {
     foo(): B<T>; // instead of B does see this
 >foo : { (): B<T>; (): void; }
->    : ^^^^^^^ ^ ^^^^^^^^^^^^^
+>    : ^^^^^^    ^^^^^^^^^^^^^
 
     foo(): void; // instead of B does see this
 >foo : { (): B<T>; (): void; }
@@ -12,7 +12,7 @@ interface A<T> {
  
     foo2(): B<number>;
 >foo2 : () => B<number>
->     : ^^^^^^^        
+>     : ^^^^^^         
 }
  
 interface B<T> extends A<T> {

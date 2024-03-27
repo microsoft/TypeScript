@@ -23,7 +23,7 @@ interface Prop {
 
 function Comp(p: Prop) {
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^
 >p : Prop
 >  : ^^^^
 

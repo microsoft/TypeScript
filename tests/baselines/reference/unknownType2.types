@@ -21,7 +21,7 @@ type SomeResponse = 'yes' | 'no' | 'idk';
 
 let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 >validate : (x: unknown) => SomeResponse
->         : ^^^^       ^^^^^^^^^^^^^^^^^
+>         : ^^^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 >x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
@@ -844,7 +844,7 @@ function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
 
 function switchResponse(x: unknown): SomeResponse {
 >switchResponse : (x: unknown) => SomeResponse
->               : ^^^^       ^^^^^^^^^^^^^^^^^
+>               : ^^^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 
@@ -887,7 +887,7 @@ function switchResponse(x: unknown): SomeResponse {
 
 function switchResponseWrong(x: unknown): SomeResponse {
 >switchResponseWrong : (x: unknown) => SomeResponse
->                    : ^^^^       ^^^^^^^^^^^^^^^^^
+>                    : ^^^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 

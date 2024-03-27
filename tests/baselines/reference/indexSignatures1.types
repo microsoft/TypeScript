@@ -13,7 +13,7 @@ const sym = Symbol();
 
 function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [sym]: number }) {
 >gg3 : (x: { [key: string]: string; }, y: { [key: symbol]: string; }, z: { [sym]: number; }) => void
->    : ^^^^                          ^^^^^                          ^^^^^   ^^^            ^^^^^^^^^
+>    : ^^^^                          ^^^^^                          ^^^^^                  ^^^^^^^^^
 >x : { [key: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -91,7 +91,7 @@ interface IY { [key: `a${string}a`]: string }
 
 function gg2(x: IX, y: IY) {
 >gg2 : (x: IX, y: IY) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^  ^^^^^  ^^^^^^^^^
 >x : IX
 >  : ^^
 >y : IY
@@ -1219,9 +1219,9 @@ interface Plugs {
 
 const plugins = {
 >plugins : { user: Plugs; [system]: Plugs; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 >{    "user": {} as Plugs,    [system]: {} as Plugs} : { user: Plugs; [system]: Plugs; }
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                    : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 
     "user": {} as Plugs,
 >"user" : Plugs
@@ -1251,7 +1251,7 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >plugins[system] : Plugs
 >                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 >system : unique symbol
 >       : ^^^^^^^^^^^^^
 >SomeSytePlugin : unique symbol
@@ -1277,7 +1277,7 @@ plugins[system][SomeSytePlugin]();
 >plugins[system] : Plugs
 >                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 >system : unique symbol
 >       : ^^^^^^^^^^^^^
 >SomeSytePlugin : unique symbol
@@ -1327,9 +1327,9 @@ const directive = Symbol('directive');
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^                   ^^^^     ^^^^         ^^^^^^^^^    ^^^^   ^^^^^    
+>    : ^    ^^    ^^    ^^^^^^^^^^^                                                                 ^^^^^    
 >options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : TArg
 >    : ^^^^
 >[directive] : TDir | undefined

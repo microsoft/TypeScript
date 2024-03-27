@@ -14,7 +14,7 @@ interface Config<T1 extends { type: string }> {
 
 declare function test<
 >test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
->     : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^^       
 
   T1 extends { type: string },
 >type : string
@@ -23,7 +23,7 @@ declare function test<
   const TConfig extends Config<T1>,
 >(config: { produceThing: T1 } & TConfig): TConfig;
 >config : { produceThing: T1; } & TConfig
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
 >produceThing : T1
 >             : ^^
 

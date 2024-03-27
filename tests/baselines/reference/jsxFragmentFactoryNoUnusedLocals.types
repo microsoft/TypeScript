@@ -25,7 +25,7 @@ type CounterProps = {
 
 export function Counter({ count = 0 }: CounterProps) {
 >Counter : ({ count }: CounterProps) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^
 >count : number
 >      : ^^^^^^
 >0 : 0

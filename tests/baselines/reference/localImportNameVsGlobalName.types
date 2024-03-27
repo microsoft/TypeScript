@@ -32,7 +32,7 @@ module App {
 
   export function foo(key: Key): void {}
 >foo : (key: Key) => void
->    : ^^^^^^^^^^^^^^    
+>    : ^^^^^^   ^^^^^    
 >key : Key
 >    : ^^^
 

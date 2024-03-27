@@ -55,7 +55,7 @@ declare module "array" {
         interface Array<T> {
             getA(): A;
 >getA : () => A
->     : ^^^^^^^
+>     : ^^^^^^ 
         }
     }
 }

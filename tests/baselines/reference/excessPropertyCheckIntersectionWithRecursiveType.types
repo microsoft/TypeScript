@@ -265,7 +265,7 @@ type BuildTree<T, N extends number = -1, I extends any[] = []> = {
 
   0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };
 >0 : T & { children: BuildTree<T, N, Prepend<any, I>>[]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^^^^^^^      ^    ^^^
+>  : ^^^^^^^^^^^^^^^^                                  ^^^
 >children : BuildTree<T, N, [head: any, ...args: I]>[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

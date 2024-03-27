@@ -15,7 +15,7 @@ declare module EM {
 
 		public getPosition() : EM.Position;
 >getPosition : () => EM.Position
->            : ^^^^^^^^ ^^^^^^^^
+>            : ^^^^^^           
 >EM : any
 >   : ^^^
 	}

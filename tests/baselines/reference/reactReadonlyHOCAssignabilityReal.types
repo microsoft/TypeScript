@@ -14,7 +14,7 @@ import * as React from "react";
 
 function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
 >myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }>) => React.ComponentClass<P>
->                       : ^^^^^^^^^^^^^^^^                ^                     ^^^^^^^^^^                ^ 
+>                       : ^ ^^^^^^^^^                                           ^^^^^                       
 >Inner : React.ComponentClass<P & { name: string; }, any>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >React : any

@@ -886,7 +886,7 @@ module TypeScript {
 
     function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
 >setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tokenId : TokenID
 >        : ^^^^^^^
 >reservation : number
@@ -6465,7 +6465,7 @@ module TypeScript {
 
     export function lookupToken(tokenId: TokenID): TokenInfo {
 >lookupToken : (tokenId: TokenID) => TokenInfo
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^       ^^^^^         
 >tokenId : TokenID
 >        : ^^^^^^^
 
@@ -6650,7 +6650,7 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             if (this.tokenId <= TokenID.LimKeyword) {
 >this.tokenId <= TokenID.LimKeyword : boolean
@@ -6828,7 +6828,7 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             return TokenClass.Literal;
 >TokenClass.Literal : TokenClass.Literal
@@ -6878,7 +6878,7 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             return TokenClass.Literal;
 >TokenClass.Literal : TokenClass.Literal
@@ -6928,7 +6928,7 @@ module TypeScript {
         }
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             return TokenClass.Identifier;
 >TokenClass.Identifier : TokenClass.Identifier
@@ -6976,7 +6976,7 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             return TokenClass.Whitespace;
 >TokenClass.Whitespace : TokenClass.Whitespace
@@ -7032,7 +7032,7 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             return TokenClass.Comment;
 >TokenClass.Comment : TokenClass.Comment
@@ -7088,7 +7088,7 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->               : ^^^^^^^^^^^^^^^^
+>               : ^^^^^^          
 
             return TokenClass.Literal;
 >TokenClass.Literal : TokenClass.Literal

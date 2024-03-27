@@ -4,7 +4,7 @@
 interface ContextualType<T> {
     method(parameter: T): void;
 >method : (parameter: T) => void
->       : ^^^^^^^^^^^^^^^^^^    
+>       : ^^^^^^^^^^^^ ^^^^^    
 >parameter : T
 >          : ^
 }
@@ -20,7 +20,7 @@ class CBase<T>  {
 
     foo(param: ContextualType<T>) {
 >foo : (param: ContextualType<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>    : ^^^^^^^^                 ^^^^^^^^^
 >param : ContextualType<T>
 >      : ^^^^^^^^^^^^^^^^^
     }

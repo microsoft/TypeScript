@@ -3,11 +3,11 @@
 === contextualSignatureInstantiation3.ts ===
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->    : ^^^^^^^^^^^^^^^  ^^^^^    ^     ^^^^^^^  
+>    : ^ ^^ ^^^^^^^^^   ^^^^^           ^^^^^   
 >items : T[]
 >      : ^^^
 >f : (x: T) => U
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -26,7 +26,7 @@ function map<T, U>(items: T[], f: (x: T) => U): U[]{
 
 function identity<T>(x: T) {
 >identity : <T>(x: T) => T
->         : ^^^^^^^^^^^^^^
+>         : ^ ^^^^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -37,7 +37,7 @@ function identity<T>(x: T) {
 
 function singleton<T>(x: T) {
 >singleton : <T>(x: T) => T[]
->          : ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^ ^^^^^^^^
 >x : T
 >  : ^
 

@@ -7,7 +7,7 @@ class Shape {
 
     static create(): Shape {
 >create : () => Shape
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 
         return new Shape();
 >new Shape() : Shape
@@ -20,7 +20,7 @@ class Shape {
 interface ShapeFactory {
     create(): Shape;
 >create : () => Shape
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 }
 
 var x: ShapeFactory = Shape;

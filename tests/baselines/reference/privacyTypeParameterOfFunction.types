@@ -21,7 +21,7 @@ export interface publicInterfaceWithPrivateTypeParameters {
     // TypeParameter_0_of_method_from_exported_interface_has_or_is_using_private_type_1
     myMethod<T extends privateClass>(): privateClass;
 >myMethod : <T extends privateClass>() => privateClass
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            
 }
 
 export interface publicInterfaceWithPublicTypeParameters {
@@ -29,7 +29,7 @@ export interface publicInterfaceWithPublicTypeParameters {
     <T extends publicClass>(): publicClass;
     myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 }
 
 interface privateInterfaceWithPrivateTypeParameters {
@@ -37,7 +37,7 @@ interface privateInterfaceWithPrivateTypeParameters {
     <T extends privateClass>(): privateClass;
     myMethod<T extends privateClass>(): privateClass;
 >myMethod : <T extends privateClass>() => privateClass
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            
 }
 
 interface privateInterfaceWithPublicTypeParameters {
@@ -45,7 +45,7 @@ interface privateInterfaceWithPublicTypeParameters {
     <T extends publicClass>(): publicClass;
     myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 }
 
 export class publicClassWithWithPrivateTypeParameters {
@@ -164,7 +164,7 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
     <T>(): publicClass;
     myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^           
 }
 
 interface privateInterfaceWithPublicTypeParametersWithoutExtends {
@@ -172,7 +172,7 @@ interface privateInterfaceWithPublicTypeParametersWithoutExtends {
     <T>(): publicClass;
     myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^           
 }
 
 export class publicClassWithWithPublicTypeParametersWithoutExtends {

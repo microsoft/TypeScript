@@ -22,7 +22,7 @@ declare module './parent' {
 
 export function child1(prototype: ParentThing) {
 >child1 : (prototype: ParentThing) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^           ^^^^^^^^^
 >prototype : ParentThing
 >          : ^^^^^^^^^^^
 

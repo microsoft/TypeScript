@@ -7,7 +7,7 @@ import e = require('./exporter');
 
 export function w(): e.w { // Should be OK
 >w : () => e.w
->  : ^^^^^^^  
+>  : ^^^^^^   
 >e : any
 >  : ^^^
 

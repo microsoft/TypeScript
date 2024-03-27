@@ -71,7 +71,7 @@ let obj2 = {
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^           ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buttonProps : ButtonProps
 >            : ^^^^^^^^^^^
 >JSX : any
@@ -79,7 +79,7 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >linkProps : LinkProps
 >          : ^^^^^^^^^
 >JSX : any
@@ -87,7 +87,7 @@ export function MainButton(linkProps: LinkProps): JSX.Element;
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^           ^^^
 >hyphenProps : HyphenProps
 >            : ^^^^^^^^^^^
 >JSX : any

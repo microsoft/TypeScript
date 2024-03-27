@@ -78,7 +78,7 @@ class G<T> {
     constructor() {
         return { x: <T>null };
 >{ x: <T>null } : { x: T; }
->               : ^^^^^^^^^
+>               : ^^^^^ ^^^
 >x : T
 >  : ^
 ><T>null : T

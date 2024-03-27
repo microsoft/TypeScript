@@ -4,15 +4,15 @@
 interface MyArrayWrapper<T> {
     constructor(initialItems?: T[]);
 >constructor : (initialItems?: T[]) => any
->            : ^^^^^^^^^^^^^^^^^  ^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^   ^^^^^^^^
 >initialItems : T[]
 >             : ^^^
 
     doSomething(predicate: (x: T, y: T) => string): void;
 >doSomething : (predicate: (x: T, y: T) => string) => void
->            : ^^^^^^^^^^^^    ^     ^           ^^^^^    
+>            : ^^^^^^^^^^^^                      ^^^^^    
 >predicate : (x: T, y: T) => string
->          : ^^^^^^^^^^^^^^^^      
+>          : ^^^^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 >y : T
@@ -21,7 +21,7 @@ interface MyArrayWrapper<T> {
 
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->       : ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^^^^^^^^^^^^^^   ^^^^^                 
 >initialValues : T[]
 >              : ^^^
 

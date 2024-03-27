@@ -1363,7 +1363,7 @@ module TypeScript {
 
         public bindSymbol(scope: SymbolScope, symbol: Symbol) {
 >bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >symbol : Symbol

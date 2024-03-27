@@ -3,7 +3,7 @@
 === controlFlowInstanceOfGuardPrimitives.ts ===
 function distinguish(thing: string | number | Date) {
 >distinguish : (thing: string | number | Date) => void
->            : ^^^^^^^^                  ^^^^^^^^^^^^^
+>            : ^^^^^^^^                      ^^^^^^^^^
 >thing : string | number | Date
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 

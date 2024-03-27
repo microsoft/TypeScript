@@ -16,7 +16,7 @@ type Test<K extends keyof any> = {
 
 function test<T extends Test<keyof T>>(arg: T) {
 >test : <T extends Test<keyof T>>(arg: T) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^
 >arg : T
 >    : ^
 
