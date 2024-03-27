@@ -10065,3 +10065,9 @@ export interface Queue<T> {
     dequeue(): T;
     isEmpty(): boolean;
 }
+
+/** @internal */
+export interface EvaluationResolver {
+    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
+    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
+}
