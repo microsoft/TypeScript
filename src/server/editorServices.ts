@@ -997,7 +997,7 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
         cb: (callback: T, eventPath: string) => void,
     ) {
         hostWatcherMap.idToCallbacks.get(id)?.forEach(callback => {
-            eventPaths.forEach(eventPath => cb(callback, eventPath));
+            eventPaths.forEach(eventPath => cb(callback, normalizeSlashes(eventPath)));
         });
     }
 }
