@@ -29,3 +29,13 @@ enum D {
     a = (2),
     b,
 }
+enum E {
+    a,
+    b,
+    c = a,
+    d,
+    e = d | b,
+    f,
+    g = (f | a)! satisfies number as any,
+    h,
+}

@@ -166,6 +166,7 @@ import {
     equateValues,
     escapeLeadingUnderscores,
     escapeString,
+    type EvaluatorResult,
     every,
     EvolvingArrayType,
     ExclamationToken,
@@ -719,7 +720,6 @@ import {
     isStringOrNumericLiteralLike,
     isSuperCall,
     isSuperProperty,
-    isSyntacticallyString,
     isTaggedTemplateExpression,
     isTemplateSpan,
     isThisContainerOrFunctionBlock,
@@ -12745,7 +12745,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         for (const member of (declaration as EnumDeclaration).members) {
                             if (hasBindableName(member)) {
                                 const memberSymbol = getSymbolOfDeclaration(member);
-                                const value = getEnumMemberValue(member);
+                                const value = getEnumMemberValue(member).value;
                                 const memberType = getFreshTypeOfLiteralType(
                                     value !== undefined ?
                                         getEnumLiteralType(value, getSymbolId(symbol), memberSymbol) :
@@ -21144,8 +21144,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     return false;
                 }
-                const sourceValue = getEnumMemberValue(getDeclarationOfKind(sourceProperty, SyntaxKind.EnumMember)!);
-                const targetValue = getEnumMemberValue(getDeclarationOfKind(targetProperty, SyntaxKind.EnumMember)!);
+                const sourceValue = getEnumMemberValue(getDeclarationOfKind(sourceProperty, SyntaxKind.EnumMember)!).value;
+                const targetValue = getEnumMemberValue(getDeclarationOfKind(targetProperty, SyntaxKind.EnumMember)!).value;
                 if (sourceValue !== targetValue) {
                     const sourceIsString = typeof sourceValue === "string";
                     const targetIsString = typeof targetValue === "string";
@@ -39254,7 +39254,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType)) {
             return getTemplateLiteralType(texts, types);
         }
-        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluateTemplateExpression(node);
+        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluateTemplateExpression(node).value;
         return evaluated ? getFreshTypeOfLiteralType(getStringLiteralType(evaluated)) : stringType;
     }
 
@@ -45648,6 +45648,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false): EvaluatorResult<T> {
+        return { value, isSyntacticallyString, resolvedOtherFiles };
+    }
+
     function computeEnumMemberValues(node: EnumDeclaration) {
         const nodeLinks = getNodeLinks(node);
         if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
@@ -45655,15 +45659,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let autoValue: number | undefined = 0;
             let previous: EnumMember | undefined;
             for (const member of node.members) {
-                const value = computeMemberValue(member, autoValue, previous);
-                getNodeLinks(member).enumMemberValue = value;
-                autoValue = typeof value === "number" ? value + 1 : undefined;
+                const result = computeEnumMemberValue(member, autoValue, previous);
+                getNodeLinks(member).enumMemberValue = result;
+                autoValue = typeof result.value === "number" ? result.value + 1 : undefined;
                 previous = member;
             }
         }
     }
 
-    function computeMemberValue(member: EnumMember, autoValue: number | undefined, previous: EnumMember | undefined) {
+    function computeEnumMemberValue(member: EnumMember, autoValue: number | undefined, previous: EnumMember | undefined): EvaluatorResult {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
@@ -45674,12 +45678,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (member.initializer) {
-            return computeConstantValue(member);
+            return computeConstantEnumMemberValue(member);
         }
         // In ambient non-const numeric enum declarations, enum members without initializers are
         // considered computed members (as opposed to having auto-incremented values).
         if (member.parent.flags & NodeFlags.Ambient && !isEnumConst(member.parent)) {
-            return undefined;
+            return evaluatorResult(/*value*/ undefined);
         }
         // If the member declaration specifies no value, the member is considered a constant enum member.
         // If the member is the first member in the enum declaration, it is assigned the value zero.
@@ -45687,31 +45691,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // occurs if the immediately preceding member is not a constant enum member.
         if (autoValue === undefined) {
             error(member.name, Diagnostics.Enum_member_must_have_initializer);
-            return undefined;
+            return evaluatorResult(/*value*/ undefined);
         }
-        if (getIsolatedModules(compilerOptions) && previous?.initializer && !isSyntacticallyNumericConstant(previous.initializer)) {
-            error(
-                member.name,
-                Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
-            );
+        if (getIsolatedModules(compilerOptions) && previous?.initializer) {
+            const prevValue = getEnumMemberValue(previous);
+            if (!(typeof prevValue.value === "number" && !prevValue.resolvedOtherFiles)) {
+                error(
+                    member.name,
+                    Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
+                );
+            }
         }
-        return autoValue;
+        return evaluatorResult(autoValue);
     }
 
-    function computeConstantValue(member: EnumMember): string | number | undefined {
+    function computeConstantEnumMemberValue(member: EnumMember): EvaluatorResult {
         const isConstEnum = isEnumConst(member.parent);
         const initializer = member.initializer!;
-        const value = evaluate(initializer, member);
-        if (value !== undefined) {
-            if (isConstEnum && typeof value === "number" && !isFinite(value)) {
+        const result = evaluate(initializer, member);
+        if (result.value !== undefined) {
+            if (isConstEnum && typeof result.value === "number" && !isFinite(result.value)) {
                 error(
                     initializer,
-                    isNaN(value) ?
+                    isNaN(result.value) ?
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN :
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value,
                 );
             }
-            else if (getIsolatedModules(compilerOptions) && typeof value === "string" && !isSyntacticallyString(initializer)) {
+            else if (getIsolatedModules(compilerOptions) && typeof result.value === "string" && !result.isSyntacticallyString) {
                 error(
                     initializer,
                     Diagnostics._0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled,
@@ -45728,90 +45735,89 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
         }
-        return value;
+        return result;
     }
 
-    function isSyntacticallyNumericConstant(expr: Expression): boolean {
+    function evaluate(expr: Expression, location?: Declaration): EvaluatorResult {
+        let isSyntacticallyString = false;
+        let resolvedOtherFiles = false;
         expr = skipOuterExpressions(expr);
         switch (expr.kind) {
             case SyntaxKind.PrefixUnaryExpression:
-                return isSyntacticallyNumericConstant((expr as PrefixUnaryExpression).operand);
-            case SyntaxKind.BinaryExpression:
-                return isSyntacticallyNumericConstant((expr as BinaryExpression).left) && isSyntacticallyNumericConstant((expr as BinaryExpression).right);
-            case SyntaxKind.NumericLiteral:
-                return true;
-        }
-        return false;
-    }
-
-    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
-        switch (expr.kind) {
-            case SyntaxKind.PrefixUnaryExpression:
-                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
-                if (typeof value === "number") {
+                const result = evaluate((expr as PrefixUnaryExpression).operand, location);
+                resolvedOtherFiles = result.resolvedOtherFiles;
+                if (typeof result.value === "number") {
                     switch ((expr as PrefixUnaryExpression).operator) {
                         case SyntaxKind.PlusToken:
-                            return value;
+                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.MinusToken:
-                            return -value;
+                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.TildeToken:
-                            return ~value;
+                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles);
                     }
                 }
                 break;
-            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.BinaryExpression: {
                 const left = evaluate((expr as BinaryExpression).left, location);
                 const right = evaluate((expr as BinaryExpression).right, location);
-                if (typeof left === "number" && typeof right === "number") {
+                resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles;
+                isSyntacticallyString = left.isSyntacticallyString || right.isSyntacticallyString;
+                if (typeof left.value === "number" && typeof right.value === "number") {
                     switch ((expr as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.BarToken:
-                            return left | right;
+                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.AmpersandToken:
-                            return left & right;
+                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.GreaterThanGreaterThanToken:
-                            return left >> right;
+                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            return left >>> right;
+                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.LessThanLessThanToken:
-                            return left << right;
+                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.CaretToken:
-                            return left ^ right;
+                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.AsteriskToken:
-                            return left * right;
+                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.SlashToken:
-                            return left / right;
+                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.PlusToken:
-                            return left + right;
+                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.MinusToken:
-                            return left - right;
+                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.PercentToken:
-                            return left % right;
+                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.AsteriskAsteriskToken:
-                            return left ** right;
+                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles);
                     }
                 }
                 else if (
-                    (typeof left === "string" || typeof left === "number") &&
-                    (typeof right === "string" || typeof right === "number") &&
+                    (typeof left.value === "string" || typeof left.value === "number") &&
+                    (typeof right.value === "string" || typeof right.value === "number") &&
                     (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
                 ) {
-                    return "" + left + right;
+                    return evaluatorResult(
+                        "" + left.value + right.value,
+                        isSyntacticallyString,
+                        resolvedOtherFiles,
+                    );
                 }
                 break;
+            }
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return (expr as StringLiteralLike).text;
+                return evaluatorResult((expr as StringLiteralLike).text, /*isSyntacticallyString*/ true);
             case SyntaxKind.TemplateExpression:
                 return evaluateTemplateExpression(expr as TemplateExpression, location);
             case SyntaxKind.NumericLiteral:
                 checkGrammarNumericLiteral(expr as NumericLiteral);
-                return +(expr as NumericLiteral).text;
-            case SyntaxKind.ParenthesizedExpression:
-                return evaluate((expr as ParenthesizedExpression).expression, location);
+                return evaluatorResult(+(expr as NumericLiteral).text);
             case SyntaxKind.Identifier: {
                 const identifier = expr as Identifier;
                 if (isInfinityOrNaNString(identifier.escapedText) && (resolveEntityName(identifier, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
-                    return +(identifier.escapedText);
+                    // Technically we resolved a global lib file here, but the decision to treat this as numeric
+                    // is more predicated on the fact that the single-file resolution *didn't* resolve to a
+                    // different meaning of `Infinity` or `NaN`. Transpilers handle this no problem.
+                    return evaluatorResult(+(identifier.escapedText), /*isSyntacticallyString*/ false);
                 }
                 // falls through
             }
@@ -45825,7 +45831,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (isConstantVariable(symbol)) {
                             const declaration = symbol.valueDeclaration;
                             if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
-                                return evaluate(declaration.initializer, declaration);
+                                const result = evaluate(declaration.initializer, declaration);
+                                if (location && getSourceFileOfNode(location) !== getSourceFileOfNode(declaration)) {
+                                    return evaluatorResult(
+                                        result.value,
+                                        /*isSyntacticallyString*/ false,
+                                        /*resolvedOtherFiles*/ true,
+                                    );
+                                }
+                                return result;
                             }
                         }
                     }
@@ -45839,39 +45853,54 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const name = escapeLeadingUnderscores(((expr as ElementAccessExpression).argumentExpression as StringLiteralLike).text);
                         const member = rootSymbol.exports!.get(name);
                         if (member) {
+                            Debug.assert(getSourceFileOfNode(member.valueDeclaration) === getSourceFileOfNode(rootSymbol.valueDeclaration));
                             return location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
                         }
                     }
                 }
                 break;
         }
-        return undefined;
+        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles);
     }
 
     function evaluateEnumMember(expr: Expression, symbol: Symbol, location: Declaration) {
         const declaration = symbol.valueDeclaration;
         if (!declaration || declaration === location) {
             error(expr, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(symbol));
-            return undefined;
+            return evaluatorResult(/*value*/ undefined);
         }
         if (!isBlockScopedNameDeclaredBeforeUse(declaration, location)) {
             error(expr, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
-            return 0;
+            return evaluatorResult(/*value*/ 0);
         }
-        return getEnumMemberValue(declaration as EnumMember);
-    }
-
-    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
-        let result = expr.head.text;
-        for (const span of expr.templateSpans) {
-            const value = evaluate(span.expression, location);
-            if (value === undefined) {
-                return undefined;
-            }
-            result += value;
-            result += span.literal.text;
+        const result = getEnumMemberValue(declaration as EnumMember);
+        if (getSourceFileOfNode(location) !== getSourceFileOfNode(declaration) && !result.resolvedOtherFiles) {
+            return evaluatorResult(
+                result.value,
+                result.isSyntacticallyString,
+                /*resolvedOtherFiles*/ true,
+            );
         }
         return result;
+    }
+
+    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined> {
+        let result = expr.head.text;
+        let resolvedOtherFiles = false;
+        for (const span of expr.templateSpans) {
+            const spanResult = evaluate(span.expression, location);
+            if (spanResult.value === undefined) {
+                return evaluatorResult(/*value*/ undefined, /*isSyntacticallyString*/ true);
+            }
+            result += spanResult.value;
+            result += span.literal.text;
+            resolvedOtherFiles ||= spanResult.resolvedOtherFiles;
+        }
+        return evaluatorResult(
+            result,
+            /*isSyntacticallyString*/ true,
+            resolvedOtherFiles,
+        );
     }
 
     function checkEnumDeclaration(node: EnumDeclaration) {
@@ -48497,9 +48526,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return nodeLinks[nodeId]?.flags || 0;
     }
 
-    function getEnumMemberValue(node: EnumMember): string | number | undefined {
+    function getEnumMemberValue(node: EnumMember): EvaluatorResult {
         computeEnumMemberValues(node.parent);
-        return getNodeLinks(node).enumMemberValue;
+        return getNodeLinks(node).enumMemberValue ?? evaluatorResult(/*value*/ undefined);
     }
 
     function canHaveConstantValue(node: Node): node is EnumMember | AccessExpression {
@@ -48514,7 +48543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getConstantValue(node: EnumMember | AccessExpression): string | number | undefined {
         if (node.kind === SyntaxKind.EnumMember) {
-            return getEnumMemberValue(node);
+            return getEnumMemberValue(node).value;
         }
 
         const symbol = getNodeLinks(node).resolvedSymbol;
@@ -48522,7 +48551,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // inline property\index accesses only for const enums
             const member = symbol.valueDeclaration as EnumMember;
             if (isEnumConst(member.parent)) {
-                return getEnumMemberValue(member);
+                return getEnumMemberValue(member).value;
             }
         }
 
@@ -48882,6 +48911,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getConstantValue: nodeIn => {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
+            },
+            getEnumMemberValue: nodeIn => {
+                const node = getParseTreeNode(nodeIn, isEnumMember);
+                return node ? getEnumMemberValue(node) : undefined;
             },
             collectLinkedAliases,
             getReferencedValueDeclaration,

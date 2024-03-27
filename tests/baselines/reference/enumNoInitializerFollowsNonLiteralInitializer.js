@@ -28,6 +28,16 @@ enum D {
     a = (2),
     b,
 }
+enum E {
+    a,
+    b,
+    c = a,
+    d,
+    e = d | b,
+    f,
+    g = (f | a)! satisfies number as any,
+    h,
+}
 
 
 //// [helpers.js]
@@ -68,3 +78,14 @@ var D;
     D[D["a"] = 2] = "a";
     D[D["b"] = 3] = "b";
 })(D || (D = {}));
+var E;
+(function (E) {
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
+    E[E["c"] = 0] = "c";
+    E[E["d"] = 1] = "d";
+    E[E["e"] = 1] = "e";
+    E[E["f"] = 2] = "f";
+    E[E["g"] = 2] = "g";
+    E[E["h"] = 3] = "h";
+})(E || (E = {}));
