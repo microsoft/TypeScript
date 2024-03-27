@@ -10668,7 +10668,7 @@ export function isSyntacticallyString(expr: Expression): boolean {
 }
 
 /** @internal */
-export function createEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression, onNumericLiteral }: EvaluationResolver) {
+export function createEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression }: EvaluationResolver) {
     function evaluate(expr: TemplateExpression, location?: Declaration): string;
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined;
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
@@ -10731,7 +10731,6 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             case SyntaxKind.TemplateExpression:
                 return evaluateTemplateExpression(expr as TemplateExpression, location);
             case SyntaxKind.NumericLiteral:
-                onNumericLiteral(expr as NumericLiteral);
                 return +(expr as NumericLiteral).text;
             case SyntaxKind.ParenthesizedExpression:
                 return evaluate((expr as ParenthesizedExpression).expression, location);

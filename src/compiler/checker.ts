@@ -1478,7 +1478,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var evaluate = createEvaluator({
         evaluateElementAccessExpression,
         evaluateEntityNameExpression,
-        onNumericLiteral: checkGrammarNumericLiteral,
     });
 
     var globals = createSymbolTable();

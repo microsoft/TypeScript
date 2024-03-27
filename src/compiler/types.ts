@@ -10061,5 +10061,4 @@ export interface Queue<T> {
 export interface EvaluationResolver {
     evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
     evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
-    onNumericLiteral(expr: NumericLiteral): void;
 }
