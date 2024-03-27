@@ -371,7 +371,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
         // Add and change multiple files - combine and send multiple requests together
         updateFileOnHost(session, "c:/projects/myproject/d.ts", "Add file", "export const yy = 10;");
-        updateFileOnHost(session, "c:/projects/myproject/c.ts", "Change File", `export const z = 30;`, );
+        updateFileOnHost(session, "c:/projects/myproject/c.ts", "Change File", `export const z = 30;`);
         updateFileOnHost(session, "c:/projects/myproject/e.ts", "Add File", "export const zz = 40;");
         invokeWatchChange(
             session,
