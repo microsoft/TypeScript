@@ -6,6 +6,6 @@
 //// }
 //// 
 //// const Thing: FC = (props) => <div></div>;
-//// const HelloWorld = () => <[|/**/Thing|]/>;
+//// const HelloWorld = () => <[|/**/Thing|] />;
 
 verify.baselineGoToDefinition("");
