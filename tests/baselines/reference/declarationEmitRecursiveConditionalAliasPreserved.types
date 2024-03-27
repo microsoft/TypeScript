@@ -9,6 +9,7 @@ Symbol count: 49,000 / 49,000 (nearest 500)
 === input.d.ts ===
 type _BuildPowersOf2LengthArrays<
 >_BuildPowersOf2LengthArrays : _BuildPowersOf2LengthArrays<Length, AccumulatedArray>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Length extends number,
     AccumulatedArray extends never[][],
@@ -21,6 +22,7 @@ type _BuildPowersOf2LengthArrays<
 
 type _ConcatLargestUntilDone<
 >_ConcatLargestUntilDone : _ConcatLargestUntilDone<Length, AccumulatedArray, NextArray>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Length extends number,
     AccumulatedArray extends never[][],
@@ -49,9 +51,11 @@ type _ConcatLargestUntilDone<
 
 type _Replace<R extends unknown[], T> = { [K in keyof R]: T };
 >_Replace : _Replace<R, T>
+>         : ^^^^^^^^^^^^^^
 
 export type TupleOf<Type, Length extends number> = number extends Length
 >TupleOf : TupleOf<Type, Length>
+>        : ^^^^^^^^^^^^^^^^^^^^^
 
     ? Type[]
     : {
@@ -68,6 +72,7 @@ export type TupleOf<Type, Length extends number> = number extends Length
 
 export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
 >Subtract : Subtract<N1, N2>
+>         : ^^^^^^^^^^^^^^^^
 
     ...TupleOf<never, N2>,
     ...infer R,
@@ -77,9 +82,11 @@ export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> 
 
 export type Decrement<T extends number> = Subtract<T, 1>;
 >Decrement : Decrement<T>
+>          : ^^^^^^^^^^^^
 
 export type Add<N1 extends number, N2 extends number> = [
 >Add : Add<N1, N2>
+>    : ^^^^^^^^^^^
 
     ...TupleOf<never, N1>,
     ...TupleOf<never, N2>,
@@ -89,6 +96,7 @@ export type Add<N1 extends number, N2 extends number> = [
 
 type _MultiAdd<
 >_MultiAdd : _MultiAdd<Num, Accumulator, IterationsLeft>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Num extends number,
     Accumulator extends number,
@@ -99,6 +107,7 @@ type _MultiAdd<
 
 export type Multiply<N1 extends number, N2 extends number> = number extends N1 | N2
 >Multiply : Multiply<N1, N2>
+>         : ^^^^^^^^^^^^^^^^
 
     ? number
     : {
@@ -107,6 +116,7 @@ export type Multiply<N1 extends number, N2 extends number> = number extends N1 |
 
 type PowerTailRec<
 >PowerTailRec : PowerTailRec<Num, PowerOf, Result>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Num extends number,
     PowerOf extends number,
@@ -119,25 +129,36 @@ type PowerTailRec<
 
 export type Power<Num extends number, PowerOf extends number> = PowerTailRec<Num, PowerOf, 1>;
 >Power : Power<Num, PowerOf>
+>      : ^^^^^^^^^^^^^^^^^^^
 
 === a.tsx ===
 import { Power } from "./input";
 >Power : any
+>      : ^^^
 
 export const power = <Num extends number, PowerOf extends number>(
 >power : <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>
+>      : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^       ^^^^^                   
 ><Num extends number, PowerOf extends number>(    num: Num,    powerOf: PowerOf): Power<Num, PowerOf> => (num ** powerOf) as never : <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>
+>                                                                                                                                  : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^       ^^^^^                   
 
     num: Num,
 >num : Num
+>    : ^^^
 
     powerOf: PowerOf
 >powerOf : PowerOf
+>        : ^^^^^^^
 
 ): Power<Num, PowerOf> => (num ** powerOf) as never;
 >(num ** powerOf) as never : never
+>                          : ^^^^^
 >(num ** powerOf) : number
+>                 : ^^^^^^
 >num ** powerOf : number
+>               : ^^^^^^
 >num : Num
+>    : ^^^
 >powerOf : PowerOf
+>        : ^^^^^^^
 

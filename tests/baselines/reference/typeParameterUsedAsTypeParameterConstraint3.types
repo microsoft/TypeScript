@@ -27,31 +27,41 @@
 interface I<T, U, V> {
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 
     z: V;
 >z : V
+>  : ^
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
+>    : ^ ^^^^^^^^^^^^^^^ ^^^^^ 
 >x : W
+>  : ^
 }
 
 interface I2<V, T, U> {
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 
     z: V;
 >z : V
+>  : ^
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
+>    : ^ ^^^^^^^^^^^^^^^ ^^^^^ 
 >x : W
+>  : ^
 }
 
 //interface I < T, U extends T, V extends U > {

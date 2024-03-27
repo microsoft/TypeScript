@@ -3,20 +3,37 @@
 === formatToPartsFractionalSecond.ts ===
 new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond')
 >new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond') : Intl.DateTimeFormatPart
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatToParts().find : { <S extends Intl.DateTimeFormatPart>(predicate: (value: Intl.DateTimeFormatPart, index: number, obj: Intl.DateTimeFormatPart[]) => value is S, thisArg?: any): S; (predicate: (value: Intl.DateTimeFormatPart, index: number, obj: Intl.DateTimeFormatPart[]) => unknown, thisArg?: any): Intl.DateTimeFormatPart; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatToParts() : Intl.DateTimeFormatPart[]
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
+>                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
+>     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >find : { <S extends Intl.DateTimeFormatPart>(predicate: (value: Intl.DateTimeFormatPart, index: number, obj: Intl.DateTimeFormatPart[]) => value is S, thisArg?: any): S; (predicate: (value: Intl.DateTimeFormatPart, index: number, obj: Intl.DateTimeFormatPart[]) => unknown, thisArg?: any): Intl.DateTimeFormatPart; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(val) => val.type === 'fractionalSecond' : (val: Intl.DateTimeFormatPart) => boolean
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Intl.DateTimeFormatPart
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >val.type === 'fractionalSecond' : boolean
+>                                : ^^^^^^^
 >val.type : keyof Intl.DateTimeFormatPartTypesRegistry
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Intl.DateTimeFormatPart
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >type : keyof Intl.DateTimeFormatPartTypesRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'fractionalSecond' : "fractionalSecond"
+>                   : ^^^^^^^^^^^^^^^^^^
 

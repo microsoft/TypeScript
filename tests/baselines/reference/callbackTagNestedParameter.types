@@ -16,13 +16,20 @@
  */
 function eachPerson(callback) {
 >eachPerson : (callback: WorksWithPeopleCallback) => void
+>           : ^^^^^^^^^^^                       ^^^^^    
 >callback : WorksWithPeopleCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
     callback({ name: "Empty" });
 >callback({ name: "Empty" }) : void
+>                            : ^^^^
 >callback : WorksWithPeopleCallback
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "Empty" } : { name: string; }
+>                  : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"Empty" : "Empty"
+>        : ^^^^^^^
 }
 

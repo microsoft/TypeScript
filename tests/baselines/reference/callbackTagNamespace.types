@@ -9,15 +9,19 @@
  */
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {NS.Nested.Inner} */
 function f(space, peace) {
 >f : (space: any, peace: any) => string | number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >space : any
 >peace : any
 
     return '1'
 >'1' : "1"
+>    : ^^^
 }
 

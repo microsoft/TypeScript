@@ -3,6 +3,7 @@
 === /a.js ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     /**
      * {@linkcode this.a}
@@ -16,11 +17,14 @@ class Foo {
      */
     a() { }
 >a : () => void
+>  : ^^^^^^^^^^
 
     b() { }
 >b : () => void
+>  : ^^^^^^^^^^
 
     #c() { }
 >#c : () => void
+>   : ^^^^^^^^^^
 }
 

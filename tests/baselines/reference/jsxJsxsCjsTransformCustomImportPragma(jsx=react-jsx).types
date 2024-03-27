@@ -12,19 +12,28 @@ Symbol count: 67,000 / 67,000 (nearest 500)
 import "./preact";
 const a = <>
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><>  <p></p>  text  <div className="foo"></div></> : JSX.Element
+>                                                  : ^^^^^^^^^^^
 
   <p></p>
 ><p></p> : JSX.Element
+>        : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 
   text
   <div className="foo"></div>
 ><div className="foo"></div> : JSX.Element
+>                            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >div : any
+>    : ^^^
 
 </>
 
@@ -34,19 +43,28 @@ export {};
 /* @jsxImportSource preact */
 const a = <>
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><>  <p></p>  text  <div className="foo"></div></> : JSX.Element
+>                                                  : ^^^^^^^^^^^
 
   <p></p>
 ><p></p> : JSX.Element
+>        : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 
   text
   <div className="foo"></div>
 ><div className="foo"></div> : JSX.Element
+>                            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >div : any
+>    : ^^^
 
 </>
 

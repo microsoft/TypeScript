@@ -3,49 +3,69 @@
 === consumer.ts ===
 import Drawing = require('./Drawing');
 >Drawing : typeof Drawing
+>        : ^^^^^^^^^^^^^^
 
 var addr = new Drawing.Math.Adder();
 >addr : import("Math/Adder")
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Drawing.Math.Adder() : import("Math/Adder")
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Drawing.Math.Adder : typeof import("Math/Adder")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Drawing.Math : { Adder: typeof import("Math/Adder"); }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Drawing : typeof Drawing
+>        : ^^^^^^^^^^^^^^
 >Math : { Adder: typeof import("Math/Adder"); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Adder : typeof import("Math/Adder")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === Drawing.ts ===
 export import Math = require('./Math/Math')
 >Math : { Adder: typeof import("Math/Adder"); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === Math/Math.ts ===
 import Adder = require('./Adder');
 >Adder : typeof Adder
+>      : ^^^^^^^^^^^^
 
 var Math = {
 >Math : { Adder: typeof Adder; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    Adder:Adder} : { Adder: typeof Adder; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     Adder:Adder
 >Adder : typeof Adder
+>      : ^^^^^^^^^^^^
 >Adder : typeof Adder
+>      : ^^^^^^^^^^^^
 
 };
 
 export = Math
 >Math : { Adder: typeof Adder; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 === Math/Adder.ts ===
 class Adder {
 >Adder : Adder
+>      : ^^^^^
 
     add(a: number, b: number) {
 >add : (a: number, b: number) => void
+>    : ^^^^      ^^^^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
         
     }
 }
 
 export = Adder;
 >Adder : Adder
+>      : ^^^^^
 

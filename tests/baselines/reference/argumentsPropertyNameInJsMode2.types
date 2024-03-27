@@ -3,16 +3,23 @@
 === a.js ===
 function f(x) {
 >f : (x: any, ...args: any[]) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 
   arguments;
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 f(1, 2, 3);
 >f(1, 2, 3) : void
+>           : ^^^^
 >f : (x: any, ...args: any[]) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

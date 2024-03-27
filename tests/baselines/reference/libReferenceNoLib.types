@@ -16,10 +16,15 @@ interface IArguments { }
 /// <reference lib="dom" />
 export declare interface HTMLElement { field: string; }
 >field : string
+>      : ^^^^^^
 
 export const elem: HTMLElement = { field: 'a' };
 >elem : HTMLElement
+>     : ^^^^^^^^^^^
 >{ field: 'a' } : { field: string; }
+>               : ^^^^^^^^^^^^^^^^^^
 >field : string
+>      : ^^^^^^
 >'a' : "a"
+>    : ^^^
 

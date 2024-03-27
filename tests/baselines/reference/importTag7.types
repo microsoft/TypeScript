@@ -4,10 +4,12 @@
 export interface A {
     a: number;
 >a : number
+>  : ^^^^^^
 }
 export interface B {
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 === /foo.js ===
@@ -23,6 +25,9 @@ export interface B {
  */
 function f(a, b) {}
 >f : (a: * A, b: * B) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : * A
+>  : ^^^
 >b : * B
+>  : ^^^
 

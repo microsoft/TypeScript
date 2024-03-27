@@ -3,7 +3,9 @@
 === parserExportAssignment6.ts ===
 declare module "M" {
 >"M" : typeof import("M")
+>    : ^^^^^^^^^^^^^^^^^^
 
     export = A;
 >A : any
+>  : ^^^
 }
