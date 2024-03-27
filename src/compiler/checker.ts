@@ -3102,6 +3102,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let result: Symbol | undefined;
         let lastLocation: Node | undefined;
         let lastSelfReferenceLocation: Declaration | undefined;
+        let seenAsUsedOutsideOfSelf = false;
         let propertyWithInvalidInitializer: PropertyDeclaration | undefined;
         let associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined;
         let withinDeferredContext = false;
@@ -3434,6 +3435,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         location = location.parent.parent.parent;
                     }
                     break;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    seenAsUsedOutsideOfSelf = true;
+                    break;
             }
             if (isSelfReferenceLocation(location)) {
                 lastSelfReferenceLocation = location;
@@ -3446,8 +3450,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
         // If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
-        // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-        if (isUse && result && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
+        // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used,
+        // unless `seenAsUsedOutsideOfSelf` is true.
+        if (isUse && result && (seenAsUsedOutsideOfSelf || !lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
             result.isReferenced! |= meaning;
         }
 
