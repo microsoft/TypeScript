@@ -97,12 +97,12 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["main.ts"]
   options: {"watch":true,"extendedDiagnostics":true}
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -180,12 +180,12 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["main.ts"]
   options: {"watch":true,"extendedDiagnostics":true}
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

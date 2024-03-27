@@ -147,9 +147,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -232,14 +232,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:03 AM[0m] File change detected. Starting incremental compilation...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:07 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:04 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -305,9 +305,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:15 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

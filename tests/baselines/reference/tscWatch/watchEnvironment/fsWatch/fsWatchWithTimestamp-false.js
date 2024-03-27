@@ -136,12 +136,12 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -128,7 +128,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
@@ -140,7 +140,7 @@ File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -188,7 +188,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
@@ -200,7 +200,7 @@ File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
-[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -254,7 +254,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
@@ -265,7 +265,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/myproject/other.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 undefined Source file
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -167,7 +167,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
 [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
@@ -207,7 +207,7 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90m12:00:39 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:37 AM[0m] Found 2 errors. Watching for file changes.
 
 
 

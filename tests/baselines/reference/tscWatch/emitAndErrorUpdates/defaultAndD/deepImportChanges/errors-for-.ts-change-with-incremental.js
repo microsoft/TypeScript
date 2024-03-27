@@ -266,14 +266,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:58 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -457,9 +457,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:03 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -631,14 +631,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:01:57 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 

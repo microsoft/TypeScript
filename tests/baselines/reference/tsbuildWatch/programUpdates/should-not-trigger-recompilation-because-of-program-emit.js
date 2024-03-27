@@ -302,7 +302,7 @@ Output::
 
 [[90m12:01:05 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -386,21 +386,21 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:15 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:16 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
+[[90m12:01:15 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
 
-[[90m12:01:17 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:16 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:28 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:24 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:29 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:25 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:31 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:27 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:32 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:28 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -510,11 +510,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:38 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
+[[90m12:01:33 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
 
-[[90m12:01:39 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:01:34 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
 
 
@@ -617,19 +617,19 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:53 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
+[[90m12:01:44 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:01:54 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:01:46 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:57 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'pkg0/tsconfig.json'
+[[90m12:01:48 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:01:58 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:49 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:59 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

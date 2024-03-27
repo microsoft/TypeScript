@@ -186,7 +186,7 @@ Output::
 [7m1[0m console.log(Config.value);
 [7m [0m [91m            ~~~~~~[0m
 
-[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
 

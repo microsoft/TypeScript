@@ -651,7 +651,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:44 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -915,7 +915,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:48 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -946,7 +946,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1165,7 +1165,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:02:10 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -1196,7 +1196,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:02:14 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:03 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1430,7 +1430,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:07 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -1494,7 +1494,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:02:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1762,7 +1762,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading config file: /home/src/projects/project1/tsconfig.json
 Synchronizing program
-[[90m12:02:39 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:21 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -1800,7 +1800,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:02:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1927,7 +1927,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading config file: /home/src/projects/project1/tsconfig.json
 Synchronizing program
-[[90m12:02:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:27 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -1981,7 +1981,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:02:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -2254,7 +2254,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:03:08 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:44 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -2300,7 +2300,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:03:21 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -2554,7 +2554,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:03:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:57 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
@@ -2618,7 +2618,7 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:03:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:06 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -122,9 +122,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -176,7 +176,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
@@ -184,7 +184,7 @@ Output::
 [7m3[0m     "importsNotUsedAsValues": "error"
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -241,7 +241,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
@@ -249,7 +249,7 @@ Output::
 [7m3[0m     "importsNotUsedAsValues": "preserve"
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
 
 
 

@@ -379,7 +379,7 @@ CreatingProgramWith::
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -562,7 +562,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -583,7 +583,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
     [7m [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
-[[90m12:01:12 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:07 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -769,14 +769,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

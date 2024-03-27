@@ -228,14 +228,14 @@ FsWatchesRecursive *deleted*::
 
 Output::
 >> Screen clear
-[[90m12:00:44 AM[0m] Starting compilation in watch mode...
+[[90m12:00:43 AM[0m] Starting compilation in watch mode...
 
 [96msrc/index.ts[0m:[93m1[0m:[93m51[0m - [91merror[0m[90m TS2339: [0mProperty 'foo' does not exist on type 'Result'.
 
 [7m1[0m import classNames from "classnames"; classNames().foo;
 [7m [0m [91m                                                  ~~~[0m
 
-[[90m12:00:51 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
 
 
 

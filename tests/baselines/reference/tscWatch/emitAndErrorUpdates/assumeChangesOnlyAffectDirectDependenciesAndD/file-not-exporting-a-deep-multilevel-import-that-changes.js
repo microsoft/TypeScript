@@ -235,7 +235,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -252,7 +252,7 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:01:07 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:02 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -327,7 +327,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -344,7 +344,7 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:01:24 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:14 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -419,7 +419,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -436,7 +436,7 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:01:41 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:26 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
