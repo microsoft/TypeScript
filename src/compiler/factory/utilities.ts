@@ -4,7 +4,6 @@ import {
     addInternalEmitFlags,
     AdditiveOperator,
     AdditiveOperatorOrHigher,
-    AssertionLevel,
     AssignmentExpression,
     AssignmentOperatorOrHigher,
     AssignmentPattern,
@@ -24,7 +23,6 @@ import {
     compareStringsCaseSensitive,
     CompilerOptions,
     ComputedPropertyName,
-    Debug,
     Declaration,
     DefaultKeyword,
     EmitFlags,
@@ -179,6 +177,8 @@ import {
     TypeNode,
     WrappedExpression,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 // Compound nodes
 
@@ -1420,7 +1420,7 @@ namespace BinaryExpressionState {
     }
 
     function checkCircularity(stackIndex: number, nodeStack: BinaryExpression[], node: BinaryExpression) {
-        if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
+        if (Debug.shouldAssert(Debug.AssertionLevel.Aggressive)) {
             while (stackIndex >= 0) {
                 Debug.assert(nodeStack[stackIndex] !== node, "Circular traversal detected.");
                 stackIndex--;

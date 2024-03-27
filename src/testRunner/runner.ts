@@ -214,11 +214,11 @@ function handleTestConfig() {
 }
 
 function beginTests() {
-    ts.Debug.loggingHost = {
+    ts.Debug.setLoggingHost({
         log(_level, s) {
             console.log(s || "");
         },
-    };
+    });
 
     if (ts.Debug.isDebugging) {
         ts.Debug.enableDebugInfo();
@@ -244,6 +244,7 @@ export let isWorker: boolean;
 function startTestEnvironment() {
     // For debugging convenience.
     (globalThis as any).ts = ts;
+    (globalThis as any).Debug = ts.Debug;
 
     isWorker = handleTestConfig();
     if (isWorker) {

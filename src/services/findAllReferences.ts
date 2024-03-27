@@ -20,7 +20,6 @@ import {
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     displayPart,
     DocumentSpan,
@@ -266,6 +265,8 @@ import {
     ImportTracker,
     ModuleReference,
 } from "./_namespaces/ts.FindAllReferences";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export interface SymbolAndEntries {

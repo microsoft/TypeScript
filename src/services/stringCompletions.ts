@@ -1,7 +1,4 @@
 import {
-    getModuleSpecifierPreferences,
-} from "../compiler/moduleSpecifiers";
-import {
     addToSeen,
     altDirectorySeparator,
     arrayFrom,
@@ -26,7 +23,6 @@ import {
     createSortedArray,
     createTextSpan,
     createTextSpanFromStringLiteralLikeContent,
-    Debug,
     deduplicate,
     directorySeparator,
     ElementAccessExpression,
@@ -160,6 +156,11 @@ import {
     Log,
     SortText,
 } from "./_namespaces/ts.Completions";
+
+import * as Debug from "../compiler/debug";
+import {
+    getModuleSpecifierPreferences,
+} from "../compiler/moduleSpecifiers";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;

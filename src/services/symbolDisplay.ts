@@ -6,7 +6,6 @@ import {
     CheckFlags,
     contains,
     createPrinterWithRemoveComments,
-    Debug,
     displayPart,
     EmitHint,
     emptyArray,
@@ -109,6 +108,8 @@ import {
     typeToDisplayParts,
     VariableDeclaration,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 

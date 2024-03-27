@@ -4,7 +4,6 @@ import {
     CallSignatureDeclaration,
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
-    Debug,
     Declaration,
     DeclarationName,
     DiagnosticMessage,
@@ -64,6 +63,8 @@ import {
     TypeParameterDeclaration,
     VariableDeclaration,
 } from "../../_namespaces/ts";
+
+import * as Debug from "../../debug";
 
 /** @internal */
 export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined;

@@ -34,7 +34,6 @@ import {
     createMemberAccessForPropertyName,
     createRange,
     createTokenRange,
-    Debug,
     Declaration,
     DoStatement,
     elementAt,
@@ -216,6 +215,8 @@ import {
     WhileStatement,
     YieldExpression,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 const enum ES2015SubstitutionFlags {
     /** Enables substitutions for captured `this` */

@@ -1,6 +1,5 @@
 import {
     combinePaths,
-    Debug,
     forEachAncestorDirectory,
     forEachKey,
     getBaseFileName,
@@ -40,6 +39,8 @@ import {
     TypingInstallerRequestUnion,
     WatchTypingLocations,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 
 interface NpmConfig {
     devDependencies: MapLike<any>;

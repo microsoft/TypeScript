@@ -43,7 +43,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     deduplicate,
     DefinitionInfo,
@@ -327,6 +326,8 @@ import {
     createNewFileName,
     getStatementsToMove,
 } from "./_namespaces/ts.refactor";
+
+import * as Debug from "../compiler/debug";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
 

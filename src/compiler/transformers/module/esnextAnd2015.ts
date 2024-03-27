@@ -5,7 +5,6 @@ import {
     chainBundle,
     createEmptyExports,
     createExternalHelpersImportDeclarationIfNeeded,
-    Debug,
     EmitFlags,
     EmitHint,
     ExportAssignment,
@@ -50,6 +49,8 @@ import {
     visitNodes,
     VisitResult,
 } from "../../_namespaces/ts";
+
+import * as Debug from "../../debug";
 
 /** @internal */
 export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

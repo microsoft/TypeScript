@@ -8,7 +8,6 @@ import {
     cast,
     ClassDeclaration,
     ConciseBody,
-    Debug,
     Expression,
     FunctionDeclaration,
     getModifiers,
@@ -36,6 +35,8 @@ import {
     setTextRange,
     SyntaxKind,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 /** @internal */
 export function createNodeConverters(factory: NodeFactory): NodeConverters {

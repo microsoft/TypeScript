@@ -1,7 +1,4 @@
 import {
-    getModuleSpecifier,
-} from "../../compiler/moduleSpecifiers";
-import {
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
@@ -23,7 +20,6 @@ import {
     contains,
     createModuleSpecifierResolutionHost,
     createTextRangeFromSpan,
-    Debug,
     Declaration,
     DeclarationStatement,
     Diagnostics,
@@ -153,6 +149,11 @@ import {
     VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts";
+
+import * as Debug from "../../compiler/debug";
+import {
+    getModuleSpecifier,
+} from "../../compiler/moduleSpecifiers";
 import {
     registerRefactor,
 } from "../refactorProvider";

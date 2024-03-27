@@ -1,16 +1,19 @@
 import * as ts from "./_namespaces/ts";
 
+import * as Debug from "../compiler/debug";
+
 // This file actually uses arguments passed on commandline and executes it
 
 // enable deprecation logging
-ts.Debug.loggingHost = {
+Debug.setLoggingHost({
     log(_level, s) {
         ts.sys.write(`${s || ""}${ts.sys.newLine}`);
     },
-};
+});
 
-if (ts.Debug.isDebugging) {
-    ts.Debug.enableDebugInfo();
+if (Debug.isDebugging) {
+    Debug.enableDebugInfo();
+    (globalThis as any).Debug = Debug;
 }
 
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {

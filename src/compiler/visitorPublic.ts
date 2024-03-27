@@ -1,6 +1,5 @@
 import {
     ConciseBody,
-    Debug,
     EmitFlags,
     Expression,
     factory,
@@ -103,6 +102,8 @@ import {
     TransformationContext,
     Visitor,
 } from "./_namespaces/ts";
+
+import * as Debug from "./debug";
 
 /**
  * Visits a Node using the supplied visitor, possibly returning a new Node in its place.

@@ -3,7 +3,6 @@ import {
     createGetCanonicalFileName,
     createModuleSpecifierResolutionHost,
     createRange,
-    Debug,
     emptyArray,
     endsWith,
     ensurePathIsNonModuleName,
@@ -49,6 +48,8 @@ import {
     tryRemoveDirectoryPrefix,
     UserPreferences,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function getEditsForFileRename(

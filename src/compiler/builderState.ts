@@ -3,7 +3,6 @@ import {
     CancellationToken,
     computeSignatureWithDiagnostics,
     CustomTransformers,
-    Debug,
     EmitOutput,
     emptyArray,
     GetCanonicalFileName,
@@ -32,6 +31,8 @@ import {
     toPath,
     TypeChecker,
 } from "./_namespaces/ts";
+
+import * as Debug from "./debug";
 
 /** @internal */
 export function getFileEmitOutput(

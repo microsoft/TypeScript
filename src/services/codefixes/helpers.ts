@@ -10,7 +10,6 @@ import {
     ClassLikeDeclaration,
     CodeFixContextBase,
     combine,
-    Debug,
     Declaration,
     Diagnostics,
     emptyArray,
@@ -114,6 +113,8 @@ import {
 import {
     ImportAdder,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl

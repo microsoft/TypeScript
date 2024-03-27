@@ -8,7 +8,6 @@ import {
     cast,
     createMultiMap,
     createSymbolTable,
-    Debug,
     Declaration,
     DiagnosticMessage,
     Diagnostics,
@@ -110,6 +109,8 @@ import {
     registerCodeFix,
     tryGetAutoImportableReferenceFromTypeNode,
 } from "../_namespaces/ts.codefix";
+
+import * as Debug from "../../compiler/debug";
 
 const fixId = "inferFromUsage";
 const errorCodes = [

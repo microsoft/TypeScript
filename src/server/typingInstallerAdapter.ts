@@ -2,7 +2,6 @@ import {
     ApplyCodeActionCommandResult,
     assertType,
     createQueue,
-    Debug,
     JsTyping,
     MapLike,
     server,
@@ -40,6 +39,8 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export interface TypingsInstallerWorkerProcess {

@@ -2,7 +2,6 @@ import {
     CharacterCodes,
     Comparer,
     Comparison,
-    Debug,
     EqualityComparer,
     MapLike,
     Queue,
@@ -10,6 +9,8 @@ import {
     SortedReadonlyArray,
     TextSpan,
 } from "./_namespaces/ts";
+
+import * as Debug from "./debug";
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];
@@ -2047,13 +2048,6 @@ export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t
     else {
         return t => t;
     }
-}
-/** @internal */
-export const enum AssertionLevel {
-    None = 0,
-    Normal = 1,
-    Aggressive = 2,
-    VeryAggressive = 3,
 }
 
 /**

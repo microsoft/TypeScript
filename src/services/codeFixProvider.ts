@@ -11,7 +11,6 @@ import {
     computeSuggestionDiagnostics,
     contains,
     createMultiMap,
-    Debug,
     Diagnostic,
     DiagnosticOrDiagnosticAndArguments,
     diagnosticToString,
@@ -23,6 +22,8 @@ import {
     TextChange,
     textChanges,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();

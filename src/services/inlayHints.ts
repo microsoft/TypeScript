@@ -5,7 +5,6 @@ import {
     CharacterCodes,
     createPrinterWithRemoveComments,
     createTextSpanFromNode,
-    Debug,
     ElementFlags,
     EmitHint,
     EnumMember,
@@ -124,6 +123,8 @@ import {
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);

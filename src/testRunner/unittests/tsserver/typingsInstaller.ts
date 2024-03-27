@@ -1,8 +1,9 @@
+import * as ts from "../../_namespaces/ts";
+
 import {
     createLoggerWithInMemoryLogs,
     replaceAll,
 } from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -32,6 +33,7 @@ import NameValidationResult = ts.JsTyping.NameValidationResult;
 import {
     stringifyIndented,
 } from "../../_namespaces/ts.server";
+
 import {
     jsonToReadableText,
 } from "../helpers";

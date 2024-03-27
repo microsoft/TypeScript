@@ -3,7 +3,6 @@ import {
     combinePaths,
     compareStringsCaseSensitive,
     CompilerOptions,
-    Debug,
     deduplicate,
     equateStringsCaseSensitive,
     Extension,
@@ -33,6 +32,8 @@ import {
 import {
     stringifyIndented,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;

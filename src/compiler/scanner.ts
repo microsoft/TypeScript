@@ -8,7 +8,6 @@ import {
     CommentKind,
     CommentRange,
     compareValues,
-    Debug,
     DiagnosticMessage,
     Diagnostics,
     identity,
@@ -28,6 +27,8 @@ import {
     SyntaxKind,
     TokenFlags,
 } from "./_namespaces/ts";
+
+import * as Debug from "./debug";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
 

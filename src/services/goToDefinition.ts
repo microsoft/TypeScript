@@ -9,7 +9,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
@@ -110,6 +109,8 @@ import {
 import {
     isContextWithStartAndEndNode,
 } from "./_namespaces/ts.FindAllReferences";
+
+import * as Debug from "../compiler/debug";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {

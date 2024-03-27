@@ -7,7 +7,6 @@ import {
     BindingOrAssignmentElement,
     BindingOrAssignmentElementTarget,
     BindingOrAssignmentPattern,
-    Debug,
     DestructuringAssignment,
     ElementAccessExpression,
     every,
@@ -61,6 +60,8 @@ import {
     visitNode,
     VisitResult,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 interface FlattenContext {
     context: TransformationContext;

@@ -7,7 +7,6 @@ import {
     computePositionOfLineAndCharacter,
     contains,
     createTextSpanFromBounds,
-    Debug,
     directorySeparator,
     DocumentPositionMapper,
     DocumentRegistryBucketKeyWithMode,
@@ -50,6 +49,8 @@ import {
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 /** @internal */

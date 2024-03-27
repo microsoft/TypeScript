@@ -1,4 +1,3 @@
-import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -30,7 +29,6 @@ import {
     createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchProgram,
     createWatchStatusReporter as ts_createWatchStatusReporter,
-    Debug,
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
@@ -87,6 +85,9 @@ import {
     WatchCompilerHost,
     WatchOptions,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
+import * as performance from "../compiler/performance";
 
 interface Statistic {
     name: string;

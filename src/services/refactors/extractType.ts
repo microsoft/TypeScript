@@ -6,7 +6,6 @@ import {
     cast,
     concatenate,
     createTextRangeFromSpan,
-    Debug,
     Diagnostics,
     EmitFlags,
     emptyArray,
@@ -73,6 +72,8 @@ import {
     RefactorErrorInfo,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+
+import * as Debug from "../../compiler/debug";
 
 const refactorName = "Extract type";
 

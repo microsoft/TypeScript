@@ -36,7 +36,6 @@ import {
     createScanner,
     createTextSpan,
     createTextSpanFromBounds,
-    Debug,
     Declaration,
     Decorator,
     DefaultClause,
@@ -379,6 +378,8 @@ import {
     walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 // These utilities are common to multiple language service features.
 // #region

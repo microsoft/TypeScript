@@ -2,7 +2,6 @@ import {
     addToSeen,
     arrayFrom,
     arrayToMap,
-    AssertionLevel,
     CachedDirectoryStructureHost,
     canJsonReportNoInputFiles,
     canWatchDirectoryOrFile,
@@ -22,7 +21,6 @@ import {
     createDocumentRegistryInternal,
     createGetCanonicalFileName,
     createMultiMap,
-    Debug,
     Diagnostic,
     directorySeparator,
     DirectoryStructureHost,
@@ -185,6 +183,8 @@ import {
     TypingsCache,
     WatchTypingLocations,
 } from "./_namespaces/ts.server";
+
+import * as Debug from "../compiler/debug";
 import * as protocol from "./protocol";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
@@ -1818,7 +1818,7 @@ export class ProjectService {
         project.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
 
         project.close();
-        if (Debug.shouldAssert(AssertionLevel.Normal)) {
+        if (Debug.shouldAssert(Debug.AssertionLevel.Normal)) {
             this.filenameToScriptInfo.forEach(info =>
                 Debug.assert(
                     !info.isAttached(project),

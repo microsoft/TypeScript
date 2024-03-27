@@ -9,7 +9,6 @@ import {
     CaseOrDefaultClause,
     chainBundle,
     ClassDeclaration,
-    Debug,
     EmitFlags,
     ExportAssignment,
     ExportSpecifier,
@@ -62,6 +61,8 @@ import {
     visitNodes,
     VisitResult,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 const enum UsingKind {
     None,

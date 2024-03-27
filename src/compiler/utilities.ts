@@ -80,7 +80,6 @@ import {
     createScanner,
     createTextSpan,
     createTextSpanFromBounds,
-    Debug,
     Declaration,
     DeclarationName,
     DeclarationWithTypeParameterChildren,
@@ -566,6 +565,8 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts";
+
+import * as Debug from "./debug";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];
@@ -1923,7 +1924,7 @@ export function isBlockScope(node: Node, parentNode: Node | undefined): boolean 
 
 /** @internal */
 export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters {
-    Debug.type<DeclarationWithTypeParameters>(node);
+    Debug.assertType<DeclarationWithTypeParameters>(node);
     switch (node.kind) {
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
@@ -1937,7 +1938,7 @@ export function isDeclarationWithTypeParameters(node: Node): node is Declaration
 
 /** @internal */
 export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren {
-    Debug.type<DeclarationWithTypeParameterChildren>(node);
+    Debug.assertType<DeclarationWithTypeParameterChildren>(node);
     switch (node.kind) {
         case SyntaxKind.CallSignature:
         case SyntaxKind.ConstructSignature:

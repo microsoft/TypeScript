@@ -2,7 +2,8 @@
 
 export * from "../corePublic";
 export * from "../core";
-export * from "../debug";
+import * as Debug from "../debug";
+export { Debug };
 export * from "../semver";
 export * from "../performanceCore";
 export * from "../perfLogger";

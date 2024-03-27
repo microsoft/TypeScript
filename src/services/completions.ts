@@ -43,7 +43,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     Decorator,
     Diagnostics,
@@ -392,6 +391,8 @@ import {
 import {
     StringCompletions,
 } from "./_namespaces/ts.Completions";
+
+import * as Debug from "../compiler/debug";
 
 // Exported only for tests
 /** @internal */

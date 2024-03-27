@@ -30,7 +30,6 @@ import {
     createWatchFactory,
     createWatchHost,
     CustomTransformers,
-    Debug,
     Diagnostic,
     DiagnosticArguments,
     DiagnosticCollection,
@@ -128,6 +127,8 @@ import {
     WriteFileCallback,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+
+import * as Debug from "./debug";
 
 const minimumDate = new Date(-8640000000000000);
 const maximumDate = new Date(8640000000000000);

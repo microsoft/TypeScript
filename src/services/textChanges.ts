@@ -20,7 +20,6 @@ import {
     createTextSpan,
     createTextSpanFromRange,
     createTextWriter,
-    Debug,
     DeclarationStatement,
     EmitHint,
     EmitTextWriter,
@@ -175,6 +174,8 @@ import {
     visitNodes,
     Visitor,
 } from "./_namespaces/ts";
+
+import * as Debug from "../compiler/debug";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.

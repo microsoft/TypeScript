@@ -1,5 +1,4 @@
 import {
-    AssertionLevel,
     closeFileWatcher,
     closeFileWatcherOf,
     combinePaths,
@@ -8,7 +7,6 @@ import {
     containsPath,
     createGetCanonicalFileName,
     createMultiMap,
-    Debug,
     directorySeparator,
     emptyArray,
     emptyFileSystemEntries,
@@ -46,6 +44,8 @@ import {
     WatchOptions,
     writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
+
+import * as Debug from "./debug";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -1966,10 +1966,10 @@ if (sys && sys.getEnvironmentVariable) {
     setCustomPollingValues(sys);
     Debug.setAssertionLevel(
         /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
-            ? AssertionLevel.Normal
-            : AssertionLevel.None,
+            ? Debug.AssertionLevel.Normal
+            : Debug.AssertionLevel.None,
     );
 }
 if (sys && sys.debugMode) {
-    Debug.isDebugging = true;
+    Debug.setIsDebugging(true);
 }

@@ -8,7 +8,6 @@ import {
     ClassLikeDeclaration,
     ConditionalExpression,
     ConditionalTypeNode,
-    Debug,
     EntityName,
     Expression,
     findAncestor,
@@ -68,6 +67,8 @@ import {
     UnionOrIntersectionTypeNode,
     VoidExpression,
 } from "../_namespaces/ts";
+
+import * as Debug from "../debug";
 
 /** @internal */
 export type SerializedEntityName =
