@@ -1925,6 +1925,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolvedProjectReferenceByPath,
         forEachResolvedProjectReference,
         isSourceOfProjectReferenceRedirect,
+        getRedirectReferenceForResolutionFromSourceOfProject,
         emitBuildInfo,
         fileExists,
         readFile,
