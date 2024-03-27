@@ -4,12 +4,17 @@
 interface I {
         [p]; // Used to be indexer, now it is a computed property
 >[p] : any
+>    : ^^^
 >p : any
+>  : ^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 }

@@ -3,12 +3,16 @@
 === a.d.ts ===
 declare namespace ns {
 >ns : typeof ns
+>   : ^^^^^^^^^
 
   class SecondNS extends FirstNS { }
 >SecondNS : SecondNS
+>         : ^^^^^^^^
 >FirstNS : FirstNS
+>        : ^^^^^^^
 
   class FirstNS { }
 >FirstNS : FirstNS
+>        : ^^^^^^^
 }
 

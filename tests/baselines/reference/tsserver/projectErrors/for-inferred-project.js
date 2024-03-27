@@ -232,7 +232,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "module": "CommonJS"
+          "module": "commonjs"
         }
       },
       "seq": 3,

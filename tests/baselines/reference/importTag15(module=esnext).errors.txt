@@ -1,0 +1,18 @@
+1.js(1,30): error TS2857: Import attributes cannot be used with type-only imports or exports.
+1.js(2,33): error TS2857: Import attributes cannot be used with type-only imports or exports.
+
+
+==== 0.ts (0 errors) ====
+    export interface I { }
+    
+==== 1.js (2 errors) ====
+    /** @import { I } from './0' with { type: "json" } */
+                                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2857: Import attributes cannot be used with type-only imports or exports.
+    /** @import * as foo from './0' with { type: "json" } */
+                                    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2857: Import attributes cannot be used with type-only imports or exports.
+    
+    /** @param {I} a */
+    function f(a) {}
+    

@@ -3,41 +3,57 @@
 === consumer.ts ===
 import iString = require('./expString');
 >iString : string
+>        : ^^^^^^
 
 var v1: string = iString;
 >v1 : string
+>   : ^^^^^^
 >iString : string
+>        : ^^^^^^
 
 import iNumber = require('./expNumber');
 >iNumber : number
+>        : ^^^^^^
 
 var v2: number = iNumber;
 >v2 : number
+>   : ^^^^^^
 >iNumber : number
+>        : ^^^^^^
 
 import iBoolean = require('./expBoolean');
 >iBoolean : boolean
+>         : ^^^^^^^
 
 var v3: boolean = iBoolean;
 >v3 : boolean
+>   : ^^^^^^^
 >iBoolean : boolean
+>         : ^^^^^^^
 
 import iArray = require('./expArray');
 >iArray : number[]
+>       : ^^^^^^^^
 
 var v4: Array<number> = iArray;
 >v4 : number[]
+>   : ^^^^^^^^
 >iArray : number[]
+>       : ^^^^^^^^
 
 import iObject = require('./expObject');
 >iObject : { answer: number; when: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var v5: Object = iObject;
 >v5 : Object
+>   : ^^^^^^
 >iObject : { answer: number; when: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 import iAny = require('./expAny');
 >iAny : any
+>     : ^^^
 
 var v6 = iAny;
 >v6 : any
@@ -45,57 +61,82 @@ var v6 = iAny;
 
 import iGeneric = require('./expGeneric');
 >iGeneric : <T>(a: T) => T
+>         : ^^^^^^^^^^^^^^
 
 var v7: {<x>(p1: x): x} = iGeneric;
 >v7 : <x>(p1: x) => x
+>   : ^ ^^^^^^ ^^^^^ 
 >p1 : x
+>   : ^
 >iGeneric : <T>(a: T) => T
+>         : ^^^^^^^^^^^^^^
 
 === expString.ts ===
 var x = "test";
 >x : string
+>  : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 export = x;
 >x : string
+>  : ^^^^^^
 
 === expNumber.ts ===
 var x = 42;
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 export = x;
 >x : number
+>  : ^^^^^^
 
 === expBoolean.ts ===
 var x = true;
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 export = x;
 >x : boolean
+>  : ^^^^^^^
 
 === expArray.ts ===
 var x = [1,2];
 >x : number[]
+>  : ^^^^^^^^
 >[1,2] : number[]
+>      : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 export = x;
 >x : number[]
+>  : ^^^^^^^^
 
 === expObject.ts ===
 var x = { answer: 42, when: 1776};
 >x : { answer: number; when: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ answer: 42, when: 1776} : { answer: number; when: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >answer : number
+>       : ^^^^^^
 >42 : 42
+>   : ^^
 >when : number
+>     : ^^^^^^
 >1776 : 1776
+>     : ^^^^
 
 export = x;
 >x : { answer: number; when: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === expAny.ts ===
 var x;
@@ -103,15 +144,20 @@ var x;
 
 export = x;
 >x : any
+>  : ^^^
 
 === expGeneric.ts ===
 function x<T>(a: T){
 >x : <T>(a: T) => T
+>  : ^ ^^^^^ ^^^^^^
 >a : T
+>  : ^
 
 	return a;
 >a : T
+>  : ^
 }
 export = x;
 >x : <T>(a: T) => T
+>  : ^^^^^^^^^^^^^^
 

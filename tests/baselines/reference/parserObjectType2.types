@@ -3,5 +3,7 @@
 === parserObjectType2.ts ===
 var v: { x: number };
 >v : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 

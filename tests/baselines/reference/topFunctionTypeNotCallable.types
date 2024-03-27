@@ -5,9 +5,13 @@
 
 declare let foo: (...args: never) => void;
 >foo : (...args: never) => void
+>    : ^^^^^^^^^^     ^^^^^    
 >args : never
+>     : ^^^^^
 
 foo(); // error
 >foo() : void
+>      : ^^^^
 >foo : (...args: never) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 

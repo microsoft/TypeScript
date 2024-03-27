@@ -29,18 +29,17 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
+function Foo() { return 10; }
 
 
 //// [/a/b/f2.js]
@@ -122,20 +121,19 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
-function foo2() { return 2; }
 exports.foo2 = foo2;
+function Foo() { return 10; }
+function foo2() { return 2; }
 
 
 //// [/a/b/f2.js] file written with same contents
@@ -187,22 +185,21 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/a/b/f1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooN = exports.foo2 = exports.Foo = void 0;
-function Foo() { return 10; }
 exports.Foo = Foo;
-function foo2() { return 2; }
 exports.foo2 = foo2;
-function fooN() { return 2; }
 exports.fooN = fooN;
+function Foo() { return 10; }
+function foo2() { return 2; }
+function fooN() { return 2; }
 
 
 //// [/a/b/f2.js] file written with same contents
@@ -228,9 +225,11 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
 /a/b/f2.ts
+/a/b/f3.ts
 
 Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 /a/b/f2.ts (computed .d.ts)
+/a/b/f3.ts (used version)
 
 exitCode:: ExitStatus.undefined

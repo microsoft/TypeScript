@@ -17,12 +17,11 @@ export const c = func();
 //// [reexporter.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.func = void 0;
+exports.func = func;
 var foo_html_1 = require("./foo.html");
 function func() {
     return new foo_html_1.CustomHtmlRepresentationThing();
 }
-exports.func = func;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -3,8 +3,13 @@
 === asyncFunctionDeclaration10_es5.ts ===
 async function foo(a = await => await): Promise<void> {
 >foo : (a: any, await: any) => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^             
 >a : any
+>  : ^^^
 >await : any
+>      : ^^^
 > : any
+> : ^^^
 >await : any
+>      : ^^^
 }

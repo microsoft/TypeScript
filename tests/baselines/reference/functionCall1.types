@@ -3,10 +3,13 @@
 === functionCall1.ts ===
 function foo():any{return ""};
 >foo : () => any
+>    : ^^^^^^   
 >"" : ""
+>   : ^^
 
 var x = foo();
 >x : any
 >foo() : any
 >foo : () => any
+>    : ^^^^^^^^^
 

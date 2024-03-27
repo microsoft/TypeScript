@@ -3,35 +3,49 @@
 === a.js ===
 const other = require('./other');
 >other : () => string
+>      : ^^^^^^^^^^^^
 >require('./other') : () => string
+>                   : ^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >'./other' : "./other"
+>          : ^^^^^^^^^
 
 /** @type {Puppeteer.Keyboard} */
 var ppk;
 >ppk : Puppeteer.Keyboard
+>    : ^^^^^^^^^^^^^^^^^^
 
 Puppeteer.connect;
 >Puppeteer.connect : (name: string) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >Puppeteer : typeof Puppeteer
+>          : ^^^^^^^^^^^^^^^^
 >connect : (name: string) => void
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
 === puppet.d.ts ===
 export as namespace Puppeteer;
 >Puppeteer : typeof import("puppet")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface Keyboard {
     key: string
 >key : string
+>    : ^^^^^^
 }
 export function connect(name: string): void;
 >connect : (name: string) => void
+>        : ^^^^^^^      ^^^^^    
 >name : string
+>     : ^^^^^^
 
 === other.d.ts ===
 declare function f(): string;
 >f : () => string
+>  : ^^^^^^      
 
 export = f;
 >f : () => string
+>  : ^^^^^^^^^^^^
 

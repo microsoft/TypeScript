@@ -3,32 +3,51 @@
 === objectFreezeLiteralsDontWiden.ts ===
 const PUPPETEER_REVISIONS = Object.freeze({
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.freeze({  chromium: '1011831',  firefox: 'latest',}) : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  chromium: '1011831',  firefox: 'latest',} : { chromium: "1011831"; firefox: "latest"; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   chromium: '1011831',
 >chromium : "1011831"
+>         : ^^^^^^^^^
 >'1011831' : "1011831"
+>          : ^^^^^^^^^
 
   firefox: 'latest',
 >firefox : "latest"
+>        : ^^^^^^^^
 >'latest' : "latest"
+>         : ^^^^^^^^
 
 });
 
 let preferredRevision = PUPPETEER_REVISIONS.chromium;
 >preferredRevision : "1011831"
+>                  : ^^^^^^^^^
 >PUPPETEER_REVISIONS.chromium : "1011831"
+>                             : ^^^^^^^^^
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chromium : "1011831"
+>         : ^^^^^^^^^
 
 preferredRevision = PUPPETEER_REVISIONS.firefox;
 >preferredRevision = PUPPETEER_REVISIONS.firefox : "latest"
+>                                                : ^^^^^^^^
 >preferredRevision : "1011831"
+>                  : ^^^^^^^^^
 >PUPPETEER_REVISIONS.firefox : "latest"
+>                            : ^^^^^^^^
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >firefox : "latest"
+>        : ^^^^^^^^
 

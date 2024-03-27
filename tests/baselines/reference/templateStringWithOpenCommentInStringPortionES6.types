@@ -3,6 +3,9 @@
 === templateStringWithOpenCommentInStringPortionES6.ts ===
 ` /**head  ${ 10 } // still middle  ${ 20 } /* still tail `
 >` /**head  ${ 10 } // still middle  ${ 20 } /* still tail ` : " /**head  10 // still middle  20 /* still tail "
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 
