@@ -3,7 +3,7 @@
 === genericTypeWithNonGenericBaseMisMatch.ts ===
 interface I {
 	f: (a: { a: number }) => void
->f : (a: {    a: number;}) => void
+>f : (a: { a: number; }) => void
 >a : { a: number; }
 >a : number
 }

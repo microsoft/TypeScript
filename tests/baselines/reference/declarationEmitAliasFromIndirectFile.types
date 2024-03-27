@@ -2,7 +2,7 @@
 
 === locale.d.ts ===
 export type Locale = {
->Locale : { weekdays: {    shorthand: [string, string, string, string, string, string, string];    longhand: [string, string, string, string, string, string, string];}; }
+>Locale : { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }
 
     weekdays: {
 >weekdays : { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }
@@ -16,7 +16,7 @@ export type Locale = {
     };
 };
 export type CustomLocale = {
->CustomLocale : { weekdays: {    shorthand: [string, string, string, string, string, string, string];    longhand: [string, string, string, string, string, string, string];}; }
+>CustomLocale : { weekdays: { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }; }
 
     weekdays: {
 >weekdays : { shorthand: [string, string, string, string, string, string, string]; longhand: [string, string, string, string, string, string, string]; }

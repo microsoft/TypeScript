@@ -4,7 +4,7 @@
 Subtype cache: 300 / 300 (nearest 100)
 Assignability cache: 200 / 200 (nearest 100)
 Type Count: 1,500 / 1,500 (nearest 100)
-Instantiation count: 5,000 / 5,500 (nearest 500)
+Instantiation count: 5,500 / 6,000 (nearest 500)
 Symbol count: 27,500 / 27,500 (nearest 500)
 
 === promisePermutations3.ts ===
@@ -84,11 +84,11 @@ declare function testFunctionP(): Promise<number>;
 >testFunctionP : () => Promise<number>
 
 declare function testFunction2(): IPromise<{ x: number }>;
->testFunction2 : () => IPromise<{    x: number;}>
+>testFunction2 : () => IPromise<{ x: number; }>
 >x : number
 
 declare function testFunction2P(): Promise<{ x: number }>;
->testFunction2P : () => Promise<{    x: number;}>
+>testFunction2P : () => Promise<{ x: number; }>
 >x : number
 
 declare function testFunction3(x: number): IPromise<number>;

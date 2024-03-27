@@ -170,8 +170,8 @@ var rc1 = '' instanceof {};
 
 // @@hasInstance restricts LHS
 var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
->o4 : { [Symbol.hasInstance](value: {    x: number;}): boolean; }
->[Symbol.hasInstance] : (value: {    x: number;}) => boolean
+>o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
+>[Symbol.hasInstance] : (value: { x: number; }) => boolean
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
 >hasInstance : unique symbol

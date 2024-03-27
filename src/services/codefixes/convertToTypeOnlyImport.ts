@@ -37,8 +37,8 @@ registerCodeFix({
         const declaration = getDeclaration(context.sourceFile, context.span.start);
         if (declaration) {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration));
-            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
-                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent))
+            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && isImportDeclaration(declaration.parent.parent.parent) && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
+                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent as ImportDeclaration))
                 : undefined;
             const mainAction = createCodeFixAction(
                 fixId,
@@ -71,6 +71,7 @@ registerCodeFix({
             }
             else if (
                 errorDeclaration?.kind === SyntaxKind.ImportSpecifier
+                && isImportDeclaration(errorDeclaration.parent.parent.parent)
                 && !fixedImportDeclarations.has(errorDeclaration.parent.parent.parent)
                 && canConvertImportDeclarationForSpecifier(errorDeclaration, diag.file, context.program)
             ) {

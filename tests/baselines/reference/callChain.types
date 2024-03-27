@@ -108,8 +108,8 @@ o2?.["b"](1, ...[2, 3], 4);
 >4 : 4
 
 declare const o3: { b: ((...args: any[]) => { c: string }) | undefined };
->o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
->b : ((...args: any[]) => {    c: string;}) | undefined
+>o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
+>b : ((...args: any[]) => { c: string; }) | undefined
 >args : any[]
 >c : string
 

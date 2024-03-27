@@ -778,7 +778,7 @@ if (c.isC2()) {
 }
 
 function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
->doNotRefineDestructuredParam : ({ x, y }: {    x: number | null;    y: number;}) => boolean
+>doNotRefineDestructuredParam : ({ x, y }: { x: number | null; y: number; }) => boolean
 >x : number | null
 >y : number
 >x : number | null

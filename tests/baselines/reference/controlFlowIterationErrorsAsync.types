@@ -348,7 +348,7 @@ async () => {
 // repro #43047#issuecomment-874221939
 
 declare function myQuery(input: { lastId: number | undefined }): Promise<{ entities: number[] }>;
->myQuery : (input: {    lastId: number | undefined;}) => Promise<{    entities: number[];}>
+>myQuery : (input: { lastId: number | undefined; }) => Promise<{ entities: number[]; }>
 >input : { lastId: number | undefined; }
 >lastId : number | undefined
 >entities : number[]
