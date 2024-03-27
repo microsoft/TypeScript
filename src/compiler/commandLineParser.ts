@@ -777,15 +777,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
-        name: "noCheck",
-        type: "boolean",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Emit,
-        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-    },
-    {
         name: "importHelpers",
         type: "boolean",
         affectsEmit: true,
