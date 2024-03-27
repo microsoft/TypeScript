@@ -205,7 +205,7 @@ var a = f18(a);
 
 var a = f19(a, a);
 >a : any
->f19(a, a) : any
+>f19(a, a) : PartialInference<any, K>
 >f19 : <T, K extends keyof T>(k: K, x: T[K]) => T
 >a : any
 >a : any

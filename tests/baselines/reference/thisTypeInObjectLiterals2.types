@@ -673,10 +673,6 @@ p12.bar = p12.bar + 1;
 type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 >Accessors : Accessors<T>
 
-type Dictionary<T> = { [x: string]: T }
->Dictionary : Dictionary<T>
->x : string
-
 type Computed<T> = {
 >Computed : Computed<T>
 
