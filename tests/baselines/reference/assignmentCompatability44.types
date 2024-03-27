@@ -12,7 +12,7 @@ class Foo {
 
 const foo: { new(): Foo } = Foo;
 >foo : new () => Foo
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^^^^^   
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

@@ -30,13 +30,13 @@ function never(_: never): never {
 
 function useA(_: A): void { }
 >useA : (_: A) => void
->     : ^^^^^^^^^^    
+>     : ^^^^ ^^^^^    
 >_ : A
 >  : ^
 
 function useB(_: B): void { }
 >useB : (_: B) => void
->     : ^^^^^^^^^^    
+>     : ^^^^ ^^^^^    
 >_ : B
 >  : ^
 

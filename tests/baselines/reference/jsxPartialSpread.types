@@ -30,7 +30,7 @@ import React from 'react';
 
 export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
 >Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^                ^^^^^^^ ^^^^^^^^^^        ^^^^^^        ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^                                                        ^^^^^^^^^^^^^^^^
 >SelectProps : Partial<{ value?: unknown; }>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}

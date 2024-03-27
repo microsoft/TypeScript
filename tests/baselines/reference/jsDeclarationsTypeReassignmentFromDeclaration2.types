@@ -33,7 +33,7 @@ interface Item {
 }
 declare function getItems(): Item[];
 >getItems : () => Item[]
->         : ^^^^^^^^^^  
+>         : ^^^^^^      
 
 export = getItems;
 >getItems : () => Item[]

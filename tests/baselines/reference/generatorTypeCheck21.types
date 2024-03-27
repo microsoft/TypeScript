@@ -17,7 +17,7 @@ class Bar extends Foo { y: string }
 
 function* g(): IterableIterator<Foo> {
 >g : () => IterableIterator<Foo>
->  : ^^^^^^^^^^^^^^^^^^^^^^ ^^^ 
+>  : ^^^^^^                     
 
     yield;
 >yield : undefined

@@ -109,7 +109,7 @@ interface Props {
 
 function parseWithSpread(config: Record<string, number>): Props {
 >parseWithSpread : (config: Record<string, number>) => Props
->                : ^^^^^^^^^^^^^^^                ^^^^^^^^^^
+>                : ^^^^^^^^^                      ^^^^^     
 >config : Record<string, number>
 >       : ^^^^^^^^^^^^^^^^^^^^^^
 

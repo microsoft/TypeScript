@@ -19,15 +19,15 @@ type Tester = (opts: any, done: (...args: any[]) => any) => any;
 
 declare function cases(tester: Tester): void;
 >cases : (tester: Tester) => void
->      : ^^^^^^^^^^^^^^^^^^^^    
+>      : ^^^^^^^^^      ^^^^^    
 >tester : Tester
 >       : ^^^^^^
 
 declare function fn<Y extends any[]>(implementation?: (...args: Y) => any): Mock<Y>;
 >fn : <Y extends any[]>(implementation?: (...args: Y) => any) => Mock<Y>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^        ^^^^^^^^^ ^ 
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^       
 >implementation : ((...args: Y) => any) | undefined
->               : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^ ^^^^^   ^^^^^^^^^^^^^
 >args : Y
 >     : ^
 

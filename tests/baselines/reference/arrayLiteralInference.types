@@ -181,7 +181,7 @@ const appTypeStylesWithError: Map<AppType, Array<AppStyle>> = new Map([
 
 declare function foo<T>(...args: T[]): T[];
 >foo : <T>(...args: T[]) => T[]
->    : ^^^^^^^^^^^^^^  ^^^^^^  
+>    : ^ ^^^^^^^^^^^   ^^^^^   
 >args : T[]
 >     : ^^^
 

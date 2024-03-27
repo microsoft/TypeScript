@@ -9,18 +9,18 @@ type Box<T> = {
 
     get: () => T,
 >get : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     set: (value: T) => void
 >set : (value: T) => void
->    : ^^^^^^^^^^^^^^    
+>    : ^^^^^^^^ ^^^^^    
 >value : T
 >      : ^
 }
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
->    : ^^^^^^^^^^^^^^^^^^^^ ^ 
+>    : ^ ^^^^^^^^^ ^^^^^      
 >value : T
 >      : ^
 
@@ -76,7 +76,7 @@ interface Observable<T>
 
 declare function observable<T>(value: T): Observable<T>;
 >observable : <T>(value: T) => Observable<T>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>           : ^ ^^^^^^^^^ ^^^^^             
 >value : T
 >      : ^
 

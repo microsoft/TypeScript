@@ -7,7 +7,7 @@ class Base {
 
     constructor(func: ()=>Base) {
 >func : () => Base
->     : ^^^^^^^^^^
+>     : ^^^^^^    
     }
 }
 class Super extends Base {

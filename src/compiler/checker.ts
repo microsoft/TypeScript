@@ -8611,7 +8611,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const type = getDeclaredTypeOfSymbol(sym);
                     const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(type, context) : factory.cloneNode(node);
                     name.symbol = sym; // for quickinfo, which uses identifier symbol information
-                    return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
+                    return { introducesError, node: setTextRange(setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping), node) };
                 }
             }
 

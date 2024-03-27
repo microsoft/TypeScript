@@ -15,7 +15,7 @@ class A {
 
     getA(): A {
 >getA : () => A
->     : ^^^^^^^
+>     : ^^^^^^ 
 
         return new A();
 >new A() : A

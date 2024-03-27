@@ -296,19 +296,19 @@ type RecArray<T> = Array<T | RecArray<T>>;
 
 declare function flat<T>(a: RecArray<T>): Array<T>;
 >flat : <T>(a: RecArray<T>) => Array<T>
->     : ^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^ ^ 
+>     : ^ ^^^^^           ^^^^^        
 >a : RecArray<T>
 >  : ^^^^^^^^^^^
 
 declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
 >flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
->      : ^^^^^^^^^^^^ ^   ^^^^^ ^  ^^^^^^^^^^ ^ 
+>      : ^ ^^^^^                   ^^^^^        
 >a : (T | T[])[]
 >  : ^^^^^^^^^^^
 
 declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
 >flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
->      : ^^^^^^^^^^^^ ^   ^^^^^ ^   ^^^^^ ^   ^^^^^^^^^^ ^ 
+>      : ^ ^^^^^                              ^^^^^        
 >a : (T | (T | T[])[])[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -612,7 +612,7 @@ type ValueOrArray2<T> = T | ValueOrArray2<T>[];
 
 declare function foo1<T>(a: ValueOrArray1<T>): T;
 >foo1 : <T>(a: ValueOrArray1<T>) => T
->     : ^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>     : ^ ^^^^^                ^^^^^ 
 >a : ValueOrArray1<T>
 >  : ^^^^^^^^^^^^^^^^
 
@@ -640,7 +640,7 @@ type NumberOrArray2<T> = T | ValueOrArray2<T>[];
 
 declare function foo2<T>(a: ValueOrArray1<T>): T;
 >foo2 : <T>(a: ValueOrArray1<T>) => T
->     : ^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>     : ^ ^^^^^                ^^^^^ 
 >a : ValueOrArray1<T>
 >  : ^^^^^^^^^^^^^^^^
 
@@ -666,7 +666,7 @@ type Tree = [HTMLHeadingElement, Tree][];
 
 function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse : (node: Tree, index?: number[]) => HTMLUListElement
->      : ^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^        ^^^^^                
 >node : Tree
 >     : ^^^^
 >index : number[]
@@ -800,7 +800,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 
 function cons(hs: HTMLHeadingElement[]): Tree {
 >cons : (hs: HTMLHeadingElement[]) => Tree
->     : ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>     : ^^^^^                    ^^^^^^^^^
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 
@@ -979,7 +979,7 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 
 function level(h: HTMLHeadingElement): number {
 >level : (h: HTMLHeadingElement) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>      : ^^^^                  ^^^^^      
 >h : HTMLHeadingElement
 >  : ^^^^^^^^^^^^^^^^^^
 

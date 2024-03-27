@@ -83,7 +83,7 @@ type T16 = Pick<Shape, undefined>;  // Error
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -94,7 +94,7 @@ function f1<T>(x: T) {
 
 function f2<T extends string | number>(x: T) {
 >f2 : <T extends string | number>(x: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -105,7 +105,7 @@ function f2<T extends string | number>(x: T) {
 
 function f3<T extends keyof Shape>(x: T) {
 >f3 : <T extends keyof Shape>(x: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -116,7 +116,7 @@ function f3<T extends keyof Shape>(x: T) {
 
 function f4<T extends keyof Named>(x: T) {
 >f4 : <T extends "name">(x: T) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -186,7 +186,7 @@ function f12<T>() {
 
 declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>               : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^           ^^^^^ 
 >primary : T
 >        : ^
 >secondary : Readonly<T>
@@ -194,7 +194,7 @@ declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
 
 declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>              : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^          ^^^^^ 
 >primary : T
 >        : ^
 >secondary : Partial<T>
@@ -392,7 +392,7 @@ interface Foo {
 
 function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^          ^^^^^^^^^
 >obj : T
 >    : ^
 >props : Pick<T, K>
@@ -540,7 +540,7 @@ class C<T> {
 
     setState<K extends keyof T>(props: Pick<T, K>) {
 >setState : <K extends keyof T>(props: Pick<T, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
 >props : Pick<T, K>
 >      : ^^^^^^^^^^
 
@@ -800,7 +800,7 @@ let f: Foo2<O, 'x'> = {
 
 function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 >test1 : <T, K extends keyof T>(obj: Pick<T, K>) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
 >obj : Pick<T, K>
 >    : ^^^^^^^^^^
 
@@ -817,7 +817,7 @@ function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 
 function test2<T, K extends keyof T>(obj: Record<K, number>) {
 >test2 : <T, K extends keyof T>(obj: Record<K, number>) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^         ^^^^^^^^^
+>      : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
 >obj : Record<K, number>
 >    : ^^^^^^^^^^^^^^^^^
 

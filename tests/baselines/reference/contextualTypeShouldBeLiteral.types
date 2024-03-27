@@ -31,7 +31,7 @@ interface Y {
 
 function foo(bar: X | Y) { }
 >foo : (bar: X | Y) => void
->    : ^^^^^^^   ^^^^^^^^^^
+>    : ^^^^^^     ^^^^^^^^^
 >bar : X | Y
 >    : ^^^^^
 
@@ -111,7 +111,7 @@ interface Y2 {
 
 function foo2(bar: X2 | Y2) { }
 >foo2 : (bar: X2 | Y2) => void
->     : ^^^^^^^^   ^^^^^^^^^^^
+>     : ^^^^^^       ^^^^^^^^^
 >bar : X2 | Y2
 >    : ^^^^^^^
 

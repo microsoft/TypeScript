@@ -6,17 +6,17 @@
 export interface Event<T> {
     callback: (response: T) => void;
 >callback : (response: T) => void
->         : ^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^^^ ^^^^^    
 >response : T
 >         : ^
 
     nested: {
 >nested : { nestedCallback: (response: T) => void; }
->       : ^^^^^^^^^^^^^^^^^^           ^         ^^^
+>       : ^^^^^^^^^^^^^^^^^^                     ^^^
 
         nestedCallback: (response: T) => void;
 >nestedCallback : (response: T) => void
->               : ^^^^^^^^^^^^^^^^^    
+>               : ^^^^^^^^^^^ ^^^^^    
 >response : T
 >         : ^
     }
@@ -38,7 +38,7 @@ export type CustomEvents = {
 
 declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
 >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^               ^^^^^    
 >type : T
 >     : ^
 >data : CustomEvents[T]
@@ -91,7 +91,7 @@ declare class MyCompiler {
 interface WebpackPluginInstance {
   apply: (compiler: MyCompiler) => void;
 >apply : (compiler: MyCompiler) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>      : ^^^^^^^^^^^          ^^^^^    
 >compiler : MyCompiler
 >         : ^^^^^^^^^^
 }
@@ -110,7 +110,7 @@ interface Optimization {
 }
 declare const A: <T, P extends keyof T>(
 >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^ ^ ^^^^^    
+>  : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^          ^^^^^    
 
   obj: T,
 >obj : T
@@ -122,14 +122,14 @@ declare const A: <T, P extends keyof T>(
 
   factory: () => T[P]
 >factory : () => T[P]
->        : ^^^^^^^ ^ 
+>        : ^^^^^^    
 
 ) => void;
 export const applyOptimizationDefaults = (optimization: Optimization) => {
 >applyOptimizationDefaults : (optimization: Optimization) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^^^^^^^^^^^^            ^^^^^^^^^
 >(optimization: Optimization) => {  A(optimization, "minimizer", () => [    {      apply: (compiler) => {},    },  ]);} : (optimization: Optimization) => void
->                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                       : ^^^^^^^^^^^^^^^            ^^^^^^^^^
 >optimization : Optimization
 >             : ^^^^^^^^^^^^
 

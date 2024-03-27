@@ -177,7 +177,7 @@ declare function isObject2(value: unknown): value is {};
 
 function gg2(x: Record<string, unknown>) {
 >gg2 : (x: Record<string, unknown>) => void
->    : ^^^^^^^^^^                 ^^^^^^^^^
+>    : ^^^^                       ^^^^^^^^^
 >x : Record<string, unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -247,7 +247,7 @@ declare function isObject4(value: unknown): value is {};
 
 function gg4(x: Record<string, any>) {
 >gg4 : (x: Record<string, any>) => void
->    : ^^^^^^^^^^             ^^^^^^^^^
+>    : ^^^^                   ^^^^^^^^^
 >x : Record<string, any>
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -285,7 +285,7 @@ type Self<T> = T extends unknown ? Identity<T> : never;
 
 function is<T>(value: T): value is Self<T> {
 >is : <T>(value: T) => value is Self<T>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 
@@ -306,7 +306,7 @@ type Union =  {a: number} | {b: number} | {c: number};
 
 function example(x: Union) {
 >example : (x: Union) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^
 >x : Union
 >  : ^^^^^
 
@@ -381,7 +381,7 @@ function example(x: Union) {
 
 function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {
 >checksArrayOrObject1 : (obj: Record<string, any> | Record<string, any>[]) => void
->                     : ^^^^^^^^^^^^                ^^^^^^               ^^^^^^^^^
+>                     : ^^^^^^                                           ^^^^^^^^^
 >obj : Record<string, any> | Record<string, any>[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -484,7 +484,7 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 
 function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) {
 >checksArrayOrObject2 : (obj: Record<string, any> | Record<string, any>[]) => void
->                     : ^^^^^^^^^^^^                ^^^^^^               ^^^^^^^^^
+>                     : ^^^^^^                                           ^^^^^^^^^
 >obj : Record<string, any> | Record<string, any>[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

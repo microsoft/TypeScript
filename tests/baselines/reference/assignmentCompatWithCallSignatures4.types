@@ -50,9 +50,9 @@ module Errors {
 
         var a7: (x: (arg: Base) => Derived) => (r: Base) => Derived2;
 >a7 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
->   : ^^^^      ^^^^     ^^^^^^^^^^^^    ^^^^     ^^^^^^^^
+>   : ^^^^                      ^^^^^                     
 >x : (arg: Base) => Derived
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^    ^^^^^       
 >arg : Base
 >    : ^^^^
 >r : Base
@@ -60,13 +60,13 @@ module Errors {
 
         var a8: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
 >a8 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->   : ^^^^      ^^^^     ^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^    ^^^^     ^^^^^^^
+>   : ^^^^                      ^^^^^                       ^^^^^                    
 >x : (arg: Base) => Derived
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^    ^^^^^       
 >arg : Base
 >    : ^^^^
 >y : (arg2: Base) => Derived
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^       
 >arg2 : Base
 >     : ^^^^
 >r : Base
@@ -74,13 +74,13 @@ module Errors {
 
         var a10: (...x: Base[]) => Base;
 >a10 : (...x: Base[]) => Base
->    : ^^^^^^^^^^^  ^^^^^^^^^
+>    : ^^^^^^^      ^^^^^    
 >x : Base[]
 >  : ^^^^^^
 
         var a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->    : ^^^^                ^^^^^                             ^^^^^^^^^
+>    : ^^^^                ^^^^^                             ^^^^^    
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -94,7 +94,7 @@ module Errors {
 
         var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
->    : ^^^^^^^^^ ^^^^ ^^^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^ 
+>    : ^^^^           ^^^^^               ^^^^^              
 >x : Base[]
 >  : ^^^^^^
 >y : Derived2[]
@@ -156,11 +156,11 @@ module Errors {
             };
         var a17: {
 >a17 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
 
                 (x: {
 >x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     <T extends Derived>(a: T): T;
 >a : T
@@ -173,7 +173,7 @@ module Errors {
                 }): any[];
                 (x: {
 >x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     <T extends Derived2>(a: T): T;
 >a : T
@@ -188,7 +188,7 @@ module Errors {
 
         var b2: <T, U>(x: T) => U[]; 
 >b2 : <T, U>(x: T) => U[]
->   : ^^^^^^^^^^^^^^^^^  
+>   : ^ ^^ ^^^^^ ^^^^^   
 >x : T
 >  : ^
 
@@ -210,9 +210,9 @@ module Errors {
 
         var b7: <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >b7 : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^     ^^^^^^    ^     ^
+>   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^             ^^^^^           
 >x : (arg: T) => U
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^ 
 >arg : T
 >    : ^
 >r : T
@@ -236,13 +236,13 @@ module Errors {
 
         var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
 >b8 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^     ^^^^^^                            ^^^^^^    ^     ^
+>   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^^^^                             ^^^^^           
 >x : (arg: T) => U
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^ 
 >arg : T
 >    : ^
 >y : (arg2: { foo: number; }) => U
->  : ^^^^^^^                ^^^^^^
+>  : ^^^^^^^                ^^^^^ 
 >arg2 : { foo: number; }
 >     : ^^^^^^^      ^^^
 >foo : number
@@ -269,7 +269,7 @@ module Errors {
         
         var b10: <T extends Derived>(...x: T[]) => T; 
 >b10 : <T extends Derived>(...x: T[]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^ 
 >x : T[]
 >  : ^^^
 
@@ -291,7 +291,7 @@ module Errors {
 
         var b11: <T extends Derived>(x: T, y: T) => T; 
 >b11 : <T extends Derived>(x: T, y: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -315,7 +315,7 @@ module Errors {
 
         var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^ ^^^^^^^^^^ ^^^^ ^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^           ^^^^^ 
 >x : Base[]
 >  : ^^^^^^
 >y : Base[]
@@ -339,9 +339,9 @@ module Errors {
 
         var b15: <T>(x: { a: T; b: T }) => T; 
 >b15 : <T>(x: { a: T; b: T; }) => T
->    : ^^^^^^^     ^     ^   ^^^^^^
+>    : ^ ^^^^^               ^^^^^ 
 >x : { a: T; b: T; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
 >  : ^
 >b : T
@@ -365,9 +365,9 @@ module Errors {
 
         var b15a: <T extends Base>(x: { a: T; b: T }) => number; 
 >b15a : <T extends Base>(x: { a: T; b: T; }) => number
->     : ^^^^^^^^^^^^^^^^^^^^     ^     ^   ^^^^^      
+>     : ^ ^^^^^^^^^^^^^^^^^^               ^^^^^      
 >x : { a: T; b: T; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
 >  : ^
 >b : T
@@ -391,9 +391,9 @@ module Errors {
 
         var b16: <T>(x: (a: T) => T) => T[];
 >b16 : <T>(x: (a: T) => T) => T[]
->    : ^^^^^^^    ^     ^^^^^^^  
+>    : ^ ^^^^^           ^^^^^   
 >x : (a: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -415,9 +415,9 @@ module Errors {
 
         var b17: <T>(x: (a: T) => T) => any[];
 >b17 : <T>(x: (a: T) => T) => any[]
->    : ^^^^^^^    ^     ^^^^^^     
+>    : ^ ^^^^^           ^^^^^     
 >x : (a: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -445,13 +445,13 @@ module Errors {
         // target type has generic call signature
         var a2: <T>(x: T) => T[];
 >a2 : <T>(x: T) => T[]
->   : ^^^^^^^^^^^^^^  
+>   : ^ ^^^^^ ^^^^^   
 >x : T
 >  : ^
 
         var b2: <T>(x: T) => string[];
 >b2 : <T>(x: T) => string[]
->   : ^^^^^^^^^^^^^        
+>   : ^ ^^^^^ ^^^^^        
 >x : T
 >  : ^
 
@@ -474,13 +474,13 @@ module Errors {
         // target type has generic call signature
         var a3: <T>(x: T) => string[];
 >a3 : <T>(x: T) => string[]
->   : ^^^^^^^^^^^^^        
+>   : ^ ^^^^^ ^^^^^        
 >x : T
 >  : ^
 
         var b3: <T>(x: T) => T[]; 
 >b3 : <T>(x: T) => T[]
->   : ^^^^^^^^^^^^^^  
+>   : ^ ^^^^^ ^^^^^   
 >x : T
 >  : ^
 

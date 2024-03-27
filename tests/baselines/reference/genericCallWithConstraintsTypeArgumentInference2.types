@@ -5,7 +5,7 @@
 
 function foo<T, U extends T>(t: T) {
 >foo : <T, U extends T>(t: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^^
 >t : T
 >  : ^
 

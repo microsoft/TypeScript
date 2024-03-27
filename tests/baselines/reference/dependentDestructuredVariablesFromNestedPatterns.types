@@ -3,7 +3,7 @@
 === dependentDestructuredVariablesFromNestedPatterns.ts ===
 function test1(arg: [[undefined, Error] | [number, undefined]]) {
 >test1 : (arg: [[undefined, Error] | [number, undefined]]) => void
->      : ^^^^^^             ^^^^^                        ^^^^^^^^^
+>      : ^^^^^^                                          ^^^^^^^^^
 >arg : [[undefined, Error] | [number, undefined]]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -29,7 +29,7 @@ function test1(arg: [[undefined, Error] | [number, undefined]]) {
 
 function test2([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 >test2 : ([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) => void
->      : ^^^^^^^^^^^^^^^^^^             ^^^^^                        ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^
 >p1 : number | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >p1Error : Error | undefined
@@ -49,9 +49,9 @@ function test2([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 
 async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined]; }>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : () => T
->   : ^^^^^^^
+>   : ^^^^^^ 
 
   const promises = await Promise.allSettled(fn());
 >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
@@ -194,7 +194,7 @@ async function test3() {
 
 function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 >test4 : ([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) => void
->      : ^^^^^^^^^^^^^^^^^^             ^^^^^                        ^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^
 >p1 : number | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >p1Error : Error | undefined

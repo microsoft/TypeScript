@@ -17,7 +17,7 @@ type Val = NumVal | StrVal;
 
 function isNumVal(x: Val): x is NumVal {
 >isNumVal : (x: Val) => x is NumVal
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^   ^^^^^^^^^^^^^^^^
 >x : Val
 >  : ^^^
 
@@ -38,7 +38,7 @@ function isNumVal(x: Val): x is NumVal {
 
 function foo(things: Val[]): void {
 >foo : (things: Val[]) => void
->    : ^^^^^^^^^^^^  ^^^^^    
+>    : ^^^^^^^^^     ^^^^^    
 >things : Val[]
 >       : ^^^^^
 

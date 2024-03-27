@@ -100,7 +100,7 @@ type OverridesInput = {
 
 const foo1: Partial<{ something: any }> & { variables: {
 >foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>; }
->     : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^      ^^^^^^^               ^^^^^^^^^^^^^^    ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^                                                                          ^^^
 >something : any
 >          : ^^^
 >variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
@@ -142,7 +142,7 @@ interface VariablesB { overrides?: OverridesInput; }
 
 const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
 >foo2 : Unrelated & { variables: VariablesA & VariablesB; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^
 >variables : VariablesA & VariablesB
 >          : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    variables: {        overrides: false  // Error    }} : { variables: { overrides: boolean; }; }

@@ -33,7 +33,7 @@ interface B extends Entity {
 
 function hasKind(entity: Entity, kind: "A"): entity is A;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^      ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : "A"
@@ -41,7 +41,7 @@ function hasKind(entity: Entity, kind: "A"): entity is A;
 
 function hasKind(entity: Entity, kind: "B"): entity is B;
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^   ^^^^^^^^^^^^^^^^^
 >entity : Entity
 >       : ^^^^^^
 >kind : "B"

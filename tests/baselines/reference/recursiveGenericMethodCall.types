@@ -5,7 +5,7 @@ interface Generator<T> { (): T; }
 
 function Generate<T>(func: Generator<T>): T {
 >Generate : <T>(func: Generator<T>) => T
->         : ^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^
+>         : ^ ^^^^^^^^            ^^^^^ 
 >func : Generator<T>
 >     : ^^^^^^^^^^^^
 

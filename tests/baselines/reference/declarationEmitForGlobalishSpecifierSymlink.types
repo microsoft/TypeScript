@@ -3,7 +3,7 @@
 === /p1/node_modules/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : () => A
->     : ^^^^^^^
+>     : ^^^^^^ 
 
 export enum A {
 >A : A
@@ -19,7 +19,7 @@ export * from "./src/impl";
 === /p2/node_modules/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : () => A
->     : ^^^^^^^
+>     : ^^^^^^ 
 
 export enum A {
 >A : A

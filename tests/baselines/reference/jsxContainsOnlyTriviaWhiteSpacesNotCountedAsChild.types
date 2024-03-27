@@ -17,7 +17,7 @@ interface Props {
 
 function NoticeList(props: Props) {
 >NoticeList : (props: Props) => null
->           : ^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^     ^^^^^^^^^
 >props : Props
 >      : ^^^^^
 

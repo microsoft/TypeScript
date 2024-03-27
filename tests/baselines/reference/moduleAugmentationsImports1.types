@@ -82,7 +82,7 @@ declare module "./a" {
     interface A {
         getB(): B;
 >getB : () => B
->     : ^^^^^^^
+>     : ^^^^^^ 
     }
 }
 
@@ -93,7 +93,7 @@ declare module "./a" {
     interface A {
         getCls(): Cls;
 >getCls : () => Cls
->       : ^^^^^^^^^
+>       : ^^^^^^   
     }
 }
 

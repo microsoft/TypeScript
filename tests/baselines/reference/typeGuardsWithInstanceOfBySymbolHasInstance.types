@@ -346,7 +346,7 @@ interface D {
 }
 declare var D: {
 >D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
 
     new (): D;
     [Symbol.hasInstance](value: unknown): value is D;

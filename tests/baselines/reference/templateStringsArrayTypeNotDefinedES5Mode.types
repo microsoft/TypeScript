@@ -3,7 +3,7 @@
 === templateStringsArrayTypeNotDefinedES5Mode.ts ===
 function f(x: TemplateStringsArray, y: number, z: number) {
 >f : (x: TemplateStringsArray, y: number, z: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>  : ^^^^                    ^^^^^      ^^^^^      ^^^^^^^^^
 >x : TemplateStringsArray
 >  : ^^^^^^^^^^^^^^^^^^^^
 >y : number

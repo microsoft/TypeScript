@@ -22,7 +22,7 @@ class Bar {
 
   yoha(@foo yoha, bar: Yoha) {}
 >yoha : (yoha: any, bar: Yoha) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >foo : (...args: any[]) => void
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >yoha : any
@@ -49,7 +49,7 @@ class Bar {
 
   yoha(@foo yoha, ...bar: Yoha[]) {}
 >yoha : (yoha: any, ...bar: Yoha[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >foo : (...args: any[]) => void
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >yoha : any

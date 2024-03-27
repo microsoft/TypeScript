@@ -89,9 +89,9 @@ type Dictionary = { [name: string]: string };
 
 const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
 >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^       
 ><F1 extends Dictionary, F2 extends Dictionary>(  d1: F1,  d2: F2,): F1 & F2 => Object.assign({}, d1, d2) : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
->                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^
+>                                                                                                         : ^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^  ^^^^^       
 
   d1: F1,
 >d1 : F1
@@ -119,9 +119,9 @@ const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
 
 const testDictionary = <T extends Dictionary>(_value: T) => { };
 >testDictionary : <T extends Dictionary>(_value: T) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 ><T extends Dictionary>(_value: T) => { } : <T extends Dictionary>(_value: T) => void
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >_value : T
 >       : ^
 
@@ -321,7 +321,7 @@ type Foo2 = { x: string } & { [K in number]: Foo2 };
 
 declare function mock<M>(_: Promise<M>): {} & M;
 >mock : <M>(_: Promise<M>) => {} & M
->     : ^^^^^^^^^^^^^^ ^ ^^^^^     ^
+>     : ^ ^^^^^          ^^^^^      
 >_ : Promise<M>
 >  : ^^^^^^^^^^
 

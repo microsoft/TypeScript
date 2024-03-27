@@ -15,12 +15,12 @@ type HandleOptions<O> = {
 
 declare function func1<
 >func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
     T extends Record<PropertyKey, readonly any[]>,
 >(fields: {
 >fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [K in keyof T]: {
         label: string;

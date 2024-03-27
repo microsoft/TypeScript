@@ -33,7 +33,7 @@ function a2(...a) { }
 
 function a3(...a: Array<String>) { }
 >a3 : (...a: Array<String>) => void
->   : ^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^
+>   : ^^^^^^^             ^^^^^^^^^
 >a : String[]
 >  : ^^^^^^^^
 
@@ -219,7 +219,7 @@ a11([1, 2]);                              // Parameter type is number[]
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }
 >foo : <T>(...a: T[]) => void
->    : ^^^^^^^^^^^  ^^^^^^^^^
+>    : ^ ^^^^^^^^   ^^^^^^^^^
 >a : T[]
 >  : ^^^
 
@@ -263,7 +263,7 @@ const enum E1 { a, b }
 
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : <T extends Number>(...a: T[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >a : T[]
 >  : ^^^
 

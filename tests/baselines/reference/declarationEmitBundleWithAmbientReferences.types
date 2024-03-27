@@ -29,9 +29,9 @@ import * as DatastoreResult from "src/datastore_result";
 
 export const build = (): DatastoreResult.T<string> => {
 >build : () => DatastoreResult.T<string>
->      : ^^^^^^^^^^^^^^^^^^^^^          
+>      : ^^^^^^                         
 >(): DatastoreResult.T<string> => {	return null;} : () => DatastoreResult.T<string>
->                                                 : ^^^^^^^^^^^^^^^^^^^^^          
+>                                                 : ^^^^^^                         
 >DatastoreResult : any
 >                : ^^^
 

@@ -102,7 +102,7 @@ const { B } = require("./b-ext");
 /** @param {B} p */
 function b(p) { p.x; }
 >b : (p: B) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >p : B
 >  : ^
 >p.x : number
@@ -143,7 +143,7 @@ const { C } = require("./c-ext");
 /** @param {C} p */
 function c(p) { p.x; }
 >c : (p: C) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >p : C
 >  : ^
 >p.x : number
@@ -230,7 +230,7 @@ const { E } = require("./e-ext");
 /** @param {E} p */
 function e(p) { p.x; }
 >e : (p: E) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >p : E
 >  : ^
 >p.x : number
@@ -293,7 +293,7 @@ function G() {
 /** @param {G} p */
 function g(p) { p.x; }
 >g : (p: G) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >p : G
 >  : ^
 >p.x : number
@@ -325,7 +325,7 @@ class H {
 /** @param {H} p */
 function h(p) { p.x; }
 >h : (p: H) => void
->  : ^^^^^^^^^^^^^^
+>  : ^^^^ ^^^^^^^^^
 >p : H
 >  : ^
 >p.x : number

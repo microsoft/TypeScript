@@ -31,7 +31,7 @@ type T1 = 1 | Promise<T1> | T1[];
 
 export async function myFunction(param: T1) {
 >myFunction : (param: T1) => Promise<void>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >param : T1
 >      : ^^
 
@@ -55,7 +55,7 @@ type EffectResult =
 
 export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult : (result: EffectResult) => Promise<void>
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^            ^^^^^^^^^^^^^^^^^^
 >result : EffectResult
 >       : ^^^^^^^^^^^^
 

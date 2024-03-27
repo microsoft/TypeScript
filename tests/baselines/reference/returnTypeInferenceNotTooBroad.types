@@ -30,13 +30,13 @@ interface Wrapper<T> {
 }
 declare function sepsis<T extends Signs>(opts: Opts<T>): Wrapper<T>;
 >sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^          
 >opts : Opts<T>
 >     : ^^^^^^^
 
 declare function unwrap<T>(w: Wrapper<T>): T;
 >unwrap : <T>(w: Wrapper<T>) => T
->       : ^^^^^^^^^^^^^^ ^ ^^^^^^
+>       : ^ ^^^^^          ^^^^^ 
 >w : Wrapper<T>
 >  : ^^^^^^^^^^
 

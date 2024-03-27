@@ -3,13 +3,13 @@
 === typing.d.ts ===
 declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
 >define : <T = unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^        ^^^^^^^^^                           ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^        ^^^^^^^^^                            ^^^^^^^^
 >name : string
 >     : ^^^^^^
 >modules : string[]
 >        : ^^^^^^^^
 >ready : (...modules: unknown[]) => T
->      : ^^^^^^^^^^^^^         ^^^^^^
+>      : ^^^^^^^^^^^^^         ^^^^^ 
 >modules : unknown[]
 >        : ^^^^^^^^^
 
@@ -24,7 +24,7 @@ declare module "deps/BaseClass" {
 
         static extends<A>(a: A): new () => A & BaseClass;
 >extends : <A>(a: A) => new () => A & BaseClass
->        : ^^^^^^^^^^^^^          ^   ^^^^^^^^^
+>        : ^ ^^^^^ ^^^^^                       
 >a : A
 >  : ^
     }

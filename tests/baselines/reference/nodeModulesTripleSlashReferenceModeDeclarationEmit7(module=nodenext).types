@@ -35,7 +35,7 @@ declare global {
 
     function getInterI(): ImportInterface;
 >getInterI : () => ImportInterface
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^               
 }
 === /node_modules/pkg/require.d.ts ===
 export {};
@@ -48,7 +48,7 @@ declare global {
 
     function getInterR(): RequireInterface;
 >getInterR : () => RequireInterface
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^                
 }
 === /sub1/uses.ts ===
 /// <reference types="pkg" preserve="true" />

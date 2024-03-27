@@ -463,7 +463,7 @@ module TypeScript {
 
     export function timeFunction(logger: ILogger, funcDescription: string, func: () =>any): any {
 >timeFunction : (logger: ILogger, funcDescription: string, func: () => any) => any
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^         ^^^^^   
+>             : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^         ^^^^^   
 >logger : ILogger
 >       : ^^^^^^^
 >funcDescription : string

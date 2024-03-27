@@ -3,7 +3,7 @@
 === couldNotSelectGenericOverload.ts ===
 function makeArray<T>(items: T[]): T[] { return items; }
 >makeArray : <T>(items: T[]) => T[]
->          : ^^^^^^^^^^^^  ^^^^^^  
+>          : ^ ^^^^^^^^^   ^^^^^   
 >items : T[]
 >      : ^^^
 >items : T[]

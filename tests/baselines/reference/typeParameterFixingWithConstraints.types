@@ -10,15 +10,15 @@ interface IBar {
 interface IFoo {
     foo<TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar): TBar;
 >foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^     ^^^^^^^^^^^^      ^^^^     ^^^^^^^^^^^^^
+>    : ^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^                   ^^^^^^^^                   ^^^^^    
 >bar : TBar
 >    : ^^^^
 >bar1 : (bar: TBar) => TBar
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^    ^^^^^    
 >bar : TBar
 >    : ^^^^
 >bar2 : (bar: TBar) => TBar
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^    ^^^^^    
 >bar : TBar
 >    : ^^^^
 }

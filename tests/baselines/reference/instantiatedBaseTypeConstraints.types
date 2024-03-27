@@ -4,7 +4,7 @@
 interface Foo<T extends Foo<T, C>, C> {
   foo(bar: C): void;
 >foo : (bar: C) => void
->    : ^^^^^^^^^^^^    
+>    : ^^^^^^ ^^^^^    
 >bar : C
 >    : ^
 }

@@ -13,7 +13,7 @@ interface X {
 
 declare function foo<T = X>(x: keyof T, y: keyof T): T;
 >foo : <T = X>(x: keyof T, y: keyof T) => T
->    : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^
+>    : ^ ^^^^^^^^^       ^^^^^       ^^^^^ 
 >x : keyof T
 >  : ^^^^^^^
 >y : keyof T
@@ -21,7 +21,7 @@ declare function foo<T = X>(x: keyof T, y: keyof T): T;
 
 declare function bar<T>(x: keyof T, y: keyof T): T;
 >bar : <T>(x: keyof T, y: keyof T) => T
->    : ^^^^^^^      ^^^^^^      ^^^^^^^
+>    : ^ ^^^^^       ^^^^^       ^^^^^ 
 >x : keyof T
 >  : ^^^^^^^
 >y : keyof T

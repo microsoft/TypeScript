@@ -43,7 +43,7 @@ import { C } from "./index";
 
 export function use(o: C): void;
 >use : (o: C) => void
->    : ^^^^^^^^^^    
+>    : ^^^^ ^^^^^    
 >o : C
 >  : ^
 

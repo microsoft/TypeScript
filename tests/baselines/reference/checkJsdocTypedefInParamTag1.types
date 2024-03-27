@@ -13,7 +13,7 @@
  */
 function foo(opts) {
 >foo : (opts: Opts) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^    ^^^^^^^^^
 >opts : Opts
 >     : ^^^^
 
@@ -47,7 +47,7 @@ foo({x: 'abc'});
  */
 function foo1(opts) {
 >foo1 : (opts: AnotherOpts) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^           ^^^^^^^^^
 >opts : AnotherOpts
 >     : ^^^^^^^^^^^
 
@@ -83,7 +83,7 @@ foo1({anotherX: "world"});
  */
 function foo2(opts) {
 >foo2 : (opts: Opts1) => void
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^     ^^^^^^^^^
 >opts : Opts1
 >     : ^^^^^
 

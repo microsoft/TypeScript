@@ -43,7 +43,7 @@ import {Component} from 'react';
 
 export function getComp(): Component {
 >getComp : () => Component
->        : ^^^^^^^^^^^^^^^
+>        : ^^^^^^         
 
     return {} as any as Component
 >{} as any as Component : Component

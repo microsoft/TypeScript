@@ -7,14 +7,14 @@ class Foo<Elements extends readonly unknown[]> {
 
   public readonly elements: { [P in keyof Elements]: { bar: Elements[P] } };
 >elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : Elements[P]
 >    : ^^^^^^^^^^^
 
   public constructor(
     ...elements: { [P in keyof Elements]: { bar: Elements[P] } }
 >elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : Elements[P]
 >    : ^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ class Foo<Elements extends readonly unknown[]> {
 
   public add(): Foo<[...Elements, "abc"]> {
 >add : () => Foo<[...Elements, "abc"]>
->    : ^^^^^^^^^     ^^^^^^^^         
+>    : ^^^^^^                         
 
     return new Foo<[...Elements, "abc"]>(...this.elements, { bar: "abc" });
 >new Foo<[...Elements, "abc"]>(...this.elements, { bar: "abc" }) : Foo<[...Elements, "abc"]>

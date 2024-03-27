@@ -33,7 +33,7 @@ import { Thing } from "./private.js"
 
 export const x: () => Thing;
 >x : () => Thing
->  : ^^^^^^^^^^^
+>  : ^^^^^^     
 
 === node_modules/inner/private.d.ts ===
 

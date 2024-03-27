@@ -19,31 +19,31 @@ type C4<T> = T extends unknown ? T | undefined : never;
 
 declare function f0<T>(x: T): [T];
 >f0 : <T>(x: T) => [T]
->   : ^^^^^^^^^^^^^ ^ 
+>   : ^ ^^^^^ ^^^^^   
 >x : T
 >  : ^
 
 declare function f1<T>(x: C1<T>): [T];
 >f1 : <T>(x: C1<T>) => [T]
->   : ^^^^^^^^^ ^ ^^^^^ ^ 
+>   : ^ ^^^^^     ^^^^^   
 >x : C1<T>
 >  : ^^^^^
 
 declare function f2<T>(x: C1<C2<T>>): [T];
 >f2 : <T>(x: C1<C2<T>>) => [T]
->   : ^^^^^^^^^ ^^ ^  ^^^^^ ^ 
+>   : ^ ^^^^^         ^^^^^   
 >x : C1<C2<T>>
 >  : ^^^^^^^^^
 
 declare function f3<T>(x: C1<C2<C3<T>>>): [T];
 >f3 : <T>(x: C1<C2<C3<T>>>) => [T]
->   : ^^^^^^^^^ ^^ ^^ ^   ^^^^^ ^ 
+>   : ^ ^^^^^             ^^^^^   
 >x : C1<C2<C3<T>>>
 >  : ^^^^^^^^^^^^^
 
 declare function f4<T>(x: C1<C2<C3<C4<T>>>>): [T];
 >f4 : <T>(x: C1<C2<C3<C4<T>>>>) => [T]
->   : ^^^^^^^^^ ^^ ^^ ^^ ^    ^^^^^ ^ 
+>   : ^ ^^^^^                 ^^^^^   
 >x : C1<C2<C3<C4<T>>>>
 >  : ^^^^^^^^^^^^^^^^^
 

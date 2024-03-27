@@ -17,7 +17,7 @@ type Thing<T> = {
 
     pipe<A, B>(
 >pipe : <A, B>(opA: Op<T, A>, opB: Op<A, B>) => Thing<B>
->     : ^^^^^^^^^^^^^^ ^  ^ ^^^^^^^^^ ^  ^ ^^^^^^^^^^ ^ 
+>     : ^ ^^ ^^^^^^^        ^^^^^^^        ^^^^^        
 
         opA: Op<T, A>,
 >opA : Op<T, A>
@@ -41,31 +41,31 @@ declare const thing: Thing<number>;
 
 declare function map<T, R>(project: (value: T) => R): Op<T, R>;
 >map : <T, R>(project: (value: T) => R) => Op<T, R>
->    : ^^^^^^^^^^^^^^^^        ^     ^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^^               ^^^^^        
 >project : (value: T) => R
->        : ^^^^^^^^^^^^^^^
+>        : ^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 
 declare function tap<T>(next: (value: T) => void): Op<T, T>;
 >tap : <T>(next: (value: T) => void) => Op<T, T>
->    : ^^^^^^^^^^        ^         ^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^^^                  ^^^^^        
 >next : (value: T) => void
->     : ^^^^^^^^^^^^^^    
+>     : ^^^^^^^^ ^^^^^    
 >value : T
 >      : ^
 
 declare function box<V>(data: V): Box<V>;
 >box : <V>(data: V) => Box<V>
->    : ^^^^^^^^^^^^^^^^^^^ ^ 
+>    : ^ ^^^^^^^^ ^^^^^      
 >data : V
 >     : ^
 
 declare function createAndUnbox<V>(factory: () => Thing<V | Box<V>>): Thing<V>;
 >createAndUnbox : <V>(factory: () => Thing<V | Box<V>>) => Thing<V>
->               : ^^^^^^^^^^^^^      ^^^^^ ^   ^^^ ^  ^^^^^^^^^^ ^ 
+>               : ^ ^^^^^^^^^^^                       ^^^^^        
 >factory : () => Thing<V | Box<V>>
->        : ^^^^^^^^^^^ ^   ^^^ ^  
+>        : ^^^^^^                 
 
 declare function log(value: any): void;
 >log : (value: any) => void

@@ -60,7 +60,7 @@ declare const x: any;
 // function without type parameters
 declare function f00(a?: A): A;
 >f00 : (a?: A) => A
->    : ^^^^^^^^^^^^
+>    : ^^^^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -82,7 +82,7 @@ f00(a);
 // function with a type parameter without a default
 declare function f01<T>(a?: T): T;
 >f01 : <T>(a?: T) => T
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -119,7 +119,7 @@ f01<A>(a);
 // function with a type paramter with a default
 declare function f02<T = A>(a?: T): T;
 >f02 : <T = A>(a?: T) => T
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -178,7 +178,7 @@ f02<B>(b);
 // function with a type parameter with a default that refers to itself
 declare function f03<T = T>(a?: T): T;
 >f03 : <T = T>(a?: T) => T
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -237,7 +237,7 @@ f03<B>(b);
 // function with a type paramter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -355,7 +355,7 @@ f04<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter
 declare function f05<T, U = T>(a?: T, b?: U): [T, U];
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -449,7 +449,7 @@ f05<A, B>(a, b);
 // function with a type parameter with a default that refers to an earlier type parameter with a default
 declare function f06<T = A, U = T>(a?: T, b?: U): [T, U];
 >f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -611,7 +611,7 @@ f06<B, C>(b, c);
 // function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter with a default
 declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^ 
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^         
 >a : T
 >  : ^
 >b : U
@@ -879,7 +879,7 @@ f07<A, C, D>(a, c, d);
 // function with a type parameter with a default that refers to an earlier type parameter with a constraint
 declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
 >f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -973,7 +973,7 @@ f08<A, B>(a, b);
 // function with a type parameter with a constraint and a default that refers to an earlier type parameter
 declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -1077,7 +1077,7 @@ f09<A, AB>(a, ab);
 // function with a type parameter with a constraint and a default that refers to an earlier type parameter with a constraint
 declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
 >f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -1215,7 +1215,7 @@ f10<A, AB>(a, ab);
 // function with a type parameter with a default that refers to an earier type parameter in a union
 declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -1329,7 +1329,7 @@ f11<A, C>(a, c);
 // function with a type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^ ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -1433,7 +1433,7 @@ f12<A, C>(a, c);
 // function with a type parameter with a default that refers to a later type parameter with a default
 declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -1537,7 +1537,7 @@ f13<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default
 declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^ 
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^         
 >a : T
 >  : ^
 >b : U
@@ -1707,7 +1707,7 @@ f14<A, B, D>(a, b, d);
 // function with two type parameters with defaults that mutually refer to each other
 declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -1791,7 +1791,7 @@ f15<A, B>(a, b);
 // function with a type parameter without a default and two type parameters with defaults that mutually refer to each other
 declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^ 
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^         
 >a : T
 >  : ^
 >b : U
@@ -1949,7 +1949,7 @@ f16<A, B, D>(a, b, d);
 // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -2063,7 +2063,7 @@ f17<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^ 
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^         
 >a : T
 >  : ^
 >b : U
@@ -2257,7 +2257,7 @@ f18<A, B, D>(a, b, d);
 // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^ 
+>    : ^ ^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : U
@@ -2371,7 +2371,7 @@ f19<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^  ^ 
+>    : ^ ^^ ^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^         
 >a : T
 >  : ^
 >b : U

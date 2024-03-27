@@ -3,22 +3,22 @@
 === objectLiteralArraySpecialization.ts ===
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->       : ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^ ^ 
+>       : ^ ^^^^^^^^^^^^^^^^^^   ^^^^^                 
 >initialValues : T[]
 >              : ^^^
 
 interface MyArrayWrapper<T> {
 	constructor(initialItems?: T[]);
 >constructor : (initialItems?: T[]) => any
->            : ^^^^^^^^^^^^^^^^^  ^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^   ^^^^^^^^
 >initialItems : T[]
 >             : ^^^
 
 	doSomething(predicate: (x: T, y: T) => boolean): void;
 >doSomething : (predicate: (x: T, y: T) => boolean) => void
->            : ^^^^^^^^^^^^    ^     ^            ^^^^^    
+>            : ^^^^^^^^^^^^                       ^^^^^    
 >predicate : (x: T, y: T) => boolean
->          : ^^^^^^^^^^^^^^^^       
+>          : ^^^^ ^^^^^ ^^^^^       
 >x : T
 >  : ^
 >y : T

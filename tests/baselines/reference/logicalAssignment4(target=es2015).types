@@ -120,7 +120,7 @@ declare const v: number
 
 function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) {
 >doSomethingWithAlias : (thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^
+>                     : ^^^^^^^^                             ^^^^^^^^^^^^^^^^                             ^^^^^^^^^
 >thing : ThingWithOriginal | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultValue : ThingWithOriginal | undefined

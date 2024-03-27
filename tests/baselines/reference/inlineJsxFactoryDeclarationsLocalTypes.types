@@ -15,7 +15,7 @@ export namespace dom {
 
             props: {
 >props : { children?: Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^  ^^^
+>      : ^^^^^^^^^^^^^         ^^^
 
                 children?: Element[];
 >children : Element[]
@@ -26,7 +26,7 @@ export namespace dom {
         interface ElementClass extends Element {
             render(): Element;
 >render : () => Element
->       : ^^^^^^^^^^^^^
+>       : ^^^^^^       
         }
         interface ElementAttributesProperty { props: any; }
 >props : any
@@ -39,7 +39,7 @@ export namespace dom {
 }
 export function dom(): dom.JSX.Element;
 >dom : () => dom.JSX.Element
->    : ^^^^^^^^^     ^^^^^^^
+>    : ^^^^^^               
 >dom : any
 >    : ^^^
 >JSX : any
@@ -60,7 +60,7 @@ export namespace predom {
 
             props: {
 >props : { children?: Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^  ^^^
+>      : ^^^^^^^^^^^^^         ^^^
 
                 children?: Element[];
 >children : Element[]
@@ -71,7 +71,7 @@ export namespace predom {
         interface ElementClass extends Element {
             render(): Element;
 >render : () => Element
->       : ^^^^^^^^^^^^^
+>       : ^^^^^^       
         }
         interface ElementAttributesProperty { props: any; }
 >props : any
@@ -84,7 +84,7 @@ export namespace predom {
 }
 export function predom(): predom.JSX.Element;
 >predom : () => predom.JSX.Element
->       : ^^^^^^^^^^^^     ^^^^^^^
+>       : ^^^^^^                  
 >predom : any
 >       : ^^^
 >JSX : any
@@ -98,11 +98,11 @@ import { predom } from "./renderer2"
 
 export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
->      : ^^^^^^^^                                   ^^^^^^     ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >(props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
->                                                                                                                                               : ^^^^^^^^                                   ^^^^^^     ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                               : ^^^^^^^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^     ^^^^^^^  ^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -172,7 +172,7 @@ export class MyClass implements predom.JSX.Element {
 
     constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^     ^^^^^^^  ^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -341,11 +341,11 @@ elem = <h></h>; // Expect assignability error here
 
 const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
->       : ^^^^^^^^                                   ^^^     ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >(props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
->                                                                                                                                    : ^^^^^^^^                                   ^^^     ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                    : ^^^^^^^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^  ^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -411,7 +411,7 @@ class DOMClass implements dom.JSX.Element {
 
     constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^  ^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
 >  : ^^^^^^
 >y : number

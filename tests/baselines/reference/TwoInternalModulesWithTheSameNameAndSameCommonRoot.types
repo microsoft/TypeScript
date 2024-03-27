@@ -21,7 +21,7 @@ module A {
 
         export function mirror<T extends Point>(p: T) {
 >mirror : <T extends Point>(p: T) => { x: number; y: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : T
 >  : ^
 
@@ -131,7 +131,7 @@ var o = A.Utils.mirror(o);
 
 var p: { tl: A.Point; br: A.Point };
 >p : { tl: A.Point; br: A.Point; }
->  : ^^^^^^^      ^^^^^^^      ^^^
+>  : ^^^^^^       ^^^^^^       ^^^
 >tl : A.Point
 >   : ^^^^^^^
 >A : any

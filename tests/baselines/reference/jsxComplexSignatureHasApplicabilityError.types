@@ -21,7 +21,7 @@ interface Props<T extends OptionValues> {
 
     onChange?(value: Option<T> | undefined): void;
 >onChange : ((value: Option<T> | undefined) => void) | undefined
->         : ^^^^^^^^^^^^^^^ ^             ^^^^^    ^^^^^^^^^^^^^
+>         : ^^^^^^^^^                     ^^^^^    ^^^^^^^^^^^^^
 >value : Option<T> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^
 }
@@ -42,7 +42,7 @@ export type ReactSingleSelectProps<
 
 export function createReactSingleSelect<
 >createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: React.ComponentType<WrappedProps>) => React.ComponentType<ReactSingleSelectProps<WrappedProps>>
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^ ^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  
+>                        : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                 ^^^^^                                                         
 
     WrappedProps extends ReactSelectProps<any>
 >(
@@ -167,7 +167,7 @@ declare class ReactSelectClass<TValue = OptionValues> extends React.Component<Re
 
     setValue(value: Option<TValue>): void;
 >setValue : (value: Option<TValue>) => void
->         : ^^^^^^^^^^^^^^ ^^^^^^ ^^^^^    
+>         : ^^^^^^^^              ^^^^^    
 >value : Option<TValue>
 >      : ^^^^^^^^^^^^^^
 }
@@ -311,7 +311,7 @@ export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Optio
 >IsOptionUniqueHandler : IsOptionUniqueHandler<TValue>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { option: Option<TValue>; options: Options<TValue>; labelKey: string; valueKey: string; }
->    : ^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
+>    : ^^^^^^^^^^              ^^^^^^^^^^^               ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >option : Option<TValue>
 >       : ^^^^^^^^^^^^^^
 >options : Options<TValue>
@@ -391,7 +391,7 @@ export type LoadOptionsLegacyHandler<TValue = OptionValues> = (input: string, ca
 >input : string
 >      : ^^^^^^
 >callback : (err: any, result: AutocompleteResult<TValue>) => void
->         : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^    
+>         : ^^^^^^   ^^^^^^^^^^                          ^^^^^    
 >err : any
 >result : AutocompleteResult<TValue>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -564,7 +564,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     onFocus?: (option: Option<TValue>, event: any) => void;
 >onFocus : ((option: Option<TValue>, event: any) => void) | undefined
->        : ^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>        : ^^^^^^^^^^              ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
 >option : Option<TValue>
 >       : ^^^^^^^^^^^^^^
 >event : any
@@ -574,7 +574,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     onSelect?: (option: Option<TValue>, event: any) => void;
 >onSelect : ((option: Option<TValue>, event: any) => void) | undefined
->         : ^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>         : ^^^^^^^^^^              ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
 >option : Option<TValue>
 >       : ^^^^^^^^^^^^^^
 >event : any
@@ -599,7 +599,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     removeValue?: (value: TValue | TValue[]) => void;
 >removeValue : ((value: TValue | TValue[]) => void) | undefined
->            : ^^^^^^^^^^^^^^^   ^^^^^^  ^^^^^    ^^^^^^^^^^^^^
+>            : ^^^^^^^^^                 ^^^^^    ^^^^^^^^^^^^^
 >value : TValue | TValue[]
 >      : ^^^^^^^^^^^^^^^^^
 
@@ -608,7 +608,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     selectValue?: (value: TValue | TValue[]) => void;
 >selectValue : ((value: TValue | TValue[]) => void) | undefined
->            : ^^^^^^^^^^^^^^^   ^^^^^^  ^^^^^    ^^^^^^^^^^^^^
+>            : ^^^^^^^^^                 ^^^^^    ^^^^^^^^^^^^^
 >value : TValue | TValue[]
 >      : ^^^^^^^^^^^^^^^^^
 }

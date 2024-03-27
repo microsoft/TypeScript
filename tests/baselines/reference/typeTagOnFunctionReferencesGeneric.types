@@ -8,7 +8,7 @@
 /**@type {IFn}*/
 export function inJs(l) {
 >inJs : <T>(m: T) => T
->     : ^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^
 >l : T
 >  : ^
 

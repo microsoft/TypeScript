@@ -3,7 +3,7 @@
 === intersectionTypeInference.ts ===
 function extend<T, U>(obj1: T, obj2: U): T & U {
 >extend : <T, U>(obj1: T, obj2: U) => T & U
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^
+>       : ^ ^^ ^^^^^^^^ ^^^^^^^^ ^^^^^     
 >obj1 : T
 >     : ^
 >obj2 : U
@@ -104,7 +104,7 @@ interface B<U> {
 
 function foo<T, U>(obj: A<T> & B<U>): T | U {
 >foo : <T, U>(obj: A<T> & B<U>) => T | U
->    : ^^^^^^^^^^^^^ ^    ^ ^ ^^^^^^   ^
+>    : ^ ^^ ^^^^^^^           ^^^^^     
 >obj : A<T> & B<U>
 >    : ^^^^^^^^^^^
 

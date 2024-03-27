@@ -9,7 +9,7 @@ interface ICallback {
 
 function load(f: ICallback) {}
 >load : (f: ICallback) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^         ^^^^^^^^^
 >f : ICallback
 >  : ^^^^^^^^^
 

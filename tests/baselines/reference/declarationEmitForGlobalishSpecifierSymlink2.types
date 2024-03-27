@@ -3,7 +3,7 @@
 === /cache/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : () => A
->     : ^^^^^^^
+>     : ^^^^^^ 
 
 export enum A {
 >A : A

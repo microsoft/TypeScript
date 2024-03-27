@@ -32,7 +32,7 @@ type Rule = string | FullRule;
 
 const obj: {field: Rule} = {
 >obj : { field: Rule; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^    ^^^
 >field : Rule
 >      : ^^^^
 >{    field: {        validate: (_t, _p, _s) => false,        normalize: match => match.x,    }} : { field: { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }; }

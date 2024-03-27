@@ -26,14 +26,14 @@ export interface SomeProps {}
 
 export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
 >foo : () => [SomeProps, OtherProps, OtherIndexProps, NestedProps]
->    : ^^^^^^ ^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^ 
+>    : ^^^^^^                                                     
 
 === node_modules/root/index.d.ts ===
 export interface RootProps {}
 
 export function bar(): RootProps;
 >bar : () => RootProps
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^^         
 
 === r/entry.ts ===
 import { foo } from "foo";

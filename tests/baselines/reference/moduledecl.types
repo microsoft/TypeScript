@@ -445,7 +445,7 @@ module exportTests {
         }
         private setC2_private(arg: C2_private) {
 >setC2_private : (arg: C2_private) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^          ^^^^^^^^^
 >arg : C2_private
 >    : ^^^^^^^^^^
         }
@@ -471,7 +471,7 @@ module exportTests {
         }
         public setC1_public(arg: C1_public) {
 >setC1_public : (arg: C1_public) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^         ^^^^^^^^^
 >arg : C1_public
 >    : ^^^^^^^^^
         }
@@ -503,7 +503,7 @@ declare module mAmbient {
 
     function foo() : C;
 >foo : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     var aVar: C;
 >aVar : C
@@ -550,7 +550,7 @@ declare module mAmbient {
 
         function foo(): C;
 >foo : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
         var aVar: C;
 >aVar : C

@@ -31,7 +31,7 @@ module __test2__ {
 
     export var obj: { <Tnumber>(a:Tnumber):Tnumber;};
 >obj : <Tnumber>(a: Tnumber) => Tnumber
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^       ^^^^^       
 >a : Tnumber
 >  : ^^^^^^^
 

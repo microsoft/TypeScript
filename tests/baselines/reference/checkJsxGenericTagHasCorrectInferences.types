@@ -12,7 +12,7 @@ interface BaseProps<T> {
 
   nextValues: (cur: T) => T;
 >nextValues : (cur: T) => T
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^ ^^^^^ 
 >cur : T
 >    : ^
 }

@@ -24,7 +24,7 @@ declare namespace Foo {
 
 declare function Foo(opts?: Foo.Whatever): void;
 >Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
->    : ^^^^^^^^^^^^^         ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^            ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opts : Foo.Whatever
 >     : ^^^^^^^^^^^^
 >Foo : any
@@ -32,7 +32,7 @@ declare function Foo(opts?: Foo.Whatever): void;
 
 declare function Foo(cb: Function, opts?: Foo.Whatever): void;
 >Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^    ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^            ^^^    ^^^
 >cb : Function
 >   : ^^^^^^^^
 >opts : Foo.Whatever

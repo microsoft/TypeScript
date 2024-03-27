@@ -22,7 +22,7 @@ interface TestSymb {
 
 export function test(): TestSymb {
 >test : () => TestSymb
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^^        
 
   function inner() {}
 >inner : { (): void; [symb]: boolean; }

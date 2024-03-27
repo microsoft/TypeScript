@@ -25,135 +25,135 @@ export class publicClassT<T> {
 export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
     myMethod(val: T): T; // Error
 >myMethod : (val: T) => T
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^ ^^^^^ 
 >val : T
 >    : ^
 
     myMethod0(): publicClassT<T>; // error
 >myMethod0 : () => publicClassT<T>
->          : ^^^^^^^^^^^^^^^^^^ ^ 
+>          : ^^^^^^               
 
     myMethod1(): privateClassT<privateClass>; // error
 >myMethod1 : () => privateClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                           
 
     myMethod2(): privateClassT<publicClass>; // error
 >myMethod2 : () => privateClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod3(): publicClassT<privateClass>; //error
 >myMethod3 : () => publicClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                         
 }
 
 export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^ ^^^^^ 
 >val : T
 >    : ^
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->          : ^^^^^^^^^^^^^^^^^^ ^ 
+>          : ^^^^^^               
 
     myMethod1(): privateClassT<privateClass>; // error
 >myMethod1 : () => privateClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                           
 
     myMethod2(): privateClassT<publicClass>; // error
 >myMethod2 : () => privateClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod3(): publicClassT<privateClass>; //error
 >myMethod3 : () => publicClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                         
 }
 
 interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^ ^^^^^ 
 >val : T
 >    : ^
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->          : ^^^^^^^^^^^^^^^^^^ ^ 
+>          : ^^^^^^               
 
     myMethod1(): privateClassT<privateClass>; // No error
 >myMethod1 : () => privateClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                           
 
     myMethod2(): privateClassT<publicClass>; // No error
 >myMethod2 : () => privateClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod3(): publicClassT<privateClass>; //No error
 >myMethod3 : () => publicClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                         
 }
 
 interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^ ^^^^^ 
 >val : T
 >    : ^
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->          : ^^^^^^^^^^^^^^^^^^ ^ 
+>          : ^^^^^^               
 
     myMethod1(): privateClassT<privateClass>; // No error
 >myMethod1 : () => privateClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                           
 
     myMethod2(): privateClassT<publicClass>; // No error
 >myMethod2 : () => privateClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod3(): publicClassT<privateClass>; //No error
 >myMethod3 : () => publicClassT<privateClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ 
+>          : ^^^^^^                          
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->          : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ 
+>          : ^^^^^^                         
 }
 
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^ ^^^^^ 
 >val : T
 >    : ^
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->          : ^^^^^^^^^^^^^^^^^^ ^ 
+>          : ^^^^^^               
 }
 
 interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^ ^^^^^ 
 >val : T
 >    : ^
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->          : ^^^^^^^^^^^^^^^^^^ ^ 
+>          : ^^^^^^               
 }

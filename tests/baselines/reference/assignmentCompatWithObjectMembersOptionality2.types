@@ -42,7 +42,7 @@ module TargetHasOptional {
 
     var a: { opt?: Base; }
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >opt : Base
 >    : ^^^^
 
@@ -211,7 +211,7 @@ module SourceHasOptional {
 
     var a: { opt: Base; }
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 >opt : Base
 >    : ^^^^
 

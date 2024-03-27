@@ -42,7 +42,7 @@ module Test {
 
     export function bug(): ILineTokens {
 >bug : () => ILineTokens
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^           
 
       var state:IState= null;
 >state : IState

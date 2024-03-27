@@ -24,7 +24,7 @@ import { Suit, Rank } from './Types';
 
 export default (suit: Suit, rank: Rank) => ({suit, rank});
 >(suit: Suit, rank: Rank) => ({suit, rank}) : (suit: Suit, rank: Rank) => { suit: Suit; rank: Rank; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^^^^^^^    ^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >suit : Suit
 >     : ^^^^
 >rank : Rank

@@ -8,7 +8,7 @@ interface F {
 }
 export function doRemove(dds: F | F[]) {
 >doRemove : (dds: F | F[]) => F[]
->         : ^^^^^^^   ^  ^^^^^^^^
+>         : ^^^^^^       ^^^^^^^^
 >dds : F | F[]
 >    : ^^^^^^^
 

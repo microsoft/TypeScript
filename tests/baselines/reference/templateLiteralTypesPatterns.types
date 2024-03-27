@@ -25,7 +25,7 @@ type Protocol<T extends string, U extends string> = `${T}://${U}`;
 
 function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 >download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
->         : ^^^^^^^^^^^^^^^^^^^                                  ^^^^^^^^^
+>         : ^^^^^^^^^^^                                          ^^^^^^^^^
 >hostSpec : `http://${string}` | `https://${string}` | `ftp://${string}`
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -104,7 +104,7 @@ type Pat<T extends string | null | undefined> = `${T}`
 
 declare function nullishes(x: Pat<null | undefined>): void;
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^^^^^^^                  ^^^^^    
+>          : ^^^^                     ^^^^^    
 >x : "undefined" | "null"
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -945,13 +945,13 @@ export abstract class BB {
 
     abstract get(id: Id<AA>): void;
 >get : (id: Id<AA>) => void
->    : ^^^^^^^ ^^ ^^^^^    
+>    : ^^^^^      ^^^^^    
 >id : `${string}-${string}`
 >   : ^^^^^^^^^^^^^^^^^^^^^
 
     update(id: Id<AA>): void {
 >update : (id: Id<AA>) => void
->       : ^^^^^^^ ^^ ^^^^^    
+>       : ^^^^^      ^^^^^    
 >id : `${string}-${string}`
 >   : ^^^^^^^^^^^^^^^^^^^^^
 

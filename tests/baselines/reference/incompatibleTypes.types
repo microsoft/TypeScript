@@ -89,13 +89,13 @@ class C4 implements IFoo4 { // incompatible on the property type
 
 function if1(i: IFoo1): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
->    : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^     ^^^    ^^^^^^^^^^^^^^^^^^^^^
 >i : IFoo1
 >  : ^^^^^
 
 function if1(i: IFoo2): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^    ^^^
 >i : IFoo2
 >  : ^^^^^
 

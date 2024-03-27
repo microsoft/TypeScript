@@ -30,9 +30,9 @@ declare class Component<P, S>  {
 
 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
->         : ^^^^^^            ^         ^     ^^^^^^^^^^^^^^         ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                             ^^^^^^^^^^^^^         ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (prevState: S, props: P) => S
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^ 
 >prevState : S
 >          : ^
 >props : P
@@ -42,7 +42,7 @@ declare class Component<P, S>  {
 
 	setState(state: S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^    ^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^         ^^^    ^^^
 >state : S
 >      : ^
 >callback : () => any
@@ -56,7 +56,7 @@ declare class Component<P, S>  {
 
 	render(): JSX.Element;
 >render : () => JSX.Element
->       : ^^^^^^^^^ ^^^^^^^
+>       : ^^^^^^           
 >JSX : any
 >    : ^^^
 

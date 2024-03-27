@@ -29,7 +29,7 @@ interface SetConstructor {
 
 function f1(s: Set<string> | Set<number>) {
 >f1 : (s: Set<string> | Set<number>) => void
->   : ^^^^^^^           ^^^        ^^^^^^^^^
+>   : ^^^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -78,7 +78,7 @@ function f1(s: Set<string> | Set<number>) {
 
 function f2(s: Set<string> | Set<number>) {
 >f2 : (s: Set<string> | Set<number>) => void
->   : ^^^^^^^           ^^^        ^^^^^^^^^
+>   : ^^^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -127,7 +127,7 @@ function f2(s: Set<string> | Set<number>) {
 
 function f3(s: Set<string> | Set<number>) {
 >f3 : (s: Set<string> | Set<number>) => void
->   : ^^^^^^^           ^^^        ^^^^^^^^^
+>   : ^^^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -156,7 +156,7 @@ function f3(s: Set<string> | Set<number>) {
 
 function f4(s: Set<string> | Set<number>) {
 >f4 : (s: Set<string> | Set<number>) => void
->   : ^^^^^^^           ^^^        ^^^^^^^^^
+>   : ^^^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -205,7 +205,7 @@ class A {
 
     static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
 >[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is T extends abstract new (...args: any) => infer U ? U : never
->                     : ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -266,7 +266,7 @@ class C extends A { c: string }
 
 function foo(x: A | undefined) {
 >foo : (x: A | undefined) => void
->    : ^^^^^            ^^^^^^^^^
+>    : ^^^^             ^^^^^^^^^
 >x : A | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -397,7 +397,7 @@ class Y {
 
 function goo(x: X) {
 >goo : (x: X) => void
->    : ^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^
 >x : X
 >  : ^
 

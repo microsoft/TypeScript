@@ -8,9 +8,9 @@ class X {
 
     f = async (): Promise<this> => this;
 >f : () => Promise<this>
->  : ^^^^^^^^^^^^^      
+>  : ^^^^^^             
 >async (): Promise<this> => this : () => Promise<this>
->                                : ^^^^^^^^^^^^^      
+>                                : ^^^^^^             
 >this : this
 >     : ^^^^
 }

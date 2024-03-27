@@ -11,7 +11,7 @@ interface Error {
 /// <reference types="node"/>
 function foo(): Error {
 >foo : () => Error
->    : ^^^^^^^^^^^
+>    : ^^^^^^     
 
     return undefined;
 >undefined : undefined

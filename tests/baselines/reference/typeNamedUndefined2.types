@@ -38,7 +38,7 @@ export namespace ns {
 
 export function x(p: ns.undefined.undefined) {
 >x : (p: ns.undefined.undefined) => symbol
->  : ^^^^^^                    ^^^^^^^^^^^
+>  : ^^^^                      ^^^^^^^^^^^
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >ns : any

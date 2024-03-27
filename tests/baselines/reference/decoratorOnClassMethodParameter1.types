@@ -3,7 +3,7 @@
 === decoratorOnClassMethodParameter1.ts ===
 declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^      ^^^^^    
+>    : ^^^^^^^^^      ^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^      ^^^^^    
 >target : Object
 >       : ^^^^^^
 >propertyKey : string | symbol

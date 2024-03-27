@@ -90,7 +90,7 @@ function f5(): {} {
 
 function f6(): Record<string, any> {
 >f6 : () => Record<string, any>
->   : ^^^^^^^^^^^^             
+>   : ^^^^^^                   
 
     if (Math.random() < 0.5) return { "foo": true };
 >Math.random() < 0.5 : boolean

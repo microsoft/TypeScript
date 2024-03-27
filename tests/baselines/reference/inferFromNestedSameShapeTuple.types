@@ -28,7 +28,7 @@ type Recursive<Id> = {
 
 declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->       : ^^^^^^^^^^^^         ^^^^^^^^^ ^^   ^^^^^^^  
+>       : ^  ^^^^^^^^^                        ^^^^^    
 >items : readonly Recursive<Id>[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 

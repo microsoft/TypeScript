@@ -21,7 +21,7 @@ interface Invariant<T> {
 
 function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 >f1 : <A, B extends A>(a: Covariant<A>, b: Covariant<B>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^^^^^^^            ^^^^^            ^^^^^^^^^
 >a : Covariant<A>
 >  : ^^^^^^^^^^^^
 >b : Covariant<B>
@@ -46,7 +46,7 @@ function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 
 function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 >f2 : <A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^^^^^^^                ^^^^^                ^^^^^^^^^
 >a : Contravariant<A>
 >  : ^^^^^^^^^^^^^^^^
 >b : Contravariant<B>
@@ -71,7 +71,7 @@ function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 
 function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 >f3 : <A, B extends A>(a: Invariant<A>, b: Invariant<B>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^ ^ ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^^^^^^^            ^^^^^            ^^^^^^^^^
 >a : Invariant<A>
 >  : ^^^^^^^^^^^^
 >b : Invariant<B>
@@ -97,7 +97,7 @@ function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 // Extract<T, Function> is a T that is known to be a Function
 function isFunction<T>(value: T): value is Extract<T, Function> {
 >isFunction : <T>(value: T) => value is Extract<T, Function>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 
@@ -114,7 +114,7 @@ function isFunction<T>(value: T): value is Extract<T, Function> {
 
 function getFunction<T>(item: T) {
 >getFunction : <T>(item: T) => Extract<T, Function>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : T
 >     : ^
 
@@ -139,7 +139,7 @@ function getFunction<T>(item: T) {
 
 function f10<T>(x: T) {
 >f10 : <T>(x: T) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -248,7 +248,7 @@ type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
 
 function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
 >f20 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
->    : ^^^^^^^^^^^^^^ ^^^^^^^ ^  ^^^   ^^^ ^^^^^^^^^^^^ ^  ^^^   ^^^ ^^^^^^^^^^^^^ ^  ^^^  ^^^ ^^^^^^^^^
+>    : ^ ^^^^^                             ^^^^^                     ^^^^^                     ^^^^^^^^^
 >x : Extract<Extract<T, Foo>, Bar>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : Extract<T, Foo & Bar>
@@ -283,7 +283,7 @@ function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
 
 function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
 >f21 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
->    : ^^^^^^^^^^^^^^ ^^^^^^^ ^  ^^^   ^^^ ^^^^^^^^^^^^ ^  ^^^   ^^^ ^^^^^^^^^^^^^ ^  ^^^  ^^^ ^^^^^^^^^
+>    : ^ ^^^^^                             ^^^^^                     ^^^^^                     ^^^^^^^^^
 >x : Extract<Extract<T, Foo>, Bar>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : Extract<T, Foo & Bar>
@@ -324,7 +324,7 @@ class Opt<T> {
 
     toVector(): Vector<T> {
 >toVector : () => Vector<T>
->         : ^^^^^^^^^^^^ ^ 
+>         : ^^^^^^         
 
         return <any>undefined;
 ><any>undefined : any
@@ -337,7 +337,7 @@ class Opt<T> {
 interface Seq<T> {
     tail(): Opt<Seq<T>>;
 >tail : () => Opt<Seq<T>>
->     : ^^^^^^^^^ ^^^ ^  
+>     : ^^^^^^           
 }
 
 class Vector<T> implements Seq<T> {
@@ -346,7 +346,7 @@ class Vector<T> implements Seq<T> {
 
     tail(): Opt<Vector<T>> {
 >tail : () => Opt<Vector<T>>
->     : ^^^^^^^^^ ^^^^^^ ^  
+>     : ^^^^^^              
 
         return <any>undefined;
 ><any>undefined : any
@@ -356,17 +356,17 @@ class Vector<T> implements Seq<T> {
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^          ^^^^ ^^^^^^ ^   ^^^^^^ ^^^^^^^ ^  ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                ^^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (v: T) => v is U
->          : ^^^^^^^^^^^^^^^^
+>          : ^^^^ ^^^^^^^^^^^
 >v : T
 >  : ^
 
     partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^            ^^^ ^^^^^^ ^   ^^^^^^ ^  ^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^                      ^^^
 >predicate : (x: T) => boolean
->          : ^^^^^^^^^^       
+>          : ^^^^ ^^^^^       
 >x : T
 >  : ^
 
@@ -374,7 +374,7 @@ class Vector<T> implements Seq<T> {
 >partition2 : { <U_1 extends T>(predicate: (v: T) => v is U_1): [Vector<U_1>, Vector<Exclude<T, U_1>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (v: T) => boolean
->          : ^^^^^^^^^^       
+>          : ^^^^ ^^^^^       
 >v : T
 >  : ^
 
@@ -410,19 +410,19 @@ interface B1<T> extends A1<T> {
 
 declare function toString1(value: object | Function): string ;
 >toString1 : (value: object | Function) => string
->          : ^^^^^^^^         ^^^^^^^^^^^^^      
+>          : ^^^^^^^^                 ^^^^^      
 >value : object | Function
 >      : ^^^^^^^^^^^^^^^^^
 
 declare function toString2(value: Function): string ;
 >toString2 : (value: Function) => string
->          : ^^^^^^^^^^^^^^^^^^^^^      
+>          : ^^^^^^^^        ^^^^^      
 >value : Function
 >      : ^^^^^^^^
 
 function foo<T>(value: T) {
 >foo : <T>(value: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^^^^^^^^
 >value : T
 >      : ^
 
@@ -644,7 +644,7 @@ const w: What = { a: 4 };
 
 declare function save(_response: IRootResponse<string>): void;
 >save : (_response: IRootResponse<string>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^    
+>     : ^^^^^^^^^^^^                     ^^^^^    
 >_response : IResponse<string>
 >          : ^^^^^^^^^^^^^^^^^
 
@@ -658,7 +658,7 @@ exportCommand(save);
 
 declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
 >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    
+>              : ^         ^^^^^^^^^^^^^^^^^^                          ^^^^^    
 >functionToCall : IExportCallback<TResponse>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -696,7 +696,7 @@ declare type IResponse<T> = {
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
 >sendValue : (name: keyof GetAllPropertiesOfType<T, string>) => void
->          : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^ ^         ^^^^^    
+>          : ^^^^^^^                                       ^^^^^    
 >name : GetPropertyNamesOfType<Required<T>, string>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -721,15 +721,15 @@ declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 
 declare function ff(x: Foo3<string>): void;
 >ff : (x: Foo3<string>) => void
->   : ^^^^^^^^        ^^^^^    
+>   : ^^^^            ^^^^^    
 >x : { x: string; }
 >  : ^^^^^^^^^^^^^^
 
 declare function gg<T>(f: (x: Foo3<T>) => void): void;
 >gg : <T>(f: (x: Foo3<T>) => void) => void
->   : ^^^^^^^    ^^^^ ^          ^^^^^    
+>   : ^ ^^^^^                    ^^^^^    
 >f : (x: Foo3<T>) => void
->  : ^^^^^^^^ ^ ^^^^^    
+>  : ^^^^       ^^^^^    
 >x : Foo3<T>
 >  : ^^^^^^^
 

@@ -38,28 +38,28 @@ export module m1 {
 
         private f1_private(m1_c3_f1_arg: C1_public) {
 >f1_private : (m1_c3_f1_arg: C1_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^         ^^^^^^^^^
 >m1_c3_f1_arg : C1_public
 >             : ^^^^^^^^^
         }
 
         public f2_public(m1_c3_f2_arg: C1_public) {
 >f2_public : (m1_c3_f2_arg: C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^         ^^^^^^^^^
 >m1_c3_f2_arg : C1_public
 >             : ^^^^^^^^^
         }
 
         private f3_private(m1_c3_f3_arg: C2_private) {
 >f3_private : (m1_c3_f3_arg: C2_private) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^          ^^^^^^^^^
 >m1_c3_f3_arg : C2_private
 >             : ^^^^^^^^^^
         }
 
         public f4_public(m1_c3_f4_arg: C2_private) { // error
 >f4_public : (m1_c3_f4_arg: C2_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^          ^^^^^^^^^
 >m1_c3_f4_arg : C2_private
 >             : ^^^^^^^^^^
         }
@@ -110,7 +110,7 @@ export module m1 {
 
         private f9_private(): C1_public {
 >f9_private : () => C1_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -121,7 +121,7 @@ export module m1 {
 
         public f10_public(): C1_public {
 >f10_public : () => C1_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -132,7 +132,7 @@ export module m1 {
 
         private f11_private(): C2_private {
 >f11_private : () => C2_private
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -143,7 +143,7 @@ export module m1 {
 
         public f12_public(): C2_private { // error
 >f12_public : () => C2_private
->           : ^^^^^^^^^^^^^^^^
+>           : ^^^^^^          
 
             return new C2_private(); //error
 >new C2_private() : C2_private
@@ -170,28 +170,28 @@ export module m1 {
         }
         private f1_private(m1_c4_f1_arg: C1_public) {
 >f1_private : (m1_c4_f1_arg: C1_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^         ^^^^^^^^^
 >m1_c4_f1_arg : C1_public
 >             : ^^^^^^^^^
         }
 
         public f2_public(m1_c4_f2_arg: C1_public) {
 >f2_public : (m1_c4_f2_arg: C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^         ^^^^^^^^^
 >m1_c4_f2_arg : C1_public
 >             : ^^^^^^^^^
         }
 
         private f3_private(m1_c4_f3_arg: C2_private) {
 >f3_private : (m1_c4_f3_arg: C2_private) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^          ^^^^^^^^^
 >m1_c4_f3_arg : C2_private
 >             : ^^^^^^^^^^
         }
 
         public f4_public(m1_c4_f4_arg: C2_private) {
 >f4_public : (m1_c4_f4_arg: C2_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^          ^^^^^^^^^
 >m1_c4_f4_arg : C2_private
 >             : ^^^^^^^^^^
         }
@@ -244,7 +244,7 @@ export module m1 {
 
         private f9_private(): C1_public {
 >f9_private : () => C1_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -255,7 +255,7 @@ export module m1 {
 
         public f10_public(): C1_public {
 >f10_public : () => C1_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -266,7 +266,7 @@ export module m1 {
 
         private f11_private(): C2_private {
 >f11_private : () => C2_private
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -277,7 +277,7 @@ export module m1 {
 
         public f12_public(): C2_private {
 >f12_public : () => C2_private
->           : ^^^^^^^^^^^^^^^^
+>           : ^^^^^^          
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -328,28 +328,28 @@ export module m1 {
 
     function f1_public(m1_f1_arg: C1_public) {
 >f1_public : (m1_f1_arg: C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^         ^^^^^^^^^
 >m1_f1_arg : C1_public
 >          : ^^^^^^^^^
     }
 
     export function f2_public(m1_f2_arg: C1_public) {
 >f2_public : (m1_f2_arg: C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^         ^^^^^^^^^
 >m1_f2_arg : C1_public
 >          : ^^^^^^^^^
     }
 
     function f3_public(m1_f3_arg: C2_private) {
 >f3_public : (m1_f3_arg: C2_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^          ^^^^^^^^^
 >m1_f3_arg : C2_private
 >          : ^^^^^^^^^^
     }
 
     export function f4_public(m1_f4_arg: C2_private) { // error
 >f4_public : (m1_f4_arg: C2_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^          ^^^^^^^^^
 >m1_f4_arg : C2_private
 >          : ^^^^^^^^^^
     }
@@ -402,7 +402,7 @@ export module m1 {
 
     function f9_private(): C1_public {
 >f9_private : () => C1_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
         return new C1_public();
 >new C1_public() : C1_public
@@ -413,7 +413,7 @@ export module m1 {
 
     export function f10_public(): C1_public {
 >f10_public : () => C1_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
         return new C1_public();
 >new C1_public() : C1_public
@@ -424,7 +424,7 @@ export module m1 {
 
     function f11_private(): C2_private {
 >f11_private : () => C2_private
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
         return new C2_private();
 >new C2_private() : C2_private
@@ -435,7 +435,7 @@ export module m1 {
 
     export function f12_public(): C2_private { // error
 >f12_public : () => C2_private
->           : ^^^^^^^^^^^^^^^^
+>           : ^^^^^^          
 
         return new C2_private(); //error
 >new C2_private() : C2_private
@@ -482,14 +482,14 @@ module m2 {
 
         private f1_private(m2_c3_f1_arg: m2_C1_public) {
 >f1_private : (m2_c3_f1_arg: m2_C1_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^            ^^^^^^^^^
 >m2_c3_f1_arg : m2_C1_public
 >             : ^^^^^^^^^^^^
         }
 
         public f2_public(m2_c3_f2_arg: m2_C1_public) {
 >f2_public : (m2_c3_f2_arg: m2_C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^            ^^^^^^^^^
 >m2_c3_f2_arg : m2_C1_public
 >             : ^^^^^^^^^^^^
         }
@@ -554,7 +554,7 @@ module m2 {
 
         private f9_private(): m2_C1_public {
 >f9_private : () => m2_C1_public
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
             return new m2_C1_public();
 >new m2_C1_public() : m2_C1_public
@@ -565,7 +565,7 @@ module m2 {
 
         public f10_public(): m2_C1_public {
 >f10_public : () => m2_C1_public
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
             return new m2_C1_public();
 >new m2_C1_public() : m2_C1_public
@@ -615,14 +615,14 @@ module m2 {
 
         private f1_private(m2_c4_f1_arg: m2_C1_public) {
 >f1_private : (m2_c4_f1_arg: m2_C1_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^            ^^^^^^^^^
 >m2_c4_f1_arg : m2_C1_public
 >             : ^^^^^^^^^^^^
         }
 
         public f2_public(m2_c4_f2_arg: m2_C1_public) {
 >f2_public : (m2_c4_f2_arg: m2_C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^            ^^^^^^^^^
 >m2_c4_f2_arg : m2_C1_public
 >             : ^^^^^^^^^^^^
         }
@@ -689,7 +689,7 @@ module m2 {
 
         private f9_private(): m2_C1_public {
 >f9_private : () => m2_C1_public
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
             return new m2_C1_public();
 >new m2_C1_public() : m2_C1_public
@@ -700,7 +700,7 @@ module m2 {
 
         public f10_public(): m2_C1_public {
 >f10_public : () => m2_C1_public
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
             return new m2_C1_public();
 >new m2_C1_public() : m2_C1_public
@@ -773,14 +773,14 @@ module m2 {
 
     function f1_public(m2_f1_arg: m2_C1_public) {
 >f1_public : (m2_f1_arg: m2_C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^            ^^^^^^^^^
 >m2_f1_arg : m2_C1_public
 >          : ^^^^^^^^^^^^
     }
 
     export function f2_public(m2_f2_arg: m2_C1_public) {
 >f2_public : (m2_f2_arg: m2_C1_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^            ^^^^^^^^^
 >m2_f2_arg : m2_C1_public
 >          : ^^^^^^^^^^^^
     }
@@ -847,7 +847,7 @@ module m2 {
 
     function f9_private(): m2_C1_public {
 >f9_private : () => m2_C1_public
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
         return new m2_C1_public();
 >new m2_C1_public() : m2_C1_public
@@ -858,7 +858,7 @@ module m2 {
 
     export function f10_public(): m2_C1_public {
 >f10_public : () => m2_C1_public
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
         return new m2_C1_public();
 >new m2_C1_public() : m2_C1_public
@@ -922,28 +922,28 @@ export class C7_public {
     }
     private f1_private(c7_f1_arg: C6_public) {
 >f1_private : (c7_f1_arg: C6_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^         ^^^^^^^^^
 >c7_f1_arg : C6_public
 >          : ^^^^^^^^^
     }
 
     public f2_public(c7_f2_arg: C6_public) {
 >f2_public : (c7_f2_arg: C6_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^         ^^^^^^^^^
 >c7_f2_arg : C6_public
 >          : ^^^^^^^^^
     }
 
     private f3_private(c7_f3_arg: C5_private) {
 >f3_private : (c7_f3_arg: C5_private) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^          ^^^^^^^^^
 >c7_f3_arg : C5_private
 >          : ^^^^^^^^^^
     }
 
     public f4_public(c7_f4_arg: C5_private) { //error
 >f4_public : (c7_f4_arg: C5_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^          ^^^^^^^^^
 >c7_f4_arg : C5_private
 >          : ^^^^^^^^^^
     }
@@ -994,7 +994,7 @@ export class C7_public {
 
     private f9_private(): C6_public {
 >f9_private : () => C6_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
         return new C6_public();
 >new C6_public() : C6_public
@@ -1005,7 +1005,7 @@ export class C7_public {
 
     public f10_public(): C6_public {
 >f10_public : () => C6_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
         return new C6_public();
 >new C6_public() : C6_public
@@ -1016,7 +1016,7 @@ export class C7_public {
 
     private f11_private(): C5_private {
 >f11_private : () => C5_private
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
         return new C5_private();
 >new C5_private() : C5_private
@@ -1027,7 +1027,7 @@ export class C7_public {
 
     public f12_public(): C5_private { //error
 >f12_public : () => C5_private
->           : ^^^^^^^^^^^^^^^^
+>           : ^^^^^^          
 
         return new C5_private(); //error
 >new C5_private() : C5_private
@@ -1055,28 +1055,28 @@ class C8_private {
         
     private f1_private(c8_f1_arg: C6_public) {
 >f1_private : (c8_f1_arg: C6_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^         ^^^^^^^^^
 >c8_f1_arg : C6_public
 >          : ^^^^^^^^^
     }
 
     public f2_public(c8_f2_arg: C6_public) {
 >f2_public : (c8_f2_arg: C6_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^         ^^^^^^^^^
 >c8_f2_arg : C6_public
 >          : ^^^^^^^^^
     }
 
     private f3_private(c8_f3_arg: C5_private) {
 >f3_private : (c8_f3_arg: C5_private) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^          ^^^^^^^^^
 >c8_f3_arg : C5_private
 >          : ^^^^^^^^^^
     }
 
     public f4_public(c8_f4_arg: C5_private) {
 >f4_public : (c8_f4_arg: C5_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^          ^^^^^^^^^
 >c8_f4_arg : C5_private
 >          : ^^^^^^^^^^
     }
@@ -1127,7 +1127,7 @@ class C8_private {
 
     private f9_private(): C6_public {
 >f9_private : () => C6_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
         return new C6_public();
 >new C6_public() : C6_public
@@ -1138,7 +1138,7 @@ class C8_private {
 
     public f10_public(): C6_public {
 >f10_public : () => C6_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
         return new C6_public();
 >new C6_public() : C6_public
@@ -1149,7 +1149,7 @@ class C8_private {
 
     private f11_private(): C5_private {
 >f11_private : () => C5_private
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
         return new C5_private();
 >new C5_private() : C5_private
@@ -1160,7 +1160,7 @@ class C8_private {
 
     public f12_public(): C5_private {
 >f12_public : () => C5_private
->           : ^^^^^^^^^^^^^^^^
+>           : ^^^^^^          
 
         return new C5_private();
 >new C5_private() : C5_private
@@ -1212,28 +1212,28 @@ class C12_private {
 
 function f1_private(f1_arg: C5_private) {
 >f1_private : (f1_arg: C5_private) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^          ^^^^^^^^^
 >f1_arg : C5_private
 >       : ^^^^^^^^^^
 }
 
 export function f2_public(f2_arg: C5_private) { // error
 >f2_public : (f2_arg: C5_private) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^          ^^^^^^^^^
 >f2_arg : C5_private
 >       : ^^^^^^^^^^
 }
 
 function f3_private(f3_arg: C6_public) {
 >f3_private : (f3_arg: C6_public) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^         ^^^^^^^^^
 >f3_arg : C6_public
 >       : ^^^^^^^^^
 }
 
 export function f4_public(f4_arg: C6_public) {
 >f4_public : (f4_arg: C6_public) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^         ^^^^^^^^^
 >f4_arg : C6_public
 >       : ^^^^^^^^^
 }
@@ -1284,7 +1284,7 @@ export function f8_public() {
 
 function f9_private(): C6_public {
 >f9_private : () => C6_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
     return new C6_public();
 >new C6_public() : C6_public
@@ -1295,7 +1295,7 @@ function f9_private(): C6_public {
 
 export function f10_public(): C6_public {
 >f10_public : () => C6_public
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
     return new C6_public();
 >new C6_public() : C6_public
@@ -1306,7 +1306,7 @@ export function f10_public(): C6_public {
 
 function f11_private(): C5_private {
 >f11_private : () => C5_private
->            : ^^^^^^^^^^^^^^^^
+>            : ^^^^^^          
 
     return new C5_private();
 >new C5_private() : C5_private
@@ -1317,7 +1317,7 @@ function f11_private(): C5_private {
 
 export function f12_public(): C5_private { //error 
 >f12_public : () => C5_private
->           : ^^^^^^^^^^^^^^^^
+>           : ^^^^^^          
 
     return new C5_private(); //error
 >new C5_private() : C5_private

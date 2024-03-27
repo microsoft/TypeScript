@@ -15,13 +15,13 @@ interface StringMap<T> {
 
 declare function numberMapToArray<T>(object: NumberMap<T>): T[];
 >numberMapToArray : <T>(object: NumberMap<T>) => T[]
->                 : ^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^  
+>                 : ^ ^^^^^^^^^^            ^^^^^   
 >object : NumberMap<T>
 >       : ^^^^^^^^^^^^
 
 declare function stringMapToArray<T>(object: StringMap<T>): T[];
 >stringMapToArray : <T>(object: StringMap<T>) => T[]
->                 : ^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^  
+>                 : ^ ^^^^^^^^^^            ^^^^^   
 >object : StringMap<T>
 >       : ^^^^^^^^^^^^
 

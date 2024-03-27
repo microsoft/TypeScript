@@ -7,7 +7,7 @@ class Base {
 
     static foo: {
 >foo : { bar: Object; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 
         bar: Object;
 >bar : Object

@@ -3,7 +3,7 @@
 === iterableArrayPattern16.ts ===
 function fun(...[a, b]: [Bar, Bar][]) { }
 >fun : (...[a, b]: [Bar, Bar][]) => void
->    : ^^^^^^^^^^^^ ^^^  ^^^   ^^^^^^^^^
+>    : ^^^^^^^^^^^^            ^^^^^^^^^
 >a : [Bar, Bar]
 >  : ^^^^^^^^^^
 >b : [Bar, Bar]

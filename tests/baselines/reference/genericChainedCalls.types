@@ -4,9 +4,9 @@
 interface I1<T> {
     func<U>(callback: (value: T) => U): I1<T>;
 >func : <U>(callback: (value: T) => U) => I1<T>
->     : ^^^^^^^^^^^^^^        ^     ^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^^^               ^^^^^     
 >callback : (value: T) => U
->         : ^^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 }

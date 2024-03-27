@@ -6,18 +6,18 @@
 interface Err<T> {
   f<U>(a: (err: T) => U): Err<U>;
 >f : <U>(a: (err: T) => U) => Err<U>
->  : ^^^^^^^      ^     ^^^^^^^^^ ^ 
+>  : ^ ^^^^^             ^^^^^      
 >a : (err: T) => U
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^ 
 >err : T
 >    : ^
 }
 interface Ok<T> {
   f(a: (err: T) => unknown): Err<T>;
 >f : (a: (err: T) => unknown) => Err<T>
->  : ^^^^      ^            ^^^^^^^^ ^ 
+>  : ^^^^                   ^^^^^      
 >a : (err: T) => unknown
->  : ^^^^^^^^^^^^       
+>  : ^^^^^^ ^^^^^       
 >err : T
 >    : ^
 }

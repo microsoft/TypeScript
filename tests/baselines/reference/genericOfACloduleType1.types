@@ -5,7 +5,7 @@ class G<T>{ bar(x: T) { return x; } }
 >G : G<T>
 >  : ^^^^
 >bar : (x: T) => T
->    : ^^^^^^^^^^^
+>    : ^^^^ ^^^^^^
 >x : T
 >  : ^
 >x : T

@@ -45,7 +45,7 @@ import SvgIcon from "./SvgIcon";
 
 export function createSvgIcon(path: string, displayName: string): typeof SvgIcon;
 >createSvgIcon : (path: string, displayName: string) => typeof SvgIcon
->              : ^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^       ^^^^^^^
+>              : ^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^              
 >path : string
 >     : ^^^^^^
 >displayName : string

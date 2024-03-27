@@ -15,7 +15,7 @@ interface Bar<T> extends Foo<T> {
 
 function f(p: Foo<number>) {
 >f : (p: Foo<number>) => void
->  : ^^^^^^^        ^^^^^^^^^
+>  : ^^^^           ^^^^^^^^^
 >p : Foo<number>
 >  : ^^^^^^^^^^^
 

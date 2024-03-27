@@ -26,7 +26,7 @@ class g<T> {
 // Just the name
 function foo(): typeof c {
 >foo : () => typeof c
->    : ^^^^^^       ^
+>    : ^^^^^^        
 >c : typeof c
 >  : ^^^^^^^^
 
@@ -46,7 +46,7 @@ function foo2() {
 // Qualified name
 function foo3(): typeof m.c {
 >foo3 : () => typeof m.c
->     : ^^^^^^       ^ ^
+>     : ^^^^^^          
 >m.c : typeof m.c
 >    : ^^^^^^^^^^
 >m : typeof m
@@ -78,7 +78,7 @@ function foo4() {
 // Just the name with type arguments
 function foo5(): typeof g {
 >foo5 : () => typeof g
->     : ^^^^^^       ^
+>     : ^^^^^^        
 >g : typeof g
 >  : ^^^^^^^^
 
@@ -98,7 +98,7 @@ function foo6() {
 // Qualified name with type arguments
 function foo7(): typeof m.g {
 >foo7 : () => typeof m.g
->     : ^^^^^^       ^ ^
+>     : ^^^^^^          
 >m.g : typeof m.g
 >    : ^^^^^^^^^^
 >m : typeof m

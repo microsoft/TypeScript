@@ -18,7 +18,7 @@ module Shape.Utils {
 
     export function convert(): Shape { return null;}
 >convert : () => Shape
->        : ^^^^^^^^^^^
+>        : ^^^^^^     
 }
 
 class Path extends Shape {
@@ -41,7 +41,7 @@ module Path.Utils {
 
     export function convert2(): Path {
 >convert2 : () => Path
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
         return null;
     }

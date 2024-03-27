@@ -16,7 +16,7 @@ interface I1<T> {
 
     commonMethodWithTypeParameter(a: T): T;
 >commonMethodWithTypeParameter : (a: T) => T
->                              : ^^^^^^^^^^^
+>                              : ^^^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -43,7 +43,7 @@ interface I2<T> {
 
     commonMethodWithTypeParameter(a: T): T;
 >commonMethodWithTypeParameter : (a: T) => T
->                              : ^^^^^^^^^^^
+>                              : ^^^^ ^^^^^ 
 >a : T
 >  : ^
 

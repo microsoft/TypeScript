@@ -3,7 +3,7 @@
 === genericRestArgs.ts ===
 function makeArrayG<T>(...items: T[]): T[] { return items; }
 >makeArrayG : <T>(...items: T[]) => T[]
->           : ^^^^^^^^^^^^^^^  ^^^^^^  
+>           : ^ ^^^^^^^^^^^^   ^^^^^   
 >items : T[]
 >      : ^^^
 >items : T[]
@@ -59,7 +59,7 @@ var a1Gd = makeArrayG<number>(1, ""); // error
 
 function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
 >makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^
 >item1 : T
 >      : ^
 >item2 : T

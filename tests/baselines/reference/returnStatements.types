@@ -32,7 +32,7 @@ function fn5(): boolean { return true; }
 
 function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >new Date(12) : Date
 >             : ^^^^
 >Date : DateConstructor
@@ -76,7 +76,7 @@ class D extends C {
 }
 function fn10(): I { return { id: 12 }; } 
 >fn10 : () => I
->     : ^^^^^^^
+>     : ^^^^^^ 
 >{ id: 12 } : { id: number; }
 >           : ^^^^^^^^^^^^^^^
 >id : number
@@ -86,7 +86,7 @@ function fn10(): I { return { id: 12 }; }
 
 function fn11(): I { return new C(); }
 >fn11 : () => I
->     : ^^^^^^^
+>     : ^^^^^^ 
 >new C() : C
 >        : ^
 >C : typeof C
@@ -94,7 +94,7 @@ function fn11(): I { return new C(); }
 
 function fn12(): C { return new D(); }
 >fn12 : () => C
->     : ^^^^^^^
+>     : ^^^^^^ 
 >new D() : D
 >        : ^
 >D : typeof D
@@ -102,5 +102,5 @@ function fn12(): C { return new D(); }
 
 function fn13(): C { return null; }
 >fn13 : () => C
->     : ^^^^^^^
+>     : ^^^^^^ 
 

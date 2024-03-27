@@ -393,7 +393,7 @@ module EmptyTypes {
 
             var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
 >t1 : { x: number; y: base; }[]
->   : ^^^^^      ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^    ^^^^^
 >x : number
 >  : ^^^^^^
 >y : base
@@ -427,7 +427,7 @@ module EmptyTypes {
 
             var t2: { x: boolean; y: base; }[] = [{ x: true, y: new derived() }, { x: false, y: new base() }];
 >t2 : { x: boolean; y: base; }[]
->   : ^^^^^       ^^^^^^^^^^^^^^
+>   : ^^^^^       ^^^^^    ^^^^^
 >x : boolean
 >  : ^^^^^^^
 >y : base
@@ -461,7 +461,7 @@ module EmptyTypes {
 
             var t3: { x: string; y: base; }[] = [{ x: undefined, y: new base() }, { x: '', y: new derived() }];
 >t3 : { x: string; y: base; }[]
->   : ^^^^^      ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^    ^^^^^
 >x : string
 >  : ^^^^^^
 >y : base
@@ -1075,7 +1075,7 @@ module NonEmptyTypes {
 
             var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
 >t1 : { x: number; y: base; }[]
->   : ^^^^^      ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^    ^^^^^
 >x : number
 >  : ^^^^^^
 >y : base
@@ -1109,7 +1109,7 @@ module NonEmptyTypes {
 
             var t2: { x: boolean; y: base; }[] = [{ x: true, y: new derived() }, { x: false, y: new base() }];
 >t2 : { x: boolean; y: base; }[]
->   : ^^^^^       ^^^^^^^^^^^^^^
+>   : ^^^^^       ^^^^^    ^^^^^
 >x : boolean
 >  : ^^^^^^^
 >y : base
@@ -1143,7 +1143,7 @@ module NonEmptyTypes {
 
             var t3: { x: string; y: base; }[] = [{ x: undefined, y: new base() }, { x: '', y: new derived() }];
 >t3 : { x: string; y: base; }[]
->   : ^^^^^      ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^    ^^^^^
 >x : string
 >  : ^^^^^^
 >y : base

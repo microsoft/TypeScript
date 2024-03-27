@@ -24,7 +24,7 @@ class Foo {
 
 function Biz(map: IHandlerMap) { }
 >Biz : (map: IHandlerMap) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^           ^^^^^^^^^
 >map : IHandlerMap
 >    : ^^^^^^^^^^^
 

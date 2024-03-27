@@ -31,7 +31,7 @@ export class SharedOption extends Option { }
 
 export const makeSharedOption: () => SharedOption;
 >makeSharedOption : () => SharedOption
->                 : ^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^            
 
 === /project/node_modules/anotherLib/index.d.ts ===
 import { Compactable } from "troublesome-lib/lib/Compactable"; // Including this will resolve Option as relative through the imports of compactable

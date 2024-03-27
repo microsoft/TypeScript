@@ -19,7 +19,7 @@ export declare const Timestamp: {
 
 export declare function now(): typeof Timestamp;
 >now : () => typeof Timestamp
->    : ^^^^^^       ^^^^^^^^^
+>    : ^^^^^^                
 >Timestamp : { [timestampSymbol]: true; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

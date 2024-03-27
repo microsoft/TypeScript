@@ -6,19 +6,19 @@ export {}
 
 declare let f1: (x: Object) => Object;
 >f1 : (x: Object) => Object
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^      ^^^^^      
 >x : Object
 >  : ^^^^^^
 
 declare let f2: (x: Object) => string;
 >f2 : (x: Object) => string
->   : ^^^^^^^^^^^^^^^      
+>   : ^^^^      ^^^^^      
 >x : Object
 >  : ^^^^^^
 
 declare let f3: (x: string) => Object;
 >f3 : (x: string) => Object
->   : ^^^^      ^^^^^^^^^^^
+>   : ^^^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 
@@ -481,7 +481,7 @@ interface Cat extends Animal { cat: void }
 interface Comparer1<T> {
     compare(a: T, b: T): number;
 >compare : (a: T, b: T) => number
->        : ^^^^^^^^^^^^^^^^      
+>        : ^^^^ ^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : T
@@ -515,7 +515,7 @@ dogComparer1 = animalComparer1;  // Ok
 interface Comparer2<T> {
     compare: (a: T, b: T) => number;
 >compare : (a: T, b: T) => number
->        : ^^^^^^^^^^^^^^^^      
+>        : ^^^^ ^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : T
@@ -555,7 +555,7 @@ interface Crate<T> {
 
     onSetItem: (item: T) => void;
 >onSetItem : (item: T) => void
->          : ^^^^^^^^^^^^^    
+>          : ^^^^^^^ ^^^^^    
 >item : T
 >     : ^
 }
@@ -590,17 +590,17 @@ dogCrate = animalCrate;  // Error
 
 declare let fc1: (f: (x: Animal) => Animal) => void;
 >fc1 : (f: (x: Animal) => Animal) => void
->    : ^^^^    ^^^^^^     ^^^^^^^^^^^    
+>    : ^^^^                     ^^^^^    
 >f : (x: Animal) => Animal
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^      ^^^^^      
 >x : Animal
 >  : ^^^^^^
 
 declare let fc2: (f: (x: Dog) => Dog) => void;
 >fc2 : (f: (x: Dog) => Dog) => void
->    : ^^^^    ^^^     ^^^^^^^^    
+>    : ^^^^               ^^^^^    
 >f : (x: Dog) => Dog
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^   ^^^^^   
 >x : Dog
 >  : ^^^
 
@@ -633,7 +633,7 @@ namespace n1 {
 
         static f1(x: Animal): Animal { throw "wat"; }
 >f1 : (x: Animal) => Animal
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^      ^^^^^      
 >x : Animal
 >  : ^^^^^^
 >"wat" : "wat"
@@ -641,7 +641,7 @@ namespace n1 {
 
         static f2(x: Dog): Animal { throw "wat"; };
 >f2 : (x: Dog) => Animal
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^^^^   ^^^^^      
 >x : Dog
 >  : ^^^
 >"wat" : "wat"
@@ -694,9 +694,9 @@ namespace n2 {
 
     type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
 >BivariantHack : (x: Input) => Output
->              : ^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^^^^      
 >foo : (x: Input) => Output
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^     ^^^^^      
 >x : Input
 >  : ^^^^^
 

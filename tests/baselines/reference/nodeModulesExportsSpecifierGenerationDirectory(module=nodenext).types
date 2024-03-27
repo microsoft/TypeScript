@@ -35,5 +35,5 @@ export { x } from "./other.js";
 export interface Thing {}
 export const x: () => Thing;
 >x : () => Thing
->  : ^^^^^^^^^^^
+>  : ^^^^^^     
 

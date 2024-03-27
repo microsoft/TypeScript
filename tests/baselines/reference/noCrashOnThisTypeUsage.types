@@ -19,7 +19,7 @@ interface IListenable {
 
 function notifyListeners<T>(listenable: IListenable, change: T) {
 >notifyListeners : <T>(listenable: IListenable, change: T) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^           ^^^^^^^^^^ ^^^^^^^^^
 >listenable : IListenable
 >           : ^^^^^^^^^^^
 >change : T

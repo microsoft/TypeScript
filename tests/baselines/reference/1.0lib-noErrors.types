@@ -176,7 +176,7 @@ interface Object {
     /** Returns the primitive value of the specified object. */
     valueOf(): Object;
 >valueOf : () => Object
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
     /**
       * Determines whether an object has a property with the specified name. 
@@ -194,7 +194,7 @@ interface Object {
       */
     isPrototypeOf(v: Object): boolean;
 >isPrototypeOf : (v: Object) => boolean
->              : ^^^^^^^^^^^^^^^       
+>              : ^^^^      ^^^^^       
 >v : Object
 >  : ^^^^^^
 
@@ -214,7 +214,7 @@ interface Object {
   */
 declare var Object: {
 >Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
->       : ^^^^^^   ^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^        ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^   ^^^   ^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^   ^^^        ^^^
+>       : ^^^^^^   ^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^        ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^                     ^^^   ^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^                  ^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^                     ^^^   ^^^^^^^^^^   ^^^   ^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^   ^^^        ^^^
 
     new (value?: any): Object;
 >value : any
@@ -245,7 +245,7 @@ declare var Object: {
     */
     getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor;
 >getOwnPropertyDescriptor : (o: any, p: string) => PropertyDescriptor
->                         : ^^^^   ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^   ^^^^^      ^^^^^                  
 >o : any
 >p : string
 >  : ^^^^^^
@@ -267,7 +267,7 @@ declare var Object: {
       */
     create(o: any, properties?: PropertyDescriptorMap): any;
 >create : (o: any, properties?: PropertyDescriptorMap) => any
->       : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>       : ^^^^   ^^^^^^^^^^^^^^^                     ^^^^^   
 >o : any
 >properties : PropertyDescriptorMap
 >           : ^^^^^^^^^^^^^^^^^^^^^
@@ -280,7 +280,7 @@ declare var Object: {
       */
     defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
 >defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
->               : ^^^^   ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>               : ^^^^   ^^^^^      ^^^^^^^^^^^^^^                  ^^^^^   
 >o : any
 >p : string
 >  : ^^^^^^
@@ -294,7 +294,7 @@ declare var Object: {
       */
     defineProperties(o: any, properties: PropertyDescriptorMap): any;
 >defineProperties : (o: any, properties: PropertyDescriptorMap) => any
->                 : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                 : ^^^^   ^^^^^^^^^^^^^^                     ^^^^^   
 >o : any
 >properties : PropertyDescriptorMap
 >           : ^^^^^^^^^^^^^^^^^^^^^
@@ -421,7 +421,7 @@ interface Function {
 
 declare var Function: {
 >Function : { (...args: string[]): Function; new (...args: string[]): Function; prototype: Function; }
->         : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^        ^^^        ^^^^^^^^^^^^^^^^        ^^^        ^^^^^^^^^^^^^        ^^^
 
     /** 
       * Creates a new function.
@@ -542,7 +542,7 @@ interface String {
       */
     match(regexp: RegExp): string[];
 >match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^        ^^^
 >regexp : RegExp
 >       : ^^^^^^
 
@@ -583,7 +583,7 @@ interface String {
       */
     replace(searchValue: RegExp, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >searchValue : RegExp
 >            : ^^^^^^
 >replaceValue : string
@@ -596,7 +596,7 @@ interface String {
       */
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                             ^^^      ^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^                                             ^^^      ^^^
 >searchValue : RegExp
 >            : ^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
@@ -622,7 +622,7 @@ interface String {
       */
     search(regexp: RegExp): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
 >regexp : RegExp
 >       : ^^^^^^
 
@@ -660,7 +660,7 @@ interface String {
       */
     split(separator: RegExp, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^        ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^        ^^^
 >separator : RegExp
 >          : ^^^^^^
 >limit : number
@@ -734,7 +734,7 @@ interface String {
   */
 declare var String: {
 >String : { (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }
->       : ^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^      ^^^
+>       : ^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^      ^^^
 
     new (value?: any): String;
 >value : any
@@ -757,7 +757,7 @@ interface Boolean {
 }
 declare var Boolean: {
 >Boolean : { (value?: any): boolean; new (value?: any): Boolean; prototype: Boolean; }
->        : ^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^       ^^^
 
     new (value?: any): Boolean;
 >value : any
@@ -815,7 +815,7 @@ interface Number {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare var Number: {
 >Number : { (value?: any): number; new (value?: any): Number; prototype: Number; MAX_VALUE: number; MIN_VALUE: number; NaN: number; NEGATIVE_INFINITY: number; POSITIVE_INFINITY: number; }
->       : ^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>       : ^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     new (value?: any): Number;
 >value : any
@@ -1440,7 +1440,7 @@ interface Date {
 
 declare var Date: {
 >Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
->     : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^      ^^^      ^^^^^^^^^      ^^^
+>     : ^^^^^^      ^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^    ^^^^^^^^^^^^^^      ^^^    ^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^      ^^^    ^^^^^^^^^^^^^    ^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^      ^^^      ^^^^^^^^^      ^^^
 
     new (): Date;
     new (value: number): Date;
@@ -1726,7 +1726,7 @@ interface RegExp {
       */
     exec(string: string): RegExpExecArray;
 >exec : (string: string) => RegExpExecArray
->     : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^      ^^^^^               
 >string : string
 >       : ^^^^^^
 
@@ -1767,11 +1767,11 @@ interface RegExp {
     // Non-standard extensions
     compile(): RegExp;
 >compile : () => RegExp
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 }
 declare var RegExp: {
 >RegExp : { (pattern: string, flags?: string): RegExp; new (pattern: string, flags?: string): RegExp; $1: string; $2: string; $3: string; $4: string; $5: string; $6: string; $7: string; $8: string; $9: string; lastMatch: string; }
->       : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^
+>       : ^^^^^^^^^^^^      ^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^
 
     new (pattern: string, flags?: string): RegExp;
 >pattern : string
@@ -1838,7 +1838,7 @@ interface Error {
 }
 declare var Error: {
 >Error : { (message?: string): Error; new (message?: string): Error; prototype: Error; }
->      : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^      ^^^     ^^^^^^^^^^^^^^^^^      ^^^     ^^^^^^^^^^^^^     ^^^
 
     new (message?: string): Error;
 >message : string
@@ -1857,7 +1857,7 @@ interface EvalError extends Error {
 }
 declare var EvalError: {
 >EvalError : { (message?: string): EvalError; new (message?: string): EvalError; prototype: EvalError; }
->          : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^      ^^^         ^^^^^^^^^^^^^^^^^      ^^^         ^^^^^^^^^^^^^         ^^^
 
     new (message?: string): EvalError;
 >message : string
@@ -1876,7 +1876,7 @@ interface RangeError extends Error {
 }
 declare var RangeError: {
 >RangeError : { (message?: string): RangeError; new (message?: string): RangeError; prototype: RangeError; }
->           : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^      ^^^          ^^^^^^^^^^^^^^^^^      ^^^          ^^^^^^^^^^^^^          ^^^
 
     new (message?: string): RangeError;
 >message : string
@@ -1895,7 +1895,7 @@ interface ReferenceError extends Error {
 }
 declare var ReferenceError: {
 >ReferenceError : { (message?: string): ReferenceError; new (message?: string): ReferenceError; prototype: ReferenceError; }
->               : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^      ^^^              ^^^^^^^^^^^^^^^^^      ^^^              ^^^^^^^^^^^^^              ^^^
 
     new (message?: string): ReferenceError;
 >message : string
@@ -1914,7 +1914,7 @@ interface SyntaxError extends Error {
 }
 declare var SyntaxError: {
 >SyntaxError : { (message?: string): SyntaxError; new (message?: string): SyntaxError; prototype: SyntaxError; }
->            : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^      ^^^           ^^^^^^^^^^^^^^^^^      ^^^           ^^^^^^^^^^^^^           ^^^
 
     new (message?: string): SyntaxError;
 >message : string
@@ -1933,7 +1933,7 @@ interface TypeError extends Error {
 }
 declare var TypeError: {
 >TypeError : { (message?: string): TypeError; new (message?: string): TypeError; prototype: TypeError; }
->          : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^      ^^^         ^^^^^^^^^^^^^^^^^      ^^^         ^^^^^^^^^^^^^         ^^^
 
     new (message?: string): TypeError;
 >message : string
@@ -1952,7 +1952,7 @@ interface URIError extends Error {
 }
 declare var URIError: {
 >URIError : { (message?: string): URIError; new (message?: string): URIError; prototype: URIError; }
->         : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^      ^^^        ^^^^^^^^^^^^^^^^^      ^^^        ^^^^^^^^^^^^^        ^^^
 
     new (message?: string): URIError;
 >message : string
@@ -2081,7 +2081,7 @@ interface Array<T> {
       */
     concat<U extends T[]>(...items: U[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >items : U[]
 >      : ^^^
 
@@ -2091,7 +2091,7 @@ interface Array<T> {
       */
     concat(...items: T[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^  ^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^
 >items : T[]
 >      : ^^^
 
@@ -2110,7 +2110,7 @@ interface Array<T> {
       */
     pop(): T;
 >pop : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
     /**
       * Appends new elements to an array, and returns the new length of the array.
@@ -2118,7 +2118,7 @@ interface Array<T> {
       */
     push(...items: T[]): number;
 >push : (...items: T[]) => number
->     : ^^^^^^^^^^^^  ^^^^^      
+>     : ^^^^^^^^^^^   ^^^^^      
 >items : T[]
 >      : ^^^
 
@@ -2127,14 +2127,14 @@ interface Array<T> {
       */
     reverse(): T[];
 >reverse : () => T[]
->        : ^^^^^^^  
+>        : ^^^^^^   
 
     /**
       * Removes the first element from an array and returns it.
       */
     shift(): T;
 >shift : () => T
->      : ^^^^^^^
+>      : ^^^^^^ 
 
     /** 
       * Returns a section of an array.
@@ -2143,7 +2143,7 @@ interface Array<T> {
       */
     slice(start?: number, end?: number): T[];
 >slice : (start?: number, end?: number) => T[]
->      : ^^^^^^^^^      ^^^^^^^^      ^^^^^^  
+>      : ^^^^^^^^^      ^^^^^^^^      ^^^^^   
 >start : number
 >      : ^^^^^^
 >end : number
@@ -2155,9 +2155,9 @@ interface Array<T> {
       */
     sort(compareFn?: (a: T, b: T) => number): T[];
 >sort : (compareFn?: (a: T, b: T) => number) => T[]
->     : ^^^^^^^^^^^^^    ^     ^           ^^^^^^  
+>     : ^^^^^^^^^^^^^                      ^^^^^   
 >compareFn : (a: T, b: T) => number
->          : ^^^^^^^^^^^^^^^^      
+>          : ^^^^ ^^^^^ ^^^^^      
 >a : T
 >  : ^
 >b : T
@@ -2169,7 +2169,7 @@ interface Array<T> {
       */
     splice(start: number): T[];
 >splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
->       : ^^^^^^^^^^      ^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >start : number
 >      : ^^^^^^
 
@@ -2181,7 +2181,7 @@ interface Array<T> {
       */
     splice(start: number, deleteCount: number, ...items: T[]): T[];
 >splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^  ^^^^  ^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^   ^^^   ^^^
 >start : number
 >      : ^^^^^^
 >deleteCount : number
@@ -2195,7 +2195,7 @@ interface Array<T> {
       */
     unshift(...items: T[]): number;
 >unshift : (...items: T[]) => number
->        : ^^^^^^^^^^^^  ^^^^^      
+>        : ^^^^^^^^^^^   ^^^^^      
 >items : T[]
 >      : ^^^
 
@@ -2206,7 +2206,7 @@ interface Array<T> {
       */
     indexOf(searchElement: T, fromIndex?: number): number;
 >indexOf : (searchElement: T, fromIndex?: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      
+>        : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^      ^^^^^      
 >searchElement : T
 >              : ^
 >fromIndex : number
@@ -2219,7 +2219,7 @@ interface Array<T> {
       */
     lastIndexOf(searchElement: T, fromIndex?: number): number;
 >lastIndexOf : (searchElement: T, fromIndex?: number) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      
+>            : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^      ^^^^^      
 >searchElement : T
 >              : ^
 >fromIndex : number
@@ -2232,9 +2232,9 @@ interface Array<T> {
       */
     every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
 >every : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
->      : ^^^^^^^^^^^^^        ^                        ^              ^^^^^^^^^^^^   ^^^^^       
+>      : ^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^^^       
 >callbackfn : (value: T, index: number, array: T[]) => boolean
->           : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^       
+>           : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^   ^^^^^       
 >value : T
 >      : ^
 >index : number
@@ -2250,9 +2250,9 @@ interface Array<T> {
       */
     some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
 >some : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
->     : ^^^^^^^^^^^^^        ^                        ^              ^^^^^^^^^^^^   ^^^^^       
+>     : ^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^^^       
 >callbackfn : (value: T, index: number, array: T[]) => boolean
->           : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^       
+>           : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^   ^^^^^       
 >value : T
 >      : ^
 >index : number
@@ -2268,9 +2268,9 @@ interface Array<T> {
       */
     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
 >forEach : (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^        ^                        ^           ^^^^^^^^^^^^   ^^^^^    
+>        : ^^^^^^^^^^^^^                                             ^^^^^^^^^^^^   ^^^^^    
 >callbackfn : (value: T, index: number, array: T[]) => void
->           : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^    
+>           : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^   ^^^^^    
 >value : T
 >      : ^
 >index : number
@@ -2286,9 +2286,9 @@ interface Array<T> {
       */
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
 >map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^        ^                        ^       ^^^^^^^^^^^^^   ^^^^^^  
+>    : ^ ^^^^^^^^^^^^^^                                          ^^^^^^^^^^^^   ^^^^^   
 >callbackfn : (value: T, index: number, array: T[]) => U
->           : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^^
+>           : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^   ^^^^^ 
 >value : T
 >      : ^
 >index : number
@@ -2304,9 +2304,9 @@ interface Array<T> {
       */
     filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
 >filter : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => T[]
->       : ^^^^^^^^^^^^^        ^                        ^              ^^^^^^^^^^^^   ^^^^^^  
+>       : ^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^^^   
 >callbackfn : (value: T, index: number, array: T[]) => boolean
->           : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^       
+>           : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^   ^^^^^       
 >value : T
 >      : ^
 >index : number
@@ -2322,9 +2322,9 @@ interface Array<T> {
       */
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->       : ^^^^^^^^^^^^^^^                ^                ^                               ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^                                                                          ^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^^
+>           : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^^^   ^^^^^ 
 >previousValue : T
 >              : ^
 >currentValue : T
@@ -2343,9 +2343,9 @@ interface Array<T> {
       */
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^                ^                               ^       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^                                                                          ^^^^^^^^^^^^^^^^ ^^^ ^^^
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^^
+>           : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^^^   ^^^^^ 
 >previousValue : U
 >              : ^
 >currentValue : T
@@ -2364,9 +2364,9 @@ interface Array<T> {
       */
     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->            : ^^^^^^^^^^^^^^^                ^                ^                               ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^                                                                          ^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^^
+>           : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^^^   ^^^^^ 
 >previousValue : T
 >              : ^
 >currentValue : T
@@ -2385,9 +2385,9 @@ interface Array<T> {
       */
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^                ^                               ^       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^                                                                          ^^^^^^^^^^^^^^^^ ^^^ ^^^
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^  ^^^^^^
+>           : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^      ^^^^^^^^^   ^^^^^ 
 >previousValue : U
 >              : ^
 >currentValue : T
@@ -2412,7 +2412,7 @@ interface Array<T> {
 }
 declare var Array: {
 >Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T_1>(...items: T_1[]): T_1[]; new (arrayLength?: number): any[]; new <T_2>(arrayLength: number): T_2[]; new <T_3>(...items: T_3[]): T_3[]; isArray(arg: any): boolean; prototype: Array<any>; }
->      : ^^^^^^^^^^^^^^^^^      ^^^     ^^^^^^^^^^^^^^^^^^^      ^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^^^^     ^^^
+>      : ^^^^^^^^^^^^^^^^^      ^^^     ^^^ ^^^^^^^^^^^^^^^      ^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^     ^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^          ^^^
 
     new (arrayLength?: number): any[];
 >arrayLength : number

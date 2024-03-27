@@ -15,7 +15,7 @@ module Events {
 
          public addListener(type:string, listener:ListenerCallback) {
 >addListener : (type: string, listener: ListenerCallback) => void
->            : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^      ^^^^^^^^^^^^                ^^^^^^^^^
 >type : string
 >     : ^^^^^^
 >listener : ListenerCallback

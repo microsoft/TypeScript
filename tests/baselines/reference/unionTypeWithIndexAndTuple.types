@@ -12,7 +12,7 @@ interface I {
 }
 function f(args: ["a"] | I) { }
 >f : (args: ["a"] | I) => void
->  : ^^^^^^^        ^^^^^^^^^^
+>  : ^^^^^^^         ^^^^^^^^^
 >args : I | ["a"]
 >     : ^^^^^^^^^
 

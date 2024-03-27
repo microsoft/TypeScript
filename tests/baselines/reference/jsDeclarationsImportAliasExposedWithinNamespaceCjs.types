@@ -34,7 +34,7 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
->       : ^^^^^^^^^^^^^^^^^^^      ^^^^^             
+>       : ^^^^^^^^                 ^^^^^             
 >input : boolean | myTypes.typeC
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 

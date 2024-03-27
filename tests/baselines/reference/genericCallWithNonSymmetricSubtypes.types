@@ -6,7 +6,7 @@
 
 function foo<T>(x: T, y: T) {
 >foo : <T>(x: T, y: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^ ^^^^^ ^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -147,7 +147,7 @@ var r6 = foo(y, x); // { x?: number; };
 
 var s1: (x: Object) => string;
 >s1 : (x: Object) => string
->   : ^^^^^^^^^^^^^^^      
+>   : ^^^^      ^^^^^      
 >x : Object
 >  : ^^^^^^
 

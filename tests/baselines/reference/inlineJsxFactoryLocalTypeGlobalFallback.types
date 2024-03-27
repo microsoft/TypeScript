@@ -35,7 +35,7 @@ declare global {
 }
 export function dom(): JSX.Element;
 >dom : () => JSX.Element
->    : ^^^^^^^^^ ^^^^^^^
+>    : ^^^^^^           
 >JSX : any
 >    : ^^^
 
@@ -71,7 +71,7 @@ export namespace predom {
 }
 export function predom(): predom.JSX.Element;
 >predom : () => predom.JSX.Element
->       : ^^^^^^^^^^^^     ^^^^^^^
+>       : ^^^^^^                  
 >predom : any
 >       : ^^^
 >JSX : any

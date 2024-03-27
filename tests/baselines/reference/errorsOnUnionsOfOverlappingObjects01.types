@@ -40,7 +40,7 @@ export let x = { a: '', b: '' };
 
 declare function f(x: Foo | Other): any;
 >f : (x: Foo | Other) => any
->  : ^^^^^^^   ^^^^^^^^^^   
+>  : ^^^^           ^^^^^   
 >x : Foo | Other
 >  : ^^^^^^^^^^^
 
@@ -70,7 +70,7 @@ f({ a: '', b: '' })
 
 declare function g(x: Bar | Other): any;
 >g : (x: Bar | Other) => any
->  : ^^^^^^^   ^^^^^^^^^^   
+>  : ^^^^           ^^^^^   
 >x : Bar | Other
 >  : ^^^^^^^^^^^
 
@@ -100,7 +100,7 @@ g({ a: '', b: '' })
 
 declare function h(x: Foo | Bar | Other): any;
 >h : (x: Foo | Bar | Other) => any
->  : ^^^^^^^   ^^^   ^^^^^^^^^^   
+>  : ^^^^                 ^^^^^   
 >x : Foo | Bar | Other
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -156,7 +156,7 @@ type ExoticAnimal =
 
 declare function addToZoo(animal: ExoticAnimal): void;
 >addToZoo : (animal: ExoticAnimal) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^^^            ^^^^^    
 >animal : ExoticAnimal
 >       : ^^^^^^^^^^^^
 

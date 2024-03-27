@@ -18,11 +18,11 @@ interface ErrorResult {
 interface AsyncLoaderProps<TResult extends {}> {
     readonly asyncLoad: () => Box<TResult>;
 >asyncLoad : () => Box<TResult>
->          : ^^^^^^^^^ ^^^^^^^ 
+>          : ^^^^^^            
 
     readonly children: (result: Exclude<TResult, ErrorResult>) => string;
 >children : (result: Exclude<TResult, ErrorResult>) => string
->         : ^^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^^^^^^^ ^^^^^      
+>         : ^^^^^^^^^                             ^^^^^      
 >result : Exclude<TResult, ErrorResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -47,7 +47,7 @@ class AsyncLoader<TResult extends {}> {
 
 function load(): Box<{ success: true } | ErrorResult> {
 >load : () => Box<{ success: true; } | ErrorResult>
->     : ^^^^^^^^^                      ^^^^^^^^^^^ 
+>     : ^^^^^^                                     
 >success : true
 >        : ^^^^
 >true : true

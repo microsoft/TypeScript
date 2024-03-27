@@ -111,7 +111,7 @@ interface Task<T> {
 
 export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
->       : ^^^^^^^^^^^^^^^ ^   ^^^^^^^^^^^^^^^^^^^^ ^   ^^^^^    
+>       : ^ ^^^^^^^^^         ^^^^^^^^^^^^             ^^^^^    
 >tasks : Task<T>[]
 >      : ^^^^^^^^^
 >callback : Callback<T[]>

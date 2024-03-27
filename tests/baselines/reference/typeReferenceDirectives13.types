@@ -9,7 +9,7 @@ import {$} from "./ref";
 export interface A {
     x: () => typeof $
 >x : () => typeof $
->  : ^^^^^^       ^
+>  : ^^^^^^        
 >$ : { x: number; }
 >  : ^^^^^^^^^^^^^^
 }

@@ -4,7 +4,7 @@
 interface IObserver {
 	handleChange<T, TChange>(observable: IObservable<T, TChange>, change: TChange): void;
 >handleChange : <T, TChange>(observable: IObservable<T, TChange>, change: TChange) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^  ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^    
+>             : ^ ^^       ^^^^^^^^^^^^^^                       ^^^^^^^^^^       ^^^^^    
 >observable : IObservable<T, TChange>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^
 >change : TChange
@@ -14,7 +14,7 @@ interface IObserver {
 interface IObservable<T, TChange = unknown> {
 	get(): T;
 >get : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 	readonly TChange: TChange;
 >TChange : TChange
@@ -24,7 +24,7 @@ interface IObservable<T, TChange = unknown> {
 export interface IReader {
 	readObservable<T>(observable: IObservable<T, any>): T;
 >readObservable : <T>(observable: IObservable<T, any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^      ^^^^^^
+>               : ^ ^^^^^^^^^^^^^^                   ^^^^^ 
 >observable : IObservable<T, any>
 >           : ^^^^^^^^^^^^^^^^^^^
 }
@@ -41,7 +41,7 @@ export abstract class ConvenientObservable<T, TChange> implements IObservable<T,
 
 	public abstract get(): T;
 >get : () => T
->    : ^^^^^^^
+>    : ^^^^^^ 
 }
 
 export abstract class BaseObservable<T, TChange = void> extends ConvenientObservable<T, TChange> {

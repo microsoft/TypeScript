@@ -10,7 +10,7 @@ export interface Scalar {
 
 export function scalar(value: string): Scalar {
 >scalar : (value: string) => Scalar
->       : ^^^^^^^^      ^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^^^      
 >value : string
 >      : ^^^^^^
 

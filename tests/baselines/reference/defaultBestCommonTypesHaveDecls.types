@@ -27,7 +27,7 @@ obj2.length;
 
 function concat<T>(x: T, y: T): T { return null; }
 >concat : <T>(x: T, y: T) => T
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -57,7 +57,7 @@ var elementCount = result.length;
 
 function concat2<T, U>(x: T, y: U) { return null; }
 >concat2 : <T, U>(x: T, y: U) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^
 >x : T
 >  : ^
 >y : U

@@ -14,7 +14,7 @@ interface MyPropertyDescriptor {
 
 declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescriptor): any;
 >defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
->                 : ^^^^   ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                 : ^^^^   ^^^^^      ^^^^^^^^^^^^^^                    ^^^^^   
 >o : any
 >p : string
 >  : ^^^^^^
@@ -51,7 +51,7 @@ interface MyPropertyDescriptor2 {
 
 declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDescriptor2): any;
 >defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
->                  : ^^^^   ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                  : ^^^^   ^^^^^      ^^^^^^^^^^^^^^                     ^^^^^   
 >o : any
 >p : string
 >  : ^^^^^^

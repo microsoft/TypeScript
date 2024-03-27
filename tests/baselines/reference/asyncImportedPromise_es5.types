@@ -18,5 +18,5 @@ class Test {
 
     async example<T>(): Task<T> { return; }
 >example : <T>() => Task<T>
->        : ^^^^^^^^^^^^^ ^ 
+>        : ^ ^^^^^^^       
 }

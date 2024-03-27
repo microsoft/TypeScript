@@ -5,7 +5,7 @@ declare namespace JSX {
     interface Element {
         render(): Element | string | false;
 >render : () => Element | string | false
->       : ^^^^^^^^^^^^^                 
+>       : ^^^^^^                        
 >false : false
 >      : ^^^^^
     }
@@ -13,7 +13,7 @@ declare namespace JSX {
 
 function SFC<T>(props: Record<string, T>) {
 >SFC : <T>(props: Record<string, T>) => string
->    : ^^^^^^^^^^^^^^^^^         ^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^^^^^^^^^^
 >props : Record<string, T>
 >      : ^^^^^^^^^^^^^^^^^
 

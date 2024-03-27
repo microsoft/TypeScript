@@ -23,7 +23,7 @@ interface MyInnerProps {
 
 export function MyComponent(_props: MyProps) {
 >MyComponent : (_props: MyProps) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^       ^^^^^^^^^^^^^^^^
 >_props : MyProps
 >       : ^^^^^^^
 

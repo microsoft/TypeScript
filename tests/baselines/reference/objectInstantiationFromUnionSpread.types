@@ -25,7 +25,7 @@ type Item = Success | Fail;
 
 function f1(a: Item[]) {
 >f1 : (a: Item[]) => void
->   : ^^^^^^^^  ^^^^^^^^^
+>   : ^^^^      ^^^^^^^^^
 >a : Item[]
 >  : ^^^^^^
 
@@ -62,7 +62,7 @@ function f1(a: Item[]) {
 
 function f2<T>(a: Item[]) {
 >f2 : <T>(a: Item[]) => void
->   : ^^^^^^^^^^^  ^^^^^^^^^
+>   : ^^^^^^^      ^^^^^^^^^
 >a : Item[]
 >  : ^^^^^^
 

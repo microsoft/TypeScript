@@ -48,7 +48,7 @@ type Both = A | B;
 
 function isBoth(x: Base): x is Both {
 >isBoth : (x: Base) => x is Both
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^    ^^^^^^^^^^^^^^
 >x : Base
 >  : ^^^^
 

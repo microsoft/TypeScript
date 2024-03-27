@@ -56,13 +56,13 @@ var d2: IHasVisualizationModel = moduleA || i;
 
 var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { x: moduleA };
 >e : { x: IHasVisualizationModel; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                      ^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 ><{ x: IHasVisualizationModel }>null || { x: moduleA } : { x: IHasVisualizationModel; }
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^^^^^                      ^^^
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^                      ^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >{ x: moduleA } : { x: typeof moduleA; }
@@ -74,13 +74,13 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 
 var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
 >f : { x: IHasVisualizationModel; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                      ^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 ><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; }
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^                      ^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >{ x: moduleA } : { x: typeof moduleA; }

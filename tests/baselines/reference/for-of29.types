@@ -3,11 +3,11 @@
 === for-of29.ts ===
 var iterableWithOptionalIterator: {
 >iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 
     [Symbol.iterator]?(): Iterator<string>
 >[Symbol.iterator] : () => Iterator<string>
->                  : ^^^^^^^^^^^^^^        
+>                  : ^^^^^^                
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

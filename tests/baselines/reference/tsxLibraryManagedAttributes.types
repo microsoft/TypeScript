@@ -81,19 +81,19 @@ declare class ReactComponent<P={}, S={}> {
 
     props: P & Readonly<{children: ReactNode[]}>;
 >props : P & Readonly<{ children: ReactNode[]; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^
 >children : ReactNode[]
 >         : ^^^^^^^^^^^
 
     setState(s: Partial<S>): S;
 >setState : (s: Partial<S>) => S
->         : ^^^^^^^^^^^ ^ ^^^^^^
+>         : ^^^^          ^^^^^ 
 >s : Partial<S>
 >  : ^^^^^^^^^^
 
     render(): ReactNode;
 >render : () => ReactNode
->       : ^^^^^^^^^^^^^^^
+>       : ^^^^^^         
 }
 
 declare namespace JSX {

@@ -51,7 +51,7 @@ interface PM {
 
 export function ComponentWithUnion(props: PM | PS) {
 >ComponentWithUnion : (props: PM | PS) => JSX.Element
->                   : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^       ^^^^^^^^^^^^^^^^
 >props : PS | PM
 >      : ^^^^^^^
 

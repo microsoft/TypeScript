@@ -23,7 +23,7 @@ type someType = { x: number };
 
 function acceptsSomeType(a: someType) {
 >acceptsSomeType : (a: someType) => void
->                : ^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^        ^^^^^^^^^
 >a : someType
 >  : ^^^^^^^^
 

@@ -4,7 +4,7 @@
 interface Field<T> {
     clean(input: T): T
 >clean : (input: T) => T
->      : ^^^^^^^^^^^^^^^
+>      : ^^^^^^^^ ^^^^^ 
 >input : T
 >      : ^
 }

@@ -44,7 +44,7 @@ interface D3SvgPath {
 interface D3SvgArea extends D3SvgPath {
     x(x: (data: any, index?: number) => number): D3SvgArea;
 >x : (x: (data: any, index?: number) => number) => D3SvgArea
->  : ^^^^                                     ^^^^^^^^^^^^^^
+>  : ^^^^                                     ^^^^^         
 >x : (data: any, index?: number) => number
 >  : ^^^^^^^   ^^^^^^^^^^      ^^^^^      
 >data : any
@@ -54,7 +54,7 @@ interface D3SvgArea extends D3SvgPath {
 
     y(y: (data: any, index?: number) => number): D3SvgArea;
 >y : (y: (data: any, index?: number) => number) => D3SvgArea
->  : ^^^^                                     ^^^^^^^^^^^^^^
+>  : ^^^^                                     ^^^^^         
 >y : (data: any, index?: number) => number
 >  : ^^^^^^^   ^^^^^^^^^^      ^^^^^      
 >data : any
@@ -72,13 +72,13 @@ interface D3SvgArea extends D3SvgPath {
 
     y0(y: number): D3SvgArea;
 >y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 
     y0(y: (data: any, index?: number) => number): D3SvgArea;
 >y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^         ^^^
 >y : (data: any, index?: number) => number
 >  : ^^^^^^^   ^^^^^^^^^^      ^^^^^      
 >data : any
@@ -96,13 +96,13 @@ interface D3SvgArea extends D3SvgPath {
 
     y1(y: number): D3SvgArea;
 >y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 
     y1(y: (data: any, index?: number) => number): D3SvgArea;
 >y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^         ^^^
 >y : (data: any, index?: number) => number
 >  : ^^^^^^^   ^^^^^^^^^^      ^^^^^      
 >data : any
@@ -112,19 +112,19 @@ interface D3SvgArea extends D3SvgPath {
 
     interpolate(interpolator: string): D3SvgArea;
 >interpolate : (interpolator: string) => D3SvgArea
->            : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^      ^^^^^         
 >interpolator : string
 >             : ^^^^^^
 
     tension(tension: number): D3SvgArea;
 >tension : (tension: number) => D3SvgArea
->        : ^^^^^^^^^^      ^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^         
 >tension : number
 >        : ^^^^^^
 
     defined(defined: (data: any, index?: number) => boolean): D3SvgArea;
 >defined : (defined: (data: any, index?: number) => boolean) => D3SvgArea
->        : ^^^^^^^^^^                                      ^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^                                      ^^^^^         
 >defined : (data: any, index?: number) => boolean
 >        : ^^^^^^^   ^^^^^^^^^^      ^^^^^       
 >data : any

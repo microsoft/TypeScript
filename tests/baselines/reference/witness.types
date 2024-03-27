@@ -346,9 +346,9 @@ var fnCallResult: any;
 // Call argument
 function fnArg1(x: typeof fnArg1, y: number) {
 >fnArg1 : (x: typeof fnArg1, y: number) => void
->       : ^^^^       ^^^^^^^^^^^      ^^^^^^^^^
+>       : ^^^^             ^^^^^      ^^^^^^^^^
 >x : (x: typeof fnArg1, y: number) => void
->  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^             ^^^^^^^^^^^^^^^^^^^^
 >fnArg1 : (x: typeof fnArg1, y: number) => void
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : number

@@ -19,7 +19,7 @@ module Editor {
         
         addLine(lineText: string): List<Line> {
 >addLine : (lineText: string) => List<Line>
->        : ^^^^^^^^^^^      ^^^^^^^^^ ^^^^ 
+>        : ^^^^^^^^^^^      ^^^^^          
 >lineText : string
 >         : ^^^^^^
             
@@ -57,7 +57,7 @@ module Editor {
     
     export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
->                : ^^^^^^^^^^^^^^^ ^ ^^^^^^^^^ ^ 
+>                : ^ ^^^^^^^^^       ^^^^^       
 >entry : List<U>
 >      : ^^^^^^^
 
@@ -68,14 +68,14 @@ module Editor {
 
     export function ListMakeHead<U>(): List<U> {
 >ListMakeHead : <U>() => List<U>
->             : ^^^^^^^^^^^^^ ^ 
+>             : ^ ^^^^^^^       
 
 		return null;
     }
 
     export function ListMakeEntry<U>(data: U): List<U> {
 >ListMakeEntry : <U>(data: U) => List<U>
->              : ^^^^^^^^^^^^^^^^^^^^ ^ 
+>              : ^ ^^^^^^^^ ^^^^^       
 >data : U
 >     : ^
 
@@ -92,7 +92,7 @@ module Editor {
 
         add(data: T): List<T> {
 >add : (data: T) => List<T>
->    : ^^^^^^^^^^^^^^^^^ ^ 
+>    : ^^^^^^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -123,7 +123,7 @@ module Editor {
 
         popEntry(head: List<T>): List<T> {
 >popEntry : (head: List<T>) => List<T>
->         : ^^^^^^^^^^^ ^ ^^^^^^^^^ ^ 
+>         : ^^^^^^^       ^^^^^       
 >head : List<T>
 >     : ^^^^^^^
 

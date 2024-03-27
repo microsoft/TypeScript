@@ -15,7 +15,7 @@ import * as React from 'react';
 
 declare const Radio: (props: {}) => React.ReactElement<{}>;
 >Radio : (props: {}) => React.ReactElement<{}>
->      : ^^^^^^^^  ^^^^^^^^^^                 
+>      : ^^^^^^^^  ^^^^^                      
 >props : {}
 >      : ^^
 >React : any
@@ -23,7 +23,7 @@ declare const Radio: (props: {}) => React.ReactElement<{}>;
 
 declare const OtherRadio: () => React.ReactElement<{}>;
 >OtherRadio : () => React.ReactElement<{}>
->           : ^^^^^^^^^^^                 
+>           : ^^^^^^                      
 >React : any
 >      : ^^^
 

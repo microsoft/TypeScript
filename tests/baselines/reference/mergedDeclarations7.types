@@ -15,7 +15,7 @@ declare module 'passport' {
         interface PassportStatic extends Passport {
             Passport: {new(): Passport};
 >Passport : new () => Passport
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^        
         }
     }
 

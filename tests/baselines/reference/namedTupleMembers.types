@@ -150,7 +150,7 @@ export const func = null as any as Func<SegmentAnnotated>;
 
 export function useState<T>(initial: T): [value: T, setter: (T) => void] {
 >useState : <T>(initial: T) => [value: T, setter: (T: any) => void]
->         : ^^^^^^^^^^^^^^^^^^^        ^              ^^^          
+>         : ^ ^^^^^^^^^^^ ^^^^^                       ^^^          
 >initial : T
 >        : ^
 >T : any
@@ -248,7 +248,7 @@ y = x;
 
 declare function f<T extends any[]>(...x: T): T;
 >f : <T extends any[]>(...x: T) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -262,7 +262,7 @@ declare function g(elem: object, index: number): object;
 
 declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                    : ^ ^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^ ^^^^^             
 >args : any[]
 >     : ^^^^^
 >x : T

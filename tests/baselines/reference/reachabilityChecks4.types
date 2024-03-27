@@ -115,7 +115,7 @@ interface Transition {
 
 function f2(transition: Transition): any {
 >f2 : (transition: Transition) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>   : ^^^^^^^^^^^^^          ^^^^^   
 >transition : Transition
 >           : ^^^^^^^^^^
 

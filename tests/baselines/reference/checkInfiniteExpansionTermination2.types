@@ -13,7 +13,7 @@ interface ISubject<T> extends IObservable<T> { }
 
 declare function combineLatest<TOther>(x: IObservable<TOther>[]): void;
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^   ^^^    ^^^^^^^^^^^^^
+>              : ^^^      ^^^^^                     ^^^    ^^^^^^^^^^^^^
 >x : IObservable<TOther>[]
 >  : ^^^^^^^^^^^^^^^^^^^^^
 

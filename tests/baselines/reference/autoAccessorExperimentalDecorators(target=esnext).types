@@ -3,7 +3,7 @@
 === autoAccessorExperimentalDecorators.ts ===
 declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
->    : ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^^^^^^^^^   ^^^^^^^           ^^^^^^^^                  ^^^^^    
 >target : any
 >       : ^^^
 >key : PropertyKey

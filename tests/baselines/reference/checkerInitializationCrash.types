@@ -66,9 +66,9 @@ declare namespace React {
 
     function useMemo<T>(factory: () => T, deps: undefined): T;
 >useMemo : <T>(factory: () => T, deps: undefined) => T
->        : ^^^^^^^^^^^^^      ^^^^^^^^^         ^^^^^^
+>        : ^ ^^^^^^^^^^^       ^^^^^^^^         ^^^^^ 
 >factory : () => T
->        : ^^^^^^^
+>        : ^^^^^^ 
 >deps : undefined
 >     : ^^^^^^^^^
 }

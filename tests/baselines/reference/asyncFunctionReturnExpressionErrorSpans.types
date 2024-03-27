@@ -24,7 +24,7 @@ interface Foo {
 
 async function asyncFoo(): Promise<Foo> {
 >asyncFoo : () => Promise<Foo>
->         : ^^^^^^^^^^^^^ ^^^ 
+>         : ^^^^^^            
 
     return {
 >{        bar: {            baz: {                inner: {                    thing: 1                }            }        }    } : { bar: { baz: { inner: { thing: number; }; }; }; }

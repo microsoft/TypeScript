@@ -75,7 +75,7 @@ function d0<T extends Class>({x} = { x: new Class() }) { }
 
 function d1<T extends F>({x}: { x: F }) { }
 >d1 : <T extends F>({ x }: { x: F; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^     ^   ^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >x : F
 >  : ^
 >x : F
@@ -83,7 +83,7 @@ function d1<T extends F>({x}: { x: F }) { }
 
 function d2<T extends Class>({x}: { x: Class }) { }
 >d2 : <T extends Class>({ x }: { x: Class; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^
 >x : Class
 >  : ^^^^^
 >x : Class
@@ -91,7 +91,7 @@ function d2<T extends Class>({x}: { x: Class }) { }
 
 function d3<T extends D>({y}: { y: D }) { }
 >d3 : <T extends D>({ y }: { y: D; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^     ^   ^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 >y : D
 >  : ^
 >y : D

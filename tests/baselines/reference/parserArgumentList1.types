@@ -3,7 +3,7 @@
 === parserArgumentList1.ts ===
 export function removeClass (node:HTMLElement, className:string) {
 >removeClass : (node: HTMLElement, className: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>            : ^^^^^^^           ^^^^^^^^^^^^^      ^^^^^^^^^
 >node : HTMLElement
 >     : ^^^^^^^^^^^
 >className : string

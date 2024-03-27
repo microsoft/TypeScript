@@ -5,19 +5,19 @@ export {}
 export interface Option<T> {
 	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;
 >zip1 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray1<O>]>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^     ^^^^^^^^^^^^^^^^^ ^   
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                    
 >others : O
 >       : ^
 
 	zip2<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray2<O>]>;
 >zip2 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray2<O>]>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^     ^^^^^^^^^^^^^^^^^ ^   
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                    
 >others : O
 >       : ^
 
 	zip3<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray3<O>]>;
 >zip3 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray3<O>]>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^     ^^^^^^^^^^^^^^^^^ ^   
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                    
 >others : O
 >       : ^
 }

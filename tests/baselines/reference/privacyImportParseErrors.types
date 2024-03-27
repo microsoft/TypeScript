@@ -77,7 +77,7 @@ export module m1 {
         }
         export var v1: { new (): c1; };
 >v1 : new () => c1
->   : ^^^^^^^^^^^^
+>   : ^^^^^^^^^^  
 
         export var v2: c1;
 >v2 : c1
@@ -98,7 +98,7 @@ export module m1 {
         }
         export var v1: { new (): c1; };
 >v1 : new () => c1
->   : ^^^^^^^^^^^^
+>   : ^^^^^^^^^^  
 
         export var v2: c1;
 >v2 : c1
@@ -575,7 +575,7 @@ module m2 {
         }
         export var v1: { new (): c1; };
 >v1 : new () => c1
->   : ^^^^^^^^^^^^
+>   : ^^^^^^^^^^  
 
         export var v2: c1;
 >v2 : c1
@@ -596,7 +596,7 @@ module m2 {
         }
         export var v1: { new (): c1; };
 >v1 : new () => c1
->   : ^^^^^^^^^^^^
+>   : ^^^^^^^^^^  
 
         export var v2: c1;
 >v2 : c1
@@ -1041,7 +1041,7 @@ export declare module "glo_M2_public" {
     }
     export var v1: { new (): c1; };
 >v1 : new () => c1
->   : ^^^^^^^^^^^^
+>   : ^^^^^^^^^^  
 
     export var v2: c1;
 >v2 : c1
@@ -1091,7 +1091,7 @@ export declare module "glo_M4_private" {
     }
     export var v1: { new (): c1; };
 >v1 : new () => c1
->   : ^^^^^^^^^^^^
+>   : ^^^^^^^^^^  
 
     export var v2: c1;
 >v2 : c1
@@ -1506,7 +1506,7 @@ export declare module "use_glo_M1_public" {
 
     export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_public : new () => use_glo_M1_public.c1
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                            : ^^^^^^^^^^                    
 >use_glo_M1_public : any
 >                  : ^^^
 
@@ -1516,13 +1516,13 @@ export declare module "use_glo_M1_public" {
 
     export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_public : () => use_glo_M1_public.c1
->                            : ^^^^^^^^^^^^^^^^^^^^^^^   
+>                            : ^^^^^^                    
 >use_glo_M1_public : any
 >                  : ^^^
 
     var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_private : new () => use_glo_M1_public.c1
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                             : ^^^^^^^^^^                    
 >use_glo_M1_public : any
 >                  : ^^^
 
@@ -1532,7 +1532,7 @@ export declare module "use_glo_M1_public" {
 
     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_private : () => use_glo_M1_public.c1
->                             : ^^^^^^^^^^^^^^^^^^^^^^^   
+>                             : ^^^^^^                    
 >use_glo_M1_public : any
 >                  : ^^^
 
@@ -1610,7 +1610,7 @@ declare module "use_glo_M3_private" {
 
     export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
 >use_glo_M3_private_v1_public : new () => use_glo_M3_private.c1
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                             : ^^^^^^^^^^                     
 >use_glo_M3_private : any
 >                   : ^^^
 
@@ -1620,13 +1620,13 @@ declare module "use_glo_M3_private" {
 
     export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
 >use_glo_M3_private_v3_public : () => use_glo_M3_private.c1
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^   
+>                             : ^^^^^^                     
 >use_glo_M3_private : any
 >                   : ^^^
 
     var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
 >use_glo_M3_private_v1_private : new () => use_glo_M3_private.c1
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                              : ^^^^^^^^^^                     
 >use_glo_M3_private : any
 >                   : ^^^
 
@@ -1636,7 +1636,7 @@ declare module "use_glo_M3_private" {
 
     var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
 >use_glo_M3_private_v3_private : () => use_glo_M3_private.c1
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^   
+>                              : ^^^^^^                     
 >use_glo_M3_private : any
 >                   : ^^^
 

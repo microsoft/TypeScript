@@ -52,7 +52,7 @@ export function getPrismaClient(options?: any) {
 
 export function applyModelsAndClientExtensions(client: Client) {
 >applyModelsAndClientExtensions : (client: Client) => PrismaClient
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 >client : PrismaClient
 >       : ^^^^^^^^^^^^
 

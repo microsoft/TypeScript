@@ -6,7 +6,7 @@
 
 declare function foo<Z, T extends <U>(x: U) => Z>(y: T): Z;
 >foo : <Z, T extends <U>(x: U) => Z>(y: T) => Z
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^ 
 >x : U
 >  : ^
 >y : T

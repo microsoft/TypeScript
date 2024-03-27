@@ -290,7 +290,7 @@ function isNonNullVar(x: number | null) {
 
 function isNonNullGeneric<T>(x: T) {
 >isNonNullGeneric : <T>(x: T) => x is T & ({} | undefined)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -648,7 +648,7 @@ const resultBars: Bar[] = list.filter((value) => 'bar' in value);  // should ok
 
 function isBarNonNull(x: Foo | Bar | null) {
 >isBarNonNull : (x: Foo | Bar | null) => x is Bar
->             : ^^^^^^^   ^^^       ^^^^^^^^^^^^^
+>             : ^^^^                ^^^^^^^^^^^^^
 >x : Foo | Bar | null
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1458,7 +1458,7 @@ if (isNumOrStr(unk)) {
 // A function can be a type predicate even if it throws.
 function assertAndPredicate(x: string | number | Date) {
 >assertAndPredicate : (x: string | number | Date) => x is string
->                   : ^^^^                  ^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^                      ^^^^^^^^^^^^^^^^
 >x : string | number | Date
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1508,7 +1508,7 @@ if (assertAndPredicate(snd)) {
 
 function isNumberWithThis(this: Date, x: number | string) {
 >isNumberWithThis : (this: Date, x: number | string) => x is number
->                 : ^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^    ^^^^^               ^^^^^^^^^^^^^^^^
 >this : Date
 >     : ^^^^
 >x : string | number

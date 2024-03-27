@@ -79,9 +79,9 @@ interface I1 {
 }
 const o1 = {
 >o1 : { get x(): number; set x(value: Fail<string>); }
->   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^        ^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^            ^^^^
 >{    get x(): number { return 0; },    set x(value: Fail<string>) {}} : { get x(): number; set x(value: Fail<string>); }
->                                                                      : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^        ^^^^
+>                                                                      : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^            ^^^^
 
     get x(): number { return 0; },
 >x : number

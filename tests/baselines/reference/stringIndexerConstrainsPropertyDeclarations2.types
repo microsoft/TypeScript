@@ -76,7 +76,7 @@ interface Foo2 {
 
 var a: {
 >a : { [x: string]: A; a: A; b: B; c: number; d: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^      ^^^^^      ^^^
 
     [x: string]: A;
 >x : string

@@ -67,9 +67,9 @@ var f3: any;
 // Truly recursive types
 var g: { x: typeof g; };
 >g : { x: typeof g; }
->  : ^^^^^       ^^^^
+>  : ^^^^^        ^^^
 >x : { x: typeof g; }
->  : ^^^^^       ^^^^
+>  : ^^^^^        ^^^
 >g : { x: any; }
 >  : ^^^^^^^^^^^
 
@@ -85,9 +85,9 @@ var g: typeof g.x;
 
 var h: () => typeof h;
 >h : () => typeof h
->  : ^^^^^^       ^
+>  : ^^^^^^        
 >h : () => typeof h
->  : ^^^^^^       ^
+>  : ^^^^^^        
 
 var h = h();
 >h : () => any
@@ -99,13 +99,13 @@ var h = h();
 
 var i: (x: typeof i) => typeof x;
 >i : (x: typeof i) => typeof x
->  : ^^^^       ^^^^^^       ^
+>  : ^^^^        ^^^^^        
 >x : (x: typeof i) => any
->  : ^^^^       ^^^^^^^^^
+>  : ^^^^        ^^^^^^^^
 >i : (x: any) => any
 >  : ^^^^^^^^^^^^^^^
 >x : (x: any) => typeof x
->  : ^^^^^^^^^^^^       ^
+>  : ^^^^^^^^^^^^        
 
 var i = i(i);
 >i : (x: any) => any
@@ -119,7 +119,7 @@ var i = i(i);
 
 var j: <T extends typeof j>(x: T) => T;
 >j : <T extends any>(x: T) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^ 
 >j : <T extends any>(x: T) => T
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
@@ -138,9 +138,9 @@ var j = j(j);
 // Same as h, i, j with construct signatures
 var h2: new () => typeof h2;
 >h2 : new () => typeof h2
->   : ^^^^^^^^^^       ^^
+>   : ^^^^^^^^^^         
 >h2 : new () => typeof h2
->   : ^^^^^^^^^^       ^^
+>   : ^^^^^^^^^^         
 
 var h2 = new h2();
 >h2 : new () => any
@@ -152,13 +152,13 @@ var h2 = new h2();
 
 var i2: new (x: typeof i2) => typeof x;
 >i2 : new (x: typeof i2) => typeof x
->   : ^^^^^^^^       ^^^^^^^       ^
+>   : ^^^^^^^^         ^^^^^        
 >x : new (x: typeof i2) => any
->  : ^^^^^^^^       ^^^^^^^^^^
+>  : ^^^^^^^^         ^^^^^^^^
 >i2 : new (x: any) => any
 >   : ^^^^^^^^^^^^^^^^^^^
 >x : new (x: any) => typeof x
->  : ^^^^^^^^^^^^^^^^       ^
+>  : ^^^^^^^^^^^^^^^^        
 
 var i2 = new i2(i2);
 >i2 : new (x: any) => any
@@ -172,7 +172,7 @@ var i2 = new i2(i2);
 
 var j2: new <T extends typeof j2>(x: T) => T;
 >j2 : new <T extends any>(x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^ 
 >j2 : new <T extends any>(x: T) => T
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
@@ -225,9 +225,9 @@ var k = k[''];
 // These two are recursive
 var hy1: { x: typeof hy1 }[];
 >hy1 : { x: typeof hy1; }[]
->    : ^^^^^       ^^^^^^^^
+>    : ^^^^^          ^^^^^
 >x : { x: typeof hy1; }[]
->  : ^^^^^       ^^^^^^^^
+>  : ^^^^^          ^^^^^
 >hy1 : { x: any[]; }[]
 >    : ^^^^^^^^^^^^^^^
 
@@ -247,9 +247,9 @@ var hy1 = hy1[0].x;
 
 var hy2: { x: Array<typeof hy2> };
 >hy2 : { x: Array<typeof hy2>; }
->    : ^^^^^^^^^^        ^^^ ^^^
+>    : ^^^^^                 ^^^
 >x : { x: Array<typeof hy2>; }[]
->  : ^^^^^^^^^^        ^^^ ^^^^^
+>  : ^^^^^                 ^^^^^
 >hy2 : { x: any[]; }
 >    : ^^^^^^^^^^^^^
 

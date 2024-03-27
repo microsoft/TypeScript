@@ -7,7 +7,7 @@ interface Obj { key: "value"; }
 
 async function fn1(): Promise<Obj> {
 >fn1 : () => Promise<Obj>
->    : ^^^^^^^^^^^^^ ^^^ 
+>    : ^^^^^^            
 
     return { key: "value" };
 >{ key: "value" } : { key: "value"; }
@@ -20,7 +20,7 @@ async function fn1(): Promise<Obj> {
 
 async function fn2(): Promise<Obj> {
 >fn2 : () => Promise<Obj>
->    : ^^^^^^^^^^^^^ ^^^ 
+>    : ^^^^^^            
 
     return new Promise(resolve => {
 >new Promise(resolve => {        resolve({ key: "value" });    }) : Promise<Obj>
@@ -49,7 +49,7 @@ async function fn2(): Promise<Obj> {
 
 async function fn3(): Promise<Obj> {
 >fn3 : () => Promise<Obj>
->    : ^^^^^^^^^^^^^ ^^^ 
+>    : ^^^^^^            
 
     return await { key: "value" };
 >await { key: "value" } : { key: "value"; }
@@ -64,7 +64,7 @@ async function fn3(): Promise<Obj> {
 
 async function fn4(): Promise<Obj> {
 >fn4 : () => Promise<Obj>
->    : ^^^^^^^^^^^^^ ^^^ 
+>    : ^^^^^^            
 
     return await new Promise(resolve => {
 >await new Promise(resolve => {        resolve({ key: "value" });    }) : Obj
@@ -169,7 +169,7 @@ interface ProcessTreeNode {
 
 export declare function getProcessTree(
 >getProcessTree : (rootPid: number, callback: (tree: ProcessTreeNode) => void) => void
->               : ^^^^^^^^^^      ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^         ^^^^^    
+>               : ^^^^^^^^^^      ^^^^^^^^^^^^                               ^^^^^    
 
   rootPid: number,
 >rootPid : number
@@ -177,7 +177,7 @@ export declare function getProcessTree(
 
   callback: (tree: ProcessTreeNode) => void
 >callback : (tree: ProcessTreeNode) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^^^^^^^               ^^^^^    
 >tree : ProcessTreeNode
 >     : ^^^^^^^^^^^^^^^
 
@@ -264,7 +264,7 @@ type Metadata = {
 };
 declare function scanMetadata(
 >scanMetadata : (local: ILocalExtension) => Promise<Metadata | undefined>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^             
+>             : ^^^^^^^^               ^^^^^                             
 
   local: ILocalExtension
 >local : ILocalExtension
@@ -274,7 +274,7 @@ declare function scanMetadata(
 
 async function copyExtensions(
 >copyExtensions : (fromExtensions: ILocalExtension[]) => Promise<void>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^      
+>               : ^^^^^^^^^^^^^^^^^                 ^^^^^             
 
   fromExtensions: ILocalExtension[]
 >fromExtensions : ILocalExtension[]

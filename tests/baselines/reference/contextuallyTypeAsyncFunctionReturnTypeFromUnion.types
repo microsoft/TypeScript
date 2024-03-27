@@ -9,20 +9,20 @@ declare class StateMachine<T> {
 
   onDone: (a: T) => void;
 >onDone : (a: T) => void
->       : ^^^^^^^^^^    
+>       : ^^^^ ^^^^^    
 >a : T
 >  : ^
 }
 
 declare function createMachine<T>(implementations: {
 >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
->              : ^^^^^^^^^^^^^^^^^^^^^            ^^^^^^               ^^^^^^^ ^    ^^^^^^^^^^^^ ^     ^^^^^    
+>              : ^ ^^^^^^^^^^^^^^^^^^^                                                                 ^^^^^    
 >implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
->                : ^^^^^^^^^^^^^^^^^^               ^^^^^^^ ^    ^^^^^^^^^^^^ ^  ^^^
+>                : ^^^^^^^^^^^^                                                  ^^^
 
   services: Record<string, () => Promise<T> | StateMachine<T>>;
 >services : Record<string, () => Promise<T> | StateMachine<T>>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^    ^^^^^^^^^^^^ ^ ^
+>         : ^^^^^^^^^^^^^^^^^^^^^                            ^
 
 }): void;
 
@@ -80,7 +80,7 @@ createMachine<{ count: number }>({
 
 function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number }> {
 >fn1 : () => () => Promise<{ count: number; }> | StateMachine<{ count: number; }>
->    : ^^^^^^      ^^^^^^^                       ^^^^^^^^^^^^                    
+>    : ^^^^^^                                                                    
 >count : number
 >      : ^^^^^^
 >count : number
@@ -105,7 +105,7 @@ function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number 
 
 declare function load(): Promise<boolean>;
 >load : () => Promise<boolean>
->     : ^^^^^^^^^^^^^         
+>     : ^^^^^^                
 
 type LoadCallback = () => Promise<boolean> | string;
 >LoadCallback : LoadCallback

@@ -26,7 +26,7 @@ class g<T> {
 // Just the name
 function foo(): c[] {
 >foo : () => c[]
->    : ^^^^^^^  
+>    : ^^^^^^   
 
     return [new c()];
 >[new c()] : c[]
@@ -52,7 +52,7 @@ function foo2() {
 // Qualified name
 function foo3(): m.c[] {
 >foo3 : () => m.c[]
->     : ^^^^^^^ ^  
+>     : ^^^^^^     
 >m : any
 >  : ^^^
 
@@ -84,7 +84,7 @@ function foo4() {
 // Just the name with type arguments
 function foo5(): g<string>[] {
 >foo5 : () => g<string>[]
->     : ^^^^^^^          
+>     : ^^^^^^           
 
     return [new g<string>()];
 >[new g<string>()] : g<string>[]
@@ -110,7 +110,7 @@ function foo6() {
 // Qualified name with type arguments
 function foo7(): m.g<number>[] {
 >foo7 : () => m.g<number>[]
->     : ^^^^^^^ ^          
+>     : ^^^^^^             
 >m : any
 >  : ^^^
 
@@ -146,7 +146,7 @@ function foo8() {
 // Array of function types
 function foo9(): (()=>c)[] {
 >foo9 : () => (() => c)[]
->     : ^^^^^^       ^   
+>     : ^^^^^^           
 
     return [() => new c()];
 >[() => new c()] : (() => c)[]

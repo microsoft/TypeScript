@@ -29,7 +29,7 @@ function test(x: number & { _foo: string }) {
 
 function f1(x: F & { foo: number }) {
 >f1 : (x: F & { foo: number; }) => void
->   : ^^^^^                   ^^^^^^^^^
+>   : ^^^^                    ^^^^^^^^^
 >x : F & { foo: number; }
 >  : ^^^^^^^^^^^      ^^^
 >foo : number

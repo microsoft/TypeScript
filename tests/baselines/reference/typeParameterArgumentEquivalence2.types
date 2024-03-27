@@ -7,13 +7,13 @@ function foo<T,U>() {
 
     var x: (item: U) => boolean;
 >x : (item: U) => boolean
->  : ^^^^^^^^^^^^^       
+>  : ^^^^^^^ ^^^^^       
 >item : U
 >     : ^
 
     var y: (item: T) => boolean;
 >y : (item: T) => boolean
->  : ^^^^^^^^^^^^^       
+>  : ^^^^^^^ ^^^^^       
 >item : T
 >     : ^
 

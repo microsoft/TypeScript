@@ -10,9 +10,9 @@ Symbol count: 28,000 / 28,000 (nearest 500)
 interface MiddlewareArray<T> extends Array<T> {}
 declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
 >configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
->               : ^^^^^^^^^^              ^^^^^^^^^^^^^^^        ^^^^^    
+>               : ^^^^^^^^^^                                     ^^^^^    
 >options : { middleware: MiddlewareArray<any>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>        : ^^^^^^^^^^^^^^                    ^^^
 >middleware : MiddlewareArray<any>
 >           : ^^^^^^^^^^^^^^^^^^^^
 

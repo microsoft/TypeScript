@@ -104,7 +104,7 @@ interface A {
 
 function foo(x: A): string { return "abc"; }
 >foo : (x: A) => string
->    : ^^^^^^^^^^      
+>    : ^^^^ ^^^^^      
 >x : A
 >  : ^
 >"abc" : "abc"

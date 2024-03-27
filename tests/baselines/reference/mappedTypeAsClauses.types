@@ -288,7 +288,7 @@ type Schema = {
 
   root: {
 >root : { title: string; task: Task; }
->     : ^^^^^^^^^      ^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^      ^^^^^^^^    ^^^
 
     title: string;
 >title : string
@@ -334,7 +334,7 @@ interface M {
 
 function f(x: KeysExtendedBy<M, number>) {
 >f : (x: KeysExtendedBy<M, number>) => "b"
->  : ^^^^^^^^^^^^^^^^^^ ^         ^^^^^^^^
+>  : ^^^^                         ^^^^^^^^
 >x : "b"
 >  : ^^^
 

@@ -3,13 +3,13 @@
 === sourceMapValidationDecorators.ts ===
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : (target: Function) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^    
+>                : ^^^^^^^^^        ^^^^^    
 >target : Function
 >       : ^^^^^^^^
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
 >ClassDecorator2 : (x: number) => (target: Function) => void
->                : ^^^^      ^^^^^         ^^^^^^^^         
+>                : ^^^^      ^^^^^                          
 >x : number
 >  : ^^^^^^
 >target : Function
@@ -17,7 +17,7 @@ declare function ClassDecorator2(x: number): (target: Function) => void;
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                   : ^^^^^^^^^      ^^^^^^^               ^^^^^^^^^^^^^^^                  ^^^^^    
 >target : Object
 >       : ^^^^^^
 >key : string | symbol
@@ -27,7 +27,7 @@ declare function PropertyDecorator1(target: Object, key: string | symbol, descri
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^^^^      ^^^^^         ^^^^^^                                     ^^^^^^^^^^^^^^^^^^         
+>                   : ^^^^      ^^^^^                                                                               
 >x : number
 >  : ^^^^^^
 >target : Object
@@ -39,7 +39,7 @@ declare function PropertyDecorator2(x: number): (target: Object, key: string | s
 
 declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^      ^^^^^    
+>                    : ^^^^^^^^^      ^^^^^^^               ^^^^^^^^^^^^^^      ^^^^^    
 >target : Object
 >       : ^^^^^^
 >key : string | symbol
@@ -49,7 +49,7 @@ declare function ParameterDecorator1(target: Object, key: string | symbol, param
 
 declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^^^^      ^^^^^         ^^^^^^                                                   
+>                    : ^^^^      ^^^^^                                                                  
 >x : number
 >  : ^^^^^^
 >target : Object

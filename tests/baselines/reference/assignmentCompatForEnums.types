@@ -18,7 +18,7 @@ var list = {};
 
 function returnType(): TokenType { return null; }
 >returnType : () => TokenType
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^         
 
 function foo() {
 >foo : () => void

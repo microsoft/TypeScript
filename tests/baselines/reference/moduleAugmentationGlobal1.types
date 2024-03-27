@@ -20,7 +20,7 @@ declare global {
     interface Array<T> {
         getA(): A;
 >getA : () => A
->     : ^^^^^^^
+>     : ^^^^^^ 
     }
 }
 

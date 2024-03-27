@@ -3,9 +3,9 @@
 === instantiationExpressionErrors.ts ===
 declare let f: { <T>(): T, g<U>(): U };
 >f : { <T>(): T; g<U>(): U; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^ ^^^^ ^^^^^ ^^^
 >g : <U>() => U
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 // Type arguments in member expressions
 
@@ -171,7 +171,7 @@ const b4 = f<number>?.<number>();  // Error, expected no type arguments
 
 declare let g: (<T>(x: T) => T) | undefined;
 >g : (<T>(x: T) => T) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^
 >x : T
 >  : ^
 

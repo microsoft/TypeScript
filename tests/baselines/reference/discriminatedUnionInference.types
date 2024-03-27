@@ -43,7 +43,7 @@ type Item<T> = { kind: 'a', data: T } | { kind: 'b', data: T[] };
 
 declare function foo<T>(item: Item<T>): T;
 >foo : <T>(item: Item<T>) => T
->    : ^^^^^^^^^^^^^^ ^ ^^^^^^
+>    : ^ ^^^^^^^^       ^^^^^ 
 >item : Item<T>
 >     : ^^^^^^^
 

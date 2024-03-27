@@ -52,7 +52,7 @@ rawr(dinosaur);
 
 function rawr(dino: RexOrRaptor) {
 >rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dino : RexOrRaptor
 >     : ^^^^^^^^^^^
 

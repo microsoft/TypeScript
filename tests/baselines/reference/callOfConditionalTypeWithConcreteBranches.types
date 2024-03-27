@@ -9,7 +9,7 @@ type Q<T> = number extends T ? (n: number) => void : never;
 
 function fn<T>(arg: Q<T>) {
 >fn : <T>(arg: Q<T>) => void
->   : ^^^^^^^^^^ ^ ^^^^^^^^^
+>   : ^ ^^^^^^^    ^^^^^^^^^
 >arg : Q<T>
 >    : ^^^^
 
@@ -83,13 +83,13 @@ type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
 
 function fn2<T>(arg: Q2<T>) {
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^^^^^^^^^^^ ^ ^^^^^^^^^
+>    : ^ ^^^^^^^     ^^^^^^^^^
 >arg : Q2<T>
 >    : ^^^^^
 
   function useT(_arg: T): void {}
 >useT : (_arg: T) => void
->     : ^^^^^^^^^^^^^    
+>     : ^^^^^^^ ^^^^^    
 >_arg : T
 >     : ^
 

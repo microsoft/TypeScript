@@ -15,7 +15,7 @@ declare const sn: string | number;
 
 declare function f1<T>(x: T, y: string | T): T;
 >f1 : <T>(x: T, y: string | T) => T
->   : ^^^^^^^^^^^^^         ^^^^^^^
+>   : ^ ^^^^^ ^^^^^          ^^^^^ 
 >x : T
 >  : ^
 >y : string | T
@@ -107,7 +107,7 @@ const a7 = f1("hello", 1);  // Error
 
 declare function f2<T>(value: [string, T]): T;
 >f2 : <T>(value: [string, T]) => T
->   : ^^^^^^^^^^^         ^ ^^^^^^
+>   : ^ ^^^^^^^^^           ^^^^^ 
 >value : [string, T]
 >      : ^^^^^^^^^^^
 
@@ -127,7 +127,7 @@ var b1 = f2(["string", true]);  // boolean
 
 declare function f3<T>(x: string | false | T): T;
 >f3 : <T>(x: string | false | T) => T
->   : ^^^^^^^                 ^^^^^^^
+>   : ^ ^^^^^                  ^^^^^ 
 >x : string | false | T
 >  : ^^^^^^^^^^^^^^^^^^
 >false : false
@@ -185,7 +185,7 @@ const c5 = f3("abc");  // never
 
 declare function f4<T>(x: string & T): T;
 >f4 : <T>(x: string & T) => T
->   : ^^^^^^^         ^^^^^^^
+>   : ^ ^^^^^          ^^^^^ 
 >x : string & T
 >  : ^^^^^^^^^^
 
@@ -222,9 +222,9 @@ const d3 = f4(42);  // Error
 export interface Foo<T> {
     then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
 >then : <U>(f: (x: T) => U | Foo<U>, g: U) => Foo<U>
->     : ^^^^^^^    ^     ^   ^^^ ^ ^^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^                    ^^^^^ ^^^^^      
 >f : (x: T) => U | Foo<U>
->  : ^^^^^^^^^^^   ^^^ ^ 
+>  : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >g : U
@@ -233,9 +233,9 @@ export interface Foo<T> {
 export interface Bar<T> {
     then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
 >then : <S>(f: (x: T) => S | Bar<S>, g: S) => Bar<S>
->     : ^^^^^^^    ^     ^   ^^^ ^ ^^^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^                    ^^^^^ ^^^^^      
 >f : (x: T) => S | Bar<S>
->  : ^^^^^^^^^^^   ^^^ ^ 
+>  : ^^^^ ^^^^^          
 >x : T
 >  : ^
 >g : S
@@ -244,7 +244,7 @@ export interface Bar<T> {
 
 function qux(p1: Foo<void>, p2: Bar<void>) {
 >qux : (p1: Foo<void>, p2: Bar<void>) => void
->    : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^
+>    : ^^^^^         ^^^^^^         ^^^^^^^^^
 >p1 : Foo<void>
 >   : ^^^^^^^^^
 >p2 : Bar<void>
@@ -263,7 +263,7 @@ function qux(p1: Foo<void>, p2: Bar<void>) {
 
 declare function foo<T>(x: T | Promise<T>): void;
 >foo : <T>(x: T | Promise<T>) => void
->    : ^^^^^^^^   ^^^^^^^ ^ ^^^^^    
+>    : ^ ^^^^^              ^^^^^    
 >x : T | Promise<T>
 >  : ^^^^^^^^^^^^^^
 
@@ -285,7 +285,7 @@ foo(x);
 
 declare function bar<T>(x: T, y: string | T): T;
 >bar : <T>(x: T, y: string | T) => T
->    : ^^^^^^^^^^^^^         ^^^^^^^
+>    : ^ ^^^^^ ^^^^^          ^^^^^ 
 >x : T
 >  : ^
 >y : string | T
@@ -329,7 +329,7 @@ type DeepPromised<T> =
 
 async function fun<T>(deepPromised: DeepPromised<T>) {
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^
 >deepPromised : DeepPromised<T>
 >             : ^^^^^^^^^^^^^^^
 
@@ -387,7 +387,7 @@ type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
 
 declare function baz<T>(dp: Deep<T>): T;
 >baz : <T>(dp: Deep<T>) => T
->    : ^^^^^^^^^^^^ ^ ^^^^^^
+>    : ^ ^^^^^^       ^^^^^ 
 >dp : Deep<T>
 >   : ^^^^^^^
 

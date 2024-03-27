@@ -16,7 +16,7 @@ export type Thing = {
 
 export declare function makeThing(): Thing;
 >makeThing : () => Thing
->          : ^^^^^^^^^^^
+>          : ^^^^^^     
 
 === index.ts ===
 import { makeThing } from "umd";

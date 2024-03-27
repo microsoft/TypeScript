@@ -12,7 +12,7 @@ export class C {
      */
     static a() {
 >a : <T>(this: T) => T
->  : ^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^ 
 
         return this;
 >this : T
@@ -26,7 +26,7 @@ export class C {
      */
     b() {
 >b : <T>(this: T) => T
->  : ^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^ 
 
         return this;
 >this : T

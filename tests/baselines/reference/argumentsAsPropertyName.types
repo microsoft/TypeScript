@@ -18,7 +18,7 @@ declare function use(s: any);
 
 function myFunction(myType: MyType) {
 >myFunction : (myType: MyType) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^      ^^^^^^^^^
 >myType : MyType
 >       : ^^^^^^
 

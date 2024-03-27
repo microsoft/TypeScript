@@ -9,7 +9,7 @@ type Facts = { [key: string]: boolean };
 
 declare function checkTruths(x: Facts): void;
 >checkTruths : (x: Facts) => void
->            : ^^^^^^^^^^^^^^    
+>            : ^^^^     ^^^^^    
 >x : Facts
 >  : ^^^^^
 

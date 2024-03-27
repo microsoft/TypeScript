@@ -38,7 +38,7 @@ module ConstructSignature {
 
     var rarg2: new <T>(x: T) => string;
 >rarg2 : new <T>(x: T) => string
->      : ^^^^^^^^^^^^^^^^^      
+>      : ^^^^^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 
@@ -89,7 +89,7 @@ module ConstructSignature {
 
     var r4arg1: new <T>(x: T) => string;
 >r4arg1 : new <T>(x: T) => string
->       : ^^^^^^^^^^^^^^^^^      
+>       : ^^^^^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 

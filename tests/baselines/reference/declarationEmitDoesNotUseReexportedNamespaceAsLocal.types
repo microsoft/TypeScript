@@ -24,7 +24,7 @@ export * as Q from "./sub";
 
 declare function add<T>(x: Promise<T>): T;
 >add : <T>(x: Promise<T>) => T
->    : ^^^^^^^^^^^^^^ ^ ^^^^^^
+>    : ^ ^^^^^          ^^^^^ 
 >x : Promise<T>
 >  : ^^^^^^^^^^
 

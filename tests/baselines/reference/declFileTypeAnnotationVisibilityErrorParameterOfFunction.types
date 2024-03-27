@@ -18,7 +18,7 @@ module m {
     // Directly using names from this module
     function foo1(param: private1) {
 >foo1 : (param: private1) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^        ^^^^^^^^^
 >param : private1
 >      : ^^^^^^^^
     }
@@ -35,7 +35,7 @@ module m {
 
     export function foo3(param : private1) {
 >foo3 : (param: private1) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^        ^^^^^^^^^
 >param : private1
 >      : ^^^^^^^^
     }
@@ -52,7 +52,7 @@ module m {
 
     function foo11(param: public1) {
 >foo11 : (param: public1) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^       ^^^^^^^^^
 >param : public1
 >      : ^^^^^^^
     }
@@ -69,7 +69,7 @@ module m {
 
     export function foo13(param: public1) {
 >foo13 : (param: public1) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^       ^^^^^^^^^
 >param : public1
 >      : ^^^^^^^
     }
@@ -96,7 +96,7 @@ module m {
 
     function foo111(param: m2.public2) {
 >foo111 : (param: m2.public2) => void
->       : ^^^^^^^^^^        ^^^^^^^^^
+>       : ^^^^^^^^          ^^^^^^^^^
 >param : m2.public2
 >      : ^^^^^^^^^^
 >m2 : any
@@ -119,7 +119,7 @@ module m {
 
     export function foo113(param: m2.public2) {
 >foo113 : (param: m2.public2) => void
->       : ^^^^^^^^^^        ^^^^^^^^^
+>       : ^^^^^^^^          ^^^^^^^^^
 >param : m2.public2
 >      : ^^^^^^^^^^
 >m2 : any

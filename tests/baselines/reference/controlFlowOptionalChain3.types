@@ -23,7 +23,7 @@ interface Foo {
 
 function test1(foo: Foo | undefined) {
 >test1 : (foo: Foo | undefined) => void
->      : ^^^^^^^^^            ^^^^^^^^^
+>      : ^^^^^^               ^^^^^^^^^
 >foo : Foo | undefined
 >    : ^^^^^^^^^^^^^^^
 
@@ -50,7 +50,7 @@ function test1(foo: Foo | undefined) {
 
 function test2(foo: Foo | undefined) {
 >test2 : (foo: Foo | undefined) => void
->      : ^^^^^^^^^            ^^^^^^^^^
+>      : ^^^^^^               ^^^^^^^^^
 >foo : Foo | undefined
 >    : ^^^^^^^^^^^^^^^
 
@@ -79,7 +79,7 @@ function test2(foo: Foo | undefined) {
 
 function Test3({ foo }: { foo: Foo | undefined }) {
 >Test3 : ({ foo }: { foo: Foo | undefined; }) => JSX.Element
->      : ^^^^^^^^^^       ^^^               ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^                         ^^^^^^^^^^^^^^^^
 >foo : Foo | undefined
 >    : ^^^^^^^^^^^^^^^
 >foo : Foo | undefined

@@ -98,7 +98,7 @@ function hasNonMatchingParameter(y): x is A {
 
 function hasNonMatchingParameterType1(x: A): x is B {
 >hasNonMatchingParameterType1 : (x: A) => x is B
->                             : ^^^^^^^^^^^^^^^^
+>                             : ^^^^ ^^^^^^^^^^^
 >x : A
 >  : ^
 
@@ -222,7 +222,7 @@ if (hasNoTypeGuard(a)) {
 // Type predicate type is not assignable
 declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
 >acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
->                                             : ^^^^^     ^^^           ^^^^^^^^^
+>                                             : ^^^^^     ^^^            ^^^^^^^^
 >p1 : (p1: any) => p1 is B
 >   : ^^^^^^^^^^^^^^^^^^^^
 >p1 : any
@@ -340,7 +340,7 @@ function b2(a: b is A) {};
 
 function b3(): A | b is A {
 >b3 : () => A | b
->   : ^^^^^^^    
+>   : ^^^^^^     
 >is : any
 >   : ^^^
 >A : typeof A
@@ -510,7 +510,7 @@ type KeySet<T extends Keys> = { [k in T]: true }
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 >hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | "d">
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : KeySet<T>
 >  : ^^^^^^^^^
 

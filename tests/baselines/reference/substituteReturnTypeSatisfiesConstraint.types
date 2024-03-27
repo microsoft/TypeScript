@@ -11,7 +11,7 @@ type O = { m: () => M };
 >O : O
 >  : ^
 >m : () => M
->  : ^^^^^^^
+>  : ^^^^^^ 
 
 type X<T extends M> = T;
 >X : T

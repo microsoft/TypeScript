@@ -4,13 +4,13 @@
 interface Alpha<T> {
     takesArgOfT(arg: T): Alpha<T>;
 >takesArgOfT : (arg: T) => Alpha<T>
->            : ^^^^^^^^^^^^^^^^^ ^ 
+>            : ^^^^^^ ^^^^^        
 >arg : T
 >    : ^
 
     makeBetaOfNumber(): Beta<number>;
 >makeBetaOfNumber : () => Beta<number>
->                 : ^^^^^^^^^^        
+>                 : ^^^^^^            
 }
 interface Beta<T> extends Alpha<T> {
 }

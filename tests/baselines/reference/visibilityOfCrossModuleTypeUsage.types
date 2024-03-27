@@ -7,7 +7,7 @@ import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 
 function run(configuration: commands.IConfiguration) {
 >run : (configuration: commands.IConfiguration) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^                       ^^^^^^^^^
 >configuration : commands.IConfiguration
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >commands : any
@@ -65,7 +65,7 @@ export interface IServer {
 export interface IWorkspace {
     toAbsolutePath(server: IServer, workspaceRelativePath?: string): string;
 >toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      
+>               : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      
 >server : IServer
 >       : ^^^^^^^
 >workspaceRelativePath : string

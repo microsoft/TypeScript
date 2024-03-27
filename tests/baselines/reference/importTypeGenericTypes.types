@@ -128,7 +128,7 @@ export class Bar2<T> {
 
     item: {a: string, b: number, c: object, data: T};
 >item : { a: string; b: number; c: object; data: T; }
->     : ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^ ^^^
 >a : string
 >  : ^^^^^^
 >b : number

@@ -13,7 +13,7 @@ class C {
 interface I {
     x(): Goo;
 >x : () => Goo
->  : ^^^^^^^^^
+>  : ^^^^^^   
 }
 
 interface Goo {
@@ -24,9 +24,9 @@ interface Goo {
 
 function foo<T>(f: { y: T }): T { return null }
 >foo : <T>(f: { y: T; }) => T
->    : ^^^^^^^     ^   ^^^^^^
+>    : ^ ^^^^^         ^^^^^ 
 >f : { y: T; }
->  : ^^^^^^^^^
+>  : ^^^^^ ^^^
 >y : T
 >  : ^
 

@@ -17,7 +17,7 @@ var p: XEvent = XEvent.prototype;
 
 var x: {prototype: XEvent} = XEvent;
 >x : { prototype: XEvent; }
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^      ^^^
 >prototype : XEvent
 >          : ^^^^^^
 >XEvent : typeof XEvent

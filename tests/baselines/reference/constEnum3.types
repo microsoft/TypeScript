@@ -17,13 +17,13 @@ type TestTypeStr = keyof typeof TestType;
 
 function f1(f: TestType) { }
 >f1 : (f: TestType) => void
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^        ^^^^^^^^^
 >f : TestType
 >  : ^^^^^^^^
 
 function f2(f: TestTypeStr) { }
 >f2 : (f: TestTypeStr) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^           ^^^^^^^^^
 >f : "foo" | "bar"
 >  : ^^^^^^^^^^^^^
 

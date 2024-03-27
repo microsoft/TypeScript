@@ -12,7 +12,7 @@ module B {
 
 	export function f(): A.I { return null; }
 >f : () => A.I
->  : ^^^^^^^  
+>  : ^^^^^^   
 >A : any
 >  : ^^^
 }

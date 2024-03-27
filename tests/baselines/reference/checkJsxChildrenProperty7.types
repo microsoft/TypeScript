@@ -66,7 +66,7 @@ function AnotherButton(p: any) {
 
 function Comp(p: Prop) {
 >Comp : (p: Prop) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^
 >p : Prop
 >  : ^^^^
 

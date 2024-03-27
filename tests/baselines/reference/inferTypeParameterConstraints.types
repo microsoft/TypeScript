@@ -41,7 +41,7 @@ class BaseClass<V> {
 
   protected fake(): V {
 >fake : () => V
->     : ^^^^^^^
+>     : ^^^^^^ 
 
     throw new Error("");
 >new Error("") : Error

@@ -27,7 +27,7 @@ class D {
 
 function foo<T, U extends T>(t: T, t2: U) {
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^ ^^^^^^
 >t : T
 >  : ^
 >t2 : U
@@ -35,7 +35,7 @@ function foo<T, U extends T>(t: T, t2: U) {
 
     return (x: T) => t2;
 >(x: T) => t2 : (x: T) => U
->             : ^^^^^^^^^^^
+>             : ^^^^ ^^^^^^
 >x : T
 >  : ^
 >t2 : U

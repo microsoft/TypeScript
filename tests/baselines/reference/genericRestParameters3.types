@@ -195,9 +195,9 @@ interface CoolArray<E> extends Array<E> {
 
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^          ^         ^^^^^    
+>    : ^ ^^^^^^^^^^^^^^^^^^^^                    ^^^^^    
 >cb : (...args: T) => void
->   : ^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^^^ ^^^^^    
 >args : T
 >     : ^
 
@@ -225,7 +225,7 @@ foo<CoolArray<any>>(foo);  // Error
 
 function bar<T extends any[]>(...args: T): T {
 >bar : <T extends any[]>(...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -260,7 +260,7 @@ let b = bar<CoolArray<number>>(10, 20);  // Error
 
 declare function baz<T>(...args: CoolArray<T>): void;
 >baz : <T>(...args: CoolArray<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^    
+>    : ^ ^^^^^^^^^^^            ^^^^^    
 >args : CoolArray<T>
 >     : ^^^^^^^^^^^^
 
@@ -306,7 +306,7 @@ baz(...ca);  // Error
 
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
 >hmm : <A extends [] | [number, string]>(...args: A) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^    
 >args : A
 >     : ^
 
@@ -410,13 +410,13 @@ ff2 = ff1;
 
 function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
 >ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^                     ^^^^^^                     ^                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^                                                     ^^^^^^                                          ^^^^^^^^^
 >s1 : (...args: [x: string, ...rest: A | [number]]) => void
->   : ^^^^^^^^^^                     ^            ^^^^^    
+>   : ^^^^^^^^^^                                  ^^^^^    
 >args : [x: string, number] | [x: string, ...rest: A]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : (x: string, ...rest: A | [number]) => void
->   : ^^^^      ^^^^^^^^^^^^           ^^^^^    
+>   : ^^^^      ^^^^^^^^^^^            ^^^^^    
 >x : string
 >  : ^^^^^^
 >rest : [number] | A

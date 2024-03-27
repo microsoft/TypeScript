@@ -23,7 +23,7 @@ module NonGenericParameter {
 
     function foo4(cb: typeof a) {
 >foo4 : (cb: typeof a) => { new (x: boolean): boolean; new (x: string): string; }
->     : ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb : { new (x: boolean): boolean; new (x: string): string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { new (x: boolean): boolean; new (x: string): string; }
@@ -36,7 +36,7 @@ module NonGenericParameter {
 
     var b: { new <T, U>(x: T): U }
 >b : new <T, U>(x: T) => U
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -57,9 +57,9 @@ module GenericParameter {
 
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
->     : ^^^^^^^^          ^                            ^   ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^
+>     : ^ ^^^^^^                                           ^^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^^      ^^^ ^^^
 >cb : { new (x: T): string; new (x: number): T; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^
+>   : ^^^^^^^^^^ ^^^      ^^^^^^^^^^      ^^^ ^^^
 >x : T
 >  : ^
 >x : number
@@ -72,7 +72,7 @@ module GenericParameter {
 
     var a: { new <T>(x: T): T };
 >a : new <T>(x: T) => T
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -88,9 +88,9 @@ module GenericParameter {
 
     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
->     : ^^^^^^^^          ^                   ^      ^            ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>     : ^ ^^^^^^                                                  ^^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^^ ^^^^^^ ^^^      ^^^
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>   : ^^^^^^^^^^ ^^^      ^^^^^^^^^^ ^^^^^^ ^^^      ^^^
 >x : T
 >  : ^
 >x : T
@@ -105,7 +105,7 @@ module GenericParameter {
 
     var b: { new <T>(x: T, y: T): string };
 >b : new <T>(x: T, y: T) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^      
+>  : ^^^^^ ^^^^^ ^^^^^ ^^^^^      
 >x : T
 >  : ^
 >y : T
@@ -123,11 +123,11 @@ module GenericParameter {
 
     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
->     : ^^^^^^^^^^^^^^          ^                   ^      ^            ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>     : ^ ^^^^^ ^^^^^^                                                  ^^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^^ ^^^^^^ ^^^      ^^^
 >x : T
 >  : ^
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^
+>   : ^^^^^^^^^^ ^^^      ^^^^^^^^^^ ^^^^^^ ^^^      ^^^
 >x : T
 >  : ^
 >x : T
@@ -154,7 +154,7 @@ module GenericParameter {
 
     var c: { new<T>(x: T): number; new<T>(x: number): T; }
 >c : { new <T>(x: T): number; new <T_1>(x: number): T_1; }
->  : ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^
+>  : ^^^^^^^ ^^^^^ ^^^      ^^^^^^^   ^^^^^      ^^^^^^^^^
 >x : T
 >  : ^
 >x : number

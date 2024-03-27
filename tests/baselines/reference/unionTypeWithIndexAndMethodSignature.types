@@ -14,7 +14,7 @@ interface Options {
 }
 declare function f(options: number | Options): void;
 >f : (options: number | Options) => void
->  : ^^^^^^^^^^         ^^^^^^^^^^^^    
+>  : ^^^^^^^^^^                ^^^^^    
 >options : number | Options
 >        : ^^^^^^^^^^^^^^^^
 

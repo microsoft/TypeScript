@@ -32,7 +32,7 @@ class A {
 
 function decorator(target: Object, propertyKey: string) {
 >decorator : (target: Object, propertyKey: string) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>          : ^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^
 >target : Object
 >       : ^^^^^^
 >propertyKey : string

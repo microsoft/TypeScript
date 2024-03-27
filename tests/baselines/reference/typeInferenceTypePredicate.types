@@ -3,7 +3,7 @@
 === typeInferenceTypePredicate.ts ===
 declare function f<T>(predicate: (x: {}) => x is T): T;
 >f : <T>(predicate: (x: {}) => x is T) => T
->  : ^^^^^^^^^^^^^^^                ^^^^^^^
+>  : ^ ^^^^^^^^^^^^^                 ^^^^^ 
 >predicate : (x: {}) => x is T
 >          : ^^^^  ^^^^^^^^^^^
 >x : {}

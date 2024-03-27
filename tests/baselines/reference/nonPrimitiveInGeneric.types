@@ -3,7 +3,7 @@
 === nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : <T>(t: T) => void
->        : ^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -59,7 +59,7 @@ generic<object>(b); // expect error
 
 function bound<T extends object>(t: T) {
 >bound : <T extends object>(t: T) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -132,7 +132,7 @@ bound2<string>(); // expect error
 
 function bound3<T extends {}>(t: T) {
 >bound3 : <T extends {}>(t: T) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >t : T
 >  : ^
 

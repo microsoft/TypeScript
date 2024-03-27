@@ -24,7 +24,7 @@ class Base {
 
             testBase(x: Base) {
 >testBase : (x: Base) => void
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^    ^^^^^^^^^
 >x : Base
 >  : ^^^^
 

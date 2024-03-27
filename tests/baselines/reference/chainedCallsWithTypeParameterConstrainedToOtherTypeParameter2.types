@@ -11,9 +11,9 @@ class Chain<T> {
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
->     : ^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^^^^^^^           ^^^^^        
 >cb : (x: T) => S
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -196,9 +196,9 @@ class Chain2<T extends I> {
 
     then<S extends T>(cb: (x: T) => S): Chain2<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->     : ^^^^^^^^^^^^^^^^^^    ^     ^^^^^^^^^^^^ ^ 
+>     : ^ ^^^^^^^^^^^^^^^^           ^^^^^         
 >cb : (x: T) => S
->   : ^^^^^^^^^^^
+>   : ^^^^ ^^^^^ 
 >x : T
 >  : ^
 

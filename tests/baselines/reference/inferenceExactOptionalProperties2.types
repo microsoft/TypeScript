@@ -18,7 +18,7 @@ type EventObject = {
 interface ActorLogic<TEvent extends EventObject> {
   transition: (ev: TEvent) => unknown;
 >transition : (ev: TEvent) => unknown
->           : ^^^^^^^^^^^^^^^^       
+>           : ^^^^^      ^^^^^       
 >ev : TEvent
 >   : ^^^^^^
 }
@@ -59,13 +59,13 @@ interface MachineConfig<TActor extends ProvidedActor> {
 
 declare function assign<TActor extends ProvidedActor>(
 >assign : <TActor extends ProvidedActor>(_: (spawn: (actor: TActor["src"]) => void) => {}) => AssignAction<TActor>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^                       ^^^^^^^^^^^^^^^^^ ^^^^^^ 
+>       : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^                    
 
   _: (spawn: (actor: TActor["src"]) => void) => {},
 >_ : (spawn: (actor: TActor["src"]) => void) => {}
->  : ^^^^^^^^        ^^^^^^                ^^^^^  
+>  : ^^^^^^^^                              ^^^^^  
 >spawn : (actor: TActor["src"]) => void
->      : ^^^^^^^^^^^^^^       ^^^^^    
+>      : ^^^^^^^^             ^^^^^    
 >actor : TActor["src"]
 >      : ^^^^^^^^^^^^^
 
@@ -90,12 +90,12 @@ type ToProvidedActor<TActors extends Record<string, UnknownActorLogic>> =
 
 declare function setup<
 >setup : <TActors extends Record<string, UnknownActorLogic> = {}>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined) => { createMachine: <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^    ^^^
 
   TActors extends Record<string, UnknownActorLogic> = {},
 >(implementations?: {
 >implementations : { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   actors?: { [K in keyof TActors]: TActors[K] };
 >actors : { [K in keyof TActors]: TActors[K]; } | undefined
@@ -104,7 +104,7 @@ declare function setup<
 }): {
   createMachine: <
 >createMachine : <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^    
 
     const TConfig extends MachineConfig<ToProvidedActor<TActors>>,
   >(

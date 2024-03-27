@@ -14,7 +14,7 @@ interface IUser {
 interface IFetchUserProps {
     children: (user: IUser) => JSX.Element;
 >children : (user: IUser) => JSX.Element
->         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^
+>         : ^^^^^^^     ^^^^^           
 >user : IUser
 >     : ^^^^^
 >JSX : any

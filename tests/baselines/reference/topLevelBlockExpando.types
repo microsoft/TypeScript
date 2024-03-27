@@ -83,7 +83,7 @@ interface Person {
  */
 function doHumanThings(param) {}
 >doHumanThings : (param: Human) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^     ^^^^^^^^^
 >param : Human
 >      : ^^^^^
 

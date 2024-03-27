@@ -113,7 +113,7 @@ Other.Cls = class {
      */
     method(p) {}
 >method : (p: Host.UserMetrics.Action) => void
->       : ^^^^^^^^                   ^^^^^^^^^
+>       : ^^^^                       ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 

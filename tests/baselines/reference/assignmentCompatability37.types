@@ -31,7 +31,7 @@ module __test2__ {
 
     export var aa:{ new <Tnumber>(param: Tnumber); };;
 >aa : new <Tnumber>(param: Tnumber) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^       ^^^^^^^^^       ^^^^^^^^
 >param : Tnumber
 >      : ^^^^^^^
 

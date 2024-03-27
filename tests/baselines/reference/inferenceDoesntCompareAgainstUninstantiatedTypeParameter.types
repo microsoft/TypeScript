@@ -16,7 +16,7 @@ class ClassA<TEntityClass>  {
 export interface ValueInterface<TValueClass> {
     func?: (row: TValueClass) => any;
 >func : (row: TValueClass) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^   
+>     : ^^^^^^           ^^^^^   
 >row : TValueClass
 >    : ^^^^^^^^^^^
 
@@ -27,7 +27,7 @@ export interface ValueInterface<TValueClass> {
 export interface SettingsInterface<TClass> {
     values?: (row: TClass) => ValueInterface<TClass>[],
 >values : (row: TClass) => ValueInterface<TClass>[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^   
+>       : ^^^^^^      ^^^^^                        
 >row : TClass
 >    : ^^^^^^
 }

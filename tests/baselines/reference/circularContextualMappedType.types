@@ -17,7 +17,7 @@ declare function reproduce(options: number): void;
 
 declare function reproduce<T>(options: Mapped<T>): T
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ ^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^         ^^^ ^^^
 >options : Mapped<T>
 >        : ^^^^^^^^^
 

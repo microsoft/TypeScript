@@ -39,7 +39,7 @@ export {}; // flag file as module
  */
 function doTheThing(x) {
 >doTheThing : (x: number) => SomeType
->           : ^^^^      ^^^^^^^^^^^^^
+>           : ^^^^      ^^^^^        
 >x : number
 >  : ^^^^^^
 

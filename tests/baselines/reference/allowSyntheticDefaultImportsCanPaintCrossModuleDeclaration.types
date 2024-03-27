@@ -17,7 +17,7 @@ import Color from "./color";
 
 export declare function styled(): Color;
 >styled : () => Color
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 
 === file2.ts ===
 import { styled }  from "./file1";

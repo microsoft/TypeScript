@@ -43,13 +43,13 @@ class Elephant {
 
 function foo(animals: IAnimal[]) { }
 >foo : (animals: IAnimal[]) => void
->    : ^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>    : ^^^^^^^^^^         ^^^^^^^^^
 >animals : IAnimal[]
 >        : ^^^^^^^^^
 
 function bar(animals: { [n: number]: IAnimal }) { }
 >bar : (animals: { [n: number]: IAnimal; }) => void
->    : ^^^^^^^^^^               ^^^^^^^   ^^^^^^^^^
+>    : ^^^^^^^^^^                         ^^^^^^^^^
 >animals : { [n: number]: IAnimal; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number

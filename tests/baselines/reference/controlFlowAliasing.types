@@ -1351,7 +1351,7 @@ type Data = { kind: 'str', payload: string } | { kind: 'num', payload: number };
 
 function gg2(obj: Data) {
 >gg2 : (obj: Data) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^    ^^^^^^^^^
 >obj : Data
 >    : ^^^^
 
@@ -1392,7 +1392,7 @@ function gg2(obj: Data) {
 
 function foo({ kind, payload }: Data) {
 >foo : ({ kind, payload }: Data) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >kind : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >payload : string | number
@@ -1462,7 +1462,7 @@ class Utils {
 
   static isDefined<T>(value: T): value is NonNullable<T> {
 >isDefined : <T>(value: T) => value is NonNullable<T>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 

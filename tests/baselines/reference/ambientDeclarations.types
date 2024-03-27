@@ -72,7 +72,7 @@ declare function fn9(...q: {}[]);
 
 declare function fn10<T>(...q: T[]);
 >fn10 : <T>(...q: T[]) => any
->     : ^^^^^^^^^^^  ^^^^^^^^
+>     : ^ ^^^^^^^^   ^^^^^^^^
 >q : T[]
 >  : ^^^
 
@@ -84,7 +84,7 @@ declare class cls {
     constructor();
     method(): cls;
 >method : () => cls
->       : ^^^^^^^^^
+>       : ^^^^^^   
 
     static static(p): number;
 >static : (p: any) => number

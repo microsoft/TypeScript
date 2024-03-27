@@ -6,7 +6,7 @@
 // Object constraint
 function foo<T extends Object>(x: T) { }
 >foo : <T extends Object>(x: T) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -67,7 +67,7 @@ var i: I<{}>;
 // {} constraint
 function foo2<T extends {}>(x: T) { }
 >foo2 : <T extends {}>(x: T) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : T
 >  : ^
 

@@ -29,7 +29,7 @@ class E {
 }
 function foo(x: "hi", items: string[]): D;
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^    ^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^    ^^^^^^^^^        ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "hi"
 >  : ^^^^
 >items : string[]
@@ -37,7 +37,7 @@ function foo(x: "hi", items: string[]): D;
 
 function foo(x: "bye", items: string[]): E;
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^        ^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^        ^^^ ^^^
 >x : "bye"
 >  : ^^^^^
 >items : string[]
@@ -93,7 +93,7 @@ var c = foo("um", []); // error
 //function bar(x: "hi", items: string[]): D;
 function bar(x: "bye", items: string[]): E;
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^     ^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^     ^^^^^^^^^        ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "bye"
 >  : ^^^^^
 >items : string[]
@@ -101,7 +101,7 @@ function bar(x: "bye", items: string[]): E;
 
 function bar(x: string, items: string[]): C;
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^        ^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^        ^^^ ^^^
 >x : string
 >  : ^^^^^^
 >items : string[]

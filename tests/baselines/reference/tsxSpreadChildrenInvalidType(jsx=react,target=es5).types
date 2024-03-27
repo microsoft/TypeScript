@@ -67,7 +67,7 @@ function Todo(prop: { key: number, todo: string }) {
 }
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 
@@ -113,7 +113,7 @@ function TodoList({ todos }: TodoListProps) {
 }
 function TodoListNoError({ todos }: TodoListProps) {
 >TodoListNoError : ({ todos }: TodoListProps) => JSX.Element
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 

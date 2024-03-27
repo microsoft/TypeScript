@@ -3,9 +3,9 @@
 === contextualTypingTwoInstancesOfSameTypeParameter.ts ===
 function f6<T>(x: (a: T) => T) {
 >f6 : <T>(x: (a: T) => T) => any
->   : ^^^^^^^    ^     ^^^^^^^^^
+>   : ^ ^^^^^           ^^^^^^^^
 >x : (a: T) => T
->  : ^^^^^^^^^^^
+>  : ^^^^ ^^^^^ 
 >a : T
 >  : ^
 
