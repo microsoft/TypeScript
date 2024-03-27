@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/unicodeInModuleSpecifierError1.ts] ////
+
+=== 🦁.ts ===
+export const foo = "bar";
+>foo : "bar"
+>"bar" : "bar"
+
+const baz = "baz";
+>baz : "baz"
+>"baz" : "baz"
+
+=== main.ts ===
+import { bar, baz } from './🦁.ts';
+>bar : any
+>baz : any
+
+export { bar, baz } from './🦁.ts';
+>bar : any
+>baz : any
+
