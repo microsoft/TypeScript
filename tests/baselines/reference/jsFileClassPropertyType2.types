@@ -3,27 +3,42 @@
 === foo.js ===
 class C {
 >C : C
+>  : ^
 
     constructor() {
       /** @type {number[]}*/
       this.p = [];
 >this.p = [] : undefined[]
+>            : ^^^^^^^^^^^
 >this.p : number[]
+>       : ^^^^^^^^
 >this : this
+>     : ^^^^
 >p : number[]
+>  : ^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
   }
 }
 
 === bar.ts ===
 (new C()).p.push("string");
 >(new C()).p.push("string") : number
+>                           : ^^^^^^
 >(new C()).p.push : (...items: number[]) => number
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(new C()).p : number[]
+>            : ^^^^^^^^
 >(new C()) : C
+>          : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >p : number[]
+>  : ^^^^^^^^
 >push : (...items: number[]) => number
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 

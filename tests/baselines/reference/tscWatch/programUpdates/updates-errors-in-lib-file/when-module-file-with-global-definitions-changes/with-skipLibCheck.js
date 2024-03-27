@@ -29,14 +29,14 @@ interface Document {
 /a/lib/tsc.js -w /user/username/projects/myproject/a.ts --skipLibCheck
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96ma.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m4[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -100,9 +100,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -151,14 +151,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
 
 [7m4[0m     fullscreen: boolean;
 [7m [0m [91m    ~~~~~~~~~~[0m
 
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

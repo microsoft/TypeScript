@@ -3,18 +3,28 @@
 === awaitCallExpressionInSyncFunction.ts ===
 function foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
    const foo = await(Promise.resolve(1));
 >foo : any
+>    : ^^^
 >await(Promise.resolve(1)) : any
+>                          : ^^^
 >await : any
+>      : ^^^
 >Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
    return foo;
 >foo : any
+>    : ^^^
 }
 

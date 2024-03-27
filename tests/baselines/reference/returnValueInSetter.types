@@ -3,10 +3,13 @@
 === returnValueInSetter.ts ===
 class f {
 >f : f
+>  : ^
 
     set x(value) {
 >x : any
+>  : ^^^
 >value : any
+>      : ^^^
 
         return null; // Should be an error
     }

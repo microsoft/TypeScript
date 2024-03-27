@@ -1836,10 +1836,6 @@
         "category": "Error",
         "code": 2332
     },
-    "'this' cannot be referenced in constructor arguments.": {
-        "category": "Error",
-        "code": 2333
-    },
     "'this' cannot be referenced in a static property initializer.": {
         "category": "Error",
         "code": 2334

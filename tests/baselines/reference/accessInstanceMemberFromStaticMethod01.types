@@ -3,15 +3,20 @@
 === accessInstanceMemberFromStaticMethod01.ts ===
 class C {
 >C : C
+>  : ^
 
     static foo: string;
 >foo : string
+>    : ^^^^^^
 
     bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         let k = foo;
 >k : any
+>  : ^^^
 >foo : any
+>    : ^^^
     }
 }

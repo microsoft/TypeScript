@@ -7,49 +7,68 @@ export default 12;
 === index2.js ===
 export default function foo() {
 >foo : () => typeof foo
+>    : ^^^^^^^^^^^^^^^^
 
     return foo;
 >foo : () => typeof foo
+>    : ^^^^^^^^^^^^^^^^
 }
 export const x = foo;
 >x : () => typeof foo
+>  : ^^^^^^^^^^^^^^^^
 >foo : () => typeof foo
+>    : ^^^^^^^^^^^^^^^^
 
 export { foo as bar };
 >foo : () => typeof foo
+>    : ^^^^^^^^^^^^^^^^
 >bar : () => typeof foo
+>    : ^^^^^^^^^^^^^^^^
 
 === index3.js ===
 export default class Foo {
 >Foo : Foo
+>    : ^^^
 
     a = /** @type {Foo} */(null);
 >a : Foo
+>  : ^^^
 >(null) : Foo
+>       : ^^^
 
 };
 export const X = Foo;
 >X : typeof Foo
+>  : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export { Foo as Bar };
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Bar : typeof Foo
+>    : ^^^^^^^^^^
 
 === index4.js ===
 import Fab from "./index3";
 >Fab : typeof Fab
+>    : ^^^^^^^^^^
 
 class Bar extends Fab {
 >Bar : Bar
+>    : ^^^
 >Fab : Fab
+>    : ^^^
 
     x = /** @type {Bar} */(null);
 >x : Bar
+>  : ^^^
 >(null) : Bar
+>       : ^^^
 }
 export default Bar;
 >Bar : Bar
+>    : ^^^
 
 === index5.js ===
 
@@ -63,6 +82,7 @@ export default 12;
 // merge type alias and function (OK)
 export default function func() {};
 >func : () => void
+>     : ^^^^^^^^^^
 
 /**
  * @typedef {string | number} default

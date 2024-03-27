@@ -3,20 +3,26 @@
 === unusedTypeParameterInMethod1.ts ===
 class A {
 >A : A
+>  : ^
 
     public f1<X, Y, Z>() {
 >f1 : <X, Y, Z>() => void
+>   : ^^^^^^^^^^^^^^^^^^^
 
         var a: Y;
 >a : Y
+>  : ^
 
         var b: Z;
 >b : Z
+>  : ^
 
         a;
 >a : Y
+>  : ^
 
         b;
 >b : Z
+>  : ^
     }
 }

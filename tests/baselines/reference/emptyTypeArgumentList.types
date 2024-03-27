@@ -3,16 +3,22 @@
 === emptyTypeArgumentList.ts ===
 function foo<T>() { }
 >foo : <T>() => void
+>    : ^^^^^^^^^^^^^
 
 foo<>();
 >foo<>() : void
+>        : ^^^^
 >foo : <T>() => void
+>    : ^^^^^^^^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/33041
 function noParams() {}
 >noParams : () => void
+>         : ^^^^^^^^^^
 
 noParams<>();
 >noParams<>() : void
+>             : ^^^^
 >noParams : () => void
+>         : ^^^^^^^^^^
 

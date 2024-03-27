@@ -3,14 +3,21 @@
 === optionalParamReferencingOtherParams3.ts ===
 function right(a = b, b = a) {
 >right : (a?: any, b?: any) => void
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 
     a;
 >a : any
+>  : ^^^
 
     b;
 >b : any
+>  : ^^^
 }

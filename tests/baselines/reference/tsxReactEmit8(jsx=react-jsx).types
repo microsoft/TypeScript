@@ -11,13 +11,21 @@ Symbol count: 70,500 / 70,500 (nearest 500)
 
 <div>1</div>;
 ><div>1</div> : JSX.Element
+>             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 <div key={"key-attr"}>2</div>;
 ><div key={"key-attr"}>2</div> : JSX.Element
+>                              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >key : string
+>    : ^^^^^^
 >"key-attr" : "key-attr"
+>           : ^^^^^^^^^^
 >div : any
+>    : ^^^
 
