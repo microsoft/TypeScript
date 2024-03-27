@@ -2597,5 +2597,5 @@ export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag):
 export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     sourceFile ??= getSourceFileOfNode(node);
     const parseTreeNode = getParseTreeNode(node);
-    return parseTreeNode && !!getJSDocInternalTag(parseTreeNode);
+    return !!parseTreeNode && !!getJSDocInternalTag(parseTreeNode);
 }
