@@ -93,7 +93,7 @@
           "kind": "space"
         },
         {
-          "text": "any",
+          "text": "number",
           "kind": "keyword"
         },
         {
@@ -117,7 +117,7 @@
           "kind": "space"
         },
         {
-          "text": "any",
+          "text": "number",
           "kind": "keyword"
         },
         {
