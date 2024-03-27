@@ -3,6 +3,7 @@
 === parserObjectType4.ts ===
 var v: {
 >v : { x: any; y: any; }
+>  : ^^^^^^^^^^^^^^^^^^^
 
   x
 >x : any

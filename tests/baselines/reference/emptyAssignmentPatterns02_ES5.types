@@ -16,8 +16,10 @@ let x, y, z, a1, a2, a3;
 >({} = { x, y, z } = a) : any
 >{} = { x, y, z } = a : any
 >{} : {}
+>   : ^^
 >{ x, y, z } = a : any
 >{ x, y, z } : { x: any; y: any; z: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >y : any
 >z : any
@@ -27,8 +29,10 @@ let x, y, z, a1, a2, a3;
 >([] = [ a1, a2, a3] = a) : any
 >[] = [ a1, a2, a3] = a : any
 >[] : []
+>   : ^^
 >[ a1, a2, a3] = a : any
 >[ a1, a2, a3] : [any, any, any]
+>              : ^^^^^^^^^^^^^^^
 >a1 : any
 >a2 : any
 >a3 : any

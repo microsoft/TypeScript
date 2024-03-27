@@ -690,11 +690,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
     });
 
     describe("with fsWatch with fsWatchWithTimestamp", () => {
-        function verify(fsWatchWithTimestamp: boolean) {
+        function verify(fsWatchWithTimestamp: boolean, watchFile?: "useFsEventsOnParentDirectory") {
             verifyTscWatch({
                 scenario,
-                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}`,
-                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}${watchFile ? ` ${watchFile}` : ""}`,
+                commandLineArgs: ["-w", "--extendedDiagnostics", ...(watchFile ? ["--watchFile", watchFile] : [])],
                 sys: () =>
                     createWatchedSystem(
                         {
@@ -723,6 +723,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         }
         verify(/*fsWatchWithTimestamp*/ true);
         verify(/*fsWatchWithTimestamp*/ false);
+        verify(/*fsWatchWithTimestamp*/ true, "useFsEventsOnParentDirectory");
+        verify(/*fsWatchWithTimestamp*/ false, "useFsEventsOnParentDirectory");
     });
 
     verifyTscWatch({

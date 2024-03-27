@@ -3,14 +3,18 @@
 === file.js ===
 import { dummy } from './mod1'
 >dummy : number
+>      : ^^^^^^
 
 /** @type {import('./mod1').Dotted.Name} - should work */
 var dot2
 >dot2 : number
+>     : ^^^^^^
 
 === mod1.js ===
 /** @typedef {number} Dotted.Name */
 export var dummy = 1
 >dummy : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 

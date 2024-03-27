@@ -6,7 +6,9 @@
  */
 function f(x) {}
 >f : (x: CantResolveThis) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : CantResolveThis
+>  : ^^^^^^^^^^^^^^^
 
 /**
  * @typedef {CantResolveThis} Ty

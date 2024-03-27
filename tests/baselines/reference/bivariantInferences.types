@@ -6,21 +6,32 @@
 interface Array<T> {
     equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
 >equalsShallow : <T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean
+>              : ^ ^^^^^^^^                ^^^^^^^^^                ^^^^^       
 >this : readonly T[]
+>     : ^^^^^^^^^^^^
 >other : readonly T[]
+>      : ^^^^^^^^^^^^
 }
 
 declare const a: (string | number)[] | null[] | undefined[] | {}[];
 >a : (string | number)[] | null[] | undefined[] | {}[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const b: (string | number)[] | null[] | undefined[] | {}[];
 >b : (string | number)[] | null[] | undefined[] | {}[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let x = a.equalsShallow(b);
 >x : boolean
+>  : ^^^^^^^
 >a.equalsShallow(b) : boolean
+>                   : ^^^^^^^
 >a.equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T_1>(this: readonly T_1[], other: readonly T_1[]) => boolean) | (<T_2>(this: readonly T_2[], other: readonly T_2[]) => boolean) | (<T_3>(this: readonly T_3[], other: readonly T_3[]) => boolean)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : (string | number)[] | null[] | undefined[] | {}[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T_1>(this: readonly T_1[], other: readonly T_1[]) => boolean) | (<T_2>(this: readonly T_2[], other: readonly T_2[]) => boolean) | (<T_3>(this: readonly T_3[], other: readonly T_3[]) => boolean)
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : (string | number)[] | null[] | undefined[] | {}[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

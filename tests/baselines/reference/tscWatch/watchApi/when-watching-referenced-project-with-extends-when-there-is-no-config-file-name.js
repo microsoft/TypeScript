@@ -60,7 +60,7 @@ declare const console: { log(msg: any): void; };
 
 /a/lib/tsc.js --w -p . --extendedDiagnostics
 Output::
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: / CaseSensitiveFileNames: false
 Synchronizing program
@@ -81,7 +81,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 20
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects 1 undefined Failed Lookup Locations
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -174,13 +174,13 @@ After running Timeout callback:: count: 0
 Output::
 Synchronizing program
 Loading config file: /user/username/projects/project/lib/tsconfig.json
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/project/app.ts"]
   options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -233,13 +233,13 @@ After running Timeout callback:: count: 0
 Output::
 Synchronizing program
 Loading config file: /user/username/projects/project/lib/tsconfig.json
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/project/app.ts"]
   options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
-[[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

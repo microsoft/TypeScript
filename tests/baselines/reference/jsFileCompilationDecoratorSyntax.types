@@ -4,4 +4,5 @@
 @internal class C { }
 >internal : error
 >C : C
+>  : ^
 

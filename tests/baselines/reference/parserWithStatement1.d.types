@@ -3,4 +3,5 @@
 === parserWithStatement1.d.ts ===
 with (foo) {
 >foo : any
+>    : ^^^
 }

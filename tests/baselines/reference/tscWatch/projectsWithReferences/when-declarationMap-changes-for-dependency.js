@@ -218,7 +218,7 @@ export declare function multiply(a: number, b: number): number;
 /a/lib/tsc.js -w -p logic --traceResolution --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:56 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/user/username/projects/sample1/logic/package.json' does not exist.
 File '/user/username/projects/sample1/package.json' does not exist.
@@ -261,7 +261,7 @@ core/anotherModule.d.ts
   File is output of project reference source 'core/anotherModule.ts'
 logic/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -585,7 +585,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/sample1/logic/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
@@ -620,7 +620,7 @@ core/anotherModule.d.ts
   File is output of project reference source 'core/anotherModule.ts'
 logic/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -4,71 +4,104 @@
 /// <reference path="d.d.ts"/>
 import {A} from "./a";
 >A : typeof A
+>  : ^^^^^^^^
 
 import "D";
 import "e";
 
 let a: A;
 >a : A
+>  : ^
 
 let b = a.getB().x.toFixed();
 >b : string
+>  : ^^^^^^
 >a.getB().x.toFixed() : string
+>                     : ^^^^^^
 >a.getB().x.toFixed : (fractionDigits?: number) => string
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.getB().x : number
+>           : ^^^^^^
 >a.getB() : import("b").B
+>         : ^^^^^^^^^^^^^^^^^^^
 >a.getB : () => import("b").B
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 >getB : () => import("b").B
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let c = a.getCls().y.toLowerCase();
 >c : string
+>  : ^^^^^^
 >a.getCls().y.toLowerCase() : string
+>                           : ^^^^^^
 >a.getCls().y.toLowerCase : () => string
+>                         : ^^^^^^^^^^^^
 >a.getCls().y : string
+>             : ^^^^^^
 >a.getCls() : import("C").Cls
+>           : ^^^^^^^^^^^^^^^
 >a.getCls : () => import("C").Cls
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 >getCls : () => import("C").Cls
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^^^^^^^
 
 === a.ts ===
 export class A {}
 >A : A
+>  : ^
 
 === b.ts ===
 export class B {x: number;}
 >B : B
+>  : ^
 >x : number
+>  : ^^^^^^
 
 === c.d.ts ===
 declare module "C" {
 >"C" : typeof import("C")
+>    : ^^^^^^^^^^^^^^^^^^
 
     class Cls {y: string; }
 >Cls : Cls
+>    : ^^^
 >y : string
+>  : ^^^^^^
 }
 
 === d.d.ts ===
 declare module "D" {
 >"D" : typeof import("D")
+>    : ^^^^^^^^^^^^^^^^^^
 
     import {A} from "a";
 >A : typeof A
+>  : ^^^^^^^^
 
     import {B} from "b";
 >B : typeof B
+>  : ^^^^^^^^
 
     module "a" {
 >"a" : typeof import("a")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         interface A {
             getB(): B;
 >getB : () => B
+>     : ^^^^^^ 
         }
     }
 }
@@ -77,26 +110,38 @@ declare module "D" {
 /// <reference path="c.d.ts" preserve="true"/>
 import {A} from "./a";
 >A : typeof A
+>  : ^^^^^^^^
 
 import {Cls} from "C";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 A.prototype.getCls = function () { return undefined; }
 >A.prototype.getCls = function () { return undefined; } : () => any
+>                                                       : ^^^^^^^^^
 >A.prototype.getCls : () => Cls
+>                   : ^^^^^^^^^
 >A.prototype : A
+>            : ^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : A
+>          : ^
 >getCls : () => Cls
+>       : ^^^^^^^^^
 >function () { return undefined; } : () => any
+>                                  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 declare module "./a" {
 >"./a" : typeof import("a")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface A {
         getCls(): Cls;
 >getCls : () => Cls
+>       : ^^^^^^   
     }
 }
 

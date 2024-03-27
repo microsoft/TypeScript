@@ -242,7 +242,7 @@ a_1.X;
 /a/lib/tsc.js -w -p c --traceResolution --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:59 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist.
 File '/user/username/projects/transitiveReferences/package.json' does not exist.
@@ -307,7 +307,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -530,7 +530,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
@@ -572,7 +572,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:23 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -671,7 +671,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -736,7 +736,7 @@ nrefs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -890,7 +890,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -955,7 +955,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1110,7 +1110,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -1156,7 +1156,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1310,7 +1310,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -1349,7 +1349,7 @@ b/index.d.ts
   File is output of project reference source 'b/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1477,7 +1477,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -1531,7 +1531,7 @@ b/index.ts
   Imported via '../b' from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:02:03 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1677,7 +1677,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:06 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -1724,7 +1724,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:02:10 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1861,7 +1861,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:12 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -1913,7 +1913,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2056,7 +2056,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/transitiveReferences/c/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -2100,7 +2100,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90m12:02:21 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -3,17 +3,27 @@
 === symbolType4.ts ===
 var s = Symbol.for("postfix");
 >s : symbol
+>  : ^^^^^^
 >Symbol.for("postfix") : symbol
+>                      : ^^^^^^
 >Symbol.for : (key: string) => symbol
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >"postfix" : "postfix"
+>          : ^^^^^^^^^
 
 s++;
 >s++ : number
+>    : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s--;
 >s-- : number
+>    : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 

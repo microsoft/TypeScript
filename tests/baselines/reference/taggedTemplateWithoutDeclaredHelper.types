@@ -3,17 +3,24 @@
 === foo.ts ===
 function id<T>(x: T) {
 >id : <T>(x: T) => T
+>   : ^ ^^^^^ ^^^^^^
 >x : T
+>  : ^
 
   return x;
 >x : T
+>  : ^
 }
 
 export const result = id `hello world`;
 >result : TemplateStringsArray
+>       : ^^^^^^^^^^^^^^^^^^^^
 >id `hello world` : TemplateStringsArray
+>                 : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
+>   : ^^^^^^^^^^^^^^
 >`hello world` : "hello world"
+>              : ^^^^^^^^^^^^^
 
 === ./node_modules/tslib/index.d.ts ===
 

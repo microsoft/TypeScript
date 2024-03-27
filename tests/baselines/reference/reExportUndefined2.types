@@ -6,17 +6,22 @@ var undefined;
 
 export { undefined };
 >undefined : any
+>          : ^^^
 
 === b.ts ===
 import { undefined } from "./a";
 >undefined : any
+>          : ^^^
 
 declare function use(a: number);
 >use : (a: number) => any
+>    : ^^^^      ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 use(undefined);
 >use(undefined) : any
 >use : (a: number) => any
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : any
 
