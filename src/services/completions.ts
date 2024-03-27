@@ -2674,7 +2674,8 @@ export function getCompletionEntriesFromSymbols(
     }
 
     function symbolAppearsToBeTypeOnly(symbol: Symbol): boolean {
-        return !(symbol.flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(symbol.flags & SymbolFlags.Type));
+        const flags = getCombinedLocalAndExportSymbolFlags(skipAlias(symbol, typeChecker));
+        return !(flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(flags & SymbolFlags.Type));
     }
 }
 
