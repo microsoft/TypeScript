@@ -109,7 +109,7 @@ Output::
     [7m [0m [96m    ~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:27 AM[0m] Found 1 error. Watching for file changes.
 
 
 

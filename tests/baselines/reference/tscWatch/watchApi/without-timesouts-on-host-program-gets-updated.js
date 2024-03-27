@@ -81,7 +81,7 @@ const y =10;
 
 
 Output::
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

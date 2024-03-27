@@ -378,16 +378,24 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 }
 
-function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSensitiveFileNames: boolean): HostWatchFile {
+function createUseFsEventsOnParentDirectoryWatchFile(
+    fsWatch: FsWatch,
+    useCaseSensitiveFileNames: boolean,
+    getModifiedTime: NonNullable<System["getModifiedTime"]>,
+    fsWatchWithTimestamp: boolean | undefined,
+): HostWatchFile {
     // One file can have multiple watchers
     const fileWatcherCallbacks = createMultiMap<string, FileWatcherCallback>();
+    const fileTimestamps = fsWatchWithTimestamp ? new Map<string, Date>() : undefined;
     const dirWatchers = new Map<string, DirectoryWatcher>();
     const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return nonPollingWatchFile;
 
     function nonPollingWatchFile(fileName: string, callback: FileWatcherCallback, _pollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined): FileWatcher {
         const filePath = toCanonicalName(fileName);
-        fileWatcherCallbacks.add(filePath, callback);
+        if (fileWatcherCallbacks.add(filePath, callback).length === 1 && fileTimestamps) {
+            fileTimestamps.set(filePath, getModifiedTime(fileName) || missingFileModifiedTime);
+        }
         const dirPath = getDirectoryPath(filePath) || ".";
         const watcher = dirWatchers.get(dirPath) ||
             createDirectoryWatcher(getDirectoryPath(fileName) || ".", dirPath, fallbackOptions);
@@ -410,15 +418,29 @@ function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSe
         const watcher = fsWatch(
             dirName,
             FileSystemEntryKind.Directory,
-            (_eventName: string, relativeFileName, modifiedTime) => {
+            (eventName: string, relativeFileName) => {
                 // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                 if (!isString(relativeFileName)) return;
                 const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
+                const filePath = toCanonicalName(fileName);
                 // Some applications save a working file via rename operations
-                const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
+                const callbacks = fileName && fileWatcherCallbacks.get(filePath);
                 if (callbacks) {
+                    let currentModifiedTime;
+                    let eventKind = FileWatcherEventKind.Changed;
+                    if (fileTimestamps) {
+                        const existingTime = fileTimestamps.get(filePath)!;
+                        if (eventName === "change") {
+                            currentModifiedTime = getModifiedTime(fileName) || missingFileModifiedTime;
+                            if (currentModifiedTime.getTime() === existingTime.getTime()) return;
+                        }
+                        currentModifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
+                        fileTimestamps.set(filePath, currentModifiedTime);
+                        if (existingTime === missingFileModifiedTime) eventKind = FileWatcherEventKind.Created;
+                        else if (currentModifiedTime === missingFileModifiedTime) eventKind = FileWatcherEventKind.Deleted;
+                    }
                     for (const fileCallback of callbacks) {
-                        fileCallback(fileName, FileWatcherEventKind.Changed, modifiedTime);
+                        fileCallback(fileName, eventKind, currentModifiedTime);
                     }
                 }
             },
@@ -974,7 +996,7 @@ export function createSystemWatchFunctions({
                 );
             case WatchFileKind.UseFsEventsOnParentDirectory:
                 if (!nonPollingWatchFile) {
-                    nonPollingWatchFile = createUseFsEventsOnParentDirectoryWatchFile(fsWatch, useCaseSensitiveFileNames);
+                    nonPollingWatchFile = createUseFsEventsOnParentDirectoryWatchFile(fsWatch, useCaseSensitiveFileNames, getModifiedTime, fsWatchWithTimestamp);
                 }
                 return nonPollingWatchFile(fileName, callback, pollingInterval, getFallbackOptions(options));
             default:
@@ -1191,7 +1213,7 @@ export function createSystemWatchFunctions({
                 return watchPresentFileSystemEntryWithFsWatchFile();
             }
             try {
-                const presentWatcher = (!fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
+                const presentWatcher = (entryKind === FileSystemEntryKind.Directory || !fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
                     fileOrDirectory,
                     recursive,
                     inodeWatching ?

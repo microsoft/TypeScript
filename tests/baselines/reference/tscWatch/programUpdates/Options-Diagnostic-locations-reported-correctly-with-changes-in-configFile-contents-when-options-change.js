@@ -114,7 +114,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/tsconfig.json[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS5053: [0mOption 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 
@@ -131,7 +131,7 @@ Output::
 [7m5[0m         "mapRoot": "./"
 [7m [0m [91m        ~~~~~~~~~[0m
 
-[[90m12:00:23 AM[0m] Found 3 errors. Watching for file changes.
+[[90m12:00:22 AM[0m] Found 3 errors. Watching for file changes.
 
 
 

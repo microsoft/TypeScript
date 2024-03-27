@@ -578,7 +578,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -733,7 +733,7 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -996,7 +996,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:02:04 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1143,7 +1143,7 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:02:44 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1408,7 +1408,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:02:49 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:21 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1571,7 +1571,7 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:03:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:50 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

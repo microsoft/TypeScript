@@ -115,7 +115,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
   Default library for target 'es5'
@@ -125,7 +125,7 @@ a/b/f2.ts
   Imported via "./f2" from file 'a/b/f1.ts'
 a/b/f1.ts
   Root file specified for compilation
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

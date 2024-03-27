@@ -132,7 +132,7 @@ Output::
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -208,14 +208,14 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "./file2";
 [7m [0m [91m                  ~~~~~~~~~[0m
 
-[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 
 

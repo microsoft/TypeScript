@@ -164,7 +164,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
 
@@ -180,7 +180,7 @@ link.ts
   Matched by default include pattern '**/*'
 b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
 

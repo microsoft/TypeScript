@@ -110,14 +110,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m10[0m:[93m1[0m - [91merror[0m[90m TS2367: [0mThis comparison appears to be unintentional because the types '{ reallyLongPropertyName1: string | number | bigint | boolean | symbol | object; reallyLongPropertyName2: string | number | bigint | boolean | symbol | object; reallyLongPropertyName3: string | number | bigint | boolean | symbol | object; reallyLongPropertyName4: string | number | bigint | boolean | symbol | object; reallyLongPropertyName5: string | number | bigint | boolean | symbol | object; reallyLongPropertyName6: string | number | bigint | boolean | symbol | object; reallyLongPropertyName7: string | number | bigint | boolean | symbol | object; }' and 'string' have no overlap.
 
 [7m10[0m v === 'foo';
 [7m  [0m [91m~~~~~~~~~~~[0m
 
-[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 

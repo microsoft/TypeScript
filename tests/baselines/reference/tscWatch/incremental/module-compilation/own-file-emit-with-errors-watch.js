@@ -205,14 +205,14 @@ FsWatchesRecursive *deleted*::
 
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] Starting compilation in watch mode...
+[[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
 [96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m1[0m export const y: string = 20;
 [7m [0m [91m             ~[0m
 
-[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 

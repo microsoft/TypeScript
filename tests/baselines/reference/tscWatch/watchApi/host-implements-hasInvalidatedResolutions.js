@@ -156,12 +156,12 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:35 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -215,7 +215,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
@@ -226,7 +226,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/myproject/other.ts' exists - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 undefined Source file
-[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

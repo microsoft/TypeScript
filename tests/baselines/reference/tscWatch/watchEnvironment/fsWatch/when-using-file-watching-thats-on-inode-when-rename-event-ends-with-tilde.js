@@ -197,7 +197,7 @@ CreatingProgramWith::
     [7m [0m [96m                ~~~~[0m
     'foo2' is declared here.
 
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -305,12 +305,12 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -582,14 +582,14 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
 [96mlogic/index.ts[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m8[0m let y: string = 10;
 [7m [0m [91m    ~[0m
 
-[[90m12:01:28 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:25 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -743,7 +743,7 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
 [96mcore/index.ts[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
@@ -755,7 +755,7 @@ Output::
 [7m8[0m let y: string = 10;
 [7m [0m [91m    ~[0m
 
-[[90m12:01:39 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 2 errors. Watching for file changes.
 
 
 

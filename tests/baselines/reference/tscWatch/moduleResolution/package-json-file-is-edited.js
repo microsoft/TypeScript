@@ -202,7 +202,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -239,7 +239,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/mypr
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -344,7 +344,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -386,7 +386,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -486,7 +486,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -521,7 +521,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -620,7 +620,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:01 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -658,7 +658,7 @@ FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:00 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -760,7 +760,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
@@ -811,7 +811,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:01:11 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
 
 
 

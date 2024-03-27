@@ -135,7 +135,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading config file: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
@@ -146,7 +146,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 [7m1[0m export const aNumber: number = "string"
 [7m [0m [91m                      ~~~~~~[0m
 
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 

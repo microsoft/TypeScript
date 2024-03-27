@@ -1169,7 +1169,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -1220,7 +1220,7 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:01:47 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:44 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1432,7 +1432,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -1477,7 +1477,7 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefine
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:02 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:55 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1701,7 +1701,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:09 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -1797,7 +1797,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefine
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:05 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2011,7 +2011,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:24 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:11 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2081,7 +2081,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/index.d.ts 250 undefined Source file
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:31 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2267,7 +2267,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2369,7 +2369,7 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:37 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:21 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2433,7 +2433,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:24 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2514,7 +2514,7 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:41 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:25 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2580,7 +2580,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:28 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2669,7 +2669,7 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:45 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:29 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2735,7 +2735,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:49 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:33 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/index.mts"]
@@ -2803,7 +2803,7 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:02:50 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 

@@ -90,9 +90,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

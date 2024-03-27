@@ -167,11 +167,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:37 AM[0m] Project 'tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
+[[90m12:00:36 AM[0m] Project 'tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -195,13 +195,13 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:43 AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.js'
+[[90m12:00:41 AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.js'
 
-[[90m12:00:44 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
+[[90m12:00:42 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
-[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

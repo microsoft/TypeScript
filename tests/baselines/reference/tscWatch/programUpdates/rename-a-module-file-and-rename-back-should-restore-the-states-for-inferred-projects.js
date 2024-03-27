@@ -103,7 +103,7 @@ Output::
 [7m1[0m import * as T from "./moduleFile"; T.bar();
 [7m [0m [91m                   ~~~~~~~~~~~~~~[0m
 
-[[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -172,9 +172,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

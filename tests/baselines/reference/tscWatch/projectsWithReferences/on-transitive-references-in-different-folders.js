@@ -282,7 +282,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -487,7 +487,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
 ../../../../a/lib/lib.d.ts
@@ -502,7 +502,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:23 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -604,7 +604,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module '../b' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -642,7 +642,7 @@ nrefs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -781,7 +781,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module '../b' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -819,7 +819,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -959,7 +959,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
@@ -978,7 +978,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1117,7 +1117,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
@@ -1135,7 +1135,7 @@ b/index.d.ts
   File is output of project reference source 'b/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1245,7 +1245,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
@@ -1278,7 +1278,7 @@ b/index.ts
   Imported via '../b' from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:02:03 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:48 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1411,7 +1411,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:06 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
@@ -1431,7 +1431,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:02:10 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1554,7 +1554,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:12 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
@@ -1579,7 +1579,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:59 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1709,7 +1709,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
@@ -1726,7 +1726,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:02:21 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
