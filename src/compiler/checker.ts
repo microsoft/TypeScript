@@ -14131,16 +14131,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return modifiers & MappedTypeModifiers.ExcludeOptional ? -1 : modifiers & MappedTypeModifiers.IncludeOptional ? 1 : 0;
     }
 
-    function getModifiersTypeOptionality(type: Type): number {
-        return type.flags & TypeFlags.Intersection ? Math.max(...map((type as IntersectionType).types, getModifiersTypeOptionality)) :
-            getObjectFlags(type) & ObjectFlags.Mapped ? getCombinedMappedTypeOptionality(type as MappedType) :
-            0;
-    }
-
     // Return -1, 0, or 1, for stripped, unchanged, or added optionality respectively. When a homomorphic mapped type doesn't
     // modify optionality, recursively consult the optionality of the type being mapped over to see if it strips or adds optionality.
-    function getCombinedMappedTypeOptionality(type: MappedType): number {
-        return getMappedTypeOptionality(type) || getModifiersTypeOptionality(getModifiersTypeFromMappedType(type));
+    // For intersections, return -1 or 1 when all constituents strip or add optionality, otherwise return 0.
+    function getCombinedMappedTypeOptionality(type: Type): number {
+        if (getObjectFlags(type) & ObjectFlags.Mapped) {
+            return getMappedTypeOptionality(type as MappedType) || getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(type as MappedType));
+        }
+        if (type.flags & TypeFlags.Intersection) {
+            const optionality = getCombinedMappedTypeOptionality((type as IntersectionType).types[0]);
+            return every((type as IntersectionType).types, (t, i) => i === 0 || getCombinedMappedTypeOptionality(t) === optionality) ? optionality : 0;
+        }
+        return 0;
     }
 
     function isPartialMappedType(type: Type) {
@@ -18671,11 +18673,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getUnionType([intersectTypes(type1, type2), neverType]).flags & TypeFlags.Never);
     }
 
+    // Given an indexed access on a mapped type of the form { [P in K]: E }[X], return an instantiation of E where P is
+    // replaced with X. Since this simplification doesn't account for mapped type modifiers, add 'undefined' to the
+    // resulting type if the mapped type includes a '?' modifier or if the modifiers type indicates that some properties
+    // are optional. If the modifiers type is generic, conservatively estimate optionality by recursively looking for
+    // mapped types that include '?' modifiers.
     function substituteIndexedMappedType(objectType: MappedType, index: Type) {
         const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
         const templateMapper = combineTypeMappers(objectType.mapper, mapper);
         const instantiatedTemplateType = instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
-        return addOptionality(instantiatedTemplateType, /*isProperty*/ true, getCombinedMappedTypeOptionality(objectType) > 0);
+        const isOptional = getMappedTypeOptionality(objectType) > 0 || (isGenericType(objectType) ?
+            getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(objectType)) > 0 :
+            couldAccessOptionalProperty(objectType, index));
+        return addOptionality(instantiatedTemplateType, /*isProperty*/ true, isOptional);
+    }
+
+    // Return true if an indexed access with the given object and index types could access an optional property.
+    function couldAccessOptionalProperty(objectType: Type, indexType: Type) {
+        const indexConstraint = getBaseConstraintOfType(indexType);
+        return !!indexConstraint && some(getPropertiesOfType(objectType), p =>
+            !!(p.flags & SymbolFlags.Optional) &&
+            isTypeAssignableTo(getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique), indexConstraint));
     }
 
     function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {

@@ -225,3 +225,97 @@ const resolveMapper2 = <K extends keyof typeof mapper>(
 >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 54, 55))
 >o : Symbol(o, Decl(mappedTypeIndexedAccessConstraint.ts, 55, 11))
 
+// Repro from #57860
+
+type Obj1 = {
+>Obj1 : Symbol(Obj1, Decl(mappedTypeIndexedAccessConstraint.ts, 55, 49))
+
+    a: string;
+>a : Symbol(a, Decl(mappedTypeIndexedAccessConstraint.ts, 59, 13))
+
+    b: number;
+>b : Symbol(b, Decl(mappedTypeIndexedAccessConstraint.ts, 60, 14))
+
+};
+
+type Obj2 = {
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexedAccessConstraint.ts, 62, 2))
+
+    b: number;
+>b : Symbol(b, Decl(mappedTypeIndexedAccessConstraint.ts, 64, 13))
+
+    c: boolean;
+>c : Symbol(c, Decl(mappedTypeIndexedAccessConstraint.ts, 65, 14))
+
+};
+
+declare const mapIntersection: {
+>mapIntersection : Symbol(mapIntersection, Decl(mappedTypeIndexedAccessConstraint.ts, 69, 13))
+
+    [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 70, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Obj1 : Symbol(Obj1, Decl(mappedTypeIndexedAccessConstraint.ts, 55, 49))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexedAccessConstraint.ts, 62, 2))
+
+};
+
+const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
+>accessMapped : Symbol(accessMapped, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 5))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 22))
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexedAccessConstraint.ts, 62, 2))
+>key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 44))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 22))
+>mapIntersection[key].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>mapIntersection : Symbol(mapIntersection, Decl(mappedTypeIndexedAccessConstraint.ts, 69, 13))
+>key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 73, 44))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+declare const resolved: { a?: number | undefined; b: number; c: number };
+>resolved : Symbol(resolved, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 13))
+>a : Symbol(a, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 25))
+>b : Symbol(b, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 49))
+>c : Symbol(c, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 60))
+
+const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
+>accessResolved : Symbol(accessResolved, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 5))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 24))
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexedAccessConstraint.ts, 62, 2))
+>key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 46))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 24))
+>resolved[key].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>resolved : Symbol(resolved, Decl(mappedTypeIndexedAccessConstraint.ts, 75, 13))
+>key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 46))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+// Additional repro from #57860
+
+type Foo = {
+>Foo : Symbol(Foo, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 82))
+
+    prop: string;
+>prop : Symbol(prop, Decl(mappedTypeIndexedAccessConstraint.ts, 81, 12))
+}
+
+function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
+>test : Symbol(test, Decl(mappedTypeIndexedAccessConstraint.ts, 83, 1))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 14))
+>Foo : Symbol(Foo, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 82))
+>obj : Symbol(obj, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 35))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 82))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(mappedTypeIndexedAccessConstraint.ts, 77, 82))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 14))
+>key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 78))
+>K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 14))
+
+    obj[key].length;
+>obj[key].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 35))
+>key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 85, 78))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
