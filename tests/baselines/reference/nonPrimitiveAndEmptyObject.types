@@ -10,7 +10,7 @@ export interface BarProps {
 
 export interface FooProps {
     fooProps?: BarProps & object;
->fooProps : (BarProps & object) | undefined
+>fooProps : BarProps & object | undefined
 }
 
 declare const foo: FooProps;

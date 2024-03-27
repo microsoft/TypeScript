@@ -138,14 +138,14 @@ equal(v as string, v as string & { tag: 'foo' } | undefined);
 >equal : <T>(a: T, b: T) => void
 >v as string : string
 >v : never
->v as string & { tag: 'foo' } | undefined : (string & { tag: 'foo'; }) | undefined
+>v as string & { tag: 'foo' } | undefined : string & { tag: 'foo'; } | undefined
 >v : never
 >tag : "foo"
 
 equal(v as string & { tag: 'foo' } | undefined, v as string);
 >equal(v as string & { tag: 'foo' } | undefined, v as string) : void
 >equal : <T>(a: T, b: T) => void
->v as string & { tag: 'foo' } | undefined : (string & { tag: 'foo'; }) | undefined
+>v as string & { tag: 'foo' } | undefined : string & { tag: 'foo'; } | undefined
 >v : never
 >tag : "foo"
 >v as string : string

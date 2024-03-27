@@ -4,7 +4,7 @@
 // Repro from #50683
 
 type Alignment = (string & {}) | "left" | "center" | "right";
->Alignment : (string & {}) | "left" | "center" | "right"
+>Alignment : string & {} | "left" | "center" | "right"
 
 type Alignments = Record<Alignment, string>;
 >Alignments : { [x: string & {}]: string; left: string; center: string; right: string; }

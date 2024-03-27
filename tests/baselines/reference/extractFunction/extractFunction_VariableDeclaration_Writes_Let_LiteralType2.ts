@@ -23,7 +23,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let x: ("a" | 'b') | undefined;
+    let x: "a" | 'b' | undefined;
     ({ x, a } = /*RENAME*/newFunction(a));
     a; x;
 }

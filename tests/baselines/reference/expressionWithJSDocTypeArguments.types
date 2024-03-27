@@ -47,7 +47,7 @@ type TNopeFoo = typeof foo<?string>;
 >foo : <T>(x: T) => T
 
 type TComeOnFoo = typeof foo<?string?>;
->TComeOnFoo : typeof foo<(string | null) | null>
+>TComeOnFoo : typeof foo<string | null | null>
 >foo : <T>(x: T) => T
 
 const WhatBar = Bar<?>;
@@ -83,6 +83,6 @@ type TNopeBar = typeof Bar<?string>;
 >Bar : typeof Bar
 
 type TComeOnBar = typeof Bar<?string?>;
->TComeOnBar : typeof Bar<(string | null) | null>
+>TComeOnBar : typeof Bar<string | null | null>
 >Bar : typeof Bar
 

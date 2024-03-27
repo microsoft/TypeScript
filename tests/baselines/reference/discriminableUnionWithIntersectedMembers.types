@@ -3,7 +3,7 @@
 === discriminableUnionWithIntersectedMembers.ts ===
 // regression test for https://github.com/microsoft/TypeScript/issues/33243
 type X = 
->X : ({ x: 'x'; y: number; } & { y: number; }) | ({ x: 'y'; y: number; z?: boolean; } & { y: number; })
+>X : { x: 'x'; y: number; } & { y: number; } | { x: 'y'; y: number; z?: boolean; } & { y: number; }
 
  | { x: 'x', y: number } & { y: number } 
 >x : "x"

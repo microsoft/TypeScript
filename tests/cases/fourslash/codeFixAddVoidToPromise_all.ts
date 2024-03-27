@@ -15,5 +15,5 @@ verify.codeFixAll({
     newFileContent: `const p1 = new Promise<void>(resolve => resolve());
 const p2 = new Promise<number | void>(resolve => resolve());
 const p3 = new Promise<number | string | void>(resolve => resolve());
-const p4 = new Promise<({ x: number } & { y: string }) | void>(resolve => resolve());`
+const p4 = new Promise<{ x: number } & { y: string } | void>(resolve => resolve());`
 });

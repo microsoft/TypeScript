@@ -166,7 +166,7 @@ interface B {
 }
 
 type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
->CommonWithOverlappingOptionals : Common | (Common & A) | (Common & B)
+>CommonWithOverlappingOptionals : Common | Common & A | Common & B
 
 // Should reject { b } because reduced to Common | (Common & A)
 const c1: CommonWithOverlappingOptionals = {
