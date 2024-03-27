@@ -1,5 +1,9 @@
 import * as ts from "./_namespaces/ts";
-import { createPrinter, createTextWriter, memoize } from "./_namespaces/ts";
+import {
+    createPrinter,
+    createTextWriter,
+    memoize,
+} from "./_namespaces/ts";
 
 export interface TypeWriterTypeResult {
     line: number;
@@ -40,7 +44,7 @@ function* forEachASTNode(node: ts.Node) {
     }
 }
 
-const createSyntheticNodeUnderliningPrinter = memoize((): {printer: ts.Printer, writer: ts.EmitTextWriter, underliner: ts.EmitTextWriter, reset(): void} => {
+const createSyntheticNodeUnderliningPrinter = memoize((): { printer: ts.Printer; writer: ts.EmitTextWriter; underliner: ts.EmitTextWriter; reset(): void; } => {
     let underlining = false;
     const printer = createPrinter({ removeComments: true }, {
         onEmitNode: (hint, node, cb) => {
@@ -50,7 +54,7 @@ const createSyntheticNodeUnderliningPrinter = memoize((): {printer: ts.Printer, 
             const result = cb(hint, node);
             underlining = wasUnderlining;
             return result;
-        }
+        },
     });
     const baseWriter = createTextWriter("");
     const underliner = createTextWriter("");
@@ -149,20 +153,20 @@ const createSyntheticNodeUnderliningPrinter = memoize((): {printer: ts.Printer, 
             clear(): void {
                 baseWriter.clear();
                 underliner.clear();
-            }
+            },
         },
         underliner,
         reset() {
             underlining = false;
             baseWriter.clear();
             underliner.clear();
-        }
+        },
     };
 
     function underlineFor(s: string) {
         return s.length === 0 ? s : (underlining ? "^" : " ").repeat(s.length);
     }
-})
+});
 
 export class TypeWriterWalker {
     currentSourceFile!: ts.SourceFile;
@@ -286,7 +290,7 @@ export class TypeWriterWalker {
                 syntaxKind: node.kind,
                 sourceText,
                 type: typeString,
-                underline
+                underline,
             };
         }
         const symbol = this.checker.getSymbolAtLocation(node);
