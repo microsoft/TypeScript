@@ -187,83 +187,36 @@ ScriptInfos::
         /a/b/projects/project/src/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/file1.ts
-
-
-	../../../../lib/lib.d.ts
-	  Default library for target 'es5'
-	file1.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
 Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json :: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /a/b/projects/project/src/tsconfig.json Detected file add/remove of non supported extension: /a/b/projects/project/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json :: WatchInfo: /a/b/projects/project/src 1 undefined Config: /a/b/projects/project/src/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 1
 1: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/src/tsconfig.json] deleted
-
-PolledWatches *deleted*::
-/a/b/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/project/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatches *deleted*::
-/a/b/projects/project/src/tsconfig.json:
-  {}
-
-FsWatchesRecursive *deleted*::
-/a/b/projects/project/src:
-  {}
 
 Timeout callback:: count: 1
 1: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/a/b/projects/project/src/tsconfig.json (Configured) *deleted*
+/a/b/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
-    isClosed: true *changed*
-    noOpenRef: true *changed*
+    isOrphan: true *changed*
+    deferredClose: true *changed*
 
-ScriptInfos::
-/a/b/projects/project/src/file1.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /a/b/projects/project/src/tsconfig.json *deleted*
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /a/b/projects/project/src/tsconfig.json *deleted*
-
-Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
-Info seq  [hh:mm:ss:mss] 		Projects: 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -286,13 +239,17 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*,/a/b/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/project/src/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -308,24 +265,35 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/b/projects/node_modules/@types: *new*
+/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/node_modules/@types: *new*
+/a/b/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/src/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
 /a/b/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
+/a/b/projects/project/src/tsconfig.json:
+  {}
 /a/lib/lib.d.ts:
   {}
 
+FsWatchesRecursive::
+/a/b/projects/project/src:
+  {}
+
 Projects::
+/a/b/projects/project/src/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true
+    deferredClose: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -333,9 +301,11 @@ Projects::
 ScriptInfos::
 /a/b/projects/project/src/file1.ts (Open) *changed*
     version: SVC-1-0
-    containingProjects: 1 *changed*
+    containingProjects: 2 *changed*
         /dev/null/inferredProject1* *default* *new*
+        /a/b/projects/project/src/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
-    containingProjects: 1 *changed*
+    containingProjects: 2 *changed*
+        /a/b/projects/project/src/tsconfig.json
         /dev/null/inferredProject1* *new*

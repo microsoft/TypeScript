@@ -9,12 +9,12 @@ let y = 1
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {},
-                    "files": [
-                        "commonFile1.ts",
-                        "commonFile3.ts"
-                    ]
-                }
+  "compilerOptions": {},
+  "files": [
+    "commonFile1.ts",
+    "commonFile3.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -130,11 +130,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 5,
-                    "offset": 25
+                    "offset": 5
                   },
                   "end": {
                     "line": 5,
-                    "offset": 41
+                    "offset": 21
                   },
                   "file": "/a/b/tsconfig.json"
                 },
@@ -257,11 +257,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 5,
-                    "offset": 25
+                    "offset": 5
                   },
                   "end": {
                     "line": 5,
-                    "offset": 41
+                    "offset": 21
                   },
                   "file": "/a/b/tsconfig.json"
                 },

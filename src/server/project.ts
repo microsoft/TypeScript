@@ -657,7 +657,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
-        const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
+        const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+            fileName,
+            this.currentDirectory,
+            this.directoryStructureHost,
+            /*deferredDeleteOk*/ false,
+        );
         if (scriptInfo) {
             const existingValue = this.rootFilesMap.get(scriptInfo.path);
             if (existingValue && existingValue.info !== scriptInfo) {
@@ -678,7 +683,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getScriptVersion(filename: string) {
         // Don't attach to the project if version is asked
 
-        const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(filename, this.currentDirectory, this.directoryStructureHost);
+        const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+            filename,
+            this.currentDirectory,
+            this.directoryStructureHost,
+            /*deferredDeleteOk*/ false,
+        );
         return (info && info.getLatestVersion())!; // TODO: GH#18217
     }
 
@@ -1658,7 +1668,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // by the host for files in the program when the program is retrieved above but
             // the program doesn't contain external files so this must be done explicitly.
             inserted => {
-                const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
+                const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                    inserted,
+                    this.currentDirectory,
+                    this.directoryStructureHost,
+                    /*deferredDeleteOk*/ false,
+                );
                 scriptInfo?.attachToProject(this);
             },
             removed => this.detachScriptInfoFromProject(removed),
@@ -2708,6 +2723,9 @@ export class ConfiguredProject extends Project {
     private compilerHost?: CompilerHost;
 
     /** @internal */
+    deferredClose?: boolean;
+
+    /** @internal */
     constructor(
         configFileName: NormalizedPath,
         readonly canonicalConfigFilePath: NormalizedPath,
@@ -2767,6 +2785,7 @@ export class ConfiguredProject extends Project {
      * @returns: true if set of files in the project stays the same and false - otherwise.
      */
     override updateGraph(): boolean {
+        if (this.deferredClose) return false;
         const isInitialLoad = this.isInitialLoadPending();
         this.isInitialLoadPending = returnFalse;
         const updateLevel = this.pendingUpdateLevel;
@@ -2883,6 +2902,11 @@ export class ConfiguredProject extends Project {
         super.close();
     }
 
+    override markAsDirty() {
+        if (this.deferredClose) return;
+        super.markAsDirty();
+    }
+
     /** @internal */
     addExternalProjectReference() {
         this.externalProjectRefCount++;
@@ -2932,6 +2956,7 @@ export class ConfiguredProject extends Project {
         }
 
         const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(this.canonicalConfigFilePath)!;
+        if (this.deferredClose) return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
         if (this.projectService.hasPendingProjectUpdate(this)) {
             // If there is pending update for this project,
             // we dont know if this project would be needed by any of the open files impacted by this config file
@@ -2955,6 +2980,10 @@ export class ConfiguredProject extends Project {
                             );
                     },
                 ) || false;
+    }
+
+    override isOrphan(): boolean {
+        return !!this.deferredClose;
     }
 
     /** @internal */
@@ -3013,4 +3042,9 @@ export function isExternalProject(project: Project): project is ExternalProject 
 /**@internal */
 export function isBackgroundProject(project: Project): project is AutoImportProviderProject | AuxiliaryProject {
     return project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary;
+}
+
+/** @internal */
+export function isProjectDeferredClose(project: Project): project is ConfiguredProject {
+    return isConfiguredProject(project) && !!project.deferredClose;
 }

@@ -22,12 +22,12 @@ interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "target": "es6",
-                        "allowAnything": true
-                    },
-                    "someOtherProperty": {}
-                }
+  "compilerOptions": {
+    "target": "es6",
+    "allowAnything": true
+  },
+  "someOtherProperty": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -151,11 +151,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 3,
-                    "offset": 35
+                    "offset": 15
                   },
                   "end": {
                     "line": 3,
-                    "offset": 40
+                    "offset": 20
                   },
                   "file": "/a/b/tsconfig.json"
                 },
@@ -208,11 +208,11 @@ Info seq  [hh:mm:ss:mss] event:
           {
             "start": {
               "line": 4,
-              "offset": 25
+              "offset": 5
             },
             "end": {
               "line": 4,
-              "offset": 40
+              "offset": 20
             },
             "text": "Unknown compiler option 'allowAnything'.",
             "code": 5023,

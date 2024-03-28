@@ -3471,8 +3471,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts *deleted*
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0
 /home/src/projects/project/node_modules/foo/index.d.ts
     version: Text-1
@@ -3838,12 +3840,19 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /home/src/projects/project/node_modules/foo/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts *deleted*
+/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
@@ -4169,6 +4178,34 @@ export declare const bar2: number;
 
 Timeout callback:: count: 1
 42: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
@@ -4501,6 +4538,33 @@ export declare const foo2: number;
 
 Timeout callback:: count: 1
 46: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json

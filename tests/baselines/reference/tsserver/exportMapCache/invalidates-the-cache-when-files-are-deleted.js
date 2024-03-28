@@ -502,7 +502,6 @@ ScriptInfos::
         /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a.ts 2:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a.ts 2:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
@@ -514,30 +513,6 @@ Before running Timeout callback:: count: 2
 3: /tsconfig.json
 4: *ensureProjectForOpenFiles*
 //// [/a.ts] deleted
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/ambient.d.ts:
-  {}
-/lib/foo/constants.d.ts:
-  {}
-/package.json:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a.ts:
-  {}
-
-FsWatchesRecursive::
-/:
-  {}
-/node_modules:
-  {}
 
 Timeout callback:: count: 2
 3: /tsconfig.json *new*
@@ -554,8 +529,10 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/a.ts *deleted*
+/a.ts *changed*
     version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /tsconfig.json *deleted*
 /ambient.d.ts

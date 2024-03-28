@@ -312,7 +312,6 @@ ScriptInfos::
         /a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/file1Consumer2.ts 2:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/file1Consumer2.ts 2:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
@@ -323,26 +322,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/fi
 Before request
 //// [/a/b/file1Consumer2.ts] deleted
 
-FsWatches::
-/a/b/file1Consumer1.ts:
-  {}
-/a/b/globalFile3.ts:
-  {}
-/a/b/moduleFile2.ts:
-  {}
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatches *deleted*::
-/a/b/file1Consumer2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Timeout callback:: count: 2
 3: /a/b/tsconfig.json *new*
 4: *ensureProjectForOpenFiles* *new*
@@ -352,8 +331,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
-/a/b/file1Consumer2.ts *deleted*
+/a/b/file1Consumer2.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /a/b/tsconfig.json *deleted*
 /a/b/globalFile3.ts

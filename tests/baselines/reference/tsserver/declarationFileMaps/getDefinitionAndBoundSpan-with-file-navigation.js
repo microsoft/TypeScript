@@ -655,7 +655,6 @@ ScriptInfos::
         /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /b/b.ts :: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
@@ -663,22 +662,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: /b/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /b/b.ts :: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Before request
 //// [/b/b.ts] deleted
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/b/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/b/b.ts:
-  {}
-
-FsWatchesRecursive::
-/b:
-  {}
 
 Timeout callback:: count: 1
 2: /b/tsconfig.json *new*
@@ -691,8 +674,10 @@ Projects::
     noOpenRef: true
 
 ScriptInfos::
-/b/b.ts *deleted*
+/b/b.ts *changed*
     version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /b/tsconfig.json *deleted*
 
@@ -877,6 +862,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -908,6 +894,10 @@ FsWatches::
 /user/tsconfig.json: *new*
   {}
 
+FsWatches *deleted*::
+/b/b.ts:
+  {}
+
 FsWatchesRecursive::
 /a: *new*
   {}
@@ -931,6 +921,11 @@ ScriptInfos::
     version: Text-2
     containingProjects: 1
         /user/tsconfig.json
+/b/b.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /user/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
