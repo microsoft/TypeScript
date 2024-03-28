@@ -168,14 +168,14 @@ f.register(s, null);
 >  : ^^^^^^
 
 f.unregister(s);
->f.unregister(s) : void
->                : ^^^^
->f.unregister : (unregisterToken: object) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f.unregister(s) : boolean
+>                : ^^^^^^^
+>f.unregister : (unregisterToken: object) => boolean
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : FinalizationRegistry<unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->unregister : (unregisterToken: object) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unregister : (unregisterToken: object) => boolean
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : symbol
 >  : ^^^^^^
 

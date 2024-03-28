@@ -42,7 +42,7 @@ interface FinalizationRegistry<T> {
      * @param unregisterToken The token that was used as the unregisterToken argument when calling
      * register to register the target value.
      */
-    unregister(unregisterToken: WeakKey): void;
+    unregister(unregisterToken: WeakKey): boolean;
 }
 
 interface FinalizationRegistryConstructor {
