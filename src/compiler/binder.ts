@@ -72,6 +72,7 @@ import {
     FlowFlags,
     FlowLabel,
     FlowNode,
+    FlowNodeBase,
     FlowReduceLabel,
     FlowStart,
     FlowSwitchClause,
@@ -512,8 +513,17 @@ export function createFlowNode(flags: FlowFlags.TrueCondition | FlowFlags.FalseC
 export function createFlowNode(flags: FlowFlags.SwitchClause, node: FlowSwitchClauseInfo, antecedent: FlowNode): FlowSwitchClause;
 export function createFlowNode(flags: FlowFlags.Call, node: CallExpression, antecedent: FlowNode): FlowCall;
 export function createFlowNode(flags: FlowFlags.ReduceLabel, node: FlowLabel, antecedent: FlowNode, antecedents: FlowNode[]): FlowReduceLabel;
+export function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode;
 export function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode {
-    return { flags, id: undefined, node, antecedent, antecedents } as FlowNode;
+    return new (FlowNode as any)(flags, node, antecedent, antecedents);
+}
+
+function FlowNode(this: FlowNodeBase, flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]) {
+    this.flags = flags;
+    this.id = undefined;
+    this.node = node;
+    this.antecedent = antecedent;
+    this.antecedents = antecedents;
 }
 
 const binder = /* @__PURE__ */ createBinder();

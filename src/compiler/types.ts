@@ -4103,6 +4103,9 @@ export type FlowNode =
 export interface FlowNodeBase {
     flags: FlowFlags;
     id: number | undefined; // Node id used by flow type cache in checker
+    node: unknown;
+    antecedent: FlowNode | undefined;
+    antecedents: FlowNode[] | undefined;
 }
 
 export interface FlowUnreachable extends FlowNodeBase {
