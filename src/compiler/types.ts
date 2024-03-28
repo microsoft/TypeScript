@@ -764,6 +764,8 @@ export type JSDocSyntaxKind =
     | SyntaxKind.GreaterThanToken
     | SyntaxKind.OpenBracketToken
     | SyntaxKind.CloseBracketToken
+    | SyntaxKind.OpenParenToken
+    | SyntaxKind.CloseParenToken
     | SyntaxKind.EqualsToken
     | SyntaxKind.CommaToken
     | SyntaxKind.DotToken
