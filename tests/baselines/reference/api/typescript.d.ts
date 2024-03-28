@@ -5813,7 +5813,10 @@ declare namespace ts {
     type FlowNode = FlowUnreachable | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
     interface FlowNodeBase {
         flags: FlowFlags;
-        id: number | undefined;
+        id?: number;
+        node: unknown;
+        antecedent: FlowNode | undefined;
+        antecedents: FlowNode[] | undefined;
     }
     interface FlowUnreachable extends FlowNodeBase {
         node: undefined;
@@ -5846,12 +5849,9 @@ declare namespace ts {
         antecedents: undefined;
     }
     interface FlowSwitchClause extends FlowNodeBase {
-        node: FlowSwitchClauseInfo;
+        node: SwitchStatement;
         antecedent: FlowNode;
         antecedents: undefined;
-    }
-    interface FlowSwitchClauseInfo {
-        switchStatement: SwitchStatement;
         clauseStart: number;
         clauseEnd: number;
     }
@@ -9244,9 +9244,10 @@ declare namespace ts {
     function createFlowNode(flags: FlowFlags.BranchLabel | FlowFlags.LoopLabel): FlowLabel;
     function createFlowNode(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, node: Expression | VariableDeclaration | BindingElement, antecedent: FlowNode): FlowAssignment | FlowArrayMutation;
     function createFlowNode(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, node: Expression, antecedent: FlowNode): FlowCondition;
-    function createFlowNode(flags: FlowFlags.SwitchClause, node: FlowSwitchClauseInfo, antecedent: FlowNode): FlowSwitchClause;
+    function createFlowNode(flags: FlowFlags.SwitchClause, node: SwitchStatement, antecedent: FlowNode): FlowSwitchClause;
     function createFlowNode(flags: FlowFlags.Call, node: CallExpression, antecedent: FlowNode): FlowCall;
     function createFlowNode(flags: FlowFlags.ReduceLabel, node: FlowLabel, antecedent: FlowNode, antecedents: FlowNode[]): FlowReduceLabel;
+    function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode;
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
