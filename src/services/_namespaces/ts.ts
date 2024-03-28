@@ -56,3 +56,5 @@ import * as textChanges from "./ts.textChanges";
 export { textChanges };
 import * as formatting from "./ts.formatting";
 export { formatting };
+import * as pasteEdits from "./ts.PasteEdits";
+export { pasteEdits };

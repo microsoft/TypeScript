@@ -379,7 +379,6 @@ import {
     walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
-
 // These utilities are common to multiple language service features.
 // #region
 /** @internal */

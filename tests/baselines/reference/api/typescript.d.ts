@@ -99,6 +99,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                GetPasteEdits = "getPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -468,6 +469,28 @@ declare namespace ts {
                     newFileName: string;
                     files: string[];
                 };
+            }
+            /**
+             * Request refactorings at a given position post pasting text from some other location.
+             */
+            export interface GetPasteEditsRequest extends Request {
+                command: CommandTypes.GetPasteEdits;
+                arguments: GetPasteEditsRequestArgs;
+            }
+            export interface GetPasteEditsRequestArgs extends FileRequestArgs {
+                pastedText: string[];
+                pasteLocations: TextSpan[];
+                copiedFrom?: {
+                    file: string;
+                    range: TextSpan[];
+                };
+            }
+            export interface GetPasteEditsResponse extends Response {
+                body: PasteEditsAction;
+            }
+            export interface PasteEditsAction {
+                edits: FileCodeEdits[];
+                fixId?: {};
             }
             export interface GetEditsForRefactorRequest extends Request {
                 command: CommandTypes.GetEditsForRefactor;
@@ -3499,6 +3522,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
+            private getPasteEdits;
             private organizeImports;
             private getEditsForFileRename;
             private getCodeFixes;
@@ -3507,6 +3531,7 @@ declare namespace ts {
             private getStartAndEndPosition;
             private mapCodeAction;
             private mapCodeFixAction;
+            private mapPasteEditsAction;
             private mapTextChangesToCodeEdits;
             private mapTextChangeToCodeEdit;
             private convertTextChangeToCodeEdit;
@@ -10095,6 +10120,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
+        getPasteEdits(args: PasteEditsArgs, formatOptions: FormatCodeSettings): PasteEdits;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -10111,6 +10137,20 @@ declare namespace ts {
         All = "All",
         SortAndCombine = "SortAndCombine",
         RemoveUnused = "RemoveUnused",
+    }
+    interface PasteEdits {
+        edits: readonly FileTextChanges[];
+        fixId?: {};
+    }
+    interface PasteEditsArgs {
+        targetFile: string;
+        pastedText: string[];
+        pasteLocations: TextRange[];
+        copiedFrom: {
+            file: string;
+            range: TextRange[];
+        } | undefined;
+        preferences: UserPreferences;
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */

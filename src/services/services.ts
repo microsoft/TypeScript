@@ -238,6 +238,9 @@ import {
     ParseConfigFileHost,
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
+    PasteEdits,
+    pasteEdits,
+    PasteEditsArgs,
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
@@ -2091,6 +2094,23 @@ export function createLanguageService(
         };
     }
 
+    function getPasteEdits(
+        args: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits {
+        synchronizeHostData();
+        return pasteEdits.pasteEditsProvider(
+            getValidSourceFile(args.targetFile),
+            args.pastedText,
+            args.pasteLocations,
+            args.copiedFrom ? { file: getValidSourceFile(args.copiedFrom.file), range: args.copiedFrom.range } : undefined,
+            host,
+            args.preferences,
+            formatting.getFormatContext(formatOptions, host),
+            cancellationToken,
+        );
+    }
+
     function getNodeForQuickInfo(node: Node): Node {
         if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
             return node.parent.expression;
@@ -3169,6 +3189,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        getPasteEdits,
     };
 
     switch (languageServiceMode) {
