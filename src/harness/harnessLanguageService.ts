@@ -398,6 +398,7 @@ class SessionServerHost implements ts.server.ServerHost {
         "watchedFiles",
         "watchedDirectories",
         ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames),
+        this,
     );
 
     constructor(private host: NativeLanguageServiceHost) {

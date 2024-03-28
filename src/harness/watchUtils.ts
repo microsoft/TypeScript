@@ -1,5 +1,4 @@
 import {
-    addRange,
     arrayFrom,
     compareStringsCaseSensitive,
     contains,
@@ -10,6 +9,7 @@ import {
     GetCanonicalFileName,
     MultiMap,
     PollingInterval,
+    System,
 } from "./_namespaces/ts";
 
 export interface TestFileWatcher {
@@ -25,7 +25,7 @@ export interface TestFsWatcher<DirCallback> {
 export interface Watches<Data> {
     add(path: string, data: Data): void;
     remove(path: string, data: Data): void;
-    forEach(path: string, cb: (data: Data) => void): void;
+    forEach(path: string, cb: (data: Data, path: string) => void): void;
     serialize(baseline: string[]): void;
 }
 
@@ -44,6 +44,7 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData>(
     pollingWatchesName: string,
     fsWatchesName: string,
     getCanonicalFileName: GetCanonicalFileName,
+    system: Required<Pick<System, "realpath">>,
 ): WatchUtils<PollingWatcherData, FsWatcherData> {
     const pollingWatches = initializeWatches<PollingWatcherData>(pollingWatchesName);
     const fsWatches = initializeWatches<FsWatcherData>(fsWatchesName);
@@ -64,6 +65,8 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData>(
         const actuals = createMultiMap<string, Data>();
         let serialized: Map<string, Data[]> | undefined;
         let canonicalPathsToStrings: Map<string, Set<string>> | undefined;
+        let realToLinked: MultiMap<string, string> | undefined;
+        let pathToReal: Map<string, string> | undefined;
         return {
             add,
             remove,
@@ -73,40 +76,69 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData>(
 
         function add(path: string, data: Data) {
             actuals.add(path, data);
-            if (actuals.get(path)!.length === 1) {
-                const canonicalPath = getCanonicalFileName(path);
-                if (canonicalPath !== path) {
-                    (canonicalPathsToStrings ??= new Map()).set(
-                        canonicalPath,
-                        (canonicalPathsToStrings?.get(canonicalPath) ?? new Set()).add(path),
-                    );
-                }
+            if (actuals.get(path)!.length !== 1) return;
+            const canonicalPath = getCanonicalFileName(path);
+            if (canonicalPath !== path) {
+                (canonicalPathsToStrings ??= new Map()).set(
+                    canonicalPath,
+                    (canonicalPathsToStrings?.get(canonicalPath) ?? new Set()).add(path),
+                );
+            }
+            const real = system.realpath(path);
+            (pathToReal ??= new Map()).set(path, real);
+            if (real === path) return;
+            const canonicalReal = getCanonicalFileName(real);
+            if (getCanonicalFileName(path) !== canonicalReal) {
+                (realToLinked ??= createMultiMap()).add(canonicalReal, path);
             }
         }
 
         function remove(path: string, data: Data) {
             actuals.remove(path, data);
-            if (!actuals.has(path)) {
-                const canonicalPath = getCanonicalFileName(path);
-                if (canonicalPath !== path) {
-                    const existing = canonicalPathsToStrings!.get(canonicalPath);
-                    if (existing!.size === 1) canonicalPathsToStrings!.delete(canonicalPath);
-                    else existing!.delete(path);
-                }
+            if (actuals.has(path)) return;
+            const canonicalPath = getCanonicalFileName(path);
+            if (canonicalPath !== path) {
+                const existing = canonicalPathsToStrings!.get(canonicalPath);
+                if (existing!.size === 1) canonicalPathsToStrings!.delete(canonicalPath);
+                else existing!.delete(path);
+            }
+            const real = pathToReal?.get(path)!;
+            pathToReal!.delete(path);
+            if (real === path) return;
+            const canonicalReal = getCanonicalFileName(real);
+            if (getCanonicalFileName(path) !== canonicalReal) {
+                realToLinked!.remove(canonicalReal, path);
             }
         }
 
-        function forEach(path: string, cb: (data: Data) => void) {
-            let allData: Data[] | undefined;
-            allData = addRange(allData, actuals.get(path));
+        function getAllData(path: string) {
+            let allData: Map<string, Data[]> | undefined;
+            addData(path);
             const canonicalPath = getCanonicalFileName(path);
-            if (canonicalPath !== path) allData = addRange(allData, actuals.get(canonicalPath));
+            if (canonicalPath !== path) addData(canonicalPath);
             canonicalPathsToStrings?.get(canonicalPath)?.forEach(canonicalSamePath => {
                 if (canonicalSamePath !== path && canonicalSamePath !== canonicalPath) {
-                    allData = addRange(allData, actuals.get(canonicalSamePath));
+                    addData(canonicalSamePath);
                 }
             });
-            allData?.forEach(cb);
+            return allData;
+            function addData(path: string) {
+                const data = actuals.get(path);
+                if (data) (allData ??= new Map()).set(path, data);
+            }
+        }
+
+        function forEach(path: string, cb: (data: Data, path: string) => void) {
+            const real = system.realpath(path);
+            const canonicalPath = getCanonicalFileName(path);
+            const canonicalReal = getCanonicalFileName(real);
+            let allData = canonicalPath === canonicalReal ? getAllData(path) : getAllData(real);
+            realToLinked?.get(canonicalReal)?.forEach(linked => {
+                if (allData?.has(linked)) return;
+                const data = actuals.get(linked);
+                if (data) (allData ??= new Map()).set(linked, data);
+            });
+            allData?.forEach((data, path) => data.forEach(d => cb(d, path)));
         }
 
         function serialize(baseline: string[]) {

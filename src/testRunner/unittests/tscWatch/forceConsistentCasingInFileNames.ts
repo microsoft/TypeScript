@@ -188,7 +188,7 @@ a;b;
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
-            commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+            commandLineArgs: ["--w", "--p", ".", "--explainFiles", "--extendedDiagnostics"],
             sys: () => {
                 const moduleA: File = {
                     path: diskPath,
@@ -226,7 +226,6 @@ a;b;
                         `,
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    symlinksNotReflected: [`/user/username/projects/myproject/link.ts`],
                 },
             ],
         });
@@ -236,13 +235,13 @@ a;b;
     verifyFileSymlink("when file symlink target matches disk but import does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./XY`);
     verifyFileSymlink("when import matches disk but file symlink target does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/XY.ts`, `./Xy`);
     verifyFileSymlink("when import and file symlink target agree but do not match disk", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./Xy`);
-    verifyFileSymlink("when import, file symlink target, and disk are all different", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./yX`);
+    verifyFileSymlink("when import, file symlink target, and disk are all different", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./xY`);
 
     function verifyDirSymlink(subScenario: string, diskPath: string, targetPath: string, importedPath: string) {
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
-            commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+            commandLineArgs: ["--w", "--p", ".", "--explainFiles", "--extendedDiagnostics"],
             sys: () => {
                 const moduleA: File = {
                     path: `${diskPath}/a.ts`,
@@ -281,7 +280,6 @@ a;b;
                         `,
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    symlinksNotReflected: [`/user/username/projects/myproject/link/a.ts`],
                 },
             ],
         });
@@ -291,7 +289,7 @@ a;b;
     verifyDirSymlink("when directory symlink target matches disk but import does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./XY`);
     verifyDirSymlink("when import matches disk but directory symlink target does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./Xy`);
     verifyDirSymlink("when import and directory symlink target agree but do not match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./Xy`);
-    verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./yX`);
+    verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./xY`);
 
     verifyTscWatch({
         scenario: "forceConsistentCasingInFileNames",
