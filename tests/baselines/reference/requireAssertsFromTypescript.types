@@ -51,7 +51,7 @@ artoo(y)
 // based on assert in @types/node
 export function art(value: any, message?: string | Error): asserts value;
 >art : (value: any, message?: string | Error) => asserts value
->    : ^^^^^^^^   ^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^^^^^              ^^^^^             
 >value : any
 >message : string | Error
 >        : ^^^^^^^^^^^^^^
@@ -59,7 +59,7 @@ export function art(value: any, message?: string | Error): asserts value;
 === ex2.d.ts ===
 declare function art(value: any, message?: string | Error): asserts value;
 >art : (value: any, message?: string | Error) => asserts value
->    : ^^^^^^^^   ^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^^^^^              ^^^^^             
 >value : any
 >message : string | Error
 >        : ^^^^^^^^^^^^^^

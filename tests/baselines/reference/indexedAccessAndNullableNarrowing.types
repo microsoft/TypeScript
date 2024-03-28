@@ -98,7 +98,7 @@ type State = AnyObject;
 
 declare function hasOwnProperty<T extends AnyObject>(
 >hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^           ^^^^^               
 
     object: T,
 >object : T

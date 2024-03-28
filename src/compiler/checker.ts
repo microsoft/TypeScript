@@ -855,6 +855,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
+    Mutable,
     NamedDeclaration,
     NamedExports,
     NamedImportsOrExports,
@@ -6469,6 +6470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
             expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNode(context, expr, type, addUndefined)),
             serializeTypeForDeclaration: (type: Type, symbol: Symbol, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, /*includePrivateSymbol*/ undefined, /*bundled*/ undefined, addUndefined)),
+            serializeReturnTypeForSignature: (signature: Signature, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeReturnTypeForSignature(context, signature)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
             signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
             symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
@@ -7649,8 +7651,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
-            const suppressAny = context.flags & NodeBuilderFlags.SuppressAnyReturnType;
-            if (suppressAny) context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // suppress only toplevel `any`s
+            const flags = context.flags;
+            context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // SuppressAnyReturnType should only apply to the signature `return` position
             context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
             let typeParameters: TypeParameterDeclaration[] | undefined;
             let typeArguments: TypeNode[] | undefined;
@@ -7780,21 +7782,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (thisParameter) {
                 parameters.unshift(thisParameter);
             }
+            context.flags = flags;
 
-            let returnTypeNode: TypeNode | undefined;
-            const typePredicate = getTypePredicateOfSignature(signature);
-            if (typePredicate) {
-                returnTypeNode = typePredicateToTypePredicateNodeHelper(typePredicate, context);
-            }
-            else {
-                const returnType = getReturnTypeOfSignature(signature);
-                if (returnType && !(suppressAny && isTypeAny(returnType))) {
-                    returnTypeNode = serializeReturnTypeForSignature(context, returnType, signature, options?.privateSymbolVisitor, options?.bundledImports);
-                }
-                else if (!suppressAny) {
-                    returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-                }
-            }
+            const returnTypeNode = serializeReturnTypeForSignature(context, signature, options?.privateSymbolVisitor, options?.bundledImports);
+
             let modifiers = options?.modifiers;
             if ((kind === SyntaxKind.ConstructorType) && signature.flags & SignatureFlags.Abstract) {
                 const flags = modifiersToFlags(modifiers);
@@ -8572,7 +8563,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
+        function serializeReturnTypeForSignature(context: NodeBuilderContext, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
+            const suppressAny = context.flags & NodeBuilderFlags.SuppressAnyReturnType;
+            const flags = context.flags;
+            if (suppressAny) context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // suppress only toplevel `any`s
+            let returnTypeNode: TypeNode | undefined;
+            const returnType = getReturnTypeOfSignature(signature);
+            if (returnType && !(suppressAny && isTypeAny(returnType))) {
+                returnTypeNode = serializeReturnTypeForSignatureWorker(context, signature, includePrivateSymbol, bundled);
+            }
+            else if (!suppressAny) {
+                returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            }
+            context.flags = flags;
+            return returnTypeNode;
+        }
+
+        function serializeReturnTypeForSignatureWorker(context: NodeBuilderContext, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
+            const typePredicate = getTypePredicateOfSignature(signature);
+            const type = getReturnTypeOfSignature(signature);
             if (!isErrorType(type) && context.enclosingDeclaration) {
                 const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
                 const enclosingDeclarationIgnoringFakeScope = getEnclosingDeclarationIgnoringFakeScope(context.enclosingDeclaration);
@@ -8585,7 +8594,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            return typeToTypeNodeHelper(type, context);
+            if (typePredicate) {
+                return typePredicateToTypePredicateNodeHelper(typePredicate, context);
+            }
+            const expr = signature.declaration && getPossibleTypeNodeReuseExpression(signature.declaration);
+            return expressionOrTypeToTypeNode(context, expr, type);
         }
 
         function trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(node: T, context: NodeBuilderContext, includePrivateSymbol?: (s: Symbol) => void) {
@@ -8633,7 +8646,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return transformed === existing ? setTextRange(factory.cloneNode(existing), existing) : transformed;
 
-            function visitExistingNodeTreeSymbols(node: Node): Node {
+            function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
                 // We don't _actually_ support jsdoc namepath types, emit `any` instead
                 if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                     return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -8642,16 +8655,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                 }
                 if (isJSDocNullableType(node)) {
-                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode), factory.createLiteralTypeNode(factory.createNull())]);
+                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode)!, factory.createLiteralTypeNode(factory.createNull())]);
                 }
                 if (isJSDocOptionalType(node)) {
-                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode), factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+                    return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode)!, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                 }
                 if (isJSDocNonNullableType(node)) {
                     return visitNode(node.type, visitExistingNodeTreeSymbols);
                 }
                 if (isJSDocVariadicType(node)) {
-                    return factory.createArrayTypeNode(visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
+                    return factory.createArrayTypeNode(visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode)!);
                 }
                 if (isJSDocTypeLiteral(node)) {
                     return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
@@ -8743,15 +8756,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         node.isTypeOf,
                     );
                 }
-                if (isParameter(node)) {
-                    if (!node.type && !node.initializer) {
-                        return factory.updateParameterDeclaration(node, /*modifiers*/ undefined, node.dotDotDotToken, visitEachChild(node.name, visitExistingNodeTreeSymbols, /*context*/ undefined), node.questionToken, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), /*initializer*/ undefined);
-                    }
+                if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.ComputedPropertyName && !isLateBindableName(node.name)) {
+                    return undefined;
                 }
-                if (isPropertySignature(node)) {
-                    if (!node.type && !node.initializer) {
-                        return factory.updatePropertySignature(node, node.modifiers, node.name, node.questionToken, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
+                if (
+                    (isFunctionLike(node) && !node.type)
+                    || (isPropertyDeclaration(node) && !node.type && !node.initializer)
+                    || (isPropertySignature(node) && !node.type && !node.initializer)
+                    || (isParameter(node) && !node.type && !node.initializer)
+                ) {
+                    let visited = visitEachChild(node, visitExistingNodeTreeSymbols, /*context*/ undefined);
+                    if (visited === node) {
+                        visited = setTextRange(factory.cloneNode(node), node);
                     }
+                    (visited as Mutable<typeof visited>).type = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    if (isParameter(node)) {
+                        (visited as Mutable<ParameterDeclaration>).modifiers = undefined;
+                    }
+                    return visited;
                 }
 
                 if (isEntityName(node) || isEntityNameExpression(node)) {
@@ -48664,6 +48686,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     type DeclarationWithPotentialInnerNodeReuse =
         | SignatureDeclaration
+        | JSDocSignature
         | AccessorDeclaration
         | VariableLikeDeclaration
         | PropertyAccessExpression
@@ -48712,13 +48735,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!signatureDeclaration) {
             return factory.createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
         }
-        const signature = getSignatureFromDeclaration(signatureDeclaration);
-        const typePredicate = getTypePredicateOfSignature(signature);
-        if (typePredicate) {
-            // Inferred type predicates
-            return nodeBuilder.typePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
-        }
-        return nodeBuilder.expressionOrTypeToTypeNode(getPossibleTypeNodeReuseExpression(signatureDeclaration), getReturnTypeOfSignature(signature), /*addUndefined*/ undefined, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
+        return nodeBuilder.serializeReturnTypeForSignature(getSignatureFromDeclaration(signatureDeclaration), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
     function createTypeOfExpression(exprIn: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {

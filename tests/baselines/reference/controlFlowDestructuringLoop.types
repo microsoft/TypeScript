@@ -17,7 +17,7 @@ type Val = NumVal | StrVal;
 
 function isNumVal(x: Val): x is NumVal {
 >isNumVal : (x: Val) => x is NumVal
->         : ^^^^   ^^^^^^^^^^^^^^^^
+>         : ^^^^   ^^^^^           
 >x : Val
 >  : ^^^
 

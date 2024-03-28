@@ -245,11 +245,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 
             this.up();
 >this.up() : void
@@ -438,11 +438,11 @@ module TypeScript {
 >this.ast.length : number
 >                : ^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >length : number
 >       : ^^^^^^
 >1 : 1
@@ -479,11 +479,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 
                 return TypeScript.NodeType.None;
 >TypeScript.NodeType.None : any
@@ -503,18 +503,18 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
         }
 
         public ast() {
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
 ><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : TypeScript.AST
@@ -563,7 +563,7 @@ module TypeScript {
 
         public parent() {
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
 ><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : TypeScript.AST
@@ -654,21 +654,21 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >this.parent() === null : boolean
 >                       : ^^^^^^^
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
                 return false;
 >false : false
@@ -688,11 +688,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.Name : any
@@ -716,11 +716,11 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.ClassDeclaration : any
@@ -750,21 +750,21 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >name : any
 >     : ^^^
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
         }
 
         public isNameOfInterface(): boolean {
@@ -779,21 +779,21 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >this.parent() === null : boolean
 >                       : ^^^^^^^
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
                 return false;
 >false : false
@@ -813,11 +813,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.Name : any
@@ -841,11 +841,11 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.InterfaceDeclaration : any
@@ -875,21 +875,21 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >name : any
 >     : ^^^
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
         }
 
         public isNameOfArgument(): boolean {
@@ -904,21 +904,21 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >this.parent() === null : boolean
 >                       : ^^^^^^^
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
                 return false;
 >false : false
@@ -938,11 +938,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.Name : any
@@ -966,11 +966,11 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.ArgDecl : any
@@ -1000,21 +1000,21 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >id : any
 >   : ^^^
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
         }
 
         public isNameOfVariable(): boolean {
@@ -1029,21 +1029,21 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >this.parent() === null : boolean
 >                       : ^^^^^^^
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
                 return false;
 >false : false
@@ -1063,11 +1063,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.Name : any
@@ -1091,11 +1091,11 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.VarDecl : any
@@ -1125,21 +1125,21 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >id : any
 >   : ^^^
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
         }
 
         public isNameOfModule(): boolean {
@@ -1154,21 +1154,21 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >this.parent() === null : boolean
 >                       : ^^^^^^^
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
                 return false;
 >false : false
@@ -1188,11 +1188,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.Name : any
@@ -1216,11 +1216,11 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.ModuleDeclaration : any
@@ -1250,21 +1250,21 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >name : any
 >     : ^^^
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
         }
 
         public isNameOfFunction(): boolean {
@@ -1279,21 +1279,21 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >this.parent() === null : boolean
 >                       : ^^^^^^^
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 
                 return false;
 >false : false
@@ -1313,11 +1313,11 @@ module TypeScript {
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.Name : any
@@ -1341,11 +1341,11 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >nodeType : any
 >         : ^^^
 >TypeScript.NodeType.FuncDecl : any
@@ -1375,21 +1375,21 @@ module TypeScript {
 >this.parent() : TypeScript.AST
 >              : ^^^^^^^^^^^^^^
 >this.parent : () => TypeScript.AST
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^              
 >this : this
 >     : ^^^^
 >parent : () => TypeScript.AST
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^              
 >name : any
 >     : ^^^
 >this.ast() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >this.ast : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >this : this
 >     : ^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
         }
 
         public isChildOfScript(): boolean {
@@ -7240,7 +7240,7 @@ module TypeScript {
 >ctx.path.ast() : TypeScript.AST
 >               : ^^^^^^^^^^^^^^
 >ctx.path.ast : () => TypeScript.AST
->             : ^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^              
 >ctx.path : AstPath
 >         : ^^^^^^^
 >ctx : AstPathContext
@@ -7248,7 +7248,7 @@ module TypeScript {
 >path : AstPath
 >     : ^^^^^^^
 >ast : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 
                     if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {
 >previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar) : boolean

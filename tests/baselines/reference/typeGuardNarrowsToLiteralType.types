@@ -3,7 +3,7 @@
 === typeGuardNarrowsToLiteralType.ts ===
 declare function isFoo(value: string) : value is "foo";
 >isFoo : (value: string) => value is "foo"
->      : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^      ^^^^^              
 >value : string
 >      : ^^^^^^
 

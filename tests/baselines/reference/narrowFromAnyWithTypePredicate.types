@@ -7,31 +7,31 @@ declare var x: any;
 
 declare function isFunction(x): x is Function;
 >isFunction : (x: any) => x is Function
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^             
 >x : any
 >  : ^^^
 
 declare function isObject(x): x is Object;
 >isObject : (x: any) => x is Object
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^           
 >x : any
 >  : ^^^
 
 declare function isAnything(x): x is {};
 >isAnything : (x: any) => x is {}
->           : ^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^       
 >x : any
 >  : ^^^
 
 declare function isError(x): x is Error;
 >isError : (x: any) => x is Error
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^          
 >x : any
 >  : ^^^
 
 declare function isDate(x): x is Date;
 >isDate : (x: any) => x is Date
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^         
 >x : any
 >  : ^^^
 
