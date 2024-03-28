@@ -5871,6 +5871,7 @@ export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
     propertyType: Type;
     mappedType: MappedType;
     constraintType: IndexType;
+    inferenceMapper?: TypeMapper;
 }
 
 /** @internal */
@@ -6471,6 +6472,7 @@ export interface ReverseMappedType extends ObjectType {
     source: Type;
     mappedType: MappedType;
     constraintType: IndexType;
+    inferenceMapper?: TypeMapper;
 }
 
 /** @internal */
