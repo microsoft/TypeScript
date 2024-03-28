@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/stripInternal2.ts] ////
+
+=== stripInternal2.ts ===
+export class Foo {
+>Foo : Foo
+
+  /**
+   * Should be stripped
+   * @internal
+   */
+  shouldBeStripped = 1;
+>shouldBeStripped : number
+>1 : 1
+
+  // TODO: maybe make this @internal?
+  /**
+   * Should *not* be stripped
+   */
+  shouldNotBeStripped = 2;
+>shouldNotBeStripped : number
+>2 : 2
+}

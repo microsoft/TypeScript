@@ -93,7 +93,9 @@ exports.Baz = Baz;
 
 //// [declarationEmitWorkWithInlineComments.d.ts]
 export declare class Foo {
-    notInternal1: string;
+    isInternal4: string;
+    isInternal6: string;
+    isInternal7: string;
     notInternal2: string;
     notInternal3: string;
     constructor(
@@ -104,8 +106,10 @@ export declare class Foo {
     isInternal5: string, isInternal6: string, isInternal7: string, /** @internal */ notInternal1: string, notInternal2: string, notInternal3: string);
 }
 export declare class Bar {
+    isInternal1: string;
     constructor(/* @internal */ isInternal1: string);
 }
 export declare class Baz {
+    isInternal: string;
     constructor(/* @internal */ isInternal: string);
 }
