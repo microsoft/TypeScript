@@ -39,8 +39,8 @@ declare function invalidThisType(this: unique symbol): void;
 >     : ^^^^^^
 
 declare function invalidTypePredicate(n: any): n is unique symbol;
->invalidTypePredicate : (n: any) => n is symbol
->                     : ^^^^   ^^^^^^^^^^^^^^^^
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^^^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -92,8 +92,8 @@ class InvalidClass {
 >     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol { return; }
->invalidTypePredicate : (n: any) => n is symbol
->                     : ^^^^   ^^^^^^^^^^^^^^^^
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^^^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -142,8 +142,8 @@ class InvalidClass {
 >     : ^^^^^^
 
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
->invalidStaticTypePredicate : (n: any) => n is symbol
->                           : ^^^^   ^^^^^^^^^^^^^^^^
+>invalidStaticTypePredicate : (n: any) => n is unique symbol
+>                           : ^^^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -195,8 +195,8 @@ interface InvalidInterface {
 >     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol
->invalidTypePredicate : (n: any) => n is symbol
->                     : ^^^^   ^^^^^^^^^^^^^^^^
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^^^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -241,8 +241,8 @@ type InvalidTypeLiteral = {
 >     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol
->invalidTypePredicate : (n: any) => n is symbol
->                     : ^^^^   ^^^^^^^^^^^^^^^^
+>invalidTypePredicate : (n: any) => n is unique symbol
+>                     : ^^^^   ^^^^^                  
 >n : any
 >  : ^^^
 

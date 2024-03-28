@@ -31,7 +31,7 @@ export const none : None = { none: '' };
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
 >isSome : <a>(value: Optional<a>) => value is Some<a>
->       : ^ ^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^           ^^^^^                
 >value : Optional<a>
 >      : ^^^^^^^^^^^
 

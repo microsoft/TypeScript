@@ -34,9 +34,9 @@
 verify.quickInfos({
     1: "(method) Crate<T>.isSundries(): this is Crate<Sundries>",
     2: "(method) Crate<T>.isSupplies(): this is Crate<Supplies>",
-    3: `(method) Crate<T>.isPackedTight(): this is this & {
+    3: `(method) Crate<T>.isPackedTight(): this is (this & {
     extraContents: T;
-}`,
+})`,
     4: `(method) Crate<any>.isPackedTight(): this is Crate<any> & {
     extraContents: any;
 }`,

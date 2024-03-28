@@ -3,9 +3,9 @@
 === implicitAnyCastedValue.ts ===
 var x = function () {
 >x : () => any
->  : ^^^^^^^^^
+>  : ^^^^^^   
 >function () {    return <any>0;  // this should not be an error} : () => any
->                                                                 : ^^^^^^^^^
+>                                                                 : ^^^^^^   
 
     return <any>0;  // this should not be an error
 ><any>0 : any
@@ -16,7 +16,7 @@ var x = function () {
 
 function foo() {
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
     return <any>"hello world";  // this should not be an error
 ><any>"hello world" : any
@@ -52,7 +52,7 @@ class C {
 
     public returnBarWithCase() {    // this should not be an error
 >returnBarWithCase : () => any
->                  : ^^^^^^^^^
+>                  : ^^^^^^   
 
         return <any>this.bar;
 ><any>this.bar : any
@@ -67,7 +67,7 @@ class C {
 
     public returnFooWithCase() {
 >returnFooWithCase : () => any
->                  : ^^^^^^^^^
+>                  : ^^^^^^   
 
         return <any>this.foo;  // this should not be an error
 ><any>this.foo : any
@@ -120,7 +120,7 @@ class C1 {
 
 function castedNull() {
 >castedNull : () => any
->           : ^^^^^^^^^
+>           : ^^^^^^   
 
     return <any>null;  // this should not be an error
 ><any>null : any
@@ -143,7 +143,7 @@ function returnTypeBar(): any {
 
 function undefinedBar() {
 >undefinedBar : () => any
->             : ^^^^^^^^^
+>             : ^^^^^^   
 
     return <any>undefined;  // this should not be an error
 ><any>undefined : any

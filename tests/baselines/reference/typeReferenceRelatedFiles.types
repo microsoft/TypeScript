@@ -18,7 +18,7 @@ import { FSWatcher } from "fs";
 
 export function f() {
 >f : () => FSWatcher
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^         
 
     return {} as FSWatcher;
 >{} as FSWatcher : FSWatcher

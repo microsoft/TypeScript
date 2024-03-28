@@ -7,7 +7,7 @@ type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
 
 declare function isString(text: unknown): text is string;
 >isString : (text: unknown) => text is string
->         : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^       ^^^^^              
 >text : unknown
 >     : ^^^^^^^
 

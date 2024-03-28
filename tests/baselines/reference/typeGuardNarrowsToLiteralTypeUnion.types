@@ -2,8 +2,8 @@
 
 === typeGuardNarrowsToLiteralTypeUnion.ts ===
 declare function isFoo(value: string) : value is ("foo" | "bar");
->isFoo : (value: string) => value is "foo" | "bar"
->      : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isFoo : (value: string) => value is ("foo" | "bar")
+>      : ^^^^^^^^      ^^^^^                        
 >value : string
 >      : ^^^^^^
 

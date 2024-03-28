@@ -3,7 +3,7 @@
 === implicitAnyAnyReturningFunction.ts ===
 function A() {
 >A : () => any
->  : ^^^^^^^^^
+>  : ^^^^^^   
 
     return <any>"";
 ><any>"" : any
@@ -30,7 +30,7 @@ class C {
 
     public A() {
 >A : () => any
->  : ^^^^^^^^^
+>  : ^^^^^^   
 
         return <any>"";
 ><any>"" : any

@@ -24,7 +24,7 @@ const getStringGetter = (key) => {
 
   return () => {
 >() => {    return /** @type {string} */ (cache.get(key))  } : () => string
->                                                            : ^^^^^^^^^^^^
+>                                                            : ^^^^^^      
 
     return /** @type {string} */ (cache.get(key))
 >(cache.get(key)) : string

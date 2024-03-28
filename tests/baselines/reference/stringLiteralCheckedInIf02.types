@@ -11,7 +11,7 @@ type T = S[] | S;
 
 function isS(t: T): t is S {
 >isS : (t: T) => t is S
->    : ^^^^ ^^^^^^^^^^^
+>    : ^^^^ ^^^^^      
 >t : T
 >  : ^
 

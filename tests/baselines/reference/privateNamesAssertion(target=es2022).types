@@ -7,7 +7,7 @@ class Foo {
 
     #p1: (v: any) => asserts v is string = (v) => {
 >#p1 : (v: any) => asserts v is string
->    : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^   ^^^^^                   
 >v : any
 >(v) => {        if (typeof v !== "string") {            throw new Error();        }    } : (v: any) => void
 >                                                                                         : ^^^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ class Foo2 {
 
     #p1(v: any): asserts v is string {
 >#p1 : (v: any) => asserts v is string
->    : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^   ^^^^^                   
 >v : any
 
         if (typeof v !== "string") {

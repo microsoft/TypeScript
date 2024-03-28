@@ -25,7 +25,7 @@ declare class State<TContext> {
 
     matches<TSV extends string>(stateValue: TSV): this is State<TContext> & { value: TSV };
 >matches : <TSV extends string>(stateValue: TSV) => this is State<TContext> & { value: TSV; }
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^                                         
 >stateValue : TSV
 >           : ^^^
 >value : TSV

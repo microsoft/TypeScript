@@ -267,7 +267,7 @@ function f11(x: unknown) {
 
 declare function isFunction(x: unknown): x is Function;
 >isFunction : (x: unknown) => x is Function
->           : ^^^^       ^^^^^^^^^^^^^^^^^^
+>           : ^^^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 

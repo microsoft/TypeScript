@@ -56,7 +56,7 @@ class Derived1 extends class extends Base1 {
 
     root() {
 >root : () => any
->     : ^^^^^^^^^
+>     : ^^^^^^   
 
         return undefined as any;
 >undefined as any : any

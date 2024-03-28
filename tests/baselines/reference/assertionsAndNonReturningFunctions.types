@@ -26,7 +26,7 @@ const assert = check => {
 /** @type {(x: unknown) => asserts x is string } */
 function assertIsString(x) {
 >assertIsString : (x: unknown) => asserts x is string
->               : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^       ^^^^^                   
 >x : unknown
 >  : ^^^^^^^
 
@@ -55,7 +55,7 @@ function assertIsString(x) {
 */
 function assert2(check) {
 >assert2 : (check: boolean) => asserts check
->        : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^^^             
 >check : boolean
 >      : ^^^^^^^
 

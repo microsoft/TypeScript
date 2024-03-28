@@ -13,8 +13,8 @@ interface Breed {
 }
 
 declare function isNil(value: unknown): value is undefined | null;
->isNil : (value: unknown) => value is null | undefined
->      : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isNil : (value: unknown) => value is undefined | null
+>      : ^^^^^^^^       ^^^^^                         
 >value : unknown
 >      : ^^^^^^^
 

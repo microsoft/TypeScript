@@ -16,7 +16,7 @@ interface Ari<T> {
 >filter : { <S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>; (cb2: (value: T) => unknown): Ari<T>; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^                        ^^^                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cb1 : (value: T) => value is S
->    : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^^^          
 >value : T
 >      : ^
 
@@ -138,7 +138,7 @@ var foos = [true, true, false, null].filter((thing): thing is boolean => thing !
 >filter : { <S extends boolean>(predicate: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (predicate: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(thing): thing is boolean => thing !== null : (thing: boolean) => thing is boolean
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^^^^^^^^^^^^^^^^^^^^                
 >thing : boolean
 >      : ^^^^^^^
 >thing !== null : boolean

@@ -56,7 +56,7 @@ declare function f7<T>(x: (a: any) => a is T): T;
 >f7 : <T>(x: (a: any) => a is T) => T
 >   : ^ ^^^^^                  ^^^^^ 
 >x : (a: any) => a is T
->  : ^^^^   ^^^^^^^^^^^
+>  : ^^^^   ^^^^^      
 >a : any
 
 declare function f8<T>(x: () => T): T;

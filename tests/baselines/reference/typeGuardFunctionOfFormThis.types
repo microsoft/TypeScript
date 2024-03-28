@@ -7,7 +7,7 @@ class RoyalGuard {
 
     isLeader(): this is LeadGuard {
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 
         return this instanceof LeadGuard;
 >this instanceof LeadGuard : boolean
@@ -19,7 +19,7 @@ class RoyalGuard {
     }
     isFollower(): this is FollowerGuard {
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 
         return this instanceof FollowerGuard;
 >this instanceof FollowerGuard : boolean
@@ -209,9 +209,9 @@ class ArrowGuard {
 
     isElite = (): this is ArrowElite => {
 >isElite : () => this is ArrowElite
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^                  
 >(): this is ArrowElite => {        return this instanceof ArrowElite;    } : () => this is ArrowElite
->                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^^^^^^                  
 
         return this instanceof ArrowElite;
 >this instanceof ArrowElite : boolean
@@ -223,9 +223,9 @@ class ArrowGuard {
     }
     isMedic = (): this is ArrowMedic => {
 >isMedic : () => this is ArrowMedic
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^                  
 >(): this is ArrowMedic => {        return this instanceof ArrowMedic;    } : () => this is ArrowMedic
->                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^^^^^^                  
 
         return this instanceof ArrowMedic;
 >this instanceof ArrowMedic : boolean
@@ -331,11 +331,11 @@ interface Crate<T> {
 
     isSupplies(): this is Crate<Supplies>;
 >isSupplies : () => this is Crate<Supplies>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                       
 
     isSundries(): this is Crate<Sundries>;
 >isSundries : () => this is Crate<Sundries>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                       
 }
 
 let crate: Crate<{}>;
@@ -435,7 +435,7 @@ class MimicGuard {
 
     isLeader(): this is MimicLeader { return this instanceof MimicLeader; };
 >isLeader : () => this is MimicLeader
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                   
 >this instanceof MimicLeader : boolean
 >                            : ^^^^^^^
 >this : this
@@ -445,7 +445,7 @@ class MimicGuard {
 
     isFollower(): this is MimicFollower { return this instanceof MimicFollower; };
 >isFollower : () => this is MimicFollower
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 >this instanceof MimicFollower : boolean
 >                              : ^^^^^^^
 >this : this
@@ -557,10 +557,10 @@ if (mimic.isFollower()) {
 interface MimicGuardInterface {
     isLeader(): this is LeadGuard;
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 
     isFollower(): this is FollowerGuard;
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 }
 

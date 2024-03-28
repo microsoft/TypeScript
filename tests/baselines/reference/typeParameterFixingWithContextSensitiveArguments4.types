@@ -58,7 +58,7 @@ var d = f(a, b, x => x, x => <any>x); // Type [A, B]
 >x : B
 >  : ^
 >x => <any>x : (x: A) => any
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^^^^^   
 >x : A
 >  : ^
 ><any>x : any

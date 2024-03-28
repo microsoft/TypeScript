@@ -80,7 +80,7 @@ interface I3 {
 
     j: (x: any) => x is this;
 >j : (x: any) => x is this
->  : ^^^^   ^^^^^^^^^^^^^^
+>  : ^^^^   ^^^^^         
 >x : any
 }
 

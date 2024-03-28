@@ -137,7 +137,7 @@ const a4b = [r4, c4];  // {}[]
 
 declare function isObject1(value: unknown): value is Record<string, unknown>;
 >isObject1 : (value: unknown) => value is Record<string, unknown>
->          : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^       ^^^^^                                
 >value : unknown
 >      : ^^^^^^^
 
@@ -171,7 +171,7 @@ function gg1(x: {}) {
 
 declare function isObject2(value: unknown): value is {};
 >isObject2 : (value: unknown) => value is {}
->          : ^^^^^^^^       ^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^       ^^^^^           
 >value : unknown
 >      : ^^^^^^^
 
@@ -207,7 +207,7 @@ function gg2(x: Record<string, unknown>) {
 
 declare function isObject3(value: unknown): value is Record<string, any>;
 >isObject3 : (value: unknown) => value is Record<string, any>
->          : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^       ^^^^^                            
 >value : unknown
 >      : ^^^^^^^
 
@@ -241,7 +241,7 @@ function gg3(x: {}) {
 
 declare function isObject4(value: unknown): value is {};
 >isObject4 : (value: unknown) => value is {}
->          : ^^^^^^^^       ^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^       ^^^^^           
 >value : unknown
 >      : ^^^^^^^
 
@@ -285,7 +285,7 @@ type Self<T> = T extends unknown ? Identity<T> : never;
 
 function is<T>(value: T): value is Self<T> {
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^^^^                
 >value : T
 >      : ^
 

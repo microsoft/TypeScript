@@ -45,7 +45,7 @@ export type TypedArray = Int32Array | Uint8Array;
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
->             : ^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^  ^^^^^                            
 >a : {}
 >  : ^^
 

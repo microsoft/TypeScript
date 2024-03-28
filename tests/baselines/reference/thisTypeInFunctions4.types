@@ -15,7 +15,7 @@ type CorrectObject = {name: string};
 
 declare function isCorrect(obj: any): obj is CorrectObject
 >isCorrect : (obj: any) => obj is CorrectObject
->          : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^   ^^^^^                    
 >obj : any
 
 declare function callsCallback(cb: (name: string)=>void)

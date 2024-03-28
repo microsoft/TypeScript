@@ -85,7 +85,7 @@ namespace Directive {
 
   export function is<T>(value: Directive | T): value is Directive {
 >is : <T>(value: Directive | T) => value is Directive
->   : ^ ^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^             ^^^^^                  
 >value : T | Directive
 >      : ^^^^^^^^^^^^^
 
@@ -259,7 +259,7 @@ type StepState<T = Record<string, unknown>> = T & {
 
 function canPickStepContinue<T extends QuickPickStep>(
 >canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^                ^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^                ^^^^^^^^^^^^^^                           ^^^^^                             
 
   _step: T,
 >_step : T

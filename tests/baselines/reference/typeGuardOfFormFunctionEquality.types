@@ -3,7 +3,7 @@
 === typeGuardOfFormFunctionEquality.ts ===
 declare function isString1(a: number, b: Object): b is string;
 >isString1 : (a: number, b: Object) => b is string
->          : ^^^^      ^^^^^      ^^^^^^^^^^^^^^^^
+>          : ^^^^      ^^^^^      ^^^^^           
 >a : number
 >  : ^^^^^^
 >b : Object
@@ -11,7 +11,7 @@ declare function isString1(a: number, b: Object): b is string;
 
 declare function isString2(a: Object): a is string;
 >isString2 : (a: Object) => a is string
->          : ^^^^      ^^^^^^^^^^^^^^^^
+>          : ^^^^      ^^^^^           
 >a : Object
 >  : ^^^^^^
 
@@ -58,7 +58,7 @@ var x = isString1(0, "") === isString2("");
 
 function isString3(a: number, b: number, c: Object): c is string {
 >isString3 : (a: number, b: number, c: Object) => c is string
->          : ^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^
+>          : ^^^^      ^^^^^      ^^^^^      ^^^^^           
 >a : number
 >  : ^^^^^^
 >b : number

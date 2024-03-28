@@ -11,7 +11,7 @@ interface Pet {
 
 function isPet(pet: any): pet is Pet {
 >isPet : (pet: any) => pet is Pet
->      : ^^^^^^   ^^^^^^^^^^^^^^^
+>      : ^^^^^^   ^^^^^          
 >pet : any
 
     return typeof pet.name === "string";

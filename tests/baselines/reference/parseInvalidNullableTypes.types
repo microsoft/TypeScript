@@ -3,7 +3,7 @@
 === parseInvalidNullableTypes.ts ===
 function f1(a: string): a is ?string {
 >f1 : (a: string) => a is string | null
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^      ^^^^^           ^^^^^^^
 >a : string
 >  : ^^^^^^
 

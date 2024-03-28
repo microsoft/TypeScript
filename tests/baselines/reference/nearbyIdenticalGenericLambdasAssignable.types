@@ -27,9 +27,9 @@ const fB = <T>() => {
 };
 const fC = <T>() => {
 >fC : <T>() => { v: T; }
->   : ^ ^^^^^^^^^^^^ ^^^
+>   : ^ ^^^^^^^         
 ><T>() => {    return {} as any as { v: T };} : <T>() => { v: T; }
->                                             : ^ ^^^^^^^^^^^^ ^^^
+>                                             : ^ ^^^^^^^         
 
     return {} as any as { v: T };
 >{} as any as { v: T } : { v: T; }
@@ -57,9 +57,9 @@ type TB = typeof fB;
 
 type TC = typeof fC;
 >TC : <T>() => { v: T; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^         
 >fC : <T>() => { v: T; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^         
 
 type TL = <T>() => { v: T }; 
 >TL : TL
@@ -83,7 +83,7 @@ declare function accC(x: TC): void;
 >accC : (x: TC) => void
 >     : ^^^^  ^^^^^    
 >x : <T>() => { v: T; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^         
 
 declare function accL(x: TL): void;
 >accL : (x: TL) => void
@@ -110,7 +110,7 @@ accA(fA); accA(fB); accA(fC);
 >accA : (x: <T>() => { v: T; }) => void
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fC : <T>() => { v: T; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^         
 
 //             ~~ previously an error
 accB(fA); accB(fB); accB(fC);
@@ -131,28 +131,28 @@ accB(fA); accB(fB); accB(fC);
 >accB : (x: <T>() => { v: T; }) => void
 >     : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^
 >fC : <T>() => { v: T; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^         
 
 //             OK
 accC(fA); accC(fB); accC(fC);
 >accC(fA) : void
 >         : ^^^^
 >accC : (x: <T>() => { v: T; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^^^^^^         ^^^^^^^^^
 >fA : <T>() => { v: T; }
 >   : ^^^^^^^^^^^^^^^^^^
 >accC(fB) : void
 >         : ^^^^
 >accC : (x: <T>() => { v: T; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^^^^^^         ^^^^^^^^^
 >fB : <T>() => { v: T; }
 >   : ^ ^^^^^^^^^^^^ ^^^
 >accC(fC) : void
 >         : ^^^^
 >accC : (x: <T>() => { v: T; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^^^^^^         ^^^^^^^^^
 >fC : <T>() => { v: T; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^         
 
 //             ~~ previously an error
 accL(fA); accL(fB); accL(fC);
@@ -173,6 +173,6 @@ accL(fA); accL(fB); accL(fC);
 >accL : (x: TL) => void
 >     : ^^^^^^^^^^^^^^^
 >fC : <T>() => { v: T; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^         
 
 //             ~~ previously an error

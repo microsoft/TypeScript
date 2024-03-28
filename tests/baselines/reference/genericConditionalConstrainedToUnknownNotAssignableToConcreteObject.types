@@ -7,7 +7,7 @@ interface A { x: number }
 
 declare function isA(a: unknown): a is A;
 >isA : (a: unknown) => a is A
->    : ^^^^       ^^^^^^^^^^^
+>    : ^^^^       ^^^^^      
 >a : unknown
 >  : ^^^^^^^
 

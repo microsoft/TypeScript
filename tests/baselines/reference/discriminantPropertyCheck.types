@@ -807,7 +807,7 @@ type Type = TypeA | TypeB;
 
 declare function isType(x: unknown): x is Type;
 >isType : (x: unknown) => x is Type
->       : ^^^^       ^^^^^^^^^^^^^^
+>       : ^^^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 

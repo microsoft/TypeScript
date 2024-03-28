@@ -4,9 +4,9 @@
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -20,15 +20,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder/index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -42,15 +42,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder/index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -64,15 +64,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder2/index.ts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -86,15 +86,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder2/index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -108,15 +108,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder2/index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -130,15 +130,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder2/another/index.ts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -152,15 +152,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder2/another/index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -174,15 +174,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === subfolder2/another/index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -196,15 +196,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -218,15 +218,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -240,15 +240,15 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 
 === index.ts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
->                          : ^^^^^^^^^^
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
 >                 : ^
 ><any>(void 0) : any
@@ -262,5 +262,5 @@ const x = <T>() => <T><any>(void 0);
 
 export {x};
 >x : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 

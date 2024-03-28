@@ -18,7 +18,7 @@ const value: { inner: number | string } = null as any;
 
 function isNumber(obj: any): obj is number {
 >isNumber : (obj: any) => obj is number
->         : ^^^^^^   ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^   ^^^^^             
 >obj : any
 
     return true; // method implementation irrelevant

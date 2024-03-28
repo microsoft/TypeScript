@@ -32,17 +32,17 @@ class C extends A {
 
 declare function isA(p1: any): p1 is A;
 >isA : (p1: any) => p1 is A
->    : ^^^^^   ^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^       
 >p1 : any
 
 declare function isB(p1: any): p1 is B;
 >isB : (p1: any) => p1 is B
->    : ^^^^^   ^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^       
 >p1 : any
 
 declare function isC(p1: any): p1 is C;
 >isC : (p1: any) => p1 is C
->    : ^^^^^   ^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^       
 >p1 : any
 
 declare function retC(): C;
@@ -130,7 +130,7 @@ interface I1 {
 // The type predicate type is assignable to the parameter type.
 declare function isC_multipleParams(p1, p2): p1 is C;
 >isC_multipleParams : (p1: any, p2: any) => p1 is C
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^^^^^^^^^^^       
 >p1 : any
 >p2 : any
 
@@ -156,11 +156,11 @@ if (isC_multipleParams(a, 0)) {
 // Methods
 var obj: {
 >obj : { func1(p1: A): p1 is C; }
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^ ^^^       ^^^
 
     func1(p1: A): p1 is C;
 >func1 : (p1: A) => p1 is C
->      : ^^^^^ ^^^^^^^^^^^^
+>      : ^^^^^ ^^^^^       
 >p1 : A
 >   : ^
 }
@@ -170,7 +170,7 @@ class D {
 
     method1(p1: A): p1 is C {
 >method1 : (p1: A) => p1 is C
->        : ^^^^^ ^^^^^^^^^^^^
+>        : ^^^^^ ^^^^^       
 >p1 : A
 >   : ^
 
@@ -183,9 +183,9 @@ class D {
 // Arrow function
 let f1 = (p1: A): p1 is C => false;
 >f1 : (p1: A) => p1 is C
->   : ^^^^^ ^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^       
 >(p1: A): p1 is C => false : (p1: A) => p1 is C
->                          : ^^^^^ ^^^^^^^^^^^^
+>                          : ^^^^^ ^^^^^       
 >p1 : A
 >   : ^
 >false : false
@@ -196,7 +196,7 @@ declare function f2(p1: (p1: A) => p1 is C);
 >f2 : (p1: (p1: A) => p1 is C) => any
 >   : ^^^^^                  ^^^^^^^^
 >p1 : (p1: A) => p1 is C
->   : ^^^^^ ^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^       
 >p1 : A
 >   : ^
 
@@ -206,7 +206,7 @@ f2(function(p1: A): p1 is C {
 >f2 : (p1: (p1: A) => p1 is C) => any
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function(p1: A): p1 is C {    return true;} : (p1: A) => p1 is C
->                                            : ^^^^^ ^^^^^^^^^^^^
+>                                            : ^^^^^ ^^^^^       
 >p1 : A
 >   : ^
 
@@ -239,7 +239,7 @@ declare function acceptingTypeGuardFunction(p1: (item) => item is A);
 >acceptingTypeGuardFunction : (p1: (item: any) => item is A) => any
 >                           : ^^^^^       ^^^              ^^^^^^^^
 >p1 : (item: any) => item is A
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^         
 >item : any
 
 acceptingTypeGuardFunction(isA);

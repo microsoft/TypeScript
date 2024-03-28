@@ -12,7 +12,7 @@ export { Debug };
 === src/core/debug.ts ===
 export declare function assert(expression: unknown): asserts expression;
 >assert : (expression: unknown) => asserts expression
->       : ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^       ^^^^^                  
 >expression : unknown
 >           : ^^^^^^^
 

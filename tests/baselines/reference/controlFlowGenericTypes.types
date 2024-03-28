@@ -133,13 +133,13 @@ interface Box<T> {
 
 declare function isBox(x: any): x is Box<unknown>;
 >isBox : (x: any) => x is Box<unknown>
->      : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^   ^^^^^                 
 >x : any
 >  : ^^^
 
 declare function isUndefined(x: unknown): x is undefined;
 >isUndefined : (x: unknown) => x is undefined
->            : ^^^^       ^^^^^^^^^^^^^^^^^^^
+>            : ^^^^       ^^^^^              
 >x : unknown
 >  : ^^^^^^^
 

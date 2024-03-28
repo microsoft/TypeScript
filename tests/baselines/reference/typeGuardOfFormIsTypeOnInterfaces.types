@@ -45,7 +45,7 @@ var strOrNum: string | number;
 
 function isC1(x: any): x is C1 {
 >isC1 : (x: any) => x is C1
->     : ^^^^   ^^^^^^^^^^^^
+>     : ^^^^   ^^^^^       
 >x : any
 
     return true;
@@ -55,7 +55,7 @@ function isC1(x: any): x is C1 {
 
 function isC2(x: any): x is C2 {
 >isC2 : (x: any) => x is C2
->     : ^^^^   ^^^^^^^^^^^^
+>     : ^^^^   ^^^^^       
 >x : any
 
     return true;
@@ -65,7 +65,7 @@ function isC2(x: any): x is C2 {
 
 function isD1(x: any): x is D1 {
 >isD1 : (x: any) => x is D1
->     : ^^^^   ^^^^^^^^^^^^
+>     : ^^^^   ^^^^^       
 >x : any
 
     return true;

@@ -138,7 +138,7 @@ class Type<A, O = A, I = unknown> {
     /** a custom type guard */
     readonly is: (u: unknown) => u is A,
 >is : (u: unknown) => u is A
->   : ^^^^       ^^^^^^^^^^^
+>   : ^^^^       ^^^^^      
 >u : unknown
 >  : ^^^^^^^
 

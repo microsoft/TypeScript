@@ -601,7 +601,7 @@ type AOrB = { aProp: number } | { bProp: number };
 
 declare function isAOrB(x: unknown): x is AOrB;
 >isAOrB : (x: unknown) => x is AOrB
->       : ^^^^       ^^^^^^^^^^^^^^
+>       : ^^^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 
