@@ -72,6 +72,7 @@ import {
     isTypeLiteralNode,
     JsxOpeningLikeElement,
     LanguageVariant,
+    lastOrUndefined,
     length,
     map,
     MethodDeclaration,
@@ -138,7 +139,7 @@ const errorCodes = [
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
-    Diagnostics.Cannot_find_name_0.code
+    Diagnostics.Cannot_find_name_0.code,
 ];
 
 enum InfoKind {
@@ -186,7 +187,7 @@ registerCodeFix({
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
                 const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
-                if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
+                if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text))) {
                     return;
                 }
                 if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
@@ -216,10 +217,12 @@ registerCodeFix({
                 const supers = isTypeLiteralNode(declaration) ? undefined : getAllSupers(declaration, checker);
                 for (const info of infos) {
                     // If some superclass added this property, don't add it again.
-                    if (supers?.some(superClassOrInterface => {
-                        const superInfos = typeDeclToMembers.get(superClassOrInterface);
-                        return !!superInfos && superInfos.some(({ token }) => token.text === info.token.text);
-                    })) continue;
+                    if (
+                        supers?.some(superClassOrInterface => {
+                            const superInfos = typeDeclToMembers.get(superClassOrInterface);
+                            return !!superInfos && superInfos.some(({ token }) => token.text === info.token.text);
+                        })
+                    ) continue;
 
                     const { parentDeclaration, declSourceFile, modifierFlags, token, call, isJSFile } = info;
                     // Always prefer to add a method declaration if possible.
@@ -270,7 +273,8 @@ interface FunctionInfo {
 
 interface ObjectLiteralInfo {
     readonly kind: InfoKind.ObjectLiteral;
-    readonly token: Identifier;
+    readonly token: Node;
+    readonly identifier: string;
     readonly properties: Symbol[];
     readonly parentDeclaration: ObjectLiteralExpression;
     readonly indentation?: number;
@@ -312,7 +316,18 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
-        return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
+        return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
+    }
+
+    if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
+        const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        if (!length(properties)) return undefined;
+
+        // no identifier needed because the whole parentDeclaration has the error
+        const identifier = "";
+
+        return { kind: InfoKind.ObjectLiteral, token: parent, identifier, properties, parentDeclaration: parent };
     }
 
     if (!isMemberName(token)) return undefined;
@@ -322,7 +337,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
-        return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
+        return { kind: InfoKind.ObjectLiteral, token, identifier: token.text, properties, parentDeclaration: parent.initializer };
     }
 
     if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
@@ -428,7 +443,8 @@ function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, sourceFi
             tokenName,
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            /*initializer*/ undefined);
+            /*initializer*/ undefined,
+        );
 
         const lastProp = getNodeToInsertPropertyAfter(classDeclaration);
         if (lastProp) {
@@ -521,11 +537,13 @@ function createAddIndexSignatureAction(context: CodeFixContext, sourceFile: Sour
         "x",
         /*questionToken*/ undefined,
         stringTypeNode,
-        /*initializer*/ undefined);
+        /*initializer*/ undefined,
+    );
     const indexSignature = factory.createIndexSignature(
         /*modifiers*/ undefined,
         [indexingParameter],
-        typeNode);
+        typeNode,
+    );
 
     const changes = textChanges.ChangeTracker.with(context, t => t.insertMemberAtStart(sourceFile, node, indexSignature));
     // No fixId here because code-fix-all currently only works on adding individual named properties.
@@ -579,17 +597,15 @@ function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: T
         const type = checker.getTypeAtLocation(member);
         return !!(type && type.flags & TypeFlags.StringLike);
     });
-
+    const sourceFile = parentDeclaration.getSourceFile();
     const enumMember = factory.createEnumMember(token, hasStringInitializer ? factory.createStringLiteral(token.text) : undefined);
-    changes.replaceNode(parentDeclaration.getSourceFile(), parentDeclaration, factory.updateEnumDeclaration(
-        parentDeclaration,
-        parentDeclaration.modifiers,
-        parentDeclaration.name,
-        concatenate(parentDeclaration.members, singleElementArray(enumMember))
-    ), {
-        leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-        trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
-    });
+    const last = lastOrUndefined(parentDeclaration.members);
+    if (last) {
+        changes.insertNodeInListAfter(sourceFile, last, enumMember, parentDeclaration.members);
+    }
+    else {
+        changes.insertMemberAtStart(sourceFile, parentDeclaration, enumMember);
+    }
 }
 
 function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo | SignatureInfo) {
@@ -640,7 +656,7 @@ function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context:
     const options = {
         leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
         trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-        indentation: info.indentation
+        indentation: info.indentation,
     };
     changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
     importAdder.writeFixes(changes);
@@ -664,7 +680,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (type.flags & TypeFlags.EnumLike) {
         const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
-        const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
+        const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
     if (type.flags & TypeFlags.NumberLiteral) {
@@ -703,8 +719,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         const signature = checker.getSignaturesOfType(type, SignatureKind.Call);
         if (signature === undefined) return createUndefined();
 
-        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0],
-            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as FunctionExpression | undefined;
+        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0], createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as FunctionExpression | undefined;
         return func ?? createUndefined();
     }
     if (getObjectFlags(type) & ObjectFlags.Class) {
@@ -747,8 +762,7 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
             }
         }
     }
-    return filter(targetProps, targetProp =>
-        isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
+    return filter(targetProps, targetProp => isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
 }
 
 function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, callExpression: CallExpression) {
@@ -764,7 +778,8 @@ function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quot
         const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
-    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
+    // We're using these nodes as property names in an object literal; no need to quote names when not needed.
+    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single, /*stringNamed*/ false, /*isMethod*/ false);
 }
 
 function findScope(node: Node) {

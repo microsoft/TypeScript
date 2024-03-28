@@ -7,27 +7,37 @@
 interface IObservable<T> {
     n: IObservable<T[]>;
 >n : IObservable<T[]>
+>  : ^^^^^^^^^^^^^^^^
 }
 interface ISubject<T> extends IObservable<T> { }
 
 declare function combineLatest<TOther>(x: IObservable<TOther>[]): void;
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
+>              : ^^^      ^^^^^                     ^^^    ^^^^^^^^^^^^^
 >x : IObservable<TOther>[]
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 declare function combineLatest(): void;
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 
 function fn<T>() {
 >fn : <T>() => void
+>   : ^^^^^^^^^^^^^
 
     var values: ISubject<any>[] = [];
 >values : ISubject<any>[]
+>       : ^^^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     // Hang when using <T>, but not <any>
     combineLatest<T>(values);
 >combineLatest<T>(values) : void
+>                         : ^^^^
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >values : ISubject<any>[]
+>       : ^^^^^^^^^^^^^^^
 }
 

@@ -14,38 +14,56 @@
 
 class C {
 >C : C
+>  : ^
 
     constructor() {
         return {};
 >{} : {}
+>   : ^^
     }
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     constructor() {
         var _this = "uh-oh?";
 >_this : string
+>      : ^^^^^^
 >"uh-oh?" : "uh-oh?"
+>         : ^^^^^^^^
 
         console.log("ruh-roh...");
 >console.log("ruh-roh...") : void
+>                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"ruh-roh..." : "ruh-roh..."
+>             : ^^^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 
         console.log("d'oh!");
 >console.log("d'oh!") : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"d'oh!" : "d'oh!"
+>        : ^^^^^^^
     }
 }

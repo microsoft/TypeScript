@@ -33,7 +33,9 @@ exports.A = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
+exports.x = exports.A = void 0;
+var A = a.A; // Error
+exports.A = A;
 var x = 0;
 exports.x = x;
 //// [c.js]

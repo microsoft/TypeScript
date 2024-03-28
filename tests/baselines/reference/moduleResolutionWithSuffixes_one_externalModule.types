@@ -3,8 +3,10 @@
 === /index.ts ===
 import { ios } from "some-library";
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /node_modules/some-library/index.ios.d.ts ===
 export declare function ios(): void;
 >ios : () => void
+>    : ^^^^^^    
 

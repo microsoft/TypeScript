@@ -31,8 +31,8 @@ module.exports = b;
 
 
 //// [declFileImportChainInExportAssignment.d.ts]
-declare module m {
-    module c {
+declare namespace m {
+    namespace c {
         class c {
         }
     }

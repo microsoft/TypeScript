@@ -3,15 +3,21 @@
 === nullableFunctionError.ts ===
 null();
 >null() : any
+>       : ^^^
 
 undefined();
 >undefined() : any
+>            : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let f: null | undefined;
 >f : null | undefined
+>  : ^^^^^^^^^^^^^^^^
 
 f();
 >f() : any
+>    : ^^^
 >f : null | undefined
+>  : ^^^^^^^^^^^^^^^^
 

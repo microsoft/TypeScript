@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/classExtendsNull2.ts] ////
+
+=== classExtendsNull2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55499
+
+interface Base {}
+
+class C extends null {
+>C : C
+>  : ^
+
+  constructor() {
+    super();
+>super() : void
+>        : ^^^^
+>super : any
+>      : ^^^
+  }
+}
+interface C extends Base {}
+

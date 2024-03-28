@@ -4,10 +4,13 @@
 interface I {
     foo(callback: (a: any, b: any) => void): I
 >foo : (callback: (a: any, b: any) => void) => I
+>    : ^^^^^^^^^^^                        ^^^^^ 
 >callback : (a: any, b: any) => void
+>         : ^^^^   ^^^^^   ^^^^^    
 >a : any
 >b : any
 
     is(): boolean;
 >is : () => boolean
+>   : ^^^^^^       
 }

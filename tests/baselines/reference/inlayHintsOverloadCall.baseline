@@ -1,0 +1,90 @@
+// === Inlay Hints ===
+call(1);
+     ^
+{
+  "text": "a:",
+  "position": 131,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+call(1, 2);
+     ^
+{
+  "text": "b:",
+  "position": 140,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+call(1, 2);
+        ^
+{
+  "text": "c:",
+  "position": 143,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+new call(1);
+         ^
+{
+  "text": "d:",
+  "position": 156,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1)
+    ^
+{
+  "text": "w:",
+  "position": 326,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, 2)
+    ^
+{
+  "text": "a:",
+  "position": 333,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, 2)
+       ^
+{
+  "text": "b:",
+  "position": 336,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+new Class(1)
+          ^
+{
+  "text": "a:",
+  "position": 475,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+new Class(1, 2)
+          ^
+{
+  "text": "b:",
+  "position": 488,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+new Class(1, 2)
+             ^
+{
+  "text": "c:",
+  "position": 491,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

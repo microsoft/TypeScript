@@ -1,3 +1,4 @@
+// === Syntax Diagnostics ===
 Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics4.ts':
 /tests/cases/fourslash/a.js(1,1): error TS8009: The 'public' modifier can only be used in TypeScript files.
 

@@ -1,0 +1,28 @@
+a.js(2,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+a.js(12,14): error TS1273: 'private' modifier cannot appear on a type parameter
+
+
+==== a.js (2 errors) ====
+    /**
+     * @template const T
+                 ~~~~~
+!!! error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+     * @typedef {[T]} X
+     */
+    
+    /**
+     * @template const T
+     */
+    class C { }
+    
+    /**
+     * @template private T
+                 ~~~~~~~
+!!! error TS1273: 'private' modifier cannot appear on a type parameter
+     * @param {T} x
+     * @returns {T}
+     */
+    function f(x) {
+        return x;
+    }
+    

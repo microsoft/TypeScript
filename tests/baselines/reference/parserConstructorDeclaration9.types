@@ -3,6 +3,7 @@
 === parserConstructorDeclaration9.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor<T>() { }
 }

@@ -1,4 +1,4 @@
-const { TSESTree, AST_NODE_TYPES } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
 module.exports = createRule({
@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: `disallows the use of certain TypeScript keywords as variable or parameter names`,
-            recommended: "error",
         },
         messages: {
             noKeywordsError: `{{ name }} clashes with keyword/type`,
@@ -36,15 +35,15 @@ module.exports = createRule({
         ];
 
         /** @type {(name: string) => boolean} */
-        const isKeyword = (name) => keywords.includes(name);
+        const isKeyword = name => keywords.includes(name);
 
-        /** @type {(node: TSESTree.Identifier) => void} */
-        const report = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Identifier) => void} */
+        const report = node => {
             context.report({ messageId: "noKeywordsError", data: { name: node.name }, node });
         };
 
-        /** @type {(node: TSESTree.ObjectPattern) => void} */
-        const checkProperties = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.ObjectPattern) => void} */
+        const checkProperties = node => {
             node.properties.forEach(property => {
                 if (
                     property &&
@@ -57,8 +56,8 @@ module.exports = createRule({
             });
         };
 
-        /** @type {(node: TSESTree.ArrayPattern) => void} */
-        const checkElements = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.ArrayPattern) => void} */
+        const checkElements = node => {
             node.elements.forEach(element => {
                 if (
                     element &&
@@ -70,8 +69,8 @@ module.exports = createRule({
             });
         };
 
-        /** @type {(node: TSESTree.ArrowFunctionExpression | TSESTree.FunctionDeclaration | TSESTree.FunctionExpression | TSESTree.TSMethodSignature | TSESTree.TSFunctionType) => void} */
-        const checkParams = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.ArrowFunctionExpression | import("@typescript-eslint/utils").TSESTree.FunctionDeclaration | import("@typescript-eslint/utils").TSESTree.FunctionExpression | import("@typescript-eslint/utils").TSESTree.TSMethodSignature | import("@typescript-eslint/utils").TSESTree.TSFunctionType) => void} */
+        const checkParams = node => {
             if (!node || !node.params || !node.params.length) {
                 return;
             }

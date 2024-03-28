@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/declarationEmitNestedAnonymousMappedType.ts] ////
+
+=== declarationEmitNestedAnonymousMappedType.ts ===
+export function enumFromStrings<const Members extends readonly string[]>() {
+>enumFromStrings : Symbol(enumFromStrings, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 0))
+>Members : Symbol(Members, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 32))
+
+    type Part1 = {
+>Part1 : Symbol(Part1, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 76))
+
+        [key in keyof Members as Members[key] extends string
+>key : Symbol(key, Decl(declarationEmitNestedAnonymousMappedType.ts, 2, 9))
+>Members : Symbol(Members, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 32))
+>Members : Symbol(Members, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 32))
+>key : Symbol(key, Decl(declarationEmitNestedAnonymousMappedType.ts, 2, 9))
+
+        ? Members[key]
+>Members : Symbol(Members, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 32))
+>key : Symbol(key, Decl(declarationEmitNestedAnonymousMappedType.ts, 2, 9))
+
+        : never]: Members[key];
+>Members : Symbol(Members, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 32))
+>key : Symbol(key, Decl(declarationEmitNestedAnonymousMappedType.ts, 2, 9))
+
+    };
+    type Part2 = { [Property in keyof Part1]: Part1[Property] };
+>Part2 : Symbol(Part2, Decl(declarationEmitNestedAnonymousMappedType.ts, 5, 6))
+>Property : Symbol(Property, Decl(declarationEmitNestedAnonymousMappedType.ts, 6, 20))
+>Part1 : Symbol(Part1, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 76))
+>Part1 : Symbol(Part1, Decl(declarationEmitNestedAnonymousMappedType.ts, 0, 76))
+>Property : Symbol(Property, Decl(declarationEmitNestedAnonymousMappedType.ts, 6, 20))
+
+    return Object.create(null) as Part2;
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Part2 : Symbol(Part2, Decl(declarationEmitNestedAnonymousMappedType.ts, 5, 6))
+}
+

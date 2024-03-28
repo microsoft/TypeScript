@@ -32,7 +32,7 @@ export {}
 
 /a/lib/tsc.js --w
 Output::
-[[90m12:00:45 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /home/user/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -65,29 +65,17 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/home/user/projects/myproject/src/file.ts"]
-Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/home/user/projects/myproject/node_modules/reala/index.d.ts
-/home/user/projects/myproject/src/file.ts
+//// [/home/user/projects/myproject/src/file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/home/user/projects/myproject/node_modules/reala/index.d.ts
-/home/user/projects/myproject/src/file.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
-/home/user/projects/myproject/src/file.ts (used version)
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types: *new*
@@ -119,10 +107,32 @@ FsWatches::
 /home/user/projects/myproject/tsconfig.json: *new*
   {}
 
+Timeout callback:: count: 1
+1: timerToUpdateChildWatches *new*
+
+Program root files: [
+  "/home/user/projects/myproject/src/file.ts"
+]
+Program options: {
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "watch": true,
+  "configFilePath": "/home/user/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/home/user/projects/myproject/node_modules/reala/index.d.ts
+/home/user/projects/myproject/src/file.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/home/user/projects/myproject/node_modules/reala/index.d.ts
+/home/user/projects/myproject/src/file.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
+/home/user/projects/myproject/src/file.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/home/user/projects/myproject/src/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

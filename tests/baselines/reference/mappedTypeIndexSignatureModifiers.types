@@ -1,0 +1,170 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeIndexSignatureModifiers.ts] ////
+
+=== mappedTypeIndexSignatureModifiers.ts ===
+// https://github.com/microsoft/TypeScript/issues/14295
+
+interface Obj1 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+}
+type Res1 = Pick<Obj1, keyof Obj1>
+>Res1 : Res1
+>     : ^^^^
+
+interface Obj2 {
+    concreteProp: 'hello';
+>concreteProp : "hello"
+>             : ^^^^^^^
+
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+}
+type Res2 = Pick<Obj2, keyof Obj2>
+>Res2 : Res2
+>     : ^^^^
+
+interface Obj3 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    readonly [key: number]: 'foo';
+>key : number
+>    : ^^^^^^
+}
+type Res3 = Pick<Obj3, keyof Obj3>
+>Res3 : Res3
+>     : ^^^^
+
+interface Obj4 {
+    [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    readonly [key: number]: 'foo';
+>key : number
+>    : ^^^^^^
+}
+type Res4 = Pick<Obj4, keyof Obj4>
+>Res4 : Res4
+>     : ^^^^
+
+interface Obj5 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    [key: number]: 'foo';
+>key : number
+>    : ^^^^^^
+}
+type Res5 = Pick<Obj5, keyof Obj5>
+>Res5 : Res5
+>     : ^^^^
+
+type Identity<T> = { [P in keyof T]: T[P]; }
+>Identity : Identity<T>
+>         : ^^^^^^^^^^^
+
+interface Obj6 {
+    readonly [key: `wow${string}`]: 'foo';
+>key : `wow${string}`
+>    : ^^^^^^^^^^^^^^
+}
+type Res6 = Identity<Obj6>
+>Res6 : Identity<Obj6>
+>     : ^^^^^^^^^^^^^^
+
+interface Obj7 {
+    [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    readonly [key: `wow${string}`]: 'foo';
+>key : `wow${string}`
+>    : ^^^^^^^^^^^^^^
+}
+type Res7 = Identity<Obj7>
+>Res7 : Identity<Obj7>
+>     : ^^^^^^^^^^^^^^
+
+interface Obj8 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    [key: `wow${string}`]: 'foo';
+>key : `wow${string}`
+>    : ^^^^^^^^^^^^^^
+}
+type Res8 = Identity<Obj8>
+>Res8 : Identity<Obj8>
+>     : ^^^^^^^^^^^^^^
+
+type StrippingPick<T, K extends keyof T> = { -readonly [P in K]: T[P]; }
+>StrippingPick : StrippingPick<T, K>
+>              : ^^^^^^^^^^^^^^^^^^^
+
+interface Obj9 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+}
+type Res9 = StrippingPick<Obj9, keyof Obj9>
+>Res9 : Res9
+>     : ^^^^
+
+interface Obj10 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    readonly [key: number]: 'foo';
+>key : number
+>    : ^^^^^^
+}
+type Res10 = StrippingPick<Obj10, keyof Obj10>
+>Res10 : Res10
+>      : ^^^^^
+
+interface Obj11 {
+    [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    readonly [key: number]: 'foo';
+>key : number
+>    : ^^^^^^
+}
+type Res11 = StrippingPick<Obj11, keyof Obj11>
+>Res11 : Res11
+>      : ^^^^^
+
+interface Obj12 {
+    readonly [key: string]: string;
+>key : string
+>    : ^^^^^^
+
+    [key: number]: 'foo';
+>key : number
+>    : ^^^^^^
+}
+type Res12 = StrippingPick<Obj12, keyof Obj12>
+>Res12 : Res12
+>      : ^^^^^
+
+type StrippingIdentity<T> = { -readonly [P in keyof T]: T[P]; }
+>StrippingIdentity : StrippingIdentity<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+interface Obj13 {
+    readonly [key: `wow${string}`]: 'foo';
+>key : `wow${string}`
+>    : ^^^^^^^^^^^^^^
+}
+type Res13 = StrippingIdentity<Obj13>
+>Res13 : StrippingIdentity<Obj13>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+

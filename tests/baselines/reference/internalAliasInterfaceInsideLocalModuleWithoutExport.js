@@ -24,11 +24,11 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasInterfaceInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     interface I {
     }
 }
-export declare module c {
+export declare namespace c {
     import b = a.I;
     var x: b;
 }

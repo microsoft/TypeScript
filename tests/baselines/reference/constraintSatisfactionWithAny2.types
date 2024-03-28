@@ -6,19 +6,25 @@
 
 declare function foo<Z, T extends <U>(x: U) => Z>(y: T): Z;
 >foo : <Z, T extends <U>(x: U) => Z>(y: T) => Z
+>    : ^ ^^ ^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^ 
 >x : U
+>  : ^
 >y : T
+>  : ^
 
 var a: any;
 >a : any
 
 foo(a);
 >foo(a) : unknown
+>       : ^^^^^^^
 >foo : <Z, T extends <U>(x: U) => Z>(y: T) => Z
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 
 foo<any, any>(a);
 >foo<any, any>(a) : any
 >foo : <Z, T extends <U>(x: U) => Z>(y: T) => Z
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 

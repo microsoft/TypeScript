@@ -3,13 +3,18 @@
 === undefinedTypeAssignment1.ts ===
 type undefined = string;
 >undefined : string
+>          : ^^^^^^
 
 function p(undefined = "wat") {
 >p : (undefined?: string) => string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : string
+>          : ^^^^^^
 >"wat" : "wat"
+>      : ^^^^^
 
 	return undefined;
 >undefined : string
+>          : ^^^^^^
 }
 

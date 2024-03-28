@@ -20,8 +20,8 @@ var Outer;
 
 
 //// [privacyCheckTypeOfInvisibleModuleNoError.d.ts]
-declare module Outer {
-    module Inner {
+declare namespace Outer {
+    namespace Inner {
         var m: number;
     }
     export var f: typeof Inner;

@@ -3,19 +3,25 @@
 === parserErrorRecoveryIfStatement2.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     if (a
 >a : any
+>  : ^^^
   }
 > : any
+> : ^^^
 
   f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
   }
   f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
   }
 }

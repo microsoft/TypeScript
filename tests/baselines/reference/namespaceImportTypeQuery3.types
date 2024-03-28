@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/externalModules/typeOnly/namespaceImportTypeQuery3.ts] ////
+
+=== /a.ts ===
+import type { A } from './z'; // unresolved
+>A : any
+>  : ^^^
+
+const A = 0;
+>A : 0
+>  : ^
+>0 : 0
+>  : ^
+
+export { A };
+>A : 0
+>  : ^
+
+export class B {};
+>B : B
+>  : ^
+
+=== /b.ts ===
+import * as types from './a';
+>types : typeof types
+>      : ^^^^^^^^^^^^
+
+let t: typeof types = {
+>t : typeof types
+>  : ^^^^^^^^^^^^
+>types : typeof types
+>      : ^^^^^^^^^^^^
+>{  A: undefined as any, // ok  B: undefined as any,} : { A: any; B: any; }
+>                                                     : ^^^^^   ^^^^^   ^^^
+
+  A: undefined as any, // ok
+>A : any
+>  : ^^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  B: undefined as any,
+>B : any
+>  : ^^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+

@@ -1,8 +1,10 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -19,7 +21,7 @@ describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     constructor(name: string, width: number, height: number, onSelect: Function);
     Name: string;
     SelectedFile: string;
-}`
+}`,
         };
         const appLib: File = {
             path: `${libProjectLocation}/@app/lib/index.d.ts`,
@@ -28,7 +30,7 @@ declare class TestLib {
     issue: BrokenTest;
     constructor();
     test(): void;
-}`
+}`,
         };
         const testProjectLocation = `/user/username/projects/myproject/test`;
         const testFile: File = {
@@ -44,21 +46,21 @@ declare class TestLib {
         var x = new BrokenTest('',0,0,null);
 
     }
-}`
+}`,
         };
         const testConfig: File = {
             path: `${testProjectLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     module: "amd",
-                    typeRoots: ["../lib/@types", "../lib/@app"]
-                }
-            })
+                    typeRoots: ["../lib/@types", "../lib/@app"],
+                },
+            }),
         };
 
         const files = [typeLib, appLib, testFile, testConfig, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
         host.runQueuedTimeoutCallbacks();
@@ -69,25 +71,25 @@ declare class TestLib {
         const projectPath = `/user/username/projects/myproject/background`;
         const file: File = {
             path: `${projectPath}/a.ts`,
-            content: "let x = 10;"
+            content: "let x = 10;",
         };
         const tsconfig: File = {
             path: `${projectPath}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     types: [
-                        "../typedefs/filesystem"
-                    ]
-                }
-            })
+                        "../typedefs/filesystem",
+                    ],
+                },
+            }),
         };
         const filesystem: File = {
             path: `/user/username/projects/myproject/typedefs/filesystem.d.ts`,
-            content: `interface LocalFileSystem { someProperty: string; }`
+            content: `interface LocalFileSystem { someProperty: string; }`,
         };
         const files = [file, tsconfig, filesystem, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
     });

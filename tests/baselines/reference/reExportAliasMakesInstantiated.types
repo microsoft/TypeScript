@@ -1,0 +1,70 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/reExportAliasMakesInstantiated.ts] ////
+
+=== reExportAliasMakesInstantiated.ts ===
+declare module pack1 {
+>pack1 : typeof pack1
+>      : ^^^^^^^^^^^^
+
+  const test1: string;
+>test1 : string
+>      : ^^^^^^
+
+  export { test1 };
+>test1 : string
+>      : ^^^^^^
+}
+declare module pack2 {
+>pack2 : typeof pack2
+>      : ^^^^^^^^^^^^
+
+  import test1 = pack1.test1;
+>test1 : string
+>      : ^^^^^^
+>pack1 : typeof pack1
+>      : ^^^^^^^^^^^^
+>test1 : string
+>      : ^^^^^^
+
+  export { test1 };
+>test1 : string
+>      : ^^^^^^
+}
+export import test1 = pack2.test1;
+>test1 : string
+>      : ^^^^^^
+>pack2 : typeof pack2
+>      : ^^^^^^^^^^^^
+>test1 : string
+>      : ^^^^^^
+
+declare module mod1 {
+  type test1 = string;
+>test1 : string
+>      : ^^^^^^
+
+  export { test1 };
+>test1 : any
+>      : ^^^
+}
+declare module mod2 {
+>mod2 : typeof mod2
+>     : ^^^^^^^^^^^
+
+  import test1 = mod1.test1;
+>test1 : any
+>      : ^^^
+>mod1 : any
+>     : ^^^
+>test1 : string
+>      : ^^^^^^
+
+  export { test1 };
+>test1 : any
+>      : ^^^
+}
+const test2 = mod2; // Possible false positive instantiation, but ok
+>test2 : typeof mod2
+>      : ^^^^^^^^^^^
+>mod2 : typeof mod2
+>     : ^^^^^^^^^^^
+

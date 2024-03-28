@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/circularBaseConstraint.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 100 / 100 (nearest 100)
+Type Count: 600 / 600 (nearest 100)
+Instantiation count: 2,000 / 2,000 (nearest 500)
+Symbol count: 25,500 / 25,500 (nearest 500)
+
+=== circularBaseConstraint.ts ===
+// Repro from #54610
+
+type A<T> = T;
+>A : T
+>  : ^
+
+type B<T> = T extends any[]
+>B : B<T>
+>  : ^^^^
+
+    ? never
+    : A<T> extends infer key
+    ? key extends keyof T
+        ? B<T[key]>
+        : never
+    : never;
+
+function foo<T>() {
+>foo : <T>() => void
+>    : ^^^^^^^^^^^^^
+
+    `${a}` as B<T>;
+>`${a}` as B<T> : B<T>
+>               : ^^^^
+>`${a}` : string
+>       : ^^^^^^
+>a : any
+>  : ^^^
+}
+

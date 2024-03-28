@@ -84,7 +84,8 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 //// [importDecl_require.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = exports.x = exports.d = void 0;
+exports.x = exports.d = void 0;
+exports.foo = foo;
 var d = /** @class */ (function () {
     function d() {
     }
@@ -92,11 +93,11 @@ var d = /** @class */ (function () {
 }());
 exports.d = d;
 function foo() { return null; }
-exports.foo = foo;
 //// [importDecl_require1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = exports.d = void 0;
+exports.d = void 0;
+exports.foo = foo;
 var d = /** @class */ (function () {
     function d() {
     }
@@ -105,11 +106,11 @@ var d = /** @class */ (function () {
 exports.d = d;
 var x;
 function foo() { return null; }
-exports.foo = foo;
 //// [importDecl_require2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = exports.x = exports.d = void 0;
+exports.x = exports.d = void 0;
+exports.foo = foo;
 var d = /** @class */ (function () {
     function d() {
     }
@@ -117,11 +118,11 @@ var d = /** @class */ (function () {
 }());
 exports.d = d;
 function foo() { return null; }
-exports.foo = foo;
 //// [importDecl_require3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = exports.x = exports.d = void 0;
+exports.x = exports.d = void 0;
+exports.foo = foo;
 var d = /** @class */ (function () {
     function d() {
     }
@@ -129,13 +130,11 @@ var d = /** @class */ (function () {
 }());
 exports.d = d;
 function foo() { return null; }
-exports.foo = foo;
 //// [importDecl_require4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo2 = void 0;
-function foo2() { return null; }
 exports.foo2 = foo2;
+function foo2() { return null; }
 //// [importDecl_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -210,16 +209,11 @@ export declare function foo(): d;
 import m4 = require("./importDecl_require");
 export declare function foo2(): m4.d;
 //// [importDecl_1.d.ts]
-/// <reference path="importDecl_require.d.ts" />
-/// <reference path="importDecl_require1.d.ts" />
-/// <reference path="importDecl_require2.d.ts" />
-/// <reference path="importDecl_require3.d.ts" />
-/// <reference path="importDecl_require4.d.ts" />
 import m4 = require("./importDecl_require");
 export declare var x4: m4.d;
 export declare var d4: typeof m4.d;
 export declare var f4: m4.d;
-export declare module m1 {
+export declare namespace m1 {
     var x2: m4.d;
     var d2: typeof m4.d;
     var f2: m4.d;
@@ -229,7 +223,7 @@ export declare var useGlo_m4_d4: typeof glo_m4.d;
 export declare var useGlo_m4_f4: glo_m4.d;
 import fncOnly_m4 = require("./importDecl_require2");
 export declare var useFncOnly_m4_f4: fncOnly_m4.d;
-export declare module usePrivate_m4_m1 {
+export declare namespace usePrivate_m4_m1 {
 }
 export declare var d: m4.d;
 export declare var useMultiImport_m4_x4: m4.d;

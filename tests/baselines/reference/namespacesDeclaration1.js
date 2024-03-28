@@ -13,9 +13,9 @@ module M {
 
 
 //// [namespacesDeclaration1.d.ts]
-declare module M {
+declare namespace M {
     namespace N {
-        module M2 {
+        namespace M2 {
             interface I {
             }
         }

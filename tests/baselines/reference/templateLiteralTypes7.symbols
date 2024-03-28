@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes7.ts] ////
+
+=== templateLiteralTypes7.ts ===
+// https://github.com/microsoft/TypeScript/issues/57807
+
+interface NMap {
+>NMap : Symbol(NMap, Decl(templateLiteralTypes7.ts, 0, 0))
+
+  1: 'A'
+>1 : Symbol(NMap[1], Decl(templateLiteralTypes7.ts, 2, 16))
+
+  2: 'B'
+>2 : Symbol(NMap[2], Decl(templateLiteralTypes7.ts, 3, 8))
+
+  3: 'C'
+>3 : Symbol(NMap[3], Decl(templateLiteralTypes7.ts, 4, 8))
+
+  4: 'D'
+>4 : Symbol(NMap[4], Decl(templateLiteralTypes7.ts, 5, 8))
+}
+
+declare const g: <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>g : Symbol(g, Decl(templateLiteralTypes7.ts, 9, 13))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 9, 18))
+>x : Symbol(x, Decl(templateLiteralTypes7.ts, 9, 39))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 9, 18))
+>NMap : Symbol(NMap, Decl(templateLiteralTypes7.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 9, 18))
+
+type G1 = <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>G1 : Symbol(G1, Decl(templateLiteralTypes7.ts, 9, 60))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 11, 11))
+>x : Symbol(x, Decl(templateLiteralTypes7.ts, 11, 32))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 11, 11))
+>NMap : Symbol(NMap, Decl(templateLiteralTypes7.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 11, 11))
+
+const g1: G1 = g; // ok
+>g1 : Symbol(g1, Decl(templateLiteralTypes7.ts, 12, 5))
+>G1 : Symbol(G1, Decl(templateLiteralTypes7.ts, 9, 60))
+>g : Symbol(g, Decl(templateLiteralTypes7.ts, 9, 13))
+
+type G2 = <T extends 1 | 2 | 3 | 4>(x: `${T}`) => NMap[T]
+>G2 : Symbol(G2, Decl(templateLiteralTypes7.ts, 12, 17))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 14, 11))
+>x : Symbol(x, Decl(templateLiteralTypes7.ts, 14, 36))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 14, 11))
+>NMap : Symbol(NMap, Decl(templateLiteralTypes7.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 14, 11))
+
+const g2: G2 = g; // error
+>g2 : Symbol(g2, Decl(templateLiteralTypes7.ts, 15, 5))
+>G2 : Symbol(G2, Decl(templateLiteralTypes7.ts, 12, 17))
+>g : Symbol(g, Decl(templateLiteralTypes7.ts, 9, 13))
+
+type G3 = <T extends 1 | 2>(x: `${T}`) => NMap[T]
+>G3 : Symbol(G3, Decl(templateLiteralTypes7.ts, 15, 17))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 17, 11))
+>x : Symbol(x, Decl(templateLiteralTypes7.ts, 17, 28))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 17, 11))
+>NMap : Symbol(NMap, Decl(templateLiteralTypes7.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes7.ts, 17, 11))
+
+const g3: G3 = g; // ok
+>g3 : Symbol(g3, Decl(templateLiteralTypes7.ts, 18, 5))
+>G3 : Symbol(G3, Decl(templateLiteralTypes7.ts, 15, 17))
+>g : Symbol(g, Decl(templateLiteralTypes7.ts, 9, 13))
+

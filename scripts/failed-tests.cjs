@@ -76,7 +76,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
      */
     static writeFailures(file, passes, failures, keepFailed, done) {
         const failingTests = new Set(fs.existsSync(file) ? readTests() : undefined);
-        const possiblyPassingSuites = /**@type {Set<string>}*/(new Set());
+        const possiblyPassingSuites = /**@type {Set<string>}*/ (new Set());
 
         // Remove tests that are now passing and track suites that are now
         // possibly passing.
@@ -138,7 +138,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
     done(failures, fn) {
         assert(this.reporterOptions);
         assert(this.reporterOptions.file);
-        FailedTestsReporter.writeFailures(this.reporterOptions.file, this.passes, this.failures, this.reporterOptions.keepFailed || this.stats.tests === 0, (err) => {
+        FailedTestsReporter.writeFailures(this.reporterOptions.file, this.passes, this.failures, this.reporterOptions.keepFailed || this.stats.tests === 0, err => {
             const reporter = this.reporter;
             if (reporter && reporter.done) {
                 reporter.done(failures, fn);

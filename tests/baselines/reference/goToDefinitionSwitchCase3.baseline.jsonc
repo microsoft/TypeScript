@@ -1,0 +1,45 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase3.ts ===
+// <|[|switch|] (null)|> {
+//   /*GOTO DEF*/default: {
+//     switch (null) {
+//       default: break;
+//     }
+//   };
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "keyword",
+    "name": "switch",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase3.ts ===
+// switch (null) {
+//   default: {
+//     <|[|switch|] (null)|> {
+//       /*GOTO DEF*/default: break;
+//     }
+//   };
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "keyword",
+    "name": "switch",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

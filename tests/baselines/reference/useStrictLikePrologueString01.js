@@ -11,7 +11,6 @@ export function f() {
 " use strict ";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 function f() {
 }
-exports.f = f;

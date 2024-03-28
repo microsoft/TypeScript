@@ -3,12 +3,15 @@
 === generatorTypeCheck61.ts ===
 function * g() {
 >g : () => Generator<number, void, (target: typeof C) => void | typeof C>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     @(yield 0)
 >(yield 0) : any
 >yield 0 : any
 >0 : 0
+>  : ^
 
     class C {};
 >C : C
+>  : ^
 }
