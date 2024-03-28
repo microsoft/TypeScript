@@ -2,6 +2,6 @@
 
 === ParameterList5.ts ===
 function A(): (public B) => C {
->A : () => (B: any) => C
+>A : () => (public B) => C
 >B : any
 }

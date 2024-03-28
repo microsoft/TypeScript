@@ -51,7 +51,7 @@ type InteropObservable<T> = {
 >InteropObservable : InteropObservable<T>
 
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
->[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
+>[Symbol.obs] : () => {    subscribe(next: (val: T) => void): void;}
 >Symbol.obs : unique symbol
 >Symbol : SymbolConstructor
 >obs : unique symbol

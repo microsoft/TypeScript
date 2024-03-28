@@ -66,7 +66,7 @@ module TypeScript {
 >data : any
 
         map(fn: (k: string, v, c) => void , context): void;
->map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>map : (fn: (k: string, v, c) => void, context: any) => void
 >fn : (k: string, v: any, c: any) => void
 >k : string
 >v : any
@@ -74,7 +74,7 @@ module TypeScript {
 >context : any
 
         every(fn: (k: string, v, c) => boolean, context): boolean;
->every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>every : (fn: (k: string, v, c) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
 >k : string
 >v : any
@@ -82,7 +82,7 @@ module TypeScript {
 >context : any
 
         some(fn: (k: string, v, c) => boolean, context): boolean;
->some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>some : (fn: (k: string, v, c) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
 >k : string
 >v : any
@@ -230,7 +230,7 @@ module TypeScript {
         }
 
         public map(fn: (k: string, v, c) => void , context) {
->map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>map : (fn: (k: string, v, c) => void, context: any) => void
 >fn : (k: string, v: any, c: any) => void
 >k : string
 >v : any
@@ -271,7 +271,7 @@ module TypeScript {
         }
 
         public every(fn: (k: string, v, c) => boolean, context) {
->every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>every : (fn: (k: string, v, c) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
 >k : string
 >v : any
@@ -319,7 +319,7 @@ module TypeScript {
         }
 
         public some(fn: (k: string, v, c) => boolean, context) {
->some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>some : (fn: (k: string, v, c) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
 >k : string
 >v : any
@@ -502,7 +502,7 @@ module TypeScript {
         }
 
         public map(fn: (k: string, v, c) => void , context) {
->map : (fn: (k: string, v: any, c: any) => void, context: any) => void
+>map : (fn: (k: string, v, c) => void, context: any) => void
 >fn : (k: string, v: any, c: any) => void
 >k : string
 >v : any
@@ -531,7 +531,7 @@ module TypeScript {
         }
 
         public every(fn: (k: string, v, c) => boolean, context) {
->every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>every : (fn: (k: string, v, c) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
 >k : string
 >v : any
@@ -559,7 +559,7 @@ module TypeScript {
         }
 
         public some(fn: (k: string, v, c) => boolean, context) {
->some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
+>some : (fn: (k: string, v, c) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
 >k : string
 >v : any
