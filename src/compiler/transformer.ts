@@ -65,10 +65,10 @@ import {
     transformESDecorators,
     transformESNext,
     transformGenerators,
+    transformImpliedNodeFormatDependentModule,
     transformJsx,
     transformLegacyDecorators,
     transformModule,
-    transformNodeModule,
     transformSystemModule,
     transformTypeScript,
     VariableDeclaration,
@@ -77,17 +77,23 @@ import * as performance from "./_namespaces/ts.performance";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
+        case ModuleKind.Preserve:
+            // `transformECMAScriptModule` contains logic for preserving
+            // CJS input syntax in `--module preserve`
+            return transformECMAScriptModule;
         case ModuleKind.ESNext:
         case ModuleKind.ES2022:
         case ModuleKind.ES2020:
         case ModuleKind.ES2015:
-        case ModuleKind.Preserve:
-            return transformECMAScriptModule;
-        case ModuleKind.System:
-            return transformSystemModule;
         case ModuleKind.Node16:
         case ModuleKind.NodeNext:
-            return transformNodeModule;
+        case ModuleKind.CommonJS:
+            // Wraps `transformModule` and `transformECMAScriptModule` and
+            // selects between them based on the `impliedNodeFormat` of the
+            // source file.
+            return transformImpliedNodeFormatDependentModule;
+        case ModuleKind.System:
+            return transformSystemModule;
         default:
             return transformModule;
     }

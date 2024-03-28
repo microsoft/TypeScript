@@ -137,6 +137,7 @@ import {
     setOriginalNode,
     setTextRange,
     ShorthandPropertyAssignment,
+    shouldTransformImportCall,
     singleOrMany,
     some,
     SourceFile,
@@ -785,7 +786,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+                if (isImportCall(node) && shouldTransformImportCall(currentSourceFile, compilerOptions)) {
                     return visitImportCallExpression(node);
                 }
                 break;

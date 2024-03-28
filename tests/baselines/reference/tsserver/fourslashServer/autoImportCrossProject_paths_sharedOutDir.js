@@ -196,6 +196,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/index.ts
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/sub 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/sub 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/sub/folder/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/sub/folder/package.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/sub/package.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (7)
@@ -288,6 +290,10 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/dep/sub/folder/index.ts: *new*
   {"pollingInterval":500}
+/packages/dep/sub/folder/package.json: *new*
+  {"pollingInterval":2000}
+/packages/dep/sub/package.json: *new*
+  {"pollingInterval":2000}
 /packages/dep/tsconfig.json: *new*
   {"pollingInterval":2000}
 /tsconfig.base.json: *new*

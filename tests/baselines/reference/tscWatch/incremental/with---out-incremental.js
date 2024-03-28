@@ -38,7 +38,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"5029505981-const x = 10;","impliedFormat":1},{"version":"2026007743-const y = 20;","impliedFormat":1}],"root":[2,3],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
@@ -49,9 +49,30 @@ var y = 20;
       "./file2.ts"
     ],
     "fileInfos": {
-      "../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./file1.ts": "5029505981-const x = 10;",
-      "./file2.ts": "2026007743-const y = 20;"
+      "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "impliedFormat": 1
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "impliedFormat": "commonjs"
+      },
+      "./file1.ts": {
+        "original": {
+          "version": "5029505981-const x = 10;",
+          "impliedFormat": 1
+        },
+        "version": "5029505981-const x = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./file2.ts": {
+        "original": {
+          "version": "2026007743-const y = 20;",
+          "impliedFormat": 1
+        },
+        "version": "2026007743-const y = 20;",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [
@@ -68,7 +89,7 @@ var y = 20;
     }
   },
   "version": "FakeTSVersion",
-  "size": 583
+  "size": 673
 }
 
 

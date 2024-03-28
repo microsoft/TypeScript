@@ -60,7 +60,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/alpha/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3360792065-export { }","signature":"-3531856636-export {};\n"},{"version":"-5654511483-import * as b from '../../beta/b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,2,1],"latestChangedDtsFile":"./src/a.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3360792065-export { }","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-5654511483-import * as b from '../../beta/b'","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,2,1],"latestChangedDtsFile":"./src/a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/alpha/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -79,27 +79,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "../../beta/b.ts": {
         "original": {
           "version": "-3360792065-export { }",
-          "signature": "-3531856636-export {};\n"
+          "signature": "-3531856636-export {};\n",
+          "impliedFormat": 1
         },
         "version": "-3360792065-export { }",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": "commonjs"
       },
       "../src/a.ts": {
         "original": {
           "version": "-5654511483-import * as b from '../../beta/b'",
-          "signature": "-3531856636-export {};\n"
+          "signature": "-3531856636-export {};\n",
+          "impliedFormat": 1
         },
         "version": "-5654511483-import * as b from '../../beta/b'",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -125,7 +131,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
     "latestChangedDtsFile": "./src/a.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 947
+  "size": 1001
 }
 
 //// [/beta/b.d.ts]

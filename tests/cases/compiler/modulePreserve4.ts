@@ -106,5 +106,8 @@ const f2 = require("./f.cjs"); // { default: 0 }
 import g1 from "./g"; // { default: 0 }
 const g2 = require("./g"); // { default: 0 }
 
+// @Filename: /main4.cjs
+exports.x = require("./g");
+
 // @Filename: /dummy.ts
 export {}; // Silly test harness

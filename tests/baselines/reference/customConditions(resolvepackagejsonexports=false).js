@@ -29,5 +29,3 @@ import _ from "lodash";
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });

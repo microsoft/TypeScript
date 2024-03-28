@@ -29,6 +29,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /node_modules/@angular/forms
 Info seq  [hh:mm:ss:mss] For info: /node_modules/@angular/forms/forms.d.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/@angular/forms/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/@angular/forms/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -49,6 +50,10 @@ PolledWatches::
   {"pollingInterval":500}
 /node_modules/@angular/forms/node_modules/@types: *new*
   {"pollingInterval":500}
+
+FsWatches::
+/node_modules/@angular/forms/package.json: *new*
+  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -199,7 +204,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/node_modules/@angular/forms/package.json: *new*
+/node_modules/@angular/forms/package.json:
   {}
 
 Projects::

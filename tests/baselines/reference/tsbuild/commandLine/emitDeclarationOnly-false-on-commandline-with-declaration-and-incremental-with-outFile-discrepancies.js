@@ -6,11 +6,26 @@ CleanBuild:
 {
   "program": {
     "fileInfos": {
-      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
-      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
-      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
-      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "./src/a.ts": {
+        "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/b.ts": {
+        "version": "-6189287562-export const b = 10;const bLocal = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/c.ts": {
+        "version": "3248317647-import { a } from \"./a\";export const c = a;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/d.ts": {
+        "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [
@@ -39,11 +54,26 @@ IncrementalBuild:
 {
   "program": {
     "fileInfos": {
-      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "./src/a.ts": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
-      "./src/b.ts": "-6189287562-export const b = 10;const bLocal = 10;",
-      "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
-      "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "./src/a.ts": {
+        "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/b.ts": {
+        "version": "-6189287562-export const b = 10;const bLocal = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/c.ts": {
+        "version": "3248317647-import { a } from \"./a\";export const c = a;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/d.ts": {
+        "version": "-19615769517-import { b } from \"./b\";export const d = b;",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [

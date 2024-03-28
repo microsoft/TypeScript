@@ -112,7 +112,7 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-14968179652-namespace container {\n    export const myConst = 30;\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
@@ -122,8 +122,22 @@ declare namespace container {
       "../../lib/index.ts"
     ],
     "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../../lib/index.ts": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n"
+      "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "impliedFormat": 1
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "impliedFormat": "commonjs"
+      },
+      "../../lib/index.ts": {
+        "original": {
+          "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [
@@ -140,7 +154,7 @@ declare namespace container {
     "latestChangedDtsFile": "./lib.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 765
+  "size": 825
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
@@ -173,7 +187,7 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","impliedFormat":1},{"version":"-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
@@ -184,9 +198,30 @@ declare namespace container {
       "../../compositeexec/index.ts"
     ],
     "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-      "../../compositeexec/index.ts": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
+      "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "impliedFormat": 1
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "impliedFormat": "commonjs"
+      },
+      "./lib.d.ts": {
+        "original": {
+          "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+        "impliedFormat": "commonjs"
+      },
+      "../../compositeexec/index.ts": {
+        "original": {
+          "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [
@@ -203,7 +238,7 @@ declare namespace container {
     "latestChangedDtsFile": "./compositeExec.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 927
+  "size": 1017
 }
 
 

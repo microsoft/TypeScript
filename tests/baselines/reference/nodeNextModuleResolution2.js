@@ -16,5 +16,4 @@ import {x} from "foo";
 
 
 //// [app.mjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

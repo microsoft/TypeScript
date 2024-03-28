@@ -38,10 +38,12 @@ import {
     getDefaultExportInfoWorker,
     getDefaultLikeExportInfo,
     getDirectoryPath,
+    getEmitModuleFormatOfFile,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExportInfoMap,
+    getImpliedNodeFormatForEmit,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
     getNameForExportedSymbol,
@@ -852,8 +854,9 @@ function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
 
     // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
     //    whatever syntax Node expects based on the detected module kind
-    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) return true;
-    if (sourceFile.impliedNodeFormat === ModuleKind.ESNext) return false;
+    //    TODO: consider removing `impliedNodeFormatForEmit`
+    if (getImpliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.CommonJS) return true;
+    if (getImpliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.ESNext) return false;
 
     // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
@@ -1118,7 +1121,7 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
  * @internal
  */
 export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
-    if (compilerOptions.verbatimModuleSyntax && (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS || importingFile.impliedNodeFormat === ModuleKind.CommonJS)) {
+    if (compilerOptions.verbatimModuleSyntax && getEmitModuleFormatOfFile(importingFile, compilerOptions) === ModuleKind.CommonJS) {
         // TODO: if the exporting file is ESM under nodenext, or `forceImport` is given in a JS file, this is impossible
         return ImportKind.CommonJS;
     }
@@ -1163,7 +1166,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
             return ImportKind.Namespace;
         case ModuleKind.Node16:
         case ModuleKind.NodeNext:
-            return importingFile.impliedNodeFormat === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
+            return getImpliedNodeFormatForEmit(importingFile, compilerOptions) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
             return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
     }

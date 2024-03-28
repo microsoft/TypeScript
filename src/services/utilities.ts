@@ -96,6 +96,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForEmit,
     getImpliedNodeFormatForFile,
     getIndentString,
     getJSDocEnumTag,
@@ -4247,9 +4248,11 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     }
     const compilerOptions = program.getCompilerOptions();
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const impliedNodeFormat = typeof file === "string"
-        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
-        : file.impliedNodeFormat;
+    const sourceFileLike = typeof file === "string" ? {
+        fileName: file,
+        impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
+    } : file;
+    const impliedNodeFormat = getImpliedNodeFormatForEmit(sourceFileLike, compilerOptions);
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

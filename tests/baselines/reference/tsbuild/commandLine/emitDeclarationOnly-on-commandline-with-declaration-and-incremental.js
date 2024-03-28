@@ -162,7 +162,7 @@ export declare const d = 10;
 
 
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3497920574-export declare const a = 10;\n","impliedFormat":1},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -186,43 +186,53 @@ export declare const d = 10;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-18487752940-export const a = 10;const aLocal = 10;",
-          "signature": "-3497920574-export declare const a = 10;\n"
+          "signature": "-3497920574-export declare const a = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
-        "signature": "-3497920574-export declare const a = 10;\n"
+        "signature": "-3497920574-export declare const a = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-3829150557-export declare const b = 10;\n"
+          "signature": "-3829150557-export declare const b = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -260,11 +270,11 @@ export declare const d = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1277
+  "size": 1367
 }
 
 //// [/src/project2/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-3497920574-export declare const a = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"-3829150557-export declare const b = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-13789510868-export const e = 10;","signature":false,"impliedFormat":1},{"version":"-3497920574-export declare const a = 10;\n","signature":false,"impliedFormat":1},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false,"impliedFormat":1},{"version":"-3829150557-export declare const b = 10;\n","signature":false,"impliedFormat":1},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false,"impliedFormat":1}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
 
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -290,45 +300,57 @@ export declare const d = 10;
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "signature": false,
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./e.ts": {
         "original": {
           "version": "-13789510868-export const e = 10;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-13789510868-export const e = 10;"
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/a.d.ts": {
         "original": {
           "version": "-3497920574-export declare const a = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-3497920574-export declare const a = 10;\n"
+        "version": "-3497920574-export declare const a = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./f.ts": {
         "original": {
           "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/b.d.ts": {
         "original": {
           "version": "-3829150557-export declare const b = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-3829150557-export declare const b = 10;\n"
+        "version": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./g.ts": {
         "original": {
           "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -367,7 +389,7 @@ export declare const d = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1260
+  "size": 1368
 }
 
 
@@ -515,7 +537,7 @@ No shapes updated in the builder::
 
 //// [/src/project1/src/a.d.ts] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","signature":"-3497920574-export declare const a = 10;\n","impliedFormat":1},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -539,43 +561,53 @@ No shapes updated in the builder::
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
-          "signature": "-3497920574-export declare const a = 10;\n"
+          "signature": "-3497920574-export declare const a = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
-        "signature": "-3497920574-export declare const a = 10;\n"
+        "signature": "-3497920574-export declare const a = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-3829150557-export declare const b = 10;\n"
+          "signature": "-3829150557-export declare const b = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -613,7 +645,7 @@ No shapes updated in the builder::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1291
+  "size": 1381
 }
 
 
@@ -712,7 +744,7 @@ export declare const aaa = 10;
 
 //// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","impliedFormat":1},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -736,43 +768,53 @@ export declare const aaa = 10;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-3829150557-export declare const b = 10;\n"
+          "signature": "-3829150557-export declare const b = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -810,11 +852,11 @@ export declare const aaa = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1344
+  "size": 1434
 }
 
 //// [/src/project2/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"-3829150557-export declare const b = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-13789510868-export const e = 10;","signature":false,"impliedFormat":1},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false,"impliedFormat":1},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false,"impliedFormat":1},{"version":"-3829150557-export declare const b = 10;\n","signature":false,"impliedFormat":1},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false,"impliedFormat":1}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
 
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -840,45 +882,57 @@ export declare const aaa = 10;
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "signature": false,
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./e.ts": {
         "original": {
           "version": "-13789510868-export const e = 10;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-13789510868-export const e = 10;"
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/a.d.ts": {
         "original": {
           "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./f.ts": {
         "original": {
           "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/b.d.ts": {
         "original": {
           "version": "-3829150557-export declare const b = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-3829150557-export declare const b = 10;\n"
+        "version": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./g.ts": {
         "original": {
           "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -917,7 +971,7 @@ export declare const aaa = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1292
+  "size": 1400
 }
 
 
@@ -1035,7 +1089,7 @@ exports.d = b_1.b;
 
 
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","impliedFormat":1},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1059,43 +1113,53 @@ exports.d = b_1.b;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-3829150557-export declare const b = 10;\n"
+          "signature": "-3829150557-export declare const b = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1132,11 +1196,11 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1317
+  "size": 1407
 }
 
 //// [/src/project2/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"-3829150557-export declare const b = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-13789510868-export const e = 10;","signature":false,"impliedFormat":1},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false,"impliedFormat":1},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false,"impliedFormat":1},{"version":"-3829150557-export declare const b = 10;\n","signature":false,"impliedFormat":1},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false,"impliedFormat":1}],"root":[2,4,6],"options":{"declaration":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
 
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1162,45 +1226,57 @@ exports.d = b_1.b;
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "signature": false,
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./e.ts": {
         "original": {
           "version": "-13789510868-export const e = 10;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-13789510868-export const e = 10;"
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/a.d.ts": {
         "original": {
           "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./f.ts": {
         "original": {
           "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/b.d.ts": {
         "original": {
           "version": "-3829150557-export declare const b = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-3829150557-export declare const b = 10;\n"
+        "version": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./g.ts": {
         "original": {
           "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1238,7 +1314,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1265
+  "size": 1373
 }
 
 
@@ -1393,7 +1469,7 @@ var alocal = 10;
 
 
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","impliedFormat":1},{"version":"-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1417,43 +1493,53 @@ var alocal = 10;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;",
-          "signature": "-3829150557-export declare const b = 10;\n"
+          "signature": "-3829150557-export declare const b = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1490,7 +1576,7 @@ var alocal = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1335
+  "size": 1425
 }
 
 
@@ -1582,7 +1668,7 @@ No shapes updated in the builder::
 
 //// [/src/project1/src/b.d.ts] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","impliedFormat":1},{"version":"-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1606,43 +1692,53 @@ No shapes updated in the builder::
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;",
-          "signature": "-3829150557-export declare const b = 10;\n"
+          "signature": "-3829150557-export declare const b = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1680,7 +1776,7 @@ No shapes updated in the builder::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1378
+  "size": 1468
 }
 
 
@@ -1779,7 +1875,7 @@ export declare const aaaaa = 10;
 
 //// [/src/project1/src/d.d.ts] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;","signature":"2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","impliedFormat":1},{"version":"-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;","signature":"2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1803,43 +1899,53 @@ export declare const aaaaa = 10;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;",
-          "signature": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n"
+          "signature": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;",
-        "signature": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n"
+        "signature": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1877,11 +1983,11 @@ export declare const aaaaa = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1435
+  "size": 1525
 }
 
 //// [/src/project2/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-13789510868-export const e = 10;","signature":false,"impliedFormat":1},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false,"impliedFormat":1},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false,"impliedFormat":1},{"version":"2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n","signature":false,"impliedFormat":1},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false,"impliedFormat":1}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
 
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1907,45 +2013,57 @@ export declare const aaaaa = 10;
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "signature": false,
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./e.ts": {
         "original": {
           "version": "-13789510868-export const e = 10;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-13789510868-export const e = 10;"
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/a.d.ts": {
         "original": {
           "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./f.ts": {
         "original": {
           "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/b.d.ts": {
         "original": {
           "version": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n"
+        "version": "2661550180-export declare const b = 10;\nexport declare const aaaaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./g.ts": {
         "original": {
           "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1984,7 +2102,7 @@ export declare const aaaaa = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1325
+  "size": 1433
 }
 
 
@@ -2097,7 +2215,7 @@ exports.a2 = 10;
 //// [/src/project1/src/d.d.ts] file written with same contents
 //// [/src/project1/src/d.js] file written with same contents
 //// [/src/project1/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"},{"version":"-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;","signature":"-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;","signature":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","impliedFormat":1},{"version":"-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;","signature":"-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n","impliedFormat":1},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2121,43 +2239,53 @@ exports.a2 = 10;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
         "original": {
           "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+          "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "signature": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
         "original": {
           "version": "-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;",
-          "signature": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n"
+          "signature": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;",
-        "signature": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n"
+        "signature": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4160380540-export declare const c = 10;\n"
+          "signature": "-4160380540-export declare const c = 10;\n",
+          "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-4491610523-export declare const d = 10;\n"
+          "signature": "-4491610523-export declare const d = 10;\n",
+          "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -2194,11 +2322,11 @@ exports.a2 = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1462
+  "size": 1552
 }
 
 //// [/src/project2/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-13789510868-export const e = 10;","signature":false,"impliedFormat":1},{"version":"-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n","signature":false,"impliedFormat":1},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false,"impliedFormat":1},{"version":"-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n","signature":false,"impliedFormat":1},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false,"impliedFormat":1}],"root":[2,4,6],"options":{"declaration":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
 
 //// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2224,45 +2352,57 @@ exports.a2 = 10;
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "signature": false,
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./e.ts": {
         "original": {
           "version": "-13789510868-export const e = 10;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-13789510868-export const e = 10;"
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/a.d.ts": {
         "original": {
           "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
+        "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./f.ts": {
         "original": {
           "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
       },
       "../../project1/src/b.d.ts": {
         "original": {
           "version": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n"
+        "version": "-2237944013-export declare const b = 10;\nexport declare const aaaaa = 10;\nexport declare const a2 = 10;\n",
+        "impliedFormat": "commonjs"
       },
       "./g.ts": {
         "original": {
           "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-          "signature": false
+          "signature": false,
+          "impliedFormat": 1
         },
-        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -2300,6 +2440,6 @@ exports.a2 = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1330
+  "size": 1438
 }
 

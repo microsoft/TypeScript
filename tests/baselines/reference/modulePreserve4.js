@@ -100,6 +100,9 @@ const f2 = require("./f.cjs"); // { default: 0 }
 import g1 from "./g"; // { default: 0 }
 const g2 = require("./g"); // { default: 0 }
 
+//// [main4.cjs]
+exports.x = require("./g");
+
 //// [dummy.ts]
 export {}; // Silly test harness
 
@@ -185,6 +188,8 @@ import f1 from "./f.cjs"; // 0
 const f2 = require("./f.cjs"); // { default: 0 }
 import g1 from "./g"; // { default: 0 }
 const g2 = require("./g"); // { default: 0 }
+//// [main4.cjs]
+exports.x = require("./g");
 //// [dummy.js]
 export {}; // Silly test harness
 
@@ -217,5 +222,7 @@ export {};
 export {};
 //// [main3.d.cts]
 export {};
+//// [main4.d.cts]
+export const x: typeof import("./g");
 //// [dummy.d.ts]
 export {};
