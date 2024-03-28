@@ -635,14 +635,16 @@ export interface GetPasteEditsRequest extends Request {
     arguments: GetPasteEditsRequestArgs;
 }
 
-export type GetPasteEditsRequestArgs = FileRequestArgs & {
+export interface GetPasteEditsRequestArgs extends FileRequestArgs {
     pastedText: string[];
     pasteLocations: TextSpan[];
     copiedFrom?: { file: string; range: TextSpan[]; };
-};
+}
+
 export interface GetPasteEditsResponse extends Response {
     body: PasteEditsAction;
 }
+
 export interface PasteEditsAction {
     edits: FileCodeEdits[];
     fixId?: {};

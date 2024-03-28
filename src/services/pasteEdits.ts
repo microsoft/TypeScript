@@ -69,10 +69,10 @@ function pasteEdits(
     let newText = "";
     pasteLocations.forEach((location, i) => {
         if (i === pasteLocations.length - 1) {
-            newText += targetFile.getText().slice(start, location.pos) + pastedText[i] + targetFile.getText().slice(location.end);
+            newText += targetFile.text.slice(start, location.pos) + pastedText[i] + targetFile.text.slice(location.end);
         }
         else {
-            newText += targetFile.getText().slice(start, location.pos) + pastedText[i];
+            newText += targetFile.text.slice(start, location.pos) + pastedText[i];
             start = location.end;
         }
     });

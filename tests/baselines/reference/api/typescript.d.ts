@@ -477,14 +477,14 @@ declare namespace ts {
                 command: CommandTypes.GetPasteEdits;
                 arguments: GetPasteEditsRequestArgs;
             }
-            export type GetPasteEditsRequestArgs = FileRequestArgs & {
+            export interface GetPasteEditsRequestArgs extends FileRequestArgs {
                 pastedText: string[];
                 pasteLocations: TextSpan[];
                 copiedFrom?: {
                     file: string;
                     range: TextSpan[];
                 };
-            };
+            }
             export interface GetPasteEditsResponse extends Response {
                 body: PasteEditsAction;
             }
