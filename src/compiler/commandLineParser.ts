@@ -1578,6 +1578,22 @@ export const optionDeclarations: CommandLineOption[] = [
     ...commandOptionsWithoutBuild,
 ];
 
+// These aren't available via CLI or config (yet), but we still want to handle them correctly
+/** @internal */
+export const privateOptionDeclarations: CommandLineOption[] = [
+    {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Emit,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: undefined,
+        defaultValueDescription: false,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+    },
+];
+
 /** @internal */
 export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1695,7 +1711,7 @@ let optionsNameMapCache: OptionsNameMap;
 
 /** @internal */
 export function getOptionsNameMap(): OptionsNameMap {
-    return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
+    return optionsNameMapCache ||= createOptionNameMap([...optionDeclarations, ...privateOptionDeclarations]);
 }
 
 const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
