@@ -69,7 +69,7 @@ export abstract class BaseObservable<T, TChange = void> extends ConvenientObserv
 
 	protected readonly observers = new Set<IObserver>();
 >observers : Symbol(BaseObservable.observers, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 18, 98))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
 >IObserver : Symbol(IObserver, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 0, 0))
 }
 
