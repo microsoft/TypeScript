@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/noCheckRequiresEmitDeclarationOnly.ts] ////
+
+=== noCheckRequiresEmitDeclarationOnly.ts ===
+export const a: number = "not ok";
+>a : Symbol(a, Decl(noCheckRequiresEmitDeclarationOnly.ts, 0, 12))
+

@@ -1,4 +1,3 @@
-import * as compiler from "./_namespaces/compiler";
 import {
     Baseline,
     Compiler,
@@ -171,7 +170,7 @@ class CompilerTest {
     private configuredName: string;
     private harnessSettings: TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
-    private result: compiler.CompilationResult;
+    private result: Compiler.CompileFilesResult;
     private options: ts.CompilerOptions;
     private tsConfigFiles: Compiler.TestFile[];
     // equivalent to the files that will be passed on the command line
