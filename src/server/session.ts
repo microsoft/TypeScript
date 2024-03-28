@@ -15,7 +15,6 @@ import {
     CompletionEntryData,
     CompletionEntryDetails,
     CompletionInfo,
-    CompletionTriggerKind,
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     concatenate,
@@ -53,6 +52,7 @@ import {
     formatting,
     getDeclarationFromName,
     getDeclarationOfKind,
+    getDocumentSpansEqualityComparer,
     getEmitDeclarations,
     getEntrypointsFromPackageJsonInfo,
     getLineAndCharacterOfPosition,
@@ -99,7 +99,6 @@ import {
     normalizePath,
     OperationCanceledException,
     OrganizeImportsMode,
-    outFile,
     OutliningSpan,
     Path,
     perfLogger,
@@ -498,8 +497,8 @@ interface ProjectNavigateToItems {
     navigateToItems: readonly NavigateToItem[];
 }
 
-function createDocumentSpanSet(): Set<DocumentSpan> {
-    return createSet(({ textSpan }) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
+function createDocumentSpanSet(useCaseSensitiveFileNames: boolean): Set<DocumentSpan> {
+    return createSet(({ textSpan }) => textSpan.start + 100003 * textSpan.length, getDocumentSpansEqualityComparer(useCaseSensitiveFileNames));
 }
 
 function getRenameLocationsWorker(
@@ -509,6 +508,7 @@ function getRenameLocationsWorker(
     findInStrings: boolean,
     findInComments: boolean,
     preferences: protocol.UserPreferences,
+    useCaseSensitiveFileNames: boolean,
 ): readonly RenameLocation[] {
     const perProjectResults = getPerProjectReferences(
         projects,
@@ -525,7 +525,7 @@ function getRenameLocationsWorker(
     }
 
     const results: RenameLocation[] = [];
-    const seen = createDocumentSpanSet();
+    const seen = createDocumentSpanSet(useCaseSensitiveFileNames);
 
     perProjectResults.forEach((projectResults, project) => {
         for (const result of projectResults) {
@@ -552,6 +552,7 @@ function getReferencesWorker(
     projects: Projects,
     defaultProject: Project,
     initialLocation: DocumentPosition,
+    useCaseSensitiveFileNames: boolean,
     logger: Logger,
 ): readonly ReferencedSymbol[] {
     const perProjectResults = getPerProjectReferences(
@@ -593,7 +594,7 @@ function getReferencesWorker(
     }
     else {
         // Correct isDefinition properties from projects other than defaultProject
-        const knownSymbolSpans = createDocumentSpanSet();
+        const knownSymbolSpans = createDocumentSpanSet(useCaseSensitiveFileNames);
         for (const referencedSymbol of defaultProjectResults) {
             for (const ref of referencedSymbol.references) {
                 if (ref.isDefinition) {
@@ -632,7 +633,7 @@ function getReferencesWorker(
     // of each definition and merging references from all the projects where they appear.
 
     const results: ReferencedSymbol[] = [];
-    const seenRefs = createDocumentSpanSet(); // It doesn't make sense to have a reference in two definition lists, so we de-dup globally
+    const seenRefs = createDocumentSpanSet(useCaseSensitiveFileNames); // It doesn't make sense to have a reference in two definition lists, so we de-dup globally
 
     // TODO: We might end up with a more logical allocation of refs to defs if we pre-sorted the defs by descending ref-count.
     // Otherwise, it just ends up attached to the first corresponding def we happen to process.  The others may or may not be
@@ -649,7 +650,7 @@ function getReferencesWorker(
                     contextSpan: getMappedContextSpanForProject(referencedSymbol.definition, project),
                 };
 
-            let symbolToAddTo = find(results, o => documentSpansEqual(o.definition, definition));
+            let symbolToAddTo = find(results, o => documentSpansEqual(o.definition, definition, useCaseSensitiveFileNames));
             if (!symbolToAddTo) {
                 symbolToAddTo = { definition, references: [] };
                 results.push(symbolToAddTo);
@@ -1131,9 +1132,10 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
-        this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
+        this.projectService.logger.info(`got projects updated in background ${openFiles}`);
         if (openFiles.length) {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
+                this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
                 this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
             }
@@ -1193,7 +1195,7 @@ export class Session<TMessage = string> implements EventSender {
     public send(msg: protocol.Message) {
         if (msg.type === "event" && !this.canUseEvents) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                this.logger.info(`Session does not support events: ignored event: ${stringifyIndented(msg)}`);
             }
             return;
         }
@@ -1541,7 +1543,10 @@ export class Session<TMessage = string> implements EventSender {
         );
 
         if (needsJsResolution) {
-            const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
+            const definitionSet = createSet<DefinitionInfo>(
+                d => d.textSpan.start,
+                getDocumentSpansEqualityComparer(this.host.useCaseSensitiveFileNames),
+            );
             definitions?.forEach(d => definitionSet.add(d));
             const noDtsProject = project.getNoDtsResolutionProject(file);
             const ls = noDtsProject.getLanguageService();
@@ -1992,6 +1997,7 @@ export class Session<TMessage = string> implements EventSender {
             !!args.findInStrings,
             !!args.findInComments,
             preferences,
+            this.host.useCaseSensitiveFileNames,
         );
         if (!simplifiedResult) return locations;
         return { info: renameInfo, locs: this.toSpanGroups(locations) };
@@ -2028,6 +2034,7 @@ export class Session<TMessage = string> implements EventSender {
             projects,
             this.getDefaultProject(args),
             { fileName: args.file, pos: position },
+            this.host.useCaseSensitiveFileNames,
             this.logger,
         );
 
@@ -2053,7 +2060,7 @@ export class Session<TMessage = string> implements EventSender {
         const preferences = this.getPreferences(toNormalizedPath(fileName));
 
         const references: ReferenceEntry[] = [];
-        const seen = createDocumentSpanSet();
+        const seen = createDocumentSpanSet(this.host.useCaseSensitiveFileNames);
 
         forEachProjectInProjects(projects, /*path*/ undefined, project => {
             if (project.getCancellationToken().isCancellationRequested()) return;
@@ -2301,7 +2308,7 @@ export class Session<TMessage = string> implements EventSender {
             {
                 ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
-                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
+                triggerKind: args.triggerKind,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions,
             },
@@ -2415,7 +2422,7 @@ export class Session<TMessage = string> implements EventSender {
                 return {
                     projectFileName: project.getProjectName(),
                     fileNames: project.getCompileOnSaveAffectedFileList(info),
-                    projectUsesOutFile: !!outFile(compilationSettings),
+                    projectUsesOutFile: !!compilationSettings.outFile,
                 };
             },
         );
@@ -2742,7 +2749,8 @@ export class Session<TMessage = string> implements EventSender {
     private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
-        return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
+        const result = project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
+        return result.map(result => ({ ...result, actions: result.actions.map(action => ({ ...action, range: action.range ? { start: convertToLocation({ line: action.range.start.line, character: action.range.start.offset }), end: convertToLocation({ line: action.range.end.line, character: action.range.end.offset }) } : undefined })) }));
     }
 
     private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
@@ -2793,7 +2801,7 @@ export class Session<TMessage = string> implements EventSender {
         const changes = project.getLanguageService().organizeImports(
             {
                 fileName: file,
-                mode: args.mode as OrganizeImportsMode | undefined ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
+                mode: args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
                 type: "file",
             },
             this.getFormatOptions(file),
@@ -3181,7 +3189,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(response);
         },
         [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-            this.projectService.openExternalProject(request.arguments);
+            this.projectService.openExternalProject(request.arguments, /*print*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3191,7 +3199,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
-            this.projectService.closeExternalProject(request.arguments.projectFileName);
+            this.projectService.closeExternalProject(request.arguments.projectFileName, /*print*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },

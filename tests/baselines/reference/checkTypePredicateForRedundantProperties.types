@@ -3,11 +3,16 @@
 === checkTypePredicateForRedundantProperties.ts ===
 function addProp2(x: any): x is { a: string; a: string; } {
 >addProp2 : (x: any) => x is { a: string; }
+>         : ^^^^   ^^^^^^^^^^^^^^^      ^^^
 >x : any
+>  : ^^^
 >a : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     return true;
 >true : true
+>     : ^^^^
 }
 

@@ -378,16 +378,24 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 }
 
-function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSensitiveFileNames: boolean): HostWatchFile {
+function createUseFsEventsOnParentDirectoryWatchFile(
+    fsWatch: FsWatch,
+    useCaseSensitiveFileNames: boolean,
+    getModifiedTime: NonNullable<System["getModifiedTime"]>,
+    fsWatchWithTimestamp: boolean | undefined,
+): HostWatchFile {
     // One file can have multiple watchers
     const fileWatcherCallbacks = createMultiMap<string, FileWatcherCallback>();
+    const fileTimestamps = fsWatchWithTimestamp ? new Map<string, Date>() : undefined;
     const dirWatchers = new Map<string, DirectoryWatcher>();
     const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return nonPollingWatchFile;
 
     function nonPollingWatchFile(fileName: string, callback: FileWatcherCallback, _pollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined): FileWatcher {
         const filePath = toCanonicalName(fileName);
-        fileWatcherCallbacks.add(filePath, callback);
+        if (fileWatcherCallbacks.add(filePath, callback).length === 1 && fileTimestamps) {
+            fileTimestamps.set(filePath, getModifiedTime(fileName) || missingFileModifiedTime);
+        }
         const dirPath = getDirectoryPath(filePath) || ".";
         const watcher = dirWatchers.get(dirPath) ||
             createDirectoryWatcher(getDirectoryPath(fileName) || ".", dirPath, fallbackOptions);
@@ -410,15 +418,29 @@ function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSe
         const watcher = fsWatch(
             dirName,
             FileSystemEntryKind.Directory,
-            (_eventName: string, relativeFileName, modifiedTime) => {
+            (eventName: string, relativeFileName) => {
                 // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                 if (!isString(relativeFileName)) return;
                 const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
+                const filePath = toCanonicalName(fileName);
                 // Some applications save a working file via rename operations
-                const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
+                const callbacks = fileName && fileWatcherCallbacks.get(filePath);
                 if (callbacks) {
+                    let currentModifiedTime;
+                    let eventKind = FileWatcherEventKind.Changed;
+                    if (fileTimestamps) {
+                        const existingTime = fileTimestamps.get(filePath)!;
+                        if (eventName === "change") {
+                            currentModifiedTime = getModifiedTime(fileName) || missingFileModifiedTime;
+                            if (currentModifiedTime.getTime() === existingTime.getTime()) return;
+                        }
+                        currentModifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
+                        fileTimestamps.set(filePath, currentModifiedTime);
+                        if (existingTime === missingFileModifiedTime) eventKind = FileWatcherEventKind.Created;
+                        else if (currentModifiedTime === missingFileModifiedTime) eventKind = FileWatcherEventKind.Deleted;
+                    }
                     for (const fileCallback of callbacks) {
-                        fileCallback(fileName, FileWatcherEventKind.Changed, modifiedTime);
+                        fileCallback(fileName, eventKind, currentModifiedTime);
                     }
                 }
             },
@@ -914,6 +936,7 @@ export interface CreateSystemWatchFunctions {
     useNonPollingWatchers?: boolean;
     tscWatchDirectory: string | undefined;
     inodeWatching: boolean;
+    fsWatchWithTimestamp: boolean | undefined;
     sysLog: (s: string) => void;
 }
 
@@ -934,6 +957,7 @@ export function createSystemWatchFunctions({
     useNonPollingWatchers,
     tscWatchDirectory,
     inodeWatching,
+    fsWatchWithTimestamp,
     sysLog,
 }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
     const pollingWatches = new Map<string, SingleFileWatcher<FileWatcherCallback>>();
@@ -972,7 +996,7 @@ export function createSystemWatchFunctions({
                 );
             case WatchFileKind.UseFsEventsOnParentDirectory:
                 if (!nonPollingWatchFile) {
-                    nonPollingWatchFile = createUseFsEventsOnParentDirectoryWatchFile(fsWatch, useCaseSensitiveFileNames);
+                    nonPollingWatchFile = createUseFsEventsOnParentDirectoryWatchFile(fsWatch, useCaseSensitiveFileNames, getModifiedTime, fsWatchWithTimestamp);
                 }
                 return nonPollingWatchFile(fileName, callback, pollingInterval, getFallbackOptions(options));
             default:
@@ -1189,7 +1213,7 @@ export function createSystemWatchFunctions({
                 return watchPresentFileSystemEntryWithFsWatchFile();
             }
             try {
-                const presentWatcher = fsWatchWorker(
+                const presentWatcher = (entryKind === FileSystemEntryKind.Directory || !fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
                     fileOrDirectory,
                     recursive,
                     inodeWatching ?
@@ -1286,6 +1310,18 @@ export function createSystemWatchFunctions({
             );
         }
     }
+
+    function fsWatchWorkerHandlingTimestamp(fileOrDirectory: string, recursive: boolean, callback: FsWatchCallback): FsWatchWorkerWatcher {
+        let modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+        return fsWatchWorker(fileOrDirectory, recursive, (eventName, relativeFileName, currentModifiedTime) => {
+            if (eventName === "change") {
+                currentModifiedTime ||= getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                if (currentModifiedTime.getTime() === modifiedTime.getTime()) return;
+            }
+            modifiedTime = currentModifiedTime || getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+            callback(eventName, relativeFileName, modifiedTime);
+        });
+    }
 }
 
 /**
@@ -1308,85 +1344,6 @@ export function patchWriteFileEnsuringDirectory(sys: System) {
 }
 
 export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
-
-/** @internal */
-export interface NodeBuffer extends Uint8Array {
-    constructor: any;
-    write(str: string, encoding?: BufferEncoding): number;
-    write(str: string, offset: number, encoding?: BufferEncoding): number;
-    write(str: string, offset: number, length: number, encoding?: BufferEncoding): number;
-    toString(encoding?: string, start?: number, end?: number): string;
-    toJSON(): { type: "Buffer"; data: number[]; };
-    equals(otherBuffer: Uint8Array): boolean;
-    compare(
-        otherBuffer: Uint8Array,
-        targetStart?: number,
-        targetEnd?: number,
-        sourceStart?: number,
-        sourceEnd?: number,
-    ): number;
-    copy(targetBuffer: Uint8Array, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
-    slice(begin?: number, end?: number): Buffer;
-    subarray(begin?: number, end?: number): Buffer;
-    writeUIntLE(value: number, offset: number, byteLength: number): number;
-    writeUIntBE(value: number, offset: number, byteLength: number): number;
-    writeIntLE(value: number, offset: number, byteLength: number): number;
-    writeIntBE(value: number, offset: number, byteLength: number): number;
-    readUIntLE(offset: number, byteLength: number): number;
-    readUIntBE(offset: number, byteLength: number): number;
-    readIntLE(offset: number, byteLength: number): number;
-    readIntBE(offset: number, byteLength: number): number;
-    readUInt8(offset: number): number;
-    readUInt16LE(offset: number): number;
-    readUInt16BE(offset: number): number;
-    readUInt32LE(offset: number): number;
-    readUInt32BE(offset: number): number;
-    readInt8(offset: number): number;
-    readInt16LE(offset: number): number;
-    readInt16BE(offset: number): number;
-    readInt32LE(offset: number): number;
-    readInt32BE(offset: number): number;
-    readFloatLE(offset: number): number;
-    readFloatBE(offset: number): number;
-    readDoubleLE(offset: number): number;
-    readDoubleBE(offset: number): number;
-    reverse(): this;
-    swap16(): Buffer;
-    swap32(): Buffer;
-    swap64(): Buffer;
-    writeUInt8(value: number, offset: number): number;
-    writeUInt16LE(value: number, offset: number): number;
-    writeUInt16BE(value: number, offset: number): number;
-    writeUInt32LE(value: number, offset: number): number;
-    writeUInt32BE(value: number, offset: number): number;
-    writeInt8(value: number, offset: number): number;
-    writeInt16LE(value: number, offset: number): number;
-    writeInt16BE(value: number, offset: number): number;
-    writeInt32LE(value: number, offset: number): number;
-    writeInt32BE(value: number, offset: number): number;
-    writeFloatLE(value: number, offset: number): number;
-    writeFloatBE(value: number, offset: number): number;
-    writeDoubleLE(value: number, offset: number): number;
-    writeDoubleBE(value: number, offset: number): number;
-    readBigUInt64BE?(offset?: number): bigint;
-    readBigUInt64LE?(offset?: number): bigint;
-    readBigInt64BE?(offset?: number): bigint;
-    readBigInt64LE?(offset?: number): bigint;
-    writeBigInt64BE?(value: bigint, offset?: number): number;
-    writeBigInt64LE?(value: bigint, offset?: number): number;
-    writeBigUInt64BE?(value: bigint, offset?: number): number;
-    writeBigUInt64LE?(value: bigint, offset?: number): number;
-    fill(value: string | Uint8Array | number, offset?: number, end?: number, encoding?: BufferEncoding): this;
-    indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
-    lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
-    entries(): IterableIterator<[number, number]>;
-    includes(value: string | number | Buffer, byteOffset?: number, encoding?: BufferEncoding): boolean;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<number>;
-}
-
-/** @internal */
-export interface Buffer extends NodeBuffer {}
 
 // TODO: GH#18217 Methods on System are often used as if they are certainly defined
 export interface System {
@@ -1431,6 +1388,7 @@ export interface System {
     realpath?(path: string): string;
     /** @internal */ getEnvironmentVariable(name: string): string;
     /** @internal */ tryEnableSourceMapsForHost?(): void;
+    /** @internal */ getAccessibleFileSystemEntries?(path: string): FileSystemEntries;
     /** @internal */ debugMode?: boolean;
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     clearTimeout?(timeoutId: any): void;
@@ -1438,12 +1396,11 @@ export interface System {
     /** @internal */ setBlocking?(): void;
     base64decode?(input: string): string;
     base64encode?(input: string): string;
-    /** @internal */ bufferFrom?(input: string, encoding?: string): Buffer;
     /** @internal */ require?(baseDir: string, moduleName: string): ModuleImportResult;
 
     // For testing
     /** @internal */ now?(): Date;
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
 }
 
 export interface FileWatcher {
@@ -1477,12 +1434,8 @@ export let sys: System = (() => {
         let activeSession: import("inspector").Session | "stopping" | undefined;
         let profilePath = "./profile.cpuprofile";
 
-        const Buffer: {
-            new (input: string, encoding?: string): any;
-            from?(input: string, encoding?: string): any;
-        } = require("buffer").Buffer;
-
-        const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
+        const isMacOs = process.platform === "darwin";
+        const isLinuxOrMacOs = process.platform === "linux" || isMacOs;
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1495,7 +1448,7 @@ export let sys: System = (() => {
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
-        const fsSupportsRecursiveFsWatch = process.platform === "win32" || process.platform === "darwin";
+        const fsSupportsRecursiveFsWatch = process.platform === "win32" || isMacOs;
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,
@@ -1515,6 +1468,7 @@ export let sys: System = (() => {
             useNonPollingWatchers: !!process.env.TSC_NONPOLLING_WATCHER,
             tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
             inodeWatching: isLinuxOrMacOs,
+            fsWatchWithTimestamp: isMacOs,
             sysLog,
         });
         const nodeSystem: System = {
@@ -1537,6 +1491,7 @@ export let sys: System = (() => {
             resolvePath: path => _path.resolve(path),
             fileExists,
             directoryExists,
+            getAccessibleFileSystemEntries,
             createDirectory(directoryName: string) {
                 if (!nodeSystem.directoryExists(directoryName)) {
                     // Wrapped in a try-catch to prevent crashing if we are in a race
@@ -1609,9 +1564,8 @@ export let sys: System = (() => {
                     handle.setBlocking(true);
                 }
             },
-            bufferFrom,
-            base64decode: input => bufferFrom(input, "base64").toString("utf8"),
-            base64encode: input => bufferFrom(input).toString("base64"),
+            base64decode: input => Buffer.from(input, "base64").toString("utf8"),
+            base64encode: input => Buffer.from(input).toString("base64"),
             require: (baseDir, moduleName) => {
                 try {
                     const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
@@ -1718,13 +1672,6 @@ export let sys: System = (() => {
                 cb();
                 return false;
             }
-        }
-
-        function bufferFrom(input: string, encoding?: string): Buffer {
-            // See https://github.com/Microsoft/TypeScript/issues/25652
-            return Buffer.from && Buffer.from !== Int8Array.from
-                ? Buffer.from(input, encoding)
-                : new Buffer(input, encoding);
         }
 
         function isFileSystemCaseSensitive(): boolean {

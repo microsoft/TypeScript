@@ -1,5 +1,8 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTscWatch,
 } from "../helpers/tscWatch";
 import {
@@ -50,7 +53,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
 
     describe("with symlinks in sibling folders and common package referenced from both folders", () => {
         function pluginOneConfig() {
-            return JSON.stringify({
+            return jsonToReadableText({
                 compilerOptions: {
                     target: "es5",
                     declaration: true,
@@ -93,7 +96,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     export default _default;`;
         }
         function fsaPackageJson() {
-            return JSON.stringify({
+            return jsonToReadableText({
                 name: "typescript-fsa",
                 version: "3.0.0-beta-2",
             });
@@ -139,7 +142,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             files: [
                 {
                     path: `/user/username/projects/myproject/plugin-two/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "plugin-two",
                         version: "0.1.3",
                         main: "dist/commonjs/index.js",
@@ -192,7 +195,7 @@ ${pluginOneAction()}`,
             },
             {
                 path: `/user/username/projects/myproject/pkg1/package.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "@raymondfeng/pkg1",
                     version: "1.0.0",
                     main: "dist/index.js",
@@ -211,7 +214,7 @@ ${pluginOneAction()}`,
             },
             {
                 path: `/user/username/projects/myproject/pkg2/package.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "@raymondfeng/pkg2",
                     version: "1.0.0",
                     main: "dist/index.js",
@@ -231,7 +234,7 @@ ${pluginOneAction()}`,
             },
             {
                 path: `/user/username/projects/myproject/pkg3/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
@@ -254,5 +257,99 @@ ${pluginOneAction()}`,
             libFile,
         ],
         changeCaseFileTestPath: str => str.includes("/pkg1"),
+    });
+
+    verifyTscWatch({
+        scenario: "declarationEmit",
+        subScenario: "when using Windows paths and uppercase letters",
+        sys: () =>
+            createWatchedSystem([
+                {
+                    path: `D:\\Work\\pkg1\\package.json`,
+                    content: jsonToReadableText({
+                        name: "ts-specifier-bug",
+                        version: "1.0.0",
+                        description: "",
+                        main: "index.js",
+                        scripts: {
+                            build: "tsc",
+                        },
+                        keywords: [],
+                        author: "",
+                        license: "ISC",
+                        dependencies: {
+                            typescript: "5.4.0-dev.20231222",
+                        },
+                    }),
+                },
+                {
+                    path: `D:\\Work\\pkg1\\tsconfig.json`,
+                    content: jsonToReadableText({
+                        compilerOptions: {
+                            module: "commonjs",
+                            declaration: true,
+                            removeComments: true,
+                            emitDecoratorMetadata: true,
+                            experimentalDecorators: true,
+                            strictPropertyInitialization: false,
+                            allowSyntheticDefaultImports: true,
+                            target: "es2017",
+                            sourceMap: true,
+                            esModuleInterop: true,
+                            outDir: "./dist",
+                            baseUrl: "./",
+                            skipLibCheck: true,
+                            strictNullChecks: false,
+                            noImplicitAny: false,
+                            strictBindCallApply: false,
+                            forceConsistentCasingInFileNames: false,
+                            noFallthroughCasesInSwitch: false,
+                            moduleResolution: "node",
+                            resolveJsonModule: true,
+                        },
+                        include: ["src"],
+                    }),
+                },
+                {
+                    path: `D:\\Work\\pkg1\\src\\main.ts`,
+                    content: Utils.dedent`
+                    import { PartialType } from './utils';
+
+                    class Common {}
+                    
+                    export class Sub extends PartialType(Common) {
+                        id: string;
+                    }
+                `,
+                },
+                {
+                    path: `D:\\Work\\pkg1\\src\\utils\\index.ts`,
+                    content: Utils.dedent`
+                    import { MyType, MyReturnType } from './type-helpers';
+
+                    export function PartialType<T>(classRef: MyType<T>) {
+                        abstract class PartialClassType {
+                            constructor() {}
+                        }
+                    
+                        return PartialClassType as MyReturnType;
+                    }
+                `,
+                },
+                {
+                    path: `D:\\Work\\pkg1\\src\\utils\\type-helpers.ts`,
+                    content: Utils.dedent`
+                    export type MyReturnType = {
+                        new (...args: any[]): any;
+                    };
+                  
+                    export interface MyType<T = any> extends Function {
+                        new (...args: any[]): T;
+                    }
+                `,
+                },
+                libFile,
+            ], { currentDirectory: "D:\\Work\\pkg1", windowsStyleRoot: "D:/" }),
+        commandLineArgs: ["-p", "D:\\Work\\pkg1", "--explainFiles"],
     });
 });

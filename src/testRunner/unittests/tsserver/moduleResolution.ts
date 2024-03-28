@@ -1,27 +1,27 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    getFsConentsForAlternateResultAtTypesPackageJson,
+    getFsContentsForAlternateResult,
+    getFsContentsForAlternateResultDts,
+    getFsContentsForAlternateResultPackageJson,
+} from "../helpers/alternateResult";
+import {
     libContent,
 } from "../helpers/contents";
-import {
-    getFsConentsForNode10ResultAtTypesPackageJson,
-    getFsContentsForNode10Result,
-    getFsContentsForNode10ResultDts,
-    getFsContentsForNode10ResultPackageJson,
-} from "../helpers/node10Result";
 import {
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -35,7 +35,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         function setup(packageFileContents: string) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/src/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         target: "es2016",
                         module: "Node16",
@@ -63,7 +63,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                     `,
             };
             const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([fileA], session);
             return {
                 host,
@@ -73,17 +73,19 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             };
         }
         it("package json file is edited", () => {
-            const { host, session, packageFile, verifyErr } = setup(JSON.stringify({ name: "app", version: "1.0.0" }));
+            const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({ name: "app", version: "1.0.0" }));
 
             session.logger.info("Modify package json file to add type module");
-            host.writeFile(
+            host.modifyFile(
                 packageFile.path,
-                JSON.stringify({
+                jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
                 }),
+                { ignoreWatches: true },
             );
+            host.invokeFsWatches(packageFile.path, "rename", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined); // Create event instead of change
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -103,7 +105,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             session.logger.info("Modify package json file to add type module");
             host.writeFile(
                 packageFile.path,
-                JSON.stringify({
+                jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
@@ -123,14 +125,14 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         });
 
         it("package json file is edited when package json with type module exists", () => {
-            const { host, session, packageFile, verifyErr } = setup(JSON.stringify({
+            const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({
                 name: "app",
                 version: "1.0.0",
                 type: "module",
             }));
 
             session.logger.info("Modify package json file to remove type module");
-            host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
+            host.writeFile(packageFile.path, jsonToReadableText({ name: "app", version: "1.0.0" }));
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -148,7 +150,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             verifyErr();
 
             session.logger.info("Modify package json file to without type module");
-            host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
+            host.writeFile(packageFile.path, jsonToReadableText({ name: "app", version: "1.0.0" }));
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -163,9 +165,9 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         });
     });
 
-    it("node10Result", () => {
-        const host = createServerHost(getFsContentsForNode10Result());
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+    it("alternateResult", () => {
+        const host = createServerHost(getFsContentsForAlternateResult());
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project/index.mts"], session);
         verifyGetErrRequest({
             files: ["/home/src/projects/project/index.mts"],
@@ -175,28 +177,28 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts");
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForNode10ResultDts("bar"));
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar"));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForNode10ResultDts("foo"));
+        host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo"));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForNode10ResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true));
+        host.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForNode10ResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false));
+        host.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false));
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts");
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts");
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForNode10ResultDts("bar2"));
+        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2"));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForNode10ResultDts("foo2"));
+        host.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2"));
         verifyErrors();
 
-        baselineTsserverLogs("moduleResolution", "node10Result", session);
+        baselineTsserverLogs("moduleResolution", "alternateResult", session);
 
         function verifyErrors() {
             host.runQueuedTimeoutCallbacks();
@@ -236,7 +238,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                 solutionBuildWithBaseline(host, ["packages/package-b"]);
                 host.clearOutput();
             }
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host), canUseEvents: true });
+            const session = new TestSession(host);
             openFilesForSession(["/home/src/projects/project/packages/package-b/src/index.ts"], session);
             verifyGetErrRequest({
                 session,
@@ -280,25 +282,21 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             baselineTsserverLogs("moduleResolution", `using referenced project${built ? " built" : ""}`, session);
         }
         function getPackageJson(packageName: string) {
-            return JSON.stringify(
-                {
-                    name: packageName,
-                    version: "1.0.0",
-                    type: "module",
-                    main: "build/index.js",
-                    exports: {
-                        ".": "./build/index.js",
-                        "./package.json": "./package.json",
-                        "./*": ["./build/*/index.js", "./build/*.js"],
-                    },
+            return jsonToReadableText({
+                name: packageName,
+                version: "1.0.0",
+                type: "module",
+                main: "build/index.js",
+                exports: {
+                    ".": "./build/index.js",
+                    "./package.json": "./package.json",
+                    "./*": ["./build/*/index.js", "./build/*.js"],
                 },
-                undefined,
-                " ",
-            );
+            });
         }
 
         function getTsConfig(references?: object[]) {
-            return JSON.stringify({
+            return jsonToReadableText({
                 compilerOptions: {
                     allowSyntheticDefaultImports: true,
                     baseUrl: "./",

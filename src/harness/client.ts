@@ -35,7 +35,6 @@ import {
     identity,
     ImplementationLocation,
     InlayHint,
-    InlayHintKind,
     InteractiveRefactorArguments,
     isString,
     JSDocTagInfo,
@@ -175,7 +174,7 @@ export class SessionClient implements LanguageService {
         let foundResponseMessage = false;
         let response!: T;
         while (!foundResponseMessage) {
-            const lastMessage = this.messages.dequeue()!;
+            const lastMessage = this.messages.dequeue();
             Debug.assert(!!lastMessage, "Did not receive any responses.");
             const responseBody = extractMessage(lastMessage);
             try {
@@ -777,7 +776,7 @@ export class SessionClient implements LanguageService {
             return ({
                 ...item,
                 position: this.lineOffsetToPosition(file, position),
-                kind: item.kind as InlayHintKind,
+                kind: item.kind,
                 displayParts: displayParts?.map(({ text, span }) => ({
                     text,
                     span: span && {
@@ -842,7 +841,7 @@ export class SessionClient implements LanguageService {
 
         const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);
         const response = this.processResponse<protocol.GetMoveToRefactoringFileSuggestions>(request);
-        return { newFileName: response.body?.newFileName, files: response.body?.files }!;
+        return { newFileName: response.body?.newFileName, files: response.body?.files };
     }
 
     getEditsForRefactor(

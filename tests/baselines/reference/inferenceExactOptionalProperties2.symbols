@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/inferenceExactOptionalProperties2.ts] ////
+
+=== inferenceExactOptionalProperties2.ts ===
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(inferenceExactOptionalProperties2.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceExactOptionalProperties2.ts, 0, 12))
+>T : Symbol(T, Decl(inferenceExactOptionalProperties2.ts, 0, 12))
+>T : Symbol(T, Decl(inferenceExactOptionalProperties2.ts, 0, 12))
+
+type EventObject = {
+>EventObject : Symbol(EventObject, Decl(inferenceExactOptionalProperties2.ts, 0, 28))
+
+  type: string;
+>type : Symbol(type, Decl(inferenceExactOptionalProperties2.ts, 2, 20))
+
+};
+
+interface ActorLogic<TEvent extends EventObject> {
+>ActorLogic : Symbol(ActorLogic, Decl(inferenceExactOptionalProperties2.ts, 4, 2))
+>TEvent : Symbol(TEvent, Decl(inferenceExactOptionalProperties2.ts, 6, 21))
+>EventObject : Symbol(EventObject, Decl(inferenceExactOptionalProperties2.ts, 0, 28))
+
+  transition: (ev: TEvent) => unknown;
+>transition : Symbol(ActorLogic.transition, Decl(inferenceExactOptionalProperties2.ts, 6, 50))
+>ev : Symbol(ev, Decl(inferenceExactOptionalProperties2.ts, 7, 15))
+>TEvent : Symbol(TEvent, Decl(inferenceExactOptionalProperties2.ts, 6, 21))
+}
+
+type UnknownActorLogic = ActorLogic<never>;
+>UnknownActorLogic : Symbol(UnknownActorLogic, Decl(inferenceExactOptionalProperties2.ts, 8, 1))
+>ActorLogic : Symbol(ActorLogic, Decl(inferenceExactOptionalProperties2.ts, 4, 2))
+
+interface ProvidedActor {
+>ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+
+  src: string;
+>src : Symbol(ProvidedActor.src, Decl(inferenceExactOptionalProperties2.ts, 12, 25))
+
+  logic: UnknownActorLogic;
+>logic : Symbol(ProvidedActor.logic, Decl(inferenceExactOptionalProperties2.ts, 13, 14))
+>UnknownActorLogic : Symbol(UnknownActorLogic, Decl(inferenceExactOptionalProperties2.ts, 8, 1))
+}
+
+interface ActionFunction<TActor extends ProvidedActor> {
+>ActionFunction : Symbol(ActionFunction, Decl(inferenceExactOptionalProperties2.ts, 15, 1))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 17, 25))
+>ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+
+  (): void;
+  _out_TActor?: TActor;
+>_out_TActor : Symbol(ActionFunction._out_TActor, Decl(inferenceExactOptionalProperties2.ts, 18, 11))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 17, 25))
+}
+
+interface AssignAction<TActor extends ProvidedActor> {
+>AssignAction : Symbol(AssignAction, Decl(inferenceExactOptionalProperties2.ts, 20, 1))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 22, 23))
+>ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+
+  (): void;
+  _out_TActor?: TActor;
+>_out_TActor : Symbol(AssignAction._out_TActor, Decl(inferenceExactOptionalProperties2.ts, 23, 11))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 22, 23))
+}
+
+interface MachineConfig<TActor extends ProvidedActor> {
+>MachineConfig : Symbol(MachineConfig, Decl(inferenceExactOptionalProperties2.ts, 25, 1))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 27, 24))
+>ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+
+  entry?: ActionFunction<TActor>;
+>entry : Symbol(MachineConfig.entry, Decl(inferenceExactOptionalProperties2.ts, 27, 55))
+>ActionFunction : Symbol(ActionFunction, Decl(inferenceExactOptionalProperties2.ts, 15, 1))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 27, 24))
+}
+
+declare function assign<TActor extends ProvidedActor>(
+>assign : Symbol(assign, Decl(inferenceExactOptionalProperties2.ts, 29, 1))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 31, 24))
+>ProvidedActor : Symbol(ProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 10, 43))
+
+  _: (spawn: (actor: TActor["src"]) => void) => {},
+>_ : Symbol(_, Decl(inferenceExactOptionalProperties2.ts, 31, 54))
+>spawn : Symbol(spawn, Decl(inferenceExactOptionalProperties2.ts, 32, 6))
+>actor : Symbol(actor, Decl(inferenceExactOptionalProperties2.ts, 32, 14))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 31, 24))
+
+): AssignAction<TActor>;
+>AssignAction : Symbol(AssignAction, Decl(inferenceExactOptionalProperties2.ts, 20, 1))
+>TActor : Symbol(TActor, Decl(inferenceExactOptionalProperties2.ts, 31, 24))
+
+type ToProvidedActor<TActors extends Record<string, UnknownActorLogic>> =
+>ToProvidedActor : Symbol(ToProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 33, 24))
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 35, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>UnknownActorLogic : Symbol(UnknownActorLogic, Decl(inferenceExactOptionalProperties2.ts, 8, 1))
+
+  Values<{
+>Values : Symbol(Values, Decl(inferenceExactOptionalProperties2.ts, 0, 0))
+
+    [K in keyof TActors & string]: {
+>K : Symbol(K, Decl(inferenceExactOptionalProperties2.ts, 37, 5))
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 35, 21))
+
+      src: K;
+>src : Symbol(src, Decl(inferenceExactOptionalProperties2.ts, 37, 36))
+>K : Symbol(K, Decl(inferenceExactOptionalProperties2.ts, 37, 5))
+
+      logic: TActors[K];
+>logic : Symbol(logic, Decl(inferenceExactOptionalProperties2.ts, 38, 13))
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 35, 21))
+>K : Symbol(K, Decl(inferenceExactOptionalProperties2.ts, 37, 5))
+
+    };
+  }>;
+
+declare function setup<
+>setup : Symbol(setup, Decl(inferenceExactOptionalProperties2.ts, 41, 5))
+
+  TActors extends Record<string, UnknownActorLogic> = {},
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 43, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>UnknownActorLogic : Symbol(UnknownActorLogic, Decl(inferenceExactOptionalProperties2.ts, 8, 1))
+
+>(implementations?: {
+>implementations : Symbol(implementations, Decl(inferenceExactOptionalProperties2.ts, 45, 2))
+
+  actors?: { [K in keyof TActors]: TActors[K] };
+>actors : Symbol(actors, Decl(inferenceExactOptionalProperties2.ts, 45, 21))
+>K : Symbol(K, Decl(inferenceExactOptionalProperties2.ts, 46, 14))
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 43, 23))
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 43, 23))
+>K : Symbol(K, Decl(inferenceExactOptionalProperties2.ts, 46, 14))
+
+}): {
+  createMachine: <
+>createMachine : Symbol(createMachine, Decl(inferenceExactOptionalProperties2.ts, 47, 5))
+
+    const TConfig extends MachineConfig<ToProvidedActor<TActors>>,
+>TConfig : Symbol(TConfig, Decl(inferenceExactOptionalProperties2.ts, 48, 18))
+>MachineConfig : Symbol(MachineConfig, Decl(inferenceExactOptionalProperties2.ts, 25, 1))
+>ToProvidedActor : Symbol(ToProvidedActor, Decl(inferenceExactOptionalProperties2.ts, 33, 24))
+>TActors : Symbol(TActors, Decl(inferenceExactOptionalProperties2.ts, 43, 23))
+
+  >(
+    config: TConfig,
+>config : Symbol(config, Decl(inferenceExactOptionalProperties2.ts, 50, 4))
+>TConfig : Symbol(TConfig, Decl(inferenceExactOptionalProperties2.ts, 48, 18))
+
+  ) => void;
+};
+
+declare const counterLogic: ActorLogic<{ type: "INCREMENT" }>;
+>counterLogic : Symbol(counterLogic, Decl(inferenceExactOptionalProperties2.ts, 55, 13))
+>ActorLogic : Symbol(ActorLogic, Decl(inferenceExactOptionalProperties2.ts, 4, 2))
+>type : Symbol(type, Decl(inferenceExactOptionalProperties2.ts, 55, 40))
+
+// example usage
+setup({
+>setup({  actors: { counter: counterLogic },}).createMachine : Symbol(createMachine, Decl(inferenceExactOptionalProperties2.ts, 47, 5))
+>setup : Symbol(setup, Decl(inferenceExactOptionalProperties2.ts, 41, 5))
+
+  actors: { counter: counterLogic },
+>actors : Symbol(actors, Decl(inferenceExactOptionalProperties2.ts, 58, 7))
+>counter : Symbol(counter, Decl(inferenceExactOptionalProperties2.ts, 59, 11))
+>counterLogic : Symbol(counterLogic, Decl(inferenceExactOptionalProperties2.ts, 55, 13))
+
+}).createMachine({
+>createMachine : Symbol(createMachine, Decl(inferenceExactOptionalProperties2.ts, 47, 5))
+
+  entry: assign((spawn) => {
+>entry : Symbol(entry, Decl(inferenceExactOptionalProperties2.ts, 60, 18))
+>assign : Symbol(assign, Decl(inferenceExactOptionalProperties2.ts, 29, 1))
+>spawn : Symbol(spawn, Decl(inferenceExactOptionalProperties2.ts, 61, 17))
+
+    spawn("counter"); // ok
+>spawn : Symbol(spawn, Decl(inferenceExactOptionalProperties2.ts, 61, 17))
+
+    spawn("alarm"); // error
+>spawn : Symbol(spawn, Decl(inferenceExactOptionalProperties2.ts, 61, 17))
+
+    return {};
+  }),
+});
+
+// no provided actors, `assign` should still work
+setup().createMachine({
+>setup().createMachine : Symbol(createMachine, Decl(inferenceExactOptionalProperties2.ts, 47, 5))
+>setup : Symbol(setup, Decl(inferenceExactOptionalProperties2.ts, 41, 5))
+>createMachine : Symbol(createMachine, Decl(inferenceExactOptionalProperties2.ts, 47, 5))
+
+  entry: assign(() => ({})),
+>entry : Symbol(entry, Decl(inferenceExactOptionalProperties2.ts, 69, 23))
+>assign : Symbol(assign, Decl(inferenceExactOptionalProperties2.ts, 29, 1))
+
+});
+

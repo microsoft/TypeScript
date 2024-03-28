@@ -1,19 +1,19 @@
 import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
+    jsonToReadableText,
+} from "../helpers";
 import {
-    getServerHosForLibResolution,
+    getServerHostForLibResolution,
 } from "../helpers/libraryResolution";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 
 describe("unittests:: tsserver:: libraryResolution", () => {
     it("with config", () => {
-        const host = getServerHosForLibResolution();
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = getServerHostForLibResolution();
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
@@ -26,7 +26,7 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.writeFile(
             "/home/src/projects/project1/tsconfig.json",
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     typeRoots: ["./typeroot1", "./typeroot2"],
@@ -38,7 +38,7 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.writeFile(
             "/home/src/projects/project1/tsconfig.json",
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     typeRoots: ["./typeroot1"],
@@ -57,8 +57,8 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         baselineTsserverLogs("libraryResolution", "with config", session);
     });
     it("with config with redirection", () => {
-        const host = getServerHosForLibResolution(/*libRedirection*/ true);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = getServerHostForLibResolution(/*libRedirection*/ true);
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();
@@ -71,7 +71,7 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.writeFile(
             "/home/src/projects/project1/tsconfig.json",
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     typeRoots: ["./typeroot1", "./typeroot2"],
@@ -83,7 +83,7 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.writeFile(
             "/home/src/projects/project1/tsconfig.json",
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     typeRoots: ["./typeroot1"],

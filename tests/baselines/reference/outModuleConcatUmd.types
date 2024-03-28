@@ -1,16 +1,18 @@
 //// [tests/cases/compiler/outModuleConcatUmd.ts] ////
 
 === ref/a.ts ===
-// This should error
-
 export class A { }
 >A : A
+>  : ^
 
 === b.ts ===
 import {A} from "./ref/a";
 >A : typeof A
+>  : ^^^^^^^^
 
 export class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 

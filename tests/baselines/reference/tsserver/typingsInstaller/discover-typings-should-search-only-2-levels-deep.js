@@ -4,10 +4,14 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 
 
 //// [/node_modules/a/package.json]
-{"name":"a"}
+{
+  "name": "a"
+}
 
 //// [/node_modules/a/b/package.json]
-{"name":"b"}
+{
+  "name": "b"
+}
 
 
 ts.JsTyping.discoverTypings::

@@ -3,25 +3,37 @@
 === index.ts ===
 export const a = async () => (await import("inner")).x();
 >a : () => Promise<import("node_modules/inner/private").Thing>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async () => (await import("inner")).x() : () => Promise<import("node_modules/inner/private").Thing>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(await import("inner")).x() : import("node_modules/inner/private").Thing
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(await import("inner")).x : () => import("node_modules/inner/private").Thing
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(await import("inner")) : typeof import("node_modules/inner/index")
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await import("inner") : typeof import("node_modules/inner/index")
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("inner") : Promise<typeof import("node_modules/inner/index")>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"inner" : "inner"
+>        : ^^^^^^^
 >x : () => import("node_modules/inner/private").Thing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/inner/index.d.ts ===
 export { x } from "./other.js";
 >x : () => import("node_modules/inner/private").Thing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/inner/other.d.ts ===
 import { Thing } from "./private.js"
 >Thing : any
+>      : ^^^
 
 export const x: () => Thing;
 >x : () => Thing
+>  : ^^^^^^     
 
 === node_modules/inner/private.d.ts ===
 

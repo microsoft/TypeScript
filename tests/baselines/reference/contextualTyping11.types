@@ -3,10 +3,17 @@
 === contextualTyping11.ts ===
 class foo { public bar:{id:number;}[] = [<foo>({})]; }
 >foo : foo
+>    : ^^^
 >bar : { id: number; }[]
+>    : ^^^^^^      ^^^^^
 >id : number
+>   : ^^^^^^
 >[<foo>({})] : foo[]
+>            : ^^^^^
 ><foo>({}) : foo
+>          : ^^^
 >({}) : {}
+>     : ^^
 >{} : {}
+>   : ^^
 

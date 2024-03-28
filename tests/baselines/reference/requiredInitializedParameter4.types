@@ -3,10 +3,14 @@
 === requiredInitializedParameter4.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     method(a = 0, b) { }
 >method : (a: number, b: any) => void
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : any
 }

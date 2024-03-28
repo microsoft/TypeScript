@@ -6,15 +6,24 @@
  */
 const foo = function (a, b, ...r) { };
 >foo : (arg0: boolean, arg1: string, ...arg2: any[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (a, b, ...r) { } : (a: boolean, b: string, ...r: any[]) => void
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >b : string
+>  : ^^^^^^
 >r : any[]
+>  : ^^^^^
 
 === b.ts ===
 foo(false, '');
 >foo(false, '') : void
+>               : ^^^^
 >foo : (arg0: boolean, arg1: string, ...arg2: any[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 >'' : ""
+>   : ^^
 

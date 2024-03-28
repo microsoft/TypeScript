@@ -3,4 +3,5 @@
 === parserIfStatement2.ts ===
 if (a) {
 >a : any
+>  : ^^^
 }

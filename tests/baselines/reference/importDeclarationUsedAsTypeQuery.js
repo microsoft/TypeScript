@@ -32,6 +32,5 @@ export declare class B {
     id: number;
 }
 //// [importDeclarationUsedAsTypeQuery_1.d.ts]
-/// <reference path="importDeclarationUsedAsTypeQuery_require.d.ts" />
 import a = require('./importDeclarationUsedAsTypeQuery_require');
 export declare var x: typeof a;

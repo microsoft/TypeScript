@@ -41,8 +41,7 @@ export class FourSlashRunner extends RunnerBase {
         }
 
         describe(this.testSuiteName + " tests", () => {
-            this.tests.forEach(test => {
-                const file = typeof test === "string" ? test : test.file;
+            this.tests.forEach(file => {
                 describe(file, () => {
                     let fn = ts.normalizeSlashes(file);
                     const justName = fn.replace(/^.*[\\/]/, "");
