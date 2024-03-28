@@ -1459,32 +1459,51 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var emptySymbols = createSymbolTable();
     var arrayVariances = [VarianceFlags.Covariant];
 
-    var compilerOptions = host.getCompilerOptions();
-    var languageVersion = getEmitScriptTarget(compilerOptions);
-    var moduleKind = getEmitModuleKind(compilerOptions);
-    var legacyDecorators = !!compilerOptions.experimentalDecorators;
-    var useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
-    var emitStandardClassFields = getEmitStandardClassFields(compilerOptions);
-    var allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
-    var strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
-    var strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
-    var strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
-    var strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
-    var noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
-    var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
-    var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
-    var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
-    var esModuleInterop = getESModuleInterop(compilerOptions);
-    var emitModuleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-    var isolatedModules = getIsolatedModules(compilerOptions);
-    var resolveJsonModule = getResolveJsonModule(compilerOptions);
-    var emitDeclarations = getEmitDeclarations(compilerOptions);
-    var preserveConstEnums = shouldPreserveConstEnums(compilerOptions);
-    var jsxTransformEnabled = getJSXTransformEnabled(compilerOptions);
-    var jsonModuleEmitEnabled = hasJsonModuleEmitEnabled(compilerOptions);
-    var verbatimModuleSyntax = compilerOptions.verbatimModuleSyntax;
-    var noUncheckedIndexedAccess = compilerOptions.noUncheckedIndexedAccess;
-    var downlevelIteration = compilerOptions.downlevelIteration;
+    var _compilerOptions = host.getCompilerOptions();
+    var languageVersion = getEmitScriptTarget(_compilerOptions);
+    var moduleKind = getEmitModuleKind(_compilerOptions);
+    var legacyDecorators = !!_compilerOptions.experimentalDecorators;
+    var useDefineForClassFields = getUseDefineForClassFields(_compilerOptions);
+    var emitStandardClassFields = getEmitStandardClassFields(_compilerOptions);
+    var allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(_compilerOptions);
+    var strictNullChecks = getStrictOptionValue(_compilerOptions, "strictNullChecks");
+    var strictFunctionTypes = getStrictOptionValue(_compilerOptions, "strictFunctionTypes");
+    var strictBindCallApply = getStrictOptionValue(_compilerOptions, "strictBindCallApply");
+    var strictPropertyInitialization = getStrictOptionValue(_compilerOptions, "strictPropertyInitialization");
+    var noImplicitAny = getStrictOptionValue(_compilerOptions, "noImplicitAny");
+    var noImplicitThis = getStrictOptionValue(_compilerOptions, "noImplicitThis");
+    var useUnknownInCatchVariables = getStrictOptionValue(_compilerOptions, "useUnknownInCatchVariables");
+    var exactOptionalPropertyTypes = _compilerOptions.exactOptionalPropertyTypes;
+    var esModuleInterop = getESModuleInterop(_compilerOptions);
+    var emitModuleResolutionKind = getEmitModuleResolutionKind(_compilerOptions);
+    var isolatedModules = getIsolatedModules(_compilerOptions);
+    var resolveJsonModule = getResolveJsonModule(_compilerOptions);
+    var emitDeclarations = getEmitDeclarations(_compilerOptions);
+    var preserveConstEnums = shouldPreserveConstEnums(_compilerOptions);
+    var jsxTransformEnabled = getJSXTransformEnabled(_compilerOptions);
+    var jsonModuleEmitEnabled = hasJsonModuleEmitEnabled(_compilerOptions);
+    var verbatimModuleSyntax = _compilerOptions.verbatimModuleSyntax;
+    var noUncheckedIndexedAccess = _compilerOptions.noUncheckedIndexedAccess;
+    var downlevelIteration = _compilerOptions.downlevelIteration;
+    var jsxEmit = _compilerOptions.jsx ?? JsxEmit.None;
+    var jsxFactory = _compilerOptions.jsxFactory;
+    var jsxFragmentFactory = _compilerOptions.jsxFragmentFactory;
+    var reactNamespace = _compilerOptions.reactNamespace;
+    var outFile = _compilerOptions.outFile;
+    var checkJs = _compilerOptions.checkJs;
+    var noErrorTruncation = _compilerOptions.noErrorTruncation;
+    var noPropertyAccessFromIndexSignature = _compilerOptions.noPropertyAccessFromIndexSignature;
+    var experimentalDecorators = _compilerOptions.experimentalDecorators;
+    var noImplicitReturns = _compilerOptions.noImplicitReturns;
+    var allowUnreachableCode = _compilerOptions.allowUnreachableCode;
+    var emitDecoratorMetadata = _compilerOptions.emitDecoratorMetadata;
+    var noFallthroughCasesInSwitch = _compilerOptions.noFallthroughCasesInSwitch;
+    var noUnusedLocals = _compilerOptions.noUnusedLocals;
+    var noUnusedParameters = _compilerOptions.noUnusedParameters;
+    var noImplicitOverride = _compilerOptions.noImplicitOverride;
+    var importHelpers = _compilerOptions.importHelpers;
+    var typeSpecifiedInOptions = !!_compilerOptions.types;
+    var allowUmdGlobalAccess = _compilerOptions.allowUmdGlobalAccess;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -1815,7 +1834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         },
         getSuggestionDiagnostics: (fileIn, ct) => {
             const file = getParseTreeNode(fileIn, isSourceFile) || Debug.fail("Could not determine parsed source file.");
-            if (skipTypeChecking(file, compilerOptions, host)) {
+            if (skipTypeChecking(file, _compilerOptions, host)) {
                 return emptyArray;
             }
 
@@ -2286,7 +2305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         [".mjs", ".mjs"],
         [".js", ".js"],
         [".cjs", ".cjs"],
-        [".tsx", compilerOptions.jsx === JsxEmit.Preserve ? ".jsx" : ".js"],
+        [".tsx", jsxEmit === JsxEmit.Preserve ? ".jsx" : ".js"],
         [".jsx", ".jsx"],
         [".json", ".json"],
     ];
@@ -2338,15 +2357,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (!_jsxNamespace) {
             _jsxNamespace = "React" as __String;
-            if (compilerOptions.jsxFactory) {
-                _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
+            if (jsxFactory) {
+                _jsxFactoryEntity = parseIsolatedEntityName(jsxFactory, languageVersion);
                 visitNode(_jsxFactoryEntity, markAsSynthetic);
                 if (_jsxFactoryEntity) {
                     _jsxNamespace = getFirstIdentifier(_jsxFactoryEntity).escapedText;
                 }
             }
-            else if (compilerOptions.reactNamespace) {
-                _jsxNamespace = escapeLeadingUnderscores(compilerOptions.reactNamespace);
+            else if (reactNamespace) {
+                _jsxNamespace = escapeLeadingUnderscores(reactNamespace);
             }
         }
         if (!_jsxFactoryEntity) {
@@ -2613,8 +2632,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const sourceSymbolFile = source.declarations && getSourceFileOfNode(source.declarations[0]);
             const targetSymbolFile = target.declarations && getSourceFileOfNode(target.declarations[0]);
 
-            const isSourcePlainJs = isPlainJsFile(sourceSymbolFile, compilerOptions.checkJs);
-            const isTargetPlainJs = isPlainJsFile(targetSymbolFile, compilerOptions.checkJs);
+            const isSourcePlainJs = isPlainJsFile(sourceSymbolFile, checkJs);
+            const isTargetPlainJs = isPlainJsFile(targetSymbolFile, checkJs);
             const symbolName = symbolToString(source);
 
             // Collect top-level duplicate identifier errors into one mapping, so we can then merge their diagnostics if there are a bunch
@@ -2815,7 +2834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (declarationFile !== useFile) {
             if (
                 (moduleKind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
-                (!compilerOptions.outFile) ||
+                (!outFile) ||
                 isInTypeQuery(usage) ||
                 declaration.flags & NodeFlags.Ambient
             ) {
@@ -3601,7 +3620,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value && !(originalLocation!.flags & NodeFlags.JSDoc)) {
                     const merged = getMergedSymbol(result);
                     if (length(merged.declarations) && every(merged.declarations, d => isNamespaceExportDeclaration(d) || isSourceFile(d) && !!d.symbol.globalExports)) {
-                        errorOrSuggestion(!compilerOptions.allowUmdGlobalAccess, errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
+                        errorOrSuggestion(!allowUmdGlobalAccess, errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
                     }
                 }
 
@@ -3635,7 +3654,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
                 // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
-                if (compilerOptions.isolatedModules && result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
+                if (_compilerOptions.isolatedModules && result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
                     const isGlobal = lookup(globals, name, meaning) === result;
                     const nonValueSymbol = isGlobal && isSourceFile(lastLocation!) && lastLocation.locals && lookup(lastLocation.locals, name, ~SymbolFlags.Value);
                     if (nonValueSymbol) {
@@ -3950,7 +3969,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
-                if (getIsolatedModules(compilerOptions)) {
+                if (isolatedModules) {
                     diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                 }
             }
@@ -5045,7 +5064,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = emitModuleResolutionKind;
         const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
-        const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
+        const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(_compilerOptions, resolvedModule, currentSourceFile);
         const sourceFile = resolvedModule
             && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
             && host.getSourceFile(resolvedModule.resolvedFileName);
@@ -5066,7 +5085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
             }
-            else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
+            else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(_compilerOptions, currentSourceFile.fileName)) {
                 const importOrExport = findAncestor(location, isImportDeclaration)?.importClause ||
                     findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
                 if (!(importOrExport?.isTypeOnly || findAncestor(location, isImportTypeNode))) {
@@ -5234,7 +5253,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
              * @see https://github.com/microsoft/TypeScript/issues/42151
              */
             if (emitModuleKindIsNonNodeESM(moduleKind) || mode === ModuleKind.ESNext) {
-                const preferTs = isDeclarationFileName(moduleReference) && shouldAllowImportingTsExtension(compilerOptions);
+                const preferTs = isDeclarationFileName(moduleReference) && shouldAllowImportingTsExtension(_compilerOptions);
                 const ext = tsExtension === Extension.Mts || tsExtension === Extension.Dmts ? preferTs ? ".mts" : ".mjs" :
                     tsExtension === Extension.Cts || tsExtension === Extension.Dmts ? preferTs ? ".cts" : ".cjs" :
                     preferTs ? ".ts" : ".js";
@@ -6431,7 +6450,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
-        const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
+        const noTruncation = noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
         const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0));
         if (typeNode === undefined) return Debug.fail("should always get typenode");
         // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
@@ -8130,13 +8149,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const links = getSymbolLinks(symbol);
             let specifier = links.specifierCache && links.specifierCache.get(cacheKey);
             if (!specifier) {
-                const isBundle = !!compilerOptions.outFile;
+                const isBundle = !!outFile;
                 // For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
                 // just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
                 // using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative
                 // specifier preference
                 const { moduleResolverHost } = context.tracker;
-                const specifierCompilerOptions = isBundle ? { ...compilerOptions, baseUrl: moduleResolverHost.getCommonSourceDirectory() } : compilerOptions;
+                const specifierCompilerOptions = isBundle ? { ..._compilerOptions, baseUrl: moduleResolverHost.getCommonSourceDirectory() } : _compilerOptions;
                 specifier = first(moduleSpecifiers.getModuleSpecifiers(
                     symbol,
                     checker,
@@ -24570,7 +24589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return propType;
         }
         if (everyType(type, isTupleType)) {
-            return getTupleElementTypeOutOfStartCount(type, index, compilerOptions.noUncheckedIndexedAccess ? undefinedType : undefined);
+            return getTupleElementTypeOutOfStartCount(type, index, noUncheckedIndexedAccess ? undefinedType : undefined);
         }
         return undefined;
     }
@@ -25070,7 +25089,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function reportImplicitAny(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
         const typeAsString = typeToString(getWidenedType(type));
-        if (isInJSFile(declaration) && !isCheckJsEnabledForFile(getSourceFileOfNode(declaration), compilerOptions)) {
+        if (isInJSFile(declaration) && !isCheckJsEnabledForFile(getSourceFileOfNode(declaration), _compilerOptions)) {
             // Only report implicit any errors/suggestions in TS and ts-check JS files
             return;
         }
@@ -26610,25 +26629,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case "console":
                 return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom;
             case "$":
-                return compilerOptions.types
+                return typeSpecifiedInOptions
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery;
             case "describe":
             case "suite":
             case "it":
             case "test":
-                return compilerOptions.types
+                return typeSpecifiedInOptions
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha;
             case "process":
             case "require":
             case "Buffer":
             case "module":
-                return compilerOptions.types
+                return typeSpecifiedInOptions
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode;
             case "Bun":
-                return compilerOptions.types
+                return typeSpecifiedInOptions
                     ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun_and_then_add_bun_to_the_types_field_in_your_tsconfig
                     : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun;
             case "Map":
@@ -31406,7 +31425,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getIntersectedSignatures(signatures: readonly Signature[]) {
-        return getStrictOptionValue(compilerOptions, "noImplicitAny")
+        return noImplicitAny
             ? reduceLeft(
                 signatures,
                 (left: Signature | undefined, right) =>
@@ -32071,12 +32090,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // if jsxFactory compiler option is provided, ensure jsxFragmentFactory compiler option or @jsxFrag pragma is provided too
         const nodeSourceFile = getSourceFileOfNode(node);
         if (
-            jsxTransformEnabled && (compilerOptions.jsxFactory || nodeSourceFile.pragmas.has("jsx"))
-            && !compilerOptions.jsxFragmentFactory && !nodeSourceFile.pragmas.has("jsxfrag")
+            jsxTransformEnabled && (jsxFactory || nodeSourceFile.pragmas.has("jsx"))
+            && !jsxFragmentFactory && !nodeSourceFile.pragmas.has("jsxfrag")
         ) {
             error(
                 node,
-                compilerOptions.jsxFactory
+                jsxFactory
                     ? Diagnostics.The_jsxFragmentFactory_compiler_option_must_be_provided_to_use_JSX_fragments_with_the_jsxFactory_compiler_option
                     : Diagnostics.An_jsxFrag_pragma_is_required_when_using_an_jsx_pragma_with_JSX_fragments,
             );
@@ -32340,7 +32359,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links && links.jsxImplicitImportContainer) {
             return links.jsxImplicitImportContainer;
         }
-        const runtimeImportSpecifier = getJSXRuntimeImport(getJSXImplicitImportBase(compilerOptions, file), compilerOptions);
+        const runtimeImportSpecifier = getJSXRuntimeImport(getJSXImplicitImportBase(_compilerOptions, file), _compilerOptions);
         if (!runtimeImportSpecifier) {
             return undefined;
         }
@@ -32349,7 +32368,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
             : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
         // Synthesized JSX import is either first or after tslib
-        const jsxImportIndex = compilerOptions.importHelpers ? 1 : 0;
+        const jsxImportIndex = importHelpers ? 1 : 0;
         const specifier = file?.imports[jsxImportIndex];
         if (specifier) {
             Debug.assert(nodeIsSynthesized(specifier) && specifier.text === runtimeImportSpecifier, `Expected sourceFile.imports[${jsxImportIndex}] to be the synthesized JSX runtime import`);
@@ -32609,7 +32628,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkJsxPreconditions(errorNode: Node) {
         // Preconditions for using JSX
-        if ((compilerOptions.jsx || JsxEmit.None) === JsxEmit.None) {
+        if (jsxEmit === JsxEmit.None) {
             error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
         }
 
@@ -32632,7 +32651,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!getJsxNamespaceContainerForImplicitImport(node)) {
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const jsxFactoryRefErr = diagnostics && jsxEmit === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const jsxFactoryNamespace = getJsxNamespace(node);
             const jsxFactoryLocation = isNodeOpeningLikeElement ? node.tagName : node;
 
@@ -33220,7 +33239,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return errorType;
                 }
                 const containingClass = getContainingClassExcludingClassDecorators(right);
-                if (containingClass && isPlainJsFile(getSourceFileOfNode(containingClass), compilerOptions.checkJs)) {
+                if (containingClass && isPlainJsFile(getSourceFileOfNode(containingClass), checkJs)) {
                     grammarErrorOnNode(right, Diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class, idText(right));
                 }
             }
@@ -33285,7 +33304,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             propType = (noUncheckedIndexedAccess && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, missingType]) : indexInfo.type;
-            if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
+            if (noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
                 error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
             }
             if (indexInfo.declaration && isDeprecatedDeclaration(indexInfo.declaration)) {
@@ -33322,7 +33341,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isUncheckedJSSuggestion(node: Node | undefined, suggestion: Symbol | undefined, excludeClasses: boolean): boolean {
         const file = getSourceFileOfNode(node);
         if (file) {
-            if (compilerOptions.checkJs === undefined && file.checkJsDirective === undefined && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
+            if (checkJs === undefined && file.checkJsDirective === undefined && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
                 const declarationFile = forEach(suggestion?.declarations, getSourceFileOfNode);
                 const suggestionHasNoExtendsOrDecorators = !suggestion?.valueDeclaration
                     || !isClassLike(suggestion.valueDeclaration)
@@ -33533,7 +33552,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function containerSeemsToBeEmptyDomElement(containingType: Type) {
-        return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
+        return (_compilerOptions.lib && !_compilerOptions.lib.includes("dom")) &&
             everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
             isEmptyObjectType(containingType);
     }
@@ -34635,7 +34654,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Returns the argument count for a decorator node that works like a function invocation.
      */
     function getDecoratorArgumentCount(node: Decorator, signature: Signature) {
-        return compilerOptions.experimentalDecorators ?
+        return experimentalDecorators ?
             getLegacyDecoratorArgumentCount(node, signature) :
             // Allow the runtime to oversupply arguments to an ES decorator as long as there's at least one parameter.
             Math.min(Math.max(getParameterCount(signature), 1), 2);
@@ -37739,7 +37758,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
                 error(errorNode, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
             }
-            else if (compilerOptions.noImplicitReturns) {
+            else if (noImplicitReturns) {
                 if (!type) {
                     // If return type annotation is omitted check if function has any explicit return statements.
                     // If it does not have any - its inferred return type is void - don't do any checks.
@@ -38070,7 +38089,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sourceFile = getSourceFileOfNode(node);
                 if (!hasParseDiagnostics(sourceFile)) {
                     let span: TextSpan | undefined;
-                    if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                    if (!isEffectiveExternalModule(sourceFile, _compilerOptions)) {
                         span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
                         const message = isAwaitExpression(node) ? Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module :
                             Diagnostics.await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module;
@@ -39040,7 +39059,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return rightType;
                 }
             case SyntaxKind.CommaToken:
-                if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isIndirectCall(left.parent as BinaryExpression)) {
+                if (!allowUnreachableCode && isSideEffectFree(left) && !isIndirectCall(left.parent as BinaryExpression)) {
                     const sf = getSourceFileOfNode(left);
                     const sourceText = sf.text;
                     const start = skipTrivia(sourceText, left.pos);
@@ -42161,7 +42180,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        if (compilerOptions.emitDecoratorMetadata) {
+        if (emitDecoratorMetadata) {
             checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
 
             // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
@@ -43642,7 +43661,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
-        const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
+        const downlevelIteration = !uplevelIteration && _compilerOptions.downlevelIteration;
         const possibleOutOfBounds = noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 
         // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
@@ -44508,7 +44527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        else if (container.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeUndefinedVoidOrAny(container, returnType)) {
+        else if (container.kind !== SyntaxKind.Constructor && noImplicitReturns && !isUnwrappedReturnTypeUndefinedVoidOrAny(container, returnType)) {
             // The function has a return type, but the return statement doesn't have an expression.
             error(node, Diagnostics.Not_all_code_paths_return_a_value);
         }
@@ -44557,7 +44576,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 addLazyDiagnostic(createLazyCaseClauseDiagnostics(clause));
             }
             forEach(clause.statements, checkSourceElement);
-            if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
+            if (noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                 error(clause, Diagnostics.Fallthrough_case_in_switch);
             }
 
@@ -45228,7 +45247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ): MemberOverrideStatus {
         const isJs = isInJSFile(node);
         const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
-        if (baseWithThis && (memberHasOverrideModifier || compilerOptions.noImplicitOverride)) {
+        if (baseWithThis && (memberHasOverrideModifier || noImplicitOverride)) {
             const memberEscapedName = escapeLeadingUnderscores(memberName);
             const thisType = memberIsStatic ? staticType : typeWithThis;
             const baseType = memberIsStatic ? baseStaticType : baseWithThis;
@@ -45258,7 +45277,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return MemberOverrideStatus.HasInvalidOverride;
             }
-            else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+            else if (prop && baseProp?.declarations && noImplicitOverride && !nodeInAmbientContext) {
                 const baseHasAbstract = some(baseProp.declarations, hasAbstractModifier);
                 if (memberHasOverrideModifier) {
                     return MemberOverrideStatus.Ok;
@@ -45808,7 +45827,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(member.name, Diagnostics.Enum_member_must_have_initializer);
             return undefined;
         }
-        if (getIsolatedModules(compilerOptions) && previous?.initializer && !isSyntacticallyNumericConstant(previous.initializer)) {
+        if (isolatedModules && previous?.initializer && !isSyntacticallyNumericConstant(previous.initializer)) {
             error(
                 member.name,
                 Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
@@ -45830,7 +45849,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value,
                 );
             }
-            else if (getIsolatedModules(compilerOptions) && typeof value === "string" && !isSyntacticallyString(initializer)) {
+            else if (isolatedModules && typeof value === "string" && !isSyntacticallyString(initializer)) {
                 error(
                     initializer,
                     Diagnostics._0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled,
@@ -46303,7 +46322,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (node.kind !== SyntaxKind.ExportSpecifier) {
                 // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
                 // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
-                const appearsValueyToTranspiler = compilerOptions.isolatedModules && !findAncestor(node, isTypeOnlyImportOrExportDeclaration);
+                const appearsValueyToTranspiler = _compilerOptions.isolatedModules && !findAncestor(node, isTypeOnlyImportOrExportDeclaration);
                 if (appearsValueyToTranspiler && symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
                     error(
                         node,
@@ -46874,7 +46893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (kind >= SyntaxKind.FirstStatement && kind <= SyntaxKind.LastStatement && canHaveFlowNode(node) && node.flowNode && !isReachableFlowNode(node.flowNode)) {
-            errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
+            errorOrSuggestion(allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
         }
 
         switch (kind) {
@@ -47256,9 +47275,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         switch (kind) {
             case UnusedKind.Local:
-                return !!compilerOptions.noUnusedLocals;
+                return !!noUnusedLocals;
             case UnusedKind.Parameter:
-                return !!compilerOptions.noUnusedParameters;
+                return !!noUnusedParameters;
             default:
                 return Debug.assertNever(kind);
         }
@@ -47272,7 +47291,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkSourceFileWorker(node: SourceFile) {
         const links = getNodeLinks(node);
         if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-            if (skipTypeChecking(node, compilerOptions, host)) {
+            if (skipTypeChecking(node, _compilerOptions, host)) {
                 return;
             }
 
@@ -47296,7 +47315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             addLazyDiagnostic(() => {
                 // This relies on the results of other lazy diagnostics, so must be computed after them
-                if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
+                if (!node.isDeclarationFile && (noUnusedLocals || noUnusedParameters)) {
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (containingNode, kind, diag) => {
                         if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
                             diagnostics.add(diag);
@@ -48883,8 +48902,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        if (compilerOptions.jsxFragmentFactory) {
-            return parseIsolatedEntityName(compilerOptions.jsxFragmentFactory, languageVersion);
+        if (jsxFragmentFactory) {
+            return parseIsolatedEntityName(jsxFragmentFactory, languageVersion);
         }
     }
 
@@ -49011,7 +49030,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function initializeTypeChecker() {
         // Bind all source files and propagate errors
         for (const file of host.getSourceFiles()) {
-            bindSourceFile(file, compilerOptions);
+            bindSourceFile(file, _compilerOptions);
         }
 
         amalgamatedDuplicates = new Map();
@@ -49139,9 +49158,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
-        if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
+        if ((requestedExternalEmitHelpers & helpers) !== helpers && importHelpers) {
             const sourceFile = getSourceFileOfNode(location);
-            if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
+            if (isEffectiveExternalModule(sourceFile, _compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
                 const helpersModule = resolveHelpersModule(sourceFile, location);
                 if (helpersModule !== unknownSymbol) {
                     const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
@@ -50208,7 +50227,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sourceFile = getSourceFileOfNode(forInOrOfStatement);
                 if (isInTopLevelContext(forInOrOfStatement)) {
                     if (!hasParseDiagnostics(sourceFile)) {
-                        if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                        if (!isEffectiveExternalModule(sourceFile, _compilerOptions)) {
                             diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module));
                         }
                         switch (moduleKind) {
