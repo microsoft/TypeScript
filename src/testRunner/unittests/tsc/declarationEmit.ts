@@ -258,4 +258,98 @@ ${pluginOneAction()}`,
         ],
         changeCaseFileTestPath: str => str.includes("/pkg1"),
     });
+
+    verifyTscWatch({
+        scenario: "declarationEmit",
+        subScenario: "when using Windows paths and uppercase letters",
+        sys: () =>
+            createWatchedSystem([
+                {
+                    path: `D:\\Work\\pkg1\\package.json`,
+                    content: jsonToReadableText({
+                        name: "ts-specifier-bug",
+                        version: "1.0.0",
+                        description: "",
+                        main: "index.js",
+                        scripts: {
+                            build: "tsc",
+                        },
+                        keywords: [],
+                        author: "",
+                        license: "ISC",
+                        dependencies: {
+                            typescript: "5.4.0-dev.20231222",
+                        },
+                    }),
+                },
+                {
+                    path: `D:\\Work\\pkg1\\tsconfig.json`,
+                    content: jsonToReadableText({
+                        compilerOptions: {
+                            module: "commonjs",
+                            declaration: true,
+                            removeComments: true,
+                            emitDecoratorMetadata: true,
+                            experimentalDecorators: true,
+                            strictPropertyInitialization: false,
+                            allowSyntheticDefaultImports: true,
+                            target: "es2017",
+                            sourceMap: true,
+                            esModuleInterop: true,
+                            outDir: "./dist",
+                            baseUrl: "./",
+                            skipLibCheck: true,
+                            strictNullChecks: false,
+                            noImplicitAny: false,
+                            strictBindCallApply: false,
+                            forceConsistentCasingInFileNames: false,
+                            noFallthroughCasesInSwitch: false,
+                            moduleResolution: "node",
+                            resolveJsonModule: true,
+                        },
+                        include: ["src"],
+                    }),
+                },
+                {
+                    path: `D:\\Work\\pkg1\\src\\main.ts`,
+                    content: Utils.dedent`
+                    import { PartialType } from './utils';
+
+                    class Common {}
+                    
+                    export class Sub extends PartialType(Common) {
+                        id: string;
+                    }
+                `,
+                },
+                {
+                    path: `D:\\Work\\pkg1\\src\\utils\\index.ts`,
+                    content: Utils.dedent`
+                    import { MyType, MyReturnType } from './type-helpers';
+
+                    export function PartialType<T>(classRef: MyType<T>) {
+                        abstract class PartialClassType {
+                            constructor() {}
+                        }
+                    
+                        return PartialClassType as MyReturnType;
+                    }
+                `,
+                },
+                {
+                    path: `D:\\Work\\pkg1\\src\\utils\\type-helpers.ts`,
+                    content: Utils.dedent`
+                    export type MyReturnType = {
+                        new (...args: any[]): any;
+                    };
+                  
+                    export interface MyType<T = any> extends Function {
+                        new (...args: any[]): T;
+                    }
+                `,
+                },
+                libFile,
+            ], { currentDirectory: "D:\\Work\\pkg1", windowsStyleRoot: "D:/" }),
+        commandLineArgs: ["-p", "D:\\Work\\pkg1", "--explainFiles"],
+    });
 });
