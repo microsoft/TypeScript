@@ -483,7 +483,9 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    returnFalse,
     ReturnStatement,
+    returnUndefined,
     SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
@@ -10803,10 +10805,11 @@ export function createNameResolver({
     getSymbolOfDeclaration,
     globals,
     lookup,
-    getNodeLinks,
-    onPropertyWithInvalidInitializer,
-    onFailedToResolveSymbol,
-    onSuccessfullyResolvedSymbol,
+    setRequiresScopeChangeCache = returnUndefined,
+    getRequiresScopeChangeCache = returnUndefined,
+    onPropertyWithInvalidInitializer = returnFalse,
+    onFailedToResolveSymbol = returnUndefined,
+    onSuccessfullyResolvedSymbol = returnUndefined,
 }: {
     compilerOptions: CompilerOptions;
     getSymbolOfDeclaration: (node: Declaration) => Symbol;
@@ -10815,7 +10818,8 @@ export function createNameResolver({
     argumentsSymbol: Symbol;
     requireSymbol: Symbol;
     lookup: (symbols: SymbolTable, name: __String, meaning: SymbolFlags) => Symbol | undefined;
-    getNodeLinks: (node: Node) => { declarationRequiresScopeChange?: boolean; };
+    setRequiresScopeChangeCache: undefined | ((node: FunctionLikeDeclaration, value: boolean) => void);
+    getRequiresScopeChangeCache: undefined | ((node: FunctionLikeDeclaration) => boolean | undefined);
     onPropertyWithInvalidInitializer?: (location: Node | undefined, name: __String, declaration: PropertyDeclaration, result: Symbol | undefined) => boolean;
     onFailedToResolveSymbol?: (
         location: Node | undefined,
@@ -10854,7 +10858,7 @@ export function createNameResolver({
         let associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined;
         let withinDeferredContext = false;
         let grandparent: Node;
-        const name = typeof nameArg === "string" ? nameArg : (nameArg as Identifier).escapedText;
+        const name = isString(nameArg) ? nameArg : (nameArg as Identifier).escapedText;
         loop:
         while (location) {
             if (name === "const" && isConstAssertion(location)) {
@@ -11216,18 +11220,16 @@ export function createNameResolver({
             }
         }
 
-        if (nameNotFoundMessage && propertyWithInvalidInitializer && onPropertyWithInvalidInitializer!(originalLocation, name, propertyWithInvalidInitializer, result)) {
-            return undefined;
-        }
-
-        if (!result) {
-            if (nameNotFoundMessage) {
-                onFailedToResolveSymbol!(originalLocation, nameArg, meaning, nameNotFoundMessage);
+        if (nameNotFoundMessage) {
+            if (propertyWithInvalidInitializer && onPropertyWithInvalidInitializer(originalLocation, name, propertyWithInvalidInitializer, result)) {
+                return undefined;
             }
-            return undefined;
-        }
-        else if (nameNotFoundMessage) {
-            onSuccessfullyResolvedSymbol!(originalLocation, result, meaning, lastLocation, associatedDeclarationForContainingInitializerOrBindingName, withinDeferredContext);
+            if (!result) {
+                onFailedToResolveSymbol(originalLocation, nameArg, meaning, nameNotFoundMessage);
+            }
+            else {
+                onSuccessfullyResolvedSymbol(originalLocation, result, meaning, lastLocation, associatedDeclarationForContainingInitializerOrBindingName, withinDeferredContext);
+            }
         }
 
         return result;
@@ -11249,11 +11251,12 @@ export function createNameResolver({
             // - nullish coalesce pre-es2020
             // - spread assignment in binding pattern pre-es2017
             if (target >= ScriptTarget.ES2015) {
-                const links = getNodeLinks(functionLocation);
-                if (links.declarationRequiresScopeChange === undefined) {
-                    links.declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
+                let declarationRequiresScopeChange = getRequiresScopeChangeCache(functionLocation);
+                if (declarationRequiresScopeChange === undefined) {
+                    declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
+                    setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange);
                 }
-                return !links.declarationRequiresScopeChange;
+                return !declarationRequiresScopeChange;
             }
         }
         return false;

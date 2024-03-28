@@ -1510,7 +1510,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         globals,
         getSymbolOfDeclaration,
         error,
-        getNodeLinks,
+        getRequiresScopeChangeCache,
+        setRequiresScopeChangeCache,
         lookup: getSymbol,
         onPropertyWithInvalidInitializer: checkAndReportErrorForInvalidInitializer,
         onFailedToResolveSymbol,
@@ -1524,7 +1525,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         globals,
         getSymbolOfDeclaration,
         error,
-        getNodeLinks,
+        getRequiresScopeChangeCache,
+        setRequiresScopeChangeCache,
         lookup: getSuggestionForSymbolNameLookup,
     });
     // for public members that accept a Node or one of its subtypes, we must guard against
@@ -3024,6 +3026,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getRequiresScopeChangeCache(node: FunctionLikeDeclaration) {
+        return getNodeLinks(node).declarationRequiresScopeChange;
+    }
+    function setRequiresScopeChangeCache(node: FunctionLikeDeclaration, value: boolean) {
+        getNodeLinks(node).declarationRequiresScopeChange = value;
+    }
     // The invalid initializer error is needed in two situation:
     // 1. When result is undefined, after checking for a missing "this."
     // 2. When result is defined
@@ -3053,12 +3061,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         meaning: SymbolFlags,
         nameNotFoundMessage: DiagnosticMessage,
     ) {
-        const name = typeof nameArg === "string" ? nameArg : (nameArg as Identifier).escapedText;
+        const name = isString(nameArg) ? nameArg : (nameArg as Identifier).escapedText;
         addLazyDiagnostic(() => {
             if (
                 !errorLocation ||
                 errorLocation.parent.kind !== SyntaxKind.JSDocLink &&
-                    !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) && // TODO: GH#18217
+                    !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
                     !checkAndReportErrorForExtendingInterface(errorLocation) &&
                     !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                     !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
