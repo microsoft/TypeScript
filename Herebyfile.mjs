@@ -393,17 +393,39 @@ function entrypointBuildTask(options) {
     return { build, bundle, shim, main, watch };
 }
 
-const { main: tsc, watch: watchTsc } = entrypointBuildTask({
-    name: "tsc",
+const { main: tscReal, watch: watchTscReal } = entrypointBuildTask({
+    name: "tscReal",
     description: "Builds the command-line compiler",
     buildDeps: [generateDiagnostics],
     project: "src/tsc",
     srcEntrypoint: "./src/tsc/tsc.ts",
     builtEntrypoint: "./built/local/tsc/tsc.js",
+    output: "./built/local/tscReal.js",
+    mainDeps: [generateLibs],
+});
+
+const { main: tscSnapshot, watch: watchTscSnapshot } = entrypointBuildTask({
+    name: "tscSnapshot",
+    description: "Builds the command-line compiler",
+    buildDeps: [generateDiagnostics],
+    project: "src/tsc",
+    srcEntrypoint: "./src/tscSnapshot/tsc.ts",
+    builtEntrypoint: "./built/local/tscSnapshot/tsc.js",
     output: "./built/local/tsc.js",
     mainDeps: [generateLibs],
 });
-export { tsc, watchTsc };
+
+export const tsc = task({
+    name: "tsc",
+    description: "Builds the command-line compiler",
+    dependencies: [tscReal, tscSnapshot],
+});
+
+export const watchTsc = task({
+    name: "watchTsc",
+    description: "Builds the command-line compiler",
+    dependencies: [watchTscReal, watchTscSnapshot],
+});
 
 const { main: services, build: buildServices, watch: watchServices } = entrypointBuildTask({
     name: "services",

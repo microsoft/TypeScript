@@ -9,16 +9,47 @@ ts.Debug.loggingHost = {
     },
 };
 
-if (ts.Debug.isDebugging) {
-    ts.Debug.enableDebugInfo();
+interface V8 {
+    startupSnapshot?: {
+        isBuildingSnapshot(): boolean;
+        setDeserializeMainFunction(fn: () => void): void;
+    };
 }
 
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
+let v8: V8 | undefined;
+try {
+    if (!process.versions.bun) {
+        v8 = require("v8");
+    }
+}
+catch {
+    // do nothing
 }
 
-if (ts.sys.setBlocking) {
-    ts.sys.setBlocking();
+function main() {
+    if (ts.Debug.isDebugging) {
+        ts.Debug.enableDebugInfo();
+    }
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
+
+    if (ts.sys.setBlocking) {
+        ts.sys.setBlocking();
+    }
+
+    ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
 }
 
-ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
+if (v8?.startupSnapshot?.isBuildingSnapshot()) {
+    v8.startupSnapshot.setDeserializeMainFunction(() => {
+        // When we're executed as a snapshot, argv won't contain the js file anymore.
+        process.argv.splice(1, 0, __filename);
+        ts.setSys(ts.createSystem());
+        main();
+    });
+}
+else {
+    main();
+}
