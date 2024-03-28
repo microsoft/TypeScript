@@ -111,6 +111,7 @@ import {
     createEmptyExports,
     createEvaluator,
     createFileDiagnostic,
+    createFlowNode,
     createGetCanonicalFileName,
     createGetSymbolWalker,
     createModeAwareCacheKey,
@@ -27793,7 +27794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (flags & FlowFlags.SwitchClause) {
                 // The control flow path representing an unmatched value in a switch statement with
                 // no default clause is unreachable if the switch statement is exhaustive.
-                if ((flow as FlowSwitchClause).clauseStart === (flow as FlowSwitchClause).clauseEnd && isExhaustiveSwitchStatement((flow as FlowSwitchClause).switchStatement)) {
+                if ((flow as FlowSwitchClause).node.clauseStart === (flow as FlowSwitchClause).node.clauseEnd && isExhaustiveSwitchStatement((flow as FlowSwitchClause).node.switchStatement)) {
                     return false;
                 }
                 flow = (flow as FlowSwitchClause).antecedent;
@@ -27801,7 +27802,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (flags & FlowFlags.ReduceLabel) {
                 // Cache is unreliable once we start adjusting labels
                 lastFlowNode = undefined;
-                const target = (flow as FlowReduceLabel).target;
+                const target = (flow as FlowReduceLabel).node;
                 const saveAntecedents = target.antecedents;
                 target.antecedents = (flow as FlowReduceLabel).antecedents;
                 const result = isReachableFlowNodeWorker((flow as FlowReduceLabel).antecedent, /*noCacheCheck*/ false);
@@ -27845,7 +27846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 flow = (flow as FlowLabel).antecedents![0];
             }
             else if (flags & FlowFlags.ReduceLabel) {
-                const target = (flow as FlowReduceLabel).target;
+                const target = (flow as FlowReduceLabel).node;
                 const saveAntecedents = target.antecedents;
                 target.antecedents = (flow as FlowReduceLabel).antecedents;
                 const result = isPostSuperFlowNode((flow as FlowReduceLabel).antecedent, /*noCacheCheck*/ false);
@@ -27978,7 +27979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else if (flags & FlowFlags.ReduceLabel) {
-                    const target = (flow as FlowReduceLabel).target;
+                    const target = (flow as FlowReduceLabel).node;
                     const saveAntecedents = target.antecedents;
                     target.antecedents = (flow as FlowReduceLabel).antecedents;
                     type = getTypeAtFlowNode((flow as FlowReduceLabel).antecedent);
@@ -28169,30 +28170,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-            const expr = skipParentheses(flow.switchStatement.expression);
+            const { switchStatement, clauseStart, clauseEnd } = flow.node;
+            const expr = skipParentheses(switchStatement.expression);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             let type = getTypeFromFlowType(flowType);
             if (isMatchingReference(reference, expr)) {
-                type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                type = narrowTypeBySwitchOnDiscriminant(type, switchStatement, clauseStart, clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
-                type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                type = narrowTypeBySwitchOnTypeOf(type, switchStatement, clauseStart, clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TrueKeyword) {
-                type = narrowTypeBySwitchOnTrue(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                type = narrowTypeBySwitchOnTrue(type, switchStatement, clauseStart, clauseEnd);
             }
             else {
                 if (strictNullChecks) {
                     if (optionalChainContainsReference(expr, reference)) {
-                        type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd, t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
+                        type = narrowTypeBySwitchOptionalChainContainment(type, switchStatement, clauseStart, clauseEnd, t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
                     }
                     else if (expr.kind === SyntaxKind.TypeOfExpression && optionalChainContainsReference((expr as TypeOfExpression).expression, reference)) {
-                        type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd, t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
+                        type = narrowTypeBySwitchOptionalChainContainment(type, switchStatement, clauseStart, clauseEnd, t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
                     }
                 }
                 const access = getDiscriminantPropertyAccess(expr, type);
                 if (access) {
-                    type = narrowTypeBySwitchOnDiscriminantProperty(type, access, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                    type = narrowTypeBySwitchOnDiscriminantProperty(type, access, switchStatement, clauseStart, clauseEnd);
                 }
             }
             return createFlowType(type, isIncomplete(flowType));
@@ -28204,7 +28206,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let seenIncomplete = false;
             let bypassFlow: FlowSwitchClause | undefined;
             for (const antecedent of flow.antecedents!) {
-                if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (antecedent as FlowSwitchClause).clauseStart === (antecedent as FlowSwitchClause).clauseEnd) {
+                if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (antecedent as FlowSwitchClause).node.clauseStart === (antecedent as FlowSwitchClause).node.clauseEnd) {
                     // The antecedent is the bypass branch of a potentially exhaustive switch statement.
                     bypassFlow = antecedent as FlowSwitchClause;
                     continue;
@@ -28235,7 +28237,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If the bypass flow contributes a type we haven't seen yet and the switch statement
                 // isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
                 // the risk of circularities, we only want to perform them when they make a difference.
-                if (!(type.flags & TypeFlags.Never) && !contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.switchStatement)) {
+                if (!(type.flags & TypeFlags.Never) && !contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.node.switchStatement)) {
                     if (type === declaredType && declaredType === initialType) {
                         return type;
                     }
@@ -37665,22 +37667,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
         const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
             expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
-            { flags: FlowFlags.Start };
-        const trueCondition: FlowCondition = {
-            flags: FlowFlags.TrueCondition,
-            node: expr,
-            antecedent,
-        };
+            createFlowNode(FlowFlags.Start);
+        const trueCondition = createFlowNode(FlowFlags.TrueCondition, expr, antecedent);
 
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
         if (trueType === initType) return undefined;
 
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
-        const falseCondition: FlowCondition = {
-            ...trueCondition,
-            flags: FlowFlags.FalseCondition,
-        };
+        const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
         const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
         return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }

@@ -65,10 +65,18 @@ import {
     Expression,
     ExpressionStatement,
     findAncestor,
+    FlowArrayMutation,
+    FlowAssignment,
+    FlowCall,
+    FlowCondition,
     FlowFlags,
     FlowLabel,
     FlowNode,
     FlowReduceLabel,
+    FlowStart,
+    FlowSwitchClause,
+    FlowSwitchClauseInfo,
+    FlowUnreachable,
     forEach,
     forEachChild,
     ForInOrOfStatement,
@@ -496,9 +504,16 @@ export const enum ContainerFlags {
     IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
 }
 
-function initFlowNode<T extends FlowNode>(node: T) {
-    Debug.attachFlowNodeDebugInfo(node);
-    return node;
+export function createFlowNode(flags: FlowFlags.Unreachable): FlowUnreachable;
+export function createFlowNode(flags: FlowFlags.Start): FlowStart;
+export function createFlowNode(flags: FlowFlags.BranchLabel | FlowFlags.LoopLabel): FlowLabel;
+export function createFlowNode(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, node: Expression | VariableDeclaration | BindingElement, antecedent: FlowNode): FlowAssignment | FlowArrayMutation;
+export function createFlowNode(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, node: Expression, antecedent: FlowNode): FlowCondition;
+export function createFlowNode(flags: FlowFlags.SwitchClause, node: FlowSwitchClauseInfo, antecedent: FlowNode): FlowSwitchClause;
+export function createFlowNode(flags: FlowFlags.Call, node: CallExpression, antecedent: FlowNode): FlowCall;
+export function createFlowNode(flags: FlowFlags.ReduceLabel, node: FlowLabel, antecedent: FlowNode, antecedents: FlowNode[]): FlowReduceLabel;
+export function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode {
+    return { flags, id: undefined, node, antecedent, antecedents } as FlowNode;
 }
 
 const binder = /* @__PURE__ */ createBinder();
@@ -558,8 +573,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
     var classifiableNames: Set<__String>;
 
-    var unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
-    var reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+    var unreachableFlow = createFlowNode(FlowFlags.Unreachable);
+    var reportedUnreachableFlow = createFlowNode(FlowFlags.Unreachable);
     var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
     /* eslint-enable no-var */
 
@@ -1013,7 +1028,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
             // similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
-                currentFlow = initFlowNode({ flags: FlowFlags.Start });
+                currentFlow = createFlowNode(FlowFlags.Start);
                 if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
                     currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
                 }
@@ -1319,16 +1334,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return containsNarrowableReference(expr);
     }
 
-    function createBranchLabel(): FlowLabel {
-        return initFlowNode({ flags: FlowFlags.BranchLabel, antecedents: undefined });
+    function createBranchLabel() {
+        return createFlowNode(FlowFlags.BranchLabel);
     }
 
-    function createLoopLabel(): FlowLabel {
-        return initFlowNode({ flags: FlowFlags.LoopLabel, antecedents: undefined });
+    function createLoopLabel() {
+        return createFlowNode(FlowFlags.LoopLabel);
     }
 
-    function createReduceLabel(target: FlowLabel, antecedents: FlowNode[], antecedent: FlowNode): FlowReduceLabel {
-        return initFlowNode({ flags: FlowFlags.ReduceLabel, target, antecedents, antecedent });
+    function createReduceLabel(target: FlowLabel, antecedents: FlowNode[], antecedent: FlowNode) {
+        return createFlowNode(FlowFlags.ReduceLabel, target, antecedent, antecedents);
     }
 
     function setFlowNodeReferenced(flow: FlowNode) {
@@ -1343,7 +1358,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function createFlowCondition(flags: FlowFlags, antecedent: FlowNode, expression: Expression | undefined): FlowNode {
+    function createFlowCondition(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, antecedent: FlowNode, expression: Expression | undefined) {
         if (antecedent.flags & FlowFlags.Unreachable) {
             return antecedent;
         }
@@ -1361,17 +1376,17 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             return antecedent;
         }
         setFlowNodeReferenced(antecedent);
-        return initFlowNode({ flags, antecedent, node: expression });
+        return createFlowNode(flags, expression, antecedent);
     }
 
-    function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
+    function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
         setFlowNodeReferenced(antecedent);
-        return initFlowNode({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
+        return createFlowNode(FlowFlags.SwitchClause, { switchStatement, clauseStart, clauseEnd }, antecedent);
     }
 
-    function createFlowMutation(flags: FlowFlags, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement): FlowNode {
+    function createFlowMutation(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement): FlowNode {
         setFlowNodeReferenced(antecedent);
-        const result = initFlowNode({ flags, antecedent, node });
+        const result = createFlowNode(flags, node, antecedent);
         if (currentExceptionTarget) {
             addAntecedent(currentExceptionTarget, result);
         }
@@ -1380,7 +1395,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
         setFlowNodeReferenced(antecedent);
-        return initFlowNode({ flags: FlowFlags.Call, antecedent, node });
+        return createFlowNode(FlowFlags.Call, node, antecedent);
     }
 
     function finishFlowLabel(flow: FlowLabel): FlowNode {
@@ -1695,7 +1710,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindCaseBlock(node: CaseBlock): void {
         const clauses = node.clauses;
         const isNarrowingSwitch = node.parent.expression.kind === SyntaxKind.TrueKeyword || isNarrowingExpression(node.parent.expression);
-        let fallthroughFlow = unreachableFlow;
+        let fallthroughFlow: FlowNode = unreachableFlow;
 
         for (let i = 0; i < clauses.length; i++) {
             const clauseStart = i;
@@ -2404,7 +2419,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const host = typeAlias.parent.parent;
             container = (getEnclosingContainer(host) as IsContainer | undefined) || file;
             blockScopeContainer = (getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined) || file;
-            currentFlow = initFlowNode({ flags: FlowFlags.Start });
+            currentFlow = createFlowNode(FlowFlags.Start);
             parent = typeAlias;
             bind(typeAlias.typeExpression);
             const declName = getNameOfDeclaration(typeAlias);
@@ -2476,7 +2491,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const enclosingBlockScopeContainer = host ? getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined : undefined;
             container = enclosingContainer || file;
             blockScopeContainer = enclosingBlockScopeContainer || file;
-            currentFlow = initFlowNode({ flags: FlowFlags.Start });
+            currentFlow = createFlowNode(FlowFlags.Start);
             parent = jsDocImportTag;
             bind(jsDocImportTag.importClause);
         }

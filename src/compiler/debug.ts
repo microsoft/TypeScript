@@ -10,7 +10,6 @@ import {
     FlowFlags,
     FlowLabel,
     FlowNode,
-    FlowNodeBase,
     FlowSwitchClause,
     getEffectiveModifierFlagsNoCache,
     getEmitFlags,
@@ -506,14 +505,14 @@ export namespace Debug {
 
     let isDebugInfoEnabled = false;
 
-    let flowNodeProto: FlowNodeBase | undefined;
+    let flowNodeProto: FlowNode | undefined;
 
-    function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
+    function attachFlowNodeDebugInfoWorker(flowNode: FlowNode) {
         if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
             Object.defineProperties(flowNode, {
                 // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                 __tsDebuggerDisplay: {
-                    value(this: FlowNodeBase) {
+                    value(this: FlowNode) {
                         const flowHeader = this.flags & FlowFlags.Start ? "FlowStart" :
                             this.flags & FlowFlags.BranchLabel ? "FlowBranchLabel" :
                             this.flags & FlowFlags.LoopLabel ? "FlowLoopLabel" :
@@ -531,12 +530,12 @@ export namespace Debug {
                     },
                 },
                 __debugFlowFlags: {
-                    get(this: FlowNodeBase) {
+                    get(this: FlowNode) {
                         return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true);
                     },
                 },
                 __debugToString: {
-                    value(this: FlowNodeBase) {
+                    value(this: FlowNode) {
                         return formatControlFlowGraph(this);
                     },
                 },
@@ -544,13 +543,13 @@ export namespace Debug {
         }
     }
 
-    export function attachFlowNodeDebugInfo(flowNode: FlowNodeBase) {
+    export function attachFlowNodeDebugInfo(flowNode: FlowNode) {
         if (isDebugInfoEnabled) {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `FlowNode`
                 // so the method doesn't show up in the watch window.
                 if (!flowNodeProto) {
-                    flowNodeProto = Object.create(Object.prototype) as FlowNodeBase;
+                    flowNodeProto = Object.create(Object.prototype) as FlowNode;
                     attachFlowNodeDebugInfoWorker(flowNodeProto);
                 }
                 Object.setPrototypeOf(flowNode, flowNodeProto);
@@ -1104,8 +1103,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             else if (isFlowSwitchClause(flowNode)) {
                 const clauses: string[] = [];
-                for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
-                    const clause = flowNode.switchStatement.caseBlock.clauses[i];
+                for (let i = flowNode.node.clauseStart; i < flowNode.node.clauseEnd; i++) {
+                    const clause = flowNode.node.switchStatement.caseBlock.clauses[i];
                     if (isDefaultClause(clause)) {
                         clauses.push("default");
                     }
