@@ -2020,10 +2020,11 @@ export function createLanguageService(
         if (!nodes) {
             return undefined;
         }
+        const checkedSpans = normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd())));
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
         return {
             diagnostics: semanticDiagnostics.slice(),
-            spans: normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd()))),
+            spans: checkedSpans,
         };
     }
 
@@ -2043,6 +2044,11 @@ export function createLanguageService(
         return nodes;
     }
 
+    /**
+     * Gets nodes that overlap the given span to be partially checked.
+     * @returns an array of nodes that overlap the span and are source element nodes (c.f. {@link isSourceElement}),
+     * or undefined if a partial check would be the same as a whole file check.
+     */
     function getNodesForSpan(file: SourceFile, span: TextSpan): Node[] | undefined {
         // Span is the whole file
         if (textSpanContainsTextRange(span, file)) {
@@ -2059,12 +2065,21 @@ export function createLanguageService(
             nodes.push(file.endOfFileToken);
         }
 
+        // Span would include the whole file
         if (some(nodes, isSourceFile)) {
             return undefined;
         }
 
         return nodes;
 
+        // The algorithm is the following:
+        // Starting from a node that contains the whole input span, we consider its children.
+        // If a child node is completely contained in the input span, then it or its source element ancestor should be included.
+        // If a child node does not overlap the input span, it should not be included.
+        // The interesting case is for nodes that overlap but are not contained by the span, i.e. nodes in the span boundary.
+        // For those boundary nodes, if it is a block-like node (i.e. it contains statements),
+        // we try to filter out the child statements that do not overlap the span.
+        // For boundary nodes that are not block-like, we simply include them (or their source element ancestor).
         function includeNodes(node: Node): true | undefined {
             if (!textRangeIntersectsWithTextSpan(node, span)) {
                 if (node.pos >= span.start + span.length) {
