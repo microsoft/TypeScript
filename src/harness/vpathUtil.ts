@@ -34,6 +34,7 @@ const invalidNonNavigableComponentWithWildcardsRegExp = /^\.{1,2}$|[:"<>|]/;
 const extRegExp = /\.\w+$/;
 
 export const enum ValidationFlags {
+    /** @knipignore */
     None = 0,
 
     RequireRoot = 1 << 0,
@@ -51,6 +52,7 @@ export const enum ValidationFlags {
     AllowWildcard = 1 << 11,
 
     /** Path must be a valid directory root */
+    /** @knipignore */
     Root = RequireRoot | AllowRoot | AllowTrailingSeparator,
 
     /** Path must be a absolute */
@@ -60,6 +62,7 @@ export const enum ValidationFlags {
     RelativeOrAbsolute = AllowRoot | AllowDirname | AllowBasename | AllowExtname | AllowTrailingSeparator | AllowNavigation,
 
     /** Path may only be a filename */
+    /** @knipignore */
     Basename = RequireBasename | AllowExtname,
 }
 
@@ -115,12 +118,6 @@ export function isDeclaration(path: string) {
 
 export function isSourceMap(path: string) {
     return extname(path, ".map", /*ignoreCase*/ false).length > 0;
-}
-
-const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
-
-export function isJavaScriptSourceMap(path: string) {
-    return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
 }
 
 export function isJson(path: string) {

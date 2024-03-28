@@ -45,9 +45,6 @@ import {
     toPath,
 } from "../../_namespaces/ts";
 import {
-    typingsInstaller,
-} from "../../_namespaces/ts.server";
-import {
     timeIncrements,
 } from "../../_namespaces/vfs";
 
@@ -115,7 +112,7 @@ export type FileOrFolderOrSymLink = File | Folder | SymLink;
 export interface FileOrFolderOrSymLinkMap {
     [path: string]: string | Omit<File, "path"> | Omit<SymLink, "path"> | undefined;
 }
-export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
+function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
     return isString((fileOrFolderOrSymLink as File).content);
 }
 
@@ -307,22 +304,6 @@ export enum Tsc_WatchDirectory {
     NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
     DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling",
 }
-
-export interface TestServerHostOptions {
-    useCaseSensitiveFileNames: boolean;
-    executingFilePath: string;
-    currentDirectory: string;
-    newLine?: string;
-    useWindowsStylePaths?: boolean;
-    environmentVariables?: Map<string, string>;
-}
-
-export type PendingInstallCallback = (
-    pendingInstallInfo: string,
-    installedTypingsOrSuccess: string[] | string | boolean,
-    typingFiles: readonly File[],
-    onRequestCompleted: typingsInstaller.RequestCompletedAction,
-) => void;
 
 export enum SerializeOutputOrder {
     None,

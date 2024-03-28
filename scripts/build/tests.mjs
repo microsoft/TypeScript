@@ -20,7 +20,7 @@ import {
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
-export const coverageDir = "coverage";
+const coverageDir = "coverage";
 
 /**
  * @param {string} runJs
@@ -174,7 +174,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     }
 }
 
-export async function cleanTestDirs() {
+async function cleanTestDirs() {
     await rimraf(localBaseline);
     await fs.promises.mkdir(localBaseline, { recursive: true });
 }
@@ -192,7 +192,7 @@ export async function cleanTestDirs() {
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
  */
-export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runners: runners ? runners.split(",") : undefined,

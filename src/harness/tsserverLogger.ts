@@ -27,7 +27,7 @@ export function replaceAll(source: string, searchValue: string, replaceValue: st
     return result;
 }
 
-export interface Logger extends ts.server.Logger {
+interface Logger extends ts.server.Logger {
     logs?: string[];
     log(s: string): void;
     host?: ts.server.ServerHost;
@@ -96,21 +96,7 @@ export function nowString(logger: Logger) {
     return `hh:mm:ss:mss`;
 }
 
-export function createLoggerWritingToConsole(host: ts.server.ServerHost, sanitizeLibs?: true) {
-    const logger = createHasErrorMessageLogger();
-    logger.logs = [];
-    logger.logs.push = (...args) => {
-        args.forEach(s => console.log(s));
-        return 0;
-    };
-    return handleLoggerGroup(
-        logger,
-        host,
-        sanitizeLibs,
-    ) as LoggerWithInMemoryLogs;
-}
-
-export function sanitizeLog(s: string): string {
+function sanitizeLog(s: string): string {
     s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
     s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
     s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
@@ -140,7 +126,7 @@ function sanitizeHarnessLSException(s: string) {
     return s;
 }
 
-export function sanitizeLibFileText(s: string): string {
+function sanitizeLibFileText(s: string): string {
     Compiler.libFileNameSourceFileMap?.forEach((lib, fileName) => {
         s = replaceAll(s, JSON.stringify(lib.text), `${fileName}-Text`);
         s = replaceAll(s, lib.text, `${fileName}-Text`);

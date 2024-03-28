@@ -240,7 +240,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     Baseline.runBaseline(tscBaselineName(scenario, subScenario, commandLineArgs, isWatch(commandLineArgs)), baseline.join("\r\n"));
 }
 
-export function isWatch(commandLineArgs: readonly string[]) {
+function isWatch(commandLineArgs: readonly string[]) {
     return ts.forEach(commandLineArgs, arg => {
         if (arg.charCodeAt(0) !== ts.CharacterCodes.minus) return false;
         const option = arg.slice(arg.charCodeAt(1) === ts.CharacterCodes.minus ? 2 : 1).toLowerCase();

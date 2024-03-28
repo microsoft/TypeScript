@@ -81,7 +81,7 @@ function guessIndentation(lines: string[]) {
     return indentation;
 }
 
-export function getByteOrderMarkLength(text: string): number {
+function getByteOrderMarkLength(text: string): number {
     if (text.length >= 1) {
         const ch0 = text.charCodeAt(0);
         if (ch0 === 0xfeff) return 1;
@@ -101,6 +101,7 @@ export function addUTF8ByteOrderMark(text: string) {
     return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
 }
 
+/** @knipignore -- knip doesn't understand this in src/testRunner/unittests/semver.ts: import theory = Utils.theory; */
 export function theory<T extends any[]>(name: string, cb: (...args: T) => void, data: T[]) {
     for (const entry of data) {
         it(`${name}(${entry.map(formatTheoryDatum).join(", ")})`, () => cb(...entry));

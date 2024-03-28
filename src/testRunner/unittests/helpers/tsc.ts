@@ -121,7 +121,7 @@ export function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite
 /**
  * Initialize Fs, execute command line and save baseline
  */
-export function testTscCompile(input: TestTscCompile) {
+function testTscCompile(input: TestTscCompile) {
     let actualReadFileMap: ts.MapLike<number> | undefined;
     let getPrograms: CommandLineCallbacks["getPrograms"] | undefined;
     return testTscCompileLike({

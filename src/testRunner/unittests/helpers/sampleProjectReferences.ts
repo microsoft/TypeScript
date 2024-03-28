@@ -11,7 +11,6 @@ import {
     loadProjectFromFiles,
 } from "./vfs";
 import {
-    createServerHost,
     createWatchedSystem,
     libFile,
 } from "./virtualFileSystemWithWatch";
@@ -102,15 +101,6 @@ export function getFsForSampleProjectReferences() {
 export function getSysForSampleProjectReferences(withNodeNext?: boolean) {
     return createWatchedSystem(
         getFsContentsForSampleProjectReferences(withNodeNext),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
-    );
-}
-
-export function getServerHostForSampleProjectReferences() {
-    return createServerHost(
-        getFsContentsForSampleProjectReferences(),
         {
             currentDirectory: "/user/username/projects/sample1",
         },
