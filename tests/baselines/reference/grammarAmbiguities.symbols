@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts] ////
+
+=== grammarAmbiguities.ts ===
 function f(n: any) { return null; }
 >f : Symbol(f, Decl(grammarAmbiguities.ts, 0, 0))
 >n : Symbol(n, Decl(grammarAmbiguities.ts, 0, 11))

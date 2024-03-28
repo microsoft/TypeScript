@@ -1,51 +1,51 @@
-tests/cases/compiler/awaitLiteralValues.ts(2,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/compiler/awaitLiteralValues.ts(6,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/compiler/awaitLiteralValues.ts(10,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/compiler/awaitLiteralValues.ts(14,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/compiler/awaitLiteralValues.ts(18,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/compiler/awaitLiteralValues.ts(22,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitLiteralValues.ts(2,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitLiteralValues.ts(6,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitLiteralValues.ts(10,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitLiteralValues.ts(14,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitLiteralValues.ts(18,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitLiteralValues.ts(22,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 
-==== tests/cases/compiler/awaitLiteralValues.ts (6 errors) ====
+==== awaitLiteralValues.ts (6 errors) ====
     function awaitString() {
         await 'literal';
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 tests/cases/compiler/awaitLiteralValues.ts:1:10: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitLiteralValues.ts:1:10: Did you mean to mark this function as 'async'?
     }
     
     function awaitNumber() {
         await 1;
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 tests/cases/compiler/awaitLiteralValues.ts:5:10: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitLiteralValues.ts:5:10: Did you mean to mark this function as 'async'?
     }
     
     function awaitTrue() {
         await true;
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 tests/cases/compiler/awaitLiteralValues.ts:9:10: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitLiteralValues.ts:9:10: Did you mean to mark this function as 'async'?
     }
     
     function awaitFalse() {
         await false;
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 tests/cases/compiler/awaitLiteralValues.ts:13:10: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitLiteralValues.ts:13:10: Did you mean to mark this function as 'async'?
     }
     
     function awaitNull() {
         await null;
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 tests/cases/compiler/awaitLiteralValues.ts:17:10: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitLiteralValues.ts:17:10: Did you mean to mark this function as 'async'?
     }
     
     function awaitUndefined() {
         await undefined;
         ~~~~~
 !!! error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-!!! related TS1356 tests/cases/compiler/awaitLiteralValues.ts:21:10: Did you mean to mark this function as 'async'?
+!!! related TS1356 awaitLiteralValues.ts:21:10: Did you mean to mark this function as 'async'?
     }
     

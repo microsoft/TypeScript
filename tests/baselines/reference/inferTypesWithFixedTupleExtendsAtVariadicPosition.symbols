@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTypesWithFixedTupleExtendsAtVariadicPosition.ts ===
+//// [tests/cases/compiler/inferTypesWithFixedTupleExtendsAtVariadicPosition.ts] ////
+
+=== inferTypesWithFixedTupleExtendsAtVariadicPosition.ts ===
 // repro #51138
 
 type SubTup2FixedLength<T extends unknown[]> = T extends [

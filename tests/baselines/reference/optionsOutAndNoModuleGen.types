@@ -1,5 +1,9 @@
-=== tests/cases/compiler/optionsOutAndNoModuleGen.ts ===
+//// [tests/cases/compiler/optionsOutAndNoModuleGen.ts] ////
+
+=== optionsOutAndNoModuleGen.ts ===
 export var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

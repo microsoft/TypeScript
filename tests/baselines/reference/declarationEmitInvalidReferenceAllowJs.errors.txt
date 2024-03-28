@@ -1,9 +1,9 @@
-tests/cases/compiler/declarationEmitInvalidReferenceAllowJs.ts(1,22): error TS6231: Could not resolve the path 'tests/cases/compiler/invalid' with the extensions: '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+declarationEmitInvalidReferenceAllowJs.ts(1,22): error TS6231: Could not resolve the path 'invalid' with the extensions: '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
 
 
-==== tests/cases/compiler/declarationEmitInvalidReferenceAllowJs.ts (1 errors) ====
+==== declarationEmitInvalidReferenceAllowJs.ts (1 errors) ====
     /// <reference path="invalid" />
                          ~~~~~~~
-!!! error TS6231: Could not resolve the path 'tests/cases/compiler/invalid' with the extensions: '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+!!! error TS6231: Could not resolve the path 'invalid' with the extensions: '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
     var x = 0; 
     

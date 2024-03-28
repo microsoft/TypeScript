@@ -1,48 +1,67 @@
-=== tests/cases/compiler/awaitLiteralValues.ts ===
+//// [tests/cases/compiler/awaitLiteralValues.ts] ////
+
+=== awaitLiteralValues.ts ===
 function awaitString() {
 >awaitString : () => void
+>            : ^^^^^^^^^^
 
     await 'literal';
 >await 'literal' : "literal"
+>                : ^^^^^^^^^
 >'literal' : "literal"
+>          : ^^^^^^^^^
 }
 
 function awaitNumber() {
 >awaitNumber : () => void
+>            : ^^^^^^^^^^
 
     await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 }
 
 function awaitTrue() {
 >awaitTrue : () => void
+>          : ^^^^^^^^^^
 
     await true;
 >await true : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 }
 
 function awaitFalse() {
 >awaitFalse : () => void
+>           : ^^^^^^^^^^
 
     await false;
 >await false : false
+>            : ^^^^^
 >false : false
+>      : ^^^^^
 }
 
 function awaitNull() {
 >awaitNull : () => void
+>          : ^^^^^^^^^^
 
     await null;
 >await null : null
+>           : ^^^^
 }
 
 function awaitUndefined() {
 >awaitUndefined : () => void
+>               : ^^^^^^^^^^
 
     await undefined;
 >await undefined : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 

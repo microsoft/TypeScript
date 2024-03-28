@@ -1,7 +1,11 @@
-=== tests/cases/compiler/systemModule4.ts ===
+//// [tests/cases/compiler/systemModule4.ts] ////
+
+=== systemModule4.ts ===
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export var y;
 >y : any

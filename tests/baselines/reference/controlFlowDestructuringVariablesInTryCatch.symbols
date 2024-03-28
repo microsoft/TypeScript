@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts ===
+//// [tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts] ////
+
+=== controlFlowDestructuringVariablesInTryCatch.ts ===
 declare function f1(): string;
 >f1 : Symbol(f1, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardRedundancy.ts] ////
+
 //// [typeGuardRedundancy.ts]
 var x: string|number;
 

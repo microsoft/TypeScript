@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts] ////
+
 //// [decoratorMetadataGenericTypeVariable.ts]
 export class C<TypeVariable> {
   @Decorate
@@ -18,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = exports.C = /** @class */ (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     __decorate([
@@ -27,3 +29,4 @@ var C = exports.C = /** @class */ (function () {
     ], C.prototype, "member", void 0);
     return C;
 }());
+exports.C = C;

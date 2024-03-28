@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts] ////
+
 //// [instantiateGenericClassWithWrongNumberOfTypeArguments.ts]
 // it is always an error to provide a type argument list whose count does not match the type parameter list
 // both of these attempts to construct a type is an error

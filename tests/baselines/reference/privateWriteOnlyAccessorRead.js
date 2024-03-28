@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts] ////
+
 //// [privateWriteOnlyAccessorRead.ts]
 class Test {
   set #value(v: { foo: { bar: number } }) {}

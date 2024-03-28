@@ -108,7 +108,7 @@ function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker
         propertyDeclaration.name,
         factory.createToken(SyntaxKind.ExclamationToken),
         propertyDeclaration.type,
-        propertyDeclaration.initializer
+        propertyDeclaration.initializer,
     );
     changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
 }
@@ -149,7 +149,7 @@ function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclar
         propertyDeclaration.name,
         propertyDeclaration.questionToken,
         propertyDeclaration.type,
-        initializer
+        initializer,
     );
     changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
 }

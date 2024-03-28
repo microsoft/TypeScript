@@ -1,16 +1,26 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameNotAccessibleOutsideDefiningClass.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNotAccessibleOutsideDefiningClass.ts] ////
+
+=== privateNameNotAccessibleOutsideDefiningClass.ts ===
 class A {
 >A : A
+>  : ^
 
     #foo: number = 3;
 >#foo : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 }
 
 new A().#foo = 4;               // Error
 >new A().#foo = 4 : 4
+>                 : ^
 >new A().#foo : any
+>             : ^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >4 : 4
+>  : ^
 

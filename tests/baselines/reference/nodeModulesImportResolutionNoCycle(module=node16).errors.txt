@@ -1,27 +1,27 @@
-tests/cases/conformance/node/index.cts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
-tests/cases/conformance/node/index.mts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
-tests/cases/conformance/node/index.ts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.cts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.mts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.ts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/node/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     // esm format file
     import * as type from "#type";
                           ~~~~~~~
 !!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
     type;
-==== tests/cases/conformance/node/index.mts (1 errors) ====
+==== index.mts (1 errors) ====
     // esm format file
     import * as type from "#type";
                           ~~~~~~~
 !!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
     type;
-==== tests/cases/conformance/node/index.cts (1 errors) ====
+==== index.cts (1 errors) ====
     // esm format file
     import * as type from "#type";
                           ~~~~~~~
 !!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
     type;
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,

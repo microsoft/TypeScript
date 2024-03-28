@@ -1,24 +1,33 @@
-=== tests/cases/compiler/externSyntax.ts ===
+//// [tests/cases/compiler/externSyntax.ts] ////
+
+=== externSyntax.ts ===
 declare var v;
 >v : any
+>  : ^^^
 
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class D {
 >D : D
+>  : ^
 
         public p;
 >p : any
+>  : ^^^
     }
     export class C {
 >C : C
+>  : ^
 
         public f();
 >f : () => any
+>  : ^^^^^^^^^
 
         public g() { } // error body
 >g : () => void
+>  : ^^^^^^^^^^
     }
 }
 

@@ -1,9 +1,13 @@
-=== tests/cases/compiler/switchCases.ts ===
+//// [tests/cases/compiler/switchCases.ts] ////
+
+=== switchCases.ts ===
 switch(0) {
 >0 : 0
+>  : ^
 
  case 1:
 >1 : 1
+>  : ^
 
  break;
 }

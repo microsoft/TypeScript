@@ -1,27 +1,38 @@
-=== tests/cases/compiler/generics1NoError.ts ===
+//// [tests/cases/compiler/generics1NoError.ts] ////
+
+=== generics1NoError.ts ===
 interface A { a: string; }
 >a : string
+>  : ^^^^^^
 
 interface B extends A { b: string; }
 >b : string
+>  : ^^^^^^
 
 interface C extends B { c: string; }
 >c : string
+>  : ^^^^^^
 
 interface G<T, U extends B> {
     x: T;
 >x : T
+>  : ^
 
     y: U;
 >y : U
+>  : ^
 }
 var v1: G<A, C>;               // Ok
 >v1 : G<A, C>
+>   : ^^^^^^^
 
 var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
 >v2 : G<{ a: string; }, C>
+>   : ^^^^^^^      ^^^^^^^
 >a : string
+>  : ^^^^^^
 
 var v4: G<G<A, B>, C>;         // Ok
 >v4 : G<G<A, B>, C>
+>   : ^^^^^^^^^^^^^
 

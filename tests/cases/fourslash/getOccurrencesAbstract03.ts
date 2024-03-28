@@ -15,7 +15,4 @@
 ////        [|abstract|] class B { [|abstract|] m(): void; }
 ////}
 
-const [r0, r1, r2, r3, r4, r5] = test.ranges();
-verify.rangesAreDocumentHighlights([r0, r1]);
-verify.rangesAreDocumentHighlights([r2, r3]);
-verify.rangesAreDocumentHighlights([r4, r5]);
+verify.baselineDocumentHighlights();

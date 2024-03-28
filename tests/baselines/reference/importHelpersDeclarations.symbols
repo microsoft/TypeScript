@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declaration.d.ts ===
+//// [tests/cases/compiler/importHelpersDeclarations.ts] ////
+
+=== declaration.d.ts ===
 export declare class D {
 >D : Symbol(D, Decl(declaration.d.ts, 0, 0))
 }

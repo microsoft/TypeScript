@@ -1,12 +1,21 @@
-=== tests/cases/compiler/recursiveBaseCheck4.ts ===
+//// [tests/cases/compiler/recursiveBaseCheck4.ts] ////
+
+=== recursiveBaseCheck4.ts ===
 class M<T> extends M<string> { }
 >M : M<T>
+>  : ^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 (new M).blah;
 >(new M).blah : any
+>             : ^^^
 >(new M) : M<unknown>
+>        : ^^^^^^^^^^
 >new M : M<unknown>
+>      : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >blah : any
+>     : ^^^
 

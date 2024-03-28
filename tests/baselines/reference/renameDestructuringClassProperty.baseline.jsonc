@@ -1,0 +1,78 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringClassProperty.ts ===
+// class A {
+//     /*RENAME*/<|[|fooRENAME|]: string;|>
+// }
+// class B {
+//     syntax1(a: A): void {
+//         <|let { [|fooRENAME|]: foo/*END SUFFIX*/ } = a;|>
+//     }
+//     syntax2(a: A): void {
+//         <|let { [|fooRENAME|]: foo } = a;|>
+//     }
+//     syntax11(a: A): void {
+//         <|let { [|fooRENAME|]: foo/*END SUFFIX*/ } = a;|>
+//         foo = "newString";
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringClassProperty.ts ===
+// class A {
+//     <|[|fooRENAME|]: string;|>
+// }
+// class B {
+//     syntax1(a: A): void {
+//         <|let { [|fooRENAME|]: foo/*END SUFFIX*/ } = a;|>
+//     }
+//     syntax2(a: A): void {
+//         <|let { /*RENAME*/[|fooRENAME|]: foo } = a;|>
+//     }
+//     syntax11(a: A): void {
+//         <|let { [|fooRENAME|]: foo/*END SUFFIX*/ } = a;|>
+//         foo = "newString";
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringClassProperty.ts ===
+// class A {
+//     foo: string;
+// }
+// class B {
+//     syntax1(a: A): void {
+//         <|let { /*START PREFIX*/foo: /*RENAME*/[|fooRENAME|] } = a;|>
+//     }
+//     syntax2(a: A): void {
+//         let { foo: foo } = a;
+// --- (line: 10) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringClassProperty.ts ===
+// --- (line: 8) skipped ---
+//         let { foo: foo } = a;
+//     }
+//     syntax11(a: A): void {
+//         <|let { /*START PREFIX*/foo: /*RENAME*/[|fooRENAME|] } = a;|>
+//         [|fooRENAME|] = "newString";
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringClassProperty.ts ===
+// --- (line: 8) skipped ---
+//         let { foo: foo } = a;
+//     }
+//     syntax11(a: A): void {
+//         <|let { /*START PREFIX*/foo: [|fooRENAME|] } = a;|>
+//         /*RENAME*/[|fooRENAME|] = "newString";
+//     }
+// }

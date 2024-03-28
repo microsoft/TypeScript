@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesES6.ts] ////
+
 //// [objectLiteralShorthandPropertiesES6.ts]
 var a, b, c;
 

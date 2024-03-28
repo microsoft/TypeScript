@@ -1,52 +1,77 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxNoElisionESM.ts] ////
+
 === /a.ts ===
 export const a = 0;
 >a : 0
+>  : ^
 >0 : 0
+>  : ^
 
 export type A = typeof a;
 >A : 0
+>  : ^
 >a : 0
+>  : ^
 
 export class AClass {}
 >AClass : AClass
+>       : ^^^^^^
 
 === /b.ts ===
 import { a, A, AClass } from "./a";
 >a : 0
+>  : ^
 >A : any
+>  : ^^^
 >AClass : typeof AClass
+>       : ^^^^^^^^^^^^^
 
 import type { a as aValue, A as AType } from "./a";
 >a : 0
+>  : ^
 >aValue : any
+>       : ^^^
 >A : any
+>  : ^^^
 >AType : 0
+>      : ^
 
 import { type A as AType2 } from "./a";
 >A : any
+>  : ^^^
 >AType2 : any
+>       : ^^^
 
 export { A };
 >A : any
+>  : ^^^
 
 export { A as A2 } from "./a";
 >A : any
+>  : ^^^
 >A2 : any
+>   : ^^^
 
 export type { A as A3 } from "./a";
 >A : any
+>  : ^^^
 >A3 : 0
+>   : ^
 
 export { type A as A4 } from "./a";
 >A : any
+>  : ^^^
 >A4 : any
+>   : ^^^
 
 export type { AClass } from "./a";
 >AClass : AClass
+>       : ^^^^^^
 
 === /c.ts ===
 import { AClass } from "./b";
 >AClass : typeof AClass
+>       : ^^^^^^^^^^^^^
 
 === /main4.ts ===
 
@@ -55,16 +80,20 @@ export default 1; // ok
 === /main5.ts ===
 export default class C {} // ok
 >C : C
+>  : ^
 
 === /main6.ts ===
 interface I {}
 export default I; // error
 >I : I
+>  : ^
 
 === /main7.ts ===
 import type C from "./main5";
 >C : C
+>  : ^
 
 export default C; // error
 >C : C
+>  : ^
 

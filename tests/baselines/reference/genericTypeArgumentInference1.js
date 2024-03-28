@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeArgumentInference1.ts] ////
+
 //// [genericTypeArgumentInference1.ts]
 module Underscore {
     export interface Iterator<T, U> {

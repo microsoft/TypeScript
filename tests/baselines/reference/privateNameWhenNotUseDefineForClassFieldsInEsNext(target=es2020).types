@@ -1,73 +1,111 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts] ////
+
+=== privateNameWhenNotUseDefineForClassFieldsInEsNext.ts ===
 class TestWithStatics {
 >TestWithStatics : TestWithStatics
+>                : ^^^^^^^^^^^^^^^
 
     #prop = 0
 >#prop : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     static dd = new TestWithStatics().#prop; // OK
 >dd : number
+>   : ^^^^^^
 >new TestWithStatics().#prop : number
+>                            : ^^^^^^
 >new TestWithStatics() : TestWithStatics
+>                      : ^^^^^^^^^^^^^^^
 >TestWithStatics : typeof TestWithStatics
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
     static ["X_ z_ zz"] = class Inner {
 >["X_ z_ zz"] : typeof Inner
+>             : ^^^^^^^^^^^^
 >"X_ z_ zz" : "X_ z_ zz"
+>           : ^^^^^^^^^^
 >class Inner {        #foo  = 10        m() {            new TestWithStatics().#prop // OK        }        static C = class InnerInner {            m() {                new TestWithStatics().#prop // OK                new Inner().#foo; // OK            }        }        static M(){            return class {                m() {                    new TestWithStatics().#prop // OK                    new Inner().#foo; // OK                }            }        }    } : typeof Inner
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
         #foo  = 10
 >#foo : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
         m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
             new TestWithStatics().#prop // OK
 >new TestWithStatics().#prop : number
+>                            : ^^^^^^
 >new TestWithStatics() : TestWithStatics
+>                      : ^^^^^^^^^^^^^^^
 >TestWithStatics : typeof TestWithStatics
+>                : ^^^^^^^^^^^^^^^^^^^^^^
         }
         static C = class InnerInner {
 >C : typeof InnerInner
+>  : ^^^^^^^^^^^^^^^^^
 >class InnerInner {            m() {                new TestWithStatics().#prop // OK                new Inner().#foo; // OK            }        } : typeof InnerInner
+>                                                                                                                                                  : ^^^^^^^^^^^^^^^^^
 >InnerInner : typeof InnerInner
+>           : ^^^^^^^^^^^^^^^^^
 
             m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
                 new TestWithStatics().#prop // OK
 >new TestWithStatics().#prop : number
+>                            : ^^^^^^
 >new TestWithStatics() : TestWithStatics
+>                      : ^^^^^^^^^^^^^^^
 >TestWithStatics : typeof TestWithStatics
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
                 new Inner().#foo; // OK
 >new Inner().#foo : number
+>                 : ^^^^^^
 >new Inner() : Inner
+>            : ^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
             }
         }
 
         static M(){
 >M : () => typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             return class {
 >class {                m() {                    new TestWithStatics().#prop // OK                    new Inner().#foo; // OK                }            } : typeof (Anonymous class)
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
                 m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
                     new TestWithStatics().#prop // OK
 >new TestWithStatics().#prop : number
+>                            : ^^^^^^
 >new TestWithStatics() : TestWithStatics
+>                      : ^^^^^^^^^^^^^^^
 >TestWithStatics : typeof TestWithStatics
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
                     new Inner().#foo; // OK
 >new Inner().#foo : number
+>                 : ^^^^^^
 >new Inner() : Inner
+>            : ^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
                 }
             }
         }
@@ -76,73 +114,109 @@ class TestWithStatics {
 
 class TestNonStatics {
 >TestNonStatics : TestNonStatics
+>               : ^^^^^^^^^^^^^^
 
     #prop = 0
 >#prop : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     dd = new TestNonStatics().#prop; // OK
 >dd : number
+>   : ^^^^^^
 >new TestNonStatics().#prop : number
+>                           : ^^^^^^
 >new TestNonStatics() : TestNonStatics
+>                     : ^^^^^^^^^^^^^^
 >TestNonStatics : typeof TestNonStatics
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
     ["X_ z_ zz"] = class Inner {
 >["X_ z_ zz"] : typeof Inner
+>             : ^^^^^^^^^^^^
 >"X_ z_ zz" : "X_ z_ zz"
+>           : ^^^^^^^^^^
 >class Inner {        #foo  = 10        m() {            new TestNonStatics().#prop // Ok        }        C = class InnerInner {            m() {                new TestNonStatics().#prop // Ok                new Inner().#foo; // Ok            }        }        static M(){            return class {                m() {                    new TestNonStatics().#prop // OK                    new Inner().#foo; // OK                }            }        }    } : typeof Inner
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
         #foo  = 10
 >#foo : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
         m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
             new TestNonStatics().#prop // Ok
 >new TestNonStatics().#prop : number
+>                           : ^^^^^^
 >new TestNonStatics() : TestNonStatics
+>                     : ^^^^^^^^^^^^^^
 >TestNonStatics : typeof TestNonStatics
+>               : ^^^^^^^^^^^^^^^^^^^^^
         }
         C = class InnerInner {
 >C : typeof InnerInner
+>  : ^^^^^^^^^^^^^^^^^
 >class InnerInner {            m() {                new TestNonStatics().#prop // Ok                new Inner().#foo; // Ok            }        } : typeof InnerInner
+>                                                                                                                                                 : ^^^^^^^^^^^^^^^^^
 >InnerInner : typeof InnerInner
+>           : ^^^^^^^^^^^^^^^^^
 
             m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
                 new TestNonStatics().#prop // Ok
 >new TestNonStatics().#prop : number
+>                           : ^^^^^^
 >new TestNonStatics() : TestNonStatics
+>                     : ^^^^^^^^^^^^^^
 >TestNonStatics : typeof TestNonStatics
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
                 new Inner().#foo; // Ok
 >new Inner().#foo : number
+>                 : ^^^^^^
 >new Inner() : Inner
+>            : ^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
             }
         }
 
         static M(){
 >M : () => typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             return class {
 >class {                m() {                    new TestNonStatics().#prop // OK                    new Inner().#foo; // OK                }            } : typeof (Anonymous class)
+>                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
                 m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
                     new TestNonStatics().#prop // OK
 >new TestNonStatics().#prop : number
+>                           : ^^^^^^
 >new TestNonStatics() : TestNonStatics
+>                     : ^^^^^^^^^^^^^^
 >TestNonStatics : typeof TestNonStatics
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
                     new Inner().#foo; // OK
 >new Inner().#foo : number
+>                 : ^^^^^^
 >new Inner() : Inner
+>            : ^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
                 }
             }
         }

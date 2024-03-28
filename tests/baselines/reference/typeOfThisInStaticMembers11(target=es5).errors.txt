@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(6,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(12,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(13,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(13,26): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(14,22): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(35,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+typeOfThisInStaticMembers11.ts(6,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+typeOfThisInStaticMembers11.ts(12,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+typeOfThisInStaticMembers11.ts(13,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+typeOfThisInStaticMembers11.ts(13,26): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+typeOfThisInStaticMembers11.ts(14,22): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+typeOfThisInStaticMembers11.ts(35,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts (6 errors) ====
+==== typeOfThisInStaticMembers11.ts (6 errors) ====
     declare const foo: any;
     
     @foo

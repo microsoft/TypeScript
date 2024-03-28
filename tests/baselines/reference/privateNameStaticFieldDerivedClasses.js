@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts] ////
+
 //// [privateNameStaticFieldDerivedClasses.ts]
 class Base {
     static #prop: number = 123;
@@ -32,14 +34,14 @@ var _a, _Base_prop, _b, _Derived_derivedProp;
 class Base {
     static method(x) {
         Derived.; // error
-        __classPrivateFieldSet(Base, _a, 10, "f", _Base_prop);
+        __classPrivateFieldSet(_a, _a, 10, "f", _Base_prop);
     }
 }
 _a = Base;
 _Base_prop = { value: 123 };
 class Derived extends Base {
     static method(x) {
-        __classPrivateFieldGet(Derived, _b, "f", _Derived_derivedProp);
+        __classPrivateFieldGet(_b, _b, "f", _Derived_derivedProp);
         Base. = 10; // error
     }
 }

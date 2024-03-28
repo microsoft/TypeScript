@@ -1,7 +1,7 @@
 import {
     ANONYMOUS,
     Debug,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     emptyArray,
     factory,
@@ -30,19 +30,20 @@ registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixImplicitThis(context) {
         const { sourceFile, program, span } = context;
-        let diagnostic: DiagnosticAndArguments | undefined;
+        let diagnostic: DiagnosticOrDiagnosticAndArguments | undefined;
         const changes = textChanges.ChangeTracker.with(context, t => {
             diagnostic = doChange(t, sourceFile, span.start, program.getTypeChecker());
         });
         return diagnostic ? [createCodeFixAction(fixId, changes, diagnostic, fixId, Diagnostics.Fix_all_implicit_this_errors)] : emptyArray;
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        doChange(changes, diag.file, diag.start, context.program.getTypeChecker());
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            doChange(changes, diag.file, diag.start, context.program.getTypeChecker());
+        }),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticAndArguments | undefined {
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticOrDiagnosticAndArguments | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (!isThis(token)) return undefined;
 

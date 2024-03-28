@@ -1,9 +1,14 @@
-=== tests/cases/compiler/numericMethodName1.ts ===
+//// [tests/cases/compiler/numericMethodName1.ts] ////
+
+=== numericMethodName1.ts ===
 class C {
 >C : C
+>  : ^
 
   1 = 2;
 >1 : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }
 

@@ -1,103 +1,164 @@
-=== tests/cases/conformance/types/primitives/enum/validEnumAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/enum/validEnumAssignments.ts] ////
+
+=== validEnumAssignments.ts ===
 enum E {
 >E : E
+>  : ^
 
     A,
 >A : E.A
+>  : ^^^
 
     B
 >B : E.B
+>  : ^^^
 }
 
 var n: number;
 >n : number
+>  : ^^^^^^
 
 var a: any;
 >a : any
+>  : ^^^
 
 var e: E;
 >e : E
+>  : ^
 
 n = e;
 >n = e : E
+>      : ^
 >n : number
+>  : ^^^^^^
 >e : E
+>  : ^
 
 n = E.A;
 >n = E.A : E.A
+>        : ^^^
 >n : number
+>  : ^^^^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
 a = n;
 >a = n : number
+>      : ^^^^^^
 >a : any
+>  : ^^^
 >n : number
+>  : ^^^^^^
 
 a = e;
 >a = e : E
+>      : ^
 >a : any
+>  : ^^^
 >e : E
+>  : ^
 
 a = E.A;
 >a = E.A : E.A
+>        : ^^^
 >a : any
+>  : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
 e = e;
 >e = e : E
+>      : ^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 e = E.A;
 >e = E.A : E.A
+>        : ^^^
 >e : E
+>  : ^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 
 e = E.B;
 >e = E.B : E.B
+>        : ^^^
 >e : E
+>  : ^
 >E.B : E.B
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >B : E.B
+>  : ^^^
 
 e = n;
 >e = n : number
+>      : ^^^^^^
 >e : E
+>  : ^
 >n : number
+>  : ^^^^^^
 
 e = null;
 >e = null : null
+>         : ^^^^
 >e : E
+>  : ^
 
 e = undefined;
 >e = undefined : undefined
+>              : ^^^^^^^^^
 >e : E
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 e = 1;
 >e = 1 : 1
+>      : ^
 >e : E
+>  : ^
 >1 : 1
+>  : ^
 
 e = 1.;
 >e = 1. : 1
+>       : ^
 >e : E
+>  : ^
 >1. : 1
+>   : ^
 
 e = 1.0;
 >e = 1.0 : 1
+>        : ^
 >e : E
+>  : ^
 >1.0 : 1
+>    : ^
 
 e = -1;
 >e = -1 : -1
+>       : ^^
 >e : E
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 

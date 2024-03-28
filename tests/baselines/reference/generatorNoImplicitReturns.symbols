@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorNoImplicitReturns.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorNoImplicitReturns.ts] ////
+
+=== generatorNoImplicitReturns.ts ===
  
 function* testGenerator () { 
 >testGenerator : Symbol(testGenerator, Decl(generatorNoImplicitReturns.ts, 0, 0))

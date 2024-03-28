@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts] ////
+
 //// [instantiationExpressions.ts]
 declare function fx<T>(x: T): T;
 declare function fx<T>(x: T, n: number): T;

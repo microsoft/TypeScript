@@ -1,12 +1,18 @@
-=== tests/cases/compiler/unusedPrivateMethodInClass1.ts ===
+//// [tests/cases/compiler/unusedPrivateMethodInClass1.ts] ////
+
+=== unusedPrivateMethodInClass1.ts ===
 class greeter {
 >greeter : greeter
+>        : ^^^^^^^
 
     private function1() {
 >function1 : () => void
+>          : ^^^^^^^^^^
 
         var y = 10;
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }

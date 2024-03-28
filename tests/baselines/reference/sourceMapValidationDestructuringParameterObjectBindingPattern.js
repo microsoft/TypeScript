@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts] ////
+
 //// [sourceMapValidationDestructuringParameterObjectBindingPattern.ts]
 interface Robot {
     name: string;

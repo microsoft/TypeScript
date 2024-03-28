@@ -1,23 +1,34 @@
-=== tests/cases/compiler/moduleClassArrayCodeGenTest.ts ===
+//// [tests/cases/compiler/moduleClassArrayCodeGenTest.ts] ////
+
+=== moduleClassArrayCodeGenTest.ts ===
 // Invalid code gen for Array of Module class
 
 module M
 >M : typeof M
+>  : ^^^^^^^^
 {
     export class A { }
 >A : A
+>  : ^
 
     class B{ }
 >B : B
+>  : ^
 }
 
 var t: M.A[] = [];
 >t : M.A[]
+>  : ^^^^^
 >M : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 var t2: M.B[] = [];
 >t2 : M.B[]
+>   : ^^^^^
 >M : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

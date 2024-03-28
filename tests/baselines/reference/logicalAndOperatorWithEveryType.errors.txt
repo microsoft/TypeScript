@@ -1,16 +1,16 @@
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts (10 errors) ====
+==== logicalAndOperatorWithEveryType.ts (10 errors) ====
     // The && operator permits the operands to be of any type and produces a result of the same
     // type as the second operand.
     

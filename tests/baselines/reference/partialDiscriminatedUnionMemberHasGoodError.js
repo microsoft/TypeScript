@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts] ////
+
 //// [partialDiscriminatedUnionMemberHasGoodError.ts]
 interface TypeA {
     type: "A";

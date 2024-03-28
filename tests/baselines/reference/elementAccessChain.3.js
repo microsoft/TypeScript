@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.3.ts] ////
+
 //// [elementAccessChain.3.ts]
 declare const obj: any;
 

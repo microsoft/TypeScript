@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts] ////
+
 //// [exponentiationOperatorWithNullValueAndValidOperands.ts]
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.

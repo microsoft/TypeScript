@@ -1,19 +1,24 @@
-=== tests/cases/compiler/errors.d.ts ===
-// #42957
+//// [tests/cases/compiler/importPropertyFromMappedType.ts] ////
 
+=== errors.d.ts ===
 export = createHttpError;
 >createHttpError : createHttpError.NamedConstructors
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const createHttpError: createHttpError.NamedConstructors;
 >createHttpError : createHttpError.NamedConstructors
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createHttpError : any
+>                : ^^^
 
 declare namespace createHttpError {
     type NamedConstructors =  { [P in 'NotFound']: unknown;}
->NamedConstructors : { NotFound: unknown; }
+>NamedConstructors : NamedConstructors
+>                  : ^^^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { NotFound } from './errors'
 >NotFound : unknown
+>         : ^^^^^^^
 

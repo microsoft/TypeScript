@@ -1,12 +1,16 @@
-=== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts] ////
+
+=== templateStringInYieldKeyword.ts ===
 function* gen() {
 >gen : () => Generator<string, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Once this is supported, the inner expression does not need to be parenthesized.
     var x = yield `abc${ x }def`;
 >x : any
 >yield `abc${ x }def` : any
 >`abc${ x }def` : string
+>               : ^^^^^^
 >x : any
 }
 

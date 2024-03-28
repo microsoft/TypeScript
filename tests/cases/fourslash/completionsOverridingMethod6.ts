@@ -2,84 +2,149 @@
 
 // @Filename: a.ts
 // @newline: LF
-// Case: modifier inheritance/deduplication
-////class A {
-////    public method(): number {
-////        return 0;
-////    }
-////}
-////
-////abstract class B extends A {
-////    [|public abstract|] /*b*/
-////}
-////
-////class C extends A {
-////    [|public override m|]/*a*/
-////}
-////
-////interface D {
-////    fun(a: number): number;
-////    fun(a: undefined, b: string): number;
-////}
-////
-////class E implements D {
-////    [|public f|]/*c*/
-////}
+// Case: modifiers
+//// class Base {
+////     method() {}
+////     protected prop = 1;
+//// }
 
-verify.completions({
-    marker: "a",
-    isNewIdentifierLocation: true,
-    preferences: {
-        includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: false,
-        includeCompletionsWithClassMemberSnippets: true,
-    },
-    includes: [
-        {
-            name: "method",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[1],
-            insertText: "public override method(): number {\n}",
-        },
-    ],
-});
+//// class A extends Base {
+////     public abstract /*a*/
+//// }
 
-verify.completions({
-    marker: "b",
-    isNewIdentifierLocation: true,
-    preferences: {
-        includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: false,
-        includeCompletionsWithClassMemberSnippets: true,
-    },
-    includes: [
-        {
-            name: "method",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[0],
-            insertText: "public abstract method(): number;",
-        },
-    ],
-});
+//// abstract class Ab extends Base {
+////     public abstract /*b*/
+//// }
 
-verify.completions({
-    marker: "c",
-    isNewIdentifierLocation: true,
-    preferences: {
-        includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: false,
-        includeCompletionsWithClassMemberSnippets: true,
-    },
-    includes: [
-        {
-            name: "fun",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[2],
-            insertText:
-`public fun(a: number): number;
-public fun(a: undefined, b: string): number;
-public fun(a: unknown, b?: unknown): number {
-}`,
+//// class B extends Base {
+////     public override m/*c*/
+//// }
+
+//// class C extends Base {
+////     override /*d*/
+//// }
+
+//// class f extends Base {
+////     protected /*f*/
+//// }
+
+verify.completions(
+    {
+        marker: "a",
+        isNewIdentifierLocation: true,
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: false,
+            includeCompletionsWithClassMemberSnippets: true,
         },
-    ],
-});
+        excludes: ["method", "prop"],
+    },
+    {
+        marker: "b",
+        isNewIdentifierLocation: true,
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: false,
+            includeCompletionsWithClassMemberSnippets: true,
+        },
+        includes: [
+            {
+                name: "method",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "public abstract method(): void;",
+                filterText: "method",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+            {
+                name: "prop",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "public abstract prop: number;",
+                filterText: "prop",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+        ],
+    },
+    {
+        marker: "c",
+        isNewIdentifierLocation: true,
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: false,
+            includeCompletionsWithClassMemberSnippets: true,
+        },
+        includes: [
+            {
+                name: "method",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "public override method(): void {\n}",
+                filterText: "method",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+            {
+                name: "prop",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "public override prop: number;",
+                filterText: "prop",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+        ]
+    },
+    {
+        marker: "d",
+        isNewIdentifierLocation: true,
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: false,
+            includeCompletionsWithClassMemberSnippets: true,
+        },
+        includes: [
+            {
+                name: "method",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "override method(): void {\n}",
+                filterText: "method",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+            {
+                name: "prop",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "protected override prop: number;",
+                filterText: "prop",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+        ]
+    },
+    {
+        marker: "f",
+        isNewIdentifierLocation: true,
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: false,
+            includeCompletionsWithClassMemberSnippets: true,
+        },
+        excludes: ["method"],
+        includes: [
+            {
+                name: "prop",
+                sortText: completion.SortText.LocationPriority,
+                insertText: "protected prop: number;",
+                filterText: "prop",
+                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
+            },
+        ]
+    },
+);

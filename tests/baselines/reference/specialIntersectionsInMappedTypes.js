@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specialIntersectionsInMappedTypes.ts] ////
+
 //// [specialIntersectionsInMappedTypes.ts]
 // Repro from #50683
 

@@ -1,22 +1,32 @@
-=== tests/cases/compiler/exportEqualsClassRedeclarationError.ts ===
+//// [tests/cases/compiler/exportEqualsClassRedeclarationError.ts] ////
+
+=== exportEqualsClassRedeclarationError.ts ===
 class SomeClass {
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 
     static get someProp(): number {
 >someProp : number
+>         : ^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 
     static set someProp(value: number) {}
 >someProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     static set someProp(value: number) {}
 >someProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 export = SomeClass;
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 

@@ -1,23 +1,35 @@
-=== tests/cases/compiler/staticMemberAccessOffDerivedType1.ts ===
+//// [tests/cases/compiler/staticMemberAccessOffDerivedType1.ts] ////
+
+=== staticMemberAccessOffDerivedType1.ts ===
 class SomeBase {
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     static GetNumber() {
 >GetNumber : () => number
+>          : ^^^^^^^^^^^^
 
         return 2;
 >2 : 2
+>  : ^
     }
 }
 class P extends SomeBase {
 >P : P
+>  : ^
 >SomeBase : SomeBase
+>         : ^^^^^^^^
 
     static SomeNumber = P.GetNumber();
 >SomeNumber : number
+>           : ^^^^^^
 >P.GetNumber() : number
+>              : ^^^^^^
 >P.GetNumber : () => number
+>            : ^^^^^^^^^^^^
 >P : typeof P
+>  : ^^^^^^^^
 >GetNumber : () => number
+>          : ^^^^^^^^^^^^
 }
 

@@ -1,8 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedMultiplication.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedMultiplication.ts] ////
+
+=== templateStringWithEmbeddedMultiplication.ts ===
 var x = `abc${ 7 * 6 }def`;
 >x : string
->`abc${ 7 * 6 }def` : string
+>  : ^^^^^^
+>`abc${ 7 * 6 }def` : "abc42def"
+>                   : ^^^^^^^^^^
 >7 * 6 : number
+>      : ^^^^^^
 >7 : 7
+>  : ^
 >6 : 6
+>  : ^
 

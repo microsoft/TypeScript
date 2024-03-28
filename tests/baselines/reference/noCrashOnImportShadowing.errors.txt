@@ -1,10 +1,10 @@
-tests/cases/compiler/index.ts(9,10): error TS2709: Cannot use namespace 'OriginalB' as a type.
+index.ts(9,10): error TS2709: Cannot use namespace 'OriginalB' as a type.
 
 
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export const zzz = 123;
     
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     import * as B from "./b";
     
     interface B {
@@ -16,7 +16,7 @@ tests/cases/compiler/index.ts(9,10): error TS2709: Cannot use namespace 'Origina
     
     export { B };
     
-==== tests/cases/compiler/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     import { B } from "./a";
     
     const x: B = { x: "" };

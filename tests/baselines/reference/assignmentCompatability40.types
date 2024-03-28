@@ -1,40 +1,67 @@
-=== tests/cases/compiler/assignmentCompatability40.ts ===
+//// [tests/cases/compiler/assignmentCompatability40.ts] ////
+
+=== assignmentCompatability40.ts ===
 module __test1__ {
 >__test1__ : typeof __test1__
+>          : ^^^^^^^^^^^^^^^^
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
 >one : T
+>    : ^
 >two : U
+>    : ^
 >obj4 : interfaceWithPublicAndOptional<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ one: 1 } : { one: number; }
+>           : ^^^^^^^^^^^^^^^^
 >one : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     export var __val__obj4 = obj4;
 >__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj4 : interfaceWithPublicAndOptional<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 module __test2__ {
 >__test2__ : typeof __test2__
+>          : ^^^^^^^^^^^^^^^^
 
     export           class classWithPrivate<T> { constructor(private one: T) {} }                       var x5 = new classWithPrivate(1);;
 >classWithPrivate : classWithPrivate<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 >one : T
+>    : ^
 >x5 : classWithPrivate<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >new classWithPrivate(1) : classWithPrivate<number>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >classWithPrivate : typeof classWithPrivate
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     export var __val__x5 = x5;
 >__val__x5 : classWithPrivate<number>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x5 : classWithPrivate<number>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 __test2__.__val__x5 = __test1__.__val__obj4
 >__test2__.__val__x5 = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__x5 : __test2__.classWithPrivate<number>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__ : typeof __test2__
+>          : ^^^^^^^^^^^^^^^^
 >__val__x5 : __test2__.classWithPrivate<number>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__
+>          : ^^^^^^^^^^^^^^^^
 >__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

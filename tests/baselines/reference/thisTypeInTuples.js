@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInTuples.ts] ////
+
 //// [thisTypeInTuples.ts]
 interface Array<T> {
     slice(): this;

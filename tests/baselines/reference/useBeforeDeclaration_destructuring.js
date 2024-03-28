@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDeclaration_destructuring.ts] ////
+
 //// [useBeforeDeclaration_destructuring.ts]
 a;
 let {a, b = a} = {a: '', b: 1};

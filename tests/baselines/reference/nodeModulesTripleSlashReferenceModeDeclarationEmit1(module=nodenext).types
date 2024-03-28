@@ -1,11 +1,14 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit1.ts] ////
+
 === /index.ts ===
 
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends RequireInterface {}
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : any
+>       : ^^^
 
     interface RequireInterface {}
 }

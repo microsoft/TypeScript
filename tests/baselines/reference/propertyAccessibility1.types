@@ -1,18 +1,29 @@
-=== tests/cases/compiler/propertyAccessibility1.ts ===
+//// [tests/cases/compiler/propertyAccessibility1.ts] ////
+
+=== propertyAccessibility1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   private privProp = 0;
 >privProp : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 }
 var f = new Foo();
 >f : Foo
+>  : ^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 f.privProp;
 >f.privProp : number
+>           : ^^^^^^
 >f : Foo
+>  : ^^^
 >privProp : number
+>         : ^^^^^^
 

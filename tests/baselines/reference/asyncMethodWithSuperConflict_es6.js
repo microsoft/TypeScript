@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/asyncMethodWithSuperConflict_es6.ts] ////
+
 //// [asyncMethodWithSuperConflict_es6.ts]
 class A {
     x() {

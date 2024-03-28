@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letConstInCaseClauses.ts ===
+//// [tests/cases/compiler/letConstInCaseClauses.ts] ////
+
+=== letConstInCaseClauses.ts ===
 var x = 10;
 >x : Symbol(x, Decl(letConstInCaseClauses.ts, 0, 3))
 

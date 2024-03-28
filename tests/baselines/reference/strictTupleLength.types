@@ -1,65 +1,101 @@
-=== tests/cases/conformance/types/tuple/strictTupleLength.ts ===
+//// [tests/cases/conformance/types/tuple/strictTupleLength.ts] ////
+
+=== strictTupleLength.ts ===
 var t0: [];
 >t0 : []
+>   : ^^
 
 var t1: [number];
 >t1 : [number]
+>   : ^^^^^^^^
 
 var t2: [number, number];
 >t2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 
 var arr: number[];
 >arr : number[]
+>    : ^^^^^^^^
 
 var len0: 0 = t0.length;
 >len0 : 0
+>     : ^
 >t0.length : 0
+>          : ^
 >t0 : []
+>   : ^^
 >length : 0
+>       : ^
 
 var len1: 1 = t1.length;
 >len1 : 1
+>     : ^
 >t1.length : 1
+>          : ^
 >t1 : [number]
+>   : ^^^^^^^^
 >length : 1
+>       : ^
 
 var len2: 2 = t2.length;
 >len2 : 2
+>     : ^
 >t2.length : 2
+>          : ^
 >t2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 >length : 2
+>       : ^
 
 var lena: number = arr.length;
 >lena : number
+>     : ^^^^^^
 >arr.length : number
+>           : ^^^^^^
 >arr : number[]
+>    : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 
 var t1 = t2; // error
 >t1 : [number]
+>   : ^^^^^^^^
 >t2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 
 var t2 = t1; // error
 >t2 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 >t1 : [number]
+>   : ^^^^^^^^
 
 type A<T extends any[]> = T['length'];
 >A : A<T>
+>  : ^^^^
 
 var b: A<[boolean]>;
 >b : 1
+>  : ^
 
 var c: 1 = b;
 >c : 1
+>  : ^
 >b : 1
+>  : ^
 
 t1 = arr; // error with or without strict
 >t1 = arr : number[]
+>         : ^^^^^^^^
 >t1 : [number]
+>   : ^^^^^^^^
 >arr : number[]
+>    : ^^^^^^^^
 
 arr = t1; // ok with or without strict
 >arr = t1 : [number]
+>         : ^^^^^^^^
 >arr : number[]
+>    : ^^^^^^^^
 >t1 : [number]
+>   : ^^^^^^^^
 

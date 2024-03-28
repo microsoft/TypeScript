@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringAssignment_private.ts ===
+//// [tests/cases/compiler/destructuringAssignment_private.ts] ////
+
+=== destructuringAssignment_private.ts ===
 class C {
 >C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
 

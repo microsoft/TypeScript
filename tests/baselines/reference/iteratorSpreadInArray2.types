@@ -1,74 +1,109 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInArray2.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInArray2.ts] ////
+
+=== iteratorSpreadInArray2.ts ===
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
+>               : ^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: symbol; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: Symbol(),
 >value : symbol
+>      : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 class NumberIterator {
 >NumberIterator : NumberIterator
+>               : ^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: number; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: 0,            done: false        } : { value: number; done: boolean; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: 0,
 >value : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var array = [...new NumberIterator, ...new SymbolIterator];
 >array : (number | symbol)[]
+>      : ^^^^^^^^^^^^^^^^^^^
 >[...new NumberIterator, ...new SymbolIterator] : (number | symbol)[]
+>                                               : ^^^^^^^^^^^^^^^^^^^
 >...new NumberIterator : number
+>                      : ^^^^^^
 >new NumberIterator : NumberIterator
+>                   : ^^^^^^^^^^^^^^
 >NumberIterator : typeof NumberIterator
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >...new SymbolIterator : symbol
+>                      : ^^^^^^
 >new SymbolIterator : SymbolIterator
+>                   : ^^^^^^^^^^^^^^
 >SymbolIterator : typeof SymbolIterator
+>               : ^^^^^^^^^^^^^^^^^^^^^
 

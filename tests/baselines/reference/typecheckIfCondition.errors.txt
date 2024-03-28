@@ -1,8 +1,8 @@
-tests/cases/compiler/typecheckIfCondition.ts(4,10): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/typecheckIfCondition.ts(4,26): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+typecheckIfCondition.ts(4,10): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+typecheckIfCondition.ts(4,26): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
-==== tests/cases/compiler/typecheckIfCondition.ts (2 errors) ====
+==== typecheckIfCondition.ts (2 errors) ====
     // both uses of module should be an undefined symbol
     function myWrapper()
     {

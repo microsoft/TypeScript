@@ -1,15 +1,22 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts] ////
+
+=== collisionCodeGenModuleWithEnumMemberConflict.ts ===
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     enum e {
 >e : e
+>  : ^
 
         m1, 
 >m1 : e.m1
+>   : ^^^^
 
         m2 = m1
 >m2 : e.m1
+>   : ^^^^
 >m1 : e
+>   : ^
     }
 }

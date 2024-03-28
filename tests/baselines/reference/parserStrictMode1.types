@@ -1,17 +1,27 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts] ////
+
+=== parserStrictMode1.ts ===
 foo1();
 >foo1() : any
+>       : ^^^
 >foo1 : any
+>     : ^^^
 
 foo1();
 >foo1() : any
+>       : ^^^
 >foo1 : any
+>     : ^^^
 
 foo1();
 >foo1() : any
+>       : ^^^
 >foo1 : any
+>     : ^^^
 
 static();
 >static() : any
+>         : ^^^
 >static : any
+>       : ^^^
 

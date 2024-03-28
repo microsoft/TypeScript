@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorDeclarationOrder.ts] ////
+
 //// [accessorDeclarationOrder.ts]
 class C1 {
     #name: string;

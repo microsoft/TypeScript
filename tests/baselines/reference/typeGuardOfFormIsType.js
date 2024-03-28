@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsType.ts] ////
+
 //// [typeGuardOfFormIsType.ts]
 class C1 {
     p1: string;

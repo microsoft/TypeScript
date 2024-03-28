@@ -1,6 +1,8 @@
-=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment8.js ===
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment8.ts] ////
 
-=== tests/cases/compiler/a.js ===
+=== checkJsdocTypeTagOnExportAssignment8.js ===
+
+=== a.js ===
 /**
  * @typedef Foo
  * @property {string} a
@@ -10,13 +12,18 @@
 /** @type {Foo} */
 export default {
 >{    a: 'a',    b: 'b'} : { a: string; b: "b"; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^
 
     a: 'a',
 >a : string
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
     b: 'b'
 >b : "b"
+>  : ^^^
 >'b' : "b"
+>    : ^^^
 }
 

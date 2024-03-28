@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowPrivateClassField.ts] ////
+
 //// [controlFlowPrivateClassField.ts]
 class Example {
     #test;

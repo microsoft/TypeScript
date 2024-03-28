@@ -1,12 +1,12 @@
-=== /app/src/index.ts ===
-/// <reference path="../lib/bar.d.ts" />
-export const x = y;
->x : Symbol(x, Decl(index.ts, 1, 12))
->y : Symbol(y, Decl(bar.d.ts, 2, 13))
+//// [tests/cases/compiler/commonSourceDirectory_dts.ts] ////
 
 === /app/lib/bar.d.ts ===
-// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
-
 declare const y: number;
->y : Symbol(y, Decl(bar.d.ts, 2, 13))
+>y : Symbol(y, Decl(bar.d.ts, 0, 13))
+
+=== /app/src/index.ts ===
+/// <reference path="../lib/bar.d.ts" preserve="true" />
+export const x = y;
+>x : Symbol(x, Decl(index.ts, 1, 12))
+>y : Symbol(y, Decl(bar.d.ts, 0, 13))
 

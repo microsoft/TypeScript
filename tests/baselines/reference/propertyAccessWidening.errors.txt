@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts(18,21): error TS2339: Property 'a' does not exist on type '{ a: string; b: number; } | {}'.
+propertyAccessWidening.ts(18,21): error TS2339: Property 'a' does not exist on type '{ a: string; b: number; } | {}'.
   Property 'a' does not exist on type '{}'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts(19,5): error TS7053: Element implicitly has an 'any' type because expression of type '"a"' can't be used to index type '{}'.
+propertyAccessWidening.ts(19,5): error TS7053: Element implicitly has an 'any' type because expression of type '"a"' can't be used to index type '{}'.
   Property 'a' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts (2 errors) ====
+==== propertyAccessWidening.ts (2 errors) ====
     // Repro from #31762
     
     function g1(headerNames: any) {

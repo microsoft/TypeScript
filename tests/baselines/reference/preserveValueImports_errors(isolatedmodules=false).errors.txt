@@ -1,49 +1,49 @@
-error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
 
 
-!!! error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'verbatimModuleSyntax' instead.
-==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+==== a.ts (0 errors) ====
     export type A = {};
     export type { A as default };
     
-==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     class B {};
     export type { B, B as default };
     
-==== tests/cases/conformance/externalModules/typeOnly/c.ts (0 errors) ====
+==== c.ts (0 errors) ====
     import DefaultA from "./a";
     import { A } from "./a";
     import DefaultB from "./b";
     import { B } from "./b";
     
-==== tests/cases/conformance/externalModules/typeOnly/c.fixed.ts (0 errors) ====
+==== c.fixed.ts (0 errors) ====
     import type DefaultA from "./a";
     import type { A } from "./a";
     import type DefaultB from "./b";
     import type { B } from "./b";
     
-==== tests/cases/conformance/externalModules/typeOnly/d.ts (0 errors) ====
+==== d.ts (0 errors) ====
     export { A as AA } from "./a";
     export { B as BB } from "./b";
     
-==== tests/cases/conformance/externalModules/typeOnly/d.fixed.ts (0 errors) ====
+==== d.fixed.ts (0 errors) ====
     export type { A as AA } from "./a";
     export type { B as BB } from "./b";
     
-==== tests/cases/conformance/externalModules/typeOnly/e.ts (0 errors) ====
+==== e.ts (0 errors) ====
     import { AA, BB } from "./d";
     
-==== tests/cases/conformance/externalModules/typeOnly/e.fixed.ts (0 errors) ====
+==== e.fixed.ts (0 errors) ====
     import type { AA, BB } from "./d";
     
-==== tests/cases/conformance/externalModules/typeOnly/f.ts (0 errors) ====
+==== f.ts (0 errors) ====
     import type { A } from "./a";
     import type { B } from "./b";
     export { A, B as BB };
     
-==== tests/cases/conformance/externalModules/typeOnly/f.fixed.ts (0 errors) ====
+==== f.fixed.ts (0 errors) ====
     import type { A } from "./a";
     import type { B } from "./b";
     export type { A, B as BB };

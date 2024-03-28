@@ -1,30 +1,43 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithZeroTypeArguments.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithZeroTypeArguments.ts] ////
+
+=== instantiateGenericClassWithZeroTypeArguments.ts ===
 // no errors expected when instantiating a generic type with no type arguments provided
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 
 var c = new C();
 >c : C<unknown>
+>  : ^^^^^^^^^^
 >new C() : C<unknown>
+>        : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 class D<T, U> {
 >D : D<T, U>
+>  : ^^^^^^^
 
     x: T
 >x : T
+>  : ^
 
     y: U
 >y : U
+>  : ^
 }
 
 var d = new D();
 >d : D<unknown, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^
 >new D() : D<unknown, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 

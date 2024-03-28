@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
+typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts (1 errors) ====
+==== typeofOperatorWithStringType.ts (1 errors) ====
     // typeof  operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];

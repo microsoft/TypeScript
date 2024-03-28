@@ -1,7 +1,10 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of2.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of2.ts] ////
+
+=== ES5For-of2.ts ===
 for (var v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var x = v;
 >x : any

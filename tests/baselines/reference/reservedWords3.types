@@ -1,20 +1,31 @@
-=== tests/cases/compiler/reservedWords3.ts ===
+//// [tests/cases/compiler/reservedWords3.ts] ////
+
+=== reservedWords3.ts ===
 function f1(enum) {}
 >f1 : () => any
+>   : ^^^^^^^^^
 > : (Missing)
+> : ^^^^^^^^^
 
 function f2(class) {}
 >f2 : () => any
+>   : ^^^^^^^^^
 
 function f3(function) {}
 >f3 : () => any
+>   : ^^^^^^^^^
 > : () => any
+> : ^^^^^^^^^
 
 function f4(while) {}
 >f4 : () => any
+>   : ^^^^^^^^^
 > : any
+> : ^^^
 
 function f5(for) {}
 >f5 : () => any
+>   : ^^^^^^^^^
 > : any
+> : ^^^
 

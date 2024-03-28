@@ -1,55 +1,75 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts] ////
+
+=== subtypesOfTypeParameterWithConstraints.ts ===
 // checking whether other types are subtypes of type parameters with constraints
 
 class C3<T> {
 >C3 : C3<T>
+>   : ^^^^^
 
     foo: T;
 >foo : T
+>    : ^
 }
 
 class D1<T extends U, U> extends C3<T> {
 >D1 : D1<T, U>
+>   : ^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D2<T extends U, U> extends C3<U> {
 >D2 : D2<T, U>
+>   : ^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D3<T extends U, U> extends C3<T> {
 >D3 : D3<T, U>
+>   : ^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: U; // error
 >foo : U
+>    : ^
 }
 
 class D4<T extends U, U> extends C3<U> {
 >D4 : D4<T, U>
+>   : ^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: U; // ok
 >foo : U
+>    : ^
 }
 
 
@@ -58,105 +78,141 @@ class D4<T extends U, U> extends C3<U> {
 // should all work
 class D5<T extends U, U extends V, V> extends C3<T> {
 >D5 : D5<T, U, V>
+>   : ^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D6<T extends U, U extends V, V> extends C3<U> {
 >D6 : D6<T, U, V>
+>   : ^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: T;
 >foo : T
+>    : ^
 }
 
 class D7<T extends U, U extends V, V> extends C3<V> {
 >D7 : D7<T, U, V>
+>   : ^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 // test if U is a subtype of T, U, V
 // only a subtype of V and itself
 class D8<T extends U, U extends V, V> extends C3<T> {
 >D8 : D8<T, U, V>
+>   : ^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: U; // error
 >foo : U
+>    : ^
 }
 
 class D9<T extends U, U extends V, V> extends C3<U> {
 >D9 : D9<T, U, V>
+>   : ^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: U; // ok
 >foo : U
+>    : ^
 }
 
 class D10<T extends U, U extends V, V> extends C3<V> {
 >D10 : D10<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: U; // ok
 >foo : U
+>    : ^
 }
 
 // test if V is a subtype of T, U, V
 // only a subtype of itself
 class D11<T extends U, U extends V, V> extends C3<T> {
 >D11 : D11<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: V; // error
 >foo : V
+>    : ^
 }
 
 class D12<T extends U, U extends V, V> extends C3<U> {
 >D12 : D12<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: V; // error
 >foo : V
+>    : ^
 }
 
 class D13<T extends U, U extends V, V> extends C3<V> {
 >D13 : D13<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: V; // ok
 >foo : V
+>    : ^
 }
 
 // Date > V > U > T
@@ -164,182 +220,246 @@ class D13<T extends U, U extends V, V> extends C3<V> {
 // should all work
 class D14<T extends U, U extends V, V extends Date> extends C3<Date> {
 >D14 : D14<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<Date>
+>   : ^^^^^^^^
 
     [x: string]: Date;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D15<T extends U, U extends V, V extends Date> extends C3<T> {
 >D15 : D15<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D16<T extends U, U extends V, V extends Date> extends C3<U> {
 >D16 : D16<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: T;
 >foo : T
+>    : ^
 }
 
 class D17<T extends U, U extends V, V extends Date> extends C3<V> {
 >D17 : D17<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: T;
 >foo : T
+>    : ^
 }
 
 // test if U is a subtype of T, U, V, Date
 // only a subtype of V, Date and itself
 class D18<T extends U, U extends V, V extends Date> extends C3<Date> {
 >D18 : D18<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<Date>
+>   : ^^^^^^^^
 
     [x: string]: Date;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D19<T extends U, U extends V, V extends Date> extends C3<T> {
 >D19 : D19<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: U; // error
 >foo : U
+>    : ^
 }
 
 class D20<T extends U, U extends V, V extends Date> extends C3<U> {
 >D20 : D20<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: U; // ok
 >foo : U
+>    : ^
 }
 
 class D21<T extends U, U extends V, V extends Date> extends C3<V> {
 >D21 : D21<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: U;
 >foo : U
+>    : ^
 }
 
 // test if V is a subtype of T, U, V, Date
 // only a subtype of itself and Date
 class D22<T extends U, U extends V, V extends Date> extends C3<Date> {
 >D22 : D22<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<Date>
+>   : ^^^^^^^^
 
     [x: string]: Date;
 >x : string
+>  : ^^^^^^
 
     foo: T; // ok
 >foo : T
+>    : ^
 }
 
 class D23<T extends U, U extends V, V extends Date> extends C3<T> {
 >D23 : D23<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: V; // error
 >foo : V
+>    : ^
 }
 
 class D24<T extends U, U extends V, V extends Date> extends C3<U> {
 >D24 : D24<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: V; // error
 >foo : V
+>    : ^
 }
 
 class D25<T extends U, U extends V, V extends Date> extends C3<V> {
 >D25 : D25<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: V; // ok
 >foo : V
+>    : ^
 }
 
 // test if Date is a subtype of T, U, V, Date
 // only a subtype of itself
 class D26<T extends U, U extends V, V extends Date> extends C3<Date> {
 >D26 : D26<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<Date>
+>   : ^^^^^^^^
 
     [x: string]: Date;
 >x : string
+>  : ^^^^^^
 
     foo: Date; // ok
 >foo : Date
+>    : ^^^^
 }
 
 class D27<T extends U, U extends V, V extends Date> extends C3<T> {
 >D27 : D27<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<T>
+>   : ^^^^^
 
     [x: string]: T;
 >x : string
+>  : ^^^^^^
 
     foo: Date; // error
 >foo : Date
+>    : ^^^^
 }
 
 class D28<T extends U, U extends V, V extends Date> extends C3<U> {
 >D28 : D28<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<U>
+>   : ^^^^^
 
     [x: string]: U;
 >x : string
+>  : ^^^^^^
 
     foo: Date; // error
 >foo : Date
+>    : ^^^^
 }
 
 class D29<T extends U, U extends V, V extends Date> extends C3<V> {
 >D29 : D29<T, U, V>
+>    : ^^^^^^^^^^^^
 >C3 : C3<V>
+>   : ^^^^^
 
     [x: string]: V;
 >x : string
+>  : ^^^^^^
 
     foo: Date; // error
 >foo : Date
+>    : ^^^^
 }

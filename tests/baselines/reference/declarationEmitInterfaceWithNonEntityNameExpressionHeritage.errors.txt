@@ -1,7 +1,7 @@
-tests/cases/compiler/declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts(2,25): error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
+declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts(2,25): error TS2499: An interface can only extend an identifier/qualified-name with optional type arguments.
 
 
-==== tests/cases/compiler/declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts (1 errors) ====
+==== declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts (1 errors) ====
     class A { }
     interface Class extends (typeof A) { }
                             ~~~~~~~~~~

@@ -1,10 +1,15 @@
-=== tests/cases/compiler/numericIndexerConstraint.ts ===
+//// [tests/cases/compiler/numericIndexerConstraint.ts] ////
+
+=== numericIndexerConstraint.ts ===
 class C {
 >C : C
+>  : ^
 
     0: number;
 >0 : number
+>  : ^^^^^^
 
     [x: number]: RegExp;
 >x : number
+>  : ^^^^^^
 }

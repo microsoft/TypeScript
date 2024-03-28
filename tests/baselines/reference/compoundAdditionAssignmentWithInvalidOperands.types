@@ -1,162 +1,257 @@
-=== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts] ////
+
+=== compoundAdditionAssignmentWithInvalidOperands.ts ===
 enum E { a, b }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 
 var a: void;
 >a : void
+>  : ^^^^
 
 var x1: boolean;
 >x1 : boolean
+>   : ^^^^^^^
 
 x1 += a;
 >x1 += a : any
+>        : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 >a : void
+>  : ^^^^
 
 x1 += true;
 >x1 += true : any
+>           : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 
 x1 += 0;
 >x1 += 0 : any
+>        : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 >0 : 0
+>  : ^
 
 x1 += E.a;
 >x1 += E.a : any
+>          : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 x1 += {};
 >x1 += {} : any
+>         : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 >{} : {}
+>   : ^^
 
 x1 += null;
 >x1 += null : any
+>           : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 
 x1 += undefined;
 >x1 += undefined : any
+>                : ^^^
 >x1 : boolean
+>   : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x2: {};
 >x2 : {}
+>   : ^^
 
 x2 += a;
 >x2 += a : any
+>        : ^^^
 >x2 : {}
+>   : ^^
 >a : void
+>  : ^^^^
 
 x2 += true;
 >x2 += true : any
+>           : ^^^
 >x2 : {}
+>   : ^^
 >true : true
+>     : ^^^^
 
 x2 += 0;
 >x2 += 0 : any
+>        : ^^^
 >x2 : {}
+>   : ^^
 >0 : 0
+>  : ^
 
 x2 += E.a;
 >x2 += E.a : any
+>          : ^^^
 >x2 : {}
+>   : ^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 x2 += {};
 >x2 += {} : any
+>         : ^^^
 >x2 : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 x2 += null;
 >x2 += null : any
+>           : ^^^
 >x2 : {}
+>   : ^^
 
 x2 += undefined;
 >x2 += undefined : any
+>                : ^^^
 >x2 : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x3: void;
 >x3 : void
+>   : ^^^^
 
 x3 += a;
 >x3 += a : any
+>        : ^^^
 >x3 : void
+>   : ^^^^
 >a : void
+>  : ^^^^
 
 x3 += true;
 >x3 += true : any
+>           : ^^^
 >x3 : void
+>   : ^^^^
 >true : true
+>     : ^^^^
 
 x3 += 0;
 >x3 += 0 : any
+>        : ^^^
 >x3 : void
+>   : ^^^^
 >0 : 0
+>  : ^
 
 x3 += E.a;
 >x3 += E.a : any
+>          : ^^^
 >x3 : void
+>   : ^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 x3 += {};
 >x3 += {} : any
+>         : ^^^
 >x3 : void
+>   : ^^^^
 >{} : {}
+>   : ^^
 
 x3 += null;
 >x3 += null : any
+>           : ^^^
 >x3 : void
+>   : ^^^^
 
 x3 += undefined;
 >x3 += undefined : any
+>                : ^^^
 >x3 : void
+>   : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x4: number;
 >x4 : number
+>   : ^^^^^^
 
 x4 += a;
 >x4 += a : any
+>        : ^^^
 >x4 : number
+>   : ^^^^^^
 >a : void
+>  : ^^^^
 
 x4 += true;
 >x4 += true : any
+>           : ^^^
 >x4 : number
+>   : ^^^^^^
 >true : true
+>     : ^^^^
 
 x4 += {};
 >x4 += {} : any
+>         : ^^^
 >x4 : number
+>   : ^^^^^^
 >{} : {}
+>   : ^^
 
 var x5: E;
 >x5 : E
+>   : ^
 
 x5 += a;
 >x5 += a : any
+>        : ^^^
 >x5 : E
+>   : ^
 >a : void
+>  : ^^^^
 
 x5 += true;
 >x5 += true : any
+>           : ^^^
 >x5 : E
+>   : ^
 >true : true
+>     : ^^^^
 
 x5 += {};
 >x5 += {} : any
+>         : ^^^
 >x5 : E
+>   : ^
 >{} : {}
+>   : ^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reuseInnerModuleMember_1.ts ===
+//// [tests/cases/compiler/reuseInnerModuleMember.ts] ////
+
+=== reuseInnerModuleMember_1.ts ===
 ///<reference path='reuseInnerModuleMember_0.ts'/>
 declare module bar {
 >bar : Symbol(bar, Decl(reuseInnerModuleMember_1.ts, 0, 0), Decl(reuseInnerModuleMember_1.ts, 5, 49))
@@ -18,7 +20,7 @@ module bar {
 >alpha : Symbol(alpha, Decl(reuseInnerModuleMember_1.ts, 1, 20))
 }
 
-=== tests/cases/compiler/reuseInnerModuleMember_0.ts ===
+=== reuseInnerModuleMember_0.ts ===
 export module M { }
 >M : Symbol(M, Decl(reuseInnerModuleMember_0.ts, 0, 0))
 

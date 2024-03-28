@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/throwWithoutNewLine2.ts] ////
+
 //// [throwWithoutNewLine2.ts]
 throw
 a;

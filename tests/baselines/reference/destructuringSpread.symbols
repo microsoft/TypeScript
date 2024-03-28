@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringSpread.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringSpread.ts] ////
+
+=== destructuringSpread.ts ===
 const { x } = {
 >x : Symbol(x, Decl(destructuringSpread.ts, 0, 7))
 

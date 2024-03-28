@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfConstructor.ts] ////
+
 //// [doNotEmitDetachedCommentsAtStartOfConstructor.ts]
 class A {
     constructor() {

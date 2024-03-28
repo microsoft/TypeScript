@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts] ////
+
+=== commaOperatorWithoutOperand.ts ===
 var ANY: any;
 >ANY : Symbol(ANY, Decl(commaOperatorWithoutOperand.ts, 0, 3))
 

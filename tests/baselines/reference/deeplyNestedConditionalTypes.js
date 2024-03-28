@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedConditionalTypes.ts] ////
+
 //// [deeplyNestedConditionalTypes.ts]
 type Foo<T> =
     T extends 0 ? '0' :

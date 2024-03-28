@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/topLevelAwaitErrors.6.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.6.ts] ////
+
+=== topLevelAwaitErrors.6.ts ===
 // await in exported function name should fail
 export function await() {
 >await : Symbol(await, Decl(topLevelAwaitErrors.6.ts, 0, 0))

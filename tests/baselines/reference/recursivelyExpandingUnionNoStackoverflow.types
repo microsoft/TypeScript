@@ -1,7 +1,11 @@
-=== tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts ===
+//// [tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts] ////
+
+=== recursivelyExpandingUnionNoStackoverflow.ts ===
 type N<T, K extends string> = T | { [P in K]: N<T, K> }[K];
 >N : N<T, K>
+>  : ^^^^^^^
 
 type M = N<number, "M">;
 >M : any
+>  : ^^^
 

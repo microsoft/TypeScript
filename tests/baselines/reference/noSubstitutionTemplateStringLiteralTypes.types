@@ -1,5 +1,9 @@
-=== tests/cases/compiler/noSubstitutionTemplateStringLiteralTypes.ts ===
+//// [tests/cases/compiler/noSubstitutionTemplateStringLiteralTypes.ts] ////
+
+=== noSubstitutionTemplateStringLiteralTypes.ts ===
 const x: `foo` = "foo";
 >x : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 

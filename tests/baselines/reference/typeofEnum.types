@@ -1,20 +1,30 @@
-=== tests/cases/compiler/typeofEnum.ts ===
+//// [tests/cases/compiler/typeofEnum.ts] ////
+
+=== typeofEnum.ts ===
 enum E {
 >E : E
+>  : ^
 
     e1,
 >e1 : E.e1
+>   : ^^^^
 
     e2
 >e2 : E.e2
+>   : ^^^^
 }
 
 var e1: typeof E;
 >e1 : typeof E
+>   : ^^^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 
 e1.e1;
 >e1.e1 : E.e1
+>      : ^^^^
 >e1 : typeof E
+>   : ^^^^^^^^
 >e1 : E.e1
+>   : ^^^^
 

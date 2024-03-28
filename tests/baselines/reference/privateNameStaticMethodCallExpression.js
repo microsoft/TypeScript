@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodCallExpression.ts] ////
+
 //// [privateNameStaticMethodCallExpression.ts]
 class AA {
     static #method() { this.x = 10; };
@@ -36,20 +38,20 @@ class AA {
     ;
     test() {
         var _b, _c, _d;
-        __classPrivateFieldGet(AA, _a, "m", _AA_method).call(AA);
-        const func = __classPrivateFieldGet(AA, _a, "m", _AA_method);
+        __classPrivateFieldGet(_a, _a, "m", _AA_method).call(_a);
+        const func = __classPrivateFieldGet(_a, _a, "m", _AA_method);
         func();
-        new (__classPrivateFieldGet(AA, _a, "m", _AA_method))();
+        new (__classPrivateFieldGet(_a, _a, "m", _AA_method))();
         const arr = [1, 2];
-        __classPrivateFieldGet(AA, _a, "m", _AA_method2).call(AA, 0, ...arr, 3);
-        const b = new (__classPrivateFieldGet(AA, _a, "m", _AA_method2))(0, ...arr, 3); //Error 
-        const str = __classPrivateFieldGet(AA, _a, "m", _AA_method2).bind(AA) `head${1}middle${2}tail`;
-        __classPrivateFieldGet((_b = AA.getClass()), _a, "m", _AA_method2).bind(_b) `test${1}and${2}`;
-        __classPrivateFieldGet((_c = AA.getClass()), _a, "m", _AA_method2).call(_c, 0, ...arr, 3);
-        const b2 = new (__classPrivateFieldGet(AA.getClass(), _a, "m", _AA_method2))(0, ...arr, 3); //Error 
-        const str2 = __classPrivateFieldGet((_d = AA.getClass()), _a, "m", _AA_method2).bind(_d) `head${1}middle${2}tail`;
+        __classPrivateFieldGet(_a, _a, "m", _AA_method2).call(_a, 0, ...arr, 3);
+        const b = new (__classPrivateFieldGet(_a, _a, "m", _AA_method2))(0, ...arr, 3); //Error 
+        const str = __classPrivateFieldGet(_a, _a, "m", _AA_method2).bind(_a) `head${1}middle${2}tail`;
+        __classPrivateFieldGet((_b = _a.getClass()), _a, "m", _AA_method2).bind(_b) `test${1}and${2}`;
+        __classPrivateFieldGet((_c = _a.getClass()), _a, "m", _AA_method2).call(_c, 0, ...arr, 3);
+        const b2 = new (__classPrivateFieldGet(_a.getClass(), _a, "m", _AA_method2))(0, ...arr, 3); //Error 
+        const str2 = __classPrivateFieldGet((_d = _a.getClass()), _a, "m", _AA_method2).bind(_d) `head${1}middle${2}tail`;
     }
-    static getClass() { return AA; }
+    static getClass() { return _a; }
 }
 _a = AA, _AA_method = function _AA_method() { this.x = 10; }, _AA_method2 = function _AA_method2(a, ...b) { };
 AA.x = 1;

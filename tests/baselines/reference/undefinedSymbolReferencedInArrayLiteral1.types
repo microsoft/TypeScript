@@ -1,28 +1,47 @@
-=== tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts ===
+//// [tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts] ////
+
+=== undefinedSymbolReferencedInArrayLiteral1.ts ===
 var tokens = [{ startIndex: deltaOffset }];
 >tokens : { startIndex: any; }[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >[{ startIndex: deltaOffset }] : { startIndex: any; }[]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^
 >{ startIndex: deltaOffset } : { startIndex: any; }
+>                            : ^^^^^^^^^^^^^^^^^^^^
 >startIndex : any
+>           : ^^^
 >deltaOffset : any
+>            : ^^^
 
 var functions = [function() {
 >functions : (() => void)[]
+>          : ^^^^^^^^^^^^^^
 >[function() {    [1, 2, 3].NonexistantMethod();    anotherNonExistingMethod();}] : (() => void)[]
+>                                                                                 : ^^^^^^^^^^^^^^
 >function() {    [1, 2, 3].NonexistantMethod();    anotherNonExistingMethod();} : () => void
+>                                                                               : ^^^^^^^^^^
 
     [1, 2, 3].NonexistantMethod();
 >[1, 2, 3].NonexistantMethod() : any
+>                              : ^^^
 >[1, 2, 3].NonexistantMethod : any
+>                            : ^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >NonexistantMethod : any
+>                  : ^^^
 
     anotherNonExistingMethod();
 >anotherNonExistingMethod() : any
+>                           : ^^^
 >anotherNonExistingMethod : any
+>                         : ^^^
 
 }];
 

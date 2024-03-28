@@ -1,7 +1,7 @@
-tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts(8,16): error TS2437: Module 'A' is hidden by a local declaration with the same name.
+internalImportInstantiatedModuleNotReferencingInstance.ts(8,16): error TS2437: Module 'A' is hidden by a local declaration with the same name.
 
 
-==== tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts (1 errors) ====
+==== internalImportInstantiatedModuleNotReferencingInstance.ts (1 errors) ====
     module A {
         export interface X { s: string }
         export var a = 10;

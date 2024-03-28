@@ -1,11 +1,16 @@
-=== tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts ===
+//// [tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts] ////
+
+=== ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts ===
 class C {
 >C : C
+>  : ^
 
     const
 >const : any
 
     x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }

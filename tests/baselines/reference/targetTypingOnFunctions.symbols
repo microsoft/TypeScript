@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypingOnFunctions.ts ===
+//// [tests/cases/compiler/targetTypingOnFunctions.ts] ////
+
+=== targetTypingOnFunctions.ts ===
 var fu: (s: string) => string = function (s) { return s.toLowerCase() };
 >fu : Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
 >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 9))

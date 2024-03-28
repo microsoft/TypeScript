@@ -1,15 +1,15 @@
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(20,19): error TS2345: Argument of type '"hello"' is not assignable to parameter of type '`*${string}*`'.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(57,5): error TS2322: Type '"hello"' is not assignable to type '`*${string}*`'.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(69,5): error TS2322: Type '"123"' is not assignable to type '`*${number}*`'.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(71,5): error TS2322: Type '"**123**"' is not assignable to type '`*${number}*`'.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(72,5): error TS2322: Type '`*${string}*`' is not assignable to type '`*${number}*`'.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(74,5): error TS2322: Type '"*false*" | "*true*"' is not assignable to type '`*${number}*`'.
+templateLiteralTypes3.ts(20,19): error TS2345: Argument of type '"hello"' is not assignable to parameter of type '`*${string}*`'.
+templateLiteralTypes3.ts(57,5): error TS2322: Type '"hello"' is not assignable to type '`*${string}*`'.
+templateLiteralTypes3.ts(69,5): error TS2322: Type '"123"' is not assignable to type '`*${number}*`'.
+templateLiteralTypes3.ts(71,5): error TS2322: Type '"**123**"' is not assignable to type '`*${number}*`'.
+templateLiteralTypes3.ts(72,5): error TS2322: Type '`*${string}*`' is not assignable to type '`*${number}*`'.
+templateLiteralTypes3.ts(74,5): error TS2322: Type '"*false*" | "*true*"' is not assignable to type '`*${number}*`'.
   Type '"*false*"' is not assignable to type '`*${number}*`'.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(133,9): error TS2367: This comparison appears to be unintentional because the types '`foo-${string}`' and '`baz-${string}`' have no overlap.
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(141,9): error TS2367: This comparison appears to be unintentional because the types '`foo-${T}`' and '`baz-${T}`' have no overlap.
+templateLiteralTypes3.ts(133,9): error TS2367: This comparison appears to be unintentional because the types '`foo-${string}`' and '`baz-${string}`' have no overlap.
+templateLiteralTypes3.ts(141,9): error TS2367: This comparison appears to be unintentional because the types '`foo-${T}`' and '`baz-${T}`' have no overlap.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes3.ts (8 errors) ====
+==== templateLiteralTypes3.ts (8 errors) ====
     // Inference from template literal type to template literal type
     
     type Foo1<T> = T extends `*${infer U}*` ? U : never;
@@ -221,4 +221,12 @@ tests/cases/conformance/types/literal/templateLiteralTypes3.ts(141,9): error TS2
     // Repro from #52685
     
     type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+    
+    // Repro from #56582
+    
+    function a<T extends {id: string}>() {
+        let x: keyof T & string | `-${keyof T & string}`;
+        x = "id";
+        x = "-id";
+    }
     

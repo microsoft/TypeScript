@@ -1,38 +1,56 @@
-=== tests/cases/compiler/recursiveTypeParameterReferenceError1.ts ===
+//// [tests/cases/compiler/recursiveTypeParameterReferenceError1.ts] ////
+
+=== recursiveTypeParameterReferenceError1.ts ===
 class X<T> { }
 >X : X<T>
+>  : ^^^^
 
 interface Foo<T> {
     z: Foo<X<T>>; // error
 >z : Foo<X<T>>
+>  : ^^^^^^^^^
 }
 var f: Foo<number>;
 >f : Foo<number>
+>  : ^^^^^^^^^^^
 
 var r = f.z; 
 >r : Foo<X<number>>
+>  : ^^^^^^^^^^^^^^
 >f.z : Foo<X<number>>
+>    : ^^^^^^^^^^^^^^
 >f : Foo<number>
+>  : ^^^^^^^^^^^
 >z : Foo<X<number>>
+>  : ^^^^^^^^^^^^^^
 
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 interface Foo2<T> {
     ofC4: C2<{ x: T }> // ok
 >ofC4 : C2<{ x: T; }>
+>     : ^^^^^^^^ ^^^^
 >x : T
+>  : ^
 }
 var f2: Foo2<number>;
 >f2 : Foo2<number>
+>   : ^^^^^^^^^^^^
 
 var r2 = f2.ofC4;
 >r2 : C2<{ x: number; }>
+>   : ^^^^^^^^^^^^^^^^^^
 >f2.ofC4 : C2<{ x: number; }>
+>        : ^^^^^^^^^^^^^^^^^^
 >f2 : Foo2<number>
+>   : ^^^^^^^^^^^^
 >ofC4 : C2<{ x: number; }>
+>     : ^^^^^^^^^^^^^^^^^^
 

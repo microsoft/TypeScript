@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseTypeInference.ts ===
+//// [tests/cases/compiler/promiseTypeInference.ts] ////
+
+=== promiseTypeInference.ts ===
 declare class CPromise<T> {
 >CPromise : Symbol(CPromise, Decl(promiseTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(promiseTypeInference.ts, 0, 23))

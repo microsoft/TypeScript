@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
+//// [tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx] ////
+
+=== jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react'

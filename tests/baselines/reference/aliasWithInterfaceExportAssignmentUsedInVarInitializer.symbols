@@ -1,11 +1,13 @@
-=== tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts ===
+//// [tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer.ts] ////
+
+=== aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts ===
 import moduleA = require("./aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
 >moduleA : Symbol(moduleA, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts, 0, 0))
 
 var d = b.q3;
 >d : Symbol(d, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts, 1, 3))
 
-=== tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts ===
+=== aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts ===
 interface c {
 >c : Symbol(c, Decl(aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts, 0, 0))
 

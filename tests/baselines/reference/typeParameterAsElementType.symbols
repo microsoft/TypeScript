@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterAsElementType.ts ===
+//// [tests/cases/compiler/typeParameterAsElementType.ts] ////
+
+=== typeParameterAsElementType.ts ===
 function fee<T>() {
 >fee : Symbol(fee, Decl(typeParameterAsElementType.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterAsElementType.ts, 0, 13))

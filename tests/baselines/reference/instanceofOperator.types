@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instanceofOperator.ts ===
+//// [tests/cases/compiler/instanceofOperator.ts] ////
+
+=== instanceofOperator.ts ===
 // Spec:
 // The instanceof operator requires the left operand to be of type Any or an object type, and the right 
 // operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
@@ -6,43 +8,61 @@
 
 module test {
 >test : typeof test
+>     : ^^^^^^^^^^^
 
     class Object { }
 >Object : Object
+>       : ^^^^^^
 
     var obj: Object;
 >obj : Object
+>    : ^^^^^^
 
 
 
     4 instanceof null;
 >4 instanceof null : boolean
+>                  : ^^^^^^^
 >4 : 4
+>  : ^
 
     // Error and should be error
     obj instanceof 4;
 >obj instanceof 4 : boolean
+>                 : ^^^^^^^
 >obj : Object
+>    : ^^^^^^
 >4 : 4
+>  : ^
 
     Object instanceof obj;
 >Object instanceof obj : boolean
+>                      : ^^^^^^^
 >Object : typeof Object
+>       : ^^^^^^^^^^^^^
 >obj : Object
+>    : ^^^^^^
 
     // Error on left hand side
     null instanceof null;
 >null instanceof null : boolean
+>                     : ^^^^^^^
 
     obj instanceof Object;
 >obj instanceof Object : boolean
+>                      : ^^^^^^^
 >obj : Object
+>    : ^^^^^^
 >Object : typeof Object
+>       : ^^^^^^^^^^^^^
 
     undefined instanceof undefined;
 >undefined instanceof undefined : boolean
+>                               : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 

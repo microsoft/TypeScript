@@ -1,4 +1,6 @@
-=== tests/cases/compiler/demo.d.ts ===
+//// [tests/cases/compiler/aliasDoesNotDuplicateSignatures.ts] ////
+
+=== demo.d.ts ===
 declare namespace demoNS {
 >demoNS : Symbol(demoNS, Decl(demo.d.ts, 0, 0))
 
@@ -15,7 +17,7 @@ declare module 'demoModule' {
     export = alias;
 >alias : Symbol(alias, Decl(demo.d.ts, 3, 29))
 }
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import { f } from 'demoModule';
 >f : Symbol(f, Decl(user.ts, 0, 8))
 

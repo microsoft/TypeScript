@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionParameterArityMismatch.ts] ////
+
 //// [functionParameterArityMismatch.ts]
 declare function f1(a: number);
 declare function f1(a: number, b: number, c: number);

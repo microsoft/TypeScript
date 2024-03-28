@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/unknown/unknownControlFlow.ts] ////
+
 //// [unknownControlFlow.ts]
 type T01 = {} & string;  // {} & string
 type T02 = {} & 'a';  // 'a'
@@ -840,9 +842,9 @@ declare function f32<T extends {} | undefined>(x: T): void;
 declare function possiblyNull<T>(x: T): T | null;
 declare function possiblyUndefined<T>(x: T): T | undefined;
 declare function possiblyNullOrUndefined<T>(x: T): T | null | undefined;
-declare function ensureNotNull<T>(x: T): T & ({} | undefined);
-declare function ensureNotUndefined<T>(x: T): T & ({} | null);
-declare function ensureNotNullOrUndefined<T>(x: T): T & {};
+declare function ensureNotNull<T>(x: T): ({} | undefined) & T;
+declare function ensureNotUndefined<T>(x: T): ({} | null) & T;
+declare function ensureNotNullOrUndefined<T>(x: T): {} & T;
 declare function f40(a: string | undefined, b: number | null | undefined): void;
 type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 declare function f41<T>(a: T): void;

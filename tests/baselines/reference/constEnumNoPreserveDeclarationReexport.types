@@ -1,47 +1,68 @@
-=== tests/cases/compiler/ConstEnum.d.ts ===
+//// [tests/cases/compiler/constEnumNoPreserveDeclarationReexport.ts] ////
+
+=== ConstEnum.d.ts ===
 export const enum MyConstEnum {
 >MyConstEnum : MyConstEnum
+>            : ^^^^^^^^^^^
 
     Foo,
 >Foo : MyConstEnum.Foo
+>    : ^^^^^^^^^^^^^^^
 
     Bar
 >Bar : MyConstEnum.Bar
+>    : ^^^^^^^^^^^^^^^
 }
-=== tests/cases/compiler/ImportExport.d.ts ===
+=== ImportExport.d.ts ===
 import { MyConstEnum } from './ConstEnum';
 >MyConstEnum : typeof MyConstEnum
+>            : ^^^^^^^^^^^^^^^^^^
 
 export default MyConstEnum;
 >MyConstEnum : MyConstEnum
+>            : ^^^^^^^^^^^
 
-=== tests/cases/compiler/ReExport.d.ts ===
+=== ReExport.d.ts ===
 export { MyConstEnum as default } from './ConstEnum';
->MyConstEnum : typeof import("tests/cases/compiler/ConstEnum").MyConstEnum
->default : typeof import("tests/cases/compiler/ConstEnum").MyConstEnum
+>MyConstEnum : typeof import("ConstEnum").MyConstEnum
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>default : typeof import("ConstEnum").MyConstEnum
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/usages.ts ===
+=== usages.ts ===
 import {MyConstEnum} from "./ConstEnum";
 >MyConstEnum : typeof MyConstEnum
+>            : ^^^^^^^^^^^^^^^^^^
 
 import AlsoEnum from "./ImportExport";
 >AlsoEnum : typeof MyConstEnum
+>         : ^^^^^^^^^^^^^^^^^^
 
 import StillEnum from "./ReExport";
 >StillEnum : typeof MyConstEnum
+>          : ^^^^^^^^^^^^^^^^^^
 
 MyConstEnum.Foo;
 >MyConstEnum.Foo : MyConstEnum.Foo
+>                : ^^^^^^^^^^^^^^^
 >MyConstEnum : typeof MyConstEnum
+>            : ^^^^^^^^^^^^^^^^^^
 >Foo : MyConstEnum.Foo
+>    : ^^^^^^^^^^^^^^^
 
 AlsoEnum.Foo;
 >AlsoEnum.Foo : MyConstEnum.Foo
+>             : ^^^^^^^^^^^^^^^
 >AlsoEnum : typeof MyConstEnum
+>         : ^^^^^^^^^^^^^^^^^^
 >Foo : MyConstEnum.Foo
+>    : ^^^^^^^^^^^^^^^
 
 StillEnum.Foo;
 >StillEnum.Foo : MyConstEnum.Foo
+>              : ^^^^^^^^^^^^^^^
 >StillEnum : typeof MyConstEnum
+>          : ^^^^^^^^^^^^^^^^^^
 >Foo : MyConstEnum.Foo
+>    : ^^^^^^^^^^^^^^^
 

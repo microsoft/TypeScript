@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericPrototypeProperty.ts ===
+//// [tests/cases/compiler/genericPrototypeProperty.ts] ////
+
+=== genericPrototypeProperty.ts ===
 class C<T> {
 >C : Symbol(C, Decl(genericPrototypeProperty.ts, 0, 0))
 >T : Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))

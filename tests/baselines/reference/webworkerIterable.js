@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/webworkerIterable.ts] ////
+
 //// [webworkerIterable.ts]
 // This API is only in webworker
 importScripts("")

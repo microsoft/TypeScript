@@ -1,7 +1,11 @@
-=== tests/cases/compiler/modifierOnParameter1.ts ===
+//// [tests/cases/compiler/modifierOnParameter1.ts] ////
+
+=== modifierOnParameter1.ts ===
 class C {
 >C : C
+>  : ^
 
    constructor(declare p) { }
 >p : any
+>  : ^^^
 }

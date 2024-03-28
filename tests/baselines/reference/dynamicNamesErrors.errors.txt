@@ -1,25 +1,19 @@
-tests/cases/compiler/dynamicNamesErrors.ts(5,5): error TS2718: Duplicate property '1'.
-tests/cases/compiler/dynamicNamesErrors.ts(6,5): error TS2733: Property '1' was also declared here.
-tests/cases/compiler/dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
-tests/cases/compiler/dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not assignable to type 'T1'.
+dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
+dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not assignable to type 'T1'.
   Types of property '[c0]' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type 'T2'.
+dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type 'T2'.
   Types of property '[c0]' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/dynamicNamesErrors.ts (5 errors) ====
+==== dynamicNamesErrors.ts (3 errors) ====
     const c0 = "1";
     const c1 = 1;
     
     interface T0 {
         [c0]: number;
-        ~~~~
-!!! error TS2718: Duplicate property '1'.
         1: number;
-        ~
-!!! error TS2733: Property '1' was also declared here.
     }
     
     interface T1 {
@@ -35,7 +29,7 @@ tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not
         [c1]: string;
         ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
-!!! related TS6203 tests/cases/compiler/dynamicNamesErrors.ts:18:5: '[c1]' was also declared here.
+!!! related TS6203 dynamicNamesErrors.ts:18:5: '[c1]' was also declared here.
     }
     
     let t1: T1;

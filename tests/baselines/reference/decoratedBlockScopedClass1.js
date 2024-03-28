@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratedBlockScopedClass1.ts] ////
+
 //// [a.ts]
 function decorator() {
     return (target: new (...args: any[]) => any) => {}

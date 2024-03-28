@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts] ////
+
+=== privateNameWhenNotUseDefineForClassFieldsInEsNext.ts ===
 class TestWithStatics {
 >TestWithStatics : Symbol(TestWithStatics, Decl(privateNameWhenNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
 

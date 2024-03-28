@@ -1,106 +1,155 @@
-=== tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts ===
+//// [tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts] ////
+
+=== untypedFunctionCallsWithTypeParameters1.ts ===
 // none of these function calls should be allowed
 var x = function () { return; };
 >x : () => void
+>  : ^^^^^^^^^^
 >function () { return; } : () => void
+>                        : ^^^^^^^^^^
 
 var r1 = x<number>();
 >r1 : void
+>   : ^^^^
 >x<number>() : void
+>            : ^^^^
 >x : () => void
+>  : ^^^^^^^^^^
 
 var y: any = x;
 >y : any
+>  : ^^^
 >x : () => void
+>  : ^^^^^^^^^^
 
 var r2 = y<string>();
 >r2 : any
+>   : ^^^
 >y<string>() : any
+>            : ^^^
 >y : any
+>  : ^^^
 
 var c: Function;
 >c : Function
+>  : ^^^^^^^^
 
 var r3 = c<number>(); // should be an error
 >r3 : any
+>   : ^^^
 >c<number>() : any
+>            : ^^^
 >c : Function
+>  : ^^^^^^^^
 
 class C implements Function {
 >C : C
+>  : ^
 
     prototype = null;
 >prototype : any
+>          : ^^^
 
     length = 1;
 >length : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     arguments = null;
 >arguments : any
+>          : ^^^
 
     caller = () => { };
 >caller : () => void
+>       : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 }
 
 var c2: C;
 >c2 : C
+>   : ^
 
 var r4 = c2<number>(); // should be an error
 >r4 : any
+>   : ^^^
 >c2<number>() : any
+>             : ^^^
 >c2 : C
+>   : ^
 
 class C2 extends Function { } // error
 >C2 : C2
+>   : ^^
 >Function : Function
+>         : ^^^^^^^^
 
 var c3: C2;
 >c3 : C2
+>   : ^^
 
 var r5 = c3<number>(); // error
 >r5 : any
+>   : ^^^
 >c3<number>() : any
+>             : ^^^
 >c3 : C2
+>   : ^^
 
 interface I {
     (number): number;
 >number : any
+>       : ^^^
 }
 var z: I;
 >z : I
+>  : ^
 
 var r6 = z<string>(1); // error
 >r6 : number
+>   : ^^^^^^
 >z<string>(1) : number
+>             : ^^^^^^
 >z : I
+>  : ^
 >1 : 1
+>  : ^
 
 interface callable2<T> {
     (a: T): T;
 >a : T
+>  : ^
 }
 
 var c4: callable2<number>;
 >c4 : callable2<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 c4<number>(1);
 >c4<number>(1) : number
+>              : ^^^^^^
 >c4 : callable2<number>
+>   : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 interface callable3<T> {
     (a: T): T;
 >a : T
+>  : ^
 }
 
 var c5: callable3<number>;
 >c5 : callable3<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 c5<string>(1); // error
 >c5<string>(1) : number
+>              : ^^^^^^
 >c5 : callable3<number>
+>   : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 

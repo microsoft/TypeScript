@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug24062.js ===
+//// [tests/cases/conformance/salsa/moduleExportAlias3.ts] ////
+
+=== bug24062.js ===
 // #24062
 class C {
 >C : Symbol(C, Decl(bug24062.js, 0, 0))

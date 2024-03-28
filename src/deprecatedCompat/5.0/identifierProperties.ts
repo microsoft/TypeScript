@@ -5,7 +5,9 @@ import {
     identifierToKeywordKind,
     NodeFlags,
 } from "../_namespaces/ts";
-import { deprecate } from "../deprecate";
+import {
+    deprecate,
+} from "../deprecate";
 
 declare module "../../compiler/types" {
     export interface Identifier {
@@ -29,8 +31,8 @@ addObjectAllocatorPatcher(objectAllocator => {
                 since: "5.0",
                 warnAfter: "5.1",
                 errorAfter: "5.2",
-                message: "Use 'identifierToKeywordKind(identifier)' instead."
-            })
+                message: "Use 'identifierToKeywordKind(identifier)' instead.",
+            }),
         });
     }
 
@@ -44,8 +46,8 @@ addObjectAllocatorPatcher(objectAllocator => {
                 since: "5.0",
                 warnAfter: "5.1",
                 errorAfter: "5.2",
-                message: "Use '.parent' or the surrounding context to determine this instead."
-            })
+                message: "Use '.parent' or the surrounding context to determine this instead.",
+            }),
         });
     }
 });

@@ -1,23 +1,29 @@
-=== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts] ////
+
+=== twoGenericInterfacesWithDifferentConstraints.ts ===
 interface A<T extends Date> {
     x: T;
 >x : T
+>  : ^
 }
 
 interface A<T extends Number> { // error
     y: T;
 >y : T
+>  : ^
 }
 
 module M {
     interface B<T extends A<Date>> {
         x: T;
 >x : T
+>  : ^
     }
 
     interface B<T extends A<any>> { // error
         y: T;
 >y : T
+>  : ^
     }
 }
 
@@ -25,6 +31,7 @@ module M2 {
     interface A<T extends Date> {
         x: T;
 >x : T
+>  : ^
     }
 }
 
@@ -32,6 +39,7 @@ module M2 {
     interface A<T extends Number> { // ok, different declaration space from other M2.A
         y: T;
 >y : T
+>  : ^
     }
 }
 
@@ -39,6 +47,7 @@ module M3 {
     export interface A<T extends Date> {
         x: T;
 >x : T
+>  : ^
     }
 }
 
@@ -46,33 +55,40 @@ module M3 {
     export interface A<T extends Number> { // error
         y: T;
 >y : T
+>  : ^
     }
 }
 
 interface B<T extends number> {
   u: T;
 >u : T
+>  : ^
 
   v: Constraint<T>; // ok
 >v : Constraint<T>
+>  : ^^^^^^^^^^^^^
 }
 
 interface B<T> { // ok
   x: T;
 >x : T
+>  : ^
 
   y: Constraint<T>; // ok
 >y : Constraint<T>
+>  : ^^^^^^^^^^^^^
 }
 
 interface C<T> {
   x: T;
 >x : T
+>  : ^
 }
 
 interface C<T extends number> { // ok
   y: T;
 >y : T
+>  : ^
 }
 
 interface Constraint<T extends number> {}

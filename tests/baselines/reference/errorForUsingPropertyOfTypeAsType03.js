@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts] ////
+
 //// [errorForUsingPropertyOfTypeAsType03.ts]
 namespace Test1 {
     enum Color {

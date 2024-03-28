@@ -1,0 +1,64 @@
+{
+    "indentWidth": 4,
+    "lineWidth": 1000,
+    "newLineKind": "auto",
+    "useTabs": false,
+    "typescript": {
+        "newLineKind": "crlf",
+        "semiColons": "always",
+        "quoteStyle": "preferDouble",
+        "quoteProps": "consistent",
+        "useBraces": "whenNotSingleLine",
+        "bracePosition": "sameLineUnlessHanging",
+        "singleBodyPosition": "sameLine",
+        "nextControlFlowPosition": "nextLine", // Stroustrup style braces.
+        "trailingCommas": "onlyMultiLine",
+        "preferHanging": false,
+        "operatorPosition": "maintain",
+
+        "arrowFunction.useParentheses": "preferNone",
+        "conditionalExpression.linePerExpression": false, // Keep our "match/case"-ish conditionals.
+        "functionExpression.spaceAfterFunctionKeyword": true,
+        "importDeclaration.forceMultiLine": true,
+        "constructorType.spaceAfterNewKeyword": true,
+        "constructSignature.spaceAfterNewKeyword": true,
+
+        // Let eslint-plugin-simple-import-sort handle this.
+        "module.sortImportDeclarations": "maintain",
+        "module.sortExportDeclarations": "maintain",
+        "exportDeclaration.sortNamedExports": "maintain",
+        "importDeclaration.sortNamedImports": "maintain"
+    },
+    "prettier": {
+        "newLineKind": "lf",
+        "associations": [
+            "**/*.{yaml,yml}"
+        ],
+        "yml.tabWidth": 2,
+        "yaml.tabWidth": 2,
+        "yml.singleQuote": true,
+        "yaml.singleQuote": true
+    },
+    "json": {
+        // This would be good to do in known-JSONC files, but VS Code warns on trailing commas.
+        "trailingCommas": "never"
+    },
+    "excludes": [
+        "**/.git",
+        "**/node_modules",
+        "**/*-lock.json",
+        "coverage/**",
+        "lib/**",
+        "built/**",
+        "tests/**",
+        "internal/**",
+        "**/*.generated.*",
+        "scripts/*.d.*"
+    ],
+    // Note: if adding new languages, make sure settings.template.json is updated too.
+    "plugins": [
+        "https://plugins.dprint.dev/typescript-0.88.9.wasm",
+        "https://plugins.dprint.dev/json-0.19.1.wasm",
+        "https://plugins.dprint.dev/prettier-0.35.0.json@0df49c4d878bb1051af2fa1d1f69ba6400f4b78633f49baa1f38954a6fd32b40"
+    ]
+}

@@ -1,33 +1,43 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans5.ts] ////
+
+=== file1.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     interface TopLevel {
         duplicate1: () => string;
 >duplicate1 : () => string
+>           : ^^^^^^      
 
         duplicate2: () => string;
 >duplicate2 : () => string
+>           : ^^^^^^      
 
         duplicate3: () => string;
 >duplicate3 : () => string
+>           : ^^^^^^      
     }
 }
 export {}
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import "./file1";
 declare global {
 >global : any
+>       : ^^^
 
     interface TopLevel {
         duplicate1(): number;
 >duplicate1 : () => number
+>           : ^^^^^^      
 
         duplicate2(): number;
 >duplicate2 : () => number
+>           : ^^^^^^      
 
         duplicate3(): number;
 >duplicate3 : () => number
+>           : ^^^^^^      
     }
 }
 export {}

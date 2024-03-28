@@ -1,35 +1,61 @@
-=== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts] ////
+
+=== parserVariableDeclaration3.ts ===
 function runTests() {
 >runTests : () => void
+>         : ^^^^^^^^^^
 
     var outfile = new Harness.Compiler.WriterAggregator()
 >outfile : any
+>        : ^^^
 >new Harness.Compiler.WriterAggregator() : any
+>                                        : ^^^
 >Harness.Compiler.WriterAggregator : any
+>                                  : ^^^
 >Harness.Compiler : any
+>                 : ^^^
 >Harness : any
+>        : ^^^
 >Compiler : any
+>         : ^^^
 >WriterAggregator : any
+>                 : ^^^
 
       , outerr = new Harness.Compiler.WriterAggregator()
 >outerr : any
+>       : ^^^
 >new Harness.Compiler.WriterAggregator() : any
+>                                        : ^^^
 >Harness.Compiler.WriterAggregator : any
+>                                  : ^^^
 >Harness.Compiler : any
+>                 : ^^^
 >Harness : any
+>        : ^^^
 >Compiler : any
+>         : ^^^
 >WriterAggregator : any
+>                 : ^^^
 
       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
 >compiler : TypeScript.TypeScriptCompiler
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : TypeScript.TypeScriptCompiler
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
+>           : ^^^
 >new TypeScript.TypeScriptCompiler(outerr) : any
+>                                          : ^^^
 >TypeScript.TypeScriptCompiler : any
+>                              : ^^^
 >TypeScript : any
+>           : ^^^
 >TypeScriptCompiler : any
+>                   : ^^^
 >outerr : any
+>       : ^^^
 
       , code;
 >code : any
+>     : ^^^
 }

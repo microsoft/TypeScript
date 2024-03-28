@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameEnum.ts] ////
+
 //// [privateNameEnum.ts]
 enum E {
     #x

@@ -4,10 +4,10 @@
         "outDir": "../built/local",
 
         "pretty": true,
-        "lib": ["es2018"],
-        "target": "es2018",
-        "module": "CommonJS",
-        "moduleResolution": "node",
+        "lib": ["es2020"],
+        "target": "es2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
 
         "declaration": true,
         "declarationMap": true,
@@ -20,10 +20,6 @@
         "strictBindCallApply": false,
         "useUnknownInCatchVariables": false,
         "noImplicitOverride": true,
-
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "allowUnusedLabels": false,
 
         "skipLibCheck": true,
 

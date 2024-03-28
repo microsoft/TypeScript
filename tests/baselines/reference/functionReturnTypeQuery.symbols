@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionReturnTypeQuery.ts ===
+//// [tests/cases/compiler/functionReturnTypeQuery.ts] ////
+
+=== functionReturnTypeQuery.ts ===
 declare let foo: number;
 >foo : Symbol(foo, Decl(functionReturnTypeQuery.ts, 0, 11))
 

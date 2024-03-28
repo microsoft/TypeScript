@@ -1,14 +1,14 @@
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(1,7): error TS2461: Type '{}' is not an array type.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(2,7): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(3,3): error TS2461: Type '{}' is not an array type.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(4,3): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(6,14): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(9,14): error TS2461: Type '{}' is not an array type.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(13,7): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts(15,7): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(1,7): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(2,7): error TS2532: Object is possibly 'undefined'.
+destructuringAssignabilityCheck.ts(3,3): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(4,3): error TS2532: Object is possibly 'undefined'.
+destructuringAssignabilityCheck.ts(6,14): error TS2532: Object is possibly 'undefined'.
+destructuringAssignabilityCheck.ts(9,14): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(13,7): error TS2532: Object is possibly 'undefined'.
+destructuringAssignabilityCheck.ts(15,7): error TS2461: Type '{}' is not an array type.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts (8 errors) ====
+==== destructuringAssignabilityCheck.ts (8 errors) ====
     const [] = {}; // should be error
           ~~
 !!! error TS2461: Type '{}' is not an array type.

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/any/anyAsFunctionCall.ts ===
+//// [tests/cases/conformance/types/any/anyAsFunctionCall.ts] ////
+
+=== anyAsFunctionCall.ts ===
 // any is considered an untyped function call
 // can be called except with type arguments which is an error
 
@@ -15,6 +17,7 @@ var b = x('hello');
 >x('hello') : any
 >x : any
 >'hello' : "hello"
+>        : ^^^^^^^
 
 var c = x(x);
 >c : any

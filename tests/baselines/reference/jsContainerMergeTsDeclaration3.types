@@ -1,16 +1,26 @@
-=== tests/cases/conformance/salsa/a.d.ts ===
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration3.ts] ////
+
+=== a.d.ts ===
 declare class A {}
 >A : A
+>  : ^
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 const A = { };
 >A : typeof A
+>  : ^^^^^^^^
 >{ } : {}
+>    : ^^
 
 A.d = { };
 >A.d = { } : {}
+>          : ^^
 >A.d : {}
+>    : ^^
 >A : typeof A
+>  : ^^^^^^^^
 >d : {}
+>  : ^^
 >{ } : {}
+>    : ^^
 

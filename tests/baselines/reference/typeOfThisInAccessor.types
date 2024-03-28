@@ -1,65 +1,89 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/typeOfThisInAccessor.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/typeOfThisInAccessor.ts] ////
+
+=== typeOfThisInAccessor.ts ===
 class C {
 >C : C
+>  : ^
 
     get x() {
 >x : number
+>  : ^^^^^^
 
         var r = this; // C
 >r : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 
     static get y() {
 >y : number
+>  : ^^^^^^
 
         var r2 = this; // typeof C
 >r2 : typeof C
+>   : ^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     a: T;
 >a : T
+>  : ^
 
     get x() {
 >x : number
+>  : ^^^^^^
 
         var r = this; // D<T>
 >r : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 
     static get y() {
 >y : number
+>  : ^^^^^^
 
         var r2 = this; // typeof D
 >r2 : typeof D
+>   : ^^^^^^^^
 >this : typeof D
+>     : ^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 var x = {
 >x : { readonly a: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    get a() {        var r3 = this; // any        return 1;    }} : { readonly a: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^
 
     get a() {
 >a : number
+>  : ^^^^^^
 
         var r3 = this; // any
 >r3 : any
@@ -67,5 +91,6 @@ var x = {
 
         return 1;
 >1 : 1
+>  : ^
     }
 }

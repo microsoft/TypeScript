@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/seeTag1.ts ===
+//// [tests/cases/conformance/jsdoc/seeTag1.ts] ////
+
+=== seeTag1.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(seeTag1.ts, 0, 0))
 

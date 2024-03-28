@@ -1,11 +1,19 @@
-=== tests/cases/compiler/stringMappingAssignability.ts ===
+//// [tests/cases/compiler/stringMappingAssignability.ts] ////
+
+=== stringMappingAssignability.ts ===
 const x: Uppercase<string> = 42;
 >x : Uppercase<string>
+>  : ^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 const y: Uppercase<string> = { foo: "bar" };
 >y : Uppercase<string>
+>  : ^^^^^^^^^^^^^^^^^
 >{ foo: "bar" } : { foo: string; }
+>               : ^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 

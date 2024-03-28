@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterDiamond3.ts] ////
+
 //// [typeParameterDiamond3.ts]
 function diamondTop<Top>() {
     function diamondMiddle<T, U>() {

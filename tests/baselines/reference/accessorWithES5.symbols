@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES5.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES5.ts] ////
+
+=== accessorWithES5.ts ===
 class C {
 >C : Symbol(C, Decl(accessorWithES5.ts, 0, 0))
 

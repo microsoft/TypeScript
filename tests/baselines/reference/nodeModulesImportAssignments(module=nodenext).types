@@ -1,30 +1,40 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportAssignments.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 import fs = require("fs");
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
 export import fs2 = require("fs");
 >fs2 : any
+>    : ^^^
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 import fs = require("fs");
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
 export import fs2 = require("fs");
 >fs2 : any
+>    : ^^^
 
-=== tests/cases/conformance/node/file.ts ===
+=== file.ts ===
 // esm format file
 const __require = null;
 >__require : any
@@ -34,16 +44,20 @@ const _createRequire = null;
 
 import fs = require("fs");
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
 export import fs2 = require("fs");
 >fs2 : any
+>    : ^^^
 
-=== tests/cases/conformance/node/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : any
 

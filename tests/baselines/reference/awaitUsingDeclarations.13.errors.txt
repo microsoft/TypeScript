@@ -1,0 +1,15 @@
+awaitUsingDeclarations.13.ts(1,1): error TS2853: 'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+awaitUsingDeclarations.13.ts(4,5): error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+
+
+==== awaitUsingDeclarations.13.ts (2 errors) ====
+    await using x = null;
+    ~~~~~
+!!! error TS2853: 'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+    
+    function f() {
+        await using x = null;
+        ~~~~~
+!!! error TS2852: 'await using' statements are only allowed within async functions and at the top levels of modules.
+!!! related TS1356 awaitUsingDeclarations.13.ts:3:10: Did you mean to mark this function as 'async'?
+    }

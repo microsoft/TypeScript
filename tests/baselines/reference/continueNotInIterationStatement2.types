@@ -1,9 +1,13 @@
-=== tests/cases/compiler/continueNotInIterationStatement2.ts ===
+//// [tests/cases/compiler/continueNotInIterationStatement2.ts] ////
+
+=== continueNotInIterationStatement2.ts ===
 while (true) {
 >true : true
+>     : ^^^^
 
   function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     continue;
   }

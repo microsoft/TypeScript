@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceDeclaration2.ts] ////
+
 //// [interfaceDeclaration2.ts]
 interface I1 { }
 module I1 { }

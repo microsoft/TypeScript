@@ -1,8 +1,8 @@
-tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(11,17): error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
-tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17): error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
+narrowExceptionVariableInCatchClause.ts(11,17): error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
+narrowExceptionVariableInCatchClause.ts(16,17): error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
 
 
-==== tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts (2 errors) ====
+==== narrowExceptionVariableInCatchClause.ts (2 errors) ====
     declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
     
     function tryCatch() {
@@ -16,7 +16,7 @@ tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17)
                 err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
                     ~~~~~~~
 !!! error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
-!!! related TS2728 tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts:1:58: 'dontPanic' is declared here.
+!!! related TS2728 narrowExceptionVariableInCatchClause.ts:1:58: 'dontPanic' is declared here.
             }
     
             else if (err instanceof Error) {
@@ -24,7 +24,7 @@ tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17)
                 err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
                     ~~~~~~~
 !!! error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'message' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'message' is declared here.
             }
     
             else {

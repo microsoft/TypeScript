@@ -1,17 +1,25 @@
-=== tests/cases/conformance/override/override18.ts ===
+//// [tests/cases/conformance/override/override18.ts] ////
+
+=== override18.ts ===
 class A {
 >A : A
+>  : ^
 
     foo?: string;
 >foo : string
+>    : ^^^^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     override foo = "string";
 >foo : string
+>    : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 }
 

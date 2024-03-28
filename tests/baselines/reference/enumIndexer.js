@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumIndexer.ts] ////
+
 //// [enumIndexer.ts]
 enum MyEnumType {
     foo, bar

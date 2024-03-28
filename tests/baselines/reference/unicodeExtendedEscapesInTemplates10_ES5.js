@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates10_ES5.ts] ////
+
 //// [unicodeExtendedEscapesInTemplates10_ES5.ts]
 // ES6 Spec - 10.1.1 Static Semantics: UTF16Encoding (cp)
 //  2. Let cu1 be floor((cp – 65536) / 1024) + 0xD800.

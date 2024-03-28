@@ -1,7 +1,11 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodWithImplementation.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodWithImplementation.ts] ////
+
+=== classAbstractMethodWithImplementation.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }

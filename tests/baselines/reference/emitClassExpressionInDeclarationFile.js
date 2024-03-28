@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile.ts] ////
+
 //// [emitClassExpressionInDeclarationFile.ts]
 export var simpleExample = class {
     static getTags() { }
@@ -48,7 +50,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = exports.WithTags = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
+exports.Test = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
+exports.WithTags = WithTags;
 exports.simpleExample = /** @class */ (function () {
     function simpleExample() {
     }
@@ -82,7 +85,6 @@ function WithTags(Base) {
         return class_1;
     }(Base));
 }
-exports.WithTags = WithTags;
 var Test = /** @class */ (function (_super) {
     __extends(Test, _super);
     function Test() {
@@ -118,22 +120,22 @@ export declare class FooItem {
     name?: string;
 }
 export type Constructor<T> = new (...args: any[]) => T;
-export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
+export declare function WithTags<T extends Constructor<FooItem>>(Base: T): T & {
     new (...args: any[]): {
         tags(): void;
         foo(): void;
         name?: string;
     };
     getTags(): void;
-} & T;
-declare const Test_base: {
+};
+declare const Test_base: typeof FooItem & {
     new (...args: any[]): {
         tags(): void;
         foo(): void;
         name?: string;
     };
     getTags(): void;
-} & typeof FooItem;
+};
 export declare class Test extends Test_base {
 }
 export {};

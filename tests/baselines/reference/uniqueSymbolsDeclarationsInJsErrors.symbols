@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.ts] ////
+
+=== uniqueSymbolsDeclarationsInJsErrors.js ===
 class C {
 >C : Symbol(C, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 0, 0))
 
@@ -21,3 +23,4 @@ class C {
     static readwriteType;
 >readwriteType : Symbol(C.readwriteType, Decl(uniqueSymbolsDeclarationsInJsErrors.js, 9, 24))
 }
+

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyGloImportParseErrors.ts ===
+//// [tests/cases/compiler/privacyGloImportParseErrors.ts] ////
+
+=== privacyGloImportParseErrors.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(privacyGloImportParseErrors.ts, 0, 0))
 

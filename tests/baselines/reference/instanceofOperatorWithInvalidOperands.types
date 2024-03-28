@@ -1,168 +1,263 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.ts] ////
+
+=== instanceofOperatorWithInvalidOperands.ts ===
 class C {
 >C : C
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 var x: any;
 >x : any
+>  : ^^^
 
 // invalid left operand
 // the left operand is required to be of type Any, an object type, or a type parameter type
 var a1: number;
 >a1 : number
+>   : ^^^^^^
 
 var a2: boolean;
 >a2 : boolean
+>   : ^^^^^^^
 
 var a3: string;
 >a3 : string
+>   : ^^^^^^
 
 var a4: void;
 >a4 : void
+>   : ^^^^
 
 var ra1 = a1 instanceof x;
 >ra1 : boolean
+>    : ^^^^^^^
 >a1 instanceof x : boolean
+>                : ^^^^^^^
 >a1 : number
+>   : ^^^^^^
 >x : any
+>  : ^^^
 
 var ra2 = a2 instanceof x;
 >ra2 : boolean
+>    : ^^^^^^^
 >a2 instanceof x : boolean
+>                : ^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >x : any
+>  : ^^^
 
 var ra3 = a3 instanceof x;
 >ra3 : boolean
+>    : ^^^^^^^
 >a3 instanceof x : boolean
+>                : ^^^^^^^
 >a3 : string
+>   : ^^^^^^
 >x : any
+>  : ^^^
 
 var ra4 = a4 instanceof x;
 >ra4 : boolean
+>    : ^^^^^^^
 >a4 instanceof x : boolean
+>                : ^^^^^^^
 >a4 : void
+>   : ^^^^
 >x : any
+>  : ^^^
 
 var ra5 = 0 instanceof x;
 >ra5 : boolean
+>    : ^^^^^^^
 >0 instanceof x : boolean
+>               : ^^^^^^^
 >0 : 0
+>  : ^
 >x : any
+>  : ^^^
 
 var ra6 = true instanceof x;
 >ra6 : boolean
+>    : ^^^^^^^
 >true instanceof x : boolean
+>                  : ^^^^^^^
 >true : true
+>     : ^^^^
 >x : any
+>  : ^^^
 
 var ra7 = '' instanceof x;
 >ra7 : boolean
+>    : ^^^^^^^
 >'' instanceof x : boolean
+>                : ^^^^^^^
 >'' : ""
+>   : ^^
 >x : any
+>  : ^^^
 
 var ra8 = null instanceof x;
 >ra8 : boolean
+>    : ^^^^^^^
 >null instanceof x : boolean
+>                  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var ra9 = undefined instanceof x;
 >ra9 : boolean
+>    : ^^^^^^^
 >undefined instanceof x : boolean
+>                       : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : any
+>  : ^^^
 
 // invalid right operand
 // the right operand to be of type Any or a subtype of the 'Function' interface type
 var b1: number;
 >b1 : number
+>   : ^^^^^^
 
 var b2: boolean;
 >b2 : boolean
+>   : ^^^^^^^
 
 var b3: string;
 >b3 : string
+>   : ^^^^^^
 
 var b4: void;
 >b4 : void
+>   : ^^^^
 
 var o1: {};
 >o1 : {}
+>   : ^^
 
 var o2: Object;
 >o2 : Object
+>   : ^^^^^^
 
 var o3: C;
 >o3 : C
+>   : ^
 
 var rb1 = x instanceof b1;
 >rb1 : boolean
+>    : ^^^^^^^
 >x instanceof b1 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >b1 : number
+>   : ^^^^^^
 
 var rb2 = x instanceof b2;
 >rb2 : boolean
+>    : ^^^^^^^
 >x instanceof b2 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >b2 : boolean
+>   : ^^^^^^^
 
 var rb3 = x instanceof b3;
 >rb3 : boolean
+>    : ^^^^^^^
 >x instanceof b3 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >b3 : string
+>   : ^^^^^^
 
 var rb4 = x instanceof b4;
 >rb4 : boolean
+>    : ^^^^^^^
 >x instanceof b4 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >b4 : void
+>   : ^^^^
 
 var rb5 = x instanceof 0;
 >rb5 : boolean
+>    : ^^^^^^^
 >x instanceof 0 : boolean
+>               : ^^^^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
 
 var rb6 = x instanceof true;
 >rb6 : boolean
+>    : ^^^^^^^
 >x instanceof true : boolean
+>                  : ^^^^^^^
 >x : any
+>  : ^^^
 >true : true
+>     : ^^^^
 
 var rb7 = x instanceof '';
 >rb7 : boolean
+>    : ^^^^^^^
 >x instanceof '' : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >'' : ""
+>   : ^^
 
 var rb8 = x instanceof o1;
 >rb8 : boolean
+>    : ^^^^^^^
 >x instanceof o1 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >o1 : {}
+>   : ^^
 
 var rb9 = x instanceof o2;
 >rb9 : boolean
+>    : ^^^^^^^
 >x instanceof o2 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >o2 : Object
+>   : ^^^^^^
 
 var rb10 = x instanceof o3;
 >rb10 : boolean
+>     : ^^^^^^^
 >x instanceof o3 : boolean
+>                : ^^^^^^^
 >x : any
+>  : ^^^
 >o3 : C
+>   : ^
 
 // both operands are invalid
 var rc1 = '' instanceof {};
 >rc1 : boolean
+>    : ^^^^^^^
 >'' instanceof {} : boolean
+>                 : ^^^^^^^
 >'' : ""
+>   : ^^
 >{} : {}
+>   : ^^
 

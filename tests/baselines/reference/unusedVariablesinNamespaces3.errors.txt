@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedVariablesinNamespaces3.ts(3,11): error TS6133: 'numberRegexp' is declared but its value is never read.
+unusedVariablesinNamespaces3.ts(3,11): error TS6133: 'numberRegexp' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedVariablesinNamespaces3.ts (1 errors) ====
+==== unusedVariablesinNamespaces3.ts (1 errors) ====
     namespace Validation {
         const lettersRegexp = /^[A-Za-z]+$/;
         const numberRegexp = /^[0-9]+$/;

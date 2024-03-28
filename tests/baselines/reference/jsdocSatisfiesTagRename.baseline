@@ -1,9 +1,0 @@
-/*====== /a.js ======*/
-
-/**
- * @typedef {Object} RENAME
- * @property {number} a
- */
-
-/** @satisfies {[|RENAME|]} comment */
-const foo = { a: 1 };

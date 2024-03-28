@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyModule.ts ===
+//// [tests/cases/compiler/noImplicitAnyModule.ts] ////
+
+=== noImplicitAnyModule.ts ===
 declare module Module {
 >Module : Symbol(Module, Decl(noImplicitAnyModule.ts, 0, 0))
 

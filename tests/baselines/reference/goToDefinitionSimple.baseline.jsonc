@@ -1,0 +1,43 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/Definition.ts ===
+// <|class [|c|] { }|>
+
+// === /tests/cases/fourslash/Consumption.ts ===
+// var n = new /*GOTO DEF*/[|c|]();
+// var n = new c();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "c",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/Definition.ts ===
+// <|class [|c|] { }|>
+
+// === /tests/cases/fourslash/Consumption.ts ===
+// var n = new c();
+// var n = new [|c|]/*GOTO DEF*/();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "c",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

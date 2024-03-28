@@ -1,6 +1,9 @@
-=== tests/cases/compiler/thisInConstructorParameter1.ts ===
+//// [tests/cases/compiler/thisInConstructorParameter1.ts] ////
+
+=== thisInConstructorParameter1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     public y;
 >y : any
@@ -9,5 +12,7 @@ class Foo {
 >x : any
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 }

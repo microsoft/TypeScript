@@ -1,4 +1,6 @@
-=== tests/cases/compiler/correlatedUnions.ts ===
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
+=== correlatedUnions.ts ===
 // Various repros from #30581
 
 type RecordMap = { n: number, s: string, b: boolean };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nameCollisionsInPropertyAssignments.ts] ////
+
 //// [nameCollisionsInPropertyAssignments.ts]
 var x = 1
 var y = { x() { x++; } }; 

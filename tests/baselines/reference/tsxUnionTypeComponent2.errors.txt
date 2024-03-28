@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(7,2): error TS2604: JSX element type 'X' does not have any construct or call signatures.
+file.tsx(7,2): error TS2604: JSX element type 'X' does not have any construct or call signatures.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     import React = require('react');
     
     type Invalid1 = React.ComponentClass<any> | number;

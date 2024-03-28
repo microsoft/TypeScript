@@ -1,22 +1,22 @@
-tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2813: Class declaration cannot implement overload list for 'default'.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
+m1.ts(1,22): error TS2323: Cannot redeclare exported variable 'default'.
+m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
+m1.ts(1,22): error TS2813: Class declaration cannot implement overload list for 'default'.
+m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
+m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
+m1.ts(5,25): error TS2814: Function with bodies can only merge with classes that are ambient.
+m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/conformance/es6/modules/m1.ts (7 errors) ====
+==== m1.ts (7 errors) ====
     export default class foo {
                          ~~~
 !!! error TS2323: Cannot redeclare exported variable 'default'.
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 tests/cases/conformance/es6/modules/m1.ts:10:16: and here.
+!!! related TS6204 m1.ts:10:16: and here.
                          ~~~
 !!! error TS2813: Class declaration cannot implement overload list for 'default'.
-!!! related TS6506 tests/cases/conformance/es6/modules/m1.ts:1:22: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 m1.ts:1:22: Consider adding a 'declare' modifier to this class.
     
     }
     
@@ -25,10 +25,10 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
 !!! error TS2323: Cannot redeclare exported variable 'default'.
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/conformance/es6/modules/m1.ts:10:16: Another export default is here.
+!!! related TS2753 m1.ts:10:16: Another export default is here.
                             ~~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/conformance/es6/modules/m1.ts:1:22: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 m1.ts:1:22: Consider adding a 'declare' modifier to this class.
     
     }
     
@@ -36,10 +36,10 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
     export default x;
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/conformance/es6/modules/m1.ts:5:25: The first export default is here.
-!!! related TS2752 tests/cases/conformance/es6/modules/m1.ts:1:22: The first export default is here.
+!!! related TS2752 m1.ts:5:25: The first export default is here.
+!!! related TS2752 m1.ts:1:22: The first export default is here.
     
-==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
+==== m2.ts (0 errors) ====
     import Entity from "./m1"
     
     Entity();

@@ -1,8 +1,13 @@
-=== tests/cases/compiler/unusedTypeParameters10.ts ===
+//// [tests/cases/compiler/unusedTypeParameters10.ts] ////
+
+=== unusedTypeParameters10.ts ===
 type Alias<T> = { };
 >Alias : Alias<T>
+>      : ^^^^^^^^
 
 type Alias2<T> = { x: T };
 >Alias2 : Alias2<T>
+>       : ^^^^^^^^^
 >x : T
+>  : ^
 

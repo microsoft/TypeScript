@@ -1,22 +1,38 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion4.ts] ////
+
+=== a.js ===
 function fn() {}
 >fn : () => void
+>   : ^^^^^^^^^^
 
 if (typeof module === 'object' && module.exports) {
 >typeof module === 'object' && module.exports : false | (() => void)
+>                                             : ^^^^^^^^^^^^^^^^^^^^
 >typeof module === 'object' : boolean
+>                           : ^^^^^^^
 >typeof module : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 >module.exports : () => void
+>               : ^^^^^^^^^^
 >module : { exports: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : () => void
+>        : ^^^^^^^^^^
 
     module.exports = fn;
 >module.exports = fn : () => void
+>                    : ^^^^^^^^^^
 >module.exports : () => void
+>               : ^^^^^^^^^^
 >module : { exports: () => void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : () => void
+>        : ^^^^^^^^^^
 >fn : () => void
+>   : ^^^^^^^^^^
 }
 

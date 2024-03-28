@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitPostComments.ts] ////
+
 //// [emitPostComments.ts]
 var y = 10;
 /**

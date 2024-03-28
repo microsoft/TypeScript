@@ -1,9 +1,16 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/noDuplicateJsdoc1.ts] ////
+
+=== a.js ===
 /** doc */
 const a = b = () => 0;
 >a : () => number
+>  : ^^^^^^^^^^^^
 >b = () => 0 : () => number
+>            : ^^^^^^^^^^^^
 >b : any
+>  : ^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 

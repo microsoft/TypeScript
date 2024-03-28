@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNew.ts] ////
+
 //// [exponentiationOperatorWithNew.ts]
 var a: any;
 var b: any;

@@ -1,35 +1,50 @@
-=== tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts ===
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts] ////
+
+=== objectLiteralWidened.ts ===
 // object literal properties are widened to any
 
 var x1 = {
 >x1 : { foo: any; bar: any; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    foo: null,    bar: undefined} : { foo: null; bar: undefined; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo: null,
 >foo : null
+>    : ^^^^
 
     bar: undefined
 >bar : undefined
+>    : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 var y1 = {
 >y1 : { foo: any; bar: { baz: any; boo: any; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    foo: null,    bar: {        baz: null,        boo: undefined    }} : { foo: null; bar: { baz: null; boo: undefined; }; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo: null,
 >foo : null
+>    : ^^^^
 
     bar: {
 >bar : { baz: null; boo: undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        baz: null,        boo: undefined    } : { baz: null; boo: undefined; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         baz: null,
 >baz : null
+>    : ^^^^
 
         boo: undefined
 >boo : undefined
+>    : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 }
 
@@ -37,42 +52,61 @@ var y1 = {
 
 var u: undefined = undefined;
 >u : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var n: null = null;
 >n : null
+>  : ^^^^
 
 var x2 = {
 >x2 : { foo: null; bar: undefined; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    foo: n,    bar: u} : { foo: null; bar: undefined; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo: n,
 >foo : null
+>    : ^^^^
 >n : null
+>  : ^^^^
 
     bar: u
 >bar : undefined
+>    : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 }
 
 var y2 = {
 >y2 : { foo: null; bar: { baz: null; boo: undefined; }; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    foo: n,    bar: {        baz: n,        boo: u    }} : { foo: null; bar: { baz: null; boo: undefined; }; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo: n,
 >foo : null
+>    : ^^^^
 >n : null
+>  : ^^^^
 
     bar: {
 >bar : { baz: null; boo: undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        baz: n,        boo: u    } : { baz: null; boo: undefined; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         baz: n,
 >baz : null
+>    : ^^^^
 >n : null
+>  : ^^^^
 
         boo: u
 >boo : undefined
+>    : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
     }
 }

@@ -1,14 +1,14 @@
-tests/cases/compiler/templateLiteralsInTypes.ts(3,1): error TS2554: Expected 2 arguments, but got 1.
-tests/cases/compiler/templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on type '`${string}:\t${number}\r\n`'.
+templateLiteralsInTypes.ts(3,1): error TS2554: Expected 2 arguments, but got 1.
+templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on type '`${string}:\t${number}\r\n`'.
 
 
-==== tests/cases/compiler/templateLiteralsInTypes.ts (2 errors) ====
+==== templateLiteralsInTypes.ts (2 errors) ====
     const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n`;
     
     f("x").foo;
-    ~~~~~~
+    ~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 tests/cases/compiler/templateLiteralsInTypes.ts:1:25: An argument for 'val' was not provided.
+!!! related TS6210 templateLiteralsInTypes.ts:1:25: An argument for 'val' was not provided.
            ~~~
 !!! error TS2339: Property 'foo' does not exist on type '`${string}:\t${number}\r\n`'.
     

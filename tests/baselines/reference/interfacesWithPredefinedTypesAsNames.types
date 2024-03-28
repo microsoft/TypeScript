@@ -1,12 +1,17 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts] ////
+
+=== interfacesWithPredefinedTypesAsNames.ts ===
 interface any { }
 interface number { }
 interface string { }
 interface boolean { }
 interface void {}
 >interface : any
+>          : ^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 interface unknown {}
 interface never {}

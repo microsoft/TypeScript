@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts] ////
+
 //// [spellingSuggestionLeadingUnderscores01.ts]
 // @filename abc.ts
 export declare let a: {

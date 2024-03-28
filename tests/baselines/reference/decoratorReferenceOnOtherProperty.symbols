@@ -1,9 +1,10 @@
-=== tests/cases/compiler/yoha.ts ===
-// https://github.com/Microsoft/TypeScript/issues/19799
+//// [tests/cases/compiler/decoratorReferenceOnOtherProperty.ts] ////
+
+=== yoha.ts ===
 export class Yoha {}
 >Yoha : Symbol(Yoha, Decl(yoha.ts, 0, 0))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {Yoha} from './yoha';
 >Yoha : Symbol(Yoha, Decl(index.ts, 0, 8))
 
@@ -24,7 +25,7 @@ class Bar {
   //                   ^^^^
 }
 
-=== tests/cases/compiler/index2.ts ===
+=== index2.ts ===
 import {Yoha} from './yoha';
 >Yoha : Symbol(Yoha, Decl(index2.ts, 0, 8))
 

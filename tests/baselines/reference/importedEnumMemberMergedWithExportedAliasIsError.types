@@ -1,22 +1,32 @@
-=== tests/cases/compiler/enum.ts ===
+//// [tests/cases/compiler/importedEnumMemberMergedWithExportedAliasIsError.ts] ////
+
+=== enum.ts ===
 export enum Enum {
 >Enum : Enum
+>     : ^^^^
 
     A,
 >A : Enum.A
+>  : ^^^^^^
 
     B
 >B : Enum.B
+>  : ^^^^^^
 }
-=== tests/cases/compiler/alias.ts ===
+=== alias.ts ===
 import {Enum} from "./enum";
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 
 import EnumA = Enum.A;
 >EnumA : Enum.A
+>      : ^^^^^^
 >Enum : Enum
+>     : ^^^^
 >A : Enum.A
+>  : ^^^^^^
 
 export type EnumA = [string] | [string, number];
->EnumA : import("tests/cases/compiler/alias").EnumA
+>EnumA : import("alias").EnumA
+>      : ^^^^^^^^^^^^^^^^^^^^^
 

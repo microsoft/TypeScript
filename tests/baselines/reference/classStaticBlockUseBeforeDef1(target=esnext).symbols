@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef1.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef1.ts] ////
+
+=== classStaticBlockUseBeforeDef1.ts ===
 class C {
 >C : Symbol(C, Decl(classStaticBlockUseBeforeDef1.ts, 0, 0))
 

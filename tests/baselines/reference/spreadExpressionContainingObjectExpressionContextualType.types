@@ -1,24 +1,39 @@
-=== tests/cases/compiler/spreadExpressionContainingObjectExpressionContextualType.ts ===
+//// [tests/cases/compiler/spreadExpressionContainingObjectExpressionContextualType.ts] ////
+
+=== spreadExpressionContainingObjectExpressionContextualType.ts ===
 // repro #49585
 
 const { value } = (() => ({
 >value : string
+>      : ^^^^^^
 >(() => ({  value: "",  ...(true ? {} : {}),}))() : { value: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^
 >(() => ({  value: "",  ...(true ? {} : {}),})) : () => { value: string; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({  value: "",  ...(true ? {} : {}),}) : () => { value: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >({  value: "",  ...(true ? {} : {}),}) : { value: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^
 >{  value: "",  ...(true ? {} : {}),} : { value: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^
 
   value: "",
 >value : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   ...(true ? {} : {}),
 >(true ? {} : {}) : {}
+>                 : ^^
 >true ? {} : {} : {}
+>               : ^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 }))();
 
@@ -26,20 +41,31 @@ const { value } = (() => ({
 
 const { value2 } = {
 >value2 : string
+>       : ^^^^^^
 >{  value2: "",  ...(() => true ? {} : {})(),} : { value2: string; }
+>                                              : ^^^^^^^^^^^^^^^^^^^
 
   value2: "",
 >value2 : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 
   ...(() => true ? {} : {})(),
 >(() => true ? {} : {})() : {}
+>                         : ^^
 >(() => true ? {} : {}) : () => {}
+>                       : ^^^^^^^^
 >() => true ? {} : {} : () => {}
+>                     : ^^^^^^^^
 >true ? {} : {} : {}
+>               : ^^
 >true : true
+>     : ^^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 };
 

@@ -1,57 +1,87 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/thisInObjectJs.ts] ////
+
+=== index.js ===
 export { }
 let obj = {
 >obj : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  x: 10,  y: [1],  fun: function() {    this.x = 1    this/*1*/  },  f2: function() {    this.x    this/*2*/  },  f3: (function() {    this.x = 1    this/*3*/  }),} : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   x: 10,
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
   y: [1],
 >y : number[]
+>  : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
   fun: function() {
 >fun : typeof fun
+>    : ^^^^^^^^^^
 >function() {    this.x = 1    this/*1*/  } : typeof fun
+>                                           : ^^^^^^^^^^
 
     this.x = 1
 >this.x = 1 : 1
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     this/*1*/
 >this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   },
   f2: function() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 >function() {    this.x    this/*2*/  } : () => void
+>                                       : ^^^^^^^^^^
 
     this.x
 >this.x : number
+>       : ^^^^^^
 >this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     this/*2*/
 >this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   },
   f3: (function() {
 >f3 : typeof (Anonymous function)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(function() {    this.x = 1    this/*3*/  }) : typeof (Anonymous function)
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function() {    this.x = 1    this/*3*/  } : typeof (Anonymous function)
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     this.x = 1
 >this.x = 1 : 1
+>           : ^
 >this.x : any
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     this/*3*/
 >this : any

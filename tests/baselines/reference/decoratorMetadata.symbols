@@ -1,8 +1,10 @@
-=== tests/cases/conformance/decorators/service.ts ===
+//// [tests/cases/conformance/decorators/decoratorMetadata.ts] ////
+
+=== service.ts ===
 export default class Service {
 >Service : Symbol(Service, Decl(service.ts, 0, 0))
 }
-=== tests/cases/conformance/decorators/component.ts ===
+=== component.ts ===
 import Service from "./service";
 >Service : Symbol(Service, Decl(component.ts, 0, 6))
 

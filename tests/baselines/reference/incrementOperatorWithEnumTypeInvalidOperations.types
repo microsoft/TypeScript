@@ -1,75 +1,122 @@
-=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts] ////
+
+=== incrementOperatorWithEnumTypeInvalidOperations.ts ===
 // ++ operator on enum type
 
 enum ENUM { };
 >ENUM : ENUM
+>     : ^^^^
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>      : ^^^^^
 >A : ENUM1.A
+>  : ^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >"" : (typeof ENUM1)[""]
+>   : ^^^^^^^^^^^^^^^^^^
 
 // enum type var
 var ResultIsNumber1 = ++ENUM;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >++ENUM : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 var ResultIsNumber2 = ++ENUM1;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >++ENUM1 : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 
 var ResultIsNumber3 = ENUM++;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >ENUM++ : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 var ResultIsNumber4 = ENUM1++;
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >ENUM1++ : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 
 // enum type expressions
 var ResultIsNumber5 = ++(ENUM[1] + ENUM[2]);
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >++(ENUM[1] + ENUM[2]) : number
+>                      : ^^^^^^
 >(ENUM[1] + ENUM[2]) : string
+>                    : ^^^^^^
 >ENUM[1] + ENUM[2] : string
+>                  : ^^^^^^
 >ENUM[1] : string
+>        : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >1 : 1
+>  : ^
 >ENUM[2] : string
+>        : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 var ResultIsNumber6 = (ENUM[1] + ENUM[2])++;
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >(ENUM[1] + ENUM[2])++ : number
+>                      : ^^^^^^
 >(ENUM[1] + ENUM[2]) : string
+>                    : ^^^^^^
 >ENUM[1] + ENUM[2] : string
+>                  : ^^^^^^
 >ENUM[1] : string
+>        : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >1 : 1
+>  : ^
 >ENUM[2] : string
+>        : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 // miss assignment operator
 ++ENUM;
 >++ENUM : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 ++ENUM1;
 >++ENUM1 : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 
 ENUM++;
 >ENUM++ : number
+>       : ^^^^^^
 >ENUM : any
+>     : ^^^
 
 ENUM1++;
 >ENUM1++ : number
+>        : ^^^^^^
 >ENUM1 : any
+>      : ^^^
 

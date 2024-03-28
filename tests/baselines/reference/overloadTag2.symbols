@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/overloadTag2.js ===
+//// [tests/cases/conformance/jsdoc/overloadTag2.ts] ////
+
+=== overloadTag2.js ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
 

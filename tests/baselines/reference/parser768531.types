@@ -1,8 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/Fuzz/parser768531.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Fuzz/parser768531.ts] ////
+
+=== parser768531.ts ===
 {a: 3}
 >a : any
+>  : ^^^
 >3 : 3
+>  : ^
 
 /x/
 >/x/ : RegExp
+>    : ^^^^^^
 

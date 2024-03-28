@@ -1,7 +1,10 @@
-tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts(1,3): error TS1005: ';' expected.
+scannerNumericLiteral3.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+scannerNumericLiteral3.ts(1,3): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts (1 errors) ====
+==== scannerNumericLiteral3.ts (2 errors) ====
     01.0
+    ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
       ~~
 !!! error TS1005: ';' expected.

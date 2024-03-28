@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overrideBaseIntersectionMethod.ts ===
+//// [tests/cases/compiler/overrideBaseIntersectionMethod.ts] ////
+
+=== overrideBaseIntersectionMethod.ts ===
 // Repro from #14615
 
 type Constructor<T> = new (...args: any[]) => T;
@@ -72,8 +74,8 @@ class Foo extends WithLocation(Point) {
 >getLocation : Symbol(Foo.getLocation, Decl(overrideBaseIntersectionMethod.ts, 21, 3))
 
     return super.getLocation()
->super.getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 4, 84), Decl(overrideBaseIntersectionMethod.ts, 12, 53))
->getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 4, 84), Decl(overrideBaseIntersectionMethod.ts, 12, 53))
+>super.getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53), Decl(overrideBaseIntersectionMethod.ts, 4, 84))
+>getLocation : Symbol(getLocation, Decl(overrideBaseIntersectionMethod.ts, 12, 53), Decl(overrideBaseIntersectionMethod.ts, 4, 84))
   }
   whereAmI() {
 >whereAmI : Symbol(Foo.whereAmI, Decl(overrideBaseIntersectionMethod.ts, 24, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsPrivateFields01.ts] ////
+
 //// [file.js]
 export class C {
     #hello = "hello";

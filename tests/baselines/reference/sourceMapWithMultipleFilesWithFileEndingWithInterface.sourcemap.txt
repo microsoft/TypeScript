@@ -2,11 +2,11 @@
 JsFile: fooResult.js
 mapUrl: fooResult.js.map
 sourceRoot: 
-sources: tests/cases/compiler/a.ts,tests/cases/compiler/b.ts
+sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:fooResult.js
-sourceFile:tests/cases/compiler/a.ts
+sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var M;
 1 >
@@ -84,7 +84,7 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 -------------------------------------------------------------------
 emittedFile:fooResult.js
-sourceFile:tests/cases/compiler/b.ts
+sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var m1;
 1 >

@@ -1,25 +1,37 @@
-=== tests/cases/compiler/importAndVariableDeclarationConflict2.ts ===
+//// [tests/cases/compiler/importAndVariableDeclarationConflict2.ts] ////
+
+=== importAndVariableDeclarationConflict2.ts ===
 module m {
 >m : typeof globalThis.m
+>  : ^^^^^^^^^^^^^^^^^^^
 
   export var m = '';
 >m : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 }
 
 import x = m.m;
 >x : string
+>  : ^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >m : string
+>  : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
   public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     var x = '';
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
   }
 }

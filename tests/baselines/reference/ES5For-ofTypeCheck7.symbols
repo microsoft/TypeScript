@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck7.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck7.ts] ////
+
+=== ES5For-ofTypeCheck7.ts ===
 var union: string | number;
 >union : Symbol(union, Decl(ES5For-ofTypeCheck7.ts, 0, 3))
 

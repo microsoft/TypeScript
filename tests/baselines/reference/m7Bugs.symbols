@@ -1,4 +1,6 @@
-=== tests/cases/compiler/m7Bugs.ts ===
+//// [tests/cases/compiler/m7Bugs.ts] ////
+
+=== m7Bugs.ts ===
 // scenario 1
 interface ISomething {
 >ISomething : Symbol(ISomething, Decl(m7Bugs.ts, 0, 0))

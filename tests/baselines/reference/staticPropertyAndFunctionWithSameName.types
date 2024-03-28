@@ -1,20 +1,28 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyAndFunctionWithSameName.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyAndFunctionWithSameName.ts] ////
+
+=== staticPropertyAndFunctionWithSameName.ts ===
 class C {
 >C : C
+>  : ^
 
     static f: number;
 >f : number
+>  : ^^^^^^
 
     f: number;
 >f : number
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     static f: number;
 >f : number
+>  : ^^^^^^
 
     f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/test/foo_3.ts ===
+//// [tests/cases/conformance/externalModules/nameWithRelativePaths.ts] ////
+
+=== test/foo_3.ts ===
 import foo0 = require('../foo_0');
 >foo0 : Symbol(foo0, Decl(foo_3.ts, 0, 0))
 
@@ -25,18 +27,18 @@ if(foo2.M2.x){
 >f : Symbol(foo1.f, Decl(foo_1.ts, 0, 0))
 }
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export var foo = 42;
 >foo : Symbol(foo, Decl(foo_0.ts, 0, 10))
 
-=== tests/cases/conformance/externalModules/test/test/foo_1.ts ===
+=== test/test/foo_1.ts ===
 export function f(){
 >f : Symbol(f, Decl(foo_1.ts, 0, 0))
 
 	return 42;
 }
 
-=== tests/cases/conformance/externalModules/test/foo_2.ts ===
+=== test/foo_2.ts ===
 export module M2 {
 >M2 : Symbol(M2, Decl(foo_2.ts, 0, 0))
 

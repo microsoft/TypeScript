@@ -1,2 +1,4 @@
-=== tests/cases/compiler/recursiveGenericSignatureInstantiation2.ts ===
+//// [tests/cases/compiler/recursiveGenericSignatureInstantiation2.ts] ////
+
+=== recursiveGenericSignatureInstantiation2.ts ===
 

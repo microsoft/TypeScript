@@ -1,38 +1,57 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/namespaceMergedWithImportAliasNoCrash.ts] ////
+
+=== file1.ts ===
 export namespace Library {
     export type Bar = { a: number };
->Bar : { a: number; }
+>Bar : Bar
+>    : ^^^
 >a : number
+>  : ^^^^^^
 }
 var x: Library.Bar; // should work
 >x : Library.Bar
+>  : ^^^^^^^^^^^
 >Library : any
+>        : ^^^
 
 Library.foo; // should be an error
 >Library.foo : any
+>            : ^^^
 >Library : any
+>        : ^^^
 >foo : any
+>    : ^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as Lib from './file1';
 >Lib : typeof Lib
+>    : ^^^^^^^^^^
 
 namespace Lib { // should fail to merge
 >Lib : typeof Lib
+>    : ^^^^^^^^^^
 
     export const foo: string = "";
 >foo : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 }
 Lib.foo; // should work
 >Lib.foo : string
+>        : ^^^^^^
 >Lib : typeof Lib
+>    : ^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 var x: Lib.Bar; // should be an error
 >x : Lib.Bar
+>  : ^^^^^^^
 >Lib : any
+>    : ^^^
 
 export { Lib }
 >Lib : typeof Lib
+>    : ^^^^^^^^^^
 

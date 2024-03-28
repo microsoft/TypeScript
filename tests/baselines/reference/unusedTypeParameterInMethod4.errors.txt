@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameterInMethod4.ts(2,14): error TS6133: 'X' is declared but its value is never read.
+unusedTypeParameterInMethod4.ts(2,14): error TS6133: 'X' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameterInMethod4.ts (1 errors) ====
+==== unusedTypeParameterInMethod4.ts (1 errors) ====
     class A {
         public f1<X>() {
                  ~~~

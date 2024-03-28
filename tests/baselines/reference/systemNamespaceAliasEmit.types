@@ -1,27 +1,41 @@
-=== tests/cases/compiler/systemNamespaceAliasEmit.ts ===
+//// [tests/cases/compiler/systemNamespaceAliasEmit.ts] ////
+
+=== systemNamespaceAliasEmit.ts ===
 namespace ns {
 >ns : typeof ns
+>   : ^^^^^^^^^
 
     const value = 1;
 >value : 1
+>      : ^
 >1 : 1
+>  : ^
 }
 
 enum AnEnum {
 >AnEnum : AnEnum
+>       : ^^^^^^
 
     ONE,
 >ONE : AnEnum.ONE
+>    : ^^^^^^^^^^
 
     TWO
 >TWO : AnEnum.TWO
+>    : ^^^^^^^^^^
 }
 
 export {ns, AnEnum, ns as FooBar, AnEnum as BarEnum};
 >ns : typeof ns
+>   : ^^^^^^^^^
 >AnEnum : typeof AnEnum
+>       : ^^^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >FooBar : typeof ns
+>       : ^^^^^^^^^
 >AnEnum : typeof AnEnum
+>       : ^^^^^^^^^^^^^
 >BarEnum : typeof AnEnum
+>        : ^^^^^^^^^^^^^
 

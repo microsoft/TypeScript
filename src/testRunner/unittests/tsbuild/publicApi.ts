@@ -2,26 +2,33 @@ import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselinePrograms,
     commandLineCallbacks,
-    loadProjectFromFiles,
     toPathWithSystem,
+} from "../helpers/baseline";
+import {
     TscCompileSystem,
     verifyTscBaseline,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
     before(() => {
         const inputFs = loadProjectFromFiles({
-            "/src/tsconfig.json": JSON.stringify({
+            "/src/tsconfig.json": jsonToReadableText({
                 references: [
                     { path: "./shared/tsconfig.json" },
-                    { path: "./webpack/tsconfig.json" }
+                    { path: "./webpack/tsconfig.json" },
                 ],
-                files: []
+                files: [],
             }),
-            "/src/shared/tsconfig.json": JSON.stringify({
+            "/src/shared/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true },
             }),
             "/src/shared/index.ts": `export function f1() { }
@@ -29,11 +36,11 @@ export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`,
-            "/src/webpack/tsconfig.json": JSON.stringify({
+            "/src/webpack/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
-                references: [{ path: "../shared/tsconfig.json" }]
+                references: [{ path: "../shared/tsconfig.json" }],
             }),
             "/src/webpack/index.ts": `export function f2() { }
 export class c2 { }
@@ -45,6 +52,7 @@ export function f22() { } // trailing`,
 
         // Create system
         sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys.storeSignatureInfo = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
@@ -60,19 +68,18 @@ export function f22() { } // trailing`,
         const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
         const buildHost = ts.createSolutionBuilderHost(
             sys,
-                /*createProgram*/ undefined,
+            /*createProgram*/ undefined,
             ts.createDiagnosticReporter(sys, /*pretty*/ true),
             ts.createBuilderStatusReporter(sys, /*pretty*/ true),
-            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
+            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
-        buildHost.afterEmitBundle = cb;
         const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
         const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
         sys.exit(exitStatus);
         sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
         const baseline: string[] = [];
-        baselinePrograms(baseline, getPrograms, ts.emptyArray, /*baselineDependencies*/ false);
+        baselinePrograms(baseline, getPrograms(), ts.emptyArray, /*baselineDependencies*/ false);
         sys.write(baseline.join("\n"));
         fs.makeReadonly();
         sys.baseLine = () => {
@@ -86,7 +93,7 @@ ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`
+${patch ? vfs.formatPatch(patch) : ""}`,
             };
         };
 

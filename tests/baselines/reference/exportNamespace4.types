@@ -1,28 +1,38 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace4.ts] ////
+
+=== a.ts ===
 export class A {}
 >A : A
+>  : ^
 
-=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+=== b.ts ===
 
 export type * from './a';
 
-=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+=== c.ts ===
 export type * as ns from './a';
->ns : typeof import("tests/cases/conformance/externalModules/typeOnly/a")
+>ns : typeof import("a")
+>   : ^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+=== d.ts ===
 import { A } from './b';
 >A : typeof A
+>  : ^^^^^^^^
 
 A;
 >A : typeof A
+>  : ^^^^^^^^
 
-=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+=== e.ts ===
 import { ns } from './c';
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 ns.A;
 >ns.A : typeof ns.A
+>     : ^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >A : typeof ns.A
+>  : ^^^^^^^^^^^
 

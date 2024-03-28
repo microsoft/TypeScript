@@ -1,7 +1,11 @@
-=== tests/cases/compiler/es5ExportEquals.ts ===
+//// [tests/cases/compiler/es5ExportEquals.ts] ////
+
+=== es5ExportEquals.ts ===
 export function f() { }
 >f : typeof f
+>  : ^^^^^^^^
 
 export = f;
 >f : typeof f
+>  : ^^^^^^^^
 

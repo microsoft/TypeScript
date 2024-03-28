@@ -1,41 +1,65 @@
-=== tests/cases/compiler/primaryExpressionMods.ts ===
+//// [tests/cases/compiler/primaryExpressionMods.ts] ////
+
+=== primaryExpressionMods.ts ===
 module M
 >M : typeof M
+>  : ^^^^^^^^
 {
     export interface P { x: number; y: number; }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     export var a = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 var p: M.P;             // Used as ModuleName
 >p : M.P
+>  : ^^^
 >M : any
+>  : ^^^
 
 var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
 >m : M
+>  : ^
 >M : typeof M
+>  : ^^^^^^^^
 
 var m2: typeof M = M;   // Used as PrimaryExpression in TypeQuery
 >m2 : typeof M
+>   : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var x1 = M.a;           // Used as PrimaryExpression
 >x1 : number
+>   : ^^^^^^
 >M.a : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 var x2 = m.a;           // Same as M.a
 >x2 : any
+>   : ^^^
 >m.a : any
+>    : ^^^
 >m : M
+>  : ^
 >a : any
+>  : ^^^
 
 var q: m.P;             // Error
 >q : m.P
+>  : ^^^
 >m : any
+>  : ^^^
 

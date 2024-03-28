@@ -1,19 +1,19 @@
-tests/cases/compiler/index.ts(9,23): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
-tests/cases/compiler/index.ts(15,8): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
-tests/cases/compiler/index.ts(24,28): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
+index.ts(9,23): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
+index.ts(15,8): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
+index.ts(24,28): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
 
 
-==== tests/cases/compiler/type1.ts (0 errors) ====
+==== type1.ts (0 errors) ====
     interface T1 {}
     export type { T1 }
     
-==== tests/cases/compiler/type2.ts (0 errors) ====
+==== type2.ts (0 errors) ====
     export interface T2 {}
     
-==== tests/cases/compiler/class3.ts (0 errors) ====
+==== class3.ts (0 errors) ====
     export class C3 {}
     
-==== tests/cases/compiler/index.ts (3 errors) ====
+==== index.ts (3 errors) ====
     import { T1 } from "./type1";
     import * as t1 from "./type1";
     import type { T2 } from "./type2";
@@ -25,7 +25,7 @@ tests/cases/compiler/index.ts(24,28): error TS1272: A type referenced in a decor
       handleEvent1(event: T1) {} // Error
                           ~~
 !!! error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
-!!! related TS1376 tests/cases/compiler/index.ts:1:10: 'T1' was imported here.
+!!! related TS1376 index.ts:1:10: 'T1' was imported here.
       
       @EventListener('2')
       handleEvent2(event: T2) {} // Ok
@@ -34,7 +34,7 @@ tests/cases/compiler/index.ts(24,28): error TS1272: A type referenced in a decor
       p1!: T1; // Error
            ~~
 !!! error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
-!!! related TS1376 tests/cases/compiler/index.ts:1:10: 'T1' was imported here.
+!!! related TS1376 index.ts:1:10: 'T1' was imported here.
     
       @EventListener('1')
       p1_ns!: t1.T1; // Ok
@@ -46,6 +46,6 @@ tests/cases/compiler/index.ts(24,28): error TS1272: A type referenced in a decor
       handleEvent3(event: C3): T1 { return undefined! } // Ok, Error
                                ~~
 !!! error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
-!!! related TS1376 tests/cases/compiler/index.ts:1:10: 'T1' was imported here.
+!!! related TS1376 index.ts:1:10: 'T1' was imported here.
     }
     

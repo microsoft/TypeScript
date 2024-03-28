@@ -1,38 +1,54 @@
-=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/extendsClause.ts] ////
+
+=== types.ts ===
 export interface I {}
 export class C {}
 >C : C
+>  : ^
 
-=== tests/cases/conformance/externalModules/typeOnly/ns.ts ===
+=== ns.ts ===
 import type * as types from './types';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 export { types };
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+=== index.ts ===
 import { types } from './ns';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 import type { C, I } from './types';
 >C : types.C
+>  : ^^^^^^^
 >I : types.I
+>  : ^^^^^^^
 
 interface Q extends C {}
 interface R extends I {}
 interface S extends types.C {}
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 interface T extends types.I {}
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 class U extends C {} // Error
 >U : U
+>  : ^
 >C : types.C
+>  : ^^^^^^^
 
 class V extends types.C {} // Error
 >V : V
+>  : ^
 >types.C : types.C
+>        : ^^^^^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >C : typeof types.C
+>  : ^^^^^^^^^^^^^^
 

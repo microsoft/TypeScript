@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts] ////
+
 //// [privateNameStaticFieldAccess.ts]
 class A {
     static #myField = "hello world";
@@ -17,7 +19,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _a, _A_myField;
 class A {
     constructor() {
-        console.log(__classPrivateFieldGet(A, _a, "f", _A_myField)); //Ok
+        console.log(__classPrivateFieldGet(_a, _a, "f", _A_myField)); //Ok
         console.log(__classPrivateFieldGet(this, _a, "f", _A_myField)); //Error
     }
 }

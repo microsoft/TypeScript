@@ -1,8 +1,8 @@
-tests/cases/conformance/esDecorators/classExpression/main.ts(4,18): error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-tests/cases/conformance/esDecorators/classExpression/main.ts(4,18): error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(4,18): error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(4,18): error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
-==== tests/cases/conformance/esDecorators/classExpression/main.ts (2 errors) ====
+==== main.ts (2 errors) ====
     declare var dec: any;
     
     // uses: __esDecorate, __runInitializers
@@ -12,6 +12,6 @@ tests/cases/conformance/esDecorators/classExpression/main.ts(4,18): error TS2343
                      ~~~~
 !!! error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
     
-==== tests/cases/conformance/esDecorators/classExpression/tslib.d.ts (0 errors) ====
+==== tslib.d.ts (0 errors) ====
     export {}
     

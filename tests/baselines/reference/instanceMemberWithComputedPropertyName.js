@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberWithComputedPropertyName.ts] ////
+
 //// [instanceMemberWithComputedPropertyName.ts]
 // https://github.com/microsoft/TypeScript/issues/30953
 "use strict";

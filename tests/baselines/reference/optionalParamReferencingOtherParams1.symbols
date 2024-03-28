@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamReferencingOtherParams1.ts ===
+//// [tests/cases/compiler/optionalParamReferencingOtherParams1.ts] ////
+
+=== optionalParamReferencingOtherParams1.ts ===
 function strange(x: number, y = x * 1, z = x + y) {
 >strange : Symbol(strange, Decl(optionalParamReferencingOtherParams1.ts, 0, 0))
 >x : Symbol(x, Decl(optionalParamReferencingOtherParams1.ts, 0, 17))

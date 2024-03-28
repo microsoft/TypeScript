@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts(3,18): error TS18049: 'f11' is possibly 'null' or 'undefined'.
+nullishCoalescingOperator11.ts(3,18): error TS18049: 'f11' is possibly 'null' or 'undefined'.
 
 
-==== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts (1 errors) ====
+==== nullishCoalescingOperator11.ts (1 errors) ====
     declare const f11: 1 | 0 | '' | null | undefined;
     
     let g11 = f11 ?? f11.toFixed()

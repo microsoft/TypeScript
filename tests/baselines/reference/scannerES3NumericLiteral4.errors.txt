@@ -1,7 +1,7 @@
-tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral4.ts(1,3): error TS1124: Digit expected.
+scannerES3NumericLiteral4.ts(1,3): error TS1124: Digit expected.
 
 
-==== tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral4.ts (1 errors) ====
+==== scannerES3NumericLiteral4.ts (1 errors) ====
     1e
       
 !!! error TS1124: Digit expected.

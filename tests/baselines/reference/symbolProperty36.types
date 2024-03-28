@@ -1,19 +1,33 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty36.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty36.ts] ////
+
+=== symbolProperty36.ts ===
 var x = {
 >x : { [Symbol.isConcatSpreadable]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.isConcatSpreadable]: 0,    [Symbol.isConcatSpreadable]: 1} : { [Symbol.isConcatSpreadable]: number; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.isConcatSpreadable]: 0,
 >[Symbol.isConcatSpreadable] : number
+>                            : ^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     [Symbol.isConcatSpreadable]: 1
 >[Symbol.isConcatSpreadable] : number
+>                            : ^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }

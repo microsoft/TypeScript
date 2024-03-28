@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAssertionToGenericFunctionType.ts ===
+//// [tests/cases/compiler/typeAssertionToGenericFunctionType.ts] ////
+
+=== typeAssertionToGenericFunctionType.ts ===
 var x = {
 >x : Symbol(x, Decl(typeAssertionToGenericFunctionType.ts, 0, 3))
 

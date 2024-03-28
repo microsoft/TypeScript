@@ -1,62 +1,81 @@
-=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases4.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases4.ts] ////
+
+=== mergedInterfacesWithMultipleBases4.ts ===
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     a: T;
 >a : T
+>  : ^
 }
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     b: T;
 >b : T
+>  : ^
 }
 
 class C3<T> {
 >C3 : C3<T>
+>   : ^^^^^
 
     c: T;
 >c : T
+>  : ^
 }
 
 class C4<T> {
 >C4 : C4<T>
+>   : ^^^^^
 
     d: T;
 >d : T
+>  : ^
 }
 
 interface A<T> extends C<string>, C3<string> { // error
     y: T;
 >y : T
+>  : ^
 }
 
 interface A<T> extends C<number>, C4<string> {
     z: T;
 >z : T
+>  : ^
 }
 
 class D implements A<boolean> {
 >D : D
+>  : ^
 
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 
     c: string;
 >c : string
+>  : ^^^^^^
 
     d: string;
 >d : string
+>  : ^^^^^^
 
     y: boolean;
 >y : boolean
+>  : ^^^^^^^
 
     z: boolean;
 >z : boolean
+>  : ^^^^^^^
 }

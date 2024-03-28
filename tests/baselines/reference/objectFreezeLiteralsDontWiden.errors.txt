@@ -1,7 +1,7 @@
-tests/cases/compiler/objectFreezeLiteralsDontWiden.ts(7,1): error TS2322: Type '"latest"' is not assignable to type '"1011831"'.
+objectFreezeLiteralsDontWiden.ts(7,1): error TS2322: Type '"latest"' is not assignable to type '"1011831"'.
 
 
-==== tests/cases/compiler/objectFreezeLiteralsDontWiden.ts (1 errors) ====
+==== objectFreezeLiteralsDontWiden.ts (1 errors) ====
     const PUPPETEER_REVISIONS = Object.freeze({
       chromium: '1011831',
       firefox: 'latest',

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts] ////
+
 //// [classMergedWithInterfaceMultipleBasesNoError.ts]
 interface Bar { }
 interface Baz { }

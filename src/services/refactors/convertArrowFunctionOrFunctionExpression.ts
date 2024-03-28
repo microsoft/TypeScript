@@ -80,10 +80,10 @@ registerRefactor(refactorName, {
     kinds: [
         toAnonymousFunctionAction.kind,
         toNamedFunctionAction.kind,
-        toArrowFunctionAction.kind
+        toArrowFunctionAction.kind,
     ],
     getEditsForAction: getRefactorEditsToConvertFunctionExpressions,
-    getAvailableActions: getRefactorActionsToConvertFunctionExpressions
+    getAvailableActions: getRefactorActionsToConvertFunctionExpressions,
 });
 
 interface FunctionInfo {
@@ -119,7 +119,7 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
 
     if (refactorKindBeginsWith(toAnonymousFunctionAction.kind, kind)) {
         const error = !selectedVariableDeclaration && isArrowFunction(func) ?
-            undefined: getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
+            undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
         if (error) {
             errors.push({ ...toAnonymousFunctionAction, notApplicableReason: error });
         }
@@ -142,7 +142,7 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
         name: refactorName,
         description: refactorDescription,
         actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason ?
-            errors : possibleActions
+            errors : possibleActions,
     }];
 }
 
@@ -181,7 +181,6 @@ function getRefactorEditsToConvertFunctionExpressions(context: RefactorContext, 
 function containingThis(node: Node): boolean {
     let containsThis = false;
     node.forEachChild(function checkThis(child) {
-
         if (isThis(child)) {
             containsThis = true;
             return;
@@ -240,8 +239,8 @@ function convertToBlock(body: ConciseBody): Block {
         const file = body.getSourceFile();
         setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
-        copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
-        return factory.createBlock([returnStatement], /* multiLine */ true);
+        copyTrailingAsLeadingComments(body, returnStatement, file, /*commentKind*/ undefined, /*hasTrailingNewLine*/ true);
+        return factory.createBlock([returnStatement], /*multiLine*/ true);
     }
     else {
         return body;
@@ -262,7 +261,7 @@ function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo
 function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
-    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /*name*/ undefined, func.typeParameters, func.parameters, func.type, body);
     return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
@@ -308,7 +307,7 @@ function getEditInfoForConvertToArrowFunction(context: RefactorContext, func: Fu
 }
 
 function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
-    return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression));
+    return body.statements.length === 1 && (isReturnStatement(head) && !!head.expression);
 }
 
 function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {

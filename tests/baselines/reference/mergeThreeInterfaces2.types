@@ -1,159 +1,232 @@
-=== tests/cases/conformance/interfaces/declarationMerging/mergeThreeInterfaces2.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/mergeThreeInterfaces2.ts] ////
+
+=== mergeThreeInterfaces2.ts ===
 // two interfaces with the same root module should merge
 
 // root module now multiple module declarations
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export interface A {
         foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     var a: A;
 >a : A
+>  : ^
 
     var r1 = a.foo;
 >r1 : string
+>   : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 
     var r2 = a.bar;
 >r2 : number
+>   : ^^^^^^
 >a.bar : number
+>      : ^^^^^^
 >a : A
+>  : ^
 >bar : number
+>    : ^^^^^^
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export interface A {
         bar: number;
 >bar : number
+>    : ^^^^^^
     }
 
     export interface A {
         baz: boolean;
 >baz : boolean
+>    : ^^^^^^^
     }
 
     var a: A;
 >a : A
+>  : ^
 
     var r1 = a.foo;
 >r1 : string
+>   : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 
     var r2 = a.bar;
 >r2 : number
+>   : ^^^^^^
 >a.bar : number
+>      : ^^^^^^
 >a : A
+>  : ^
 >bar : number
+>    : ^^^^^^
 
     var r3 = a.baz; 
 >r3 : boolean
+>   : ^^^^^^^
 >a.baz : boolean
+>      : ^^^^^^^
 >a : A
+>  : ^
 >baz : boolean
+>    : ^^^^^^^
 }
 
 // same as above but with an additional level of nesting and third module declaration
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
         export interface A {
             foo: string;
 >foo : string
+>    : ^^^^^^
         }
 
         var a: A;
 >a : A
+>  : ^
 
         var r1 = a.foo;
 >r1 : string
+>   : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 
         var r2 = a.bar;
 >r2 : number
+>   : ^^^^^^
 >a.bar : number
+>      : ^^^^^^
 >a : A
+>  : ^
 >bar : number
+>    : ^^^^^^
     }
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
         export interface A {
             bar: number;
 >bar : number
+>    : ^^^^^^
         }
 
         var a: A;
 >a : A
+>  : ^
 
         var r1 = a.foo
 >r1 : string
+>   : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 
         var r2 = a.bar;
 >r2 : number
+>   : ^^^^^^
 >a.bar : number
+>      : ^^^^^^
 >a : A
+>  : ^
 >bar : number
+>    : ^^^^^^
 
         var r3 = a.baz;
 >r3 : boolean
+>   : ^^^^^^^
 >a.baz : boolean
+>      : ^^^^^^^
 >a : A
+>  : ^
 >baz : boolean
+>    : ^^^^^^^
     }
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
         export interface A {
             baz: boolean;
 >baz : boolean
+>    : ^^^^^^^
         }
 
         var a: A;
 >a : A
+>  : ^
 
         var r1 = a.foo
 >r1 : string
+>   : ^^^^^^
 >a.foo : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 
         var r2 = a.bar;
 >r2 : number
+>   : ^^^^^^
 >a.bar : number
+>      : ^^^^^^
 >a : A
+>  : ^
 >bar : number
+>    : ^^^^^^
 
         var r3 = a.baz;
 >r3 : boolean
+>   : ^^^^^^^
 >a.baz : boolean
+>      : ^^^^^^^
 >a : A
+>  : ^
 >baz : boolean
+>    : ^^^^^^^
     }
 }

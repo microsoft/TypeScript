@@ -1,13 +1,22 @@
-=== tests/cases/compiler/jsNegativeELementAccessNotBound.js ===
+//// [tests/cases/compiler/jsNegativeElementAccessNotBound.ts] ////
+
+=== jsNegativeELementAccessNotBound.js ===
 var indexMap = {};
 >indexMap : {}
+>         : ^^
 >{} : {}
+>   : ^^
 
 indexMap[-1] = 0;
 >indexMap[-1] = 0 : 0
+>                 : ^
 >indexMap[-1] : any
 >indexMap : {}
+>         : ^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 

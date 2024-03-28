@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'C3<T>'.
+subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts (1 errors) ====
+==== subtypesOfTypeParameter.ts (1 errors) ====
     // checking whether other types are subtypes of type parameters
     
     class C3<T> {
@@ -16,7 +16,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts:7:13: This type parameter might need an `extends T` constraint.
+!!! related TS2208 subtypesOfTypeParameter.ts:7:13: This type parameter might need an `extends T` constraint.
     }
     
     function f1<T, U>(x: T, y: U) {

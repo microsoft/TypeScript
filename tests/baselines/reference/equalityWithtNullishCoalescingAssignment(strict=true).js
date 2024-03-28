@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithtNullishCoalescingAssignment.ts] ////
+
 //// [equalityWithtNullishCoalescingAssignment.ts]
 function f1(a?: boolean): void {
     a ??= true;

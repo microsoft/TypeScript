@@ -1,6 +1,8 @@
-=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment3.js ===
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment3.ts] ////
 
-=== tests/cases/compiler/a.js ===
+=== checkJsdocTypeTagOnExportAssignment3.js ===
+
+=== a.js ===
 /**
  * @typedef {Object} Foo
  * @property {boolean} a
@@ -15,7 +17,7 @@ const bar = { c: 1 };
 export default bar;
 >bar : Symbol(bar, Decl(a.js, 6, 5))
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 import a from "./a";
 >a : Symbol(a, Decl(b.js, 0, 6))
 

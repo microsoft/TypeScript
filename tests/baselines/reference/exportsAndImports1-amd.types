@@ -1,34 +1,49 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImports1-amd.ts] ////
+
+=== t1.ts ===
 var v = 1;
 >v : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 }
 interface I {
 }
 enum E {
 >E : E
+>  : ^
 
     A, B, C
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 >C : E.C
+>  : ^^^
 }
 const enum D {
 >D : D
+>  : ^
 
     A, B, C
 >A : D.A
+>  : ^^^
 >B : D.B
+>  : ^^^
 >C : D.C
+>  : ^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var x;
 >x : any
@@ -39,59 +54,103 @@ module N {
 }
 type T = number;
 >T : number
+>  : ^^^^^^
 
 import a = M.x;
 >a : any
+>  : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 export { v, f, C, I, E, D, M, N, T, a };
 >v : number
+>  : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >I : any
+>  : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : any
+>  : ^^^
 >T : any
+>  : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 export { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
+>  : ^^^^^^
 >f : () => void
->C : typeof import("tests/cases/conformance/es6/modules/t1").C
+>  : ^^^^^^^^^^
+>C : typeof import("t1").C
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >I : any
->E : typeof import("tests/cases/conformance/es6/modules/t1").E
->D : typeof import("tests/cases/conformance/es6/modules/t1").D
->M : typeof import("tests/cases/conformance/es6/modules/t1").M
+>  : ^^^
+>E : typeof import("t1").E
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>D : typeof import("t1").D
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>M : typeof import("t1").M
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >N : any
+>  : ^^^
 >T : any
+>  : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 import { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
+>  : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >I : any
+>  : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : any
+>  : ^^^
 >T : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 export { v, f, C, I, E, D, M, N, T, a };
 >v : number
+>  : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >I : any
+>  : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : any
+>  : ^^^
 >T : any
+>  : ^^^
 >a : any
+>  : ^^^
 

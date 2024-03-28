@@ -1,4 +1,7 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationReturnTypeSyntaxOfFunction.ts] ////
+
+=== a.js ===
 function F(): number { }
 >F : () => number
+>  : ^^^^^^      
 

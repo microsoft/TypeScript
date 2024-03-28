@@ -1,34 +1,51 @@
-=== tests/cases/compiler/genericCloneReturnTypes.ts ===
+//// [tests/cases/compiler/genericCloneReturnTypes.ts] ////
+
+=== genericCloneReturnTypes.ts ===
 class Bar<T> {
 >Bar : Bar<T>
+>    : ^^^^^^
 
     public size: number;
 >size : number
+>     : ^^^^^^
 
     public t: T;
 >t : T
+>  : ^
 
     constructor(x: number) {
 >x : number
+>  : ^^^^^^
 
         this.size = x;
 >this.size = x : number
+>              : ^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     }
 
     public clone() {
 >clone : () => Bar<T>
+>      : ^^^^^^^^^^^^
 
         return new Bar<T>(this.size);
 >new Bar<T>(this.size) : Bar<T>
+>                      : ^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 
     }
 
@@ -36,24 +53,37 @@ class Bar<T> {
 
 var b: Bar<number>;
 >b : Bar<number>
+>  : ^^^^^^^^^^^
 
 var b2 = b.clone();
 >b2 : Bar<number>
+>   : ^^^^^^^^^^^
 >b.clone() : Bar<number>
+>          : ^^^^^^^^^^^
 >b.clone : () => Bar<number>
+>        : ^^^^^^^^^^^^^^^^^
 >b : Bar<number>
+>  : ^^^^^^^^^^^
 >clone : () => Bar<number>
+>      : ^^^^^^^^^^^^^^^^^
 
 var b3: Bar<string>;
 >b3 : Bar<string>
+>   : ^^^^^^^^^^^
 
 b = b2;
 >b = b2 : Bar<number>
+>       : ^^^^^^^^^^^
 >b : Bar<number>
+>  : ^^^^^^^^^^^
 >b2 : Bar<number>
+>   : ^^^^^^^^^^^
 
 b = b3;
 >b = b3 : Bar<string>
+>       : ^^^^^^^^^^^
 >b : Bar<number>
+>  : ^^^^^^^^^^^
 >b3 : Bar<string>
+>   : ^^^^^^^^^^^
 

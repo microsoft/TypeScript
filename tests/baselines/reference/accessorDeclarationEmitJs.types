@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/accessorDeclarationEmitJs.ts] ////
+
+=== /a.js ===
+export const t1 = {
+>t1 : { p: string; readonly getter: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    p: 'value',    get getter() {        return 'value';    },} : { p: string; readonly getter: string; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    p: 'value',
+>p : string
+>  : ^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+
+    get getter() {
+>getter : string
+>       : ^^^^^^
+
+        return 'value';
+>'value' : "value"
+>        : ^^^^^^^
+
+    },
+}
+
+export const t2 = {
+>t2 : { v: string; setter: any; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    v: 'value',    set setter(v) {},} : { v: string; setter: any; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    v: 'value',
+>v : string
+>  : ^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+
+    set setter(v) {},
+>setter : any
+>v : any
+}
+
+export const t3 = {
+>t3 : { p: string; value: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    p: 'value',    get value() {        return 'value';    },    set value(v) {},} : { p: string; value: string; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    p: 'value',
+>p : string
+>  : ^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+
+    get value() {
+>value : string
+>      : ^^^^^^
+
+        return 'value';
+>'value' : "value"
+>        : ^^^^^^^
+
+    },
+    set value(v) {},
+>value : string
+>      : ^^^^^^
+>v : string
+>  : ^^^^^^
+}
+

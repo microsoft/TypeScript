@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts] ////
+
+=== controlFlowWithTemplateLiterals.ts ===
 declare const envVar: string | undefined;
 >envVar : Symbol(envVar, Decl(controlFlowWithTemplateLiterals.ts, 0, 13))
 

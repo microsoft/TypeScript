@@ -1,31 +1,47 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccessing1.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing1.ts] ////
+
+=== checkSuperCallBeforeThisAccessing1.ts ===
 class Based { }
 >Based : Based
+>      : ^^^^^
 
 class Derived extends Based {
 >Derived : Derived
+>        : ^^^^^^^
 >Based : Based
+>      : ^^^^^
 
     public x: number;
 >x : number
+>  : ^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Based
+>      : ^^^^^^^^^^^^
 
         this;
 >this : this
+>     : ^^^^
 
         this.x = 10;
 >this.x = 10 : 10
+>            : ^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         var that = this;
 >that : this
+>     : ^^^^
 >this : this
+>     : ^^^^
     }
 }

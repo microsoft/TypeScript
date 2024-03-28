@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts] ////
+
 //// [restParametersOfNonArrayTypes.ts]
 // Rest parameters must be an array type if they have a type annotation, so all these are errors
 

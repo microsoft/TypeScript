@@ -77,7 +77,7 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 //// [1.jsx]
  > ;
 //// [2.jsx]
-<a />;
+<a: />;
 //// [3.jsx]
  < ;
 a /  > ;
@@ -92,7 +92,8 @@ a /  > ;
 //// [8.jsx]
 <a:b></b>;
 //// [9.jsx]
-<a:b.c></a:b.c>;
+<a:b c></a:b>;
+c > ;
 //// [10.jsx]
 <a.b c></a.b>;
 c > ;

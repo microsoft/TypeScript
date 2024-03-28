@@ -1,7 +1,7 @@
-tests/cases/compiler/index.tsx(5,13): error TS2304: Cannot find name 'T'.
+index.tsx(5,13): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/compiler/index.tsx (1 errors) ====
+==== index.tsx (1 errors) ====
     declare const React: any;
     
     export function Foo() {

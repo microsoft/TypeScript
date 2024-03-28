@@ -1,9 +1,13 @@
-=== tests/cases/conformance/jsx/tsxElementResolution.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution.tsx] ////
+
+=== tsxElementResolution.tsx ===
 declare namespace JSX {
 	interface IntrinsicElements {
 		foundFirst: { x: string };
 >foundFirst : { x: string; }
+>           : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 
 		'string_named';
 >'string_named' : any
@@ -15,15 +19,19 @@ declare namespace JSX {
 
 class foundFirst { }
 >foundFirst : foundFirst
+>           : ^^^^^^^^^^
 
 class Other {}
 >Other : Other
+>      : ^^^^^
 
 module Dotted {
 >Dotted : typeof Dotted
+>       : ^^^^^^^^^^^^^
 
 	export class Name { }
 >Name : Name
+>     : ^^^^
 }
 
 // Should find the intrinsic element, not the class element
@@ -31,12 +39,15 @@ var a = <foundFirst  x="hello" />;
 >a : error
 ><foundFirst  x="hello" /> : error
 >foundFirst : typeof foundFirst
+>           : ^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var b = <string_named />;
 >b : error
 ><string_named /> : error
 >string_named : any
+>             : ^^^
 
 // TODO: This should not be a parse error (should
 //        parse a property name here, not identifier)
@@ -45,11 +56,15 @@ var d = <Other />;
 >d : error
 ><Other /> : error
 >Other : typeof Other
+>      : ^^^^^^^^^^^^
 
 var e = <Dotted.Name />;
 >e : error
 ><Dotted.Name /> : error
 >Dotted.Name : typeof Dotted.Name
+>            : ^^^^^^^^^^^^^^^^^^
 >Dotted : typeof Dotted
+>       : ^^^^^^^^^^^^^
 >Name : typeof Dotted.Name
+>     : ^^^^^^^^^^^^^^^^^^
 

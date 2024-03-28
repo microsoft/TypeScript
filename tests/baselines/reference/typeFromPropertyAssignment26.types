@@ -1,55 +1,91 @@
-=== tests/cases/conformance/salsa/bug24730.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment26.ts] ////
+
+=== bug24730.js ===
 var UI = {}
 >UI : typeof UI
+>   : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 UI.TreeElement = class {
 >UI.TreeElement = class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
+>                                                                               : ^^^^^^^^^^^^^^^^^^
 >UI.TreeElement : typeof TreeElement
+>               : ^^^^^^^^^^^^^^^^^^
 >UI : typeof UI
+>   : ^^^^^^^^^
 >TreeElement : typeof TreeElement
+>            : ^^^^^^^^^^^^^^^^^^
 >class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
+>                                                              : ^^^^^^^^^^^^^^^^^^
 
     constructor() {
         this.treeOutline = 12
 >this.treeOutline = 12 : 12
+>                      : ^^
 >this.treeOutline : any
+>                 : ^^^
 >this : this
+>     : ^^^^
 >treeOutline : any
+>            : ^^^
 >12 : 12
+>   : ^^
     }
 };
 UI.context = new UI.TreeElement()
 >UI.context = new UI.TreeElement() : TreeElement
+>                                  : ^^^^^^^^^^^
 >UI.context : TreeElement
+>           : ^^^^^^^^^^^
 >UI : typeof UI
+>   : ^^^^^^^^^
 >context : TreeElement
+>        : ^^^^^^^^^^^
 >new UI.TreeElement() : TreeElement
+>                     : ^^^^^^^^^^^
 >UI.TreeElement : typeof TreeElement
+>               : ^^^^^^^^^^^^^^^^^^
 >UI : typeof UI
+>   : ^^^^^^^^^
 >TreeElement : typeof TreeElement
+>            : ^^^^^^^^^^^^^^^^^^
 
 class C extends UI.TreeElement {
 >C : C
+>  : ^
 >UI.TreeElement : TreeElement
+>               : ^^^^^^^^^^^
 >UI : typeof UI
+>   : ^^^^^^^^^
 >TreeElement : typeof TreeElement
+>            : ^^^^^^^^^^^^^^^^^^
 
     onpopulate() {
 >onpopulate : () => void
+>           : ^^^^^^^^^^
 
         this.doesNotExist
 >this.doesNotExist : any
+>                  : ^^^
 >this : this
+>     : ^^^^
 >doesNotExist : any
+>             : ^^^
 
         this.treeOutline.doesntExistEither()
 >this.treeOutline.doesntExistEither() : any
+>                                     : ^^^
 >this.treeOutline.doesntExistEither : any
+>                                   : ^^^
 >this.treeOutline : number
+>                 : ^^^^^^
 >this : this
+>     : ^^^^
 >treeOutline : number
+>            : ^^^^^^
 >doesntExistEither : any
+>                  : ^^^
     }
 };
 

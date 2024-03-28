@@ -1,18 +1,25 @@
-=== tests/cases/compiler/breakTarget5.ts ===
+//// [tests/cases/compiler/breakTarget5.ts] ////
+
+=== breakTarget5.ts ===
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
   function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
       break target;
 >target : any
+>       : ^^^
     }
   }
 }

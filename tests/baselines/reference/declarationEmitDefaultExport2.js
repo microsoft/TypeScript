@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDefaultExport2.ts] ////
+
 //// [declarationEmitDefaultExport2.ts]
 export default class {
 }

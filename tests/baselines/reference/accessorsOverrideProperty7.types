@@ -1,17 +1,26 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty7.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty7.ts] ////
+
+=== accessorsOverrideProperty7.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract p = 'yep'
 >p : string
+>  : ^^^^^^
 >'yep' : "yep"
+>      : ^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     get p() { return 'oh no' } // error
 >p : string
+>  : ^^^^^^
 >'oh no' : "oh no"
+>        : ^^^^^^^
 }
 

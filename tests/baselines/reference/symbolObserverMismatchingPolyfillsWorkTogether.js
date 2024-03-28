@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts] ////
+
 //// [symbolObserverMismatchingPolyfillsWorkTogether.ts]
 interface SymbolConstructor {
     readonly observer: symbol;

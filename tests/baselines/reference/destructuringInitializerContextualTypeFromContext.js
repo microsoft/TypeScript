@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts] ////
+
 //// [destructuringInitializerContextualTypeFromContext.ts]
 interface SFC<P = {}> {
     (props: P & { children?: any }): any | null;

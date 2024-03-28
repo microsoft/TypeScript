@@ -1,12 +1,16 @@
-=== tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases2.ts ===
+//// [tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases2.ts] ////
+
+=== inheritedMembersAndIndexSignaturesFromDifferentBases2.ts ===
 interface A<T> {
     [n: number]: T;
 >n : number
+>  : ^^^^^^
 }
 
 interface B {
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 
 interface C extends B, A<string> { } // Should succeed

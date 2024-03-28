@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts ===
+//// [tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts] ////
+
+=== indexedAccessWithFreshObjectLiteral.ts ===
 function foo (id: string) {
 >foo : Symbol(foo, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 0))
 >id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 14))

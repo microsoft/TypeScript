@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dynamicImportInDefaultExportExpression.ts ===
+//// [tests/cases/compiler/dynamicImportInDefaultExportExpression.ts] ////
+
+=== dynamicImportInDefaultExportExpression.ts ===
 export default {
     getInstance: function () {
 >getInstance : Symbol(getInstance, Decl(dynamicImportInDefaultExportExpression.ts, 0, 16))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminantElementAccessCheck.ts] ////
+
 //// [discriminantElementAccessCheck.ts]
 type U = TypeA | TypeB;
 

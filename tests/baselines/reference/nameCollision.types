@@ -1,81 +1,112 @@
-=== tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts ===
+//// [tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts] ////
+
+=== nameCollision.ts ===
 module A {
 >A : typeof globalThis.A
+>  : ^^^^^^^^^^^^^^^^^^^
 
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.
     var A = 12;
 >A : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
     var _A = '';
 >_A : string
+>   : ^^^^^^
 >'' : ""
+>   : ^^
 }
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
     var A = 12;
 >A : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 }
 
 module B {
 >B : typeof globalThis.B
+>  : ^^^^^^^^^^^^^^^^^^^
 
     // re-opened module with colliding name
     // this should add an underscore.
     class B {
 >B : B
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 }
 
 module X {
 >X : typeof globalThis.X
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var X = 13;
 >X : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 
     export module Y {
 >Y : typeof globalThis.X.Y
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
         var Y = 13;
 >Y : number
+>  : ^^^^^^
 >13 : 13
+>   : ^^
 
         export module Z {
 >Z : typeof globalThis.X.Y.Z
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
             var X = 12;
 >X : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
             var Y = 12;
 >Y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
             var Z = 12;
 >Z : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
         }
     }
 }
 
 module Y.Y {
 >Y : typeof globalThis.Y
+>  : ^^^^^^^^^^^^^^^^^^^
 >Y : typeof globalThis.Y.Y
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     export enum Y {
 >Y : Y
+>  : ^
 
         Red, Blue
 >Red : Y.Red
+>    : ^^^^^
 >Blue : Y.Blue
+>     : ^^^^^^
     }
 }
 
@@ -83,13 +114,17 @@ module Y.Y {
 // generate code.
 module D {
 >D : typeof D
+>  : ^^^^^^^^
 
     export interface D {
         id: number;
 >id : number
+>   : ^^^^^^
     }
 
     export var E = 'hello';
 >E : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 }

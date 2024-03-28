@@ -1,68 +1,105 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts] ////
+
+=== privateNamesAndkeyof.ts ===
 class A {
 >A : A
+>  : ^
 
     #fooField = 3;
 >#fooField : number
+>          : ^^^^^^
 >3 : 3
+>  : ^
 
     #fooMethod() { };
 >#fooMethod : () => void
+>           : ^^^^^^^^^^
 
     get #fooProp() { return 1; };
 >#fooProp : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
     set #fooProp(value: number) { };
 >#fooProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     bar = 3;
 >bar : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 
     baz = 3;
 >baz : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 }
 
 // `keyof A` should not include '#foo*'
 let k: keyof A = "bar"; // OK
 >k : keyof A
+>  : ^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 k = "baz"; // OK
 >k = "baz" : "baz"
+>          : ^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 
 k = "#fooField"; // Error
 >k = "#fooField" : "#fooField"
+>                : ^^^^^^^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"#fooField" : "#fooField"
+>            : ^^^^^^^^^^^
 
 k = "#fooMethod"; // Error
 >k = "#fooMethod" : "#fooMethod"
+>                 : ^^^^^^^^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"#fooMethod" : "#fooMethod"
+>             : ^^^^^^^^^^^^
 
 k = "#fooProp"; // Error
 >k = "#fooProp" : "#fooProp"
+>               : ^^^^^^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"#fooProp" : "#fooProp"
+>           : ^^^^^^^^^^
 
 k = "fooField"; // Error
 >k = "fooField" : "fooField"
+>               : ^^^^^^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"fooField" : "fooField"
+>           : ^^^^^^^^^^
 
 k = "fooMethod"; // Error
 >k = "fooMethod" : "fooMethod"
+>                : ^^^^^^^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"fooMethod" : "fooMethod"
+>            : ^^^^^^^^^^^
 
 k = "fooProp"; // Error
 >k = "fooProp" : "fooProp"
+>              : ^^^^^^^^^
 >k : keyof A
+>  : ^^^^^^^
 >"fooProp" : "fooProp"
+>          : ^^^^^^^^^
 

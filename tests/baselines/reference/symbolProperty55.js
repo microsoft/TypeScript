@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty55.ts] ////
+
 //// [symbolProperty55.ts]
 var obj = {
     [Symbol.iterator]: 0

@@ -1,74 +1,101 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file1.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorNoUseDefineForClassFields.ts] ////
+
+=== file1.ts ===
 // https://github.com/microsoft/TypeScript/issues/51528
 class C1 {
 >C1 : C1
+>   : ^^
 
     static accessor x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file2.ts ===
+=== file2.ts ===
 class C2 {
 >C2 : C2
+>   : ^^
 
     static accessor #x = 0;
 >#x : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts ===
+=== file3.ts ===
 class C3 {
 >C3 : C3
+>   : ^^
 
     static accessor #x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     accessor #y = 0;
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts ===
+=== file3.ts ===
 class C3 {
 >C3 : C3
+>   : ^^
 
     accessor x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file4.ts ===
+=== file4.ts ===
 class C4 {
 >C4 : C4
+>   : ^^
 
     accessor #x = 0;
 >#x : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file5.ts ===
+=== file5.ts ===
 class C5 {
 >C5 : C5
+>   : ^^
 
     x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     accessor #x = 1;
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file6.ts ===
+=== file6.ts ===
 class C6 {
 >C6 : C6
+>   : ^^
 
     accessor #x = 0;
 >#x : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 

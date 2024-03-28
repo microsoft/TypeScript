@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexIntoEnum.ts] ////
+
 //// [indexIntoEnum.ts]
 module M {
 

@@ -1,11 +1,16 @@
-=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment4.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment4.ts] ////
+
+=== destructuringArrayBindingPatternAndAssignment4.ts ===
 // #35497
 
 
 declare const data: number[] | null;
 >data : number[] | null
+>     : ^^^^^^^^^^^^^^^
 
 const [value] = data; // Error
 >value : any
+>      : ^^^
 >data : number[] | null
+>     : ^^^^^^^^^^^^^^^
 

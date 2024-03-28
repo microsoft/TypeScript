@@ -1,17 +1,28 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStaticMethodAugmentation.ts] ////
+
+=== source.js ===
 export class Clazz {
 >Clazz : Clazz
+>      : ^^^^^
 
     static method() { }
 >method : typeof Clazz.method
+>       : ^^^^^^^^^^^^^^^^^^^
 }
 
 Clazz.method.prop = 5;
 >Clazz.method.prop = 5 : 5
+>                      : ^
 >Clazz.method.prop : number
+>                  : ^^^^^^
 >Clazz.method : typeof Clazz.method
+>             : ^^^^^^^^^^^^^^^^^^^
 >Clazz : typeof Clazz
+>      : ^^^^^^^^^^^^
 >method : typeof Clazz.method
+>       : ^^^^^^^^^^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
 >5 : 5
+>  : ^
 

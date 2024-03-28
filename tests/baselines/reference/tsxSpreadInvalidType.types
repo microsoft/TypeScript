@@ -1,36 +1,57 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadInvalidType.tsx] ////
+
+=== a.tsx ===
 namespace JSX {
     export interface IntrinsicElements { [key: string]: any }
 >key : string
+>    : ^^^^^^
 }
 
 const a = {} as never;
 >a : never
+>  : ^^^^^
 >{} as never : never
+>            : ^^^^^
 >{} : {}
+>   : ^^
 
 const b = null;
 >b : null
+>  : ^^^^
 
 const c = undefined;
 >c : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 const d = <div { ...a } />
 >d : any
+>  : ^^^
 ><div { ...a } /> : any
+>                 : ^^^
 >div : any
+>    : ^^^
 >a : never
+>  : ^^^^^
 
 const e = <div { ...b } />
 >e : any
+>  : ^^^
 ><div { ...b } /> : any
+>                 : ^^^
 >div : any
+>    : ^^^
 >b : null
+>  : ^^^^
 
 const f = <div { ...c } />
 >f : any
+>  : ^^^
 ><div { ...c } /> : any
+>                 : ^^^
 >div : any
+>    : ^^^
 >c : undefined
+>  : ^^^^^^^^^
 

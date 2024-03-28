@@ -1,20 +1,21 @@
-=== tests/cases/compiler/ThingA.ts ===
-// https://github.com/Microsoft/TypeScript/issues/8612
+//// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
+
+=== ThingA.ts ===
 export class ThingA { } 
 >ThingA : Symbol(ThingA, Decl(ThingA.ts, 0, 0))
 
-=== tests/cases/compiler/ThingB.ts ===
+=== ThingB.ts ===
 export class ThingB { }
 >ThingB : Symbol(ThingB, Decl(ThingB.ts, 0, 0))
 
-=== tests/cases/compiler/Things.ts ===
+=== Things.ts ===
 export {ThingA} from "./ThingA";
 >ThingA : Symbol(ThingA, Decl(Things.ts, 0, 8))
 
 export {ThingB} from "./ThingB";
 >ThingB : Symbol(ThingB, Decl(Things.ts, 1, 8))
 
-=== tests/cases/compiler/Test.ts ===
+=== Test.ts ===
 import * as things from "./Things";
 >things : Symbol(things, Decl(Test.ts, 0, 6))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingOfAccessors.ts] ////
+
 //// [contextualTypingOfAccessors.ts]
 // not contextually typing accessors
 

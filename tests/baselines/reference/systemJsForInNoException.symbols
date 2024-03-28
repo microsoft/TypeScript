@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemJsForInNoException.ts ===
+//// [tests/cases/compiler/systemJsForInNoException.ts] ////
+
+=== systemJsForInNoException.ts ===
 export const obj = { a: 1 };
 >obj : Symbol(obj, Decl(systemJsForInNoException.ts, 0, 12))
 >a : Symbol(a, Decl(systemJsForInNoException.ts, 0, 20))

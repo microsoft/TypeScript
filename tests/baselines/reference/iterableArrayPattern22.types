@@ -1,9 +1,17 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern22.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern22.ts] ////
+
+=== iterableArrayPattern22.ts ===
 var [...a] = { 0: "", 1: true };
 >a : any[]
+>  : ^^^^^
 >{ 0: "", 1: true } : { 0: string; 1: boolean; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >1 : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 

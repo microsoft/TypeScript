@@ -1,32 +1,46 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts] ////
+
+=== assignmentCompatWithGenericCallSignatures2.ts ===
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 
 interface A {
     <T>(x: T, ...y: T[][]): void
 >x : T
+>  : ^
 >y : T[][]
+>  : ^^^^^
 }
 
 interface B {
     <S>(x: S, ...y: S[]): void
 >x : S
+>  : ^
 >y : S[]
+>  : ^^^
 }
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 // Both errors
 a = b;
 >a = b : B
+>      : ^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 b = a;
 >b = a : A
+>      : ^
 >b : B
+>  : ^
 >a : A
+>  : ^
 

@@ -1,6 +1,9 @@
-=== tests/cases/compiler/test.d.ts ===
+//// [tests/cases/compiler/es5-commonjs7.ts] ////
+
+=== test.d.ts ===
 export default undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 
 export var __esModule;
 >__esModule : any

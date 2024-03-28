@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializeVarArgs1.ts ===
+//// [tests/cases/compiler/specializeVarArgs1.ts] ////
+
+=== specializeVarArgs1.ts ===
 interface Observable<T>{ }
 >Observable : Symbol(Observable, Decl(specializeVarArgs1.ts, 0, 0))
 >T : Symbol(T, Decl(specializeVarArgs1.ts, 0, 21))

@@ -1,8 +1,15 @@
-=== tests/cases/conformance/typings/a.ts ===
+//// [tests/cases/conformance/typings/typingsSuggestion1.ts] ////
+
+=== a.ts ===
 module.exports = 1;
 >module.exports = 1 : 1
+>                   : ^
 >module.exports : any
+>               : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >1 : 1
+>  : ^
 

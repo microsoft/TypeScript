@@ -1,12 +1,12 @@
-tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts(5,13): error TS1005: ',' expected.
-tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts(5,14): error TS1181: Array element destructuring pattern expected.
-tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts(5,14): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts(5,14): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts(5,19): error TS1005: ';' expected.
-tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts(5,20): error TS1128: Declaration or statement expected.
+invalidLetInForOfAndForIn_ES5.ts(5,13): error TS1005: ',' expected.
+invalidLetInForOfAndForIn_ES5.ts(5,14): error TS1181: Array element destructuring pattern expected.
+invalidLetInForOfAndForIn_ES5.ts(5,14): error TS2695: Left side of comma operator is unused and has no side effects.
+invalidLetInForOfAndForIn_ES5.ts(5,14): error TS2695: Left side of comma operator is unused and has no side effects.
+invalidLetInForOfAndForIn_ES5.ts(5,19): error TS1005: ';' expected.
+invalidLetInForOfAndForIn_ES5.ts(5,20): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts (6 errors) ====
+==== invalidLetInForOfAndForIn_ES5.ts (6 errors) ====
     // This should be an error
     // More details: http://www.ecma-international.org/ecma-262/6.0/#sec-iteration-statements
     

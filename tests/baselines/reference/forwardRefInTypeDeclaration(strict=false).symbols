@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forwardRefInTypeDeclaration.ts ===
+//// [tests/cases/compiler/forwardRefInTypeDeclaration.ts] ////
+
+=== forwardRefInTypeDeclaration.ts ===
 // forward ref ignored in a typeof
 declare let s: typeof s1;
 >s : Symbol(s, Decl(forwardRefInTypeDeclaration.ts, 1, 11))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterUsedAsConstraint.ts] ////
+
 //// [typeParameterUsedAsConstraint.ts]
 class C<T, U extends T> { }
 class C2<T extends U, U> { }

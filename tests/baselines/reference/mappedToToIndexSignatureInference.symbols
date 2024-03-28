@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedToToIndexSignatureInference.ts ===
+//// [tests/cases/compiler/mappedToToIndexSignatureInference.ts] ////
+
+=== mappedToToIndexSignatureInference.ts ===
 declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
 >fn : Symbol(fn, Decl(mappedToToIndexSignatureInference.ts, 0, 13))
 >K : Symbol(K, Decl(mappedToToIndexSignatureInference.ts, 0, 19))

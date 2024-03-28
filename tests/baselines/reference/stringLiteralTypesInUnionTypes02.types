@@ -1,60 +1,95 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts] ////
+
+=== stringLiteralTypesInUnionTypes02.ts ===
 type T = string | "foo" | "bar" | "baz";
 >T : string
+>  : ^^^^^^
 
 var x: "foo" | "bar" | "baz" | string = undefined;
 >x : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var y: T = undefined;
 >y : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 if (x === "foo") {
 >x === "foo" : boolean
+>            : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     let a = x;
 >a : string
+>  : ^^^^^^
 >x : "foo"
+>  : ^^^^^
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
+>            : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
     let b = x || y;
 >b : string
+>  : ^^^^^^
 >x || y : string
+>       : ^^^^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 else {
     let c = x;
 >c : string
+>  : ^^^^^^
 >x : "bar"
+>  : ^^^^^
 
     let d = y;
 >d : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     let e: (typeof x) | (typeof y) = c || d;
 >e : string
+>  : ^^^^^^
 >x : "bar"
+>  : ^^^^^
 >y : string
+>  : ^^^^^^
 >c || d : string
+>       : ^^^^^^
 >c : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 }
 
 x = y;
 >x = y : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 y = x;
 >y = x : string
+>      : ^^^^^^
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashIntypeCheckObjectCreationExpression.ts] ////
+
 //// [crashIntypeCheckObjectCreationExpression.ts]
 export class BuildWorkspaceService {
     public injectRequestService<P0, P1, P2>(service: P0) {

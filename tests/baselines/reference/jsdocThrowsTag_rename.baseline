@@ -1,7 +1,0 @@
-/*====== /tests/cases/fourslash/jsdocThrowsTag_rename.ts ======*/
-
-class [|RENAME|] extends Error {}
-/**
- * @throws {RENAME}
- */
-function f() {}

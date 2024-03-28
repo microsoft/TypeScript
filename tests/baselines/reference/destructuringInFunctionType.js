@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts] ////
+
 //// [destructuringInFunctionType.ts]
 interface a { a }
 interface b { b }
@@ -52,7 +54,7 @@ type T3 = ([{
 }, {
     b: a;
 }]);
-type F3 = ([{ a }, { b }]: [{
+type F3 = ([{ a: b }, { b: a }]: [{
     a: any;
 }, {
     b: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithExport.ts] ////
+
 //// [enumWithExport.ts]
 namespace x {
   export let y = 123

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts] ////
+
 //// [optionalChainingInTypeAssertions.ts]
 class Foo {
     m() {}

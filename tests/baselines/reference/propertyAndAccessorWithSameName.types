@@ -1,42 +1,58 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts] ////
+
+=== propertyAndAccessorWithSameName.ts ===
 class C {
 >C : C
+>  : ^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     get x() { // error
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 class D {
 >D : D
+>  : ^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     set x(v) { } // error
 >x : any
+>  : ^^^
 >v : any
+>  : ^^^
 }
 
 class E {
 >E : E
+>  : ^
 
     private x: number;
 >x : number
+>  : ^^^^^^
 
     get x() { // error
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     set x(v) { }
 >x : any
+>  : ^^^
 >v : any
+>  : ^^^
 }

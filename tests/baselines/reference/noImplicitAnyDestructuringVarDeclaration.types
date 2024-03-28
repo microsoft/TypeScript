@@ -1,44 +1,77 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts] ////
+
+=== noImplicitAnyDestructuringVarDeclaration.ts ===
 var [a], {b}, c, d; // error
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 var [a1 = undefined], {b1 = null}, c1 = undefined, d1 = null; // error
 >a1 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b1 : any
+>   : ^^^
 >c1 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >d1 : any
+>   : ^^^
 
 var [a2]: [any], {b2}: { b2: any }, c2: any, d2: any;
 >a2 : any
+>   : ^^^
 >b2 : any
+>   : ^^^
 >b2 : any
+>   : ^^^
 >c2 : any
+>   : ^^^
 >d2 : any
+>   : ^^^
 
 var {b3}: { b3 }, c3: { b3 }; // error in type instead
 >b3 : any
+>   : ^^^
 >b3 : any
+>   : ^^^
 >c3 : { b3: any; }
+>   : ^^^^^^^^^^^^
 >b3 : any
+>   : ^^^
 
 var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
 >a4 : any
+>   : ^^^
 >[undefined] : [undefined]
+>            : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b4 : any
+>   : ^^^
 >{ b4: null } : { b4: null; }
+>             : ^^^^^^^^^^^^^
 >b4 : null
+>   : ^^^^
 >c4 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >d4 : any
+>   : ^^^
 
 var [a5 = undefined] = []; // error
 >a5 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >[] : []
+>   : ^^
 

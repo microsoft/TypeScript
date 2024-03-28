@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxReactEmitNesting.tsx] ////
+
 //// [file.tsx]
 declare var vdom: any;
 declare var ctrl: any;

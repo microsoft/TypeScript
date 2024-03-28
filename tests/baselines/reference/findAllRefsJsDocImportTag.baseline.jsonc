@@ -1,0 +1,105 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * <|@import { [|{| defId: 0, isWriteAccess: true |}A|] } from "./b";
+//  |>*/
+// 
+// /**
+//  * @param { [|{| defId: 0 |}A|]/*FIND ALL REFS*/ } a
+//  */
+// function f(a) {}
+
+// === /b.ts ===
+// <|export interface [|{| defId: 1, isWriteAccess: true |}A|] { }|>
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * <|@import { [|{| defId: 0 |}A|] } from "./b";
+  //  |>*/
+  // 
+  // /**
+  //  * @param { A/*FIND ALL REFS*/ } a
+  //  */
+  // function f(a) {}
+
+  // === /b.ts ===
+  // <|export interface [|{| defId: 1 |}A|] { }|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) interface A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface A",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]

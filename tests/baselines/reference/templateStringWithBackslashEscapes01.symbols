@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01.ts] ////
+
+=== templateStringWithBackslashEscapes01.ts ===
 var a = `hello\world`;
 >a : Symbol(a, Decl(templateStringWithBackslashEscapes01.ts, 0, 3))
 

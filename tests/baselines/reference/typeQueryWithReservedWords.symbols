@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts] ////
+
+=== typeQueryWithReservedWords.ts ===
 class Controller {
 >Controller : Symbol(Controller, Decl(typeQueryWithReservedWords.ts, 0, 0))
 

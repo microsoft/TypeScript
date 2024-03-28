@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclaration1.ts] ////
+
 //// [emitSuperCallBeforeEmitPropertyDeclaration1.ts]
 class A {
     blub = 6;

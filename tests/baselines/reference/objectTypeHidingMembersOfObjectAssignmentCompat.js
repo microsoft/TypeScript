@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts] ////
+
 //// [objectTypeHidingMembersOfObjectAssignmentCompat.ts]
 interface I {
     toString(): void;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts] ////
+
 //// [privateNameStaticAccessors.ts]
 class A1 {
     static get #prop() { return ""; }
@@ -30,10 +32,10 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _a, _A1_prop_get, _A1_prop_set, _A1_roProp_get;
 class A1 {
     constructor(name) {
-        __classPrivateFieldSet(A1, _a, "", "a", _A1_prop_set);
-        __classPrivateFieldSet(A1, _a, "", "a"); // Error
-        console.log(__classPrivateFieldGet(A1, _a, "a", _A1_prop_get));
-        console.log(__classPrivateFieldGet(A1, _a, "a", _A1_roProp_get));
+        __classPrivateFieldSet(_a, _a, "", "a", _A1_prop_set);
+        __classPrivateFieldSet(_a, _a, "", "a"); // Error
+        console.log(__classPrivateFieldGet(_a, _a, "a", _A1_prop_get));
+        console.log(__classPrivateFieldGet(_a, _a, "a", _A1_roProp_get));
     }
 }
 _a = A1, _A1_prop_get = function _A1_prop_get() { return ""; }, _A1_prop_set = function _A1_prop_set(param) { }, _A1_roProp_get = function _A1_roProp_get() { return ""; };

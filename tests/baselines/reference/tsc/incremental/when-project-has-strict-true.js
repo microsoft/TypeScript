@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -18,15 +19,28 @@ declare const console: { log(msg: any): void; };
 export class class1 {}
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"strict":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true
+  }
+}
 
 
 
 Output::
 /lib/tsc -noEmit -p src/project
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/class1.ts"]
-Program options: {"incremental":true,"strict":true,"noEmit":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/class1.ts"
+]
+Program options: {
+  "incremental": true,
+  "strict": true,
+  "noEmit": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -42,7 +56,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./class1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7660182596-export class class1 {}"],"root":[2],"options":{"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"affectedFilesPendingEmit":[2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./class1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-7660182596-export class class1 {}"],"root":[2],"options":{"strict":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"affectedFilesPendingEmit":[2]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -76,7 +90,6 @@ Shape signatures in builder refreshed for::
       "strict": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./class1.ts"
@@ -89,7 +102,7 @@ Shape signatures in builder refreshed for::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 764
+  "size": 740
 }
 
 
@@ -101,8 +114,16 @@ Input::
 Output::
 /lib/tsc -noEmit -p src/project
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/class1.ts"]
-Program options: {"incremental":true,"strict":true,"noEmit":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/class1.ts"
+]
+Program options: {
+  "incremental": true,
+  "strict": true,
+  "noEmit": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDeclarationEmit3.ts] ////
+
 //// [typeAliasDeclarationEmit3.ts]
 function f1(): void {
     for (let i = 0; i < 1; i++)

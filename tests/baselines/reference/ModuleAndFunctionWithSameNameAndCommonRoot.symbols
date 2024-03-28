@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndFunctionWithSameNameAndCommonRoot.ts] ////
+
+=== module.ts ===
 module A {
 >A : Symbol(A, Decl(module.ts, 0, 0), Decl(function.ts, 0, 0))
 
@@ -12,7 +14,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+=== function.ts ===
 module A {
 >A : Symbol(A, Decl(module.ts, 0, 0), Decl(function.ts, 0, 0))
 
@@ -26,7 +28,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+=== simple.ts ===
 module B {
 >B : Symbol(B, Decl(simple.ts, 0, 0))
 

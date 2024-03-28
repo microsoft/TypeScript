@@ -11,5 +11,5 @@ declare module M {
 }
 
 // @Filename: client.ts
-///<reference path="declFile.d.ts"/>
+///<reference path="declFile.d.ts" preserve="true"/>
 var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file

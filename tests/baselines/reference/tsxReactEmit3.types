@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit3.tsx] ////
+
+=== test.tsx ===
 declare module JSX { interface Element { } }
 declare var React: any;
 >React : any
@@ -10,15 +12,20 @@ declare var Foo, Bar, baz;
 
 <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
 ><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : JSX.Element
+>                                                   : ^^^^^^^^^^^
 >Foo : any
 ><Bar> q </Bar> : JSX.Element
+>               : ^^^^^^^^^^^
 >Bar : any
 >Bar : any
 ><Bar/> : JSX.Element
+>       : ^^^^^^^^^^^
 >Bar : any
 ><Bar/> : JSX.Element
+>       : ^^^^^^^^^^^
 >Bar : any
 ><Bar/> : JSX.Element
+>       : ^^^^^^^^^^^
 >Bar : any
 >Foo : any
 

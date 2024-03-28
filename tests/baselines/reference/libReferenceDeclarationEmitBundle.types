@@ -1,11 +1,15 @@
-=== tests/cases/conformance/declarationEmit/file1.ts ===
-/// <reference lib="dom" />
+//// [tests/cases/conformance/declarationEmit/libReferenceDeclarationEmitBundle.ts] ////
+
+=== file1.ts ===
+/// <reference lib="dom" preserve="true" />
 export declare const elem: HTMLElement;
 >elem : HTMLElement
+>     : ^^^^^^^^^^^
 
-=== tests/cases/conformance/declarationEmit/file2.ts ===
-/// <reference lib="dom" />
+=== file2.ts ===
+/// <reference lib="dom" preserve="true" />
 export {}
 declare const elem: HTMLElement;
 >elem : HTMLElement
+>     : ^^^^^^^^^^^
 

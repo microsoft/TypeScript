@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayAssignmentTest1.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest1.ts] ////
+
+=== arrayAssignmentTest1.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(arrayAssignmentTest1.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompat1.ts] ////
+
 //// [assignmentCompat1.ts]
 var x = { one: 1 };
 var y: { [index: string]: any };

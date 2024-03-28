@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computerPropertiesInES5ShouldBeTransformed.ts ===
+//// [tests/cases/compiler/computerPropertiesInES5ShouldBeTransformed.ts] ////
+
+=== computerPropertiesInES5ShouldBeTransformed.ts ===
 const b = ({ [`key`]: renamed }) => renamed;
 >b : Symbol(b, Decl(computerPropertiesInES5ShouldBeTransformed.ts, 0, 5))
 >`key` : Symbol(renamed, Decl(computerPropertiesInES5ShouldBeTransformed.ts, 0, 12))

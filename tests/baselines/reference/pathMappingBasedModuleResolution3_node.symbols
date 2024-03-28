@@ -1,17 +1,17 @@
-=== c:/root/folder1/file1.ts ===
-// baseUrl set via command line
+//// [tests/cases/compiler/pathMappingBasedModuleResolution3_node.ts] ////
 
+=== c:/root/folder1/file1.ts ===
 import {x} from "folder2/file2"
->x : Symbol(x, Decl(file1.ts, 2, 8))
+>x : Symbol(x, Decl(file1.ts, 0, 8))
 
 declare function use(a: any): void;
->use : Symbol(use, Decl(file1.ts, 2, 31))
->a : Symbol(a, Decl(file1.ts, 3, 21))
+>use : Symbol(use, Decl(file1.ts, 0, 31))
+>a : Symbol(a, Decl(file1.ts, 1, 21))
 
 use(x.toExponential());
->use : Symbol(use, Decl(file1.ts, 2, 31))
+>use : Symbol(use, Decl(file1.ts, 0, 31))
 >x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(file1.ts, 2, 8))
+>x : Symbol(x, Decl(file1.ts, 0, 8))
 >toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 === c:/root/folder2/file2.ts ===

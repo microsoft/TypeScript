@@ -1,34 +1,55 @@
-=== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts] ////
+
+=== importCallExpressionGrammarError.ts ===
 declare function getSpecifier(): string;
 >getSpecifier : () => string
+>             : ^^^^^^      
 
 declare var whatToLoad: boolean;
 >whatToLoad : boolean
+>           : ^^^^^^^
 
 var a = ["./0"];
 >a : string[]
+>  : ^^^^^^^^
 >["./0"] : string[]
+>        : ^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 
 import(...["PathModule"]);
 >import(...["PathModule"]) : Promise<any>
+>                          : ^^^^^^^^^^^^
 >...["PathModule"] : string
->["PathModule"] : readonly [string]
+>                  : ^^^^^^
+>["PathModule"] : [string]
+>               : ^^^^^^^^
 >"PathModule" : "PathModule"
+>             : ^^^^^^^^^^^^
 
 var p1 = import(...a);
 >p1 : Promise<any>
+>   : ^^^^^^^^^^^^
 >import(...a) : Promise<any>
+>             : ^^^^^^^^^^^^
 >...a : string
+>     : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 
 const p2 = import();
 >p2 : Promise<any>
+>   : ^^^^^^^^^^^^
 >import() : Promise<any>
+>         : ^^^^^^^^^^^^
 
 const p4 = import("pathToModule", "secondModule");
 >p4 : Promise<any>
+>   : ^^^^^^^^^^^^
 >import("pathToModule", "secondModule") : Promise<any>
+>                                       : ^^^^^^^^^^^^
 >"pathToModule" : "pathToModule"
+>               : ^^^^^^^^^^^^^^
 >"secondModule" : "secondModule"
+>               : ^^^^^^^^^^^^^^
 

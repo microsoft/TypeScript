@@ -1,6 +1,9 @@
-=== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyClassImplementsClauseDeclFile.ts] ////
+
+=== privacyClassImplementsClauseDeclFile_externalModule.ts ===
 export module publicModule {
 >publicModule : typeof publicModule
+>             : ^^^^^^^^^^^^^^^^^^^
 
     export interface publicInterfaceInPublicModule {
     }
@@ -10,33 +13,43 @@ export module publicModule {
 
     class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
 >privateClassImplementingPublicInterfaceInModule : privateClassImplementingPublicInterfaceInModule
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     class privateClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
 >privateClassImplementingPrivateInterfaceInModule : privateClassImplementingPrivateInterfaceInModule
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
 >publicClassImplementingPublicInterfaceInModule : publicClassImplementingPublicInterfaceInModule
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule { // Should error
 >publicClassImplementingPrivateInterfaceInModule : publicClassImplementingPrivateInterfaceInModule
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
     class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >privateClassImplementingFromPrivateModuleInterface : privateClassImplementingFromPrivateModuleInterface
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
 >publicClassImplementingFromPrivateModuleInterface : publicClassImplementingFromPrivateModuleInterface
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
 
     export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
 >publicClassImplementingPrivateAndPublicInterface : publicClassImplementingPrivateAndPublicInterface
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 module privateModule {
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 
     export interface publicInterfaceInPrivateModule {
 
@@ -47,24 +60,32 @@ module privateModule {
 
     class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
 >privateClassImplementingPublicInterfaceInModule : privateClassImplementingPublicInterfaceInModule
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     class privateClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule {
 >privateClassImplementingPrivateInterfaceInModule : privateClassImplementingPrivateInterfaceInModule
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
 >publicClassImplementingPublicInterfaceInModule : publicClassImplementingPublicInterfaceInModule
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule { 
 >publicClassImplementingPrivateInterfaceInModule : publicClassImplementingPrivateInterfaceInModule
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
     class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >privateClassImplementingFromPrivateModuleInterface : privateClassImplementingFromPrivateModuleInterface
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >publicClassImplementingFromPrivateModuleInterface : publicClassImplementingFromPrivateModuleInterface
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -77,29 +98,38 @@ interface privateInterface {
 
 class privateClassImplementingPublicInterface implements publicInterface {
 >privateClassImplementingPublicInterface : privateClassImplementingPublicInterface
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 class privateClassImplementingPrivateInterfaceInModule implements privateInterface {
 >privateClassImplementingPrivateInterfaceInModule : privateClassImplementingPrivateInterfaceInModule
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 export class publicClassImplementingPublicInterface implements publicInterface {
 >publicClassImplementingPublicInterface : publicClassImplementingPublicInterface
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 export class publicClassImplementingPrivateInterface implements privateInterface { // Should error
 >publicClassImplementingPrivateInterface : publicClassImplementingPrivateInterface
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 >privateClassImplementingFromPrivateModuleInterface : privateClassImplementingFromPrivateModuleInterface
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 }
 export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
 >publicClassImplementingFromPrivateModuleInterface : publicClassImplementingFromPrivateModuleInterface
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateModule : typeof privateModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts ===
+=== privacyClassImplementsClauseDeclFile_GlobalFile.ts ===
 module publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export interface publicInterfaceInPublicModule {
     }
@@ -109,20 +139,25 @@ module publicModuleInGlobal {
 
     class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
 >privateClassImplementingPublicInterfaceInModule : privateClassImplementingPublicInterfaceInModule
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     class privateClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
 >privateClassImplementingPrivateInterfaceInModule : privateClassImplementingPrivateInterfaceInModule
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
 >publicClassImplementingPublicInterfaceInModule : publicClassImplementingPublicInterfaceInModule
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule { // Should error
 >publicClassImplementingPrivateInterfaceInModule : publicClassImplementingPrivateInterfaceInModule
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 interface publicInterfaceInGlobal {
 }
 class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceInGlobal {
 >publicClassImplementingPublicInterfaceInGlobal : publicClassImplementingPublicInterfaceInGlobal
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

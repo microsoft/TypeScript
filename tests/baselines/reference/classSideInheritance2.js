@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classSideInheritance2.ts] ////
+
 //// [classSideInheritance2.ts]
 interface IText {
     foo: number;

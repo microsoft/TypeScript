@@ -1,14 +1,21 @@
-=== tests/cases/compiler/test.tsx ===
+//// [tests/cases/compiler/jsxFactoryMissingErrorInsideAClass.ts] ////
+
+=== test.tsx ===
 export class C {
 >C : C
+>  : ^
 
     factory() {
 >factory : () => any
+>        : ^^^^^^^^^
 
         return <div></div>;
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 

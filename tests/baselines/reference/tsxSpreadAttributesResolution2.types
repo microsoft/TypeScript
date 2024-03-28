@@ -1,82 +1,133 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution2.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface PoisonedProp {
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: "2";
 >y : "2"
+>  : ^^^
 }
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Poisoned
+>         : ^^^^^^^^
 >React.Component : React.Component<PoisonedProp, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 
 const obj = {};
 >obj : {}
+>    : ^^
 >{} : {}
+>   : ^^
 
 // OK
 <Poisoned {...{x: "ok", y: "2"}} />;
 ><Poisoned {...{x: "ok", y: "2"}} /> : JSX.Element
+>                                    : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >{x: "ok", y: "2"} : { x: string; y: "2"; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 >y : "2"
+>  : ^^^
 >"2" : "2"
+>    : ^^^
 
 // Error
 let p = <Poisoned {...obj} />;
 >p : JSX.Element
+>  : ^^^^^^^^^^^
 ><Poisoned {...obj} /> : JSX.Element
+>                      : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >obj : {}
+>    : ^^
 
 let y = <Poisoned />;
 >y : JSX.Element
+>  : ^^^^^^^^^^^
 ><Poisoned /> : JSX.Element
+>             : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 
 let z = <Poisoned x y/>;
 >z : JSX.Element
+>  : ^^^^^^^^^^^
 ><Poisoned x y/> : JSX.Element
+>                : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >x : true
+>  : ^^^^
 >y : true
+>  : ^^^^
 
 let w = <Poisoned {...{x: 5, y: "2"}}/>;
 >w : JSX.Element
+>  : ^^^^^^^^^^^
 ><Poisoned {...{x: 5, y: "2"}}/> : JSX.Element
+>                                : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >{x: 5, y: "2"} : { x: number; y: "2"; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : "2"
+>  : ^^^
 >"2" : "2"
+>    : ^^^
 
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 >w1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Poisoned {...{x: 5, y: "2"}} X="hi" /> : JSX.Element
+>                                        : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >{x: 5, y: "2"} : { x: number; y: "2"; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 >y : "2"
+>  : ^^^
 >"2" : "2"
+>    : ^^^
 >X : string
+>  : ^^^^^^
 

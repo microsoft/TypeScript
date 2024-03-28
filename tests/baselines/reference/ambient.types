@@ -1,21 +1,31 @@
+//// [tests/cases/conformance/externalModules/typeOnly/ambient.ts] ////
+
 === /a.ts ===
 export class A { a!: string }
 >A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 === /b.ts ===
 import type { A } from './a';
 >A : A
+>  : ^
 
 declare class B extends A {}
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 declare namespace ns {
 >ns : typeof ns
+>   : ^^^^^^^^^
 
   class C extends A {}
 >C : C
+>  : ^
 >A : A
+>  : ^
 }
 

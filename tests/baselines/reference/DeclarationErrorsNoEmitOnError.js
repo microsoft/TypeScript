@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts] ////
+
 //// [DeclarationErrorsNoEmitOnError.ts]
 type T = { x : number }
 export interface I {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers01.ts] ////
+
 //// [objectBindingPatternKeywordIdentifiers01.ts]
 var { while } = { while: 1 }
 

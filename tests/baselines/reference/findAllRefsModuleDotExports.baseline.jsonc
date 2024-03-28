@@ -1,175 +1,105 @@
+// === findAllReferences ===
 // === /a.js ===
-// /*FIND ALL REFS*/const [|b|] = require("./b");
+// /*FIND ALL REFS*/<|const [|{| isWriteAccess: true, isDefinition: true |}b|] = require("./b");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "alias",
-      "name": "import b",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /a.js ===
+  // /*FIND ALL REFS*/<|const [|b|] = require("./b");|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import b",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// <|const b = require("/*FIND ALL REFS*/[|./b|]");|>
 
 // === /b.js ===
-// [|module|].exports = 0;
+// <|[|module|].exports = 0;|>
 
-// === /a.js ===
-// const b = require("/*FIND ALL REFS*/[|./b|]");
+  // === Definitions ===
+  // === /b.js ===
+  // [|module.exports = 0;|]
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "module",
-      "name": "module \"/b\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/b\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 3
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 6
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/b\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/b\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// <|const b = require("[|./b|]");|>
 
 // === /b.js ===
-// /*FIND ALL REFS*/[|module|].exports = 0;
+// /*FIND ALL REFS*/<|[|module|].exports = 0;|>
 
-// === /a.js ===
-// const b = require("[|./b|]");
+  // === Definitions ===
+  // === /b.js ===
+  // /*FIND ALL REFS*/[|module.exports = 0;|]
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.js",
-      "kind": "module",
-      "name": "module \"/b\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/b\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 3
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 6
-        },
-        "fileName": "/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/b\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/b\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

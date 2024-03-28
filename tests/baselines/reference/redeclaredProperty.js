@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/redeclaredProperty.ts] ////
+
 //// [redeclaredProperty.ts]
 class Base {
   b = 1;

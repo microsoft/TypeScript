@@ -1,47 +1,67 @@
-=== tests/cases/compiler/recursiveGenericUnionType2.ts ===
+//// [tests/cases/compiler/recursiveGenericUnionType2.ts] ////
+
+=== recursiveGenericUnionType2.ts ===
 declare module Test1 {
     export type Container<T> = T | {
 >Container : Container<T>
+>          : ^^^^^^^^^^^^
 
         [i: string]: Container<T>[];
 >i : string
+>  : ^^^^^^
 
     };
     export type IStringContainer = Container<string>;
->IStringContainer : string | { [i: string]: Container<string>[]; }
+>IStringContainer : IStringContainer
+>                 : ^^^^^^^^^^^^^^^^
 }
 
 declare module Test2 {
     export type Container<T> = T | {
 >Container : Container<T>
+>          : ^^^^^^^^^^^^
 
         [i: string]: Container<T>[];
 >i : string
+>  : ^^^^^^
 
     };
     export type IStringContainer = Container<string>;
->IStringContainer : string | { [i: string]: Container<string>[]; }
+>IStringContainer : IStringContainer
+>                 : ^^^^^^^^^^^^^^^^
 }
 
 var x: Test1.Container<number>;
 >x : Test1.Container<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Test1 : any
+>      : ^^^
 
 var s1: Test1.IStringContainer;
 >s1 : Test1.IStringContainer
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >Test1 : any
+>      : ^^^
 
 var s2: Test2.IStringContainer;
 >s2 : Test2.IStringContainer
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >Test2 : any
+>      : ^^^
 
 s1 = s2;
 >s1 = s2 : Test2.IStringContainer
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >s1 : Test1.IStringContainer
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >s2 : Test2.IStringContainer
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 s2 = s1;
 >s2 = s1 : Test1.IStringContainer
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >s2 : Test2.IStringContainer
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >s1 : Test1.IStringContainer
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 

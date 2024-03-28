@@ -1,22 +1,31 @@
-=== tests/cases/compiler/callOverloads4.ts ===
+//// [tests/cases/compiler/callOverloads4.ts] ////
+
+=== callOverloads4.ts ===
 function Foo():Foo; // error
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 function Foo(s:string):Foo; // error
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 class Foo { // error
 >Foo : Foo
+>    : ^^^
 
     bar1() { /*WScript.Echo("bar1");*/ }
 >bar1 : () => void
+>     : ^^^^^^^^^^
 
     constructor(s: string);
 >s : string
+>  : ^^^^^^
 
     constructor(x: any) {
 >x : any
+>  : ^^^
 
         // WScript.Echo("Constructor function has executed");
     }
@@ -24,23 +33,36 @@ class Foo { // error
 
 var f1 = new Foo("hey");
 >f1 : Foo
+>   : ^^^
 >new Foo("hey") : Foo
+>               : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"hey" : "hey"
+>      : ^^^^^
 
 
 f1.bar1();
 >f1.bar1() : void
+>          : ^^^^
 >f1.bar1 : () => void
+>        : ^^^^^^^^^^
 >f1 : Foo
+>   : ^^^
 >bar1 : () => void
+>     : ^^^^^^^^^^
 
 Foo();
 >Foo() : Foo
+>      : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 Foo("s");
 >Foo("s") : Foo
+>         : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"s" : "s"
+>    : ^^^
 

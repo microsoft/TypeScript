@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts ===
+//// [tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts] ////
+
+=== genericMergedDeclarationUsingTypeParameter.ts ===
 function foo<T extends U, U>(y: T, z: U) { return y; }
 >foo : Symbol(foo, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 0), Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 54))
 >T : Symbol(T, Decl(genericMergedDeclarationUsingTypeParameter.ts, 0, 13))

@@ -1,8 +1,8 @@
-tests/cases/compiler/innerAliases.ts(19,10): error TS2694: Namespace 'D' has no exported member 'inner'.
-tests/cases/compiler/innerAliases.ts(21,11): error TS2339: Property 'inner' does not exist on type 'typeof D'.
+innerAliases.ts(19,10): error TS2694: Namespace 'D' has no exported member 'inner'.
+innerAliases.ts(21,11): error TS2339: Property 'inner' does not exist on type 'typeof D'.
 
 
-==== tests/cases/compiler/innerAliases.ts (2 errors) ====
+==== innerAliases.ts (2 errors) ====
     module A {
         export module B {
             export module C {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
+
 //// [templateLiteralTypes1.ts]
 // Template types example from #12754
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts(14,21): error TS2448: Block-scoped variable 'FOO' used before its declaration.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts(14,21): error TS2454: Variable 'FOO' is used before being assigned.
+classStaticBlockUseBeforeDef3.ts(14,21): error TS2448: Block-scoped variable 'FOO' used before its declaration.
+classStaticBlockUseBeforeDef3.ts(14,21): error TS2454: Variable 'FOO' is used before being assigned.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts (2 errors) ====
+==== classStaticBlockUseBeforeDef3.ts (2 errors) ====
     class A {
         static {
             A.doSomething(); // should not error
@@ -19,7 +19,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.t
             console.log(FOO);   // should error
                         ~~~
 !!! error TS2448: Block-scoped variable 'FOO' used before its declaration.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts:18:7: 'FOO' is declared here.
+!!! related TS2728 classStaticBlockUseBeforeDef3.ts:18:7: 'FOO' is declared here.
                         ~~~
 !!! error TS2454: Variable 'FOO' is used before being assigned.
         }

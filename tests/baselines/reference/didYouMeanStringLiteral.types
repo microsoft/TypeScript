@@ -1,22 +1,33 @@
-=== tests/cases/compiler/didYouMeanStringLiteral.ts ===
+//// [tests/cases/compiler/didYouMeanStringLiteral.ts] ////
+
+=== didYouMeanStringLiteral.ts ===
 type T1 = "string" | "number" | "boolean";
->T1 : "string" | "number" | "boolean"
+>T1 : T1
+>   : ^^
 
 type T2 = T1 & ("number" | "boolean"); // "number" | "boolean"
 >T2 : "number" | "boolean"
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 type T3 = T1 & ("string" | "boolean"); // "string" | "boolean"
 >T3 : "string" | "boolean"
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 const t1: T1 = "strong";
 >t1 : T1
+>   : ^^
 >"strong" : "strong"
+>         : ^^^^^^^^
 
 const t2: T2 = "strong";
 >t2 : "number" | "boolean"
+>   : ^^^^^^^^^^^^^^^^^^^^
 >"strong" : "strong"
+>         : ^^^^^^^^
 
 const t3: T3 = "strong";
 >t3 : "string" | "boolean"
+>   : ^^^^^^^^^^^^^^^^^^^^
 >"strong" : "strong"
+>         : ^^^^^^^^
 

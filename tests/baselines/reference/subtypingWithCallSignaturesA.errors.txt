@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesA.ts(2,15): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => number'.
+subtypingWithCallSignaturesA.ts(2,15): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => number'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesA.ts (1 errors) ====
+==== subtypingWithCallSignaturesA.ts (1 errors) ====
     declare function foo3(cb: (x: number) => number): typeof cb;
     var r5 = foo3((x: number) => ''); // error
                   ~~~~~~~~~~~~~~~~~

@@ -1,0 +1,291 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// interface A {
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}foo|]: string;|>
+// }
+
+// === /tests/cases/fourslash/b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// function foo(x: A) {
+//     x.[|foo|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // interface A {
+  //     /*FIND ALL REFS*/<|[|foo|]: string;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.foo: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// interface A {
+//     <|[|foo|]: string;|>
+// }
+
+// === /tests/cases/fourslash/b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// function foo(x: A) {
+//     x./*FIND ALL REFS*/[|foo|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // interface A {
+  //     <|[|foo|]: string;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.foo: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// interface A {
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}foo|]: string;|>
+// }
+
+// === /tests/cases/fourslash/b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// 
+// function foo(x: A) {
+//     x.[|foo|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // interface A {
+  //     /*FIND ALL REFS*/<|[|foo|]: string;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.foo: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// interface A {
+//     <|[|foo|]: string;|>
+// }
+
+// === /tests/cases/fourslash/b.ts ===
+// ///<reference path='a.ts'/>
+// 
+// 
+// function foo(x: A) {
+//     x./*FIND ALL REFS*/[|foo|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // interface A {
+  //     <|[|foo|]: string;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) A.foo: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

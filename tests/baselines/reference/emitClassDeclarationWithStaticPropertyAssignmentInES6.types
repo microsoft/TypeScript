@@ -1,21 +1,31 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithStaticPropertyAssignmentInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithStaticPropertyAssignmentInES6.ts] ////
+
+=== emitClassDeclarationWithStaticPropertyAssignmentInES6.ts ===
 class C {
 >C : C
+>  : ^
 
     static z: string = "Foo";
 >z : string
+>  : ^^^^^^
 >"Foo" : "Foo"
+>      : ^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     x = 20000;
 >x : number
+>  : ^^^^^^
 >20000 : 20000
+>      : ^^^^^
 
     static b = true;
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 

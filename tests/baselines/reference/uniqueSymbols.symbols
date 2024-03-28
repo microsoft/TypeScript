@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts] ////
+
+=== uniqueSymbols.ts ===
 // declarations with call initializer
 const constCall = Symbol();
 >constCall : Symbol(constCall, Decl(uniqueSymbols.ts, 1, 5))

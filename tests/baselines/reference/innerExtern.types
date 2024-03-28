@@ -1,26 +1,36 @@
-=== tests/cases/compiler/innerExtern.ts ===
+//// [tests/cases/compiler/innerExtern.ts] ////
+
+=== innerExtern.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export declare module BB {
 >BB : typeof BB
+>   : ^^^^^^^^^
 
         export var Elephant;
 >Elephant : any
     }
     export module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export class C {
 >C : C
+>  : ^
 
             x = BB.Elephant.X;
 >x : any
 >BB.Elephant.X : any
 >BB.Elephant : any
+>            : ^^^
 >BB : typeof BB
+>   : ^^^^^^^^^
 >Elephant : any
+>         : ^^^
 >X : any
+>  : ^^^
         }
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts] ////
+
 //// [unionTypePropertyAccessibility.ts]
 class Default {
     member: string;

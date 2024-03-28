@@ -1,17 +1,28 @@
-=== tests/cases/compiler/spellingSuggestionGlobal2.ts ===
+//// [tests/cases/compiler/spellingSuggestionGlobal2.ts] ////
+
+=== spellingSuggestionGlobal2.ts ===
 export {}
 declare global { const x: any }
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 const globals = { x: true }
 >globals : { x: boolean; }
+>        : ^^^^^^^^^^^^^^^
 >{ x: true } : { x: boolean; }
+>            : ^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 global.x // should suggest `globals` (GH#42209)
 >global.x : any
+>         : ^^^
 >global : any
+>       : ^^^
 >x : any
+>  : ^^^
 

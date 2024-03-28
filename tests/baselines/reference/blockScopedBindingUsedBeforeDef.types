@@ -1,21 +1,34 @@
-=== tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts] ////
+
+=== blockScopedBindingUsedBeforeDef.ts ===
 // 1:
 for (let {[a]: a} of [{ }]) continue;
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >[{ }] : {}[]
+>      : ^^^^
 >{ } : {}
+>    : ^^
 
 // 2:
 for (let {[a]: a} = { }; false; ) continue;
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 >{ } : {}
+>    : ^^
 >false : false
+>      : ^^^^^
 
 // 3:
 let {[b]: b} = { };
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 >{ } : {}
+>    : ^^
 

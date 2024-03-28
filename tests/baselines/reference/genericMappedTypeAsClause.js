@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericMappedTypeAsClause.ts] ////
+
 //// [genericMappedTypeAsClause.ts]
 type Model = {
     a: string;

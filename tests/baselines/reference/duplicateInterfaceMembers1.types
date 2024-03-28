@@ -1,9 +1,13 @@
-=== tests/cases/compiler/duplicateInterfaceMembers1.ts ===
+//// [tests/cases/compiler/duplicateInterfaceMembers1.ts] ////
+
+=== duplicateInterfaceMembers1.ts ===
 interface Bar {
    x: number;
 >x : number
+>  : ^^^^^^
 
    x: number;
 >x : number
+>  : ^^^^^^
 }
 

@@ -1,16 +1,25 @@
-=== tests/cases/compiler/optionalParamterAndVariableDeclaration.ts ===
+//// [tests/cases/compiler/optionalParamterAndVariableDeclaration.ts] ////
+
+=== optionalParamterAndVariableDeclaration.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(options?: number) {
 >options : number
+>        : ^^^^^^
 
         var options = (options || 0);
 >options : number
+>        : ^^^^^^
 >(options || 0) : number
+>               : ^^^^^^
 >options || 0 : number
+>             : ^^^^^^
 >options : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
     }
 }
 

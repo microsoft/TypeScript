@@ -1,6 +1,11 @@
-=== tests/cases/compiler/sourceMapValidationFunctionPropertyAssignment.ts ===
+//// [tests/cases/compiler/sourceMapValidationFunctionPropertyAssignment.ts] ////
+
+=== sourceMapValidationFunctionPropertyAssignment.ts ===
 var x = { n() { } };
 >x : { n(): void; }
+>  : ^^^^^^^^^^^^^^
 >{ n() { } } : { n(): void; }
+>            : ^^^^^^^^^^^^^^
 >n : () => void
+>  : ^^^^^^^^^^
 

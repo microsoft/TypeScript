@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess2.ts ===
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess2.ts] ////
+
+=== superSymbolIndexedAccess2.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess2.ts, 0, 0))
 

@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/indexedAccessWithVariableElement.ts] ////
+
+=== indexedAccessWithVariableElement.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54420
+
+declare const array1: [...number[], number]
+>array1 : [...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+
+const el1: number = array1[0]
+>el1 : number
+>    : ^^^^^^
+>array1[0] : number
+>          : ^^^^^^
+>array1 : [...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+declare const array2: [...number[], number]
+>array2 : [...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+
+const el2: number = array2[1]
+>el2 : number
+>    : ^^^^^^
+>array2[1] : number | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>array2 : [...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+declare const array3: [number, ...number[], number]
+>array3 : [number, ...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const el3: number = array3[1]
+>el3 : number
+>    : ^^^^^^
+>array3[1] : number
+>          : ^^^^^^
+>array3 : [number, ...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+declare const array4: [number, ...number[], number]
+>array4 : [number, ...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const el4: number = array4[2]
+>el4 : number
+>    : ^^^^^^
+>array4[2] : number | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>array4 : [number, ...number[], number]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+

@@ -1,15 +1,14 @@
-tests/cases/compiler/genericMappedTypeAsClause.ts(11,36): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(14,11): error TS2322: Type 'number' is not assignable to type 'MappedModel<T>'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(15,11): error TS2322: Type 'string' is not assignable to type 'MappedModel<T>'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(16,11): error TS2322: Type 'number[]' is not assignable to type 'MappedModel<T>'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(17,11): error TS2322: Type 'boolean' is not assignable to type 'MappedModel<T>'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(18,34): error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'MappedModel<T>'.
-  Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(19,11): error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.
-tests/cases/compiler/genericMappedTypeAsClause.ts(25,60): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+genericMappedTypeAsClause.ts(11,36): error TS2322: Type 'string' is not assignable to type 'number'.
+genericMappedTypeAsClause.ts(14,11): error TS2322: Type 'number' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(15,11): error TS2322: Type 'string' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(16,11): error TS2322: Type 'number[]' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(17,11): error TS2322: Type 'boolean' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(18,34): error TS2353: Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(19,11): error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.
+genericMappedTypeAsClause.ts(25,60): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
-==== tests/cases/compiler/genericMappedTypeAsClause.ts (8 errors) ====
+==== genericMappedTypeAsClause.ts (8 errors) ====
     type Model = {
         a: string;
         b: number;
@@ -23,7 +22,7 @@ tests/cases/compiler/genericMappedTypeAsClause.ts(25,60): error TS2312: An inter
     const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
                                        ~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/compiler/genericMappedTypeAsClause.ts:6:43: The expected type comes from property 'bFoo' which is declared here on type 'MappedModel<"Foo">'
+!!! related TS6500 genericMappedTypeAsClause.ts:6:43: The expected type comes from property 'bFoo' which is declared here on type 'MappedModel<"Foo">'
     
     function f1<T extends string>() {
         const x1: MappedModel<T> = 42;  // Error
@@ -40,8 +39,7 @@ tests/cases/compiler/genericMappedTypeAsClause.ts(25,60): error TS2312: An inter
 !!! error TS2322: Type 'boolean' is not assignable to type 'MappedModel<T>'.
         const x5: MappedModel<T> = { a: 'bar', b: 42 };  // Error
                                      ~
-!!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type 'MappedModel<T>'.
-!!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
+!!! error TS2353: Object literal may only specify known properties, and 'a' does not exist in type 'MappedModel<T>'.
         const x6: MappedModel<T> = undefined;  // Error
               ~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'MappedModel<T>'.

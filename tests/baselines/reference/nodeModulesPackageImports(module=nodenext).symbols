@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesPackageImports.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as cjs from "#cjs";
 >cjs : Symbol(cjs, Decl(index.ts, 1, 6))
@@ -18,7 +20,7 @@ mjs;
 type;
 >type : Symbol(type, Decl(index.ts, 3, 6))
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as cjs from "#cjs";
 >cjs : Symbol(cjs, Decl(index.mts, 1, 6))
@@ -38,7 +40,7 @@ mjs;
 type;
 >type : Symbol(type, Decl(index.mts, 3, 6))
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // esm format file
 import * as cjs from "#cjs";
 >cjs : Symbol(cjs, Decl(index.cts, 1, 6))

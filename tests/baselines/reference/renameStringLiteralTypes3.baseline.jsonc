@@ -1,0 +1,45 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes3.ts ===
+// type Foo = "/*RENAME*/[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         switch (this.p) {
+//             case "[|aRENAME|]":
+//                 return 1;
+//             case "b":
+//                 return 2;
+// --- (line: 11) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes3.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "/*RENAME*/[|aRENAME|]";
+//     m() {
+//         switch (this.p) {
+//             case "[|aRENAME|]":
+//                 return 1;
+//             case "b":
+//                 return 2;
+// --- (line: 11) skipped ---
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes3.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         switch (this.p) {
+//             case "/*RENAME*/[|aRENAME|]":
+//                 return 1;
+//             case "b":
+//                 return 2;
+// --- (line: 11) skipped ---

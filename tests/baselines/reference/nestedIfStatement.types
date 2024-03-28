@@ -1,15 +1,21 @@
-=== tests/cases/compiler/nestedIfStatement.ts ===
+//// [tests/cases/compiler/nestedIfStatement.ts] ////
+
+=== nestedIfStatement.ts ===
 if (0) {
 >0 : 0
+>  : ^
 
 } else if (1) {
 >1 : 1
+>  : ^
 
 } else if (2) {
 >2 : 2
+>  : ^
 
 } else if (3) {
 >3 : 3
+>  : ^
 
 } else {
 }

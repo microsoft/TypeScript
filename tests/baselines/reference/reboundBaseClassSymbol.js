@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reboundBaseClassSymbol.ts] ////
+
 //// [reboundBaseClassSymbol.ts]
 interface A { a: number; }
 module Foo {

@@ -1,10 +1,15 @@
-=== tests/cases/compiler/nestedGlobalNamespaceInClass.ts ===
+//// [tests/cases/compiler/nestedGlobalNamespaceInClass.ts] ////
+
+=== nestedGlobalNamespaceInClass.ts ===
 // should not crash - from #35717
 class C {
 >C : C
+>  : ^
 
     global x
 >global : any
+>       : ^^^
 >x : any
+>  : ^^^
 }
 

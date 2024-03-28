@@ -1,21 +1,29 @@
-=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass.ts ===
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass.ts] ////
+
+=== interfaceExtendingClass.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     y() { }
 >y : () => void
+>  : ^^^^^^^^^^
 
     get Z() {
 >Z : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 }
 
 interface I extends Foo {
@@ -23,32 +31,51 @@ interface I extends Foo {
 
 var i: I;
 >i : I
+>  : ^
 
 var r1 = i.x;
 >r1 : string
+>   : ^^^^^^
 >i.x : string
+>    : ^^^^^^
 >i : I
+>  : ^
 >x : string
+>  : ^^^^^^
 
 var r2 = i.y();
 >r2 : void
+>   : ^^^^
 >i.y() : void
+>      : ^^^^
 >i.y : () => void
+>    : ^^^^^^^^^^
 >i : I
+>  : ^
 >y : () => void
+>  : ^^^^^^^^^^
 
 var r3 = i.Z;
 >r3 : number
+>   : ^^^^^^
 >i.Z : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >Z : number
+>  : ^^^^^^
 
 var f: Foo = i;
 >f : Foo
+>  : ^^^
 >i : I
+>  : ^
 
 i = f;
 >i = f : Foo
+>      : ^^^
 >i : I
+>  : ^
 >f : Foo
+>  : ^^^
 

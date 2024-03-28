@@ -1,6 +1,9 @@
-=== tests/cases/compiler/parserConstructorDeclaration12.ts ===
+//// [tests/cases/compiler/parserConstructorDeclaration12.ts] ////
+
+=== parserConstructorDeclaration12.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor<>() { }
   constructor<> () { }

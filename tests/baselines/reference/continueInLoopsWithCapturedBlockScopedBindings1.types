@@ -1,17 +1,27 @@
-=== tests/cases/compiler/continueInLoopsWithCapturedBlockScopedBindings1.ts ===
+//// [tests/cases/compiler/continueInLoopsWithCapturedBlockScopedBindings1.ts] ////
+
+=== continueInLoopsWithCapturedBlockScopedBindings1.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     for (const i of [0, 1]) {
 >i : number
+>  : ^^^^^^
 >[0, 1] : number[]
+>       : ^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 
         if (i === 0) {
 >i === 0 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
             continue;
         }
@@ -19,11 +29,15 @@ function foo() {
         // Trigger non-simple-loop emit
         (() => {
 >(() => {            return i;        })() : number
+>                                          : ^^^^^^
 >(() => {            return i;        }) : () => number
+>                                        : ^^^^^^^^^^^^
 >() => {            return i;        } : () => number
+>                                      : ^^^^^^^^^^^^
 
             return i;
 >i : number
+>  : ^^^^^^
 
         })();
     }

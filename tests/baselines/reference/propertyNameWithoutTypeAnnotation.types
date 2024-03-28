@@ -1,6 +1,9 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts] ////
+
+=== propertyNameWithoutTypeAnnotation.ts ===
 class C {
 >C : C
+>  : ^
 
     foo;
 >foo : any
@@ -13,6 +16,7 @@ interface I {
 
 var a: {
 >a : { foo: any; }
+>  : ^^^^^^^^^^^^^
 
     foo;
 >foo : any
@@ -20,10 +24,13 @@ var a: {
 
 var b = {
 >b : { foo: any; }
+>  : ^^^^^^^^^^^^^
 >{    foo: null} : { foo: null; }
+>                : ^^^^^^^^^^^^^^
 
     foo: null
 >foo : null
+>    : ^^^^
 }
 
 // These should all be of type 'any'
@@ -31,26 +38,37 @@ var r1 = (new C()).foo;
 >r1 : any
 >(new C()).foo : any
 >(new C()) : C
+>          : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >foo : any
+>    : ^^^
 
 var r2 = (<I>null).foo;
 >r2 : any
 >(<I>null).foo : any
 >(<I>null) : I
+>          : ^
 ><I>null : I
+>        : ^
 >foo : any
+>    : ^^^
 
 var r3 = a.foo;
 >r3 : any
 >a.foo : any
 >a : { foo: any; }
+>  : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 
 var r4 = b.foo;
 >r4 : any
 >b.foo : any
 >b : { foo: any; }
+>  : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 

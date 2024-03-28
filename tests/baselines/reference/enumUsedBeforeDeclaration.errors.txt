@@ -1,11 +1,11 @@
-tests/cases/compiler/enumUsedBeforeDeclaration.ts(1,18): error TS2450: Enum 'Color' used before its declaration.
+enumUsedBeforeDeclaration.ts(1,18): error TS2450: Enum 'Color' used before its declaration.
 
 
-==== tests/cases/compiler/enumUsedBeforeDeclaration.ts (1 errors) ====
+==== enumUsedBeforeDeclaration.ts (1 errors) ====
     const v: Color = Color.Green;
                      ~~~~~
 !!! error TS2450: Enum 'Color' used before its declaration.
-!!! related TS2728 tests/cases/compiler/enumUsedBeforeDeclaration.ts:3:6: 'Color' is declared here.
+!!! related TS2728 enumUsedBeforeDeclaration.ts:3:6: 'Color' is declared here.
     const v2: ConstColor = ConstColor.Green;
     enum Color { Red, Green, Blue }
     const enum ConstColor { Red, Green, Blue }

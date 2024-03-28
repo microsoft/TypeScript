@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeNextImportModeImplicitIndexResolution2.ts] ////
+
 === /node_modules/@types/dedent/index.d.ts ===
 
 export {};

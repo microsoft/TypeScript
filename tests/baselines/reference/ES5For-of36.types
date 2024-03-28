@@ -1,16 +1,27 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of36.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of36.ts] ////
+
+=== ES5For-of36.ts ===
 for (let [a = 0, b = 1] of [2, 3]) {
 >a : any
+>  : ^^^
 >0 : 0
+>  : ^
 >b : any
+>  : ^^^
 >1 : 1
+>  : ^
 >[2, 3] : number[]
+>       : ^^^^^^^^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     a;
 >a : any
+>  : ^^^
 
     b;
 >b : any
+>  : ^^^
 }

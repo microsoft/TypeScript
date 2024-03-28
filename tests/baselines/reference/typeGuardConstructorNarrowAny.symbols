@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardConstructorNarrowAny.ts ===
+//// [tests/cases/compiler/typeGuardConstructorNarrowAny.ts] ////
+
+=== typeGuardConstructorNarrowAny.ts ===
 // Narrowing any to primitives
 let var1: any;
 >var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))

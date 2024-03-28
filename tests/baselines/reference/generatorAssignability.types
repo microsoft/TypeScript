@@ -1,177 +1,261 @@
-=== tests/cases/conformance/generators/generatorAssignability.ts ===
+//// [tests/cases/conformance/generators/generatorAssignability.ts] ////
+
+=== generatorAssignability.ts ===
 declare let _: any;
 >_ : any
+>  : ^^^
 
 declare const g1: Generator<number, void, string>;
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const g2: Generator<number, void, undefined>;
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const g3: Generator<number, void, boolean>;
 >g3 : Generator<number, void, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const g4: AsyncGenerator<number, void, string>;
 >g4 : AsyncGenerator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const g5: AsyncGenerator<number, void, undefined>;
 >g5 : AsyncGenerator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const g6: AsyncGenerator<number, void, boolean>;
 >g6 : AsyncGenerator<number, void, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // spread iterable
 [...g1]; // error
 >[...g1] : number[]
+>        : ^^^^^^^^
 >...g1 : number
+>      : ^^^^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [...g2]; // ok
 >[...g2] : number[]
+>        : ^^^^^^^^
 >...g2 : number
+>      : ^^^^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // binding pattern over iterable
 let [x1] = g1; // error
 >x1 : number
+>   : ^^^^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let [x2] = g2; // ok
 >x2 : number
+>   : ^^^^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // binding rest pattern over iterable
 let [...y1] = g1; // error
 >y1 : number[]
+>   : ^^^^^^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let [...y2] = g2; // ok
 >y2 : number[]
+>   : ^^^^^^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // assignment pattern over iterable
 [_] = g1; // error
 >[_] = g1 : Generator<number, void, string>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[_] : [any]
+>    : ^^^^^
 >_ : any
+>  : ^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [_] = g2; // ok
 >[_] = g2 : Generator<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[_] : [any]
+>    : ^^^^^
 >_ : any
+>  : ^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // assignment rest pattern over iterable
 [..._] = g1; // error
 >[..._] = g1 : Generator<number, void, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[..._] : any[]
+>       : ^^^^^
 >..._ : any
+>     : ^^^
 >_ : any
+>  : ^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [..._] = g2; // ok
 >[..._] = g2 : Generator<number, void, undefined>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[..._] : any[]
+>       : ^^^^^
 >..._ : any
+>     : ^^^
 >_ : any
+>  : ^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // for-of over iterable
 for (_ of g1); // error
 >_ : any
+>  : ^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 for (_ of g2); // ok
 >_ : any
+>  : ^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 async function asyncfn() {
 >asyncfn : () => Promise<void>
+>        : ^^^^^^^^^^^^^^^^^^^
 
     // for-await-of over iterable
     for await (_ of g1); // error
 >_ : any
+>  : ^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     for await (_ of g2); // ok
 >_ : any
+>  : ^^^
 >g2 : Generator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // for-await-of over asynciterable
     for await (_ of g4); // error
 >_ : any
+>  : ^^^
 >g4 : AsyncGenerator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     for await (_ of g5); // ok
 >_ : any
+>  : ^^^
 >g5 : AsyncGenerator<number, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function* f1(): Generator<number, void, boolean> {
 >f1 : () => Generator<number, void, boolean>
+>   : ^^^^^^                                
 
     // yield* over iterable
     yield* g1; // error
 >yield* g1 : void
+>          : ^^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* g3; // ok
 >yield* g3 : void
+>          : ^^^^
 >g3 : Generator<number, void, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 async function* f2(): AsyncGenerator<number, void, boolean> {
 >f2 : () => AsyncGenerator<number, void, boolean>
+>   : ^^^^^^                                     
 
     // yield* over iterable
     yield* g1; // error
 >yield* g1 : void
+>          : ^^^^
 >g1 : Generator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* g3; // ok
 >yield* g3 : void
+>          : ^^^^
 >g3 : Generator<number, void, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // yield* over asynciterable
     yield* g4; // error
 >yield* g4 : void
+>          : ^^^^
 >g4 : AsyncGenerator<number, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* g6; // ok
 >yield* g6 : void
+>          : ^^^^
 >g6 : AsyncGenerator<number, void, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 async function f3() {
 >f3 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     const syncGenerator = function*() {
 >syncGenerator : () => Generator<1 | 2, void, unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function*() {        yield 1;        yield 2;    } : () => Generator<1 | 2, void, unknown>
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 
         yield 2;
 >yield 2 : any
+>        : ^^^
 >2 : 2
+>  : ^
 
     };
 
     const o = {[Symbol.asyncIterator]: syncGenerator};
 >o : { [Symbol.asyncIterator]: () => Generator<1 | 2, void, unknown>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{[Symbol.asyncIterator]: syncGenerator} : { [Symbol.asyncIterator]: () => Generator<1 | 2, void, unknown>; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[Symbol.asyncIterator] : () => Generator<1 | 2, void, unknown>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.asyncIterator : unique symbol
+>                     : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >asyncIterator : unique symbol
+>              : ^^^^^^^^^^^^^
 >syncGenerator : () => Generator<1 | 2, void, unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     for await (const x of o) {
 >x : 1 | 2
+>  : ^^^^^
 >o : { [Symbol.asyncIterator]: () => Generator<1 | 2, void, unknown>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

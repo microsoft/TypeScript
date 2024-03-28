@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeWithIndexedLiteralType.ts ===
+//// [tests/cases/compiler/unionTypeWithIndexedLiteralType.ts] ////
+
+=== unionTypeWithIndexedLiteralType.ts ===
 interface I { x: number; }
 >I : Symbol(I, Decl(unionTypeWithIndexedLiteralType.ts, 0, 0))
 >x : Symbol(I.x, Decl(unionTypeWithIndexedLiteralType.ts, 0, 13))

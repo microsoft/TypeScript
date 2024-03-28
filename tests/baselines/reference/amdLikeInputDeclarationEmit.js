@@ -33,8 +33,7 @@ define("lib/ExtendedClass", ["deps/BaseClass"],
 
 
 //// [ExtendedClass.d.ts]
-/// <reference path="../tests/cases/compiler/deps/BaseClass.d.ts" />
 export = ExtendedClass;
-declare const ExtendedClass: new () => {
+declare const ExtendedClass: new () => import("deps/BaseClass") & {
     f: () => "something";
-} & import("deps/BaseClass");
+};

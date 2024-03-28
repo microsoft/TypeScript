@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayConcat2.ts ===
+//// [tests/cases/compiler/arrayConcat2.ts] ////
+
+=== arrayConcat2.ts ===
 var a: string[] = [];
 >a : Symbol(a, Decl(arrayConcat2.ts, 0, 3))
 

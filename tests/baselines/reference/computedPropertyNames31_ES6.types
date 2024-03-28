@@ -1,38 +1,55 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames31_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames31_ES6.ts] ////
+
+=== computedPropertyNames31_ES6.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 class C extends Base {
 >C : C
+>  : ^
 >Base : Base
+>     : ^^^^
 
     foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
         () => {
 >() => {            var obj = {                [super.bar()]() { } // needs capture            };        } : () => void
+>                                                                                                          : ^^^^^^^^^^
 
             var obj = {
 >obj : { [x: number]: () => void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                [super.bar()]() { } // needs capture            } : { [x: number]: () => void; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 [super.bar()]() { } // needs capture
 >[super.bar()] : () => void
+>              : ^^^^^^^^^^
 >super.bar() : number
+>            : ^^^^^^
 >super.bar : () => number
+>          : ^^^^^^^^^^^^
 >super : Base
+>      : ^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
             };
         }
         return 0;
 >0 : 0
+>  : ^
     }
 }

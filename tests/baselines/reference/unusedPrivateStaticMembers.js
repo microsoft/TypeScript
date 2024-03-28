@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateStaticMembers.ts] ////
+
 //// [unusedPrivateStaticMembers.ts]
 class Test1 {
     private static m1() {}

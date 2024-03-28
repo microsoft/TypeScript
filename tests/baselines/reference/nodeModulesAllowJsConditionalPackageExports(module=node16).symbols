@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsConditionalPackageExports.ts] ////
+
+=== index.js ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : Symbol(cjs, Decl(index.js, 1, 6))
@@ -50,7 +52,7 @@ ts.mjsSource;
 >ts : Symbol(ts, Decl(index.js, 10, 6))
 >mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
 
-=== tests/cases/conformance/node/allowJs/index.mjs ===
+=== index.mjs ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : Symbol(cjs, Decl(index.mjs, 1, 6))
@@ -102,7 +104,7 @@ ts.mjsSource;
 >ts : Symbol(ts, Decl(index.mjs, 10, 6))
 >mjsSource : Symbol(cjsi.mjsSource, Decl(index.d.mts, 9, 12))
 
-=== tests/cases/conformance/node/allowJs/index.cjs ===
+=== index.cjs ===
 // cjs format file
 import * as cjs from "package/cjs";
 >cjs : Symbol(cjs, Decl(index.cjs, 1, 6))
@@ -154,7 +156,7 @@ ts.cjsSource;
 >ts : Symbol(ts, Decl(index.cjs, 10, 6))
 >cjsSource : Symbol(cjsi.cjsSource, Decl(index.d.cts, 9, 12))
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/a";
 >cjs : Symbol(cjs, Decl(index.d.ts, 1, 6))
@@ -183,7 +185,7 @@ export { ts };
 export const implicitCjsSource = true;
 >implicitCjsSource : Symbol(mjs.type.implicitCjsSource, Decl(index.d.ts, 9, 12))
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.mts ===
+=== node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/a";
 >cjs : Symbol(cjs, Decl(index.d.mts, 1, 6))
@@ -212,7 +214,7 @@ export { ts };
 export const mjsSource = true;
 >mjsSource : Symbol(mjs.mjsSource, Decl(index.d.mts, 9, 12))
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts ===
+=== node_modules/inner/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/a";
 >cjs : Symbol(cjs, Decl(index.d.cts, 1, 6))

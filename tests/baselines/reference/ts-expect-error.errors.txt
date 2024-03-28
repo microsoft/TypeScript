@@ -1,15 +1,15 @@
-tests/cases/conformance/directives/ts-expect-error.ts(8,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(11,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(21,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(24,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(28,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(31,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/directives/ts-expect-error.ts(37,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
-tests/cases/conformance/directives/ts-expect-error.ts(39,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
-tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
+ts-expect-error.ts(8,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(11,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(21,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(24,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(28,1): error TS2578: Unused '@ts-expect-error' directive.
+ts-expect-error.ts(31,5): error TS2322: Type 'string' is not assignable to type 'number'.
+ts-expect-error.ts(37,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
+ts-expect-error.ts(39,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
+ts-expect-error.ts(40,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
 
 
-==== tests/cases/conformance/directives/ts-expect-error.ts (9 errors) ====
+==== ts-expect-error.ts (9 errors) ====
     // @ts-expect-error additional commenting
     var invalidCommentedFancySingle: number = 'nope';
     
@@ -68,3 +68,11 @@ tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This 
     (({ a: true } as const).a === false); // error
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
+    
+    // @ts-expect-error: additional commenting with no whitespace
+    var invalidCommentedFancySingle: number = 'nope';
+    
+    /*
+     @ts-expect-error: additional commenting with no whitespace */
+    var invalidCommentedFancyMulti: number = 'nope';
+    

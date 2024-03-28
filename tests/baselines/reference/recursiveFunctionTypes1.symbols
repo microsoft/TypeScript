@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveFunctionTypes1.ts ===
+//// [tests/cases/compiler/recursiveFunctionTypes1.ts] ////
+
+=== recursiveFunctionTypes1.ts ===
 class C {
 >C : Symbol(C, Decl(recursiveFunctionTypes1.ts, 0, 0))
 

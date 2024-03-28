@@ -1,6 +1,9 @@
-=== tests/cases/compiler/castParentheses.ts ===
+//// [tests/cases/compiler/castParentheses.ts] ////
+
+=== castParentheses.ts ===
 class a {
 >a : a
+>  : ^
 
     static b: any;
 >b : any
@@ -11,42 +14,56 @@ var b = (<any>a);
 >(<any>a) : any
 ><any>a : any
 >a : typeof a
+>  : ^^^^^^^^
 
 var b = (<any>a).b;
 >b : any
 >(<any>a).b : any
 >(<any>a) : any
+>         : ^^^
 ><any>a : any
 >a : typeof a
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 
 var b = (<any>a.b).c;
 >b : any
 >(<any>a.b).c : any
 >(<any>a.b) : any
+>           : ^^^
 ><any>a.b : any
 >a.b : any
 >a : typeof a
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 var b = (<any>a.b()).c;
 >b : any
 >(<any>a.b()).c : any
 >(<any>a.b()) : any
+>             : ^^^
 ><any>a.b() : any
 >a.b() : any
 >a.b : any
 >a : typeof a
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 var b = (<any>new a);
 >b : any
 >(<any>new a) : any
 ><any>new a : any
 >new a : a
+>      : ^
 >a : typeof a
+>  : ^^^^^^^^
 
 var b = (<any>new a.b);
 >b : any
@@ -55,14 +72,20 @@ var b = (<any>new a.b);
 >new a.b : any
 >a.b : any
 >a : typeof a
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 
 var b = (<any>new a).b 
 >b : any
 >(<any>new a).b : any
 >(<any>new a) : any
+>             : ^^^
 ><any>new a : any
 >new a : a
+>      : ^
 >a : typeof a
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 

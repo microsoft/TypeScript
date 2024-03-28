@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/declarationMerging/mergeTwoInterfaces2.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/mergeTwoInterfaces2.ts] ////
+
+=== mergeTwoInterfaces2.ts ===
 // two interfaces with the same root module should merge
 
 // root module now multiple module declarations

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringInFunctionExpression.ts] ////
+
 //// [templateStringInFunctionExpression.ts]
 var x = function y() {
     `abc${ 0 }def`

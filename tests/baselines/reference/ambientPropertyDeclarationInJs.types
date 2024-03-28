@@ -1,28 +1,43 @@
+//// [tests/cases/compiler/ambientPropertyDeclarationInJs.ts] ////
+
 === /test.js ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         this.prop = {};
 >this.prop = {} : {}
+>               : ^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >{} : {}
+>   : ^^
     }
 
     declare prop: string;
 >prop : string
+>     : ^^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         this.prop.foo
 >this.prop.foo : any
+>              : ^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >foo : any
+>    : ^^^
     }
 }
 

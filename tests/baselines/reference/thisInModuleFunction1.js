@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInModuleFunction1.ts] ////
+
 //// [thisInModuleFunction1.ts]
 module bar {
  export function bar() {

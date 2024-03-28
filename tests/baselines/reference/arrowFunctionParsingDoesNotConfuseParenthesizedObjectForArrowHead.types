@@ -1,38 +1,55 @@
-=== tests/cases/compiler/arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts ===
+//// [tests/cases/compiler/arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts] ////
+
+=== arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts ===
 // regression test for https://github.com/microsoft/TypeScript/issues/32914
 declare var value: boolean;
 >value : boolean
+>      : ^^^^^^^
 
 declare var a: any;
 >a : any
 
 const test = () => ({
 >test : () => { prop: boolean; run: () => "special" | "default"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    }}) : () => { prop: boolean; run: () => "special" | "default"; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    }}) : { prop: boolean; run: () => "special" | "default"; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    }} : { prop: boolean; run: () => "special" | "default"; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
     prop: !value, // remove ! to see that errors will be gone
 >prop : boolean
+>     : ^^^^^^^
 >!value : boolean
+>       : ^^^^^^^
 >value : boolean
+>      : ^^^^^^^
 
     run: () => { //replace arrow function with regular function to see that errors will be gone
 >run : () => "special" | "default"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    } : () => "special" | "default"
+>                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         // comment next line or remove "()" to see that errors will be gone
         if(!a.b()) { return 'special'; }
 >!a.b() : boolean
+>       : ^^^^^^^
 >a.b() : any
 >a.b : any
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >'special' : "special"
+>          : ^^^^^^^^^
 
         return 'default';
 >'default' : "default"
+>          : ^^^^^^^^^
     }
 }); 
 

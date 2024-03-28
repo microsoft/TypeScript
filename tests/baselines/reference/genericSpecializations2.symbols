@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericSpecializations2.ts ===
+//// [tests/cases/compiler/genericSpecializations2.ts] ////
+
+=== genericSpecializations2.ts ===
 class IFoo<T> {
 >IFoo : Symbol(IFoo, Decl(genericSpecializations2.ts, 0, 0))
 >T : Symbol(T, Decl(genericSpecializations2.ts, 0, 11))

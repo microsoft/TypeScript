@@ -1,4 +1,6 @@
-=== tests/cases/compiler/addMoreCallSignaturesToBaseSignature.ts ===
+//// [tests/cases/compiler/addMoreCallSignaturesToBaseSignature.ts] ////
+
+=== addMoreCallSignaturesToBaseSignature.ts ===
 interface Foo {
     (): string;
 }
@@ -6,13 +8,18 @@ interface Foo {
 interface Bar extends Foo {
     (key: string): string;
 >key : string
+>    : ^^^^^^
 }
 
 var a: Bar;
 >a : Bar
+>  : ^^^
 
 var kitty = a();
 >kitty : string
+>      : ^^^^^^
 >a() : string
+>    : ^^^^^^
 >a : Bar
+>  : ^^^
 

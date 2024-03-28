@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldClassExpression.ts] ////
+
 //// [privateNameStaticFieldClassExpression.ts]
 class B {
     static #foo = class {
@@ -35,9 +37,9 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 var _a, _B_foo, _B_foo2, _b, _c;
 class B {
     m() {
-        console.log(__classPrivateFieldGet(B, _a, "f", _B_foo).test);
-        __classPrivateFieldGet(B, _a, "f", _B_foo).test = 10;
-        new (__classPrivateFieldGet(B, _a, "f", _B_foo))().field;
+        console.log(__classPrivateFieldGet(_a, _a, "f", _B_foo).test);
+        __classPrivateFieldGet(_a, _a, "f", _B_foo).test = 10;
+        new (__classPrivateFieldGet(_a, _a, "f", _B_foo))().field;
     }
 }
 _a = B;
@@ -45,7 +47,7 @@ _B_foo = { value: (_b = class {
             constructor() {
                 this.field = 10;
                 console.log("hello");
-                new (__classPrivateFieldGet(B, _a, "f", _B_foo2))();
+                new (__classPrivateFieldGet(_a, _a, "f", _B_foo2))();
             }
         },
         __setFunctionName(_b, "#foo"),

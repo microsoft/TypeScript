@@ -1,10 +1,13 @@
-=== tests/cases/compiler/prespecializedGenericMembers1.ts ===
+//// [tests/cases/compiler/prespecializedGenericMembers1.ts] ////
+
+=== prespecializedGenericMembers1.ts ===
 export interface IKitty {
 
     }
 
 export class Cat<CatType extends IKitty> {
 >Cat : Cat<CatType>
+>    : ^^^^^^^^^^^^
 
     constructor() {
     
@@ -13,30 +16,44 @@ export class Cat<CatType extends IKitty> {
 
 export class CatBag {
 >CatBag : CatBag
+>       : ^^^^^^
 
     constructor(cats: { barry: Cat<IKitty>; }) {
 >cats : { barry: Cat<IKitty>; }
+>     : ^^^^^^^^^           ^^^
 >barry : Cat<IKitty>
+>      : ^^^^^^^^^^^
         
     }
 }
 var cat = new Cat<IKitty>();
 >cat : Cat<IKitty>
+>    : ^^^^^^^^^^^
 >new Cat<IKitty>() : Cat<IKitty>
+>                  : ^^^^^^^^^^^
 >Cat : typeof Cat
+>    : ^^^^^^^^^^
 
 var catThing = {
 >catThing : { barry: Cat<IKitty>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    barry: cat} : { barry: Cat<IKitty>; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     barry: cat
 >barry : Cat<IKitty>
+>      : ^^^^^^^^^^^
 >cat : Cat<IKitty>
+>    : ^^^^^^^^^^^
 
 };
 var catBag = new CatBag(catThing);
 >catBag : CatBag
+>       : ^^^^^^
 >new CatBag(catThing) : CatBag
+>                     : ^^^^^^
 >CatBag : typeof CatBag
+>       : ^^^^^^^^^^^^^
 >catThing : { barry: Cat<IKitty>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 

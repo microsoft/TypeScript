@@ -1,4 +1,6 @@
-=== tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts ===
+//// [tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts] ////
+
+=== complicatedGenericRecursiveBaseClassReference.ts ===
 class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
 >S18 : Symbol(S18, Decl(complicatedGenericRecursiveBaseClassReference.ts, 0, 0))
 >B : Symbol(B, Decl(complicatedGenericRecursiveBaseClassReference.ts, 0, 10))

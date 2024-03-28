@@ -1,10 +1,10 @@
-tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts(3,7): error TS2414: Class name cannot be 'any'.
-tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts(5,7): error TS2414: Class name cannot be 'number'.
-tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts(7,7): error TS2414: Class name cannot be 'boolean'.
-tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts(10,7): error TS2414: Class name cannot be 'string'.
+objectTypesWithPredefinedTypesAsName.ts(3,7): error TS2414: Class name cannot be 'any'.
+objectTypesWithPredefinedTypesAsName.ts(5,7): error TS2414: Class name cannot be 'number'.
+objectTypesWithPredefinedTypesAsName.ts(7,7): error TS2414: Class name cannot be 'boolean'.
+objectTypesWithPredefinedTypesAsName.ts(10,7): error TS2414: Class name cannot be 'string'.
 
 
-==== tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts (4 errors) ====
+==== objectTypesWithPredefinedTypesAsName.ts (4 errors) ====
     // it is an error to use a predefined type as a type name
     
     class any { }

@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment2.ts(1,17): error TS1005: ':' expected.
+parserShorthandPropertyAssignment2.ts(1,17): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment2.ts (1 errors) ====
+==== parserShorthandPropertyAssignment2.ts (1 errors) ====
     var v = { class };
                     ~
 !!! error TS1005: ':' expected.

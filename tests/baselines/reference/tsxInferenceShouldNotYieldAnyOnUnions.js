@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxInferenceShouldNotYieldAnyOnUnions.tsx] ////
+
 //// [index.tsx]
 namespace JSX {
     export interface Element {}

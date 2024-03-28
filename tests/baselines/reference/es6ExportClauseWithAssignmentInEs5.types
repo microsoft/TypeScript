@@ -1,52 +1,83 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ExportClauseWithAssignmentInEs5.ts] ////
+
+=== server.ts ===
 var foo = 2;
 >foo : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
 foo = 3;
 >foo = 3 : 3
+>        : ^
 >foo : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 
 var baz = 3;
 >baz : number
+>    : ^^^^^^
 >3 : 3
+>  : ^
 
 baz = 4;
 >baz = 4 : 4
+>        : ^
 >baz : number
+>    : ^^^^^^
 >4 : 4
+>  : ^
 
 var buzz = 10;
 >buzz : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
 buzz += 3;
 >buzz += 3 : number
+>          : ^^^^^^
 >buzz : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
 var bizz = 8;
 >bizz : number
+>     : ^^^^^^
 >8 : 8
+>  : ^
 
 bizz++; // compiles to exports.bizz = (bizz++, bizz)
 >bizz++ : number
+>       : ^^^^^^
 >bizz : number
+>     : ^^^^^^
 
 bizz--; // similarly
 >bizz-- : number
+>       : ^^^^^^
 >bizz : number
+>     : ^^^^^^
 
 ++bizz; // compiles to exports.bizz = ++bizz
 >++bizz : number
+>       : ^^^^^^
 >bizz : number
+>     : ^^^^^^
 
 export { foo, baz, baz as quux, buzz, bizz };
 >foo : number
+>    : ^^^^^^
 >baz : number
+>    : ^^^^^^
 >baz : number
+>    : ^^^^^^
 >quux : number
+>     : ^^^^^^
 >buzz : number
+>     : ^^^^^^
 >bizz : number
+>     : ^^^^^^
 

@@ -1,11 +1,11 @@
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(36,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(39,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(58,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(61,23): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts(63,32): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(36,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(39,1): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(58,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(61,23): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+conditionalOperatorConditionIsObjectType.ts(63,32): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
-==== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts (5 errors) ====
+==== conditionalOperatorConditionIsObjectType.ts (5 errors) ====
     //Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
     var condObject: Object;
     

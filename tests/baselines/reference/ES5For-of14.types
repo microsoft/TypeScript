@@ -1,7 +1,10 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of14.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of14.ts] ////
+
+=== ES5For-of14.ts ===
 for (const v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var x = v;
 >x : any

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethod1.ts] ////
+
 //// [classAbstractUsingAbstractMethod1.ts]
 abstract class A {
     abstract foo() : number;

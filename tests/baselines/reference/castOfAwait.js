@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/castOfAwait.ts] ////
+
 //// [castOfAwait.ts]
 async function f() {
     <number> await 0;

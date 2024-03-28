@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitCommonSourceDirectoryDoesNotContainAllFiles.ts] ////
+
 === /a/index.ts ===
 
 export * from "./src/"
@@ -7,13 +9,17 @@ export * from "./src/"
 === /b/src/index.ts ===
 export class B {}
 >B : B
+>  : ^
 
 === /a/src/index.ts ===
 import { B } from "b";
 >B : typeof B
+>  : ^^^^^^^^
 
 export default function () {
 	return new B();
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 }

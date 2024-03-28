@@ -1,10 +1,15 @@
-=== tests/cases/compiler/exportInterfaceClassAndValue.ts ===
+//// [tests/cases/compiler/exportInterfaceClassAndValue.ts] ////
+
+=== exportInterfaceClassAndValue.ts ===
 export const foo = 1
 >foo : 1
+>    : ^
 >1 : 1
+>  : ^
 
 export declare class foo {}
->foo : import("tests/cases/compiler/exportInterfaceClassAndValue").foo
+>foo : import("exportInterfaceClassAndValue").foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface foo {}
 

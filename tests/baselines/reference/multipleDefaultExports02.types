@@ -1,19 +1,26 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports02.ts] ////
+
+=== m1.ts ===
 export default function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
 }
 
 export default function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
 }
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import Entity from "./m1"
 >Entity : () => void
+>       : ^^^^^^^^^^
 
 Entity();
 >Entity() : void
+>         : ^^^^
 >Entity : () => void
+>       : ^^^^^^^^^^
 

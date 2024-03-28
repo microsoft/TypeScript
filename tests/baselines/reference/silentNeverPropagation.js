@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/silentNeverPropagation.ts] ////
+
 //// [silentNeverPropagation.ts]
 // Repro from #45041
 
@@ -47,10 +49,10 @@ type MoreState = {
 };
 declare function createModule<TState, TActions>(state: TState, actions: TActions): ModuleWithState<TState> & TActions;
 declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions): ModuleWithState<TState & MoreState> & TActions;
-declare const breaks: ModuleWithState<{
-    a: number;
-} & MoreState> & ModuleWithState<{
-    a: number;
-}> & {
+declare const breaks: {
     foo(): true;
-};
+} & ModuleWithState<{
+    a: number;
+}> & ModuleWithState<MoreState & {
+    a: number;
+}>;

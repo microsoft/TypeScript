@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conflictingTypeAnnotatedVar.ts ===
+//// [tests/cases/compiler/conflictingTypeAnnotatedVar.ts] ////
+
+=== conflictingTypeAnnotatedVar.ts ===
 var foo: string;
 >foo : Symbol(foo, Decl(conflictingTypeAnnotatedVar.ts, 0, 3))
 

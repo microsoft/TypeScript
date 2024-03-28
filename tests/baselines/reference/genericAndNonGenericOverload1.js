@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericAndNonGenericOverload1.ts] ////
+
 //// [genericAndNonGenericOverload1.ts]
 interface callable2<T> {
     (a: T): T;

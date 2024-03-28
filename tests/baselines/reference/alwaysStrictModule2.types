@@ -1,25 +1,35 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/alwaysStrictModule2.ts] ////
+
+=== a.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         var arguments = [];
 >arguments : any[]
+>          : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
         var arguments = [];
 >arguments : any[]
+>          : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
 }

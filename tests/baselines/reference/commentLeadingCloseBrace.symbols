@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentLeadingCloseBrace.ts ===
+//// [tests/cases/compiler/commentLeadingCloseBrace.ts] ////
+
+=== commentLeadingCloseBrace.ts ===
 declare function commentedParameters(...args): any;
 >commentedParameters : Symbol(commentedParameters, Decl(commentLeadingCloseBrace.ts, 0, 0))
 >args : Symbol(args, Decl(commentLeadingCloseBrace.ts, 0, 37))

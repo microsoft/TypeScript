@@ -1,59 +1,74 @@
-=== tests/cases/compiler/indexerConstraints.ts ===
+//// [tests/cases/compiler/indexerConstraints.ts] ////
+
+=== indexerConstraints.ts ===
 interface A { a: number; }
 >a : number
+>  : ^^^^^^
 
 interface B extends A { b: number; }
 >b : number
+>  : ^^^^^^
 
 // Good case
 interface D {
     [s: string]: A;
 >s : string
+>  : ^^^^^^
 }
 interface D {
     [n: number]: B;
 >n : number
+>  : ^^^^^^
 }
 
 // Bad case
 interface E {
     [s: string]: B;
 >s : string
+>  : ^^^^^^
 }
 interface E {
     [n: number]: A;
 >n : number
+>  : ^^^^^^
 }
 
 // Inheritance
 interface F {
     [s: string]: B;
 >s : string
+>  : ^^^^^^
 }
 interface G extends F {
     [n: number]: A;
 >n : number
+>  : ^^^^^^
 }
 
 // Other way
 interface H {
     [n: number]: A;
 >n : number
+>  : ^^^^^^
 }
 interface I extends H {
     [s: string]: B;
 >s : string
+>  : ^^^^^^
 }
 
 // With hidden indexer
 interface J {
     [n: number]: {};
 >n : number
+>  : ^^^^^^
 }
 interface K extends J {
     [n: number]: A;
 >n : number
+>  : ^^^^^^
 
     [s: string]: B;
 >s : string
+>  : ^^^^^^
 }

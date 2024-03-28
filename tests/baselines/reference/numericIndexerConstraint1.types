@@ -1,15 +1,25 @@
-=== tests/cases/compiler/numericIndexerConstraint1.ts ===
+//// [tests/cases/compiler/numericIndexerConstraint1.ts] ////
+
+=== numericIndexerConstraint1.ts ===
 class Foo { foo() { } }
 >Foo : Foo
+>    : ^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 var x: { [index: string]: number; };
 >x : { [index: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : string
+>      : ^^^^^^
 
 var result: Foo = x["one"]; // error
 >result : Foo
+>       : ^^^
 >x["one"] : number
+>         : ^^^^^^
 >x : { [index: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"one" : "one"
+>      : ^^^^^
 

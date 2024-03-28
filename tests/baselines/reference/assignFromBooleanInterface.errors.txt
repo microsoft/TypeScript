@@ -1,8 +1,8 @@
-tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts(3,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+assignFromBooleanInterface.ts(3,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
 
 
-==== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts (1 errors) ====
+==== assignFromBooleanInterface.ts (1 errors) ====
     var x = true;
     var a: Boolean;
     x = a;

@@ -1,18 +1,27 @@
-=== tests/cases/compiler/yieldExpressionInFlowLoop.ts ===
+//// [tests/cases/compiler/yieldExpressionInFlowLoop.ts] ////
+
+=== yieldExpressionInFlowLoop.ts ===
 function* f() {
 >f : () => Generator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let result;
 >result : any
+>       : ^^^
 
     while (1) {
 >1 : 1
+>  : ^
 
         result = yield result;
 >result = yield result : any
+>                      : ^^^
 >result : any
+>       : ^^^
 >yield result : any
+>             : ^^^
 >result : any
+>       : ^^^
     }
 }
 

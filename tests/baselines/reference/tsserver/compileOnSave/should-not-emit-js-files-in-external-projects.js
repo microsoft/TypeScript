@@ -1,4 +1,5 @@
-Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/file1.ts]
 consonle.log('file1');
@@ -23,7 +24,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-Info 1    [00:00:18.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
@@ -45,15 +46,13 @@ Info 1    [00:00:18.000] request:
       "seq": 1,
       "type": "request"
     }
-Info 2    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/b/file1.ts 500 undefined WatchType: Closed Script info
-Info 3    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.js 500 undefined WatchType: Closed Script info
-Info 4    [00:00:21.000] Starting updateGraphWorker: Project: /a/b/externalproject
-Info 5    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:23.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/externalproject WatchType: Type roots
-Info 7    [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/externalproject WatchType: Type roots
-Info 8    [00:00:25.000] Finishing updateGraphWorker: Project: /a/b/externalproject Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 9    [00:00:26.000] Project '/a/b/externalproject' (External)
-Info 10   [00:00:27.000] 	Files (3)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/externalproject
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/externalproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/externalproject' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/a/b/file1.ts Text-1 "consonle.log('file1');"
 	/a/b/file2.js Text-1 "console.log'file2');"
@@ -66,17 +65,58 @@ Info 10   [00:00:27.000] 	Files (3)
 	file2.js
 	  Root file specified for compilation
 
-Info 11   [00:00:28.000] -----------------------------------------------
-Info 12   [00:00:29.000] response:
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "cc5acbce8759459f05f3022fd0cb9e08075654fac5d9ffeafa636015f076cf1f",
+          "fileStats": {
+            "js": 1,
+            "jsSize": 20,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 22,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "allowJs": true,
+            "outFile": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] Project '/a/b/externalproject' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
     }
 After request
-
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /a/b/file1.ts: *new*
@@ -86,9 +126,28 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
+Projects::
+/a/b/externalproject (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/externalproject
+/a/b/file2.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/externalproject
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/externalproject
+
 Before request
 
-Info 13   [00:00:30.000] request:
+Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compileOnSaveEmitFile",
       "arguments": {
@@ -97,7 +156,7 @@ Info 13   [00:00:30.000] request:
       "seq": 2,
       "type": "request"
     }
-Info 14   [00:00:33.000] response:
+Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true

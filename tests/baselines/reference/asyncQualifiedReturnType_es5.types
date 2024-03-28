@@ -1,14 +1,21 @@
-=== tests/cases/conformance/async/es5/asyncQualifiedReturnType_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncQualifiedReturnType_es5.ts] ////
+
+=== asyncQualifiedReturnType_es5.ts ===
 namespace X {
 >X : typeof X
+>  : ^^^^^^^^
 
     export class MyPromise<T> extends Promise<T> {
 >MyPromise : MyPromise<T>
+>          : ^^^^^^^^^^^^
 >Promise : Promise<T>
+>        : ^^^^^^^^^^
     }
 }
 
 async function f(): X.MyPromise<void> {
 >f : () => X.MyPromise<void>
+>  : ^^^^^^                 
 >X : any
+>  : ^^^
 }

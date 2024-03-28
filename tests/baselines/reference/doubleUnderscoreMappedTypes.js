@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleUnderscoreMappedTypes.ts] ////
+
 //// [doubleUnderscoreMappedTypes.ts]
 interface Properties {
     property1: string;

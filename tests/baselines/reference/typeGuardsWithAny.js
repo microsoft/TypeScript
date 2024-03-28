@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts] ////
+
 //// [typeGuardsWithAny.ts]
 var x: any = { p: 0 };
 

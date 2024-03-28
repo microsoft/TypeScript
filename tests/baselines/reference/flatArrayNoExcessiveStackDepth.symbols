@@ -1,4 +1,6 @@
-=== tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts ===
+//// [tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts] ////
+
+=== flatArrayNoExcessiveStackDepth.ts ===
 // Repro from #43493
 
 declare const foo: unknown[];

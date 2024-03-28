@@ -1,41 +1,65 @@
-=== tests/cases/compiler/newArrays.ts ===
+//// [tests/cases/compiler/newArrays.ts] ////
+
+=== newArrays.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
 	class Foo {}
 >Foo : Foo
+>    : ^^^
 
 	class Gar {
 >Gar : Gar
+>    : ^^^
 
 		public fa: Foo[];
 >fa : Foo[]
+>   : ^^^^^
 
 		public x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 		public y = 10;
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 		public m () {
 >m : () => void
+>  : ^^^^^^^^^^
 
 			this.fa = new Array<Foo>(this.x * this.y);		
 >this.fa = new Array<Foo>(this.x * this.y) : Foo[]
+>                                          : ^^^^^
 >this.fa : Foo[]
+>        : ^^^^^
 >this : this
+>     : ^^^^
 >fa : Foo[]
+>   : ^^^^^
 >new Array<Foo>(this.x * this.y) : Foo[]
+>                                : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >this.x * this.y : number
+>                : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 		}
 	}
 }

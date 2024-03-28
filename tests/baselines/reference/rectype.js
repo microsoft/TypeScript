@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/rectype.ts] ////
+
 //// [rectype.ts]
 module M {
     interface I { (i:I):I; }

@@ -1,23 +1,37 @@
-=== tests/cases/compiler/namespaces2.ts ===
+//// [tests/cases/compiler/namespaces2.ts] ////
+
+=== namespaces2.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export class C { }
 >C : C
+>  : ^
     }
 }
 
 var c: A.B.C = new A.B.C();
 >c : A.B.C
+>  : ^^^^^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 >new A.B.C() : A.B.C
+>            : ^^^^^
 >A.B.C : typeof A.B.C
+>      : ^^^^^^^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >C : typeof A.B.C
+>  : ^^^^^^^^^^^^
 

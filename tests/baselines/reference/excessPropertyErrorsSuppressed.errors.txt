@@ -1,7 +1,10 @@
-error TS5101: Option 'suppressExcessPropertyErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'suppressExcessPropertyErrors' has been removed. Please remove it from your configuration.
+excessPropertyErrorsSuppressed.ts(1,38): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
 
 
-!!! error TS5101: Option 'suppressExcessPropertyErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/excessPropertyErrorsSuppressed.ts (0 errors) ====
+!!! error TS5102: Option 'suppressExcessPropertyErrors' has been removed. Please remove it from your configuration.
+==== excessPropertyErrorsSuppressed.ts (1 errors) ====
     var x: { a: string } = { a: "hello", b: 42 };  // No error
+                                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts] ////
+
 //// [declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts]
 const _data = Symbol('data');
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regexpExecAndMatchTypeUsages.ts] ////
+
 //// [regexpExecAndMatchTypeUsages.ts]
 export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
     matchResult[0].length;
@@ -26,7 +28,7 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 //// [regexpExecAndMatchTypeUsages.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
+exports.foo = foo;
 function foo(matchResult, execResult) {
     matchResult[0].length;
     matchResult[999].length;
@@ -47,4 +49,3 @@ function foo(matchResult, execResult) {
         execResult = matchResult;
     }
 }
-exports.foo = foo;

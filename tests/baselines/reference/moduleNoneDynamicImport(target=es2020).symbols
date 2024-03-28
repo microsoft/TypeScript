@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleNoneDynamicImport.ts] ////
+
 === /a.ts ===
 const foo = import("./b");
 >foo : Symbol(foo, Decl(a.ts, 0, 5))

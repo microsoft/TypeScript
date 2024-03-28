@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionContextuallyTypedReturns.ts ===
+//// [tests/cases/compiler/asyncFunctionContextuallyTypedReturns.ts] ////
+
+=== asyncFunctionContextuallyTypedReturns.ts ===
 declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
 >f : Symbol(f, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 0))
 >cb : Symbol(cb, Decl(asyncFunctionContextuallyTypedReturns.ts, 0, 19))

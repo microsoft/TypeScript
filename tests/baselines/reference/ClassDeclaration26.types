@@ -1,13 +1,21 @@
-=== tests/cases/compiler/ClassDeclaration26.ts ===
+//// [tests/cases/compiler/ClassDeclaration26.ts] ////
+
+=== ClassDeclaration26.ts ===
 class C {
 >C : C
+>  : ^
 
     public const var export foo = 10;
 >var : any
+>    : ^^^
 >foo : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 
     var constructor() { }
 >constructor : any
+>            : ^^^
 >() { } : () => void
+>       : ^^^^^^^^^^
 }

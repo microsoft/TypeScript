@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumericLiteral.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumericLiteral.ts] ////
+
+=== comparisonOperatorWithNumericLiteral.ts ===
 type BrandedNum = number & { __numberBrand: any };
 >BrandedNum : Symbol(BrandedNum, Decl(comparisonOperatorWithNumericLiteral.ts, 0, 0))
 >__numberBrand : Symbol(__numberBrand, Decl(comparisonOperatorWithNumericLiteral.ts, 0, 28))

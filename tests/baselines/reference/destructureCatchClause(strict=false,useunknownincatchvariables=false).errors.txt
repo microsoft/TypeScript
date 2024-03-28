@@ -1,13 +1,13 @@
-tests/cases/compiler/destructureCatchClause.ts(26,17): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/compiler/destructureCatchClause.ts(27,15): error TS2461: Type 'unknown' is not an array type.
-tests/cases/compiler/destructureCatchClause.ts(29,17): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/compiler/destructureCatchClause.ts(30,17): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/compiler/destructureCatchClause.ts(32,15): error TS2461: Type 'unknown' is not an array type.
-tests/cases/compiler/destructureCatchClause.ts(33,15): error TS2461: Type 'unknown' is not an array type.
-tests/cases/compiler/destructureCatchClause.ts(35,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(26,17): error TS2339: Property 'x' does not exist on type '{}'.
+destructureCatchClause.ts(27,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(29,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(30,17): error TS2339: Property 'a' does not exist on type '{}'.
+destructureCatchClause.ts(32,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(33,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(35,17): error TS2339: Property 'a' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/destructureCatchClause.ts (7 errors) ====
+==== destructureCatchClause.ts (7 errors) ====
     // These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
     try {} catch ({ x }) { x }
     try {} catch ([ x ]) { x }

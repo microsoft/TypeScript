@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration3.ts] ////
+
+=== parserMemberVariableDeclaration3.ts ===
 class C {
 >C : C
+>  : ^
 
   static public Foo;
 >Foo : any
+>    : ^^^
 }

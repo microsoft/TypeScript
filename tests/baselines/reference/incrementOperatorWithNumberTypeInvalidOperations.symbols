@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts] ////
+
+=== incrementOperatorWithNumberTypeInvalidOperations.ts ===
 // ++ operator on number type
 var NUMBER: number;
 >NUMBER : Symbol(NUMBER, Decl(incrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))

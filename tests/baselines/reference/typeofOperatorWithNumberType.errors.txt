@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator is unused and has no side effects.
+typeofOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithNumberType.ts (1 errors) ====
+==== typeofOperatorWithNumberType.ts (1 errors) ====
     // typeof  operator on number type
     var NUMBER: number;
     var NUMBER1: number[] = [1, 2];

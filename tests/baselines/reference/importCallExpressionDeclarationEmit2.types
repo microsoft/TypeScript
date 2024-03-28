@@ -1,11 +1,18 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit2.ts] ////
+
+=== 0.ts ===
 export function foo() { return "foo"; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 var p1 = import("./0");
->p1 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>p1 : Promise<typeof import("0")>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 

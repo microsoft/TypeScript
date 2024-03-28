@@ -1,173 +1,129 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
 // const x = function () { return 111111; }
-// x./*FIND ALL REFS*/[|someProperty|] = 5;
-// x["[|someProperty|]"] = 3;
+// x./*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}someProperty|] = 5;
+// x["[|{| isWriteAccess: true, isDefinition: true |}someProperty|]"] = 3;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts",
-      "kind": "property",
-      "name": "(property) x.someProperty: number",
-      "textSpan": {
-        "start": 43,
-        "length": 12
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "someProperty",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 41,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 43,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
+  // const x = function () { return 111111; }
+  // <|x./*FIND ALL REFS*/[|someProperty|]|> = 5;
+  // x["someProperty"] = 3;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x.someProperty: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "someProperty",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
 // const x = function () { return 111111; }
-// x.[|someProperty|] = 5;
-// x["/*FIND ALL REFS*/[|someProperty|]"] = 3;
+// x.[|{| isWriteAccess: true, isDefinition: true |}someProperty|] = 5;
+// x["/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}someProperty|]"] = 3;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts",
-      "kind": "property",
-      "name": "(property) x.someProperty: number",
-      "textSpan": {
-        "start": 43,
-        "length": 12
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "someProperty",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 41,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 43,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 64,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames6.ts ===
+  // const x = function () { return 111111; }
+  // <|x.[|someProperty|]|> = 5;
+  // x["/*FIND ALL REFS*/someProperty"] = 3;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x.someProperty: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "someProperty",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts(11,5): error TS2416: Property 'x' in type 'Derived' is not assignable to the same property in base type 'Base'.
+derivedClassFunctionOverridesBaseClassAccessor.ts(11,5): error TS2416: Property 'x' in type 'Derived' is not assignable to the same property in base type 'Base'.
   Type '() => number' is not assignable to type 'number'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts(11,5): error TS2426: Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
+derivedClassFunctionOverridesBaseClassAccessor.ts(11,5): error TS2426: Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts (2 errors) ====
+==== derivedClassFunctionOverridesBaseClassAccessor.ts (2 errors) ====
     class Base {
         get x() {
             return 1;

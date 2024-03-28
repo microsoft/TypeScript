@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts ===
+//// [tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts] ////
+
+=== declarationEmitImportInExportAssignmentModule.ts ===
 module m {
 >m : Symbol(m, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 0))
 

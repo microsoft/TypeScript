@@ -1,25 +1,36 @@
-=== tests/cases/compiler/interfacePropertiesWithSameName1.ts ===
+//// [tests/cases/compiler/interfacePropertiesWithSameName1.ts] ////
+
+=== interfacePropertiesWithSameName1.ts ===
 interface Mover {
     move(): void;
 >move : () => void
+>     : ^^^^^^    
 
     getStatus(): { speed: number; };
->getStatus : () => {    speed: number;}
+>getStatus : () => { speed: number; }
+>          : ^^^^^^                  
 >speed : number
+>      : ^^^^^^
 }
 interface Shaker {
     shake(): void;
 >shake : () => void
+>      : ^^^^^^    
 
     getStatus(): { frequency: number; };
->getStatus : () => {    frequency: number;}
+>getStatus : () => { frequency: number; }
+>          : ^^^^^^                      
 >frequency : number
+>          : ^^^^^^
 }
 
 interface MoverShaker extends Mover, Shaker {
     getStatus(): { speed: number; frequency: number; };
->getStatus : () => {    speed: number;    frequency: number;}
+>getStatus : () => { speed: number; frequency: number; }
+>          : ^^^^^^                                     
 >speed : number
+>      : ^^^^^^
 >frequency : number
+>          : ^^^^^^
 }
 

@@ -1,12 +1,12 @@
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(11,1): error TS2708: Cannot use namespace 'M' as a value.
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(14,1): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(17,1): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(18,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(21,1): error TS2630: Cannot assign to 'fn' because it is a function.
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
+assignments.ts(11,1): error TS2708: Cannot use namespace 'M' as a value.
+assignments.ts(14,1): error TS2629: Cannot assign to 'C' because it is a class.
+assignments.ts(17,1): error TS2628: Cannot assign to 'E' because it is an enum.
+assignments.ts(18,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+assignments.ts(21,1): error TS2630: Cannot assign to 'fn' because it is a function.
+assignments.ts(31,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts (6 errors) ====
+==== assignments.ts (6 errors) ====
     // In this file:
     //  Assign to a module
     //  Assign to a class

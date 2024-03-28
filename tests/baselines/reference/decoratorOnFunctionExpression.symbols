@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/invalid/decoratorOnFunctionExpression.ts ===
+//// [tests/cases/conformance/decorators/invalid/decoratorOnFunctionExpression.ts] ////
+
+=== decoratorOnFunctionExpression.ts ===
 declare function dec<T>(target: T): T;
 >dec : Symbol(dec, Decl(decoratorOnFunctionExpression.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorOnFunctionExpression.ts, 0, 21))

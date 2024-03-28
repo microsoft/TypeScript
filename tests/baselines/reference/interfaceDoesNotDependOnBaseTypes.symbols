@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/interfaceDoesNotDependOnBaseTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/interfaceDoesNotDependOnBaseTypes.ts] ////
+
+=== interfaceDoesNotDependOnBaseTypes.ts ===
 var x: StringTree;
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
 >StringTree : Symbol(StringTree, Decl(interfaceDoesNotDependOnBaseTypes.ts, 4, 1))

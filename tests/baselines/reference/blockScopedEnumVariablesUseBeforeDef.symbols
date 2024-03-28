@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts] ////
+
+=== blockScopedEnumVariablesUseBeforeDef.ts ===
 function foo1() {
 >foo1 : Symbol(foo1, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 0, 0))
 
@@ -24,3 +26,22 @@ function foo2() {
 >E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 6, 14))
 >A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 7, 18))
 }
+
+const config = {
+>config : Symbol(config, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 10, 5))
+
+    a: AfterObject.A,
+>a : Symbol(a, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 10, 16))
+>AfterObject.A : Symbol(AfterObject.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 14, 24))
+>AfterObject : Symbol(AfterObject, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 12, 2))
+>A : Symbol(AfterObject.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 14, 24))
+
+};
+
+const enum AfterObject {
+>AfterObject : Symbol(AfterObject, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 12, 2))
+
+    A = 2,
+>A : Symbol(AfterObject.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 14, 24))
+}
+

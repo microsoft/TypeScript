@@ -1,11 +1,18 @@
-=== tests/cases/conformance/externalModules/0.ts ===
+//// [tests/cases/conformance/externalModules/invalidSyntaxNamespaceImportWithSystem.ts] ////
+
+=== 0.ts ===
 export class C { }
 >C : C
+>  : ^
 
-=== tests/cases/conformance/externalModules/1.ts ===
+=== 1.ts ===
 import * from Zero from "./0"
 >from : any
+>     : ^^^
 >Zero : any
+>     : ^^^
 >from : any
+>     : ^^^
 >"./0" : "./0"
+>      : ^^^^^
 

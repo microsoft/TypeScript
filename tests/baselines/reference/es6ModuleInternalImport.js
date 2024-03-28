@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleInternalImport.ts] ////
+
 //// [es6ModuleInternalImport.ts]
 export module m {
     export var a = 10;

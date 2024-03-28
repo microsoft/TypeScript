@@ -1,12 +1,16 @@
-=== tests/cases/compiler/interfaces.d.ts ===
+//// [tests/cases/compiler/importTypeResolutionJSDocEOF.ts] ////
+
+=== interfaces.d.ts ===
 export interface Bar {
     prop: string
 >prop : string
+>     : ^^^^^^
 }
 
-=== tests/cases/compiler/usage.js ===
+=== usage.js ===
 /** @type {Bar} */
 export let bar;
->bar : import("tests/cases/compiler/interfaces").Bar
+>bar : import("interfaces").Bar
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 /** @typedef {import('./interfaces').Bar} Bar */

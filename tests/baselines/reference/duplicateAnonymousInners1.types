@@ -1,29 +1,38 @@
-=== tests/cases/compiler/duplicateAnonymousInners1.ts ===
+//// [tests/cases/compiler/duplicateAnonymousInners1.ts] ////
+
+=== duplicateAnonymousInners1.ts ===
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
     }
     
     class Inner {}
 >Inner : Inner
+>      : ^^^^^
 
     // Inner should show up in intellisense
     
     export var Outer=0;
 >Outer : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
     
     // Should not be an error
     class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
     }
     

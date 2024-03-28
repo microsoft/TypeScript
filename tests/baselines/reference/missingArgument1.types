@@ -1,7 +1,13 @@
-=== tests/cases/compiler/missingArgument1.ts ===
+//// [tests/cases/compiler/missingArgument1.ts] ////
+
+=== missingArgument1.ts ===
 foo(a,,b);
 >foo(a,,b) : any
+>          : ^^^
 >foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

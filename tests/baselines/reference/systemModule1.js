@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule1.ts] ////
+
 //// [systemModule1.ts]
 export var x = 1;
 

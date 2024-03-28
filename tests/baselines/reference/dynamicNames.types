@@ -1,571 +1,908 @@
-=== tests/cases/compiler/module.ts ===
+//// [tests/cases/compiler/dynamicNames.ts] ////
+
+=== module.ts ===
 export const c0 = "a";
 >c0 : "a"
+>   : ^^^
 >"a" : "a"
+>    : ^^^
 
 export const c1 = 1;
 >c1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
 export const s0 = Symbol();
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 export interface T0 {
     [c0]: number;
 >[c0] : number
+>     : ^^^^^^
 >c0 : "a"
+>   : ^^^
 
     [c1]: string;
 >[c1] : string
+>     : ^^^^^^
 >c1 : 1
+>   : ^
 
     [s0]: boolean;
 >[s0] : boolean
+>     : ^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 export declare class T1 implements T2 {
 >T1 : T1
+>   : ^^
 
     [c0]: number;
 >[c0] : number
+>     : ^^^^^^
 >c0 : "a"
+>   : ^^^
 
     [c1]: string;
 >[c1] : string
+>     : ^^^^^^
 >c1 : 1
+>   : ^
 
     [s0]: boolean;
 >[s0] : boolean
+>     : ^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 export declare class T2 extends T1 {
 >T2 : T2
+>   : ^^
 >T1 : T1
+>   : ^^
 }
 export declare type T3 = {
->T3 : { a: number; 1: string; [s0]: boolean; }
+>T3 : T3
+>   : ^^
 
     [c0]: number;
 >[c0] : number
+>     : ^^^^^^
 >c0 : "a"
+>   : ^^^
 
     [c1]: string;
 >[c1] : string
+>     : ^^^^^^
 >c1 : 1
+>   : ^
 
     [s0]: boolean;
 >[s0] : boolean
+>     : ^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 };
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { c0, c1, s0, T0, T1, T2, T3 } from "./module";
 >c0 : "a"
+>   : ^^^
 >c1 : 1
+>   : ^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 >T0 : any
+>   : ^^^
 >T1 : typeof T1
+>   : ^^^^^^^^^
 >T2 : typeof T2
+>   : ^^^^^^^^^
 >T3 : any
+>   : ^^^
 
 import * as M from "./module";
 >M : typeof M
+>  : ^^^^^^^^
 
 namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export const c2 = "a";
 >c2 : "a"
+>   : ^^^
 >"a" : "a"
+>    : ^^^
 
     export const c3 = 1;
 >c3 : 1
+>   : ^
 >1 : 1
+>  : ^
 
     export const s1: typeof s0 = s0;
 >s1 : unique symbol
+>   : ^^^^^^^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 
     export interface T4 {
         [N.c2]: number;
 >[N.c2] : number
+>       : ^^^^^^
 >N.c2 : "a"
+>     : ^^^
 >N : typeof N
+>  : ^^^^^^^^
 >c2 : "a"
+>   : ^^^
 
         [N.c3]: string;
 >[N.c3] : string
+>       : ^^^^^^
 >N.c3 : 1
+>     : ^
 >N : typeof N
+>  : ^^^^^^^^
 >c3 : 1
+>   : ^
 
         [N.s1]: boolean;
 >[N.s1] : boolean
+>       : ^^^^^^^
 >N.s1 : unique symbol
+>     : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s1 : unique symbol
+>   : ^^^^^^^^^^^^^
     }
     export declare class T5 implements T4 {
 >T5 : T5
+>   : ^^
 
         [N.c2]: number;
 >[N.c2] : number
+>       : ^^^^^^
 >N.c2 : "a"
+>     : ^^^
 >N : typeof N
+>  : ^^^^^^^^
 >c2 : "a"
+>   : ^^^
 
         [N.c3]: string;
 >[N.c3] : string
+>       : ^^^^^^
 >N.c3 : 1
+>     : ^
 >N : typeof N
+>  : ^^^^^^^^
 >c3 : 1
+>   : ^
 
         [N.s1]: boolean;
 >[N.s1] : boolean
+>       : ^^^^^^^
 >N.s1 : unique symbol
+>     : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s1 : unique symbol
+>   : ^^^^^^^^^^^^^
     }
     export declare class T6 extends T5 {
 >T6 : T6
+>   : ^^
 >T5 : T5
+>   : ^^
     }
     export declare type T7 = {
->T7 : { a: number; 1: string; [s0]: boolean; }
+>T7 : T7
+>   : ^^
 
         [N.c2]: number;
 >[N.c2] : number
+>       : ^^^^^^
 >N.c2 : "a"
+>     : ^^^
 >N : typeof N
+>  : ^^^^^^^^
 >c2 : "a"
+>   : ^^^
 
         [N.c3]: string;
 >[N.c3] : string
+>       : ^^^^^^
 >N.c3 : 1
+>     : ^
 >N : typeof N
+>  : ^^^^^^^^
 >c3 : 1
+>   : ^
 
         [N.s1]: boolean;
 >[N.s1] : boolean
+>       : ^^^^^^^
 >N.s1 : unique symbol
+>     : ^^^^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >s1 : unique symbol
+>   : ^^^^^^^^^^^^^
 
     };
 }
 
 export const c4 = "a";
 >c4 : "a"
+>   : ^^^
 >"a" : "a"
+>    : ^^^
 
 export const c5 = 1;
 >c5 : 1
+>   : ^
 >1 : 1
+>  : ^
 
 export const s2: typeof s0 = s0;
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 >s0 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 interface T8 {
     [c4]: number;
 >[c4] : number
+>     : ^^^^^^
 >c4 : "a"
+>   : ^^^
 
     [c5]: string;
 >[c5] : string
+>     : ^^^^^^
 >c5 : 1
+>   : ^
 
     [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 declare class T9 implements T8 {
 >T9 : T9
+>   : ^^
 
     [c4]: number;
 >[c4] : number
+>     : ^^^^^^
 >c4 : "a"
+>   : ^^^
 
     [c5]: string;
 >[c5] : string
+>     : ^^^^^^
 >c5 : 1
+>   : ^
 
     [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 declare class T10 extends T9 {
 >T10 : T10
+>    : ^^^
 >T9 : T9
+>   : ^^
 }
 declare type T11 = {
->T11 : { a: number; 1: string; [s0]: boolean; }
+>T11 : T11
+>    : ^^^
 
     [c4]: number;
 >[c4] : number
+>     : ^^^^^^
 >c4 : "a"
+>   : ^^^
 
     [c5]: string;
 >[c5] : string
+>     : ^^^^^^
 >c5 : 1
+>   : ^
 
     [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 };
 
 interface T12 {
     a: number;
 >a : number
+>  : ^^^^^^
 
     1: string;
 >1 : string
+>  : ^^^^^^
 
     [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 declare class T13 implements T2 {
 >T13 : T13
+>    : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     1: string;
 >1 : string
+>  : ^^^^^^
 
     [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 declare class T14 extends T13 {
 >T14 : T14
+>    : ^^^
 >T13 : T13
+>    : ^^^
 }
 declare type T15 = {
->T15 : { a: number; 1: string; [s0]: boolean; }
+>T15 : T15
+>    : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     1: string;
 >1 : string
+>  : ^^^^^^
 
     [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 };
 
 declare class C {
 >C : C
+>  : ^
 
     static a: number;
 >a : number
+>  : ^^^^^^
 
     static 1: string;
 >1 : string
+>  : ^^^^^^
 
     static [s2]: boolean;
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 
 let t0: T0;
 >t0 : T0
+>   : ^^
 
 let t1: T1;
 >t1 : T1
+>   : ^^
 
 let t2: T2;
 >t2 : T2
+>   : ^^
 
 let t3: T3;
 >t3 : T3
+>   : ^^
 
 let t0_1: M.T0;
 >t0_1 : T0
+>     : ^^
 >M : any
+>  : ^^^
 
 let t1_1: M.T1;
 >t1_1 : T1
+>     : ^^
 >M : any
+>  : ^^^
 
 let t2_1: M.T2;
 >t2_1 : T2
+>     : ^^
 >M : any
+>  : ^^^
 
 let t3_1: M.T3;
 >t3_1 : T3
+>     : ^^
 >M : any
+>  : ^^^
 
 let t4: N.T4;
 >t4 : N.T4
+>   : ^^^^
 >N : any
+>  : ^^^
 
 let t5: N.T5;
 >t5 : N.T5
+>   : ^^^^
 >N : any
+>  : ^^^
 
 let t6: N.T6;
 >t6 : N.T6
+>   : ^^^^
 >N : any
+>  : ^^^
 
 let t7: N.T7;
 >t7 : N.T7
+>   : ^^^^
 >N : any
+>  : ^^^
 
 let t8: T8;
 >t8 : T8
+>   : ^^
 
 let t9: T9;
 >t9 : T9
+>   : ^^
 
 let t10: T10;
 >t10 : T10
+>    : ^^^
 
 let t11: T11;
 >t11 : T11
+>    : ^^^
 
 let t12: T12;
 >t12 : T12
+>    : ^^^
 
 let t13: T13;
 >t13 : T13
+>    : ^^^
 
 let t14: T14;
 >t14 : T14
+>    : ^^^
 
 let t15: T15;
 >t15 : T15
+>    : ^^^
 
 // assignability
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2 : T2
+>                                                                                                           : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1 : T1
+>                                                                                                  : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0 : T0
+>                                                                                         : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3 : T3
+>                                                                                : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1 : T1
+>                                                                       : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0 : T0
+>                                                              : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3 : T3
+>                                                     : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2 : T2
+>                                            : ^^
 >t0 = t1, t0 = t2, t0 = t3, t1 = t0 : T0
+>                                   : ^^
 >t0 = t1, t0 = t2, t0 = t3 : T3
+>                          : ^^
 >t0 = t1, t0 = t2 : T2
+>                 : ^^
 >t0 = t1 : T1
+>        : ^^
 >t0 : T0
+>   : ^^
 >t1 : T1
+>   : ^^
 >t0 = t2 : T2
+>        : ^^
 >t0 : T0
+>   : ^^
 >t2 : T2
+>   : ^^
 >t0 = t3 : T3
+>        : ^^
 >t0 : T0
+>   : ^^
 >t3 : T3
+>   : ^^
 >t1 = t0 : T0
+>        : ^^
 >t1 : T1
+>   : ^^
 >t0 : T0
+>   : ^^
 >t1 = t2 : T2
+>        : ^^
 >t1 : T1
+>   : ^^
 >t2 : T2
+>   : ^^
 >t1 = t3 : T3
+>        : ^^
 >t1 : T1
+>   : ^^
 >t3 : T3
+>   : ^^
 >t2 = t0 : T0
+>        : ^^
 >t2 : T2
+>   : ^^
 >t0 : T0
+>   : ^^
 >t2 = t1 : T1
+>        : ^^
 >t2 : T2
+>   : ^^
 >t1 : T1
+>   : ^^
 >t2 = t3 : T3
+>        : ^^
 >t2 : T2
+>   : ^^
 >t3 : T3
+>   : ^^
 >t3 = t0 : T0
+>        : ^^
 >t3 : T3
+>   : ^^
 >t0 : T0
+>   : ^^
 >t3 = t1 : T1
+>        : ^^
 >t3 : T3
+>   : ^^
 >t1 : T1
+>   : ^^
 >t3 = t2 : T2
+>        : ^^
 >t3 : T3
+>   : ^^
 >t2 : T2
+>   : ^^
 
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
+>                                                                                                           : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
+>                                                                                                  : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
+>                                                                                         : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : N.T7
+>                                                                                : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
+>                                                                       : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
+>                                                              : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : N.T7
+>                                                     : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
+>                                            : ^^^^
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
+>                                   : ^^^^
 >t4 = t5, t4 = t6, t4 = t7 : N.T7
+>                          : ^^^^
 >t4 = t5, t4 = t6 : N.T6
+>                 : ^^^^
 >t4 = t5 : N.T5
+>        : ^^^^
 >t4 : N.T4
+>   : ^^^^
 >t5 : N.T5
+>   : ^^^^
 >t4 = t6 : N.T6
+>        : ^^^^
 >t4 : N.T4
+>   : ^^^^
 >t6 : N.T6
+>   : ^^^^
 >t4 = t7 : N.T7
+>        : ^^^^
 >t4 : N.T4
+>   : ^^^^
 >t7 : N.T7
+>   : ^^^^
 >t5 = t4 : N.T4
+>        : ^^^^
 >t5 : N.T5
+>   : ^^^^
 >t4 : N.T4
+>   : ^^^^
 >t5 = t6 : N.T6
+>        : ^^^^
 >t5 : N.T5
+>   : ^^^^
 >t6 : N.T6
+>   : ^^^^
 >t5 = t7 : N.T7
+>        : ^^^^
 >t5 : N.T5
+>   : ^^^^
 >t7 : N.T7
+>   : ^^^^
 >t6 = t4 : N.T4
+>        : ^^^^
 >t6 : N.T6
+>   : ^^^^
 >t4 : N.T4
+>   : ^^^^
 >t6 = t5 : N.T5
+>        : ^^^^
 >t6 : N.T6
+>   : ^^^^
 >t5 : N.T5
+>   : ^^^^
 >t6 = t7 : N.T7
+>        : ^^^^
 >t6 : N.T6
+>   : ^^^^
 >t7 : N.T7
+>   : ^^^^
 >t7 = t4 : N.T4
+>        : ^^^^
 >t7 : N.T7
+>   : ^^^^
 >t4 : N.T4
+>   : ^^^^
 >t7 = t5 : N.T5
+>        : ^^^^
 >t7 : N.T7
+>   : ^^^^
 >t5 : N.T5
+>   : ^^^^
 >t7 = t6 : N.T6
+>        : ^^^^
 >t7 : N.T7
+>   : ^^^^
 >t6 : N.T6
+>   : ^^^^
 
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0 : T0
+>                                                                               : ^^
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0 : T0
+>                                                                     : ^^
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0 : T0
+>                                                           : ^^
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0 : T0
+>                                                 : ^^
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15 : T15
+>                                       : ^^^
 >t0 = t12, t0 = t13, t0 = t14 : T14
+>                             : ^^^
 >t0 = t12, t0 = t13 : T13
+>                   : ^^^
 >t0 = t12 : T12
+>         : ^^^
 >t0 : T0
+>   : ^^
 >t12 : T12
+>    : ^^^
 >t0 = t13 : T13
+>         : ^^^
 >t0 : T0
+>   : ^^
 >t13 : T13
+>    : ^^^
 >t0 = t14 : T14
+>         : ^^^
 >t0 : T0
+>   : ^^
 >t14 : T14
+>    : ^^^
 >t0 = t15 : T15
+>         : ^^^
 >t0 : T0
+>   : ^^
 >t15 : T15
+>    : ^^^
 >t12 = t0 : T0
+>         : ^^
 >t12 : T12
+>    : ^^^
 >t0 : T0
+>   : ^^
 >t13 = t0 : T0
+>         : ^^
 >t13 : T13
+>    : ^^^
 >t0 : T0
+>   : ^^
 >t14 = t0 : T0
+>         : ^^
 >t14 : T14
+>    : ^^^
 >t0 : T0
+>   : ^^
 >t15 = t0 : T0
+>         : ^^
 >t15 : T15
+>    : ^^^
 >t0 : T0
+>   : ^^
 
 t0 = C; // static side
 >t0 = C : typeof C
+>       : ^^^^^^^^
 >t0 : T0
+>   : ^^
 >C : typeof C
+>  : ^^^^^^^^
 
 // object literals
 export const o1 = {
 >o1 : { a: number; 1: string; [s0]: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [c4]: 1,    [c5]: "a",    [s2]: true} : { a: number; 1: string; [s0]: boolean; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [c4]: 1,
 >[c4] : number
+>     : ^^^^^^
 >c4 : "a"
+>   : ^^^
 >1 : 1
+>  : ^
 
     [c5]: "a",
 >[c5] : string
+>     : ^^^^^^
 >c5 : 1
+>   : ^
 >"a" : "a"
+>    : ^^^
 
     [s2]: true
 >[s2] : boolean
+>     : ^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 };
 
 // check element access types
 export const o1_c4 = o1[c4];
 >o1_c4 : number
+>      : ^^^^^^
 >o1[c4] : number
+>       : ^^^^^^
 >o1 : { a: number; 1: string; [s0]: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c4 : "a"
+>   : ^^^
 
 export const o1_c5 = o1[c5];
 >o1_c5 : string
+>      : ^^^^^^
 >o1[c5] : string
+>       : ^^^^^^
 >o1 : { a: number; 1: string; [s0]: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c5 : 1
+>   : ^
 
 export const o1_s2 = o1[s2];
 >o1_s2 : boolean
+>      : ^^^^^^^
 >o1[s2] : boolean
+>       : ^^^^^^^
 >o1 : { a: number; 1: string; [s0]: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : unique symbol
+>   : ^^^^^^^^^^^^^
 
 export const o2: T0 = o1;
 >o2 : T0
+>   : ^^
 >o1 : { a: number; 1: string; [s0]: boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // recursive declarations
 // (type parameter indirection courtesy of #20400)
 declare const rI: RI<"a">;
 >rI : RI<"a">
+>   : ^^^^^^^
 
 rI.x
 >rI.x : "a"
+>     : ^^^
 >rI : RI<"a">
+>   : ^^^^^^^
 >x : "a"
+>  : ^^^
 
 interface RI<T extends "a" | "b"> {
     x: T;
 >x : T
+>  : ^
 
     [rI.x]: "b";
 >[rI.x] : "b"
+>       : ^^^
 >rI.x : "a"
+>     : ^^^
 >rI : RI<"a">
+>   : ^^^^^^^
 >x : "a"
+>  : ^^^
 }
 
 declare const rC: RC<"a">;
 >rC : RC<"a">
+>   : ^^^^^^^
 
 rC.x
 >rC.x : "a"
+>     : ^^^
 >rC : RC<"a">
+>   : ^^^^^^^
 >x : "a"
+>  : ^^^
 
 declare class RC<T extends "a" | "b"> {
 >RC : RC<T>
+>   : ^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     [rC.x]: "b";
 >[rC.x] : "b"
+>       : ^^^
 >rC.x : "a"
+>     : ^^^
 >rC : RC<"a">
+>   : ^^^^^^^
 >x : "a"
+>  : ^^^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution17.tsx] ////
+
+=== file.tsx ===
 declare global {
 >global : Symbol(global, Decl(file.tsx, 0, 0))
 

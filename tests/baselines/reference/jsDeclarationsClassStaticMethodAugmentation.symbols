@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStaticMethodAugmentation.ts] ////
+
+=== source.js ===
 export class Clazz {
 >Clazz : Symbol(Clazz, Decl(source.js, 0, 0), Decl(source.js, 2, 1))
 

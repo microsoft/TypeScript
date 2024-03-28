@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts] ////
+
 //// [privateIdentifierChain.1.ts]
 class A {
     a?: A

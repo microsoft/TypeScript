@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts] ////
+
 //// [unionTypeErrorMessageTypeRefs01.ts]
 interface Foo { foo: any }
 interface Bar { bar: any }

@@ -1,11 +1,11 @@
-tests/cases/compiler/cloduleWithDuplicateMember1.ts(3,16): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/cloduleWithDuplicateMember1.ts(6,12): error TS2300: Duplicate identifier 'foo'.
-tests/cases/compiler/cloduleWithDuplicateMember1.ts(10,16): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/cloduleWithDuplicateMember1.ts(13,21): error TS2300: Duplicate identifier 'foo'.
-tests/cases/compiler/cloduleWithDuplicateMember1.ts(14,21): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember1.ts(3,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember1.ts(6,12): error TS2300: Duplicate identifier 'foo'.
+cloduleWithDuplicateMember1.ts(10,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember1.ts(13,21): error TS2300: Duplicate identifier 'foo'.
+cloduleWithDuplicateMember1.ts(14,21): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/compiler/cloduleWithDuplicateMember1.ts (5 errors) ====
+==== cloduleWithDuplicateMember1.ts (5 errors) ====
     class C {
         get x() { return 1; }
         static get x() {

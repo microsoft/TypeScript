@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfRef.ts ===
+//// [tests/cases/compiler/selfRef.ts] ////
+
+=== selfRef.ts ===
 module M
 >M : Symbol(M, Decl(selfRef.ts, 0, 0))
 {

@@ -1,12 +1,12 @@
-tests/cases/compiler/classImplementsClass5.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+classImplementsClass5.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/classImplementsClass5.ts(16,1): error TS2322: Type 'C2' is not assignable to type 'C'.
+classImplementsClass5.ts(16,1): error TS2322: Type 'C2' is not assignable to type 'C'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is not assignable to type 'C2'.
+classImplementsClass5.ts(17,1): error TS2322: Type 'C' is not assignable to type 'C2'.
   Types have separate declarations of a private property 'x'.
 
 
-==== tests/cases/compiler/classImplementsClass5.ts (3 errors) ====
+==== classImplementsClass5.ts (3 errors) ====
     class A {
         private x = 1;
         foo(): number { return 1; }

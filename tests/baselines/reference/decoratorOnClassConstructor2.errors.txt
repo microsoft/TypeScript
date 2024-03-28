@@ -1,12 +1,12 @@
-tests/cases/conformance/decorators/class/constructor/2.ts(1,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
-tests/cases/conformance/decorators/class/constructor/2.ts(2,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+2.ts(1,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+2.ts(2,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 
 
-==== tests/cases/conformance/decorators/class/constructor/0.ts (0 errors) ====
+==== 0.ts (0 errors) ====
     export class base { }
     export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
     
-==== tests/cases/conformance/decorators/class/constructor/2.ts (2 errors) ====
+==== 2.ts (2 errors) ====
     import {base} from "./0.ts"
                        ~~~~~~~~
 !!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.

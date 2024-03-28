@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentInferenceApparentType2.ts ===
+//// [tests/cases/compiler/typeArgumentInferenceApparentType2.ts] ////
+
+=== typeArgumentInferenceApparentType2.ts ===
 function method<T>(iterable: Iterable<T>): T {
 >method : Symbol(method, Decl(typeArgumentInferenceApparentType2.ts, 0, 0))
 >T : Symbol(T, Decl(typeArgumentInferenceApparentType2.ts, 0, 16))

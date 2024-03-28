@@ -1,16 +1,17 @@
-=== tests/cases/compiler/second.d.ts ===
-// Fixes #15094
+//// [tests/cases/compiler/reexportedMissingAlias.ts] ////
+
+=== second.d.ts ===
 export import Component = CompletelyMissing;
 >Component : Symbol(Component, Decl(second.d.ts, 0, 0))
 
-=== tests/cases/compiler/first.d.ts ===
+=== first.d.ts ===
 import * as Second from './second';
 >Second : Symbol(Second, Decl(first.d.ts, 0, 6))
 
 export = Second;
 >Second : Symbol(Second, Decl(first.d.ts, 0, 6))
 
-=== tests/cases/compiler/crash.ts ===
+=== crash.ts ===
 import { Component } from './first';
 >Component : Symbol(Component, Decl(crash.ts, 0, 8))
 

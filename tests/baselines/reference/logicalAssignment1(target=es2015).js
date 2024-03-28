@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment1.ts] ////
+
 //// [logicalAssignment1.ts]
 declare let a: string | undefined
 declare let b: string | undefined

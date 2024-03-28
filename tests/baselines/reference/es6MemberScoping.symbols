@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6MemberScoping.ts ===
+//// [tests/cases/compiler/es6MemberScoping.ts] ////
+
+=== es6MemberScoping.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(es6MemberScoping.ts, 0, 0))
 

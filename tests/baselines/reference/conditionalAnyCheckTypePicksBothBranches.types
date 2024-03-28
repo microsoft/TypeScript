@@ -1,33 +1,51 @@
-=== tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts ===
+//// [tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts] ////
+
+=== conditionalAnyCheckTypePicksBothBranches.ts ===
 type T = any extends number ? 1 : 0;
 >T : 0 | 1
+>  : ^^^^^
 
 let x: T;
 >x : 0 | 1
+>  : ^^^^^
 
 x = 1;
 >x = 1 : 1
+>      : ^
 >x : 0 | 1
+>  : ^^^^^
 >1 : 1
+>  : ^
 
 x = 0; // not an error
 >x = 0 : 0
+>      : ^
 >x : 0 | 1
+>  : ^^^^^
 >0 : 0
+>  : ^
 
 type U = [any] extends [number] ? 1 : 0;
 >U : 1
+>  : ^
 
 let y: U;
 >y : 1
+>  : ^
 
 y = 1;
 >y = 1 : 1
+>      : ^
 >y : 1
+>  : ^
 >1 : 1
+>  : ^
 
 y = 0; // error
 >y = 0 : 0
+>      : ^
 >y : 1
+>  : ^
 >0 : 0
+>  : ^
 

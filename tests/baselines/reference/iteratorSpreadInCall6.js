@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall6.ts] ////
+
 //// [iteratorSpreadInCall6.ts]
 function foo(...s: (symbol | number)[]) { }
 class SymbolIterator {

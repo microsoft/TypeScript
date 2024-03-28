@@ -1,4 +1,7 @@
-=== tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts ===
+//// [tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts] ////
+
+=== recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts ===
 class A<T extends A> { }
 >A : A<T>
+>  : ^^^^
 

@@ -1,4 +1,7 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck5.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck5.ts] ////
+
+=== generatorTypeCheck5.ts ===
 function* g1(): any { }
 >g1 : () => any
+>   : ^^^^^^   
 

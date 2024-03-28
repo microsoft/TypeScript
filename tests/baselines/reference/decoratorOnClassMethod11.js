@@ -1,9 +1,11 @@
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod11.ts] ////
+
 //// [decoratorOnClassMethod11.ts]
 module M {
     class C {
         decorator(target: Object, key: string): void { }
 
-        @this.decorator
+        @(this.decorator)
         method() { }
     }
 }
@@ -23,7 +25,7 @@ var M;
         C.prototype.decorator = function (target, key) { };
         C.prototype.method = function () { };
         __decorate([
-            this.decorator
+            (this.decorator)
         ], C.prototype, "method", null);
         return C;
     }());

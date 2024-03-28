@@ -1,8 +1,8 @@
-tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts(5,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts(6,2): error TS1128: Declaration or statement expected.
+objectCreationExpressionInFunctionParameter.ts(5,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+objectCreationExpressionInFunctionParameter.ts(6,2): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts (2 errors) ====
+==== objectCreationExpressionInFunctionParameter.ts (2 errors) ====
     class A {
         constructor(public a1: string) {
         }

@@ -1,15 +1,24 @@
-=== tests/cases/compiler/qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts ===
+//// [tests/cases/compiler/qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts] ////
+
+=== qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts ===
 module Alpha {
 >Alpha : typeof Alpha
+>      : ^^^^^^^^^^^^
 
     export var x = 100;
 >x : number
+>  : ^^^^^^
 >100 : 100
+>    : ^^^
 }
 
 class Beta extends Alpha.x {
 >Beta : Beta
+>     : ^^^^
 >Alpha.x : number
+>        : ^^^^^^
 >Alpha : typeof Alpha
+>      : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }

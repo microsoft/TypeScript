@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisExpressionOfGenericObject.ts ===
+//// [tests/cases/compiler/thisExpressionOfGenericObject.ts] ////
+
+=== thisExpressionOfGenericObject.ts ===
 class MyClass1<T> {
 >MyClass1 : Symbol(MyClass1, Decl(thisExpressionOfGenericObject.ts, 0, 0))
 >T : Symbol(T, Decl(thisExpressionOfGenericObject.ts, 0, 15))

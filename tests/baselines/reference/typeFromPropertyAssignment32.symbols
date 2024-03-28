@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/expando.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment32.ts] ////
+
+=== expando.ts ===
 function ExpandoMerge(n: number) {
 >ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
 >n : Symbol(n, Decl(expando.ts, 0, 22))
@@ -84,7 +86,7 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 >m : Symbol(ExpandoMerge.m, Decl(expando.ts, 3, 21))
 >ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
 
-=== tests/cases/conformance/salsa/ns.ts ===
+=== ns.ts ===
 namespace ExpandoMerge {
 >ExpandoMerge : Symbol(ExpandoMerge, Decl(expando.ts, 0, 0), Decl(expando.ts, 2, 1), Decl(expando.ts, 3, 21), Decl(expando.ts, 6, 1), Decl(expando.ts, 7, 24) ... and 6 more)
 

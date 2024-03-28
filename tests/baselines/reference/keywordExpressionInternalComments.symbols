@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keywordExpressionInternalComments.ts ===
+//// [tests/cases/compiler/keywordExpressionInternalComments.ts] ////
+
+=== keywordExpressionInternalComments.ts ===
 /*1*/ new /*2*/ Array /*3*/;
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

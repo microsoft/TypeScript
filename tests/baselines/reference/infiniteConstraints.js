@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infiniteConstraints.ts] ////
+
 //// [infiniteConstraints.ts]
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
 

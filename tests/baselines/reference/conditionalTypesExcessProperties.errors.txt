@@ -1,10 +1,10 @@
-tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(8,5): error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
+conditionalTypesExcessProperties.ts(8,5): error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
   Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
-tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(9,5): error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
+conditionalTypesExcessProperties.ts(9,5): error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
   Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
 
 
-==== tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts (2 errors) ====
+==== conditionalTypesExcessProperties.ts (2 errors) ====
     type Something<T> = { test: string } &  (T extends object ? {
         arg: T
     } : {

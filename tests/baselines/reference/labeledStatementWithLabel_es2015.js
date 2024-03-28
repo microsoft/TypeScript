@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts] ////
+
 //// [labeledStatementWithLabel_es2015.ts]
 label: function fn() { }
 label: function* gen() { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stradac.ts] ////
+
 //// [stradac.ts]
 var x = 10;
 

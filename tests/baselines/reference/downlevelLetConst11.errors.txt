@@ -1,8 +1,8 @@
-tests/cases/compiler/downlevelLetConst11.ts(2,1): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
-tests/cases/compiler/downlevelLetConst11.ts(2,1): error TS2304: Cannot find name 'let'.
+downlevelLetConst11.ts(2,1): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+downlevelLetConst11.ts(2,1): error TS2304: Cannot find name 'let'.
 
 
-==== tests/cases/compiler/downlevelLetConst11.ts (2 errors) ====
+==== downlevelLetConst11.ts (2 errors) ====
     "use strict";
     let
     ~~~

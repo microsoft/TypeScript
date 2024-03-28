@@ -1,23 +1,35 @@
-=== tests/cases/compiler/importDeclWithClassModifiers.ts ===
+//// [tests/cases/compiler/importDeclWithClassModifiers.ts] ////
+
+=== importDeclWithClassModifiers.ts ===
 module x {
     interface c {
     }
 }
 export public import a = x.c;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 export private import b = x.c;
 >b : any
+>  : ^^^
 >x : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 export static import c = x.c;
 >c : any
+>  : ^^^
 >x : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 var b: a;
 >b : a
+>  : ^
 

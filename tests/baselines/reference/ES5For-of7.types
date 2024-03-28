@@ -1,20 +1,32 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of7.ts] ////
+
+=== ES5For-of7.ts ===
 for (var w of []) {
 >w : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var x = w;
 >x : any
+>  : ^^^
 >w : any
+>  : ^^^
 }
 
 for (var v of []) {
 >v : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var x = [w, v];
 >x : any
+>  : ^^^
 >[w, v] : any[]
+>       : ^^^^^
 >w : any
+>  : ^^^
 >v : any
+>  : ^^^
 }

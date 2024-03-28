@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleUnassignedVariable.ts] ////
+
 //// [moduleUnassignedVariable.ts]
 module Bar {
     export var a = 1;

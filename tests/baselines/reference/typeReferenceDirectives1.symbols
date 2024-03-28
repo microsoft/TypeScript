@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/typeReferenceDirectives1.ts] ////
+
 === /app.ts ===
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 interface A {
 >A : Symbol(A, Decl(app.ts, 0, 0))
 

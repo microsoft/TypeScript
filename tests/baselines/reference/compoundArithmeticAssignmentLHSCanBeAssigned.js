@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts] ////
+
 //// [compoundArithmeticAssignmentLHSCanBeAssigned.ts]
 enum E { a, b, c }
 

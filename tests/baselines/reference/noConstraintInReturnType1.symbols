@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noConstraintInReturnType1.ts ===
+//// [tests/cases/compiler/noConstraintInReturnType1.ts] ////
+
+=== noConstraintInReturnType1.ts ===
 class List<T extends {}> {
 >List : Symbol(List, Decl(noConstraintInReturnType1.ts, 0, 0))
 >T : Symbol(T, Decl(noConstraintInReturnType1.ts, 0, 11))

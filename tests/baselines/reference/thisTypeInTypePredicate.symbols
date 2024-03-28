@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInTypePredicate.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInTypePredicate.ts] ////
+
+=== thisTypeInTypePredicate.ts ===
 declare function filter<S>(f: (this: void, x: any) => x is S): S[];
 >filter : Symbol(filter, Decl(thisTypeInTypePredicate.ts, 0, 0))
 >S : Symbol(S, Decl(thisTypeInTypePredicate.ts, 0, 24))

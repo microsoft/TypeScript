@@ -1,45 +1,78 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts] ////
+
+=== typeSatisfaction_propertyValueConformance3.ts ===
 export type Color = { r: number, g: number, b: number };
->Color : { r: number; g: number; b: number; }
+>Color : Color
+>      : ^^^^^
 >r : number
+>  : ^^^^^^
 >g : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 // All of these should be Colors, but I only use some of them here.
 export const Palette = {
 >Palette : { white: { r: number; g: number; b: number; }; black: { r: number; g: number; d: number; }; blue: { r: number; g: number; b: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    white: { r: 255, g: 255, b: 255 },    black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'    blue: { r: 0, g: 0, b: 255 },} satisfies Record<string, Color> : { white: { r: number; g: number; b: number; }; black: { r: number; g: number; d: number; }; blue: { r: number; g: number; b: number; }; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    white: { r: 255, g: 255, b: 255 },    black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'    blue: { r: 0, g: 0, b: 255 },} : { white: { r: number; g: number; b: number; }; black: { r: number; g: number; d: number; }; blue: { r: number; g: number; b: number; }; }
+>                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     white: { r: 255, g: 255, b: 255 },
 >white : { r: number; g: number; b: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ r: 255, g: 255, b: 255 } : { r: number; g: number; b: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >255 : 255
+>    : ^^^
 >g : number
+>  : ^^^^^^
 >255 : 255
+>    : ^^^
 >b : number
+>  : ^^^^^^
 >255 : 255
+>    : ^^^
 
     black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
 >black : { r: number; g: number; d: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ r: 0, g: 0, d: 0 } : { r: number; g: number; d: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >g : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >d : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     blue: { r: 0, g: 0, b: 255 },
 >blue : { r: number; g: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ r: 0, g: 0, b: 255 } : { r: number; g: number; b: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >g : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 >255 : 255
+>    : ^^^
 
 } satisfies Record<string, Color>;
 

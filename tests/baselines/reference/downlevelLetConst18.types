@@ -1,72 +1,108 @@
-=== tests/cases/compiler/downlevelLetConst18.ts ===
+//// [tests/cases/compiler/downlevelLetConst18.ts] ////
+
+=== downlevelLetConst18.ts ===
 'use strict'
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     function foo() { x };
 >foo : () => void
+>    : ^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     function foo1() { x };
 >foo1 : () => void
+>     : ^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     (() => { x })();
 >(() => { x })() : never
+>                : ^^^^^
 >(() => { x }) : () => never
+>              : ^^^^^^^^^^^
 >() => { x } : () => never
+>            : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (const x = 1; ;) {
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (() => { x })();
 >(() => { x })() : never
+>                : ^^^^^
 >(() => { x }) : () => never
+>              : ^^^^^^^^^^^
 >() => { x } : () => never
+>            : ^^^^^^^^^^^
 >x : 1
+>  : ^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     ({ foo() { x }})
 >({ foo() { x }}) : { foo(): void; }
+>                 : ^^^^^^^^^^^^^^^^
 >{ foo() { x }} : { foo(): void; }
+>               : ^^^^^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     ({ get foo() { return x } })
 >({ get foo() { return x } }) : { readonly foo: any; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >{ get foo() { return x } } : { readonly foo: any; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     ({ set foo(v) { x } })
 >({ set foo(v) { x } }) : { foo: any; }
+>                       : ^^^^^^^^^^^^^
 >{ set foo(v) { x } } : { foo: any; }
+>                     : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 >x : any
+>  : ^^^
 }
 

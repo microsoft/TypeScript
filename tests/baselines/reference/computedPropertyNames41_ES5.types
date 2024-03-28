@@ -1,23 +1,33 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames41_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames41_ES5.ts] ////
+
+=== computedPropertyNames41_ES5.ts ===
 class Foo { x }
 >Foo : Foo
+>    : ^^^
 >x : any
 
 class Foo2 { x; y }
 >Foo2 : Foo2
+>     : ^^^^
 >x : any
 >y : any
 
 class C {
 >C : C
+>  : ^
 
     [s: string]: () => Foo2;
 >s : string
+>  : ^^^^^^
 
     // Computed properties
     static [""]() { return new Foo }
 >[""] : () => Foo
+>     : ^^^^^^^^^
 >"" : ""
+>   : ^^
 >new Foo : Foo
+>        : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 }

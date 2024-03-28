@@ -1,21 +1,28 @@
-=== tests/cases/compiler/unusedClassesinNamespace5.ts ===
+//// [tests/cases/compiler/unusedClassesinNamespace5.ts] ////
+
+=== unusedClassesinNamespace5.ts ===
 namespace Validation {
 >Validation : typeof Validation
+>           : ^^^^^^^^^^^^^^^^^
 
     class c1 {
 >c1 : c1
+>   : ^^
 
     }
 
     export class c2 {
 >c2 : c2
+>   : ^^
 
     }
 
     class c3 {
 >c3 : c3
+>   : ^^
 
         public x: c1;
 >x : c1
+>  : ^^
     }
 }

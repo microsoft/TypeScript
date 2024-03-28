@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts ===
+//// [tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts] ////
+
+=== unterminatedRegexAtEndOfSource1.ts ===
 var a = /
 >a : Symbol(a, Decl(unterminatedRegexAtEndOfSource1.ts, 0, 3))
 

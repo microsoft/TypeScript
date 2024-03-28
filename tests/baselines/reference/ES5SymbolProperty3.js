@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty3.ts] ////
+
 //// [ES5SymbolProperty3.ts]
 var Symbol: any;
 

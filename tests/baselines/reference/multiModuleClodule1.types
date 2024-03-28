@@ -1,56 +1,85 @@
-=== tests/cases/compiler/multiModuleClodule1.ts ===
+//// [tests/cases/compiler/multiModuleClodule1.ts] ////
+
+=== multiModuleClodule1.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(x: number) { }
 >x : number
+>  : ^^^^^^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 
     static boo() { }
 >boo : () => void
+>    : ^^^^^^^^^^
 }
 
 module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     var y = 2;
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }
 module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     function baz() { return ''; }
 >baz : () => string
+>    : ^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 }
 
 var c = new C(C.x);
 >c : C
+>  : ^
 >new C(C.x) : C
+>           : ^
 >C : typeof C
+>  : ^^^^^^^^
 >C.x : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 c.foo = C.foo;
 >c.foo = C.foo : () => void
+>              : ^^^^^^^^^^
 >c.foo : () => void
+>      : ^^^^^^^^^^
 >c : C
+>  : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 >C.foo : () => void
+>      : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 

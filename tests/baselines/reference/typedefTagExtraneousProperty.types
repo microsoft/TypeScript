@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/typedefTagExtraneousProperty.js ===
+//// [tests/cases/conformance/jsdoc/typedefTagExtraneousProperty.ts] ////
+
+=== typedefTagExtraneousProperty.js ===
 /** @typedef {Object.<string,string>} Mmap
  * @property {string} ignoreMe - should be ignored
  */
@@ -6,24 +8,39 @@
 /** @type {Mmap} */
 var y = { bye: "no" };
 >y : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ bye: "no" } : { bye: string; }
+>              : ^^^^^^^^^^^^^^^^
 >bye : string
+>    : ^^^^^^
 >"no" : "no"
+>     : ^^^^
 
 y
 >y : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 y.ignoreMe = "ok but just because of the index signature"
 >y.ignoreMe = "ok but just because of the index signature" : "ok but just because of the index signature"
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.ignoreMe : string
+>           : ^^^^^^
 >y : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ignoreMe : string
+>         : ^^^^^^
 >"ok but just because of the index signature" : "ok but just because of the index signature"
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 y['hi'] = "yes"
 >y['hi'] = "yes" : "yes"
+>                : ^^^^^
 >y['hi'] : string
+>        : ^^^^^^
 >y : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >"yes" : "yes"
+>      : ^^^^^
 

@@ -1,10 +1,10 @@
-tests/cases/compiler/indexWithUndefinedAndNull.ts(9,21): error TS2538: Type 'undefined' cannot be used as an index type.
-tests/cases/compiler/indexWithUndefinedAndNull.ts(10,9): error TS2538: Type 'null' cannot be used as an index type.
-tests/cases/compiler/indexWithUndefinedAndNull.ts(11,21): error TS2538: Type 'undefined' cannot be used as an index type.
-tests/cases/compiler/indexWithUndefinedAndNull.ts(12,9): error TS2538: Type 'null' cannot be used as an index type.
+indexWithUndefinedAndNull.ts(9,21): error TS2538: Type 'undefined' cannot be used as an index type.
+indexWithUndefinedAndNull.ts(10,9): error TS2538: Type 'null' cannot be used as an index type.
+indexWithUndefinedAndNull.ts(11,21): error TS2538: Type 'undefined' cannot be used as an index type.
+indexWithUndefinedAndNull.ts(12,9): error TS2538: Type 'null' cannot be used as an index type.
 
 
-==== tests/cases/compiler/indexWithUndefinedAndNull.ts (4 errors) ====
+==== indexWithUndefinedAndNull.ts (4 errors) ====
     interface N {
         [n: number]: string;
     }

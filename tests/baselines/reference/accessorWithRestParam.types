@@ -1,12 +1,19 @@
-=== tests/cases/compiler/accessorWithRestParam.ts ===
+//// [tests/cases/compiler/accessorWithRestParam.ts] ////
+
+=== accessorWithRestParam.ts ===
 class C {
 >C : C
+>  : ^
 
     set X(...v) { }
 >X : any
+>  : ^^^
 >v : any[]
+>  : ^^^^^
 
     static set X(...v2) { }
 >X : any
+>  : ^^^
 >v2 : any[]
+>   : ^^^^^
 }

@@ -1,0 +1,11 @@
+a.js(1,4): error TS1003: Identifier expected.
+a.js(1,5): error TS1109: Expression expected.
+
+
+==== a.js (2 errors) ====
+    ~< <
+       ~
+!!! error TS1003: Identifier expected.
+        
+!!! error TS1109: Expression expected.
+    

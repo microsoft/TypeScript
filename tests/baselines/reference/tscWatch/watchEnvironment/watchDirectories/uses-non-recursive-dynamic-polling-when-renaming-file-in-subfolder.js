@@ -1,9 +1,14 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/username/project/src/file1.ts]
 
 
 //// [/a/username/project/tsconfig.json]
-{"watchOptions":{"synchronousWatchDirectory":true}}
+{
+  "watchOptions": {
+    "synchronousWatchDirectory": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -22,14 +27,35 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w -p /a/username/project/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/username/project/src/file1.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+//// [/a/username/project/src/file1.js]
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/username/project/tsconfig.json: *new*
+  {}
+
+Timeout callback:: count: 1
+1: pollPollingIntervalQueue *new*
+
+Program root files: [
+  "/a/username/project/src/file1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -43,19 +69,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/src/file1.ts (used version)
 
-FsWatches::
-/a/username/project/tsconfig.json: *new*
-  {}
-/a/username/project/src/file1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/username/project/src/file1.js]
-
-
 
 Change:: Rename file1 to file2
 
@@ -65,16 +79,66 @@ Input::
 
 //// [/a/username/project/src/file1.ts] deleted
 
+Timeout callback:: count: 2
+1: pollPollingIntervalQueue
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+1: pollPollingIntervalQueue
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 3
+
+Timeout callback:: count: 3
+2: timerToUpdateProgram *deleted*
+3: timerToUpdateProgram *new*
+4: pollLowPollingIntervalQueue *new*
+5: pollPollingIntervalQueue *new*
+
+Before running Timeout callback:: count: 3
+3: timerToUpdateProgram
+4: pollLowPollingIntervalQueue
+5: pollPollingIntervalQueue
+
+After running Timeout callback:: count: 3
 Output::
 >> Screen clear
-[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/username/project/src/file2.ts"]
-Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+//// [/a/username/project/src/file2.js]
+
+
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {}
+
+Timeout callback:: count: 3
+6: timerToUpdateProgram *new*
+7: pollLowPollingIntervalQueue *new*
+8: pollPollingIntervalQueue *new*
+
+
+Program root files: [
+  "/a/username/project/src/file2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/username/project/tsconfig.json",
+  "configFilePath": "/a/username/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -84,22 +148,6 @@ Semantic diagnostics in builder refreshed for::
 /a/username/project/src/file2.ts
 
 Shape signatures in builder refreshed for::
-/a/username/project/src/file2.ts (used version)
-
-FsWatches::
-/a/username/project/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts: *new*
-  {}
-
-FsWatches *deleted*::
-/a/username/project/src/file1.ts:
-  {}
+/a/username/project/src/file2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/username/project/src/file2.js]
-
-

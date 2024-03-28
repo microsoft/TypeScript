@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen2.ts] ////
+
 //// [mergedModuleDeclarationCodeGen2.ts]
 module my.data.foo {
     export function buz() { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
 //// [jsxFragmentFactoryNoUnusedLocals.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import { Fragment, createElement } from "react"
@@ -17,7 +19,7 @@ export function Counter({ count = 0 }: CounterProps) {
 //// [jsxFragmentFactoryNoUnusedLocals.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Counter = void 0;
+exports.Counter = Counter;
 /// <reference path="react16.d.ts" />
 var react_1 = require("react");
 function Counter(_a) {
@@ -27,4 +29,3 @@ function Counter(_a) {
         (0, react_1.createElement)("p", null, cnt),
         (0, react_1.createElement)("button", { onClick: function () { return setCnt(function (prev) { return prev + 1; }); }, type: "button" }, "Update"));
 }
-exports.Counter = Counter;

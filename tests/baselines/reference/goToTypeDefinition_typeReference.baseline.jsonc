@@ -1,0 +1,19 @@
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_typeReference.ts ===
+// type User = { name: string };
+// type Box<T> = [|{ value: T }|];
+// declare const boxedUser: Box<User>
+// /*GOTO TYPE*/boxedUser
+
+  // === Details ===
+  [
+   {
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceCacheInvalidation.ts] ////
+
 //// [typeInferenceCacheInvalidation.ts]
 // Repro from #32230
 

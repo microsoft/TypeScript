@@ -1,9 +1,12 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxFragmentPreserveEmit.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
@@ -11,41 +14,67 @@ declare var React: any;
 
 <></>; // no whitespace
 ><></> : JSX.Element
+>      : ^^^^^^^^^^^
 
 <    ></   >; // lots of whitespace
 ><    ></   > : JSX.Element
+>             : ^^^^^^^^^^^
 
 < /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
 >< /*starting wrap*/ ></ /*ending wrap*/> : JSX.Element
+>                                         : ^^^^^^^^^^^
 
 <>hi</>; // text inside
 ><>hi</> : JSX.Element
+>        : ^^^^^^^^^^^
 
 <><span>hi</span><div>bye</div></>; // children
 ><><span>hi</span><div>bye</div></> : JSX.Element
+>                                   : ^^^^^^^^^^^
 ><span>hi</span> : JSX.Element
+>                : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 ><div>bye</div> : JSX.Element
+>               : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
 ><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : JSX.Element
+>                                                                       : ^^^^^^^^^^^
 ><span>1</span> : JSX.Element
+>               : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 ><><span>2.1</span><span>2.2</span></> : JSX.Element
+>                                      : ^^^^^^^^^^^
 ><span>2.1</span> : JSX.Element
+>                 : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 ><span>2.2</span> : JSX.Element
+>                 : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 ><span>3</span> : JSX.Element
+>               : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 
 <>#</>; // # would cause scanning error if not in jsxtext
 ><>#</> : JSX.Element
+>       : ^^^^^^^^^^^
 

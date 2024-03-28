@@ -1,49 +1,68 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/global.js ===
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.ts] ////
+
+=== global.js ===
 /** @type {*} */
 var dec;
 >dec : any
+>    : ^^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file1.js ===
+=== file1.js ===
 // ok
 @dec export class C1 { }
 >dec : any
+>    : ^^^
 >C1 : C1
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file2.js ===
+=== file2.js ===
 // ok
 @dec export default class C2 {}
 >dec : any
+>    : ^^^
 >C2 : C2
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file3.js ===
+=== file3.js ===
 // error
 export @dec default class C3 {}
 >dec : any
+>    : ^^^
 >C3 : C3
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file4.js ===
+=== file4.js ===
 // ok
 export @dec class C4 {}
 >dec : any
+>    : ^^^
 >C4 : C4
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file5.js ===
+=== file5.js ===
 // ok
 export default @dec class C5 {}
 >dec : any
+>    : ^^^
 >C5 : C5
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file6.js ===
+=== file6.js ===
 // error
 @dec export @dec class C6 {}
 >dec : any
+>    : ^^^
 >dec : any
+>    : ^^^
 >C6 : C6
+>   : ^^
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file7.js ===
+=== file7.js ===
 // error
 @dec export default @dec class C7 {}
 >dec : any
+>    : ^^^
 >dec : any
+>    : ^^^
 >C7 : C7
+>   : ^^
 

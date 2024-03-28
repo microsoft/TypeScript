@@ -1,59 +1,78 @@
-=== tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts ===
+//// [tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts] ////
+
+=== overrideWithoutNoImplicitOverride1.ts ===
 export declare class AmbientClass {
 >AmbientClass : AmbientClass
+>             : ^^^^^^^^^^^^
 
     override yadda(): void;
 >yadda : () => void
+>      : ^^^^^^    
 }
 
 export class NonAmbientClass {
 >NonAmbientClass : NonAmbientClass
+>                : ^^^^^^^^^^^^^^^
 
     override yadda(): void {}
 >yadda : () => void
+>      : ^^^^^^    
 }
 
 /////
 
 export declare class AmbientBase {
 >AmbientBase : AmbientBase
+>            : ^^^^^^^^^^^
 
     foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 }
 
 export declare class AmbientDerived extends AmbientBase {
 >AmbientDerived : AmbientDerived
+>               : ^^^^^^^^^^^^^^
 >AmbientBase : AmbientBase
+>            : ^^^^^^^^^^^
 
     foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 
     override bar(): void;
 >bar : () => void
+>    : ^^^^^^    
 }
 
 /////
 
 declare namespace ambientNamespace {
 >ambientNamespace : typeof ambientNamespace
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
     export class AmbientBase {
 >AmbientBase : AmbientBase
+>            : ^^^^^^^^^^^
 
         foo(): void;
 >foo : () => void
+>    : ^^^^^^    
     }
 
     export class AmbientDerived extends AmbientBase {
 >AmbientDerived : AmbientDerived
+>               : ^^^^^^^^^^^^^^
 >AmbientBase : AmbientBase
+>            : ^^^^^^^^^^^
 
         foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 
         override bar(): void;
 >bar : () => void
+>    : ^^^^^^    
     }
 }
 
@@ -61,19 +80,25 @@ declare namespace ambientNamespace {
 
 export class NonAmbientBase {
 >NonAmbientBase : NonAmbientBase
+>               : ^^^^^^^^^^^^^^
 
     foo(): void {}
 >foo : () => void
+>    : ^^^^^^    
 }
 
 export class NonAmbientDerived extends NonAmbientBase {
 >NonAmbientDerived : NonAmbientDerived
+>                  : ^^^^^^^^^^^^^^^^^
 >NonAmbientBase : NonAmbientBase
+>               : ^^^^^^^^^^^^^^
 
     foo(): void {}
 >foo : () => void
+>    : ^^^^^^    
 
     override bar(): void {}
 >bar : () => void
+>    : ^^^^^^    
 }
 

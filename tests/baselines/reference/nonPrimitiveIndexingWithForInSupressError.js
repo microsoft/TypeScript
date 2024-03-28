@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts] ////
+
 //// [nonPrimitiveIndexingWithForInSupressError.ts]
 var a: object;
 

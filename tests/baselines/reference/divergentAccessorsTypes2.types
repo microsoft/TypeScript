@@ -1,40 +1,65 @@
-=== tests/cases/compiler/divergentAccessorsTypes2.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes2.ts] ////
+
+=== divergentAccessorsTypes2.ts ===
 class Test1<T> {
 >Test1 : Test1<T>
+>      : ^^^^^^^^
 
     get foo(): T { return null as any }
 >foo : T
+>    : ^
 >null as any : any
+>            : ^^^
 
     set foo(s: T | undefined ) {
 >foo : T
+>    : ^
 >s : T | undefined
+>  : ^^^^^^^^^^^^^
     }
 }
 
 const s = new Test1<string>();
 >s : Test1<string>
+>  : ^^^^^^^^^^^^^
 >new Test1<string>() : Test1<string>
+>                    : ^^^^^^^^^^^^^
 >Test1 : typeof Test1
+>      : ^^^^^^^^^^^^
 
 s.foo = undefined;
 >s.foo = undefined : undefined
+>                  : ^^^^^^^^^
 >s.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >s : Test1<string>
+>  : ^^^^^^^^^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 s.foo = "hello";
 >s.foo = "hello" : "hello"
+>                : ^^^^^^^
 >s.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >s : Test1<string>
+>  : ^^^^^^^^^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 s.foo = 42;
 >s.foo = 42 : 42
+>           : ^^
 >s.foo : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >s : Test1<string>
+>  : ^^^^^^^^^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 

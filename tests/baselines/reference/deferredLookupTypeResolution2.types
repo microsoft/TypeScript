@@ -1,42 +1,61 @@
-=== tests/cases/compiler/deferredLookupTypeResolution2.ts ===
+//// [tests/cases/compiler/deferredLookupTypeResolution2.ts] ////
+
+=== deferredLookupTypeResolution2.ts ===
 // Repro from #17456
 
 type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } & { [key: string]: 'false'})[L];
 >StringContains : StringContains<S, L>
+>               : ^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
 type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
 >ObjectHasKey : ObjectHasKey<O, L>
+>             : ^^^^^^^^^^^^^^^^^^
 
 type A<T> = ObjectHasKey<T, '0'>;
 >A : A<T>
+>  : ^^^^
 
 type B = ObjectHasKey<[string, number], '1'>;  // "true"
 >B : "true"
+>  : ^^^^^^
 
 type C = ObjectHasKey<[string, number], '2'>;  // "false"
 >C : "false"
+>  : ^^^^^^^
 
 type D = A<[string]>;  // "true"
 >D : "true"
+>  : ^^^^^^
 
 // Error, "false" not handled
 type E<T> = { true: 'true' }[ObjectHasKey<T, '1'>];
 >E : E<T>
+>  : ^^^^
 >true : "true"
+>     : ^^^^^^
 
 type Juxtapose<T> = ({ true: 'otherwise' } & { [k: string]: 'true' })[ObjectHasKey<T, '1'>];
 >Juxtapose : Juxtapose<T>
+>          : ^^^^^^^^^^^^
 >true : "otherwise"
+>     : ^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 
 // Error, "otherwise" is missing
 type DeepError<T> = { true: 'true' }[Juxtapose<T>];
 >DeepError : DeepError<T>
+>          : ^^^^^^^^^^^^
 >true : "true"
+>     : ^^^^^^
 
 type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
 >DeepOK : DeepOK<T>
+>       : ^^^^^^^^^
 >true : "true"
+>     : ^^^^^^
 >otherwise : "false"
+>          : ^^^^^^^
 

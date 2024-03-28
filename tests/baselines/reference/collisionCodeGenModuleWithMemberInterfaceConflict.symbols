@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithMemberInterfaceConflict.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithMemberInterfaceConflict.ts] ////
+
+=== collisionCodeGenModuleWithMemberInterfaceConflict.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(collisionCodeGenModuleWithMemberInterfaceConflict.ts, 0, 0))
 

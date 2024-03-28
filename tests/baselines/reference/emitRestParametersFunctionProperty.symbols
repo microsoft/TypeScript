@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/restParameters/emitRestParametersFunctionProperty.ts ===
+//// [tests/cases/conformance/es6/restParameters/emitRestParametersFunctionProperty.ts] ////
+
+=== emitRestParametersFunctionProperty.ts ===
 var obj: {
 >obj : Symbol(obj, Decl(emitRestParametersFunctionProperty.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInWhileStatement.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInWhileStatement.ts] ////
+
+=== typeGuardsInWhileStatement.ts ===
 let cond: boolean;
 >cond : Symbol(cond, Decl(typeGuardsInWhileStatement.ts, 0, 3))
 

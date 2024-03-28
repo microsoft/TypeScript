@@ -1,58 +1,90 @@
-=== tests/cases/compiler/interfaceContextualType.ts ===
+//// [tests/cases/compiler/interfaceContextualType.ts] ////
+
+=== interfaceContextualType.ts ===
 export interface IOptions {
     italic?: boolean;
 >italic : boolean
+>       : ^^^^^^^
 
     bold?: boolean;
 >bold : boolean
+>     : ^^^^^^^
 }
 export interface IMap {
     [s: string]: IOptions;
 >s : string
+>  : ^^^^^^
 }
 
 class Bug {
 >Bug : Bug
+>    : ^^^
 
     public values: IMap;
 >values : IMap
+>       : ^^^^
 
     ok() {
 >ok : () => void
+>   : ^^^^^^^^^^
 
         this.values = {};
 >this.values = {} : {}
+>                 : ^^
 >this.values : IMap
+>            : ^^^^
 >this : this
+>     : ^^^^
 >values : IMap
+>       : ^^^^
 >{} : {}
+>   : ^^
 
         this.values['comments'] = { italic: true };
 >this.values['comments'] = { italic: true } : { italic: true; }
+>                                           : ^^^^^^^^^^^^^^^^^
 >this.values['comments'] : IOptions
+>                        : ^^^^^^^^
 >this.values : IMap
+>            : ^^^^
 >this : this
+>     : ^^^^
 >values : IMap
+>       : ^^^^
 >'comments' : "comments"
+>           : ^^^^^^^^^^
 >{ italic: true } : { italic: true; }
+>                 : ^^^^^^^^^^^^^^^^^
 >italic : true
+>       : ^^^^
 >true : true
+>     : ^^^^
     }
     shouldBeOK() {
 >shouldBeOK : () => void
+>           : ^^^^^^^^^^
 
         this.values = {
 >this.values = {            comments: { italic: true }        } : { comments: { italic: true; }; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.values : IMap
+>            : ^^^^
 >this : this
+>     : ^^^^
 >values : IMap
+>       : ^^^^
 >{            comments: { italic: true }        } : { comments: { italic: true; }; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             comments: { italic: true }
 >comments : { italic: true; }
+>         : ^^^^^^^^^^^^^^^^^
 >{ italic: true } : { italic: true; }
+>                 : ^^^^^^^^^^^^^^^^^
 >italic : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
         };
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads44.ts] ////
+
 //// [functionOverloads44.ts]
 interface Animal { animal }
 interface Dog extends Animal { dog }

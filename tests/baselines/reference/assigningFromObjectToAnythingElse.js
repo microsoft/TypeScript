@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assigningFromObjectToAnythingElse.ts] ////
+
 //// [assigningFromObjectToAnythingElse.ts]
 var x: Object;
 var y: RegExp;

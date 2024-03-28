@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleUnderscoreLabels.ts] ////
+
 //// [doubleUnderscoreLabels.ts]
 function doThing() {
     __call: while (true) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithEnum.ts] ////
+
 //// [arithmeticOperatorWithEnum.ts]
 // operands of an enum type are treated as having the primitive type Number.
 

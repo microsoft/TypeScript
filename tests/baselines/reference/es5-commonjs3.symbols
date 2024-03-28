@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-commonjs3.ts ===
+//// [tests/cases/compiler/es5-commonjs3.ts] ////
+
+=== es5-commonjs3.ts ===
 export default "test";
 export var __esModule = 1;
 >__esModule : Symbol(__esModule, Decl(es5-commonjs3.ts, 1, 10))

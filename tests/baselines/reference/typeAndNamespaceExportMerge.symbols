@@ -1,14 +1,14 @@
-=== tests/cases/conformance/externalModules/constants.ts ===
-// @strict
+//// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
 
+=== constants.ts ===
 export const COFFEE = 0;
->COFFEE : Symbol(COFFEE, Decl(constants.ts, 2, 12))
+>COFFEE : Symbol(COFFEE, Decl(constants.ts, 0, 12))
 
 export const TEA = 1;
->TEA : Symbol(TEA, Decl(constants.ts, 3, 12))
+>TEA : Symbol(TEA, Decl(constants.ts, 1, 12))
 
 
-=== tests/cases/conformance/externalModules/drink.ts ===
+=== drink.ts ===
 export type Drink = 0 | 1;
 >Drink : Symbol(Drink, Decl(drink.ts, 0, 0), Decl(drink.ts, 1, 6))
 
@@ -16,7 +16,7 @@ export * as Drink from "./constants";
 >Drink : Symbol(Drink, Decl(drink.ts, 0, 0), Decl(drink.ts, 1, 6))
 
 
-=== tests/cases/conformance/externalModules/index.ts ===
+=== index.ts ===
 import { Drink } from "./drink";
 >Drink : Symbol(Drink, Decl(index.ts, 0, 8))
 
@@ -24,7 +24,7 @@ import { Drink } from "./drink";
 const x: Drink = Drink.TEA;
 >x : Symbol(x, Decl(index.ts, 2, 5))
 >Drink : Symbol(Drink, Decl(index.ts, 0, 8))
->Drink.TEA : Symbol(TEA, Decl(constants.ts, 3, 12))
+>Drink.TEA : Symbol(TEA, Decl(constants.ts, 1, 12))
 >Drink : Symbol(Drink, Decl(index.ts, 0, 8))
->TEA : Symbol(TEA, Decl(constants.ts, 3, 12))
+>TEA : Symbol(TEA, Decl(constants.ts, 1, 12))
 

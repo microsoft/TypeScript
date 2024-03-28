@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitArrayTypesFromGenericArrayUsage.ts ===
+//// [tests/cases/compiler/declarationEmitArrayTypesFromGenericArrayUsage.ts] ////
+
+=== declarationEmitArrayTypesFromGenericArrayUsage.ts ===
 interface A extends Array<string> { }
 >A : Symbol(A, Decl(declarationEmitArrayTypesFromGenericArrayUsage.ts, 0, 0))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

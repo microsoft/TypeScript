@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration8.ts] ////
+
+=== parserConstructorDeclaration8.ts ===
 class C {
 >C : C
+>  : ^
 
   // Not a constructor
   public constructor;

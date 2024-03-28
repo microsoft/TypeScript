@@ -1,18 +1,18 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_allowJs.ts] ////
+
 === /a.ts ===
 import foo from "foo";
 >foo : Symbol(foo, Decl(a.ts, 0, 6))
 
 foo.bar();
->foo.bar : Symbol(bar, Decl(index.js, 2, 19))
+>foo.bar : Symbol(bar, Decl(index.js, 0, 19))
 >foo : Symbol(foo, Decl(a.ts, 0, 6))
->bar : Symbol(bar, Decl(index.js, 2, 19))
+>bar : Symbol(bar, Decl(index.js, 0, 19))
 
 === /node_modules/foo/index.js ===
-// Same as untypedModuleImport.ts but with --allowJs, so the package will actually be typed.
-
 exports.default = { bar() { return 0; } }
 >exports.default : Symbol(default, Decl(index.js, 0, 0))
 >exports : Symbol(default, Decl(index.js, 0, 0))
 >default : Symbol(default, Decl(index.js, 0, 0))
->bar : Symbol(bar, Decl(index.js, 2, 19))
+>bar : Symbol(bar, Decl(index.js, 0, 19))
 

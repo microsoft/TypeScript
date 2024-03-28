@@ -1,34 +1,49 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImports3-amd.ts] ////
+
+=== t1.ts ===
 export var v = 1;
 >v : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
 export class C {
 >C : C
+>  : ^
 }
 export interface I {
 }
 export enum E {
 >E : E
+>  : ^
 
     A, B, C
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 >C : E.C
+>  : ^^^
 }
 export const enum D {
 >D : D
+>  : ^
 
     A, B, C
 >A : D.A
+>  : ^^^
 >B : D.B
+>  : ^^^
 >C : D.C
+>  : ^^^
 }
 export module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var x;
 >x : any
@@ -39,89 +54,163 @@ export module N {
 }
 export type T = number;
 >T : number
+>  : ^^^^^^
 
 export import a = M.x;
 >a : any
+>  : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 export { v as v1, f as f1, C as C1, I as I1, E as E1, D as D1, M as M1, N as N1, T as T1, a as a1 };
 >v : number
+>  : ^^^^^^
 >v1 : number
+>   : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >f1 : () => void
+>   : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >C1 : typeof C
+>   : ^^^^^^^^
 >I : any
+>  : ^^^
 >I1 : any
+>   : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >E1 : typeof E
+>   : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >D1 : typeof D
+>   : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >M1 : typeof M
+>   : ^^^^^^^^
 >N : any
+>  : ^^^
 >N1 : any
+>   : ^^^
 >T : any
+>  : ^^^
 >T1 : any
+>   : ^^^
 >a : any
+>  : ^^^
 >a1 : any
+>   : ^^^
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N, T1 as T, a1 as a } from "./t1";
 >v1 : number
+>   : ^^^^^^
 >v : number
+>  : ^^^^^^
 >f1 : () => void
+>   : ^^^^^^^^^^
 >f : () => void
->C1 : typeof import("tests/cases/conformance/es6/modules/t1").C
->C : typeof import("tests/cases/conformance/es6/modules/t1").C
+>  : ^^^^^^^^^^
+>C1 : typeof import("t1").C
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>C : typeof import("t1").C
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >I1 : any
+>   : ^^^
 >I : any
->E1 : typeof import("tests/cases/conformance/es6/modules/t1").E
->E : typeof import("tests/cases/conformance/es6/modules/t1").E
->D1 : typeof import("tests/cases/conformance/es6/modules/t1").D
->D : typeof import("tests/cases/conformance/es6/modules/t1").D
->M1 : typeof import("tests/cases/conformance/es6/modules/t1").M
->M : typeof import("tests/cases/conformance/es6/modules/t1").M
+>  : ^^^
+>E1 : typeof import("t1").E
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>E : typeof import("t1").E
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>D1 : typeof import("t1").D
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>D : typeof import("t1").D
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>M1 : typeof import("t1").M
+>   : ^^^^^^^^^^^^^^^^^^^^^
+>M : typeof import("t1").M
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >N1 : any
+>   : ^^^
 >N : any
+>  : ^^^
 >T1 : any
+>   : ^^^
 >T : any
+>  : ^^^
 >a1 : any
+>   : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 import { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N, T1 as T, a1 as a } from "./t1";
 >v1 : number
+>   : ^^^^^^
 >v : number
+>  : ^^^^^^
 >f1 : () => void
+>   : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >C1 : typeof C
+>   : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >I1 : any
+>   : ^^^
 >I : any
+>  : ^^^
 >E1 : typeof E
+>   : ^^^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >D1 : typeof D
+>   : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >M1 : typeof M
+>   : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N1 : any
+>   : ^^^
 >N : any
+>  : ^^^
 >T1 : any
+>   : ^^^
 >T : any
+>  : ^^^
 >a1 : any
+>   : ^^^
 >a : any
+>  : ^^^
 
 export { v, f, C, I, E, D, M, N, T, a };
 >v : number
+>  : ^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >I : any
+>  : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : any
+>  : ^^^
 >T : any
+>  : ^^^
 >a : any
+>  : ^^^
 

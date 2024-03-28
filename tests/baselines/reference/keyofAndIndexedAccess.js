@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts] ////
+
 //// [keyofAndIndexedAccess.ts]
 class Shape {
     name: string;
@@ -1217,13 +1219,13 @@ declare function f81<T extends {
     a: {
         x: any;
     };
-}>(obj: T): T["a"]["x"];
+}>(obj: T): T['a']['x'];
 declare function f82(): void;
 declare function f83<T extends {
     [x: string]: {
         x: any;
     };
-}, K extends keyof T>(obj: T, key: K): T[K]["x"];
+}, K extends keyof T>(obj: T, key: K): T[K]['x'];
 declare function f84(): void;
 declare class C1 {
     x: number;

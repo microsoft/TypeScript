@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/commonJsIsolatedModules.ts] ////
+
+=== index.js ===
 module.exports = {}
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(module, Decl(index.js, 0, 0))

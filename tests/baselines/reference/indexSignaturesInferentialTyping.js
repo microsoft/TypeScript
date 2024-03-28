@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignaturesInferentialTyping.ts] ////
+
 //// [indexSignaturesInferentialTyping.ts]
 function foo<T>(items: { [index: number]: T }): T { return undefined; }
 function bar<T>(items: { [index: string]: T }): T { return undefined; }

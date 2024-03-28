@@ -1,7 +1,7 @@
-tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Property 'foo' does not exist on type 'Foo | Bar'.
+unionPropertyOfProtectedAndIntersectionProperty.ts(19,23): error TS2339: Property 'foo' does not exist on type 'Foo | Bar'.
 
 
-==== tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts (1 errors) ====
+==== unionPropertyOfProtectedAndIntersectionProperty.ts (1 errors) ====
     class Foo {
       protected foo = 0;
     }

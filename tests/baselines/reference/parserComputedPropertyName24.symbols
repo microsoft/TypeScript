@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName24.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName24.ts] ////
+
+=== parserComputedPropertyName24.ts ===
 class C {
 >C : Symbol(C, Decl(parserComputedPropertyName24.ts, 0, 0))
 

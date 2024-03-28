@@ -1,19 +1,24 @@
-=== tests/cases/compiler/file.tsx ===
+//// [tests/cases/compiler/reactJsxReactResolvedNodeNextEsm.tsx] ////
+
+=== file.tsx ===
 export const a = <div></div>;
 >a : error
 ><div></div> : error
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+=== node_modules/@types/react/index.d.ts ===
 declare namespace JSX {
     interface IntrinsicElements { [x: string]: any; }
 >x : string
+>  : ^^^^^^
 }
-=== tests/cases/compiler/node_modules/@types/react/jsx-runtime.d.ts ===
+=== node_modules/@types/react/jsx-runtime.d.ts ===
 
 import './';
-=== tests/cases/compiler/node_modules/@types/react/jsx-dev-runtime.d.ts ===
+=== node_modules/@types/react/jsx-dev-runtime.d.ts ===
 
 import './';
 

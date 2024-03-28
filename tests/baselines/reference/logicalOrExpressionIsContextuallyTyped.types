@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts] ////
+
+=== logicalOrExpressionIsContextuallyTyped.ts ===
 // The || operator permits the operands to be of any type.
 // If the || expression is contextually typed, the operands are contextually typed by the
 // same type and the result is of the best common type of the contextual type and the two
@@ -6,16 +8,29 @@
 
 var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
 >r : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: '', b: 123 } || { a: '', b: true } : { a: string; b: number; } | { a: string; b: boolean; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: '', b: 123 } : { a: string; b: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >b : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >{ a: '', b: true } : { a: string; b: boolean; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 

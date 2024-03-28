@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingClass.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingClass.ts] ////
+
+=== classExtendingClass.ts ===
 class C {
 >C : Symbol(C, Decl(classExtendingClass.ts, 0, 0))
 

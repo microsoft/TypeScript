@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
 //// [variadicTuples2.ts]
 // Declarations
 
@@ -8,6 +10,11 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];  // Error
 type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
+
+type V15 = [...string[], ...number[]];  // Error
+type V16 = [...string[], ...Array<number>];  // Error
+type V17 = [...Array<string>, ...number[]];  // Error
+type V18 = [...Array<string>, ...Array<number>];  // Error
 
 // Normalization
 
@@ -240,6 +247,10 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];
 type V11 = [number, ...string[], boolean?];
 type V12 = [number, string?, boolean];
+type V15 = [...string[], ...number[]];
+type V16 = [...string[], ...Array<number>];
+type V17 = [...Array<string>, ...number[]];
+type V18 = [...Array<string>, ...Array<number>];
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
 type V20 = Tup3<[number], string[], [number]>;
 type V21 = Tup3<[number], [string?], [boolean]>;

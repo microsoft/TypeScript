@@ -1,28 +1,28 @@
-tests/cases/compiler/exportDefaultTypeClassAndValue.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultTypeClassAndValue.ts(2,16): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultTypeClassAndValue.ts(3,22): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultTypeClassAndValue.ts(3,22): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultTypeClassAndValue.ts(5,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeClassAndValue.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultTypeClassAndValue.ts(2,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeClassAndValue.ts(3,22): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultTypeClassAndValue.ts(3,22): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeClassAndValue.ts(5,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/compiler/exportDefaultTypeClassAndValue.ts (5 errors) ====
+==== exportDefaultTypeClassAndValue.ts (5 errors) ====
     const foo = 1
     export default foo
     ~~~~~~~~~~~~~~~~~~
 !!! error TS2323: Cannot redeclare exported variable 'default'.
                    ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/compiler/exportDefaultTypeClassAndValue.ts:5:16: Another export default is here.
+!!! related TS2753 exportDefaultTypeClassAndValue.ts:5:16: Another export default is here.
     export default class Foo {}
                          ~~~
 !!! error TS2323: Cannot redeclare exported variable 'default'.
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 tests/cases/compiler/exportDefaultTypeClassAndValue.ts:5:16: and here.
+!!! related TS6204 exportDefaultTypeClassAndValue.ts:5:16: and here.
     type Bar = {}
     export default Bar
                    ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/compiler/exportDefaultTypeClassAndValue.ts:2:16: The first export default is here.
-!!! related TS2752 tests/cases/compiler/exportDefaultTypeClassAndValue.ts:3:22: The first export default is here.
+!!! related TS2752 exportDefaultTypeClassAndValue.ts:2:16: The first export default is here.
+!!! related TS2752 exportDefaultTypeClassAndValue.ts:3:22: The first export default is here.
     

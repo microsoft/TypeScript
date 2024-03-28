@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/tupleLengthCheck.ts ===
+//// [tests/cases/conformance/types/tuple/tupleLengthCheck.ts] ////
+
+=== tupleLengthCheck.ts ===
 declare const a: [number, string]
 >a : Symbol(a, Decl(tupleLengthCheck.ts, 0, 13))
 

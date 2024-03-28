@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
+//// [tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate.ts] ////
+
+=== errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
 interface Stuff {
 >Stuff : Symbol(Stuff, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 0, 0))
 

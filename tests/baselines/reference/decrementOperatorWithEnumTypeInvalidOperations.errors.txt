@@ -1,18 +1,18 @@
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(14,43): error TS2339: Property 'B' does not exist on type 'typeof ENUM'.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(15,29): error TS2339: Property 'A' does not exist on type 'typeof ENUM'.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts(22,1): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementOperatorWithEnumTypeInvalidOperations.ts(14,43): error TS2339: Property 'B' does not exist on type 'typeof ENUM'.
+decrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementOperatorWithEnumTypeInvalidOperations.ts(15,29): error TS2339: Property 'A' does not exist on type 'typeof ENUM'.
+decrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+decrementOperatorWithEnumTypeInvalidOperations.ts(22,1): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts (12 errors) ====
+==== decrementOperatorWithEnumTypeInvalidOperations.ts (12 errors) ====
     // -- operator on enum type
     
     enum ENUM { };

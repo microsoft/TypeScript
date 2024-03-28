@@ -1,10 +1,10 @@
-tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts(3,5): error TS7008: Member 'getAndSet' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,16): error TS7032: Property 'haveOnlySet' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,28): error TS7006: Parameter 'newXValue' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts(20,16): error TS7010: 'haveOnlyGet', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyGetAndSetAccessorWithAnyReturnType.ts(3,5): error TS7008: Member 'getAndSet' implicitly has an 'any' type.
+implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,16): error TS7032: Property 'haveOnlySet' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,28): error TS7006: Parameter 'newXValue' implicitly has an 'any' type.
+implicitAnyGetAndSetAccessorWithAnyReturnType.ts(20,16): error TS7010: 'haveOnlyGet', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts (4 errors) ====
+==== implicitAnyGetAndSetAccessorWithAnyReturnType.ts (4 errors) ====
     // these should be errors
     class GetAndSet {
         getAndSet = null;             // error at "getAndSet"

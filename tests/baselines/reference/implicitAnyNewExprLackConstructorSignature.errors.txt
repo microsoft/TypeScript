@@ -1,7 +1,7 @@
-tests/cases/compiler/implicitAnyNewExprLackConstructorSignature.ts(2,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+implicitAnyNewExprLackConstructorSignature.ts(2,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/implicitAnyNewExprLackConstructorSignature.ts (1 errors) ====
+==== implicitAnyNewExprLackConstructorSignature.ts (1 errors) ====
     function Point() { this.x = 3; }
     var x: any = new Point();  // error at "new"
                  ~~~~~~~~~~~

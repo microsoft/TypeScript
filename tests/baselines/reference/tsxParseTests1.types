@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxParseTests1.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { div; span; }
@@ -8,16 +10,29 @@ declare module JSX {
 
 var x = <div><div><span><div></div></span></div></div>;
 >x : JSX.Element
+>  : ^^^^^^^^^^^
 ><div><div><span><div></div></span></div></div> : JSX.Element
+>                                               : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 ><div><span><div></div></span></div> : JSX.Element
+>                                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 ><span><div></div></span> : JSX.Element
+>                         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 >span : any
+>     : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 

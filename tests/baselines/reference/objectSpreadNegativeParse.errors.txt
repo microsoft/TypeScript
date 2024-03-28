@@ -1,16 +1,16 @@
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(1,15): error TS2304: Cannot find name 'o'.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(1,18): error TS1109: Expression expected.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(2,12): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(2,15): error TS1109: Expression expected.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(2,16): error TS2304: Cannot find name 'o'.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(3,15): error TS2304: Cannot find name 'matchMedia'.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(3,28): error TS1005: ',' expected.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(3,31): error TS1128: Declaration or statement expected.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(4,16): error TS2304: Cannot find name 'get'.
-tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts(4,20): error TS1005: ',' expected.
+objectSpreadNegativeParse.ts(1,15): error TS2304: Cannot find name 'o'.
+objectSpreadNegativeParse.ts(1,18): error TS1109: Expression expected.
+objectSpreadNegativeParse.ts(2,12): error TS2698: Spread types may only be created from object types.
+objectSpreadNegativeParse.ts(2,15): error TS1109: Expression expected.
+objectSpreadNegativeParse.ts(2,16): error TS2304: Cannot find name 'o'.
+objectSpreadNegativeParse.ts(3,15): error TS2304: Cannot find name 'matchMedia'.
+objectSpreadNegativeParse.ts(3,28): error TS1005: ',' expected.
+objectSpreadNegativeParse.ts(3,31): error TS1128: Declaration or statement expected.
+objectSpreadNegativeParse.ts(4,16): error TS2304: Cannot find name 'get'.
+objectSpreadNegativeParse.ts(4,20): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegativeParse.ts (10 errors) ====
+==== objectSpreadNegativeParse.ts (10 errors) ====
     let o7 = { ...o? };
                   ~
 !!! error TS2304: Cannot find name 'o'.

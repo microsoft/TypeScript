@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocFunctionClassPropertiesDeclaration.ts] ////
+
 //// [a.js]
 /**
  * @param {number | undefined} x
@@ -15,7 +17,7 @@ export function Foo(x, y) {
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
+exports.Foo = Foo;
 /**
  * @param {number | undefined} x
  * @param {number | undefined} y
@@ -27,7 +29,6 @@ function Foo(x, y) {
     this.x = x;
     this.y = y;
 }
-exports.Foo = Foo;
 
 
 //// [a.d.ts]

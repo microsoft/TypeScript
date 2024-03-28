@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts] ////
+
 //// [trailingCommasInFunctionParametersAndArguments.ts]
 function f1(x,) {}
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat4.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat4.ts] ////
+
+=== enumAssignmentCompat4.ts ===
 namespace M {
 >M : Symbol(M, Decl(enumAssignmentCompat4.ts, 0, 0))
 

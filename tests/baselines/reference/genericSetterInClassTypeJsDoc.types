@@ -1,51 +1,76 @@
-=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassTypeJsDoc.js ===
+//// [tests/cases/conformance/classes/members/classTypes/genericSetterInClassTypeJsDoc.ts] ////
+
+=== genericSetterInClassTypeJsDoc.js ===
 /**
  * @template T
  */
  class Box {
 >Box : Box<T>
+>    : ^^^^^^
 
     #value;
 >#value : T
+>       : ^
 
     /** @param {T} initialValue */
     constructor(initialValue) {
 >initialValue : T
+>             : ^
 
         this.#value = initialValue;
 >this.#value = initialValue : T
+>                           : ^
 >this.#value : T
+>            : ^
 >this : this
+>     : ^^^^
 >initialValue : T
+>             : ^
     }
     
     /** @type {T} */
     get value() {
 >value : T
+>      : ^
 
         return this.#value;
 >this.#value : T
+>            : ^
 >this : this
+>     : ^^^^
     }
 
     set value(value) {
 >value : T
+>      : ^
 >value : T
+>      : ^
 
         this.#value = value;
 >this.#value = value : T
+>                    : ^
 >this.#value : T
+>            : ^
 >this : this
+>     : ^^^^
 >value : T
+>      : ^
     }
 }
 
 new Box(3).value = 3;
 >new Box(3).value = 3 : 3
+>                     : ^
 >new Box(3).value : number
+>                 : ^^^^^^
 >new Box(3) : Box<number>
+>           : ^^^^^^^^^^^
 >Box : typeof Box
+>    : ^^^^^^^^^^
 >3 : 3
+>  : ^
 >value : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferFromGenericFunctionReturnTypes2.ts ===
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes2.ts] ////
+
+=== inferFromGenericFunctionReturnTypes2.ts ===
 type Mapper<T, U> = (x: T) => U;
 >Mapper : Symbol(Mapper, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes2.ts, 0, 12))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts] ////
+
 //// [objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts]
 // errors
 var y = {

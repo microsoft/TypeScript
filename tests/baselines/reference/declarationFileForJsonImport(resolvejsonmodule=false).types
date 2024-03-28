@@ -1,15 +1,22 @@
-=== tests/cases/conformance/nonjsExtensions/main.ts ===
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForJsonImport.ts] ////
+
+=== main.ts ===
 import data from "./data.json";
 >data : string
+>     : ^^^^^^
 
 let x: string = data;
 >x : string
+>  : ^^^^^^
 >data : string
+>     : ^^^^^^
 
-=== tests/cases/conformance/nonjsExtensions/data.d.json.ts ===
+=== data.d.json.ts ===
 declare var val: string;
 >val : string
+>    : ^^^^^^
 
 export default val;
 >val : string
+>    : ^^^^^^
 

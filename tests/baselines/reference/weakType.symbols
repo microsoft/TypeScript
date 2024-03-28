@@ -1,4 +1,6 @@
-=== tests/cases/compiler/weakType.ts ===
+//// [tests/cases/compiler/weakType.ts] ////
+
+=== weakType.ts ===
 interface Settings {
 >Settings : Symbol(Settings, Decl(weakType.ts, 0, 0))
 

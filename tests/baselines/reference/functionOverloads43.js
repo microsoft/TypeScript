@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads43.ts] ////
+
 //// [functionOverloads43.ts]
 function foo(bar: { a:number }[]): number;
 function foo(bar: { a:string }[]): string;

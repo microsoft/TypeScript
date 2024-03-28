@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts] ////
+
 //// [conditionalTypeRelaxingConstraintAssignability.ts]
 export type ElChildren =
   | ElChildren.Void

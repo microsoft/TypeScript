@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/declarationEmitWorkWithInlineComments.ts] ////
+
 //// [declarationEmitWorkWithInlineComments.ts]
 export class Foo {
   constructor(

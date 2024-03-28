@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/assignmentToVoidZero1.ts] ////
+
 //// [assignmentToVoidZero1.js]
 // #38552
 exports.y = exports.x = void 0;

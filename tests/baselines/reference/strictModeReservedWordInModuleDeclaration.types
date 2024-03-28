@@ -1,6 +1,9 @@
-=== tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts ===
+//// [tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts] ////
+
+=== strictModeReservedWordInModuleDeclaration.ts ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 module public { }
 module private { }

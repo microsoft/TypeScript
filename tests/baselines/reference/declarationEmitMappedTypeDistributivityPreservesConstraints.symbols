@@ -1,4 +1,6 @@
-=== tests/cases/compiler/types.ts ===
+//// [tests/cases/compiler/declarationEmitMappedTypeDistributivityPreservesConstraints.ts] ////
+
+=== types.ts ===
 type Fns = Record<string, (...params: unknown[]) => unknown>
 >Fns : Symbol(Fns, Decl(types.ts, 0, 0))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
@@ -40,7 +42,7 @@ function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
 export default { fn };
 >fn : Symbol(fn, Decl(types.ts, 10, 16))
 
-=== tests/cases/compiler/reexport.ts ===
+=== reexport.ts ===
 import test from "./types";
 >test : Symbol(test, Decl(reexport.ts, 0, 6))
 

@@ -1,33 +1,50 @@
-=== tests/cases/compiler/genericFunduleInModule2.ts ===
+//// [tests/cases/compiler/genericFunduleInModule2.ts] ////
+
+=== genericFunduleInModule2.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export function B<T>(x: T) { return x; }
 >B : typeof B
+>  : ^^^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 }
 
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 var b: A.B;
 >b : A.B
+>  : ^^^
 >A : any
+>  : ^^^
 
 A.B(1);
 >A.B(1) : 1
+>       : ^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >1 : 1
+>  : ^
 

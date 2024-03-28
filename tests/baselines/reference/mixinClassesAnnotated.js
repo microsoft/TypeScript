@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinClassesAnnotated.ts] ////
+
 //// [mixinClassesAnnotated.ts]
 type Constructor<T> = new(...args: any[]) => T;
 
@@ -175,10 +177,10 @@ interface Tagged {
     _tag: string;
 }
 declare function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T;
-declare const Thing1: Constructor<Tagged> & typeof Derived;
-declare const Thing2: Constructor<Tagged> & Constructor<Printable> & {
+declare const Thing1: typeof Derived & Constructor<Tagged>;
+declare const Thing2: typeof Derived & Constructor<Printable> & {
     message: string;
-} & typeof Derived;
+} & Constructor<Tagged>;
 declare function f1(): void;
 declare function f2(): void;
 declare class Thing3 extends Thing2 {

@@ -1,16 +1,25 @@
-=== tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts ===
+//// [tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts] ////
+
+=== multiLineContextDiagnosticWithPretty.ts ===
 const x: {c: string} = {
 >x : { c: string; }
+>  : ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
 >{    a: {        b: '',    }} : { a: { b: string; }; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^
 
     a: {
 >a : { b: string; }
+>  : ^^^^^^^^^^^^^^
 >{        b: '',    } : { b: string; }
+>                     : ^^^^^^^^^^^^^^
 
         b: '',
 >b : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
     }
 };
 

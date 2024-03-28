@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/constructorNameInGenerator.ts(2,6): error TS1368: Class constructor may not be a generator.
+constructorNameInGenerator.ts(2,6): error TS1368: Class constructor may not be a generator.
 
 
-==== tests/cases/conformance/salsa/constructorNameInGenerator.ts (1 errors) ====
+==== constructorNameInGenerator.ts (1 errors) ====
     class C2 {
         *constructor() {}
          ~~~~~~~~~~~

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/coAndContraVariantInferences4.ts ===
+//// [tests/cases/compiler/coAndContraVariantInferences4.ts] ////
+
+=== coAndContraVariantInferences4.ts ===
 const enum SyntaxKind {
 >SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
 

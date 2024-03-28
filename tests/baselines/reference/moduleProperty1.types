@@ -1,33 +1,50 @@
-=== tests/cases/compiler/moduleProperty1.ts ===
+//// [tests/cases/compiler/moduleProperty1.ts] ////
+
+=== moduleProperty1.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var x=10;  // variable local to this module body
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     var y=x;  // property visible only in module
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     export var z=y;  // property visible to any code
 >z : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     var x = 10;  // variable local to this module body
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     private y = x;  // can't use private in modules
 >y = x : number
+>      : ^^^^^^
 >y : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
 
     export var z = y;  // property visible to any code
 >z : any
+>  : ^^^
 >y : any
+>  : ^^^
 }

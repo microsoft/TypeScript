@@ -1,7 +1,7 @@
-tests/cases/compiler/copyrightWithoutNewLine1.ts(4,24): error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+copyrightWithoutNewLine1.ts(4,24): error TS2792: Cannot find module './greeter'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/copyrightWithoutNewLine1.ts (1 errors) ====
+==== copyrightWithoutNewLine1.ts (1 errors) ====
     /*****************************
     * (c) Copyright - Important
     ****************************/

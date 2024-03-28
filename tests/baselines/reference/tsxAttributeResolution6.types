@@ -1,47 +1,72 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution6.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { n?: boolean; s?: string};
 >test1 : { n?: boolean; s?: string; }
+>      : ^^^^^^       ^^^^^^      ^^^
 >n : boolean
+>  : ^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		test2: { n: boolean; };
 >test2 : { n: boolean; }
+>      : ^^^^^       ^^^
 >n : boolean
+>  : ^^^^^^^
 	}
 }
 
 // Error
 <test1 s />;
 ><test1 s /> : JSX.Element
+>            : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >s : true
+>  : ^^^^
 
 <test1 n='true' />;
 ><test1 n='true' /> : JSX.Element
+>                   : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >n : string
+>  : ^^^^^^
 
 <test2 />;
 ><test2 /> : JSX.Element
+>          : ^^^^^^^^^^^
 >test2 : any
+>      : ^^^
 
 // OK
 <test1 n />;
 ><test1 n /> : JSX.Element
+>            : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >n : true
+>  : ^^^^
 
 <test1 n={false} />;
 ><test1 n={false} /> : JSX.Element
+>                    : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >n : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 <test2 n />;
 ><test2 n /> : JSX.Element
+>            : ^^^^^^^^^^^
 >test2 : any
+>      : ^^^
 >n : true
+>  : ^^^^
 

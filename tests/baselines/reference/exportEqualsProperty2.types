@@ -1,29 +1,40 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/exportEqualsProperty2.ts] ////
+
+=== b.ts ===
 import B = require("./a");
 >B : number
+>  : ^^^^^^
 
 const x: B = { c: B };
 >x : B
+>  : ^
 >{ c: B } : { c: number; }
+>         : ^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >B : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/a.ts ===
-// This test is just like exportDefaultProperty2, but with `export =`.
-
+=== a.ts ===
 class C {
 >C : C
+>  : ^
 
     static B: number;
 >B : number
+>  : ^^^^^^
 }
 namespace C {
     export interface B { c: number }
 >c : number
+>  : ^^^^^^
 }
 
 export = C.B;
 >C.B : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >B : number
+>  : ^^^^^^
 

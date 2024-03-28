@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchAssignmentCompat.ts ===
+//// [tests/cases/compiler/switchAssignmentCompat.ts] ////
+
+=== switchAssignmentCompat.ts ===
 class Foo { }
 >Foo : Symbol(Foo, Decl(switchAssignmentCompat.ts, 0, 0))
 

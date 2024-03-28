@@ -18,5 +18,4 @@
 
 verify.noErrors();
 const [r0Def, r0, r1Def, r1, r2Def, r2, r3Def, r3, r4] = test.ranges();
-verify.renameLocations([r0, r2], [r0, r2, { range: r3, suffixText: ": primary" }]);
-verify.renameLocations([r1, r3, r4], [r1, { range: r3, prefixText: "primary: " }, r4])
+verify.baselineRename([r0, r2, r1, r3, r4]);

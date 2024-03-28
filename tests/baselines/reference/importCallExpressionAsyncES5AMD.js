@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionAsyncES5AMD.ts] ////
+
 //// [test.ts]
 export async function fn() {
     const req = await import('./test') // ONE
@@ -68,7 +70,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
+    exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
+    exports.fn = fn;
     function fn() {
         return __awaiter(this, void 0, void 0, function () {
             var req;
@@ -83,7 +86,6 @@ define(["require", "exports"], function (require, exports) {
             });
         });
     }
-    exports.fn = fn;
     var cl1 = /** @class */ (function () {
         function cl1() {
         }

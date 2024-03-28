@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/moduleExportNonStructured.ts] ////
+
+=== index.mts ===
+import * as exportAny from "./exportAny.cjs";
+>exportAny : { default: any; }
+>          : ^^^^^^^^^^^^^^^^^
+
+import * as exportUnknown from "./exportUnknown.cjs";
+>exportUnknown : { default: unknown; }
+>              : ^^^^^^^^^^^^^^^^^^^^^
+
+import * as exportSymbol from "./exportSymbol.cjs";
+>exportSymbol : { default: symbol; }
+>             : ^^^^^^^^^^^^^^^^^^^^
+
+import type * as exportAnyType from "./exportAny.cjs";
+>exportAnyType : { default: any; }
+>              : ^^^^^^^^^^^^^^^^^
+
+import type * as exportUnknownType from "./exportUnknown.cjs";
+>exportUnknownType : { default: unknown; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^
+
+import type * as exportSymbolType from "./exportSymbol.cjs";
+>exportSymbolType : { default: symbol; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
+
+=== exportAny.d.cts ===
+declare const __: any;
+>__ : any
+>   : ^^^
+
+export = __;
+>__ : any
+>   : ^^^
+
+
+=== exportUnknown.d.cts ===
+declare const __: unknown;
+>__ : unknown
+>   : ^^^^^^^
+
+export = __;
+>__ : unknown
+>   : ^^^^^^^
+
+
+=== exportSymbol.d.cts ===
+declare const __: symbol;
+>__ : symbol
+>   : ^^^^^^
+
+export = __;
+>__ : symbol
+>   : ^^^^^^
+

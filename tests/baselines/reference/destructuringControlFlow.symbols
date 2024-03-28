@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts] ////
+
+=== destructuringControlFlow.ts ===
 function f1(obj: { a?: string }) {
 >f1 : Symbol(f1, Decl(destructuringControlFlow.ts, 0, 0))
 >obj : Symbol(obj, Decl(destructuringControlFlow.ts, 0, 12))

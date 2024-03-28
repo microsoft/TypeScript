@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAbstractClasses.ts] ////
+
 //// [mixinAbstractClasses.ts]
 interface Mixin {
     mixinMethod(): void;
@@ -71,11 +73,11 @@ declare class ConcreteBase {
 declare abstract class AbstractBase {
     abstract abstractBaseMethod(): void;
 }
-declare const DerivedFromConcrete_base: typeof ConcreteBase & (abstract new (...args: any) => Mixin);
+declare const DerivedFromConcrete_base: (abstract new (...args: any) => Mixin) & typeof ConcreteBase;
 declare class DerivedFromConcrete extends DerivedFromConcrete_base {
 }
 declare const wasConcrete: DerivedFromConcrete;
-declare const DerivedFromAbstract_base: typeof AbstractBase & (abstract new (...args: any) => Mixin);
+declare const DerivedFromAbstract_base: (abstract new (...args: any) => Mixin) & typeof AbstractBase;
 declare class DerivedFromAbstract extends DerivedFromAbstract_base {
     abstractBaseMethod(): void;
 }

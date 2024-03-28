@@ -1,9 +1,14 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/moduleResolutionNoResolve.ts] ////
+
+=== a.ts ===
 import a = require('./b');
 >a : typeof a
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export var c = '';
 >c : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 

@@ -1,22 +1,33 @@
-=== tests/cases/compiler/generics4.ts ===
+//// [tests/cases/compiler/generics4.ts] ////
+
+=== generics4.ts ===
 class C<T> { private x: T; }
 >C : C<T>
+>  : ^^^^
 >x : T
+>  : ^
 
 interface X { f(): string; }
 >f : () => string
+>  : ^^^^^^      
 
 interface Y { f(): boolean; }
 >f : () => boolean
+>  : ^^^^^^       
 
 var a: C<X>;
 >a : C<X>
+>  : ^^^^
 
 var b: C<Y>;
 >b : C<Y>
+>  : ^^^^
 
 a = b; // Not ok - return types of "f" are different
 >a = b : C<Y>
+>      : ^^^^
 >a : C<X>
+>  : ^^^^
 >b : C<Y>
+>  : ^^^^
 

@@ -1,149 +1,236 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment.ts] ////
+
+=== a.js ===
 // all references to _map, set, get, addon should be ok
 
 /** @constructor */
 var Multimap = function() {
 >Multimap : typeof Multimap
+>         : ^^^^^^^^^^^^^^^
 >function() {    this._map = {};    this._map    this.set    this.get    this.addon} : typeof Multimap
+>                                                                                    : ^^^^^^^^^^^^^^^
 
     this._map = {};
 >this._map = {} : {}
+>               : ^^
 >this._map : any
+>          : ^^^
 >this : this
+>     : ^^^^
 >_map : any
+>     : ^^^
 >{} : {}
+>   : ^^
 
     this._map
 >this._map : {}
+>          : ^^
 >this : this
+>     : ^^^^
 >_map : {}
+>     : ^^
 
     this.set
 >this.set : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >set : () => void
+>    : ^^^^^^^^^^
 
     this.get
 >this.get : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >get : () => void
+>    : ^^^^^^^^^^
 
     this.addon
 >this.addon : () => void
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >addon : () => void
+>      : ^^^^^^^^^^
 
 };
 
 Multimap.prototype = {
 >Multimap.prototype = {    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get(): void; }
+>                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Multimap.prototype : { set: () => void; get(): void; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Multimap : typeof Multimap
+>         : ^^^^^^^^^^^^^^^
 >prototype : { set: () => void; get(): void; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get(): void; }
+>                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     set: function() {
 >set : () => void
+>    : ^^^^^^^^^^
 >function() {        this._map        this.set        this.get        this.addon    } : () => void
+>                                                                                     : ^^^^^^^^^^
 
         this._map
 >this._map : {}
+>          : ^^
 >this : this
+>     : ^^^^
 >_map : {}
+>     : ^^
 
         this.set
 >this.set : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >set : () => void
+>    : ^^^^^^^^^^
 
         this.get
 >this.get : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >get : () => void
+>    : ^^^^^^^^^^
 
         this.addon
 >this.addon : () => void
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >addon : () => void
+>      : ^^^^^^^^^^
 
     },
     get() {
 >get : () => void
+>    : ^^^^^^^^^^
 
         this._map
 >this._map : {}
+>          : ^^
 >this : this
+>     : ^^^^
 >_map : {}
+>     : ^^
 
         this.set
 >this.set : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >set : () => void
+>    : ^^^^^^^^^^
 
         this.get
 >this.get : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >get : () => void
+>    : ^^^^^^^^^^
 
         this.addon
 >this.addon : () => void
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >addon : () => void
+>      : ^^^^^^^^^^
     }
 }
 
 Multimap.prototype.addon = function () {
 >Multimap.prototype.addon = function () {    this._map    this.set    this.get    this.addon} : () => void
+>                                                                                             : ^^^^^^^^^^
 >Multimap.prototype.addon : any
+>                         : ^^^
 >Multimap.prototype : { set: () => void; get(): void; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Multimap : typeof Multimap
+>         : ^^^^^^^^^^^^^^^
 >prototype : { set: () => void; get(): void; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >addon : any
+>      : ^^^
 >function () {    this._map    this.set    this.get    this.addon} : () => void
+>                                                                  : ^^^^^^^^^^
 
     this._map
 >this._map : {}
+>          : ^^
 >this : this
+>     : ^^^^
 >_map : {}
+>     : ^^
 
     this.set
 >this.set : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >set : () => void
+>    : ^^^^^^^^^^
 
     this.get
 >this.get : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >get : () => void
+>    : ^^^^^^^^^^
 
     this.addon
 >this.addon : () => void
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >addon : () => void
+>      : ^^^^^^^^^^
 }
 
 var mm = new Multimap();
 >mm : Multimap
+>   : ^^^^^^^^
 >new Multimap() : Multimap
+>               : ^^^^^^^^
 >Multimap : typeof Multimap
+>         : ^^^^^^^^^^^^^^^
 
 mm._map
 >mm._map : {}
+>        : ^^
 >mm : Multimap
+>   : ^^^^^^^^
 >_map : {}
+>     : ^^
 
 mm.set
 >mm.set : () => void
+>       : ^^^^^^^^^^
 >mm : Multimap
+>   : ^^^^^^^^
 >set : () => void
+>    : ^^^^^^^^^^
 
 mm.get
 >mm.get : () => void
+>       : ^^^^^^^^^^
 >mm : Multimap
+>   : ^^^^^^^^
 >get : () => void
+>    : ^^^^^^^^^^
 
 mm.addon
 >mm.addon : () => void
+>         : ^^^^^^^^^^
 >mm : Multimap
+>   : ^^^^^^^^
 >addon : () => void
+>      : ^^^^^^^^^^
 

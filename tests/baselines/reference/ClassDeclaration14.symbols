@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ClassDeclaration14.ts ===
+//// [tests/cases/compiler/ClassDeclaration14.ts] ////
+
+=== ClassDeclaration14.ts ===
 class C {
 >C : Symbol(C, Decl(ClassDeclaration14.ts, 0, 0))
 

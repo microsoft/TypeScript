@@ -1,48 +1,74 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethod1.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethod1.ts] ////
+
+=== classAbstractUsingAbstractMethod1.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract foo() : number;
 >foo : () => number
+>    : ^^^^^^      
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     foo() { return 1; }
 >foo : () => number
+>    : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 
 abstract class C extends A  {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     abstract foo() : number;
 >foo : () => number
+>    : ^^^^^^      
 }
 
 var a = new B;
 >a : B
+>  : ^
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 a.foo();
 >a.foo() : number
+>        : ^^^^^^
 >a.foo : () => number
+>      : ^^^^^^^^^^^^
 >a : B
+>  : ^
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
 a = new C; // error, cannot instantiate abstract class.
 >a = new C : any
+>          : ^^^
 >a : B
+>  : ^
 >new C : any
+>      : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 a.foo();
 >a.foo() : number
+>        : ^^^^^^
 >a.foo : () => number
+>      : ^^^^^^^^^^^^
 >a : B
+>  : ^
 >foo : () => number
+>    : ^^^^^^^^^^^^
 

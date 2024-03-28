@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfReferencingFile2.ts] ////
+
 //// [selfReferencingFile2.ts]
 ///<reference path='../selfReferencingFile2.ts'/>
 

@@ -12,15 +12,11 @@
 ////[|const y: import("/*4*/[|{| "contextRangeIndex": 10 |}./[|a|]|]").U = "";|]
 
 verify.noErrors();
-verify.baselineFindAllReferences('0', '1', '2', '3', '4', 'export')
-
 const [r0Def, r0, r1Def, r1, r2Def, rExport, r2, r3Def, r3, r3b, r4Def, r4, r4b] = test.ranges();
-
-verify.renameLocations(r0, [r0, r2]);
-verify.renameLocations(r1, [r1, r2]);
-verify.renameLocations(r2, [r0, r1, r2]);
+verify.baselineFindAllReferences('0', '1', '2', '3', '4', 'export');
+verify.baselineRename([r0, r1, r2]);
 for (const range of [r3b, r4b]) {
     goTo.rangeStart(range);
-    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "/a.ts", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
+    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "./a", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
     verify.renameInfoFailed("You cannot rename this element.", { allowRenameOfImportPath: false });
 }

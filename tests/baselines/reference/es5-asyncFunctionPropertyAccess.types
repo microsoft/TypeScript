@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionPropertyAccess.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionPropertyAccess.ts] ////
+
+=== es5-asyncFunctionPropertyAccess.ts ===
 declare var x, y, z, a, b, c;
 >x : any
 >y : any
@@ -9,6 +11,7 @@ declare var x, y, z, a, b, c;
 
 async function propertyAccess0() {
 >propertyAccess0 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     y = await x.a;
 >y = await x.a : any
@@ -16,24 +19,30 @@ async function propertyAccess0() {
 >await x.a : any
 >x.a : any
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 async function propertyAccess1() {
 >propertyAccess1 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     y = (await x).a;
 >y = (await x).a : any
 >y : any
 >(await x).a : any
 >(await x) : any
+>          : ^^^
 >await x : any
 >x : any
 >a : any
+>  : ^^^
 }
 
 async function callExpression0() {
 >callExpression0 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     await x(y, z);
 >await x(y, z) : any

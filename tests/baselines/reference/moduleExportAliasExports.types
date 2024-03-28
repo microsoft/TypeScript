@@ -1,30 +1,50 @@
-=== tests/cases/conformance/salsa/Eloquent.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasExports.ts] ////
+
+=== Eloquent.js ===
 // bug #27365, crashes from github.com/marijnh/Eloquent-JavaScript
 (function() {
 >(function() {exports.bigOak = 1exports.everywhere = 2module.exports = exports})() : void
+>                                                                                  : ^^^^
 >(function() {exports.bigOak = 1exports.everywhere = 2module.exports = exports}) : () => void
+>                                                                                : ^^^^^^^^^^
 >function() {exports.bigOak = 1exports.everywhere = 2module.exports = exports} : () => void
+>                                                                              : ^^^^^^^^^^
 
 exports.bigOak = 1
 >exports.bigOak = 1 : 1
+>                   : ^
 >exports.bigOak : 1
->exports : typeof import("tests/cases/conformance/salsa/Eloquent")
+>               : ^
+>exports : typeof import("Eloquent")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >bigOak : 1
+>       : ^
 >1 : 1
+>  : ^
 
 exports.everywhere = 2
 >exports.everywhere = 2 : 2
+>                       : ^
 >exports.everywhere : 2
->exports : typeof import("tests/cases/conformance/salsa/Eloquent")
+>                   : ^
+>exports : typeof import("Eloquent")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >everywhere : 2
+>           : ^
 >2 : 2
+>  : ^
 
 module.exports = exports
->module.exports = exports : typeof import("tests/cases/conformance/salsa/Eloquent")
->module.exports : typeof import("tests/cases/conformance/salsa/Eloquent")
->module : { exports: typeof import("tests/cases/conformance/salsa/Eloquent"); }
->exports : typeof import("tests/cases/conformance/salsa/Eloquent")
->exports : typeof import("tests/cases/conformance/salsa/Eloquent")
+>module.exports = exports : typeof import("Eloquent")
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>module.exports : typeof import("Eloquent")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>module : { exports: typeof import("Eloquent"); }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("Eloquent")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("Eloquent")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 })()
 

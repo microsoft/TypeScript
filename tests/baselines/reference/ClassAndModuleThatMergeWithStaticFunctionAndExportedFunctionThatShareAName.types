@@ -1,52 +1,78 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts] ////
+
+=== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts ===
 class Point {
 >Point : Point
+>      : ^^^^^
 
     constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
 >Origin : () => Point
+>       : ^^^^^^     
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 module Point {
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 
     export function Origin() { return null; } //expected duplicate identifier error
 >Origin : () => any
+>       : ^^^^^^^^^
 }
 
 
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class Point {
 >Point : Point
+>      : ^^^^^
 
         constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
         static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
 >Origin : () => Point
+>       : ^^^^^^     
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
     }
 
     export module Point {
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 
         export function Origin() { return ""; }//expected duplicate identifier error
 >Origin : () => string
+>       : ^^^^^^^^^^^^
 >"" : ""
+>   : ^^
     }
 }

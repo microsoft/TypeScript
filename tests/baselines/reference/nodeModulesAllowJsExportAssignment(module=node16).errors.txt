@@ -1,20 +1,20 @@
-tests/cases/conformance/node/allowJs/file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/node/allowJs/index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-tests/cases/conformance/node/allowJs/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
-tests/cases/conformance/node/allowJs/subfolder/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
+file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
+subfolder/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
 
 
-==== tests/cases/conformance/node/allowJs/subfolder/index.js (1 errors) ====
+==== subfolder/index.js (1 errors) ====
     // cjs format file
     const a = {};
     export = a;
     ~~~~~~~~~~~
 !!! error TS8003: 'export =' can only be used in TypeScript files.
-==== tests/cases/conformance/node/allowJs/subfolder/file.js (0 errors) ====
+==== subfolder/file.js (0 errors) ====
     // cjs format file
     const a = {};
     module.exports = a;
-==== tests/cases/conformance/node/allowJs/index.js (2 errors) ====
+==== index.js (2 errors) ====
     // esm format file
     const a = {};
     export = a;
@@ -22,20 +22,20 @@ tests/cases/conformance/node/allowJs/subfolder/index.js(3,1): error TS8003: 'exp
 !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     ~~~~~~~~~~~
 !!! error TS8003: 'export =' can only be used in TypeScript files.
-==== tests/cases/conformance/node/allowJs/file.js (1 errors) ====
+==== file.js (1 errors) ====
     // esm format file
     import "fs";
     const a = {};
     module.exports = a;
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }

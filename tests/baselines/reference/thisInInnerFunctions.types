@@ -1,45 +1,65 @@
-=== tests/cases/compiler/thisInInnerFunctions.ts ===
+//// [tests/cases/compiler/thisInInnerFunctions.ts] ////
+
+=== thisInInnerFunctions.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x = "hello";
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         function inner() {
 >inner : () => void
+>      : ^^^^^^^^^^
 
             this.y = "hi"; // 'this' should be not type to 'Foo' either
 >this.y = "hi" : "hi"
+>              : ^^^^
 >this.y : any
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
 >"hi" : "hi"
+>     : ^^^^
 
             var f = () => this.y;  // 'this' should be not type to 'Foo' either
 >f : () => any
+>  : ^^^^^^^^^
 >() => this.y : () => any
+>             : ^^^^^^^^^
 >this.y : any
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
         }
     }
 }
 
 function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
     var x = () => {
 >x : () => void
+>  : ^^^^^^^^^^
 >() => {        (() => this)();        this;    } : () => void
+>                                                 : ^^^^^^^^^^
 
         (() => this)();
 >(() => this)() : any
 >(() => this) : () => any
+>             : ^^^^^^^^^
 >() => this : () => any
+>           : ^^^^^^^^^
 >this : any
 
         this;

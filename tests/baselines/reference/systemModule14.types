@@ -1,22 +1,32 @@
-=== tests/cases/compiler/systemModule14.ts ===
+//// [tests/cases/compiler/systemModule14.ts] ////
+
+=== systemModule14.ts ===
 function foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
     return a;
 >a : any
+>  : ^^^
 }
 
 import {a} from "foo";
 >a : any
+>  : ^^^
 
 export {foo}
 >foo : () => any
+>    : ^^^^^^^^^
 
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export {foo as b}
 >foo : () => any
+>    : ^^^^^^^^^
 >b : () => any
+>  : ^^^^^^^^^
 

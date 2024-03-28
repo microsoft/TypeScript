@@ -1,14 +1,23 @@
-=== tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts ===
+//// [tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts] ////
+
+=== strictModeOctalLiterals.ts ===
 export enum E {
 >E : E
+>  : ^
 
     A = 12 + 01
 >A : E.A
+>  : ^^^
 >12 + 01 : number
+>        : ^^^^^^
 >12 : 12
+>   : ^^
 >01 : 1
+>   : ^
 }
 const orbitol: 01 = 01
 >orbitol : 1
+>        : ^
 >01 : 1
+>   : ^
 

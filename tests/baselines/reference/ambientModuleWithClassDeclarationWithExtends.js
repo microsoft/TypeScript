@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientModuleWithClassDeclarationWithExtends.ts] ////
+
 //// [ambientModuleWithClassDeclarationWithExtends.ts]
 declare module foo {
     class A { }

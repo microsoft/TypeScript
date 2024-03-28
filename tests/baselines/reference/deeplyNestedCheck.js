@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedCheck.ts] ////
+
 //// [deeplyNestedCheck.ts]
 // Repro from #14794
 

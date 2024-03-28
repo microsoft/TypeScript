@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterWithInvalidConstraintType.ts ===
+//// [tests/cases/compiler/typeParameterWithInvalidConstraintType.ts] ////
+
+=== typeParameterWithInvalidConstraintType.ts ===
 class A<T extends T> {
 >A : Symbol(A, Decl(typeParameterWithInvalidConstraintType.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterWithInvalidConstraintType.ts, 0, 8))

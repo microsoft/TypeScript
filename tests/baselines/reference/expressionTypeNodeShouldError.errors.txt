@@ -1,24 +1,24 @@
-tests/cases/compiler/base.d.ts(1,23): error TS1005: ',' expected.
-tests/cases/compiler/base.d.ts(1,34): error TS1005: ',' expected.
-tests/cases/compiler/boolean.ts(7,23): error TS1005: ',' expected.
-tests/cases/compiler/boolean.ts(7,24): error TS1389: 'typeof' is not allowed as a variable declaration name.
-tests/cases/compiler/boolean.ts(12,22): error TS1005: ';' expected.
-tests/cases/compiler/number.ts(7,26): error TS1005: ',' expected.
-tests/cases/compiler/number.ts(7,27): error TS1389: 'typeof' is not allowed as a variable declaration name.
-tests/cases/compiler/number.ts(12,20): error TS1005: ';' expected.
-tests/cases/compiler/string.ts(7,20): error TS1005: ',' expected.
-tests/cases/compiler/string.ts(7,21): error TS1389: 'typeof' is not allowed as a variable declaration name.
-tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
+base.d.ts(1,23): error TS1005: ',' expected.
+base.d.ts(1,34): error TS1005: ',' expected.
+boolean.ts(7,23): error TS1005: ',' expected.
+boolean.ts(7,24): error TS1389: 'typeof' is not allowed as a variable declaration name.
+boolean.ts(12,22): error TS1005: ';' expected.
+number.ts(7,26): error TS1005: ',' expected.
+number.ts(7,27): error TS1389: 'typeof' is not allowed as a variable declaration name.
+number.ts(12,20): error TS1005: ';' expected.
+string.ts(7,20): error TS1005: ',' expected.
+string.ts(7,21): error TS1389: 'typeof' is not allowed as a variable declaration name.
+string.ts(12,19): error TS1005: ';' expected.
 
 
-==== tests/cases/compiler/base.d.ts (2 errors) ====
+==== base.d.ts (2 errors) ====
     declare const x: "foo".charCodeAt(0);
                           ~
 !!! error TS1005: ',' expected.
                                      ~
 !!! error TS1005: ',' expected.
     
-==== tests/cases/compiler/string.ts (3 errors) ====
+==== string.ts (3 errors) ====
     interface String {
         typeof<T>(x: T): T;
     }
@@ -38,7 +38,7 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
                       ~
 !!! error TS1005: ';' expected.
     
-==== tests/cases/compiler/number.ts (3 errors) ====
+==== number.ts (3 errors) ====
     interface Number {
         typeof<T>(x: T): T;
     }
@@ -58,7 +58,7 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
                        ~
 !!! error TS1005: ';' expected.
     
-==== tests/cases/compiler/boolean.ts (3 errors) ====
+==== boolean.ts (3 errors) ====
     interface Boolean {
         typeof<T>(x: T): T;
     }

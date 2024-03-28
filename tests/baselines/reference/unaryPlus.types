@@ -1,42 +1,67 @@
-=== tests/cases/compiler/unaryPlus.ts ===
+//// [tests/cases/compiler/unaryPlus.ts] ////
+
+=== unaryPlus.ts ===
 // allowed per spec
 var a = +1;
 >a : number
+>  : ^^^^^^
 >+1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
 var b = +(<any>"");
 >b : number
+>  : ^^^^^^
 >+(<any>"") : number
+>           : ^^^^^^
 >(<any>"") : any
 ><any>"" : any
 >"" : ""
+>   : ^^
 
 enum E { some, thing };
 >E : E
+>  : ^
 >some : E.some
+>     : ^^^^^^
 >thing : E.thing
+>      : ^^^^^^^
 
 var c = +E.some;
 >c : number
+>  : ^^^^^^
 >+E.some : number
+>        : ^^^^^^
 >E.some : E.some
+>       : ^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >some : E.some
+>     : ^^^^^^
 
 // also allowed, used to be errors
 var x = +"3"; //should be valid
 >x : number
+>  : ^^^^^^
 >+"3" : number
+>     : ^^^^^^
 >"3" : "3"
+>    : ^^^
 
 var y = -"3"; // should be valid
 >y : number
+>  : ^^^^^^
 >-"3" : number
+>     : ^^^^^^
 >"3" : "3"
+>    : ^^^
 
 var z = ~"3"; // should be valid
 >z : number
+>  : ^^^^^^
 >~"3" : number
+>     : ^^^^^^
 >"3" : "3"
+>    : ^^^
 

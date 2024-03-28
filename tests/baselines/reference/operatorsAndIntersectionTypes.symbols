@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/operatorsAndIntersectionTypes.ts ===
+//// [tests/cases/conformance/types/intersection/operatorsAndIntersectionTypes.ts] ////
+
+=== operatorsAndIntersectionTypes.ts ===
 type Guid = string & { $Guid };          // Tagged string type
 >Guid : Symbol(Guid, Decl(operatorsAndIntersectionTypes.ts, 0, 0))
 >$Guid : Symbol($Guid, Decl(operatorsAndIntersectionTypes.ts, 0, 22))

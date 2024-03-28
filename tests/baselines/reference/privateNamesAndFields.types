@@ -1,36 +1,53 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts] ////
+
+=== privateNamesAndFields.ts ===
 class A {
 >A : A
+>  : ^
 
     #foo: number;
 >#foo : number
+>     : ^^^^^^
 
     constructor () {
         this.#foo = 3;
 >this.#foo = 3 : 3
+>              : ^
 >this.#foo : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >3 : 3
+>  : ^
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     #foo: string;
 >#foo : string
+>     : ^^^^^^
 
     constructor () {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
 
         this.#foo = "some string";
 >this.#foo = "some string" : "some string"
+>                          : ^^^^^^^^^^^^^
 >this.#foo : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >"some string" : "some string"
+>              : ^^^^^^^^^^^^^
     }
 }
 

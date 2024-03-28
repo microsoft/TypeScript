@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass1.ts] ////
+
 //// [parserClass1.ts]
     export class NullLogger implements ILogger {
         public information(): boolean { return false; }

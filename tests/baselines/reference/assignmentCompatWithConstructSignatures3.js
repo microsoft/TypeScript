@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts] ////
+
 //// [assignmentCompatWithConstructSignatures3.ts]
 // checking assignment compatibility relations for function types. All of these are valid.
 

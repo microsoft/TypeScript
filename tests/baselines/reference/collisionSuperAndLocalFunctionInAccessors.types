@@ -1,78 +1,108 @@
-=== tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts ===
+//// [tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts] ////
+
+=== collisionSuperAndLocalFunctionInAccessors.ts ===
 function _super() { // No error
 >_super : () => void
+>       : ^^^^^^^^^^
 }
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     get prop1(): number {
 >prop1 : number
+>      : ^^^^^^
 
         function _super() { // No error
 >_super : () => void
+>       : ^^^^^^^^^^
         }
         return 10;
 >10 : 10
+>   : ^^
     }
     set prop1(val: number) {
 >prop1 : number
+>      : ^^^^^^
 >val : number
+>    : ^^^^^^
 
         function _super() { // No error
 >_super : () => void
+>       : ^^^^^^^^^^
         }
     }
 }
 class b extends Foo {
 >b : b
+>  : ^
 >Foo : Foo
+>    : ^^^
 
     get prop2(): number {
 >prop2 : number
+>      : ^^^^^^
 
         function _super() { // Should be error
 >_super : () => void
+>       : ^^^^^^^^^^
         }
         return 10;
 >10 : 10
+>   : ^^
     }
     set prop2(val: number) {
 >prop2 : number
+>      : ^^^^^^
 >val : number
+>    : ^^^^^^
 
         function _super() { // Should be error
 >_super : () => void
+>       : ^^^^^^^^^^
         }
     }
 }
 class c extends Foo {
 >c : c
+>  : ^
 >Foo : Foo
+>    : ^^^
 
     get prop2(): number {
 >prop2 : number
+>      : ^^^^^^
 
         var x = () => {
 >x : () => void
+>  : ^^^^^^^^^^
 >() => {            function _super() { // Should be error            }        } : () => void
+>                                                                                : ^^^^^^^^^^
 
             function _super() { // Should be error
 >_super : () => void
+>       : ^^^^^^^^^^
             }
         }
         return 10;
 >10 : 10
+>   : ^^
     }
     set prop2(val: number) {
 >prop2 : number
+>      : ^^^^^^
 >val : number
+>    : ^^^^^^
 
         var x = () => {
 >x : () => void
+>  : ^^^^^^^^^^
 >() => {            function _super() { // Should be error            }        } : () => void
+>                                                                                : ^^^^^^^^^^
 
             function _super() { // Should be error
 >_super : () => void
+>       : ^^^^^^^^^^
             }
         }
     }

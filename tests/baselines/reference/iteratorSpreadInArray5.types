@@ -1,42 +1,64 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInArray5.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInArray5.ts] ////
+
+=== iteratorSpreadInArray5.ts ===
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
+>               : ^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: symbol; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: Symbol(),
 >value : symbol
+>      : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var array: number[] = [0, 1, ...new SymbolIterator];
 >array : number[]
+>      : ^^^^^^^^
 >[0, 1, ...new SymbolIterator] : (number | symbol)[]
+>                              : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 >...new SymbolIterator : symbol
+>                      : ^^^^^^
 >new SymbolIterator : SymbolIterator
+>                   : ^^^^^^^^^^^^^^
 >SymbolIterator : typeof SymbolIterator
+>               : ^^^^^^^^^^^^^^^^^^^^^
 

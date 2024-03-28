@@ -1,0 +1,101 @@
+// === goToDefinition ===
+// === /foo.js ===
+// [|function notExported() { }
+// class Blah {
+//    abc = 123;
+// }
+// module.exports.Blah = Blah;|]
+
+// === /bar.js ===
+// const /*GOTO DEF*/[|BlahModule|] = require("./foo.js");
+// new BlahModule.Blah()
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/foo\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.js ===
+// [|function notExported() { }
+// class Blah {
+//    abc = 123;
+// }
+// module.exports.Blah = Blah;|]
+
+// === /bar.js ===
+// const BlahModule = require("./foo.js");
+// new /*GOTO DEF*/[|BlahModule|].Blah()
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/foo\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.js ===
+// [|function notExported() { }
+// class Blah {
+//    abc = 123;
+// }
+// module.exports.Blah = Blah;|]
+
+// === /barTs.ts ===
+// import /*GOTO DEF*/[|BlahModule|] = require("./foo.js");
+// new BlahModule.Blah()
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/foo\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.js ===
+// [|function notExported() { }
+// class Blah {
+//    abc = 123;
+// }
+// module.exports.Blah = Blah;|]
+
+// === /barTs.ts ===
+// import BlahModule = require("./foo.js");
+// new /*GOTO DEF*/[|BlahModule|].Blah()
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/foo\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

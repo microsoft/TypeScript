@@ -1,12 +1,12 @@
-tests/cases/conformance/salsa/a.js(9,8): error TS2339: Property 'y' does not exist on type '{}'.
-tests/cases/conformance/salsa/a.js(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"z"' can't be used to index type '{}'.
+a.js(9,8): error TS2339: Property 'y' does not exist on type '{}'.
+a.js(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"z"' can't be used to index type '{}'.
   Property 'z' does not exist on type '{}'.
-tests/cases/conformance/salsa/a.js(16,10): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/conformance/salsa/a.js(18,3): error TS7053: Element implicitly has an 'any' type because expression of type '"c"' can't be used to index type '{}'.
+a.js(16,10): error TS2339: Property 'b' does not exist on type '{}'.
+a.js(18,3): error TS7053: Element implicitly has an 'any' type because expression of type '"c"' can't be used to index type '{}'.
   Property 'c' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/salsa/a.js (4 errors) ====
+==== a.js (4 errors) ====
     // This test is asserting that a single property/element access
     // on `this` is a special assignment declaration, but chaining
     // off that does not create additional declarations. I’m not sure

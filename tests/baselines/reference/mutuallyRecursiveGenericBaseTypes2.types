@@ -1,18 +1,27 @@
-=== tests/cases/compiler/mutuallyRecursiveGenericBaseTypes2.ts ===
+//// [tests/cases/compiler/mutuallyRecursiveGenericBaseTypes2.ts] ////
+
+=== mutuallyRecursiveGenericBaseTypes2.ts ===
 class foo<T>
 >foo : foo<T>
+>    : ^^^^^^
 {
     bar(): foo2<T[]> { return null; }
 >bar : () => foo2<T[]>
+>    : ^^^^^^         
 }
  
 class foo2<T> extends foo<T> {
 >foo2 : foo2<T>
+>     : ^^^^^^^
 >foo : foo<T>
+>    : ^^^^^^
 }
  
 var test = new foo<string>();
 >test : foo<string>
+>     : ^^^^^^^^^^^
 >new foo<string>() : foo<string>
+>                  : ^^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 

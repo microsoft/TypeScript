@@ -1,9 +1,12 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution10.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface ElementClass {
 		render: any;
 >render : any
+>       : ^^^
 	}
 	interface IntrinsicElements { }
 }
@@ -11,31 +14,48 @@ declare module JSX {
 interface Obj1type {
 	new(n: string): { x: number };
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 var Obj1: Obj1type;
 >Obj1 : Obj1type
+>     : ^^^^^^^^
 
 <Obj1 x={10} />; // Error, no render member
 ><Obj1 x={10} /> : JSX.Element
+>                : ^^^^^^^^^^^
 >Obj1 : Obj1type
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 interface Obj2type {
 	(n: string): { x: number; render: any; };
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >render : any
+>       : ^^^
 }
 var Obj2: Obj2type;
 >Obj2 : Obj2type
+>     : ^^^^^^^^
 
 <Obj2 x={32} render={100} />; // OK
 ><Obj2 x={32} render={100} /> : JSX.Element
+>                             : ^^^^^^^^^^^
 >Obj2 : Obj2type
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >32 : 32
+>   : ^^
 >render : number
+>       : ^^^^^^
 >100 : 100
+>    : ^^^
 

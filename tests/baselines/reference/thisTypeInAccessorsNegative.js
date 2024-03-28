@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts] ////
+
 //// [thisTypeInAccessorsNegative.ts]
 interface Foo {
     n: number;

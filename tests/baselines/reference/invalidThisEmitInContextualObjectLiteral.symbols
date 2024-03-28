@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts ===
+//// [tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts] ////
+
+=== invalidThisEmitInContextualObjectLiteral.ts ===
 interface IDef {
 >IDef : Symbol(IDef, Decl(invalidThisEmitInContextualObjectLiteral.ts, 0, 0))
 

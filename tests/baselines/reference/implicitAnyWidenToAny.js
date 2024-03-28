@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyWidenToAny.ts] ////
+
 //// [implicitAnyWidenToAny.ts]
 // these should be errors
 var x = null;                        // error at "x"

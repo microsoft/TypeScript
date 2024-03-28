@@ -1,5 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement1.d.ts] ////
+
+=== parserForInStatement1.d.ts ===
 for (var i in e) {
 >i : string
+>  : ^^^^^^
 >e : any
+>  : ^^^
 }

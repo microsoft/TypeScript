@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts] ////
+
 //// [restElementWithNullInitializer.ts]
 function foo1([...r] = null) {
 }

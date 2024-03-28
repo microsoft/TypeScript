@@ -1,61 +1,86 @@
-=== tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts ===
+//// [tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts] ////
+
+=== typeUsedAsTypeLiteralIndex.ts ===
 type K = number | string;
->K : string | number
+>K : K
+>  : ^
 
 type T = {
->T : {}
+>T : T
+>  : ^
 
     [K]: number;  // Did you mean to use 'P in K'?
 >[K] : number
+>    : ^^^^^^
 >K : any
+>  : ^^^
 }
 
 const K1 = Symbol();
 >K1 : unique symbol
+>   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 type T1 = {
->T1 : { [K1]: number; }
+>T1 : T1
+>   : ^^
 
     [K1]: number;
 >[K1] : number
+>     : ^^^^^^
 >K1 : unique symbol
+>   : ^^^^^^^^^^^^^
 }
 
 type K2 = "x" | "y";
->K2 : "x" | "y"
+>K2 : K2
+>   : ^^
 
 type T2 = {
->T2 : {}
+>T2 : T2
+>   : ^^
 
     [K2]: number;  // Did you mean to use 'K in K2'?
 >[K2] : number
+>     : ^^^^^^
 >K2 : any
+>   : ^^^
 }
 
 type K3 = number | string;
->K3 : string | number
+>K3 : K3
+>   : ^^
 
 type T3 = {
->T3 : {}
+>T3 : T3
+>   : ^^
 
     [K3]: number; // Did you mean to use 'K in K3'?
 >[K3] : number
+>     : ^^^^^^
 >K3 : any
+>   : ^^^
 }
 
 type K4 = number | string;
->K4 : string | number
+>K4 : K4
+>   : ^^
 
 type T4 = {
->T4 : { k4: string; }
+>T4 : T4
+>   : ^^
 
     [K4]: number;
 >[K4] : number
+>     : ^^^^^^
 >K4 : any
+>   : ^^^
 
     k4: string;
 >k4 : string
+>   : ^^^^^^
 }
 

@@ -1,21 +1,21 @@
-tests/cases/compiler/overloadResolutionTest1.ts(7,18): error TS2769: No overload matches this call.
+overloadResolutionTest1.ts(7,18): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
     Type 'string' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/compiler/overloadResolutionTest1.ts(18,16): error TS2769: No overload matches this call.
+overloadResolutionTest1.ts(18,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }): string', gave the following error.
     Type 'string' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: boolean; }): number', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overload matches this call.
+overloadResolutionTest1.ts(24,15): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }): number', gave the following error.
     Type 'boolean' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: string; }): string', gave the following error.
     Type 'boolean' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/overloadResolutionTest1.ts (3 errors) ====
+==== overloadResolutionTest1.ts (3 errors) ====
     function foo(bar:{a:number;}[]):string;
     function foo(bar:{a:boolean;}[]):number;
     function foo(bar:{a:any;}[]):any{ return bar };
@@ -29,9 +29,9 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overloa
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:1:19: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
-!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:2:19: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
-!!! related TS2793 tests/cases/compiler/overloadResolutionTest1.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+!!! related TS6500 overloadResolutionTest1.ts:1:19: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
+!!! related TS6500 overloadResolutionTest1.ts:2:19: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
+!!! related TS2793 overloadResolutionTest1.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
     
     
@@ -49,9 +49,9 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overloa
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 2, '(bar: { a: boolean; }): number', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:12:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
-!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:13:20: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
-!!! related TS2793 tests/cases/compiler/overloadResolutionTest1.ts:14:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+!!! related TS6500 overloadResolutionTest1.ts:12:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
+!!! related TS6500 overloadResolutionTest1.ts:13:20: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
+!!! related TS2793 overloadResolutionTest1.ts:14:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     
     function foo4(bar:{a:number;}):number;
@@ -64,6 +64,6 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overloa
 !!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 2, '(bar: { a: string; }): string', gave the following error.
 !!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:21:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
-!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:22:20: The expected type comes from property 'a' which is declared here on type '{ a: string; }'
-!!! related TS2793 tests/cases/compiler/overloadResolutionTest1.ts:23:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+!!! related TS6500 overloadResolutionTest1.ts:21:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
+!!! related TS6500 overloadResolutionTest1.ts:22:20: The expected type comes from property 'a' which is declared here on type '{ a: string; }'
+!!! related TS2793 overloadResolutionTest1.ts:23:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.

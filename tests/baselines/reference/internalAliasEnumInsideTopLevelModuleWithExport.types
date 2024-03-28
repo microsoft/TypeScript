@@ -1,29 +1,43 @@
-=== tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithExport.ts ===
+//// [tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithExport.ts] ////
+
+=== internalAliasEnumInsideTopLevelModuleWithExport.ts ===
 export module a {
 >a : typeof a
+>  : ^^^^^^^^
 
     export enum weekend {
 >weekend : weekend
+>        : ^^^^^^^
 
         Friday,
 >Friday : weekend.Friday
+>       : ^^^^^^^^^^^^^^
 
         Saturday,
 >Saturday : weekend.Saturday
+>         : ^^^^^^^^^^^^^^^^
 
         Sunday
 >Sunday : weekend.Sunday
+>       : ^^^^^^^^^^^^^^
     }
 }
 
 export import b = a.weekend;
 >b : typeof b
+>  : ^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >weekend : b
+>        : ^
 
 export var bVal: b = b.Sunday;
 >bVal : b
+>     : ^
 >b.Sunday : b.Sunday
+>         : ^^^^^^^^
 >b : typeof b
+>  : ^^^^^^^^
 >Sunday : b.Sunday
+>       : ^^^^^^^^
 

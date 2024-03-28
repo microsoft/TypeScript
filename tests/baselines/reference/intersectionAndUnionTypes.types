@@ -1,143 +1,219 @@
-=== tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts] ////
+
+=== intersectionAndUnionTypes.ts ===
 interface A { a: string }
 >a : string
+>  : ^^^^^^
 
 interface B { b: string }
 >b : string
+>  : ^^^^^^
 
 interface C { c: string }
 >c : string
+>  : ^^^^^^
 
 interface D { d: string }
 >d : string
+>  : ^^^^^^
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 var c: C;
 >c : C
+>  : ^
 
 var d: D;
 >d : D
+>  : ^
 
 var anb: A & B;
 >anb : A & B
+>    : ^^^^^
 
 var aob: A | B;
 >aob : A | B
+>    : ^^^^^
 
 var cnd: C & D;
 >cnd : C & D
+>    : ^^^^^
 
 var cod: C | D;
 >cod : C | D
+>    : ^^^^^
 
 var x: A & B | C & D;
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 
 var y: (A | B) & (C | D);
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 
 a = anb;  // Ok
 >a = anb : A & B
+>        : ^^^^^
 >a : A
+>  : ^
 >anb : A & B
+>    : ^^^^^
 
 b = anb;  // Ok
 >b = anb : A & B
+>        : ^^^^^
 >b : B
+>  : ^
 >anb : A & B
+>    : ^^^^^
 
 anb = a;
 >anb = a : A
+>        : ^
 >anb : A & B
+>    : ^^^^^
 >a : A
+>  : ^
 
 anb = b;
 >anb = b : B
+>        : ^
 >anb : A & B
+>    : ^^^^^
 >b : B
+>  : ^
 
 x = anb;  // Ok
 >x = anb : A & B
+>        : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 >anb : A & B
+>    : ^^^^^
 
 x = aob;
 >x = aob : A | B
+>        : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 >aob : A | B
+>    : ^^^^^
 
 x = cnd;  // Ok
 >x = cnd : C & D
+>        : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 >cnd : C & D
+>    : ^^^^^
 
 x = cod;
 >x = cod : C | D
+>        : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 >cod : C | D
+>    : ^^^^^
 
 anb = x;
 >anb = x : (A & B) | (C & D)
+>        : ^^^^^^^^^^^^^^^^^
 >anb : A & B
+>    : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 
 aob = x;
 >aob = x : (A & B) | (C & D)
+>        : ^^^^^^^^^^^^^^^^^
 >aob : A | B
+>    : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 
 cnd = x;
 >cnd = x : (A & B) | (C & D)
+>        : ^^^^^^^^^^^^^^^^^
 >cnd : C & D
+>    : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 
 cod = x;
 >cod = x : (A & B) | (C & D)
+>        : ^^^^^^^^^^^^^^^^^
 >cod : C | D
+>    : ^^^^^
 >x : (A & B) | (C & D)
+>  : ^^^^^^^^^^^^^^^^^
 
 y = anb;
 >y = anb : A & B
+>        : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 >anb : A & B
+>    : ^^^^^
 
 y = aob;
 >y = aob : A | B
+>        : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 >aob : A | B
+>    : ^^^^^
 
 y = cnd;
 >y = cnd : C & D
+>        : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 >cnd : C & D
+>    : ^^^^^
 
 y = cod;
 >y = cod : C | D
+>        : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 >cod : C | D
+>    : ^^^^^
 
 anb = y;
 >anb = y : (A | B) & (C | D)
+>        : ^^^^^^^^^^^^^^^^^
 >anb : A & B
+>    : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 
 aob = y;  // Ok
 >aob = y : (A | B) & (C | D)
+>        : ^^^^^^^^^^^^^^^^^
 >aob : A | B
+>    : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 
 cnd = y;
 >cnd = y : (A | B) & (C | D)
+>        : ^^^^^^^^^^^^^^^^^
 >cnd : C & D
+>    : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 
 cod = y;  // Ok
 >cod = y : (A | B) & (C | D)
+>        : ^^^^^^^^^^^^^^^^^
 >cod : C | D
+>    : ^^^^^
 >y : (A | B) & (C | D)
+>  : ^^^^^^^^^^^^^^^^^
 

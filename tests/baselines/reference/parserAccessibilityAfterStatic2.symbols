@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic2.ts] ////
+
+=== parserAccessibilityAfterStatic2.ts ===
 class Outer
 >Outer : Symbol(Outer, Decl(parserAccessibilityAfterStatic2.ts, 0, 0))
 {

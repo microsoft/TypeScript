@@ -1,10 +1,9 @@
-tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(27,30): error TS2322: Type '{ a: null; b: string; c: number; }' is not assignable to type '{ a: null; b: string; } | { a: string; c: number; }'.
-  Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
-tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS2339: Property 'b' does not exist on type '{ a: 0; b: string; } | { a: T; c: number; }'.
+discriminatedUnionTypes2.ts(27,30): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
+discriminatedUnionTypes2.ts(32,11): error TS2339: Property 'b' does not exist on type '{ a: 0; b: string; } | { a: T; c: number; }'.
   Property 'b' does not exist on type '{ a: T; c: number; }'.
 
 
-==== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts (2 errors) ====
+==== discriminatedUnionTypes2.ts (2 errors) ====
     function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
         if (x.kind === false) {
             x.a;
@@ -33,8 +32,7 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
     function f13(x: { a: null; b: string } | { a: string, c: number }) {
         x = { a: null, b: "foo", c: 4};  // Error
                                  ~
-!!! error TS2322: Type '{ a: null; b: string; c: number; }' is not assignable to type '{ a: null; b: string; } | { a: string; c: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
     }
     
     function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {

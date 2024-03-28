@@ -1,4 +1,6 @@
-import { deprecate } from "../../deprecatedCompat/deprecate";
+import {
+    deprecate,
+} from "../../deprecatedCompat/deprecate";
 import * as ts from "../_namespaces/ts";
 
 describe("unittests:: debugDeprecation", () => {
@@ -14,13 +16,13 @@ describe("unittests:: debugDeprecation", () => {
         it("silent deprecation", () => {
             const deprecation = deprecate(ts.noop, {
                 warnAfter: "3.9",
-                typeScriptVersion: "3.8"
+                typeScriptVersion: "3.8",
             });
             let logWritten = false;
             ts.Debug.loggingHost = {
                 log() {
                     logWritten = true;
-                }
+                },
             };
             deprecation();
             assert.isFalse(logWritten);
@@ -28,39 +30,39 @@ describe("unittests:: debugDeprecation", () => {
         it("warning deprecation with warnAfter", () => {
             const deprecation = deprecate(ts.noop, {
                 warnAfter: "3.9",
-                typeScriptVersion: "3.9"
+                typeScriptVersion: "3.9",
             });
             let logWritten = false;
             ts.Debug.loggingHost = {
                 log() {
                     logWritten = true;
-                }
+                },
             };
             deprecation();
             assert.isTrue(logWritten);
         });
         it("warning deprecation without warnAfter", () => {
             const deprecation = deprecate(ts.noop, {
-                typeScriptVersion: "3.9"
+                typeScriptVersion: "3.9",
             });
             let logWritten = false;
             ts.Debug.loggingHost = {
                 log() {
                     logWritten = true;
-                }
+                },
             };
             deprecation();
             assert.isTrue(logWritten);
         });
         it("warning deprecation writes once", () => {
             const deprecation = deprecate(ts.noop, {
-                typeScriptVersion: "3.9"
+                typeScriptVersion: "3.9",
             });
             let logWrites = 0;
             ts.Debug.loggingHost = {
                 log() {
                     logWrites++;
-                }
+                },
             };
             deprecation();
             deprecation();
@@ -70,13 +72,13 @@ describe("unittests:: debugDeprecation", () => {
             const deprecation = deprecate(ts.noop, {
                 warnAfter: "3.8",
                 errorAfter: "3.9",
-                typeScriptVersion: "3.9"
+                typeScriptVersion: "3.9",
             });
             let logWritten = false;
             ts.Debug.loggingHost = {
                 log() {
                     logWritten = true;
-                }
+                },
             };
             expect(deprecation).throws();
             assert.isFalse(logWritten);
@@ -89,7 +91,7 @@ describe("unittests:: debugDeprecation", () => {
             ts.Debug.loggingHost = {
                 log() {
                     logWritten = true;
-                }
+                },
             };
             expect(deprecation).throws();
             assert.isFalse(logWritten);

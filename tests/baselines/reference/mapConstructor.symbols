@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mapConstructor.ts ===
+//// [tests/cases/compiler/mapConstructor.ts] ////
+
+=== mapConstructor.ts ===
 new Map();
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

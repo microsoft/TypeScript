@@ -1,15 +1,22 @@
-=== tests/cases/conformance/dynamicImport/something.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInExportEqualsUMD.ts] ////
+
+=== something.ts ===
 
 export = 42;
 
-=== tests/cases/conformance/dynamicImport/index.ts ===
+=== index.ts ===
 export = async function() {
 >async function() {    const something = await import("./something");} : () => Promise<void>
+>                                                                      : ^^^^^^^^^^^^^^^^^^^
 
     const something = await import("./something");
 >something : 42
+>          : ^^
 >await import("./something") : 42
+>                            : ^^
 >import("./something") : Promise<42>
+>                      : ^^^^^^^^^^^
 >"./something" : "./something"
+>              : ^^^^^^^^^^^^^
 
 };

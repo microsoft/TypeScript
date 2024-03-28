@@ -1,12 +1,19 @@
-=== tests/cases/conformance/scanner/ecmascript5/scannerEnum1.ts ===
+//// [tests/cases/conformance/scanner/ecmascript5/scannerEnum1.ts] ////
+
+=== scannerEnum1.ts ===
     export enum CodeGenTarget {
 >CodeGenTarget : CodeGenTarget
+>              : ^^^^^^^^^^^^^
 
         ES3 = 0,
 >ES3 : CodeGenTarget.ES3
+>    : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
         ES5 = 1,
 >ES5 : CodeGenTarget.ES5
+>    : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }

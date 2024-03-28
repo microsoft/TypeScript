@@ -1,9 +1,7 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-tests/cases/conformance/es6/modules/m1.ts(5,5): error TS1005: ',' expected.
+m1.ts(5,5): error TS1005: ',' expected.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/conformance/es6/modules/m1.ts (1 errors) ====
+==== m1.ts (1 errors) ====
     var R: any
     export default R = {
         "__": 20,
@@ -13,7 +11,7 @@ tests/cases/conformance/es6/modules/m1.ts(5,5): error TS1005: ',' expected.
 !!! error TS1005: ',' expected.
     }
     
-==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
+==== m2.ts (0 errors) ====
     import R from "./m1";
     const { __, _, ___ } = R;
     

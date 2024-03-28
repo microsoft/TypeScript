@@ -1,5 +1,8 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
@@ -8,9 +11,9 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             baseline.push(commandLine.join(" "));
             const parsed = ts.parseCommandLineWorker(workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics, commandLine);
             baseline.push("CompilerOptions::");
-            baseline.push(JSON.stringify(parsed.options, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.options));
             baseline.push("WatchOptions::");
-            baseline.push(JSON.stringify(parsed.watchOptions, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.watchOptions));
             baseline.push("FileNames::");
             baseline.push(parsed.fileNames.join());
             baseline.push("Errors::");
@@ -67,7 +70,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     describe("parses command line null for tsconfig only option", () => {
         interface VerifyNull {
-            subScenario: string,
+            subScenario: string;
             optionName: string;
             nonNullValue?: string;
             workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics;
@@ -77,32 +80,32 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 assertParseResult(
                     `${subScenario} allows setting it to null`,
                     [`--${optionName}`, "null", "0.ts"],
-                    workerDiagnostic
+                    workerDiagnostic,
                 );
                 if (nonNullValue) {
                     assertParseResult(
                         `${subScenario} errors if non null value is passed`,
                         [`--${optionName}`, nonNullValue, "0.ts"],
-                        workerDiagnostic
+                        workerDiagnostic,
                     );
                 }
 
                 assertParseResult(
                     `${subScenario} errors if its followed by another option`,
                     ["0.ts", "--strictNullChecks", `--${optionName}`],
-                    workerDiagnostic
+                    workerDiagnostic,
                 );
 
                 assertParseResult(
                     `${subScenario} errors if its last option`,
                     ["0.ts", `--${optionName}`],
-                    workerDiagnostic
+                    workerDiagnostic,
                 );
             });
         }
 
         interface VerifyNullNonIncludedOption {
-            subScenario: string,
+            subScenario: string;
             type: () => "string" | "number" | Map<string, number | string>;
             nonNullValue?: string;
         }
@@ -121,14 +124,14 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                             category: ts.Diagnostics.Backwards_Compatibility,
                             description: ts.Diagnostics.Enable_project_compilation,
                             defaultValueDescription: undefined,
-                        }
+                        },
                     ];
                     return {
                         ...ts.compilerOptionsDidYouMeanDiagnostics,
                         optionDeclarations,
-                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations)
+                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations),
                     };
-                }
+                },
             });
         }
 
@@ -158,22 +161,23 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         verifyNullNonIncludedOption({
             subScenario: "option of type string",
             type: () => "string",
-            nonNullValue: "hello"
+            nonNullValue: "hello",
         });
 
         verifyNullNonIncludedOption({
             subScenario: "option of type number",
             type: () => "number",
-            nonNullValue: "10"
+            nonNullValue: "10",
         });
 
         verifyNullNonIncludedOption({
             subScenario: "option of type custom map",
-            type: () => new Map(Object.entries({
-                node: ts.ModuleResolutionKind.Node10,
-                classic: ts.ModuleResolutionKind.Classic,
-            })),
-            nonNullValue: "node"
+            type: () =>
+                new Map(Object.entries({
+                    node: ts.ModuleResolutionKind.Node10,
+                    classic: ts.ModuleResolutionKind.Classic,
+                })),
+            nonNullValue: "node",
         });
     });
 
@@ -199,9 +203,9 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             baseline.push(commandLine.join(" "));
             const parsed = ts.parseBuildCommand(commandLine);
             baseline.push("buildOptions::");
-            baseline.push(JSON.stringify(parsed.buildOptions, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.buildOptions));
             baseline.push("WatchOptions::");
-            baseline.push(JSON.stringify(parsed.watchOptions, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.watchOptions));
             baseline.push("Projects::");
             baseline.push(parsed.projects.join());
             baseline.push("Errors::");
@@ -243,5 +247,16 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         assertParseResult("errors on invalid excludeDirectories", ["--excludeDirectories", "**/../*"]);
         assertParseResult("parse --excludeFiles", ["--excludeFiles", "**/temp/*.ts"]);
         assertParseResult("errors on invalid excludeFiles", ["--excludeFiles", "**/../*"]);
+    });
+});
+
+describe("unittests:: config:: commandLineParsing:: optionDeclarations", () => {
+    it("should have affectsBuildInfo true for every option with affectsSemanticDiagnostics", () => {
+        for (const option of ts.optionDeclarations) {
+            if (option.affectsSemanticDiagnostics) {
+                // semantic diagnostics affect the build info, so ensure they're included
+                assert(option.affectsBuildInfo ?? false, option.name);
+            }
+        }
     });
 });

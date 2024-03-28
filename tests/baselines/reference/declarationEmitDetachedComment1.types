@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test1.ts ===
+//// [tests/cases/compiler/declarationEmitDetachedComment1.ts] ////
+
+=== test1.ts ===
 /*! Copyright 2015 MyCompany Inc. */
 
 /**
@@ -6,10 +8,11 @@
  */
 class Hello {
 >Hello : Hello
+>      : ^^^^^
 
 }
 
-=== tests/cases/compiler/test2.ts ===
+=== test2.ts ===
 /* A comment at the top of the file. */
 
 /**
@@ -17,10 +20,11 @@ class Hello {
  */
 class Hi {
 >Hi : Hi
+>   : ^^
 
 }
 
-=== tests/cases/compiler/test3.ts ===
+=== test3.ts ===
 // A one-line comment at the top of the file.
 
 /**
@@ -28,6 +32,7 @@ class Hi {
  */
 class Hola {
 >Hola : Hola
+>     : ^^^^
 
 }
 

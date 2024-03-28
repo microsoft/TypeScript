@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope2.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope2.ts] ////
+
+=== typeParametersAvailableInNestedScope2.ts ===
 function foo<T, U>(x: T, y: U) {
 >foo : Symbol(foo, Decl(typeParametersAvailableInNestedScope2.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersAvailableInNestedScope2.ts, 0, 13))

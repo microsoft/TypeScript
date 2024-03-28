@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts] ////
+
 //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts]
 // tricky interface
 interface Settable<T, V> {

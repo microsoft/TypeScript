@@ -1,53 +1,91 @@
-=== tests/cases/compiler/arrayConstructors1.ts ===
+//// [tests/cases/compiler/arrayConstructors1.ts] ////
+
+=== arrayConstructors1.ts ===
 var x: string[];
 >x : string[]
+>  : ^^^^^^^^
 
 x = new Array(1);
 >x = new Array(1) : any[]
+>                 : ^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >new Array(1) : any[]
+>             : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 x = new Array('hi', 'bye'); 
 >x = new Array('hi', 'bye') : string[]
+>                           : ^^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >new Array('hi', 'bye') : string[]
+>                       : ^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >'bye' : "bye"
+>      : ^^^^^
 
 x = new Array<string>('hi', 'bye');
 >x = new Array<string>('hi', 'bye') : string[]
+>                                   : ^^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >new Array<string>('hi', 'bye') : string[]
+>                               : ^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 >'bye' : "bye"
+>      : ^^^^^
 
 var y: number[];
 >y : number[]
+>  : ^^^^^^^^
 
 y = new Array(1);
 >y = new Array(1) : any[]
+>                 : ^^^^^
 >y : number[]
+>  : ^^^^^^^^
 >new Array(1) : any[]
+>             : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 y = new Array(1,2);
 >y = new Array(1,2) : number[]
+>                   : ^^^^^^^^
 >y : number[]
+>  : ^^^^^^^^
 >new Array(1,2) : number[]
+>               : ^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 y = new Array<number>(1, 2);
 >y = new Array<number>(1, 2) : number[]
+>                            : ^^^^^^^^
 >y : number[]
+>  : ^^^^^^^^
 >new Array<number>(1, 2) : number[]
+>                        : ^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

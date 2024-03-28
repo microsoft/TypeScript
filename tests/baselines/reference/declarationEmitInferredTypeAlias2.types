@@ -1,28 +1,41 @@
-=== tests/cases/compiler/0.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias2.ts] ////
+
+=== 0.ts ===
 {
     type Data = string | boolean;
 >Data : string | boolean
+>     : ^^^^^^^^^^^^^^^^
 
     let obj: Data = true;
 >obj : string | boolean
+>    : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 }
 export { }
 
-=== tests/cases/compiler/1.ts ===
+=== 1.ts ===
 let v = "str" || true;
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"str" || true : true | "str"
+>              : ^^^^^^^^^^^^
 >"str" : "str"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 function bar () {
 >bar : () => string | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
     return v;
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 }
 export { v, bar }
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 >bar : () => string | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 

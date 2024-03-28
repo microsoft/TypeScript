@@ -1,18 +1,25 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel3.ts] ////
+
+=== parser_duplicateLabel3.ts ===
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
   function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     target:
 >target : any
+>       : ^^^
 
     while (true) {
 >true : true
+>     : ^^^^
     }
   }
 }

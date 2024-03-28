@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx] ////
+
 //// [tsxLibraryManagedAttributes.tsx]
 type Defaultize<TProps, TDefaults> =
     & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}

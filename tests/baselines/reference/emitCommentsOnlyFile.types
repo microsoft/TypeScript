@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitCommentsOnlyFile.ts ===
+//// [tests/cases/compiler/emitCommentsOnlyFile.ts] ////
+
+=== emitCommentsOnlyFile.ts ===
 
 /**
 * @name Foo

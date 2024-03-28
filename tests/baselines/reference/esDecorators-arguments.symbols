@@ -1,4 +1,6 @@
-=== tests/cases/conformance/esDecorators/esDecorators-arguments.ts ===
+//// [tests/cases/conformance/esDecorators/esDecorators-arguments.ts] ////
+
+=== esDecorators-arguments.ts ===
 @(() => {})
 @((a: any) => {})
 >a : Symbol(a, Decl(esDecorators-arguments.ts, 1, 3))

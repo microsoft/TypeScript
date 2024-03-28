@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeofModule.ts ===
+//// [tests/cases/compiler/declFileTypeofModule.ts] ////
+
+=== declFileTypeofModule.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(declFileTypeofModule.ts, 0, 0))
 

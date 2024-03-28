@@ -1,46 +1,64 @@
-=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target12.ts ===
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target12.ts] ////
+
+=== esnextmodulekindWithES5Target12.ts ===
 export class C {
 >C : C
+>  : ^
 }
 
 export namespace C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
 export enum E {
 >E : E
+>  : ^
 
     w = 1
 >w : E.w
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 export enum E {
 >E : E
+>  : ^
 
     x = 2
 >x : E.x
+>  : ^^^
 >2 : 2
+>  : ^
 }
 
 export namespace E {
 >E : typeof E
+>  : ^^^^^^^^
 
     export const y = 1;
 >y : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
 export namespace E {
 >E : typeof E
+>  : ^^^^^^^^
 
     export const z = 1;
 >z : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
 export namespace N {
@@ -48,20 +66,27 @@ export namespace N {
 
 export namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 }
 
 export function F() {
 >F : typeof F
+>  : ^^^^^^^^
 }
 
 export namespace F {
 >F : typeof F
+>  : ^^^^^^^^
 
     export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 }

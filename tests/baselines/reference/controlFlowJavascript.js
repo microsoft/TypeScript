@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowJavascript.ts] ////
+
 //// [controlFlowJavascript.js]
 let cond = true;
 

@@ -1,52 +1,81 @@
-=== tests/cases/compiler/extendAndImplementTheSameBaseType2.ts ===
+//// [tests/cases/compiler/extendAndImplementTheSameBaseType2.ts] ////
+
+=== extendAndImplementTheSameBaseType2.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     foo: number
 >foo : number
+>    : ^^^^^^
 
     bar(): T {
 >bar : () => T
+>    : ^^^^^^ 
 
         return null;
     }
 }
 class D extends C<string> implements C<number> {
 >D : D
+>  : ^
 >C : C<string>
+>  : ^^^^^^^^^
 
     baz() { }
 >baz : () => void
+>    : ^^^^^^^^^^
 }
 
 var d: D = new D();
 >d : D
+>  : ^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
 var r: string = d.foo;
 >r : string
+>  : ^^^^^^
 >d.foo : number
+>      : ^^^^^^
 >d : D
+>  : ^
 >foo : number
+>    : ^^^^^^
 
 var r2: number = d.foo;
 >r2 : number
+>   : ^^^^^^
 >d.foo : number
+>      : ^^^^^^
 >d : D
+>  : ^
 >foo : number
+>    : ^^^^^^
 
 var r3: string = d.bar();
 >r3 : string
+>   : ^^^^^^
 >d.bar() : string
+>        : ^^^^^^
 >d.bar : () => string
+>      : ^^^^^^^^^^^^
 >d : D
+>  : ^
 >bar : () => string
+>    : ^^^^^^^^^^^^
 
 var r4: number = d.bar();
 >r4 : number
+>   : ^^^^^^
 >d.bar() : string
+>        : ^^^^^^
 >d.bar : () => string
+>      : ^^^^^^^^^^^^
 >d : D
+>  : ^
 >bar : () => string
+>    : ^^^^^^^^^^^^
 

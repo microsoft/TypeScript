@@ -1,8 +1,11 @@
-=== tests/cases/compiler/defaultOfAnyInStrictNullChecks.ts ===
+//// [tests/cases/compiler/defaultOfAnyInStrictNullChecks.ts] ////
+
+=== defaultOfAnyInStrictNullChecks.ts ===
 // Regression test for #8295
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     try {
     }
@@ -13,7 +16,9 @@ function foo() {
 >s : any
 >e.message : any
 >e : any
+>  : ^^^
 >message : any
+>        : ^^^
     }
 }
 

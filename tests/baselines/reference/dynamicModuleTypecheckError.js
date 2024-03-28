@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicModuleTypecheckError.ts] ////
+
 //// [dynamicModuleTypecheckError.ts]
 export var x = 1;
  

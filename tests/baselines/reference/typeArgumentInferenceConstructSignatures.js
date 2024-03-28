@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts] ////
+
 //// [typeArgumentInferenceConstructSignatures.ts]
 // Generic call with no parameters
 interface NoParams {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitCommonSourceDirectoryDoesNotContainAllFiles.ts] ////
+
 === /a/index.ts ===
 
 export * from "./src/"

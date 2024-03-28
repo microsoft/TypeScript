@@ -1,21 +1,32 @@
-=== tests/cases/compiler/letAsIdentifierInStrictMode.ts ===
+//// [tests/cases/compiler/letAsIdentifierInStrictMode.ts] ////
+
+=== letAsIdentifierInStrictMode.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 var let = 10;
 >let : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 let = 30;
 >let = 30 : 30
+>         : ^^
 >let : number
+>    : ^^^^^^
 >30 : 30
+>   : ^^
 
 let
 a;
 >a : any
+>  : ^^^
 

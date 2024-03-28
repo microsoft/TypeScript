@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionInObjectBindingPattern1.ts ===
+// function bar<T>(onfulfilled: (value: T) => void) {
+//   return undefined;
+// }
+// interface Test {
+//   <|[|prop2|]: number|>
+// }
+// bar<Test>(({pr/*GOTO DEF*/op2})=>{});
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "prop2",
+    "containerName": "Test",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

@@ -1,11 +1,17 @@
-=== tests/cases/compiler/deleteOperatorInStrictMode.ts ===
+//// [tests/cases/compiler/deleteOperatorInStrictMode.ts] ////
+
+=== deleteOperatorInStrictMode.ts ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 var a;
 >a : any
+>  : ^^^
 
 delete a;
 >delete a : boolean
+>         : ^^^^^^^
 >a : any
+>  : ^^^
 

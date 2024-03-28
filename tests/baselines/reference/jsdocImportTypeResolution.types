@@ -1,9 +1,12 @@
-=== tests/cases/compiler/module.js ===
+//// [tests/cases/compiler/jsdocImportTypeResolution.ts] ////
+
+=== module.js ===
 export class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 }
 
-=== tests/cases/compiler/usage.js ===
+=== usage.js ===
 /**
  * @typedef {Object} options
  * @property {import("./module").MyClass} option
@@ -11,4 +14,5 @@ export class MyClass {
 /** @type {options} */
 let v;
 >v : options
+>  : ^^^^^^^
 

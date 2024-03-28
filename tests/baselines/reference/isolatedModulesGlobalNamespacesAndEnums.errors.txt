@@ -1,9 +1,10 @@
-tests/cases/compiler/enum2.ts(3,9): error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
-tests/cases/compiler/enum2.ts(4,9): error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
-tests/cases/compiler/script-namespaces.ts(1,11): error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
+enum2.ts(2,9): error TS18055: 'Enum.D' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
+enum2.ts(3,9): error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
+enum2.ts(4,9): error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
+script-namespaces.ts(1,11): error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
 
 
-==== tests/cases/compiler/script-namespaces.ts (1 errors) ====
+==== script-namespaces.ts (1 errors) ====
     namespace Instantiated {
               ~~~~~~~~~~~~
 !!! error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.
@@ -16,19 +17,21 @@ tests/cases/compiler/script-namespaces.ts(1,11): error TS1280: Namespaces are no
         export const x: number;
     }
     
-==== tests/cases/compiler/module-namespaces.ts (0 errors) ====
+==== module-namespaces.ts (0 errors) ====
     export namespace Instantiated {
         export const x = 1;
     }
     
-==== tests/cases/compiler/enum1.ts (0 errors) ====
+==== enum1.ts (0 errors) ====
     enum Enum { A, B, C }
     declare enum Enum { X = 1_000_000 }
     const d = 'd';
     
-==== tests/cases/compiler/enum2.ts (2 errors) ====
+==== enum2.ts (3 errors) ====
     enum Enum {
         D = d,
+            ~
+!!! error TS18055: 'Enum.D' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
         E = A, // error
             ~
 !!! error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.

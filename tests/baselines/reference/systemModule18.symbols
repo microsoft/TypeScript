@@ -1,8 +1,10 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/systemModule18.ts] ////
+
+=== index.ts ===
 export import React = require("./react.js");
 >React : Symbol(React, Decl(index.ts, 0, 0))
 
-=== tests/cases/compiler/react.ts ===
+=== react.ts ===
 export function createElement() {}
 >createElement : Symbol(createElement, Decl(react.ts, 0, 0))
 

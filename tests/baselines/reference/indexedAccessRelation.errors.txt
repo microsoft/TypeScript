@@ -1,12 +1,14 @@
-tests/cases/compiler/indexedAccessRelation.ts(16,23): error TS2345: Argument of type '{ a: T; }' is not assignable to parameter of type 'Pick<S & State<T>, "a">'.
+indexedAccessRelation.ts(16,23): error TS2345: Argument of type '{ a: T; }' is not assignable to parameter of type 'Pick<S & State<T>, "a">'.
   Types of property 'a' are incompatible.
-    Type 'T' is not assignable to type 'S["a"] & T'.
-      Type 'Foo' is not assignable to type 'S["a"] & T'.
-        Type 'Foo' is not assignable to type 'S["a"]'.
-          'S["a"]' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
+    Type 'T' is not assignable to type 'T & S["a"]'.
+      Type 'Foo' is not assignable to type 'T & S["a"]'.
+        Type 'Foo' is not assignable to type 'T'.
+          'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+            Type 'T' is not assignable to type 'S["a"]'.
+              'S["a"]' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
-==== tests/cases/compiler/indexedAccessRelation.ts (1 errors) ====
+==== indexedAccessRelation.ts (1 errors) ====
     // Repro from #14723
     
     class Component<S> {
@@ -26,10 +28,12 @@ tests/cases/compiler/indexedAccessRelation.ts(16,23): error TS2345: Argument of 
                           ~~~~~~~~
 !!! error TS2345: Argument of type '{ a: T; }' is not assignable to parameter of type 'Pick<S & State<T>, "a">'.
 !!! error TS2345:   Types of property 'a' are incompatible.
-!!! error TS2345:     Type 'T' is not assignable to type 'S["a"] & T'.
-!!! error TS2345:       Type 'Foo' is not assignable to type 'S["a"] & T'.
-!!! error TS2345:         Type 'Foo' is not assignable to type 'S["a"]'.
-!!! error TS2345:           'S["a"]' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
+!!! error TS2345:     Type 'T' is not assignable to type 'T & S["a"]'.
+!!! error TS2345:       Type 'Foo' is not assignable to type 'T & S["a"]'.
+!!! error TS2345:         Type 'Foo' is not assignable to type 'T'.
+!!! error TS2345:           'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2345:             Type 'T' is not assignable to type 'S["a"]'.
+!!! error TS2345:               'S["a"]' could be instantiated with an arbitrary type which could be unrelated to 'T'.
         }
     }
     

@@ -1,13 +1,19 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts] ////
+
+=== collisionCodeGenModuleWithAccessorChildren.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var x = 3;
 >x : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
     class c {
 >c : c
+>  : ^
 
         private y;
 >y : any
@@ -18,19 +24,25 @@ module M {
 
             this.y = x;
 >this.y = x : number
+>           : ^^^^^^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
         }
     }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     class d {
 >d : d
+>  : ^
 
         private y;
 >y : any
@@ -41,23 +53,31 @@ module M {
 
             var M = 10;
 >M : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
             this.y = x;
 >this.y = x : number
+>           : ^^^^^^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
         }
     }
 }
 
 module M { // Shouldnt be _M
 >M : typeof M
+>  : ^^^^^^^^
 
     class e {
 >e : e
+>  : ^
 
         private y;
 >y : any
@@ -68,44 +88,58 @@ module M { // Shouldnt be _M
 
             this.y = x;
 >this.y = x : number
+>           : ^^^^^^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
         }
     }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     class f {
 >f : f
+>  : ^
 
         get Z() {
 >Z : number
+>  : ^^^^^^
 
             var M = 10;
 >M : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
             return x;
 >x : number
+>  : ^^^^^^
         }
     }
 }
 
 module M { // Shouldnt be _M
 >M : typeof M
+>  : ^^^^^^^^
 
     class e {
 >e : e
+>  : ^
 
         get M() {
 >M : number
+>  : ^^^^^^
 
             return x;
 >x : number
+>  : ^^^^^^
         }
     }
 }

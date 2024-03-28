@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of16.ts] ////
+
 //// [for-of16.ts]
 class StringIterator {
     [Symbol.iterator]() {

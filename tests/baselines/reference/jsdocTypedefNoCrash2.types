@@ -1,6 +1,9 @@
-=== tests/cases/compiler/export.js ===
+//// [tests/cases/compiler/jsdocTypedefNoCrash2.ts] ////
+
+=== export.js ===
 export type foo = 5;
 >foo : 5
+>    : ^
 
 /**
  * @typedef {{
@@ -8,5 +11,7 @@ export type foo = 5;
  */
 export const foo = 5;
 >foo : 5
+>    : ^
 >5 : 5
+>  : ^
 

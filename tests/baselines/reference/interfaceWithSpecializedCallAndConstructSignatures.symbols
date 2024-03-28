@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithSpecializedCallAndConstructSignatures.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithSpecializedCallAndConstructSignatures.ts] ////
+
+=== interfaceWithSpecializedCallAndConstructSignatures.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations2.ts ===
+//// [tests/cases/compiler/constDeclarations2.ts] ////
+
+=== constDeclarations2.ts ===
 // No error
 module M {
 >M : Symbol(M, Decl(constDeclarations2.ts, 0, 0))

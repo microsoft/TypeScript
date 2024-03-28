@@ -1,44 +1,67 @@
-=== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts] ////
+
+=== classWithoutExplicitConstructor.ts ===
 class C {
 >C : C
+>  : ^
 
     x = 1
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     y = 'hello';
 >y : string
+>  : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 }
 
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var c2 = new C(null); // error
 >c2 : C
+>   : ^
 >new C(null) : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 class D<T extends Date> {
 >D : D<T>
+>  : ^^^^
 
     x = 2
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     y: T = null;
 >y : T
+>  : ^
 }
 
 var d = new D();
 >d : D<Date>
+>  : ^^^^^^^
 >new D() : D<Date>
+>        : ^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var d2 = new D(null); // error
 >d2 : D<Date>
+>   : ^^^^^^^
 >new D(null) : D<Date>
+>            : ^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 

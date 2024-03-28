@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncQualifiedReturnType_es5.ts] ////
+
 //// [asyncQualifiedReturnType_es5.ts]
 namespace X {
     export class MyPromise<T> extends Promise<T> {

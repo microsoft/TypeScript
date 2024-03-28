@@ -1,8 +1,13 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck9.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck9.ts] ////
+
+=== ES5For-ofTypeCheck9.ts ===
 var union: string | string[] | number | symbol;
 >union : string | number | symbol | string[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 for (let v of union) { }
 >v : string
+>  : ^^^^^^
 >union : string | number | symbol | string[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

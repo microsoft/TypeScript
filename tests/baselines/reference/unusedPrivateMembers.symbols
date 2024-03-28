@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedPrivateMembers.ts ===
+//// [tests/cases/compiler/unusedPrivateMembers.ts] ////
+
+=== unusedPrivateMembers.ts ===
 class Test1 {
 >Test1 : Symbol(Test1, Decl(unusedPrivateMembers.ts, 0, 0))
 

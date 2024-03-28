@@ -1,9 +1,17 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedTemplateStringES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedTemplateStringES6.ts] ////
+
+=== templateStringWithEmbeddedTemplateStringES6.ts ===
 var x = `123${ `456 ${ " | " } 654` }321 123${ `456 ${ " | " } 654` }321`;
 >x : string
->`123${ `456 ${ " | " } 654` }321 123${ `456 ${ " | " } 654` }321` : string
->`456 ${ " | " } 654` : string
+>  : ^^^^^^
+>`123${ `456 ${ " | " } 654` }321 123${ `456 ${ " | " } 654` }321` : "123456  |  654321 123456  |  654321"
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>`456 ${ " | " } 654` : "456  |  654"
+>                     : ^^^^^^^^^^^^^
 >" | " : " | "
->`456 ${ " | " } 654` : string
+>      : ^^^^^
+>`456 ${ " | " } 654` : "456  |  654"
+>                     : ^^^^^^^^^^^^^
 >" | " : " | "
+>      : ^^^^^
 

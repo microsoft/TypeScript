@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classBlockScoping.ts] ////
+
 //// [classBlockScoping.ts]
 function f(b: boolean) {
   let Foo: any;
@@ -42,10 +44,10 @@ function f(b) {
                 function Foo() {
                 }
                 Foo.x = function () {
-                    new Foo();
+                    new _a();
                 };
                 Foo.prototype.m = function () {
-                    new Foo();
+                    new _a();
                 };
                 return Foo;
             }()),

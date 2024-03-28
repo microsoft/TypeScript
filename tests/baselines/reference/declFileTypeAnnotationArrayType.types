@@ -1,117 +1,174 @@
-=== tests/cases/compiler/declFileTypeAnnotationArrayType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationArrayType.ts] ////
+
+=== declFileTypeAnnotationArrayType.ts ===
 class c {
 >c : c
+>  : ^
 }
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export class c {
 >c : c
+>  : ^
     }
     export class g<T> {
 >g : g<T>
+>  : ^^^^
     }
 }
 class g<T> {
 >g : g<T>
+>  : ^^^^
 }
 
 // Just the name
 function foo(): c[] {
 >foo : () => c[]
+>    : ^^^^^^   
 
     return [new c()];
 >[new c()] : c[]
+>          : ^^^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 }
 function foo2() {
 >foo2 : () => c[]
+>     : ^^^^^^^^^
 
     return [new c()];
 >[new c()] : c[]
+>          : ^^^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 }
 
 // Qualified name
 function foo3(): m.c[] {
 >foo3 : () => m.c[]
+>     : ^^^^^^     
 >m : any
+>  : ^^^
 
     return [new m.c()];
 >[new m.c()] : m.c[]
+>            : ^^^^^
 >new m.c() : m.c
+>          : ^^^
 >m.c : typeof m.c
+>    : ^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >c : typeof m.c
+>  : ^^^^^^^^^^
 }
 function foo4() {
 >foo4 : () => typeof m.c
+>     : ^^^^^^^^^^^^^^^^
 
     return m.c;
 >m.c : typeof m.c
+>    : ^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >c : typeof m.c
+>  : ^^^^^^^^^^
 }
 
 // Just the name with type arguments
 function foo5(): g<string>[] {
 >foo5 : () => g<string>[]
+>     : ^^^^^^           
 
     return [new g<string>()];
 >[new g<string>()] : g<string>[]
+>                  : ^^^^^^^^^^^
 >new g<string>() : g<string>
+>                : ^^^^^^^^^
 >g : typeof g
+>  : ^^^^^^^^
 }
 function foo6() {
 >foo6 : () => g<string>[]
+>     : ^^^^^^^^^^^^^^^^^
 
     return [new g<string>()];
 >[new g<string>()] : g<string>[]
+>                  : ^^^^^^^^^^^
 >new g<string>() : g<string>
+>                : ^^^^^^^^^
 >g : typeof g
+>  : ^^^^^^^^
 }
 
 // Qualified name with type arguments
 function foo7(): m.g<number>[] {
 >foo7 : () => m.g<number>[]
+>     : ^^^^^^             
 >m : any
+>  : ^^^
 
     return [new m.g<number>()];
 >[new m.g<number>()] : m.g<number>[]
+>                    : ^^^^^^^^^^^^^
 >new m.g<number>() : m.g<number>
+>                  : ^^^^^^^^^^^
 >m.g : typeof m.g
+>    : ^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >g : typeof m.g
+>  : ^^^^^^^^^^
 }
 function foo8() {
 >foo8 : () => m.g<number>[]
+>     : ^^^^^^^^^^^^^^^^^^^
 
     return [new m.g<number>()];
 >[new m.g<number>()] : m.g<number>[]
+>                    : ^^^^^^^^^^^^^
 >new m.g<number>() : m.g<number>
+>                  : ^^^^^^^^^^^
 >m.g : typeof m.g
+>    : ^^^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >g : typeof m.g
+>  : ^^^^^^^^^^
 }
 
 // Array of function types
 function foo9(): (()=>c)[] {
 >foo9 : () => (() => c)[]
+>     : ^^^^^^           
 
     return [() => new c()];
 >[() => new c()] : (() => c)[]
+>                : ^^^^^^^^^^^
 >() => new c() : () => c
+>              : ^^^^^^^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 }
 function foo10() {
 >foo10 : () => (() => c)[]
+>      : ^^^^^^^^^^^^^^^^^
 
     return [() => new c()];
 >[() => new c()] : (() => c)[]
+>                : ^^^^^^^^^^^
 >() => new c() : () => c
+>              : ^^^^^^^
 >new c() : c
+>        : ^
 >c : typeof c
+>  : ^^^^^^^^
 }

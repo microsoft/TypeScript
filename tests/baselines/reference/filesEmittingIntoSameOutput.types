@@ -1,10 +1,14 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/filesEmittingIntoSameOutput.ts] ////
+
+=== a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
-=== tests/cases/compiler/a.tsx ===
+=== a.tsx ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 

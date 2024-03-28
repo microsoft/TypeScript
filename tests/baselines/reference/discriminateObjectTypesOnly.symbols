@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminateObjectTypesOnly.ts ===
+//// [tests/cases/compiler/discriminateObjectTypesOnly.ts] ////
+
+=== discriminateObjectTypesOnly.ts ===
 type Thing = number | object;
 >Thing : Symbol(Thing, Decl(discriminateObjectTypesOnly.ts, 0, 0))
 

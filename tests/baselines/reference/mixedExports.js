@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixedExports.ts] ////
+
 //// [mixedExports.ts]
 declare module M {
      function foo();

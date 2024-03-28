@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsInterface.ts ===
+//// [tests/cases/compiler/classExtendsInterface.ts] ////
+
+=== classExtendsInterface.ts ===
 interface Comparable {}
 >Comparable : Symbol(Comparable, Decl(classExtendsInterface.ts, 0, 0))
 

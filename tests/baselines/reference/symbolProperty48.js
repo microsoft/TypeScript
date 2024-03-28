@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty48.ts] ////
+
 //// [symbolProperty48.ts]
 module M {
     var Symbol;

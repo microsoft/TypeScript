@@ -7,4 +7,4 @@
 ////[|Minimatch.[|{| "contextRangeIndex": 0 |}staticProperty|] = "string";|]
 ////console.log(Minimatch.[|staticProperty|]);
 
-verify.rangesWithSameTextAreRenameLocations("staticProperty");
+verify.baselineRenameAtRangesWithText("staticProperty");

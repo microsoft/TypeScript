@@ -1,24 +1,6 @@
-=== tests/cases/conformance/declarationEmit/node_modules/ext/index.d.ts ===
-export interface A {}
->A : Symbol(A, Decl(index.d.ts, 0, 0))
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.ts] ////
 
-export function fa(): A;
->fa : Symbol(fa, Decl(index.d.ts, 0, 21))
->A : Symbol(A, Decl(index.d.ts, 0, 0))
-
-=== tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts ===
-export interface A2 {}
->A2 : Symbol(A2, Decl(other.d.ts, 0, 0))
-
-export function fa(): A2;
->fa : Symbol(fa, Decl(other.d.ts, 0, 22))
->A2 : Symbol(A2, Decl(other.d.ts, 0, 0))
-
-=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
-
-export * from "../other";
-
-=== tests/cases/conformance/declarationEmit/main.ts ===
+=== main.ts ===
 import { fa } from "ext";
 >fa : Symbol(fa, Decl(main.ts, 0, 8))
 
@@ -33,4 +15,16 @@ export const va = fa();
 export const va2 = fa2();
 >va2 : Symbol(va2, Decl(main.ts, 4, 12))
 >fa2 : Symbol(fa2, Decl(main.ts, 1, 8))
+
+=== node_modules/ext/other.d.ts ===
+export interface A2 {}
+>A2 : Symbol(A2, Decl(other.d.ts, 0, 0))
+
+export function fa(): A2;
+>fa : Symbol(fa, Decl(other.d.ts, 0, 22))
+>A2 : Symbol(A2, Decl(other.d.ts, 0, 0))
+
+=== node_modules/ext/ts3.1/index.d.ts ===
+
+export * from "../other";
 

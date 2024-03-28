@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor7.ts] ////
+
 //// [autoAccessor7.ts]
 abstract class C1 {
     abstract accessor a: any;

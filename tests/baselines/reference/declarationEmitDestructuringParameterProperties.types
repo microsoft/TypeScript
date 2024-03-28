@@ -1,39 +1,58 @@
-=== tests/cases/compiler/declarationEmitDestructuringParameterProperties.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringParameterProperties.ts] ////
+
+=== declarationEmitDestructuringParameterProperties.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     constructor(public [x, y, z]: string[]) {
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : string
+>  : ^^^^^^
     }
 }
 
 type TupleType1 =[string, number, boolean];
->TupleType1 : [string, number, boolean]
+>TupleType1 : TupleType1
+>           : ^^^^^^^^^^
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     constructor(public [x, y, z]: TupleType1) {
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
     }
 }
 
 type ObjType1 = { x: number; y: string; z: boolean }
->ObjType1 : { x: number; y: string; z: boolean; }
+>ObjType1 : ObjType1
+>         : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     constructor(public { x, y, z }: ObjType1) {
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >z : boolean
+>  : ^^^^^^^
     }
 }

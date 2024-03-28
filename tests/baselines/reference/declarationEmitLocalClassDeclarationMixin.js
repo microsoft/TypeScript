@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts] ////
+
 //// [declarationEmitLocalClassDeclarationMixin.ts]
 interface Constructor<C> { new (...args: any[]): C; }
 
@@ -99,15 +101,15 @@ exports.FilteredThing = FilteredThing;
 export declare class Unmixed {
     foo: number;
 }
-export declare const Mixed: {
+export declare const Mixed: typeof Unmixed & {
     new (...args: any[]): {
         bar: number;
     };
-} & typeof Unmixed;
-declare const FilteredThing_base: (abstract new (...args: any[]) => {
+};
+declare const FilteredThing_base: typeof Unmixed & (abstract new (...args: any[]) => {
     match(path: string): boolean;
     thing: number;
-}) & typeof Unmixed;
+});
 export declare class FilteredThing extends FilteredThing_base {
     match(path: string): boolean;
 }

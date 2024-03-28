@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/findLast.ts] ////
+
 //// [findLast.ts]
 const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 const itemString: string | undefined = ["string"].findLast((item) => item === "string");

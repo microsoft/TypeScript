@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseInvalidNullableTypes.ts] ////
+
 //// [parseInvalidNullableTypes.ts]
 function f1(a: string): a is ?string {
     return true;

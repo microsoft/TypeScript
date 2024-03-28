@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallFromClassThatHasNoBaseType1.ts ===
+//// [tests/cases/compiler/superCallFromClassThatHasNoBaseType1.ts] ////
+
+=== superCallFromClassThatHasNoBaseType1.ts ===
 class A {
 >A : Symbol(A, Decl(superCallFromClassThatHasNoBaseType1.ts, 0, 0))
 

@@ -9,5 +9,5 @@
 //// new B
 
 goTo.file('/b.ts');
-verify.importFixAtPosition([`import { A, B } from './a';
+verify.importFixAtPosition([`import { B, type A } from './a';
 new B`]);

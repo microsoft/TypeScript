@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericIndexedAccessVarianceComparisonResultCorrect.ts] ////
+
 //// [genericIndexedAccessVarianceComparisonResultCorrect.ts]
 class A {
     x: string = 'A';

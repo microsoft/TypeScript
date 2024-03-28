@@ -1,12 +1,17 @@
-=== tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts ===
+//// [tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts] ////
+
+=== indexSignatureWithAccessibilityModifier.ts ===
 interface I {
     [public x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     [public x: string]: string
 >x : string
+>  : ^^^^^^
 }

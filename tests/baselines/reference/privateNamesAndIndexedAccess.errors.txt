@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS1005: ']' expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,28): error TS7005: Variable '#bar' implicitly has an 'any' type.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,32): error TS1005: ',' expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,34): error TS1134: Variable declaration expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(7,36): error TS1134: Variable declaration expected.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts(9,28): error TS2339: Property '#bar' does not exist on type 'C'.
+privateNamesAndIndexedAccess.ts(7,28): error TS1005: ']' expected.
+privateNamesAndIndexedAccess.ts(7,28): error TS7005: Variable '#bar' implicitly has an 'any' type.
+privateNamesAndIndexedAccess.ts(7,32): error TS1005: ',' expected.
+privateNamesAndIndexedAccess.ts(7,34): error TS1134: Variable declaration expected.
+privateNamesAndIndexedAccess.ts(7,36): error TS1134: Variable declaration expected.
+privateNamesAndIndexedAccess.ts(9,28): error TS2339: Property '#bar' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts (6 errors) ====
+==== privateNamesAndIndexedAccess.ts (6 errors) ====
     class C {
         foo = 3;
         #bar = 3;

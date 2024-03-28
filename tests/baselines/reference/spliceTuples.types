@@ -1,77 +1,125 @@
-=== tests/cases/compiler/spliceTuples.ts ===
+//// [tests/cases/compiler/spliceTuples.ts] ////
+
+=== spliceTuples.ts ===
 declare const sb: [string, boolean];
 >sb : [string, boolean]
+>   : ^^^^^^^^^^^^^^^^^
 
 let k1: [number, string, boolean];
 >k1 : [number, string, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 k1 = [1, ...sb];
 >k1 = [1, ...sb] : [number, string, boolean]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >k1 : [number, string, boolean]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, ...sb] : [number, string, boolean]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...sb : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >sb : [string, boolean]
+>   : ^^^^^^^^^^^^^^^^^
 
 let k2: [number, string, boolean, number];
 >k2 : [number, string, boolean, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 k2 = [1, ...sb, 1];
 >k2 = [1, ...sb, 1] : [number, string, boolean, number]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k2 : [number, string, boolean, number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, ...sb, 1] : [number, string, boolean, number]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...sb : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >sb : [string, boolean]
+>   : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 declare const sb_: [string, ...boolean[]];
 >sb_ : [string, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 let k3: [number, string, ...boolean[]];
 >k3 : [number, string, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 k3 = [1, ...sb_];
 >k3 = [1, ...sb_] : [number, string, ...boolean[]]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k3 : [number, string, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, ...sb_] : [number, string, ...boolean[]]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...sb_ : string | boolean
+>       : ^^^^^^^^^^^^^^^^
 >sb_ : [string, ...boolean[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare const sbb_: [string, boolean, ...boolean[]];
 >sbb_ : [string, boolean, ...boolean[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let k4: [number, string, ...boolean[]];
 >k4 : [number, string, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 k4 = [1, ...sbb_];
 >k4 = [1, ...sbb_] : [number, string, boolean, ...boolean[]]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k4 : [number, string, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, ...sbb_] : [number, string, boolean, ...boolean[]]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...sbb_ : string | boolean
+>        : ^^^^^^^^^^^^^^^^
 >sbb_ : [string, boolean, ...boolean[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let k5: [number, string, boolean, ...boolean[]];
 >k5 : [number, string, boolean, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 k5 = [1, ...sbb_];
 >k5 = [1, ...sbb_] : [number, string, boolean, ...boolean[]]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k5 : [number, string, boolean, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, ...sbb_] : [number, string, boolean, ...boolean[]]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...sbb_ : string | boolean
+>        : ^^^^^^^^^^^^^^^^
 >sbb_ : [string, boolean, ...boolean[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let k6: [number, string, boolean, boolean, ...boolean[]];
 >k6 : [number, string, boolean, boolean, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 k6 = [1, ...sbb_];
 >k6 = [1, ...sbb_] : [number, string, boolean, ...boolean[]]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k6 : [number, string, boolean, boolean, ...boolean[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, ...sbb_] : [number, string, boolean, ...boolean[]]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...sbb_ : string | boolean
+>        : ^^^^^^^^^^^^^^^^
 >sbb_ : [string, boolean, ...boolean[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

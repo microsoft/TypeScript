@@ -1,60 +1,88 @@
-=== tests/cases/compiler/narrowingTypeofFunction.ts ===
+//// [tests/cases/compiler/narrowingTypeofFunction.ts] ////
+
+=== narrowingTypeofFunction.ts ===
 type Meta = { foo: string }
->Meta : { foo: string; }
+>Meta : Meta
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
 interface F { (): string }
 
 function f1(a: (F & Meta) | string) {
 >f1 : (a: (F & Meta) | string) => void
->a : string | (F & Meta)
+>   : ^^^^                   ^^^^^^^^^
+>a : string | (Meta & F)
+>  : ^^^^^^^^^^^^^^^^^^^
 
     if (typeof a === "function") {
 >typeof a === "function" : boolean
+>                        : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->a : string | (F & Meta)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | (Meta & F)
+>  : ^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         a;
->a : F & Meta
+>a : Meta & F
+>  : ^^^^^^^^
     }
     else {
         a;
 >a : string
+>  : ^^^^^^
     }
 }
 
 function f2<T>(x: (T & F) | T & string) {
 >f2 : <T>(x: (T & F) | (T & string)) => void
->x : (T & F) | (T & string)
+>   : ^ ^^^^^          ^          ^^^^^^^^^^
+>x : (F & T) | (string & T)
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : (T & F) | (T & string)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : (F & T) | (string & T)
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;
->x : T & F
+>x : F & T
+>  : ^^^^^
     }
     else {
         x;
->x : T & string
+>x : string & T
+>  : ^^^^^^^^^^
     }
 }
 
 function f3(x: { _foo: number } & number) {
->f3 : (x: {    _foo: number;} & number) => void
->x : { _foo: number; } & number
+>f3 : (x: { _foo: number; } & number) => void
+>   : ^^^^                          ^^^^^^^^^
+>x : number & { _foo: number; }
+>  : ^^^^^^^^^^^^^^^^^      ^^^
 >_foo : number
+>     : ^^^^^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : { _foo: number; } & number
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number & { _foo: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;
 >x : never
+>  : ^^^^^
     }
 }

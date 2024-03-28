@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts] ////
+
 //// [classExtendsItselfIndirectly2.ts]
 class C extends N.E { foo: string; } // error
 

@@ -20,5 +20,5 @@ export function getStyles() {
 	return styles;
 }
 
-// @link: tests/cases/compiler/Folder/node_modules/styled-components -> tests/cases/compiler/Folder/monorepo/package-a/node_modules/styled-components
-// @link: tests/cases/compiler/Folder/monorepo/package-a -> tests/cases/compiler/Folder/monorepo/core/node_modules/package-a
+// @link: Folder/node_modules/styled-components -> Folder/monorepo/package-a/node_modules/styled-components
+// @link: Folder/monorepo/package-a -> Folder/monorepo/core/node_modules/package-a

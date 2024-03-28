@@ -1,73 +1,102 @@
-=== tests/cases/compiler/es6ModuleInternalNamedImports.ts ===
+//// [tests/cases/compiler/es6ModuleInternalNamedImports.ts] ////
+
+=== es6ModuleInternalNamedImports.ts ===
 export module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     // variable
     export var M_V = 0;
 >M_V : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     // interface
     export interface M_I { }
     //calss
     export class M_C { }
 >M_C : M_C
+>    : ^^^
 
     // instantiated module
     export module M_M { var x; }
 >M_M : typeof M_M
+>    : ^^^^^^^^^^
 >x : any
+>  : ^^^
 
     // uninstantiated module
     export module M_MU { }
     // function
     export function M_F() { }
 >M_F : () => void
+>    : ^^^^^^^^^^
 
     // enum
     export enum M_E { }
 >M_E : M_E
+>    : ^^^
 
     // type
     export type M_T = number;
 >M_T : number
+>    : ^^^^^^
 
     // alias
     export import M_A = M_M;
 >M_A : typeof M_M
+>    : ^^^^^^^^^^
 >M_M : typeof M_M
+>    : ^^^^^^^^^^
 
     // Reexports
     export {M_V as v};
 >M_V : number
+>    : ^^^^^^
 >v : number
+>  : ^^^^^^
 
     export {M_I as i};
 >M_I : any
+>    : ^^^
 >i : any
+>  : ^^^
 
     export {M_C as c};
 >M_C : typeof M_C
+>    : ^^^^^^^^^^
 >c : typeof M_C
+>  : ^^^^^^^^^^
 
     export {M_M as m};
 >M_M : typeof M_M
+>    : ^^^^^^^^^^
 >m : typeof M_M
+>  : ^^^^^^^^^^
 
     export {M_MU as mu};
 >M_MU : any
+>     : ^^^
 >mu : any
+>   : ^^^
 
     export {M_F as f};
 >M_F : () => void
+>    : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
     export {M_E as e};
 >M_E : typeof M_E
+>    : ^^^^^^^^^^
 >e : typeof M_E
+>  : ^^^^^^^^^^
 
     export {M_A as a};
 >M_A : typeof M_M
+>    : ^^^^^^^^^^
 >a : typeof M_M
+>  : ^^^^^^^^^^
 }
 

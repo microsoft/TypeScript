@@ -1,22 +1,33 @@
-=== tests/cases/compiler/node_modules/pkg/index.d.ts ===
+//// [tests/cases/compiler/nodeNextImportModeImplicitIndexResolution.ts] ////
+
+=== node_modules/pkg/index.d.ts ===
 export const item = 4;
 >item : 4
+>     : ^
 >4 : 4
+>  : ^
 
-=== tests/cases/compiler/pkg/index.d.ts ===
+=== pkg/index.d.ts ===
 export const item = 4;
 >item : 4
+>     : ^
 >4 : 4
+>  : ^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { item } from "pkg"; // should work (`index.js` is assumed to be the entrypoint for packages found via nonrelative import)
 >item : 4
+>     : ^
 
 import { item as item2 } from "./pkg";  // shouldn't work (`index.js` is _not_ assumed to be the entrypoint for packages found via relative import)
 >item : any
+>     : ^^^
 >item2 : any
+>      : ^^^
 
 import { item as item3 } from "./node_modules/pkg" // _even if they're in a node_modules folder_
 >item : any
+>     : ^^^
 >item3 : any
+>      : ^^^
 

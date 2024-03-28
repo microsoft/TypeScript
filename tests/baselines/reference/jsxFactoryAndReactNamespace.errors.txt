@@ -2,7 +2,7 @@ error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactor
 
 
 !!! error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactory'.
-==== tests/cases/compiler/Element.ts (0 errors) ====
+==== Element.ts (0 errors) ====
     declare namespace JSX {
         interface Element {
             name: string;
@@ -33,7 +33,7 @@ error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactor
         return text[0].toLowerCase() + text.substring(1);
     }
     
-==== tests/cases/compiler/test.tsx (0 errors) ====
+==== test.tsx (0 errors) ====
     import { Element} from './Element';
     
     let c: {

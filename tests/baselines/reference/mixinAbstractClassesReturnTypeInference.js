@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAbstractClassesReturnTypeInference.ts] ////
+
 //// [mixinAbstractClassesReturnTypeInference.ts]
 interface Mixin1 {
     mixinMethod(): void;
@@ -46,18 +48,18 @@ interface Mixin1 {
 declare abstract class AbstractBase {
     abstract abstractBaseMethod(): void;
 }
-declare function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase): ((abstract new (...args: any[]) => {
+declare function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase): TBase & ((abstract new (...args: any[]) => {
     [x: string]: any;
     mixinMethod(): void;
 }) & {
     staticMixinMethod(): void;
-}) & TBase;
-declare const DerivedFromAbstract2_base: ((abstract new (...args: any[]) => {
+});
+declare const DerivedFromAbstract2_base: typeof AbstractBase & ((abstract new (...args: any[]) => {
     [x: string]: any;
     mixinMethod(): void;
 }) & {
     staticMixinMethod(): void;
-}) & typeof AbstractBase;
+});
 declare class DerivedFromAbstract2 extends DerivedFromAbstract2_base {
     abstractBaseMethod(): void;
 }

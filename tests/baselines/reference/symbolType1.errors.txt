@@ -1,16 +1,16 @@
-tests/cases/conformance/es6/Symbols/symbolType1.ts(1,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/es6/Symbols/symbolType1.ts(2,19): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
-tests/cases/conformance/es6/Symbols/symbolType1.ts(4,19): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+symbolType1.ts(1,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+symbolType1.ts(2,19): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+symbolType1.ts(4,19): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType1.ts (3 errors) ====
+==== symbolType1.ts (3 errors) ====
     Symbol() instanceof Symbol;
     ~~~~~~~~
 !!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
     Symbol instanceof Symbol();
                       ~~~~~~~~
-!!! error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
     (Symbol() || {}) instanceof Object; // This one should be okay, it's a valid way of distinguishing types
     Symbol instanceof (Symbol() || {});
                       ~~~~~~~~~~~~~~~~
-!!! error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.

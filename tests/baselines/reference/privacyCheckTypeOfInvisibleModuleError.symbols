@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts ===
+//// [tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts] ////
+
+=== privacyCheckTypeOfInvisibleModuleError.ts ===
 module Outer {
 >Outer : Symbol(Outer, Decl(privacyCheckTypeOfInvisibleModuleError.ts, 0, 0))
 

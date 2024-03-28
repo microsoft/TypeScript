@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callsOnComplexSignatures.tsx] ////
+
 //// [callsOnComplexSignatures.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import React from "react";

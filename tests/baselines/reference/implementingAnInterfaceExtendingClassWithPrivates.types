@@ -1,43 +1,57 @@
-=== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts ===
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts] ////
+
+=== implementingAnInterfaceExtendingClassWithPrivates.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     private x: string;
 >x : string
+>  : ^^^^^^
 }
 
 interface I extends Foo {
     y: number;
 >y : number
+>  : ^^^^^^
 }
 
 class Bar implements I { // error
 >Bar : Bar
+>    : ^^^
 }
 
 class Bar2 implements I { // error
 >Bar2 : Bar2
+>     : ^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 }
 
 class Bar3 implements I { // error
 >Bar3 : Bar3
+>     : ^^^^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 }
 
 class Bar4 implements I { // error
 >Bar4 : Bar4
+>     : ^^^^
 
     private x: string;
 >x : string
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 }

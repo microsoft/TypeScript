@@ -1,13 +1,15 @@
-=== tests/cases/conformance/salsa/npm.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment3.ts] ////
+
+=== npm.js ===
 var mod = require('./mod')
 >mod : Symbol(mod, Decl(npm.js, 0, 3))
 >require : Symbol(require)
->'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
 
 mod() // should be callable from here too
 >mod : Symbol(mod, Decl(npm.js, 0, 3))
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 module.exports = function x() { }
 >module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >module : Symbol(export=, Decl(mod.js, 0, 0))

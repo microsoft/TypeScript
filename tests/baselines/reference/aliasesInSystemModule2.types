@@ -1,56 +1,91 @@
-=== tests/cases/compiler/aliasesInSystemModule2.ts ===
+//// [tests/cases/compiler/aliasesInSystemModule2.ts] ////
+
+=== aliasesInSystemModule2.ts ===
 import {alias} from "foo";
 >alias : any
+>      : ^^^
 
 import cls = alias.Class;
 >cls : any
+>    : ^^^
 >alias : any
+>      : ^^^
 >Class : any
+>      : ^^^
 
 export import cls2 = alias.Class;
 >cls2 : any
+>     : ^^^
 >alias : any
+>      : ^^^
 >Class : any
+>      : ^^^
 
 let x = new alias.Class();
 >x : any
+>  : ^^^
 >new alias.Class() : any
+>                  : ^^^
 >alias.Class : any
+>            : ^^^
 >alias : any
+>      : ^^^
 >Class : any
+>      : ^^^
 
 let y = new cls();
 >y : any
+>  : ^^^
 >new cls() : any
+>          : ^^^
 >cls : any
+>    : ^^^
 
 let z = new cls2();
 >z : any
+>  : ^^^
 >new cls2() : any
+>           : ^^^
 >cls2 : any
+>     : ^^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   export import cls = alias.Class;
 >cls : any
+>    : ^^^
 >alias : any
+>      : ^^^
 >Class : any
+>      : ^^^
 
   let x = new alias.Class();
 >x : any
+>  : ^^^
 >new alias.Class() : any
+>                  : ^^^
 >alias.Class : any
+>            : ^^^
 >alias : any
+>      : ^^^
 >Class : any
+>      : ^^^
 
   let y = new cls(); 
 >y : any
+>  : ^^^
 >new cls() : any
+>          : ^^^
 >cls : any
+>    : ^^^
 
   let z = new cls2();
 >z : any
+>  : ^^^
 >new cls2() : any
+>           : ^^^
 >cls2 : any
+>     : ^^^
 }

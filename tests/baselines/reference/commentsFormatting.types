@@ -1,6 +1,9 @@
-=== tests/cases/compiler/commentsFormatting.ts ===
+//// [tests/cases/compiler/commentsFormatting.ts] ////
+
+=== commentsFormatting.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     /** this is first line - aligned to class declaration
 * this is 4 spaces left aligned
@@ -18,6 +21,7 @@ module m {
             * this is 8 spaces right aligned */
     export class c {
 >c : c
+>  : ^
     }
 
         /** this is first line - 4 spaces right aligned to class but in js file should be aligned to class declaration
@@ -40,6 +44,7 @@ module m {
                 * this is 8 spaces right aligned */
     export class c2 {
 >c2 : c2
+>   : ^^
     }
 
     /** this is comment with new lines in between
@@ -70,6 +75,7 @@ this is 4 spaces left aligned but above line is empty
     above 3 lines are empty*/
     export class c3 {
 >c3 : c3
+>   : ^^
     }
 
     /** this is first line - aligned to class declaration
@@ -88,5 +94,6 @@ this is 4 spaces left aligned but above line is empty
             	*  this is 12 spaces + tab */
     export class c4 {
 >c4 : c4
+>   : ^^
     }
 }

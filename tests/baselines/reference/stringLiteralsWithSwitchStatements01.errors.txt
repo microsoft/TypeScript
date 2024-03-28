@@ -1,7 +1,7 @@
-tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements01.ts(7,10): error TS2678: Type '"bar"' is not comparable to type '"foo"'.
+stringLiteralsWithSwitchStatements01.ts(7,10): error TS2678: Type '"bar"' is not comparable to type '"foo"'.
 
 
-==== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements01.ts (1 errors) ====
+==== stringLiteralsWithSwitchStatements01.ts (1 errors) ====
     let x: "foo";
     let y: "foo" | "bar"; 
     

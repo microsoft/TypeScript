@@ -1,66 +1,96 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts] ////
+
+=== derivedClassSuperCallsWithThisArg.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     constructor(a) { }
 >a : any
+>  : ^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor() {
         super(this); // ok
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Derived2 extends Base {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor(public a: string) {
 >a : string
+>  : ^^^^^^
 
         super(this); // error
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Derived3 extends Base {
 >Derived3 : Derived3
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor(public a: string) {
 >a : string
+>  : ^^^^^^
 
         super(() => this); // error
 >super(() => this) : void
+>                  : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Derived4 extends Base {
 >Derived4 : Derived4
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor(public a: string) {
 >a : string
+>  : ^^^^^^
 
         super(function () { return this; }); // ok
 >super(function () { return this; }) : void
+>                                    : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >function () { return this; } : () => any
+>                             : ^^^^^^^^^
 >this : any
+>     : ^^^
     }
 }

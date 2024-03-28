@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTag.ts] ////
+
+=== a.js ===
 /** @type {String} */
 var S;
 >S : Symbol(S, Decl(a.js, 1, 3), Decl(b.ts, 0, 3))
@@ -87,7 +89,7 @@ var f;
 var ctor;
 >ctor : Symbol(ctor, Decl(a.js, 64, 3), Decl(b.ts, 21, 3))
 
-=== tests/cases/conformance/jsdoc/b.ts ===
+=== b.ts ===
 var S: string;
 >S : Symbol(S, Decl(a.js, 1, 3), Decl(b.ts, 0, 3))
 

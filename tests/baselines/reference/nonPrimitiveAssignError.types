@@ -1,103 +1,163 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts] ////
+
+=== nonPrimitiveAssignError.ts ===
 var x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var y = {foo: "bar"};
 >y : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >{foo: "bar"} : { foo: string; }
+>             : ^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 var a: object;
 >a : object
+>  : ^^^^^^
 
 x = a;
 >x = a : object
+>      : ^^^^^^
 >x : {}
+>  : ^^
 >a : object
+>  : ^^^^^^
 
 y = a; // expect error
 >y = a : object
+>      : ^^^^^^
 >y : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 
 a = x;
 >a = x : {}
+>      : ^^
 >a : object
+>  : ^^^^^^
 >x : {}
+>  : ^^
 
 a = y;
 >a = y : { foo: string; }
+>      : ^^^^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >y : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 
 var n = 123;
 >n : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 
 var b = true;
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var s = "fooo";
 >s : string
+>  : ^^^^^^
 >"fooo" : "fooo"
+>       : ^^^^^^
 
 a = n; // expect error
 >a = n : number
+>      : ^^^^^^
 >a : object
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 a = b; // expect error
 >a = b : true
+>      : ^^^^
 >a : object
+>  : ^^^^^^
 >b : true
+>  : ^^^^
 
 a = s; // expect error
 >a = s : string
+>      : ^^^^^^
 >a : object
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 n = a; // expect error
 >n = a : object
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >a : object
+>  : ^^^^^^
 
 b = a; // expect error
 >b = a : object
+>      : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : object
+>  : ^^^^^^
 
 s = a; // expect error
 >s = a : object
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >a : object
+>  : ^^^^^^
 
 var numObj: Number = 123;
 >numObj : Number
+>       : ^^^^^^
 >123 : 123
+>    : ^^^
 
 var boolObj: Boolean = true;
 >boolObj : Boolean
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var strObj: String = "string";
 >strObj : String
+>       : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
 a = numObj; // ok
 >a = numObj : Number
+>           : ^^^^^^
 >a : object
+>  : ^^^^^^
 >numObj : Number
+>       : ^^^^^^
 
 a = boolObj; // ok
 >a = boolObj : Boolean
+>            : ^^^^^^^
 >a : object
+>  : ^^^^^^
 >boolObj : Boolean
+>        : ^^^^^^^
 
 a = strObj; // ok
 >a = strObj : String
+>           : ^^^^^^
 >a : object
+>  : ^^^^^^
 >strObj : String
+>       : ^^^^^^
 

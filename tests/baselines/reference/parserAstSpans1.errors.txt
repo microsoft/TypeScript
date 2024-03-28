@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(111,25): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+parserAstSpans1.ts(111,25): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts (2 errors) ====
+==== parserAstSpans1.ts (2 errors) ====
     /** i1 is interface with properties*/
     interface i1 {
         /** i1_p1*/

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonInferrableTypePropagation2.ts ===
+//// [tests/cases/compiler/nonInferrableTypePropagation2.ts] ////
+
+=== nonInferrableTypePropagation2.ts ===
 export interface Predicate<A> {
 >Predicate : Symbol(Predicate, Decl(nonInferrableTypePropagation2.ts, 0, 0))
 >A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 0, 27))

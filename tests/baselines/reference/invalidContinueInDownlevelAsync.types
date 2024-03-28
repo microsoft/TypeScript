@@ -1,15 +1,21 @@
-=== tests/cases/compiler/invalidContinueInDownlevelAsync.ts ===
+//// [tests/cases/compiler/invalidContinueInDownlevelAsync.ts] ////
+
+=== invalidContinueInDownlevelAsync.ts ===
 async function func() {
 >func : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 
     if (true) {
 >true : true
+>     : ^^^^
 
         continue;
     }
     else {
         await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
     }
 }

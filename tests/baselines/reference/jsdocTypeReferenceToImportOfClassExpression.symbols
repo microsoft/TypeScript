@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/MC.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImportOfClassExpression.ts] ////
+
+=== MC.js ===
 const MW = require("./MW");
 >MW : Symbol(MW, Decl(MC.js, 0, 5))
 >require : Symbol(require)
->"./MW" : Symbol("tests/cases/conformance/jsdoc/MW", Decl(MW.js, 0, 0))
+>"./MW" : Symbol("MW", Decl(MW.js, 0, 0))
 
 /** @typedef {number} Cictema */
 
@@ -21,7 +23,7 @@ module.exports = class MC {
   }
 };
 
-=== tests/cases/conformance/jsdoc/MW.js ===
+=== MW.js ===
 /** @typedef {import("./MC")} MC */
 
 class MW {

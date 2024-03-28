@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_vsAmbient.ts] ////
+
 === /a.ts ===
 /// <reference path="./declarations.d.ts" />
 import { x } from "foo";

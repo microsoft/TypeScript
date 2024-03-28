@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts] ////
+
+=== deleteOperatorWithStringType.ts ===
 // delete  operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))

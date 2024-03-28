@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instantiatedTypeAliasDisplay.ts ===
+//// [tests/cases/compiler/instantiatedTypeAliasDisplay.ts] ////
+
+=== instantiatedTypeAliasDisplay.ts ===
 // Repros from #12066
 
 interface X<A> {

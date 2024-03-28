@@ -1,14 +1,23 @@
-=== tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts] ////
+
+=== collisionThisExpressionAndAmbientVarInGlobal.ts ===
 declare var _this: number; // no error as no code gen
 >_this : number
+>      : ^^^^^^
 
 var f = () => this;
 >f : () => typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 
 _this = 10; // Error
 >_this = 10 : 10
+>           : ^^
 >_this : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 

@@ -8,4 +8,4 @@
 ////var { x, ...rest } = t;
 ////rest.[|parent|];
 
-verify.rangesWithSameTextAreRenameLocations("parent");
+verify.baselineRenameAtRangesWithText("parent");

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeParameters1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeParameters1.ts] ////
+
+=== parserSetAccessorWithTypeParameters1.ts ===
 class C {
 >C : Symbol(C, Decl(parserSetAccessorWithTypeParameters1.ts, 0, 0))
 

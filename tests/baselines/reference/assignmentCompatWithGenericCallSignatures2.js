@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts] ////
+
 //// [assignmentCompatWithGenericCallSignatures2.ts]
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 

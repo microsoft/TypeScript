@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserNotRegex2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserNotRegex2.ts] ////
+
+=== parserNotRegex2.ts ===
 declare const A: any;
 >A : any
 
@@ -10,10 +12,14 @@ declare const C: any;
 
 const x = (A / 2);
 >x : number
+>  : ^^^^^^
 >(A / 2) : number
+>        : ^^^^^^
 >A / 2 : number
+>      : ^^^^^^
 >A : any
 >2 : 2
+>  : ^
 
 B(
 >B(    C(),    () => { },    () => { }) : any
@@ -25,9 +31,11 @@ B(
 
     () => { },
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
     () => { }
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 );
 

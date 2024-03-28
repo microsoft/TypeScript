@@ -1,12 +1,17 @@
-=== tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts ===
+//// [tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts] ////
+
+=== publicMemberImplementedAsPrivateInDerivedClass.ts ===
 interface Qux {
  Bar: number;
 >Bar : number
+>    : ^^^^^^
 }
 class Foo implements Qux {
 >Foo : Foo
+>    : ^^^
 
  private Bar: number;
 >Bar : number
+>    : ^^^^^^
 }
 

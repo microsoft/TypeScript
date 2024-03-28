@@ -1,7 +1,11 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext6.ts] ////
+
+=== generatorInAmbientContext6.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function *generator(): any { }
 >generator : () => any
+>          : ^^^^^^   
 }

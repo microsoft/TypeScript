@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadGenericFunctionWithRestArgs.ts] ////
+
 //// [overloadGenericFunctionWithRestArgs.ts]
 class B<V>{
     private id: V;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/plainJSGrammarErrors2.js ===
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors2.ts] ////
+
+=== plainJSGrammarErrors2.js ===
 
 === /a.js ===
 
@@ -10,5 +12,7 @@ export default 1;
  */
 export { default as A } from "./a";
 >default : 1
+>        : ^
 >A : 1
+>  : ^
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/index.ts(3,14): error TS4023: Exported variable 'spread' has or is using name 'SYMBOL' from external module "tests/cases/compiler/bug" but cannot be named.
+index.ts(3,14): error TS4023: Exported variable 'spread' has or is using name 'SYMBOL' from external module "bug" but cannot be named.
 
 
-==== tests/cases/compiler/bug.ts (0 errors) ====
+==== bug.ts (0 errors) ====
     export const SYMBOL = Symbol()
     
     export interface Interface {
@@ -14,11 +14,11 @@ tests/cases/compiler/index.ts(3,14): error TS4023: Exported variable 'spread' ha
       }
     }
     
-==== tests/cases/compiler/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     import { createInstance } from './bug'
     
     export const spread = {
                  ~~~~~~
-!!! error TS4023: Exported variable 'spread' has or is using name 'SYMBOL' from external module "tests/cases/compiler/bug" but cannot be named.
+!!! error TS4023: Exported variable 'spread' has or is using name 'SYMBOL' from external module "bug" but cannot be named.
       ...createInstance(),
     }

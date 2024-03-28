@@ -1,4 +1,6 @@
-=== tests/cases/compiler/utils.ts ===
+//// [tests/cases/compiler/declarationEmitExportAssignment.ts] ////
+
+=== utils.ts ===
 export function foo() { }
 >foo : Symbol(foo, Decl(utils.ts, 0, 0))
 
@@ -8,7 +10,7 @@ export function bar() { }
 export interface Buzz { }
 >Buzz : Symbol(Buzz, Decl(utils.ts, 1, 25))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {foo} from "./utils";
 >foo : Symbol(foo, Decl(index.ts, 0, 8))
 

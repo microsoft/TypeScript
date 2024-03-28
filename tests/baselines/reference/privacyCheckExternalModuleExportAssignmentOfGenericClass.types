@@ -1,22 +1,30 @@
-=== tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
+//// [tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass.ts] ////
+
+=== privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
 import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export = Bar;
 >Bar : Bar
+>    : ^^^
 
 interface Bar {
     foo: Foo<number>;
 >foo : Foo<number>
+>    : ^^^^^^^^^^^
 }
-=== tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
+=== privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
 export = Foo;
 >Foo : Foo<A>
+>    : ^^^^^^
 
 class Foo<A> {
 >Foo : Foo<A>
+>    : ^^^^^^
 
     constructor(public a: A) { }
 >a : A
+>  : ^
 }
 

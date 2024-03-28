@@ -1,11 +1,16 @@
-=== tests/cases/compiler/conflictMarkerDiff3Trivia1.ts ===
+//// [tests/cases/compiler/conflictMarkerDiff3Trivia1.ts] ////
+
+=== conflictMarkerDiff3Trivia1.ts ===
 class C {
 >C : C
+>  : ^
 
 <<<<<<< HEAD
     v = 1;
 >v : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 ||||||| merged common ancestors
     v = 3;

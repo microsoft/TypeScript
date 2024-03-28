@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restElementAssignable.ts] ////
+
 //// [restElementAssignable.ts]
 {
     const { ...props } = {};

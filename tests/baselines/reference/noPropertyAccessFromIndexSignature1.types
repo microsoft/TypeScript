@@ -1,97 +1,143 @@
-=== tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts ===
+//// [tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts] ////
+
+=== noPropertyAccessFromIndexSignature1.ts ===
 interface A {
     foo: string
 >foo : string
+>    : ^^^^^^
 }
 
 interface B {
     [k: string]: string
 >k : string
+>  : ^^^^^^
 }
 
 interface C {
     foo: string
 >foo : string
+>    : ^^^^^^
 
     [k: string]: string
 >k : string
+>  : ^^^^^^
 }
 
 declare const a: A;
 >a : A
+>  : ^
 
 declare const b: B;
 >b : B
+>  : ^
 
 declare const c: C;
 >c : C
+>  : ^
 
 declare const d: C | undefined;
 >d : C
+>  : ^
 
 // access property
 a.foo;
 >a.foo : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 a["foo"]
 >a["foo"] : string
+>         : ^^^^^^
 >a : A
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
 // access index signature
 b.foo;
 >b.foo : string
+>      : ^^^^^^
 >b : B
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 b["foo"];
 >b["foo"] : string
+>         : ^^^^^^
 >b : B
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
 // access property
 c.foo;
 >c.foo : string
+>      : ^^^^^^
 >c : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 c["foo"]
 >c["foo"] : string
+>         : ^^^^^^
 >c : C
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
 // access index signature
 c.bar;
 >c.bar : string
+>      : ^^^^^^
 >c : C
+>  : ^
 >bar : string
+>    : ^^^^^^
 
 c["bar"];
 >c["bar"] : string
+>         : ^^^^^^
 >c : C
+>  : ^
 >"bar" : "bar"
+>      : ^^^^^
 
 // optional access property
 d?.foo;
 >d?.foo : string
+>       : ^^^^^^
 >d : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 d?.["foo"]
 >d?.["foo"] : string
+>           : ^^^^^^
 >d : C
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
 // optional access index signature
 d?.bar;
 >d?.bar : string
+>       : ^^^^^^
 >d : C
+>  : ^
 >bar : string
+>    : ^^^^^^
 
 d?.["bar"];
 >d?.["bar"] : string
+>           : ^^^^^^
 >d : C
+>  : ^
 >"bar" : "bar"
+>      : ^^^^^
 

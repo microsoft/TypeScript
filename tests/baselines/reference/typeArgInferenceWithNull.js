@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgInferenceWithNull.ts] ////
+
 //// [typeArgInferenceWithNull.ts]
 // All legal
 

@@ -1,21 +1,21 @@
-tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(7,1): error TS2322: Type 'I' is not assignable to type 'Object'.
+objectTypeHidingMembersOfObjectAssignmentCompat2.ts(7,1): error TS2322: Type 'I' is not assignable to type 'Object'.
   The types returned by 'toString()' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(8,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+objectTypeHidingMembersOfObjectAssignmentCompat2.ts(8,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   The types returned by 'toString()' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(14,1): error TS2322: Type 'C' is not assignable to type 'Object'.
+objectTypeHidingMembersOfObjectAssignmentCompat2.ts(14,1): error TS2322: Type 'C' is not assignable to type 'Object'.
   The types returned by 'toString()' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(15,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+objectTypeHidingMembersOfObjectAssignmentCompat2.ts(15,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   The types returned by 'toString()' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(20,1): error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
+objectTypeHidingMembersOfObjectAssignmentCompat2.ts(20,1): error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
   The types returned by 'toString()' are incompatible between these types.
     Type 'void' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts (5 errors) ====
+==== objectTypeHidingMembersOfObjectAssignmentCompat2.ts (5 errors) ====
     interface I {
         toString(): number;
     }

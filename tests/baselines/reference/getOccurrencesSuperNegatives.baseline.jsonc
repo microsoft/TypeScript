@@ -1,0 +1,61 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = /*HIGHLIGHTS*/super) {
+//     super;
+// }
+// 
+// --- (line: 5) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = super) {
+//     /*HIGHLIGHTS*/super;
+// }
+// 
+// module M {
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// function f(x = super) {
+//     super;
+// }
+// 
+// module M {
+//     /*HIGHLIGHTS*/super;
+//     function f(x = super) {
+//     super;
+//     }
+// --- (line: 10) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// --- (line: 3) skipped ---
+// 
+// module M {
+//     super;
+//     function f(x = /*HIGHLIGHTS*/super) {
+//     super;
+//     }
+// 
+// --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuperNegatives.ts ===
+// --- (line: 4) skipped ---
+// module M {
+//     super;
+//     function f(x = super) {
+//     /*HIGHLIGHTS*/super;
+//     }
+// 
+//     class A {
+// --- (line: 12) skipped ---

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/verbatimModuleSyntaxDefaultValue.ts] ////
+
+=== index.ts ===
 class Task {}
 >Task : Symbol(Task, Decl(index.ts, 0, 0))
 

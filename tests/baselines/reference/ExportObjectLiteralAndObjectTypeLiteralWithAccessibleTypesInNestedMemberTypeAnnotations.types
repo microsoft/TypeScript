@@ -1,27 +1,40 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts] ////
+
+=== ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     class Point {
 >Point : Point
+>      : ^^^^^
 
         constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
 
     export var UnitSquare : {
->UnitSquare : { top: {    left: Point;    right: Point;}; bottom: {    left: Point;    right: Point;}; }
+>UnitSquare : { top: { left: Point; right: Point; }; bottom: { left: Point; right: Point; }; }
+>           : ^^^^^^^                              ^^^^^^^^^^                              ^^^
 
         top: { left: Point, right: Point },
 >top : { left: Point; right: Point; }
+>    : ^^^^^^^^     ^^^^^^^^^     ^^^
 >left : Point
+>     : ^^^^^
 >right : Point
+>      : ^^^^^
 
         bottom: { left: Point, right: Point }
 >bottom : { left: Point; right: Point; }
+>       : ^^^^^^^^     ^^^^^^^^^     ^^^
 >left : Point
+>     : ^^^^^
 >right : Point
+>      : ^^^^^
 
     } = null;
 }

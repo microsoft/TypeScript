@@ -1,102 +1,140 @@
-=== tests/cases/compiler/collisionRestParameterClassConstructor.ts ===
+//// [tests/cases/compiler/collisionRestParameterClassConstructor.ts] ////
+
+=== collisionRestParameterClassConstructor.ts ===
 // Constructors
 class c1 {
 >c1 : c1
+>   : ^^
 
     constructor(_i: number, ...restParameters) { //_i is error
 >_i : number
+>   : ^^^^^^
 >restParameters : any[]
+>               : ^^^^^
 
         var _i = 10; // no error
 >_i : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class c1NoError {
 >c1NoError : c1NoError
+>          : ^^^^^^^^^
 
     constructor(_i: number) { // no error
 >_i : number
+>   : ^^^^^^
 
         var _i = 10; // no error
 >_i : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 
 class c2 {
 >c2 : c2
+>   : ^^
 
     constructor(...restParameters) {
 >restParameters : any[]
+>               : ^^^^^
 
         var _i = 10; // no error
 >_i : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class c2NoError {
 >c2NoError : c2NoError
+>          : ^^^^^^^^^
 
     constructor() {
         var _i = 10; // no error
 >_i : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 
 class c3 {
 >c3 : c3
+>   : ^^
 
     constructor(public _i: number, ...restParameters) { //_i is error
 >_i : number
+>   : ^^^^^^
 >restParameters : any[]
+>               : ^^^^^
 
         var _i = 10; // no error
 >_i : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class c3NoError {
 >c3NoError : c3NoError
+>          : ^^^^^^^^^
 
     constructor(public _i: number) { // no error
 >_i : number
+>   : ^^^^^^
 
         var _i = 10; // no error
 >_i : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 
 declare class c4 {
 >c4 : c4
+>   : ^^
 
     constructor(_i: number, ...restParameters); // No error - no code gen
 >_i : number
+>   : ^^^^^^
 >restParameters : any[]
+>               : ^^^^^
 }
 declare class c4NoError {
 >c4NoError : c4NoError
+>          : ^^^^^^^^^
 
     constructor(_i: number);  // no error
 >_i : number
+>   : ^^^^^^
 }
 
 class c5 {
 >c5 : c5
+>   : ^^
 
     constructor(_i: number, ...rest); // no codegen no error
 >_i : number
+>   : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 
     constructor(_i: string, ...rest); // no codegen no error
 >_i : string
+>   : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 
     constructor(_i: any, ...rest) { // error
 >_i : any
 >rest : any[]
+>     : ^^^^^
 
         var _i: any; // no error
 >_i : any
@@ -105,12 +143,15 @@ class c5 {
 
 class c5NoError {
 >c5NoError : c5NoError
+>          : ^^^^^^^^^
 
     constructor(_i: number); // no error
 >_i : number
+>   : ^^^^^^
 
     constructor(_i: string); // no error
 >_i : string
+>   : ^^^^^^
 
     constructor(_i: any) { // no error
 >_i : any
@@ -122,22 +163,30 @@ class c5NoError {
 
 declare class c6 {
 >c6 : c6
+>   : ^^
 
     constructor(_i: number, ...rest); // no codegen no error
 >_i : number
+>   : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 
     constructor(_i: string, ...rest); // no codegen no error
 >_i : string
+>   : ^^^^^^
 >rest : any[]
+>     : ^^^^^
 }
 
 declare class c6NoError {
 >c6NoError : c6NoError
+>          : ^^^^^^^^^
 
     constructor(_i: number); // no error
 >_i : number
+>   : ^^^^^^
 
     constructor(_i: string); // no error
 >_i : string
+>   : ^^^^^^
 }

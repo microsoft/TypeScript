@@ -1,13 +1,25 @@
-=== tests/cases/compiler/contextualTyping10.ts ===
+//// [tests/cases/compiler/contextualTyping10.ts] ////
+
+=== contextualTyping10.ts ===
 class foo { public bar:{id:number;}[] = [{id:1}, {id:2}]; }
 >foo : foo
+>    : ^^^
 >bar : { id: number; }[]
+>    : ^^^^^^      ^^^^^
 >id : number
+>   : ^^^^^^
 >[{id:1}, {id:2}] : { id: number; }[]
+>                 : ^^^^^^^^^^^^^^^^^
 >{id:1} : { id: number; }
+>       : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 >{id:2} : { id: number; }
+>       : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
+//// [tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts] ////
+
+=== indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
 declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
 >f : Symbol(f, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 0))
 >T : Symbol(T, Decl(indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts, 0, 19))

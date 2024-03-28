@@ -1,134 +1,206 @@
-=== tests/cases/compiler/deleteExpressionMustBeOptional.ts ===
+//// [tests/cases/compiler/deleteExpressionMustBeOptional.ts] ////
+
+=== deleteExpressionMustBeOptional.ts ===
 interface Foo {
     a: number
 >a : number
+>  : ^^^^^^
 
     b: number | undefined
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     c: number | null
 >c : number | null
+>  : ^^^^^^^^^^^^^
 
     d?: number
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     e: number | undefined | null
 >e : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f?: number | undefined | null
 >f : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     g: unknown
 >g : unknown
+>  : ^^^^^^^
 
     h: any
 >h : any
+>  : ^^^
 
     i: never
 >i : never
+>  : ^^^^^
 }
 
 interface AA {
     [s: string]: number
 >s : string
+>  : ^^^^^^
 }
 
 type BB = {
->BB : { [x: string]: number; }
+>BB : BB
+>   : ^^
 
     [P in keyof any]: number
 }
 
 declare const f: Foo
 >f : Foo
+>  : ^^^
 
 declare const a: AA
 >a : AA
+>  : ^^
 
 declare const b: BB
 >b : BB
+>  : ^^
 
 delete f.a
 >delete f.a : boolean
+>           : ^^^^^^^
 >f.a : number
+>    : ^^^^^^
 >f : Foo
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 delete f.b
 >delete f.b : boolean
+>           : ^^^^^^^
 >f.b : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >f : Foo
+>  : ^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 delete f.c
 >delete f.c : boolean
+>           : ^^^^^^^
 >f.c : number | null
+>    : ^^^^^^^^^^^^^
 >f : Foo
+>  : ^^^
 >c : number | null
+>  : ^^^^^^^^^^^^^
 
 delete f.d
 >delete f.d : boolean
+>           : ^^^^^^^
 >f.d : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >f : Foo
+>  : ^^^
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 delete f.e
 >delete f.e : boolean
+>           : ^^^^^^^
 >f.e : number | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : Foo
+>  : ^^^
 >e : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 delete f.f
 >delete f.f : boolean
+>           : ^^^^^^^
 >f.f : number | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : Foo
+>  : ^^^
 >f : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 delete f.g
 >delete f.g : boolean
+>           : ^^^^^^^
 >f.g : unknown
+>    : ^^^^^^^
 >f : Foo
+>  : ^^^
 >g : unknown
+>  : ^^^^^^^
 
 delete f.h
 >delete f.h : boolean
+>           : ^^^^^^^
 >f.h : any
+>    : ^^^
 >f : Foo
+>  : ^^^
 >h : any
+>  : ^^^
 
 delete f.i
 >delete f.i : boolean
+>           : ^^^^^^^
 >f.i : never
+>    : ^^^^^
 >f : Foo
+>  : ^^^
 >i : never
+>  : ^^^^^
 
 delete f.j
 >delete f.j : boolean
+>           : ^^^^^^^
 >f.j : any
+>    : ^^^
 >f : Foo
+>  : ^^^
 >j : any
+>  : ^^^
 
 delete a.a
 >delete a.a : boolean
+>           : ^^^^^^^
 >a.a : number
+>    : ^^^^^^
 >a : AA
+>  : ^^
 >a : number
+>  : ^^^^^^
 
 delete a.b
 >delete a.b : boolean
+>           : ^^^^^^^
 >a.b : number
+>    : ^^^^^^
 >a : AA
+>  : ^^
 >b : number
+>  : ^^^^^^
 
 delete b.a
 >delete b.a : boolean
+>           : ^^^^^^^
 >b.a : number
+>    : ^^^^^^
 >b : BB
+>  : ^^
 >a : number
+>  : ^^^^^^
 
 delete b.b
 >delete b.b : boolean
+>           : ^^^^^^^
 >b.b : number
+>    : ^^^^^^
 >b : BB
+>  : ^^
 >b : number
+>  : ^^^^^^
 

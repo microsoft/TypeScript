@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexer2A.ts] ////
+
 //// [indexer2A.ts]
 class IHeapObjectProperty { }
 class IDirectChildrenMap {

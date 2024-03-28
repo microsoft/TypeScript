@@ -1,23 +1,25 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/doNotEmitPinnedCommentOnNotEmittedNode.ts] ////
+
+=== doNotEmitPinnedCommentOnNotEmittedNode.ts ===
 class C {
->C : Symbol(C, Decl(file1.ts, 0, 0))
+>C : Symbol(C, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 0))
 
     /*! remove pinned comment anywhere else */
     public foo(x: string, y: any)
->foo : Symbol(C.foo, Decl(file1.ts, 0, 9), Decl(file1.ts, 2, 33))
->x : Symbol(x, Decl(file1.ts, 2, 15))
->y : Symbol(y, Decl(file1.ts, 2, 25))
+>foo : Symbol(C.foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
+>x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 15))
+>y : Symbol(y, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 25))
 
     public foo(x: string, y: number) { }
->foo : Symbol(C.foo, Decl(file1.ts, 0, 9), Decl(file1.ts, 2, 33))
->x : Symbol(x, Decl(file1.ts, 3, 15))
->y : Symbol(y, Decl(file1.ts, 3, 25))
+>foo : Symbol(C.foo, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 0, 9), Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 2, 33))
+>x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 3, 15))
+>y : Symbol(y, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 3, 25))
 }
 
 var x = 10;
->x : Symbol(x, Decl(file1.ts, 6, 3))
+>x : Symbol(x, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 6, 3))
 
 /*! remove pinned comment anywhere else */
 declare var OData: any;
->OData : Symbol(OData, Decl(file1.ts, 9, 11))
+>OData : Symbol(OData, Decl(doNotEmitPinnedCommentOnNotEmittedNode.ts, 9, 11))
 

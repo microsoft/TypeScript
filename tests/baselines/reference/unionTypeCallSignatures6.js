@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures6.ts] ////
+
 //// [unionTypeCallSignatures6.ts]
 type A = { a: string };
 type B = { b: number };

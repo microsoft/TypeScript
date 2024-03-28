@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration1.ts(2,12): error TS1028: Accessibility modifier already seen.
+parserMemberFunctionDeclaration1.ts(2,12): error TS1028: Accessibility modifier already seen.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration1.ts (1 errors) ====
+==== parserMemberFunctionDeclaration1.ts (1 errors) ====
     class C {
         public public Foo() { }
                ~~~~~~

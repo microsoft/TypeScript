@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts ===
+//// [tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts] ////
+
+=== controlFlowFinallyNoCatchAssignments.ts ===
 let x: number;
 >x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
 

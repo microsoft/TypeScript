@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.ts] ////
+
 //// [jsDeclarationsExportAssignedConstructorFunctionWithSub.js]
 /**
  * @param {number} p

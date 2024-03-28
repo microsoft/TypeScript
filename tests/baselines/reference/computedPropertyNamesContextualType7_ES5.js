@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType7_ES5.ts] ////
+
 //// [computedPropertyNamesContextualType7_ES5.ts]
 interface I<T> {
     [n: number]: T;

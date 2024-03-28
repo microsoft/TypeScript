@@ -1,14 +1,21 @@
-=== tests/cases/compiler/declarationEmitInferredTypeAlias8.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias8.ts] ////
+
+=== declarationEmitInferredTypeAlias8.ts ===
 type Foo<T> = T | { x: Foo<T> };
 >Foo : Foo<T>
+>    : ^^^^^^
 >x : Foo<T>
+>  : ^^^^^^
 
 var x: Foo<number[]>;
 >x : Foo<number[]>
+>  : ^^^^^^^^^^^^^
 
 function returnSomeGlobalValue() {
 >returnSomeGlobalValue : () => Foo<number[]>
+>                      : ^^^^^^^^^^^^^^^^^^^
 
     return x;
 >x : Foo<number[]>
+>  : ^^^^^^^^^^^^^
 }

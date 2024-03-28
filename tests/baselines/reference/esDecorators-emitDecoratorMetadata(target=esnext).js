@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-emitDecoratorMetadata.ts] ////
+
 //// [esDecorators-emitDecoratorMetadata.ts]
 declare let dec: any;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnImportStatement1.ts] ////
+
 //// [commentOnImportStatement1.ts]
 /* Copyright */
 

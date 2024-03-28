@@ -1,13 +1,10 @@
-import { libContent } from "../tsc/helpers";
+import {
+    getSysForNoEmitOnError,
+} from "../helpers/noEmitOnError";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../tscWatch/helpers";
-import {
-    createWatchedSystem,
-    getTsBuildProjectFile,
-    libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/tscWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {
@@ -15,10 +12,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
             caption,
             edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
             // build project
-            timeouts: sys => {
-                sys.checkTimeoutQueueLengthAndRun(1);
-                sys.checkTimeoutQueueLength(0);
-            },
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
 
@@ -26,36 +20,35 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
         caption: "No change",
         edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
         // build project
-        timeouts: sys => {
-            sys.checkTimeoutQueueLengthAndRun(1);
-            sys.checkTimeoutQueueLength(0);
-        },
+        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     };
     verifyTscWatch({
         scenario: "noEmitOnError",
         subScenario: "does not emit any files on error",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () => createWatchedSystem(
-            [
-                ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                    .map(f => getTsBuildProjectFile("noEmitOnError", f)),
-                { path: libFile.path, content: libContent }
-            ],
-            { currentDirectory: `/user/username/projects/noEmitOnError` }
-        ),
+        sys: getSysForNoEmitOnError,
         edits: [
             noChange,
-            change("Fix Syntax error", `import { A } from "../shared/types/db";
+            change(
+                "Fix Syntax error",
+                `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`),
-            change("Semantic Error", `import { A } from "../shared/types/db";
-const a: string = 10;`),
+};`,
+            ),
+            change(
+                "Semantic Error",
+                `import { A } from "../shared/types/db";
+const a: string = 10;`,
+            ),
             noChange,
-            change("Fix Semantic Error", `import { A } from "../shared/types/db";
-const a: string = "hello";`),
+            change(
+                "Fix Semantic Error",
+                `import { A } from "../shared/types/db";
+const a: string = "hello";`,
+            ),
             noChange,
         ],
-        baselineIncremental: true
+        baselineIncremental: true,
     });
 });

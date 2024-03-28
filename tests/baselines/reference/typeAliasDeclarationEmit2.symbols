@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAliasDeclarationEmit2.ts ===
+//// [tests/cases/compiler/typeAliasDeclarationEmit2.ts] ////
+
+=== typeAliasDeclarationEmit2.ts ===
 export type A<a> = { value: a };
 >A : Symbol(A, Decl(typeAliasDeclarationEmit2.ts, 0, 0))
 >a : Symbol(a, Decl(typeAliasDeclarationEmit2.ts, 0, 14))

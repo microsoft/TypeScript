@@ -1,11 +1,17 @@
-=== tests/cases/compiler/dottedModuleName2.ts ===
+//// [tests/cases/compiler/dottedModuleName2.ts] ////
+
+=== dottedModuleName2.ts ===
 module A.B {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
  
   export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
  
 }
  
@@ -13,11 +19,15 @@ module A.B {
  
 module AA { export module B {
 >AA : typeof AA
+>   : ^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
  
   export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
  
 } }
  
@@ -25,31 +35,48 @@ module AA { export module B {
  
 var tmpOK = AA.B.x;
 >tmpOK : number
+>      : ^^^^^^
 >AA.B.x : number
+>       : ^^^^^^
 >AA.B : typeof AA.B
+>     : ^^^^^^^^^^^
 >AA : typeof AA
+>   : ^^^^^^^^^
 >B : typeof AA.B
+>  : ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
  
 var tmpError = A.B.x;
 >tmpError : number
+>         : ^^^^^^
 >A.B.x : number
+>      : ^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 
 module A.B.C
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
  
 {
  
     export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
  
 }
  
@@ -61,18 +88,27 @@ module M
  
     import X1 = A;
 >X1 : typeof X1
+>   : ^^^^^^^^^
 >A : typeof X1
+>  : ^^^^^^^^^
  
     import X2 = A.B;
 >X2 : typeof X1.B
+>   : ^^^^^^^^^^^
 >A : typeof X1
+>  : ^^^^^^^^^
 >B : typeof X1.B
+>  : ^^^^^^^^^^^
  
     import X3 = A.B.C;
 >X3 : typeof X2.C
+>   : ^^^^^^^^^^^
 >A : typeof X1
+>  : ^^^^^^^^^
 >B : typeof X1.B
+>  : ^^^^^^^^^^^
 >C : typeof X2.C
+>  : ^^^^^^^^^^^
  
 }
 

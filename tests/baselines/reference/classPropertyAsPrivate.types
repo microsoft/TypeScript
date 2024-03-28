@@ -1,82 +1,127 @@
-=== tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts] ////
+
+=== classPropertyAsPrivate.ts ===
 class C {
 >C : C
+>  : ^
 
     private x: string;
 >x : string
+>  : ^^^^^^
 
     private get y() { return null; }
 >y : any
+>  : ^^^
 
     private set y(x) { }
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     private static a: string;
 >a : string
+>  : ^^^^^^
 
     private static get b() { return null; }
 >b : any
+>  : ^^^
 
     private static set b(x) { }
 >b : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     private static foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 // all errors
 c.x;
 >c.x : string
+>    : ^^^^^^
 >c : C
+>  : ^
 >x : string
+>  : ^^^^^^
 
 c.y;
 >c.y : any
+>    : ^^^
 >c : C
+>  : ^
 >y : any
+>  : ^^^
 
 c.y = 1;
 >c.y = 1 : 1
+>        : ^
 >c.y : any
+>    : ^^^
 >c : C
+>  : ^
 >y : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 c.foo();
 >c.foo() : void
+>        : ^^^^
 >c.foo : () => void
+>      : ^^^^^^^^^^
 >c : C
+>  : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 C.a;
 >C.a : string
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 C.b();
 >C.b() : any
+>      : ^^^
 >C.b : any
+>    : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 
 C.b = 1;
 >C.b = 1 : 1
+>        : ^
 >C.b : any
+>    : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >b : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 C.foo();
 >C.foo() : void
+>        : ^^^^
 >C.foo : () => void
+>      : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 

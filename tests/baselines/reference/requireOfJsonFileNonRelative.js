@@ -21,6 +21,7 @@ if (x) {
     "b": "hello"
 }
 
+
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

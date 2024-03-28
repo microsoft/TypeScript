@@ -1,14 +1,19 @@
+//// [tests/cases/compiler/declarationFilesWithTypeReferences3.ts] ////
+
 === /a/node_modules/@types/node/index.d.ts ===
 interface Error2 {
     stack2: string;
 >stack2 : string
+>       : ^^^^^^
 }
 
 === /a/app.ts ===
 /// <reference types="node"/>
 function foo(): Error2 {
 >foo : () => Error2
+>    : ^^^^^^      
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }

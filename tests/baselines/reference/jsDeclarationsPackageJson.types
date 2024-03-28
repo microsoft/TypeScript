@@ -1,114 +1,169 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsPackageJson.ts] ////
+
+=== index.js ===
 const j = require("./package.json");
 >j : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require("./package.json") : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./package.json" : "./package.json"
+>                 : ^^^^^^^^^^^^^^^^
 
 module.exports = j;
 >module.exports = j : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >j : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/package.json ===
+=== package.json ===
 {
 >{    "name": "pkg",    "version": "0.1.0",    "description": "A package",    "main": "./dist/index.js",    "bin": {      "cli": "./bin/cli.js",    },    "engines": {      "node": ">=0"    },    "scripts": {      "scriptname": "run && run again",    },    "devDependencies": {      "@ns/dep": "0.1.2",    },    "dependencies": {      "dep": "1.2.3",    },    "repository": "microsoft/TypeScript",    "keywords": [      "kw"    ],    "author": "Auth",    "license": "See Licensce",    "homepage": "https://site",    "config": {      "o": ["a"]    }} : { name: string; version: string; description: string; main: string; bin: { cli: string; }; engines: { node: string; }; scripts: { scriptname: string; }; devDependencies: { "@ns/dep": string; }; dependencies: { dep: string; }; repository: string; keywords: string[]; author: string; license: string; homepage: string; config: { o: string[]; }; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "name": "pkg",
 >"name" : string
+>       : ^^^^^^
 >"pkg" : "pkg"
+>      : ^^^^^
 
     "version": "0.1.0",
 >"version" : string
+>          : ^^^^^^
 >"0.1.0" : "0.1.0"
+>        : ^^^^^^^
 
     "description": "A package",
 >"description" : string
+>              : ^^^^^^
 >"A package" : "A package"
+>            : ^^^^^^^^^^^
 
     "main": "./dist/index.js",
 >"main" : string
+>       : ^^^^^^
 >"./dist/index.js" : "./dist/index.js"
+>                  : ^^^^^^^^^^^^^^^^^
 
     "bin": {
 >"bin" : { cli: string; }
+>      : ^^^^^^^^^^^^^^^^
 >{      "cli": "./bin/cli.js",    } : { cli: string; }
+>                                   : ^^^^^^^^^^^^^^^^
 
       "cli": "./bin/cli.js",
 >"cli" : string
+>      : ^^^^^^
 >"./bin/cli.js" : "./bin/cli.js"
+>               : ^^^^^^^^^^^^^^
 
     },
     "engines": {
 >"engines" : { node: string; }
+>          : ^^^^^^^^^^^^^^^^^
 >{      "node": ">=0"    } : { node: string; }
+>                          : ^^^^^^^^^^^^^^^^^
 
       "node": ">=0"
 >"node" : string
+>       : ^^^^^^
 >">=0" : ">=0"
+>      : ^^^^^
 
     },
     "scripts": {
 >"scripts" : { scriptname: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
 >{      "scriptname": "run && run again",    } : { scriptname: string; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^
 
       "scriptname": "run && run again",
 >"scriptname" : string
+>             : ^^^^^^
 >"run && run again" : "run && run again"
+>                   : ^^^^^^^^^^^^^^^^^^
 
     },
     "devDependencies": {
 >"devDependencies" : { "@ns/dep": string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >{      "@ns/dep": "0.1.2",    } : { "@ns/dep": string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^
 
       "@ns/dep": "0.1.2",
 >"@ns/dep" : string
+>          : ^^^^^^
 >"0.1.2" : "0.1.2"
+>        : ^^^^^^^
 
     },
     "dependencies": {
 >"dependencies" : { dep: string; }
+>               : ^^^^^^^^^^^^^^^^
 >{      "dep": "1.2.3",    } : { dep: string; }
+>                            : ^^^^^^^^^^^^^^^^
 
       "dep": "1.2.3",
 >"dep" : string
+>      : ^^^^^^
 >"1.2.3" : "1.2.3"
+>        : ^^^^^^^
 
     },
     "repository": "microsoft/TypeScript",
 >"repository" : string
+>             : ^^^^^^
 >"microsoft/TypeScript" : "microsoft/TypeScript"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
     "keywords": [
 >"keywords" : string[]
+>           : ^^^^^^^^
 >[      "kw"    ] : string[]
+>                 : ^^^^^^^^
 
       "kw"
 >"kw" : "kw"
+>     : ^^^^
 
     ],
     "author": "Auth",
 >"author" : string
+>         : ^^^^^^
 >"Auth" : "Auth"
+>       : ^^^^^^
 
     "license": "See Licensce",
 >"license" : string
+>          : ^^^^^^
 >"See Licensce" : "See Licensce"
+>               : ^^^^^^^^^^^^^^
 
     "homepage": "https://site",
 >"homepage" : string
+>           : ^^^^^^
 >"https://site" : "https://site"
+>               : ^^^^^^^^^^^^^^
 
     "config": {
 >"config" : { o: string[]; }
+>         : ^^^^^^^^^^^^^^^^
 >{      "o": ["a"]    } : { o: string[]; }
+>                       : ^^^^^^^^^^^^^^^^
 
       "o": ["a"]
 >"o" : string[]
+>    : ^^^^^^^^
 >["a"] : string[]
+>      : ^^^^^^^^
 >"a" : "a"
+>    : ^^^
     }
 }
   

@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts(7,13): error TS2339: Property '#prop' does not exist on type '{}'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts(9,14): error TS2339: Property '#prop' does not exist on type '{}'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts(12,17): error TS2339: Property '#propStatic' does not exist on type '{ prototype: C; }'.
-tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts(14,15): error TS2339: Property '#propStatic' does not exist on type '{ prototype: C; }'.
+privateNameAndObjectRestSpread.ts(7,13): error TS2339: Property '#prop' does not exist on type '{}'.
+privateNameAndObjectRestSpread.ts(9,14): error TS2339: Property '#prop' does not exist on type '{}'.
+privateNameAndObjectRestSpread.ts(12,17): error TS2339: Property '#propStatic' does not exist on type '{ prototype: C; }'.
+privateNameAndObjectRestSpread.ts(14,15): error TS2339: Property '#propStatic' does not exist on type '{ prototype: C; }'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts (4 errors) ====
+==== privateNameAndObjectRestSpread.ts (4 errors) ====
     class C {
         #prop = 1;
         static #propStatic = 1;

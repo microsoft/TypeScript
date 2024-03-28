@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts ===
+//// [tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts] ////
+
+=== emitCapturingThisInTupleDestructuring2.ts ===
 var array1: [number, number] = [1, 2];
 >array1 : Symbol(array1, Decl(emitCapturingThisInTupleDestructuring2.ts, 0, 3))
 

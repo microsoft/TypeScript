@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyOverridingPrototype.ts] ////
+
 //// [propertyOverridingPrototype.ts]
 class Base {
     foo() {

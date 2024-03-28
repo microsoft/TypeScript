@@ -1,8 +1,11 @@
+//// [tests/cases/compiler/typeReferenceDirectives1.ts] ////
+
 === /app.ts ===
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 interface A {
     x: $
 >x : $
+>  : ^
 }
 === /types/lib/index.d.ts ===
 interface $ { x }

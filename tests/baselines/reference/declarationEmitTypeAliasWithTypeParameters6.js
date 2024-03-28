@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters6.ts] ////
+
 //// [declarationEmitTypeAliasWithTypeParameters6.ts]
 type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>

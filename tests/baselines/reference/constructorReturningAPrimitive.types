@@ -1,35 +1,48 @@
-=== tests/cases/compiler/constructorReturningAPrimitive.ts ===
+//// [tests/cases/compiler/constructorReturningAPrimitive.ts] ////
+
+=== constructorReturningAPrimitive.ts ===
 // technically not allowed by JavaScript but we don't have a 'not-primitive' constraint
 // functionally only possible when your class is otherwise devoid of members so of little consequence in practice
 
 class A {
 >A : A
+>  : ^
 
     constructor() {
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 var a = new A();
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 class B<T> {
 >B : B<T>
+>  : ^^^^
 
     constructor() {
         var x: T;
 >x : T
+>  : ^
 
         return x;
 >x : T
+>  : ^
     }
 }
 
 var b = new B<number>();
 >b : B<number>
+>  : ^^^^^^^^^
 >new B<number>() : B<number>
+>                : ^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 

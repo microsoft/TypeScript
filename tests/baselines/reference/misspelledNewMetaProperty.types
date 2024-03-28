@@ -1,6 +1,11 @@
-=== tests/cases/compiler/misspelledNewMetaProperty.ts ===
+//// [tests/cases/compiler/misspelledNewMetaProperty.ts] ////
+
+=== misspelledNewMetaProperty.ts ===
 function foo(){new.targ}
 >foo : () => void
+>    : ^^^^^^^^^^
 >new.targ : () => void
->targ : any
+>         : ^^^^^^^^^^
+>targ : () => void
+>     : ^^^^^^^^^^
 

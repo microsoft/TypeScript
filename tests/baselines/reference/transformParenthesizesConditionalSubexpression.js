@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transformParenthesizesConditionalSubexpression.ts] ////
+
 //// [transformParenthesizesConditionalSubexpression.ts]
 var K = 'k'
 var a = { p  : (true ? { [K] : 'v'}        : null) }

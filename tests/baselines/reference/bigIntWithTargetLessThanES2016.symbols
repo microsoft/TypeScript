@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bigIntWithTargetLessThanES2016.ts ===
+//// [tests/cases/compiler/bigIntWithTargetLessThanES2016.ts] ////
+
+=== bigIntWithTargetLessThanES2016.ts ===
 BigInt(1) ** BigInt(1); // should error
 >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))

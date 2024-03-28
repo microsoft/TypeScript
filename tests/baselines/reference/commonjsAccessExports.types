@@ -1,39 +1,63 @@
+//// [tests/cases/compiler/commonjsAccessExports.ts] ////
+
 === /a.js ===
 exports.x = 0;
 >exports.x = 0 : 0
+>              : ^
 >exports.x : 0
+>          : ^
 >exports : typeof import("/a")
+>        : ^^^^^^^^^^^^^^^^^^^
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
 exports.x;
 >exports.x : 0
+>          : ^
 >exports : typeof import("/a")
+>        : ^^^^^^^^^^^^^^^^^^^
 >x : 0
+>  : ^
 
 // Works nested
 {
     // 'exports' does not provide a contextual type to a function-class
     exports.Cls = function() {
 >exports.Cls = function() {        this.x = 0;    } : typeof Cls
+>                                                   : ^^^^^^^^^^
 >exports.Cls : typeof Cls
+>            : ^^^^^^^^^^
 >exports : typeof import("/a")
+>        : ^^^^^^^^^^^^^^^^^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >function() {        this.x = 0;    } : typeof Cls
+>                                     : ^^^^^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
     }
 }
 
 const instance = new exports.Cls();
 >instance : Cls
+>         : ^^^
 >new exports.Cls() : Cls
+>                  : ^^^
 >exports.Cls : typeof Cls
+>            : ^^^^^^^^^^
 >exports : typeof import("/a")
+>        : ^^^^^^^^^^^^^^^^^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 

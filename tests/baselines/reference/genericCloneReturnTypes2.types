@@ -1,66 +1,108 @@
-=== tests/cases/compiler/genericCloneReturnTypes2.ts ===
+//// [tests/cases/compiler/genericCloneReturnTypes2.ts] ////
+
+=== genericCloneReturnTypes2.ts ===
 class MyList<T> {
 >MyList : MyList<T>
+>       : ^^^^^^^^^
 
     public size: number;
 >size : number
+>     : ^^^^^^
 
     public data: T[];
 >data : T[]
+>     : ^^^
 
     constructor(n: number) {
 >n : number
+>  : ^^^^^^
 
         this.size = n;
 >this.size = n : number
+>              : ^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
 >n : number
+>  : ^^^^^^
 
         this.data = new Array<T>(this.size);
 >this.data = new Array<T>(this.size) : T[]
+>                                    : ^^^
 >this.data : T[]
+>          : ^^^
 >this : this
+>     : ^^^^
 >data : T[]
+>     : ^^^
 >new Array<T>(this.size) : T[]
+>                        : ^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
     }
     public clone() {
 >clone : () => MyList<T>
+>      : ^^^^^^^^^^^^^^^
 
         return new MyList<T>(this.size);
 >new MyList<T>(this.size) : MyList<T>
+>                         : ^^^^^^^^^
 >MyList : typeof MyList
+>       : ^^^^^^^^^^^^^
 >this.size : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >size : number
+>     : ^^^^^^
     }
 }
 var a: MyList<string>;
 >a : MyList<string>
+>  : ^^^^^^^^^^^^^^
 
 var b: MyList<any> = a.clone(); // ok
 >b : MyList<any>
+>  : ^^^^^^^^^^^
 >a.clone() : MyList<string>
+>          : ^^^^^^^^^^^^^^
 >a.clone : () => MyList<string>
+>        : ^^^^^^^^^^^^^^^^^^^^
 >a : MyList<string>
+>  : ^^^^^^^^^^^^^^
 >clone : () => MyList<string>
+>      : ^^^^^^^^^^^^^^^^^^^^
 
 var c: MyList<string> = a.clone(); // bug was there was an error on this line
 >c : MyList<string>
+>  : ^^^^^^^^^^^^^^
 >a.clone() : MyList<string>
+>          : ^^^^^^^^^^^^^^
 >a.clone : () => MyList<string>
+>        : ^^^^^^^^^^^^^^^^^^^^
 >a : MyList<string>
+>  : ^^^^^^^^^^^^^^
 >clone : () => MyList<string>
+>      : ^^^^^^^^^^^^^^^^^^^^
 
 var d: MyList<number> = a.clone(); // error
 >d : MyList<number>
+>  : ^^^^^^^^^^^^^^
 >a.clone() : MyList<string>
+>          : ^^^^^^^^^^^^^^
 >a.clone : () => MyList<string>
+>        : ^^^^^^^^^^^^^^^^^^^^
 >a : MyList<string>
+>  : ^^^^^^^^^^^^^^
 >clone : () => MyList<string>
+>      : ^^^^^^^^^^^^^^^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndForIn.ts] ////
+
 //// [keyofAndForIn.ts]
 // Repro from #12513
 

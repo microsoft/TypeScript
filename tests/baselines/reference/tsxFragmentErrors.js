@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxFragmentErrors.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { }

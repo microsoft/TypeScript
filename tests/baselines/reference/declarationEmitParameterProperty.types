@@ -1,9 +1,13 @@
-=== tests/cases/compiler/declarationEmitParameterProperty.ts ===
+//// [tests/cases/compiler/declarationEmitParameterProperty.ts] ////
+
+=== declarationEmitParameterProperty.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
   constructor(public bar?: string) {
 >bar : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
   }
 }
 

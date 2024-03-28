@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralES6.ts ===
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralES6.ts] ////
+
+=== binaryIntegerLiteralES6.ts ===
 var bin1 = 0b11010;
 >bin1 : Symbol(bin1, Decl(binaryIntegerLiteralES6.ts, 0, 3))
 

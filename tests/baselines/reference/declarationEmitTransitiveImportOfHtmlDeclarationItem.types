@@ -1,25 +1,36 @@
-=== tests/cases/compiler/foo.d.html.ts ===
+//// [tests/cases/compiler/declarationEmitTransitiveImportOfHtmlDeclarationItem.ts] ////
+
+=== foo.d.html.ts ===
 export declare class CustomHtmlRepresentationThing {}
 >CustomHtmlRepresentationThing : CustomHtmlRepresentationThing
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/reexporter.ts ===
+=== reexporter.ts ===
 import { CustomHtmlRepresentationThing } from "./foo.html";
 >CustomHtmlRepresentationThing : typeof CustomHtmlRepresentationThing
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function func() {
 >func : () => CustomHtmlRepresentationThing
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new CustomHtmlRepresentationThing();
 >new CustomHtmlRepresentationThing() : CustomHtmlRepresentationThing
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >CustomHtmlRepresentationThing : typeof CustomHtmlRepresentationThing
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { func } from "./reexporter";
->func : () => import("tests/cases/compiler/foo.d.html").CustomHtmlRepresentationThing
+>func : () => import("foo.d.html").CustomHtmlRepresentationThing
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const c = func();
->c : import("tests/cases/compiler/foo.d.html").CustomHtmlRepresentationThing
->func() : import("tests/cases/compiler/foo.d.html").CustomHtmlRepresentationThing
->func : () => import("tests/cases/compiler/foo.d.html").CustomHtmlRepresentationThing
+>c : import("foo.d.html").CustomHtmlRepresentationThing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func() : import("foo.d.html").CustomHtmlRepresentationThing
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func : () => import("foo.d.html").CustomHtmlRepresentationThing
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

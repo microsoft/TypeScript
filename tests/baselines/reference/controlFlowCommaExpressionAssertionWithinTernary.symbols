@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowCommaExpressionAssertionWithinTernary.ts ===
+//// [tests/cases/compiler/controlFlowCommaExpressionAssertionWithinTernary.ts] ////
+
+=== controlFlowCommaExpressionAssertionWithinTernary.ts ===
 declare function assert(value: any): asserts value;
 >assert : Symbol(assert, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 0))
 >value : Symbol(value, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 24))

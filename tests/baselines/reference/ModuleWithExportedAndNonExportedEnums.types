@@ -1,34 +1,56 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts] ////
+
+=== ModuleWithExportedAndNonExportedEnums.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export enum Color { Red, Blue }
 >Color : Color
+>      : ^^^^^
 >Red : Color.Red
+>    : ^^^^^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 
     enum Day { Monday, Tuesday }
 >Day : Day
+>    : ^^^
 >Monday : Day.Monday
+>       : ^^^^^^^^^^
 >Tuesday : Day.Tuesday
+>        : ^^^^^^^^^^^
 }
 
 // not an error since exported
 var a: A.Color = A.Color.Red;
 >a : A.Color
+>  : ^^^^^^^
 >A : any
+>  : ^^^
 >A.Color.Red : A.Color.Red
+>            : ^^^^^^^^^^^
 >A.Color : typeof A.Color
+>        : ^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Color : typeof A.Color
+>      : ^^^^^^^^^^^^^^
 >Red : A.Color.Red
+>    : ^^^^^^^^^^^
 
 // error not exported
 var b = A.Day.Monday;
 >b : any
+>  : ^^^
 >A.Day.Monday : any
+>             : ^^^
 >A.Day : any
+>      : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >Day : any
+>    : ^^^
 >Monday : any
+>       : ^^^
 

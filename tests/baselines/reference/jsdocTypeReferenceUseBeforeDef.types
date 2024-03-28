@@ -1,9 +1,13 @@
-=== tests/cases/conformance/jsdoc/bug25097.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceUseBeforeDef.ts] ////
+
+=== bug25097.js ===
 /** @type {C | null} */
 const c = null
 >c : C
+>  : ^
 
 class C {
 >C : C
+>  : ^
 }
 

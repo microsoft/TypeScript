@@ -1,17 +1,26 @@
-=== tests/cases/compiler/prettyFileWithErrorsAndTabs.ts ===
+//// [tests/cases/compiler/prettyFileWithErrorsAndTabs.ts] ////
+
+=== prettyFileWithErrorsAndTabs.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 	{
 		const x: string = 12;
 >x : string
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 		const y: string = 12;
 >y : string
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 		const z: string = 12;
 >z : string
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 	}
 }

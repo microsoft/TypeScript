@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(17,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
+file.tsx(17,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     import React = require('react')
     
     declare function OneThing(k: {yxx: string}): JSX.Element;
@@ -21,7 +21,7 @@ tests/cases/conformance/jsx/file.tsx(17,39): error TS2842: 'string' is an unused
     declare function TestingOneThing({y1: string}): JSX.Element;
                                           ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/conformance/jsx/file.tsx:17:46: We can only write a type for 'y1' by adding a type for the entire parameter here.
+!!! related TS2843 file.tsx:17:46: We can only write a type for 'y1' by adding a type for the entire parameter here.
     declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
     declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
     declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;

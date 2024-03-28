@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/extensionLoadingPriority.ts] ////
+
 === /project/a.js ===
 
 export default "a.js";
@@ -17,7 +19,9 @@ export default "dir.js";
 === /project/b.ts ===
 import a from "./a.js";
 >a : "a.js"
+>  : ^^^^^^
 
 import dir from "./dir";
 >dir : "dir/index.ts"
+>    : ^^^^^^^^^^^^^^
 

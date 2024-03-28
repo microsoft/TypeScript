@@ -1,13 +1,13 @@
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,49): error TS2322: Type 'T' is not assignable to type 'S'.
+chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,49): error TS2322: Type 'T' is not assignable to type 'S'.
   'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,35): error TS2322: Type 'T' is not assignable to type 'S'.
+chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,35): error TS2322: Type 'T' is not assignable to type 'S'.
   'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2322: Type 'string' is not assignable to type 'number'.
+chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2322: Type 'string' is not assignable to type 'number'.
+chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2322: Type 'string' is not assignable to type 'number'.
+chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts (5 errors) ====
+==== chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts (5 errors) ====
     class Chain<T> {
         constructor(public value: T) { }
         then<S extends T>(cb: (x: T) => S): Chain<S> {
@@ -18,16 +18,16 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
                                                     ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
 !!! error TS2322:   'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13: This type parameter might need an `extends S` constraint.
-!!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
+!!! related TS2208 chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13: This type parameter might need an `extends S` constraint.
+!!! related TS6502 chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // But error to try to climb up the chain
             (new Chain(s)).then(ss => t);
                                       ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
 !!! error TS2322:   'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13: This type parameter might need an `extends S` constraint.
-!!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
+!!! related TS2208 chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13: This type parameter might need an `extends S` constraint.
+!!! related TS6502 chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // Staying at T or S should be fine
             (new Chain(t)).then(tt => t).then(tt => t).then(tt => t);

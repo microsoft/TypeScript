@@ -1,4 +1,6 @@
-=== tests/cases/compiler/elementAccessExpressionInternalComments.ts ===
+//// [tests/cases/compiler/elementAccessExpressionInternalComments.ts] ////
+
+=== elementAccessExpressionInternalComments.ts ===
 /*0*/ Array /*1*/[ /*2*/ "toString" /*3*/ ] /*4*/; /*5*/
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >"toString" : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))

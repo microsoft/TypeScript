@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callbackArgsDifferByOptionality.ts ===
+//// [tests/cases/compiler/callbackArgsDifferByOptionality.ts] ////
+
+=== callbackArgsDifferByOptionality.ts ===
 function x3(callback: (x?: 'hi') => number);
 >x3 : Symbol(x3, Decl(callbackArgsDifferByOptionality.ts, 0, 0), Decl(callbackArgsDifferByOptionality.ts, 0, 44), Decl(callbackArgsDifferByOptionality.ts, 1, 45))
 >callback : Symbol(callback, Decl(callbackArgsDifferByOptionality.ts, 0, 12))

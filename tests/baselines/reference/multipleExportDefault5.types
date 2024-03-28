@@ -1,7 +1,11 @@
-=== tests/cases/conformance/externalModules/multipleExportDefault5.ts ===
+//// [tests/cases/conformance/externalModules/multipleExportDefault5.ts] ////
+
+=== multipleExportDefault5.ts ===
 export default function bar() { }
 >bar : typeof bar
+>    : ^^^^^^^^^^
 
 export default class C {}
 >C : bar
+>  : ^^^
 

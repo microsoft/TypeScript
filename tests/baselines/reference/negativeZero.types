@@ -1,6 +1,11 @@
-=== tests/cases/compiler/negativeZero.ts ===
+//// [tests/cases/compiler/negativeZero.ts] ////
+
+=== negativeZero.ts ===
 var x = -0
 >x : number
+>  : ^^^^^^
 >-0 : 0
+>   : ^
 >0 : 0
+>  : ^
 

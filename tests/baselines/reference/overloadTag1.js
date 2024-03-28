@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/overloadTag1.ts] ////
+
 //// [overloadTag1.js]
 /**
  * @overload
@@ -47,7 +49,8 @@ uncheckedInternally("zero", "one")
 //// [overloadTag1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uncheckedInternally = exports.overloaded = void 0;
+exports.overloaded = overloaded;
+exports.uncheckedInternally = uncheckedInternally;
 /**
  * @overload
  * @param {number} a
@@ -72,7 +75,6 @@ function overloaded(a, b) {
     }
     throw new Error("Invalid arguments");
 }
-exports.overloaded = overloaded;
 var o1 = overloaded(1, 2);
 var o2 = overloaded("zero", "one");
 var o3 = overloaded("a", false);
@@ -90,13 +92,64 @@ var o3 = overloaded("a", false);
 function uncheckedInternally(a, b) {
     return a + b;
 }
-exports.uncheckedInternally = uncheckedInternally;
 uncheckedInternally(1, 2);
 uncheckedInternally("zero", "one");
 
 
 //// [overloadTag1.d.ts]
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
 export function overloaded(a: number, b: number): number;
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
 export function overloaded(a: string, b: boolean): string;
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
 export function uncheckedInternally(a: number, b: number): number;
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
 export function uncheckedInternally(a: string, b: boolean): string;

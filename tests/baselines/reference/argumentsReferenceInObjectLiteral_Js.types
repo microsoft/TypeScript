@@ -1,61 +1,85 @@
+//// [tests/cases/compiler/argumentsReferenceInObjectLiteral_Js.ts] ////
+
 === /a.js ===
 const a = () => {
 >a : () => { arguments: any[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return {        arguments: [],    };} : () => { arguments: any[]; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        arguments: [],    } : { arguments: undefined[]; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         arguments: [],
 >arguments : undefined[]
+>          : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     };
 };
 
 const b = () => {
 >b : () => { arguments: any[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    const c = {        arguments: [],    }    return c;} : () => { arguments: any[]; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const c = {
 >c : { arguments: any[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >{        arguments: [],    } : { arguments: undefined[]; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         arguments: [],
 >arguments : undefined[]
+>          : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
     return c;
 >c : { arguments: any[]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 const c = () => {
 >c : () => { arguments: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return {        arguments,    };} : () => { arguments: any; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        arguments,    } : { arguments: any; }
+>                         : ^^^^^^^^^^^^^^^^^^^
 
         arguments,
 >arguments : any
+>          : ^^^
 
     };
 }
 
 const d = () => {
 >d : () => { arguments: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    const arguments = undefined;    return {        arguments,    };} : () => { arguments: any; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const arguments = undefined;
 >arguments : any
+>          : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     return {
 >{        arguments,    } : { arguments: any; }
+>                         : ^^^^^^^^^^^^^^^^^^^
 
         arguments,
 >arguments : any
+>          : ^^^
 
     };
 }

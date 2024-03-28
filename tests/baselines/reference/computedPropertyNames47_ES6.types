@@ -1,25 +1,42 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames47_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames47_ES6.ts] ////
+
+=== computedPropertyNames47_ES6.ts ===
 enum E1 { x }
 >E1 : E1
+>   : ^^
 >x : E1.x
+>  : ^^^^
 
 enum E2 { x }
 >E2 : E2
+>   : ^^
 >x : E2.x
+>  : ^^^^
 
 var o = {
 >o : { 0: number; }
+>  : ^^^^^^^^^^^^^^
 >{    [E1.x || E2.x]: 0} : { 0: number; }
+>                        : ^^^^^^^^^^^^^^
 
     [E1.x || E2.x]: 0
 >[E1.x || E2.x] : number
+>               : ^^^^^^
 >E1.x || E2.x : E2
+>             : ^^
 >E1.x : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >x : E1
+>  : ^^
 >E2.x : E2
+>     : ^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >x : E2
+>  : ^^
 >0 : 0
+>  : ^
 
 };

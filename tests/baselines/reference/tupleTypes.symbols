@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tupleTypes.ts ===
+//// [tests/cases/compiler/tupleTypes.ts] ////
+
+=== tupleTypes.ts ===
 var v1: [];  // Error
 >v1 : Symbol(v1, Decl(tupleTypes.ts, 0, 3))
 

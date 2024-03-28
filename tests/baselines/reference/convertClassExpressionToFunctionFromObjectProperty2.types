@@ -1,17 +1,25 @@
-=== tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty2.ts ===
+//// [tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty2.ts] ////
+
+=== convertClassExpressionToFunctionFromObjectProperty2.ts ===
 ({
 >({    x: class {        constructor() { }    },    y: class {        constructor() { }    },    // keywords    break: class {        constructor() { }    },    case: class {        constructor() { }    },    catch: class {        constructor() { }    },    class: class {        constructor() { }    },    const: class {        constructor() { }    },    continue: class {        constructor() { }    },    debugger: class {        constructor() { }    },    default: class {        constructor() { }    },    delete: class {        constructor() { }    },    do: class {        constructor() { }    },    else: class {        constructor() { }    },    enum: class {        constructor() { }    },    export: class {        constructor() { }    },    extends: class {        constructor() { }    },    false: class {        constructor() { }    },    finally: class {        constructor() { }    },    for: class {        constructor() { }    },    function: class {        constructor() { }    },    if: class {        constructor() { }    },    import: class {        constructor() { }    },    in: class {        constructor() { }    },    instanceof: class {        constructor() { }    },    new: class {        constructor() { }    },    null: class {        constructor() { }    },    return: class {        constructor() { }    },    super: class {        constructor() { }    },    switch: class {        constructor() { }    },    this: class {        constructor() { }    },    throw: class {        constructor() { }    },    true: class {        constructor() { }    },    try: class {        constructor() { }    },    typeof: class {        constructor() { }    },    var: class {        constructor() { }    },    void: class {        constructor() { }    },    while: class {        constructor() { }    },    with: class {        constructor() { }    },    implements: class {        constructor() { }    },    interface: class {        constructor() { }    },    let: class {        constructor() { }    },    package: class {        constructor() { }    },    private: class {        constructor() { }    },    protected: class {        constructor() { }    },    public: class {        constructor() { }    },    static: class {        constructor() { }    },    yield: class {        constructor() { }    },    abstract: class {        constructor() { }    },    as: class {        constructor() { }    },    asserts: class {        constructor() { }    },    any: class {        constructor() { }    },    async: class {        constructor() { }    },    await: class {        constructor() { }    },    boolean: class {        constructor() { }    },    constructor: class {        constructor() { }    },    declare: class {        constructor() { }    },    get: class {        constructor() { }    },    infer: class {        constructor() { }    },    is: class {        constructor() { }    },    keyof: class {        constructor() { }    },    module: class {        constructor() { }    },    namespace: class {        constructor() { }    },    never: class {        constructor() { }    },    readonly: class {        constructor() { }    },    require: class {        constructor() { }    },    number: class {        constructor() { }    },    object: class {        constructor() { }    },    set: class {        constructor() { }    },    string: class {        constructor() { }    },    symbol: class {        constructor() { }    },    type: class {        constructor() { }    },    undefined: class {        constructor() { }    },    unique: class {        constructor() { }    },    unknown: class {        constructor() { }    },    from: class {        constructor() { }    },    global: class {        constructor() { }    },    bigint: class {        constructor() { }    },    of: class {        constructor() { }    }}) : { x: typeof x; y: typeof y; break: typeof break; case: typeof case; catch: typeof catch; class: typeof class; const: typeof const; continue: typeof continue; debugger: typeof debugger; default: typeof default; delete: typeof delete; do: typeof do; else: typeof else; enum: typeof enum; export: typeof export; extends: typeof extends; false: typeof false; finally: typeof finally; for: typeof for; function: typeof function; if: typeof if; import: typeof import; in: typeof in; instanceof: typeof instanceof; new: typeof new; null: typeof null; return: typeof return; super: typeof super; switch: typeof switch; this: typeof this; throw: typeof throw; true: typeof true; try: typeof try; typeof: typeof typeof; var: typeof var; void: typeof void; while: typeof while; with: typeof with; implements: typeof implements; interface: typeof interface; let: typeof let; package: typeof package; private: typeof private; protected: typeof protected; public: typeof public; static: typeof static; yield: typeof yield; abstract: typeof abstract; as: typeof as; asserts: typeof asserts; any: typeof any; async: typeof async; await: typeof await; boolean: typeof boolean; constructor: typeof constructor; declare: typeof declare; get: typeof get; infer: typeof infer; is: typeof is; keyof: typeof keyof; module: typeof module; namespace: typeof namespace; never: typeof never; readonly: typeof readonly; require: typeof require; number: typeof number; object: typeof object; set: typeof set; string: typeof string; symbol: typeof symbol; type: typeof type; undefined: typeof undefined; unique: typeof unique; unknown: typeof unknown; from: typeof from; global: typeof global; bigint: typeof bigint; of: typeof of; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    x: class {        constructor() { }    },    y: class {        constructor() { }    },    // keywords    break: class {        constructor() { }    },    case: class {        constructor() { }    },    catch: class {        constructor() { }    },    class: class {        constructor() { }    },    const: class {        constructor() { }    },    continue: class {        constructor() { }    },    debugger: class {        constructor() { }    },    default: class {        constructor() { }    },    delete: class {        constructor() { }    },    do: class {        constructor() { }    },    else: class {        constructor() { }    },    enum: class {        constructor() { }    },    export: class {        constructor() { }    },    extends: class {        constructor() { }    },    false: class {        constructor() { }    },    finally: class {        constructor() { }    },    for: class {        constructor() { }    },    function: class {        constructor() { }    },    if: class {        constructor() { }    },    import: class {        constructor() { }    },    in: class {        constructor() { }    },    instanceof: class {        constructor() { }    },    new: class {        constructor() { }    },    null: class {        constructor() { }    },    return: class {        constructor() { }    },    super: class {        constructor() { }    },    switch: class {        constructor() { }    },    this: class {        constructor() { }    },    throw: class {        constructor() { }    },    true: class {        constructor() { }    },    try: class {        constructor() { }    },    typeof: class {        constructor() { }    },    var: class {        constructor() { }    },    void: class {        constructor() { }    },    while: class {        constructor() { }    },    with: class {        constructor() { }    },    implements: class {        constructor() { }    },    interface: class {        constructor() { }    },    let: class {        constructor() { }    },    package: class {        constructor() { }    },    private: class {        constructor() { }    },    protected: class {        constructor() { }    },    public: class {        constructor() { }    },    static: class {        constructor() { }    },    yield: class {        constructor() { }    },    abstract: class {        constructor() { }    },    as: class {        constructor() { }    },    asserts: class {        constructor() { }    },    any: class {        constructor() { }    },    async: class {        constructor() { }    },    await: class {        constructor() { }    },    boolean: class {        constructor() { }    },    constructor: class {        constructor() { }    },    declare: class {        constructor() { }    },    get: class {        constructor() { }    },    infer: class {        constructor() { }    },    is: class {        constructor() { }    },    keyof: class {        constructor() { }    },    module: class {        constructor() { }    },    namespace: class {        constructor() { }    },    never: class {        constructor() { }    },    readonly: class {        constructor() { }    },    require: class {        constructor() { }    },    number: class {        constructor() { }    },    object: class {        constructor() { }    },    set: class {        constructor() { }    },    string: class {        constructor() { }    },    symbol: class {        constructor() { }    },    type: class {        constructor() { }    },    undefined: class {        constructor() { }    },    unique: class {        constructor() { }    },    unknown: class {        constructor() { }    },    from: class {        constructor() { }    },    global: class {        constructor() { }    },    bigint: class {        constructor() { }    },    of: class {        constructor() { }    }} : { x: typeof x; y: typeof y; break: typeof break; case: typeof case; catch: typeof catch; class: typeof class; const: typeof const; continue: typeof continue; debugger: typeof debugger; default: typeof default; delete: typeof delete; do: typeof do; else: typeof else; enum: typeof enum; export: typeof export; extends: typeof extends; false: typeof false; finally: typeof finally; for: typeof for; function: typeof function; if: typeof if; import: typeof import; in: typeof in; instanceof: typeof instanceof; new: typeof new; null: typeof null; return: typeof return; super: typeof super; switch: typeof switch; this: typeof this; throw: typeof throw; true: typeof true; try: typeof try; typeof: typeof typeof; var: typeof var; void: typeof void; while: typeof while; with: typeof with; implements: typeof implements; interface: typeof interface; let: typeof let; package: typeof package; private: typeof private; protected: typeof protected; public: typeof public; static: typeof static; yield: typeof yield; abstract: typeof abstract; as: typeof as; asserts: typeof asserts; any: typeof any; async: typeof async; await: typeof await; boolean: typeof boolean; constructor: typeof constructor; declare: typeof declare; get: typeof get; infer: typeof infer; is: typeof is; keyof: typeof keyof; module: typeof module; namespace: typeof namespace; never: typeof never; readonly: typeof readonly; require: typeof require; number: typeof number; object: typeof object; set: typeof set; string: typeof string; symbol: typeof symbol; type: typeof type; undefined: typeof undefined; unique: typeof unique; unknown: typeof unknown; from: typeof from; global: typeof global; bigint: typeof bigint; of: typeof of; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: class {
 >x : typeof x
+>  : ^^^^^^^^
 >class {        constructor() { }    } : typeof x
+>                                      : ^^^^^^^^
 
         constructor() { }
     },
     y: class {
 >y : typeof y
+>  : ^^^^^^^^
 >class {        constructor() { }    } : typeof y
+>                                      : ^^^^^^^^
 
         constructor() { }
     },
@@ -19,457 +27,609 @@
     // keywords
     break: class {
 >break : typeof break
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof break
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     case: class {
 >case : typeof case
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof case
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     catch: class {
 >catch : typeof catch
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof catch
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     class: class {
 >class : typeof class
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof class
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     const: class {
 >const : typeof const
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof const
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     continue: class {
 >continue : typeof continue
+>         : ^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof continue
+>                                      : ^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     debugger: class {
 >debugger : typeof debugger
+>         : ^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof debugger
+>                                      : ^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     default: class {
 >default : typeof default
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof default
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     delete: class {
 >delete : typeof delete
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof delete
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     do: class {
 >do : typeof do
+>   : ^^^^^^^^^
 >class {        constructor() { }    } : typeof do
+>                                      : ^^^^^^^^^
 
         constructor() { }
     },
     else: class {
 >else : typeof else
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof else
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     enum: class {
 >enum : typeof enum
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof enum
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     export: class {
 >export : typeof export
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof export
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     extends: class {
 >extends : typeof extends
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof extends
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     false: class {
 >false : typeof false
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof false
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     finally: class {
 >finally : typeof finally
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof finally
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     for: class {
 >for : typeof for
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof for
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     function: class {
 >function : typeof function
+>         : ^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof function
+>                                      : ^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     if: class {
 >if : typeof if
+>   : ^^^^^^^^^
 >class {        constructor() { }    } : typeof if
+>                                      : ^^^^^^^^^
 
         constructor() { }
     },
     import: class {
 >import : typeof import
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof import
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     in: class {
 >in : typeof in
+>   : ^^^^^^^^^
 >class {        constructor() { }    } : typeof in
+>                                      : ^^^^^^^^^
 
         constructor() { }
     },
     instanceof: class {
 >instanceof : typeof instanceof
+>           : ^^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof instanceof
+>                                      : ^^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     new: class {
 >new : typeof new
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof new
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     null: class {
 >null : typeof null
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof null
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     return: class {
 >return : typeof return
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof return
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     super: class {
 >super : typeof super
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof super
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     switch: class {
 >switch : typeof switch
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof switch
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     this: class {
 >this : typeof this
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof this
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     throw: class {
 >throw : typeof throw
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof throw
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     true: class {
 >true : typeof true
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof true
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     try: class {
 >try : typeof try
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof try
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     typeof: class {
 >typeof : typeof typeof
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof typeof
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     var: class {
 >var : typeof var
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof var
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     void: class {
 >void : typeof void
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof void
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     while: class {
 >while : typeof while
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof while
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     with: class {
 >with : typeof with
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof with
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     implements: class {
 >implements : typeof implements
+>           : ^^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof implements
+>                                      : ^^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     interface: class {
 >interface : typeof interface
+>          : ^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof interface
+>                                      : ^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     let: class {
 >let : typeof let
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof let
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     package: class {
 >package : typeof package
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof package
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     private: class {
 >private : typeof private
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof private
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     protected: class {
 >protected : typeof protected
+>          : ^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof protected
+>                                      : ^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     public: class {
 >public : typeof public
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof public
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     static: class {
 >static : typeof static
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof static
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     yield: class {
 >yield : typeof yield
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof yield
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     abstract: class {
 >abstract : typeof abstract
+>         : ^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof abstract
+>                                      : ^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     as: class {
 >as : typeof as
+>   : ^^^^^^^^^
 >class {        constructor() { }    } : typeof as
+>                                      : ^^^^^^^^^
 
         constructor() { }
     },
     asserts: class {
 >asserts : typeof asserts
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof asserts
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     any: class {
 >any : typeof any
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof any
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     async: class {
 >async : typeof async
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof async
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     await: class {
 >await : typeof await
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof await
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     boolean: class {
 >boolean : typeof boolean
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof boolean
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     constructor: class {
 >constructor : typeof constructor
+>            : ^^^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof constructor
+>                                      : ^^^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     declare: class {
 >declare : typeof declare
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof declare
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     get: class {
 >get : typeof get
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof get
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     infer: class {
 >infer : typeof infer
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof infer
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     is: class {
 >is : typeof is
+>   : ^^^^^^^^^
 >class {        constructor() { }    } : typeof is
+>                                      : ^^^^^^^^^
 
         constructor() { }
     },
     keyof: class {
 >keyof : typeof keyof
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof keyof
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     module: class {
 >module : typeof module
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof module
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     namespace: class {
 >namespace : typeof namespace
+>          : ^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof namespace
+>                                      : ^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     never: class {
 >never : typeof never
+>      : ^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof never
+>                                      : ^^^^^^^^^^^^
 
         constructor() { }
     },
     readonly: class {
 >readonly : typeof readonly
+>         : ^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof readonly
+>                                      : ^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     require: class {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof require
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     number: class {
 >number : typeof number
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof number
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     object: class {
 >object : typeof object
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof object
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     set: class {
 >set : typeof set
+>    : ^^^^^^^^^^
 >class {        constructor() { }    } : typeof set
+>                                      : ^^^^^^^^^^
 
         constructor() { }
     },
     string: class {
 >string : typeof string
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof string
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     symbol: class {
 >symbol : typeof symbol
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof symbol
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     type: class {
 >type : typeof type
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof type
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     undefined: class {
 >undefined : typeof undefined
+>          : ^^^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof undefined
+>                                      : ^^^^^^^^^^^^^^^^
 
         constructor() { }
     },
     unique: class {
 >unique : typeof unique
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof unique
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     unknown: class {
 >unknown : typeof unknown
+>        : ^^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof unknown
+>                                      : ^^^^^^^^^^^^^^
 
         constructor() { }
     },
     from: class {
 >from : typeof from
+>     : ^^^^^^^^^^^
 >class {        constructor() { }    } : typeof from
+>                                      : ^^^^^^^^^^^
 
         constructor() { }
     },
     global: class {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof global
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     bigint: class {
 >bigint : typeof bigint
+>       : ^^^^^^^^^^^^^
 >class {        constructor() { }    } : typeof bigint
+>                                      : ^^^^^^^^^^^^^
 
         constructor() { }
     },
     of: class {
 >of : typeof of
+>   : ^^^^^^^^^
 >class {        constructor() { }    } : typeof of
+>                                      : ^^^^^^^^^
 
         constructor() { }
     }

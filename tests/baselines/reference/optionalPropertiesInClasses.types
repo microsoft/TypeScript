@@ -1,32 +1,43 @@
-=== tests/cases/compiler/optionalPropertiesInClasses.ts ===
+//// [tests/cases/compiler/optionalPropertiesInClasses.ts] ////
+
+=== optionalPropertiesInClasses.ts ===
 interface ifoo {
 	x?:number;
 >x : number
+>  : ^^^^^^
 
 	y:number;
 >y : number
+>  : ^^^^^^
 }
 
 class C1 implements ifoo {
 >C1 : C1
+>   : ^^
 
 	public y:number;
 >y : number
+>  : ^^^^^^
 }
 
 class C2 implements ifoo { // ERROR - still need 'y'
 >C2 : C2
+>   : ^^
 
 	public x:number;
 >x : number
+>  : ^^^^^^
 }
 
 class C3 implements ifoo {
 >C3 : C3
+>   : ^^
 
 	public x:number;
 >x : number
+>  : ^^^^^^
 
 	public y:number;
 >y : number
+>  : ^^^^^^
 }

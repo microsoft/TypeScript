@@ -1,108 +1,162 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts] ////
+
+=== classWithBaseClassButNoConstructor.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(x: number) { }
 >x : number
+>  : ^^^^^^
 }
 
 class C extends Base {
 >C : C
+>  : ^
 >Base : Base
+>     : ^^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var r = C;
 >r : typeof C
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var c = new C(); // error
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var c2 = new C(1); // ok
 >c2 : C
+>   : ^
 >new C(1) : C
+>         : ^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
 class Base2<T,U> {
 >Base2 : Base2<T, U>
+>      : ^^^^^^^^^^^
 
     constructor(x: T) { }
 >x : T
+>  : ^
 }
 
 class D<T,U> extends Base2<T,U> {
 >D : D<T, U>
+>  : ^^^^^^^
 >Base2 : Base2<T, U>
+>      : ^^^^^^^^^^^
 
     foo: U;
 >foo : U
+>    : ^
 }
 
 var r2 = D;
 >r2 : typeof D
+>   : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var d = new D(); // error
 >d : D<unknown, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^
 >new D() : D<unknown, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var d2 = new D(1); // ok
 >d2 : D<number, unknown>
+>   : ^^^^^^^^^^^^^^^^^^
 >new D(1) : D<number, unknown>
+>         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
 // specialized base class
 class D2<T, U> extends Base2<string, number> {
 >D2 : D2<T, U>
+>   : ^^^^^^^^
 >Base2 : Base2<string, number>
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     foo: U;
 >foo : U
+>    : ^
 }
 
 var r3 = D2;
 >r3 : typeof D2
+>   : ^^^^^^^^^
 >D2 : typeof D2
+>   : ^^^^^^^^^
 
 var d3 = new D(); // error
 >d3 : D<unknown, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^
 >new D() : D<unknown, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var d4 = new D(1); // ok
 >d4 : D<number, unknown>
+>   : ^^^^^^^^^^^^^^^^^^
 >new D(1) : D<number, unknown>
+>         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
 class D3 extends Base2<string, number> {
 >D3 : D3
+>   : ^^
 >Base2 : Base2<string, number>
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var r4 = D3;
 >r4 : typeof D3
+>   : ^^^^^^^^^
 >D3 : typeof D3
+>   : ^^^^^^^^^
 
 var d5 = new D(); // error
 >d5 : D<unknown, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^
 >new D() : D<unknown, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var d6 = new D(1); // ok
 >d6 : D<number, unknown>
+>   : ^^^^^^^^^^^^^^^^^^
 >new D(1) : D<number, unknown>
+>         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 

@@ -1,81 +1,119 @@
-=== tests/cases/compiler/memberVariableDeclarations1.ts ===
+//// [tests/cases/compiler/memberVariableDeclarations1.ts] ////
+
+=== memberVariableDeclarations1.ts ===
 // from spec
 
 class Employee {
 >Employee : Employee
+>         : ^^^^^^^^
 
     public name: string;
 >name : string
+>     : ^^^^^^
 
     public address: string;
 >address : string
+>        : ^^^^^^
 
     public retired = false;
 >retired : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
     public manager: Employee = null;
 >manager : Employee
+>        : ^^^^^^^^
 
     public reports: Employee[] = [];
 >reports : Employee[]
+>        : ^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 
 class Employee2 {
 >Employee2 : Employee2
+>          : ^^^^^^^^^
 
     public name: string;
 >name : string
+>     : ^^^^^^
 
     public address: string;
 >address : string
+>        : ^^^^^^
 
     public retired: boolean;
 >retired : boolean
+>        : ^^^^^^^
 
     public manager: Employee;
 >manager : Employee
+>        : ^^^^^^^^
 
     public reports: Employee[];
 >reports : Employee[]
+>        : ^^^^^^^^^^
 
     constructor() {
         this.retired = false;
 >this.retired = false : false
+>                     : ^^^^^
 >this.retired : boolean
+>             : ^^^^^^^
 >this : this
+>     : ^^^^
 >retired : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         this.manager = null;
 >this.manager = null : null
+>                    : ^^^^
 >this.manager : Employee
+>             : ^^^^^^^^
 >this : this
+>     : ^^^^
 >manager : Employee
+>        : ^^^^^^^^
 
         this.reports = [];
 >this.reports = [] : undefined[]
+>                  : ^^^^^^^^^^^
 >this.reports : Employee[]
+>             : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >reports : Employee[]
+>        : ^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
     }
 }
 
 var e1: Employee;
 >e1 : Employee
+>   : ^^^^^^^^
 
 var e2: Employee2;
 >e2 : Employee2
+>   : ^^^^^^^^^
 
 e1 = e2;
 >e1 = e2 : Employee2
+>        : ^^^^^^^^^
 >e1 : Employee
+>   : ^^^^^^^^
 >e2 : Employee2
+>   : ^^^^^^^^^
 
 e2 = e1;
 >e2 = e1 : Employee
+>        : ^^^^^^^^
 >e2 : Employee2
+>   : ^^^^^^^^^
 >e1 : Employee
+>   : ^^^^^^^^
 

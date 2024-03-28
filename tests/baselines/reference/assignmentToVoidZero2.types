@@ -1,86 +1,146 @@
-=== tests/cases/conformance/salsa/assignmentToVoidZero2.js ===
+//// [tests/cases/conformance/salsa/assignmentToVoidZero2.ts] ////
+
+=== assignmentToVoidZero2.js ===
 exports.j = 1;
 >exports.j = 1 : 1
+>              : ^
 >exports.j : 1
->exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero2")
+>          : ^
+>exports : typeof import("assignmentToVoidZero2")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >j : 1
+>  : ^
 >1 : 1
+>  : ^
 
 exports.k = void 0;
 >exports.k = void 0 : undefined
+>                   : ^^^^^^^^^
 >exports.k : any
->exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero2")
+>          : ^^^
+>exports : typeof import("assignmentToVoidZero2")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : any
+>  : ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 var o = {}
 >o : typeof o
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 o.x = 1
 >o.x = 1 : 1
+>        : ^
 >o.x : number
+>    : ^^^^^^
 >o : typeof o
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 o.y = void 0
 >o.y = void 0 : undefined
+>             : ^^^^^^^^^
 >o.y : any
+>    : ^^^
 >o : typeof o
+>  : ^^^^^^^^
 >y : any
+>  : ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 o.x + o.y
 >o.x + o.y : any
+>          : ^^^
 >o.x : number
+>    : ^^^^^^
 >o : typeof o
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >o.y : any
+>    : ^^^
 >o : typeof o
+>  : ^^^^^^^^
 >y : any
+>  : ^^^
 
 function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
     this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     this.q = void 0
 >this.q = void 0 : undefined
+>                : ^^^^^^^^^
 >this.q : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >q : any
+>  : ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 }
 var c = new C()
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 c.p + c.q
 >c.p + c.q : any
+>          : ^^^
 >c.p : number
+>    : ^^^^^^
 >c : C
+>  : ^
 >p : number
+>  : ^^^^^^
 >c.q : any
+>    : ^^^
 >c : C
+>  : ^
 >q : any
+>  : ^^^
 
-=== tests/cases/conformance/salsa/importer.js ===
+=== importer.js ===
 import { j, k } from './assignmentToVoidZero2'
 >j : 1
+>  : ^
 >k : any
+>  : ^^^
 
 j + k
 >j + k : any
+>      : ^^^
 >j : 1
+>  : ^
 >k : any
+>  : ^^^
 

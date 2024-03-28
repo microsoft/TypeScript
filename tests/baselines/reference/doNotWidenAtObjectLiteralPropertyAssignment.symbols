@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotWidenAtObjectLiteralPropertyAssignment.ts ===
+//// [tests/cases/compiler/doNotWidenAtObjectLiteralPropertyAssignment.ts] ////
+
+=== doNotWidenAtObjectLiteralPropertyAssignment.ts ===
 interface ITestEventInterval {
 >ITestEventInterval : Symbol(ITestEventInterval, Decl(doNotWidenAtObjectLiteralPropertyAssignment.ts, 0, 0))
 

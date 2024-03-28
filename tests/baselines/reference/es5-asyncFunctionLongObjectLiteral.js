@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionLongObjectLiteral.ts] ////
+
 //// [es5-asyncFunctionLongObjectLiteral.ts]
 // the generated code from both should be similar
 

@@ -1,0 +1,109 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(<|private {/*HIGHLIGHTS*/[|{| kind: "writtenReference" |}privateParam|]}: number|>,
+//         public {publicParam}: string,
+//         protected {protectedParam}: boolean) {
+// 
+//         let localPrivate = [|{| kind: "reference" |}privateParam|];
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+// --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private {privateParam}: number,
+//         <|public {/*HIGHLIGHTS*/[|{| kind: "writtenReference" |}publicParam|]}: string|>,
+//         protected {protectedParam}: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = [|{| kind: "reference" |}publicParam|];
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = protectedParam;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private {privateParam}: number,
+//         public {publicParam}: string,
+//         <|protected {/*HIGHLIGHTS*/[|{| kind: "writtenReference" |}protectedParam|]}: boolean|>) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = [|{| kind: "reference" |}protectedParam|];
+//         this.protectedParam = false;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(<|private {[|{| kind: "writtenReference" |}privateParam|]}: number|>,
+//         public {publicParam}: string,
+//         protected {protectedParam}: boolean) {
+// 
+//         let localPrivate = /*HIGHLIGHTS*/[|{| kind: "reference" |}privateParam|];
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+// --- (line: 11) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private {privateParam}: number,
+//         <|public {[|{| kind: "writtenReference" |}publicParam|]}: string|>,
+//         protected {protectedParam}: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = /*HIGHLIGHTS*/[|{| kind: "reference" |}publicParam|];
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = protectedParam;
+// --- (line: 14) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     // This is not valid syntax: parameter property can't be binding pattern
+//     constructor(private {privateParam}: number,
+//         public {publicParam}: string,
+//         <|protected {[|{| kind: "writtenReference" |}protectedParam|]}: boolean|>) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = /*HIGHLIGHTS*/[|{| kind: "reference" |}protectedParam|];
+//         this.protectedParam = false;
+//     }
+// }

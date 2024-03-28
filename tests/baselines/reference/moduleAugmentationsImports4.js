@@ -46,6 +46,7 @@ let a: A;
 let b = a.getB().x.toFixed();
 let c = a.getCls().y.toLowerCase();
 
+
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -79,8 +80,6 @@ define("main", ["require", "exports", "D", "E"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="tests/cases/compiler/d.d.ts" />
-/// <reference path="tests/cases/compiler/e.d.ts" />
 declare module "a" {
     export class A {
     }

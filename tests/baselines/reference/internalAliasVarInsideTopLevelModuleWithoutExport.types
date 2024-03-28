@@ -1,19 +1,29 @@
-=== tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithoutExport.ts ===
+//// [tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithoutExport.ts] ////
+
+=== internalAliasVarInsideTopLevelModuleWithoutExport.ts ===
 export module a {
 >a : typeof a
+>  : ^^^^^^^^
 
     export var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 import b = a.x;
 >b : number
+>  : ^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 export var bVal = b;
 >bVal : number
+>     : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 

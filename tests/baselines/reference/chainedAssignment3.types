@@ -1,73 +1,118 @@
-=== tests/cases/compiler/chainedAssignment3.ts ===
+//// [tests/cases/compiler/chainedAssignment3.ts] ////
+
+=== chainedAssignment3.ts ===
 class A {
 >A : A
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     value: string;
 >value : string
+>      : ^^^^^^
 }
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 a = b = null;
 >a = b = null : null
+>             : ^^^^
 >a : A
+>  : ^
 >b = null : null
+>         : ^^^^
 >b : B
+>  : ^
 
 a = b = new B();
 >a = b = new B() : B
+>                : ^
 >a : A
+>  : ^
 >b = new B() : B
+>            : ^
 >b : B
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 b = a = new B();
 >b = a = new B() : B
+>                : ^
 >b : B
+>  : ^
 >a = new B() : B
+>            : ^
 >a : A
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 a.id = b.value = null;
 >a.id = b.value = null : null
+>                      : ^^^^
 >a.id : number
+>     : ^^^^^^
 >a : A
+>  : ^
 >id : number
+>   : ^^^^^^
 >b.value = null : null
+>               : ^^^^
 >b.value : string
+>        : ^^^^^^
 >b : B
+>  : ^
 >value : string
+>      : ^^^^^^
 
 // error cases
 b = a = new A();
 >b = a = new A() : A
+>                : ^
 >b : B
+>  : ^
 >a = new A() : A
+>            : ^
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 a = b = new A();
 >a = b = new A() : A
+>                : ^
 >a : A
+>  : ^
 >b = new A() : A
+>            : ^
 >b : B
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 
 

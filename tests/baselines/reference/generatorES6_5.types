@@ -1,11 +1,19 @@
-=== tests/cases/compiler/generatorES6_5.ts ===
+//// [tests/cases/compiler/generatorES6_5.ts] ////
+
+=== generatorES6_5.ts ===
 function* foo() {
 >foo : () => Generator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield a ? b : c;
 >yield a ? b : c : any
+>                : ^^^
 >a ? b : c : any
+>          : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 }

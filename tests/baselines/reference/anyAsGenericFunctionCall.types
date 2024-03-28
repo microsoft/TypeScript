@@ -1,34 +1,54 @@
-=== tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts ===
+//// [tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts] ////
+
+=== anyAsGenericFunctionCall.ts ===
 // any is considered an untyped function call
 // can be called except with type arguments which is an error
 
 var x: any;
 >x : any
+>  : ^^^
 
 var a = x<number>();
 >a : any
+>  : ^^^
 >x<number>() : any
+>            : ^^^
 >x : any
+>  : ^^^
 
 var b = x<string>('hello');
 >b : any
+>  : ^^^
 >x<string>('hello') : any
+>                   : ^^^
 >x : any
+>  : ^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 class C { foo: string; }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var c = x<C>(x);
 >c : any
+>  : ^^^
 >x<C>(x) : any
+>        : ^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 var d = x<any>(x);
 >d : any
+>  : ^^^
 >x<any>(x) : any
+>          : ^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 

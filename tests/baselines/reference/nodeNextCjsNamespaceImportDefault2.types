@@ -1,31 +1,49 @@
-=== tests/cases/compiler/src/a.cts ===
+//// [tests/cases/compiler/nodeNextCjsNamespaceImportDefault2.ts] ////
+
+=== src/a.cts ===
 export const a: number = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export default 'string';
-=== tests/cases/compiler/src/foo.mts ===
+=== src/foo.mts ===
 import d, {a} from './a.cjs';
 >d : typeof d
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 import * as ns from './a.cjs';
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export {d, a, ns};
 >d : typeof d
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 d.a;
 >d.a : number
+>    : ^^^^^^
 >d : typeof d
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 ns.default.a;
 >ns.default.a : number
+>             : ^^^^^^
 >ns.default : typeof d
+>           : ^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >default : typeof d
+>        : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decls.d.ts ===
+//// [tests/cases/compiler/genericDefaultsJs.ts] ////
+
+=== decls.d.ts ===
 declare function f0<T>(x?: T): T;
 >f0 : Symbol(f0, Decl(decls.d.ts, 0, 0))
 >T : Symbol(T, Decl(decls.d.ts, 0, 20))
@@ -41,7 +43,7 @@ declare class C1<T, U = number> {
 >x : Symbol(x, Decl(decls.d.ts, 8, 16))
 >T : Symbol(T, Decl(decls.d.ts, 6, 17))
 }
-=== tests/cases/compiler/main.js ===
+=== main.js ===
 const f0_v0 = f0();
 >f0_v0 : Symbol(f0_v0, Decl(main.js, 0, 5))
 >f0 : Symbol(f0, Decl(decls.d.ts, 0, 0))

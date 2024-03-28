@@ -1,21 +1,33 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/declarationEmitExpandoPropertyPrivateName.ts] ////
+
+=== a.ts ===
 interface I {}
 export function f(): I { return null as I; }
 >f : () => I
+>  : ^^^^^^ 
 >null as I : I
+>          : ^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import {f} from "./a";
 >f : () => I
+>  : ^^^^^^^
 
 export function q() {}
 >q : typeof q
+>  : ^^^^^^^^
 
 q.val = f();
 >q.val = f() : I
+>            : ^
 >q.val : I
+>      : ^
 >q : typeof q
+>  : ^^^^^^^^
 >val : I
+>    : ^
 >f() : I
+>    : ^
 >f : () => I
+>  : ^^^^^^^
 

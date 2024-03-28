@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences1.ts] ////
+
 //// [recursiveTypeReferences1.ts]
 type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 

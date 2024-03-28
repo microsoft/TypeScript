@@ -1,12 +1,21 @@
-=== tests/cases/compiler/jsxAttributeMissingInitializer.tsx ===
+//// [tests/cases/compiler/jsxAttributeMissingInitializer.tsx] ////
+
+=== jsxAttributeMissingInitializer.tsx ===
 const x = <div foo= ></div>;
 >x : any
+>  : ^^^
 ><div foo= ></div> : any
+>                  : ^^^
 >div : any
+>    : ^^^
 >foo : true
+>    : ^^^^
 >div : any
+>    : ^^^
 
 const y = 0;
 >y : 0
+>  : ^
 >0 : 0
+>  : ^
 

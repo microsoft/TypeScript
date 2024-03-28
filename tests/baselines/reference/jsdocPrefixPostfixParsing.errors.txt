@@ -1,20 +1,20 @@
-tests/cases/conformance/jsdoc/prefixPostfix.js(5,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-tests/cases/conformance/jsdoc/prefixPostfix.js(5,18): error TS1005: '}' expected.
-tests/cases/conformance/jsdoc/prefixPostfix.js(8,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/jsdoc/prefixPostfix.js(9,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/jsdoc/prefixPostfix.js(10,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/jsdoc/prefixPostfix.js(11,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-tests/cases/conformance/jsdoc/prefixPostfix.js(11,21): error TS1005: '}' expected.
-tests/cases/conformance/jsdoc/prefixPostfix.js(12,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/jsdoc/prefixPostfix.js(13,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/jsdoc/prefixPostfix.js(14,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-tests/cases/conformance/jsdoc/prefixPostfix.js(14,21): error TS1005: '}' expected.
-tests/cases/conformance/jsdoc/prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/conformance/jsdoc/prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
-tests/cases/conformance/jsdoc/prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
+prefixPostfix.js(5,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+prefixPostfix.js(5,18): error TS1005: '}' expected.
+prefixPostfix.js(8,12): error TS1014: A rest parameter must be last in a parameter list.
+prefixPostfix.js(9,12): error TS1014: A rest parameter must be last in a parameter list.
+prefixPostfix.js(10,12): error TS1014: A rest parameter must be last in a parameter list.
+prefixPostfix.js(11,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+prefixPostfix.js(11,21): error TS1005: '}' expected.
+prefixPostfix.js(12,12): error TS1014: A rest parameter must be last in a parameter list.
+prefixPostfix.js(13,12): error TS1014: A rest parameter must be last in a parameter list.
+prefixPostfix.js(14,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+prefixPostfix.js(14,21): error TS1005: '}' expected.
+prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
+prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
+prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/jsdoc/prefixPostfix.js (14 errors) ====
+==== prefixPostfix.js (14 errors) ====
     /**
      * @param {number![]} x - number[]
      * @param {!number[]} y - number[]

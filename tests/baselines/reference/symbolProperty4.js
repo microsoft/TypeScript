@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty4.ts] ////
+
 //// [symbolProperty4.ts]
 var x = {
     [Symbol()]: 0,

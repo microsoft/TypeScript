@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentWithExport.ts] ////
+
 //// [a.js]
 // this is a javascript file...
 

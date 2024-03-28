@@ -1,17 +1,25 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberWithComputedPropertyName2.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberWithComputedPropertyName2.ts] ////
+
+=== instanceMemberWithComputedPropertyName2.ts ===
 // https://github.com/microsoft/TypeScript/issues/33857
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     [x]: string;
 >[x] : string
+>    : ^^^^^^
 >x : 1
+>  : ^
 }
 

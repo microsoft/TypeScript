@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts(29,18): error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
+genericCallWithFunctionTypedArguments2.ts(29,18): error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
   Types of parameters 'x' and 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts(40,18): error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
+genericCallWithFunctionTypedArguments2.ts(40,18): error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
   Types of parameters 'x' and 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts (2 errors) ====
+==== genericCallWithFunctionTypedArguments2.ts (2 errors) ====
     // Generic functions used as arguments for function typed parameters are not used to make inferences from
     // Using construct signature arguments, no errors expected
     

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/neverAsDiscriminantType.ts ===
+//// [tests/cases/compiler/neverAsDiscriminantType.ts] ////
+
+=== neverAsDiscriminantType.ts ===
 type Foo1 = { kind: 'a', a: number } | { kind: 'b' } | { kind: never };
 >Foo1 : Symbol(Foo1, Decl(neverAsDiscriminantType.ts, 0, 0))
 >kind : Symbol(kind, Decl(neverAsDiscriminantType.ts, 0, 13))

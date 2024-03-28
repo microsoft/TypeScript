@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardRedundancy.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardRedundancy.ts] ////
+
+=== typeGuardRedundancy.ts ===
 var x: string|number;
 >x : Symbol(x, Decl(typeGuardRedundancy.ts, 0, 3))
 

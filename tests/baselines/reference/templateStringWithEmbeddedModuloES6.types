@@ -1,8 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedModuloES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedModuloES6.ts] ////
+
+=== templateStringWithEmbeddedModuloES6.ts ===
 var x = `abc${ 1 % 1 }def`;
 >x : string
->`abc${ 1 % 1 }def` : string
+>  : ^^^^^^
+>`abc${ 1 % 1 }def` : "abc0def"
+>                   : ^^^^^^^^^
 >1 % 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 

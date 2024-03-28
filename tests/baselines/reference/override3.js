@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override3.ts] ////
+
 //// [override3.ts]
 declare class B {
     foo(): void

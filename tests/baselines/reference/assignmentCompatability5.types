@@ -1,39 +1,65 @@
-=== tests/cases/compiler/assignmentCompatability5.ts ===
+//// [tests/cases/compiler/assignmentCompatability5.ts] ////
+
+=== assignmentCompatability5.ts ===
 module __test1__ {
 >__test1__ : typeof __test1__
+>          : ^^^^^^^^^^^^^^^^
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
 >one : T
+>    : ^
 >two : U
+>    : ^
 >obj4 : interfaceWithPublicAndOptional<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ one: 1 } : { one: number; }
+>           : ^^^^^^^^^^^^^^^^
 >one : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     export var __val__obj4 = obj4;
 >__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj4 : interfaceWithPublicAndOptional<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 module __test2__ {
 >__test2__ : typeof __test2__
+>          : ^^^^^^^^^^^^^^^^
 
     export                   interface interfaceOne<T> { one: T; };                var obj1: interfaceOne<number> = { one: 1 };;
 >one : T
+>    : ^
 >obj1 : interfaceOne<number>
+>     : ^^^^^^^^^^^^^^^^^^^^
 >{ one: 1 } : { one: number; }
+>           : ^^^^^^^^^^^^^^^^
 >one : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     export var __val__obj1 = obj1;
 >__val__obj1 : interfaceOne<number>
+>            : ^^^^^^^^^^^^^^^^^^^^
 >obj1 : interfaceOne<number>
+>     : ^^^^^^^^^^^^^^^^^^^^
 }
 __test2__.__val__obj1 = __test1__.__val__obj4
 >__test2__.__val__obj1 = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__obj1 : __test2__.interfaceOne<number>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__ : typeof __test2__
+>          : ^^^^^^^^^^^^^^^^
 >__val__obj1 : __test2__.interfaceOne<number>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__
+>          : ^^^^^^^^^^^^^^^^
 >__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,15 +1,15 @@
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(4,4): error TS2743: No overload expects 2 type arguments, but overloads do exist that expect either 1 or 3 type arguments.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(5,4): error TS2558: Expected 4 type arguments, but got 5.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(10,4): error TS2743: No overload expects 2 type arguments, but overloads do exist that expect either 1 or 3 type arguments.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(11,4): error TS2558: Expected 3 type arguments, but got 4.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(16,4): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(20,4): error TS2558: Expected 2-3 type arguments, but got 1.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(21,4): error TS2558: Expected 2-3 type arguments, but got 4.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(25,4): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/compiler/functionTypeArgumentArityErrors.ts(26,4): error TS2558: Expected 2 type arguments, but got 3.
+functionTypeArgumentArityErrors.ts(4,4): error TS2743: No overload expects 2 type arguments, but overloads do exist that expect either 1 or 3 type arguments.
+functionTypeArgumentArityErrors.ts(5,4): error TS2558: Expected 4 type arguments, but got 5.
+functionTypeArgumentArityErrors.ts(10,4): error TS2743: No overload expects 2 type arguments, but overloads do exist that expect either 1 or 3 type arguments.
+functionTypeArgumentArityErrors.ts(11,4): error TS2558: Expected 3 type arguments, but got 4.
+functionTypeArgumentArityErrors.ts(16,4): error TS2558: Expected 0 type arguments, but got 1.
+functionTypeArgumentArityErrors.ts(20,4): error TS2558: Expected 2-3 type arguments, but got 1.
+functionTypeArgumentArityErrors.ts(21,4): error TS2558: Expected 2-3 type arguments, but got 4.
+functionTypeArgumentArityErrors.ts(25,4): error TS2558: Expected 2 type arguments, but got 1.
+functionTypeArgumentArityErrors.ts(26,4): error TS2558: Expected 2 type arguments, but got 3.
 
 
-==== tests/cases/compiler/functionTypeArgumentArityErrors.ts (9 errors) ====
+==== functionTypeArgumentArityErrors.ts (9 errors) ====
     // Overloaded functions with default type arguments
     declare function f1<A = any>(): void;
     declare function f1<A, B, C, D = any>(): void;

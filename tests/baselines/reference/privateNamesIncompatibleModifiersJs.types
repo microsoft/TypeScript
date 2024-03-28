@@ -1,89 +1,116 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.ts] ////
+
+=== privateNamesIncompatibleModifiersJs.js ===
 class A {
 >A : A
+>  : ^
 
     /**
      * @public
      */
     #a = 1;
 >#a : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @private
      */
     #b = 1;
 >#b : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @protected
      */
     #c = 1;
 >#c : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @public
      */
     #aMethod() { return 1; }
 >#aMethod : () => number
+>         : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @private
      */
     #bMethod() { return 1; }
 >#bMethod : () => number
+>         : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @protected
      */
     #cMethod() { return 1; }
 >#cMethod : () => number
+>         : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @public
      */
     get #aProp() { return 1; }
 >#aProp : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @public
      */
     set #aProp(value) { }
 >#aProp : number
+>       : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     /**
      * @private
      */
     get #bProp() { return 1; }
 >#bProp : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @private
      */
     set #bProp(value) { }
 >#bProp : number
+>       : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     /**
     * @protected
     */
     get #cProp() { return 1; }
 >#cProp : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     /**
      * @protected
      */
     set #cProp(value) { }
 >#cProp : number
+>       : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 

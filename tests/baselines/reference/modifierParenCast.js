@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modifierParenCast.ts] ////
+
 //// [modifierParenCast.ts]
 let readonly: any = undefined;
 let override: any = undefined;

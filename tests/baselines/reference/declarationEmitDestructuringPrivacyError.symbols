@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts] ////
+
+=== declarationEmitDestructuringPrivacyError.ts ===
 module m {
 >m : Symbol(m, Decl(declarationEmitDestructuringPrivacyError.ts, 0, 0))
 

@@ -1,67 +1,100 @@
-=== tests/cases/compiler/mixinIntersectionIsValidbaseType.ts ===
+//// [tests/cases/compiler/mixinIntersectionIsValidbaseType.ts] ////
+
+=== mixinIntersectionIsValidbaseType.ts ===
 export type Constructor<T extends object = object> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 export interface Initable {
     init(...args: any[]): void;
 >init : (...args: any[]) => void
+>     : ^^^^^^^^^^     ^^^^^    
 >args : any[]
+>     : ^^^^^
 }
 
 /**
  * Plain mixin where the superclass must be Initable
  */
 export const Serializable = <K extends Constructor<Initable> & Initable>(
->Serializable : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
-><K extends Constructor<Initable> & Initable>(    SuperClass: K) => {    const LocalMixin = (InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    };    let ResultClass = LocalMixin(SuperClass);    return ResultClass;} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>Serializable : <K extends Initable & Constructor<Initable>>(SuperClass: K) => K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><K extends Constructor<Initable> & Initable>(    SuperClass: K) => {    const LocalMixin = (InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    };    let ResultClass = LocalMixin(SuperClass);    return ResultClass;} : <K extends Initable & Constructor<Initable>>(SuperClass: K) => K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>                                                                                                                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     SuperClass: K
 >SuperClass : K
+>           : ^
 
 ) => {
     const LocalMixin = (InnerSuperClass: K) => {
->LocalMixin : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
->(InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    } : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>LocalMixin : (InnerSuperClass: K) => K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>           : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    } : (InnerSuperClass: K) => K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >InnerSuperClass : K
+>                : ^
 
         return class SerializableLocal extends InnerSuperClass {
->class SerializableLocal extends InnerSuperClass {        } : { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
->SerializableLocal : { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>class SerializableLocal extends InnerSuperClass {        } : K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SerializableLocal : K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >InnerSuperClass : Initable
+>                : ^^^^^^^^
         }
     };
     let ResultClass = LocalMixin(SuperClass);
->ResultClass : { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
->LocalMixin(SuperClass) : { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
->LocalMixin : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>ResultClass : K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>LocalMixin(SuperClass) : K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>LocalMixin : (InnerSuperClass: K) => K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >SuperClass : K
+>           : ^
 
     return ResultClass;
->ResultClass : { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>ResultClass : K & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 const AMixin = <K extends Constructor<Initable> & Initable>(SuperClass: K) => {
->AMixin : <K extends Constructor<Initable> & Initable>(SuperClass: K) => void
-><K extends Constructor<Initable> & Initable>(SuperClass: K) => {    let SomeHowOkay = class A extends SuperClass {    };    let SomeHowNotOkay = class A extends Serializable(SuperClass) {    };} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => void
+>AMixin : <K extends Initable & Constructor<Initable>>(SuperClass: K) => void
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+><K extends Constructor<Initable> & Initable>(SuperClass: K) => {    let SomeHowOkay = class A extends SuperClass {    };    let SomeHowNotOkay = class A extends Serializable(SuperClass) {    };} : <K extends Initable & Constructor<Initable>>(SuperClass: K) => void
+>                                                                                                                                                                                                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >SuperClass : K
+>           : ^
 
     let SomeHowOkay = class A extends SuperClass {
->SomeHowOkay : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
->class A extends SuperClass {    } : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
->A : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
+>SomeHowOkay : K & { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class A extends SuperClass {    } : K & { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>A : K & { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >SuperClass : Initable
+>           : ^^^^^^^^
 
     };
 
     let SomeHowNotOkay = class A extends Serializable(SuperClass) {
->SomeHowNotOkay : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
->class A extends Serializable(SuperClass) {    } : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
->A : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
->Serializable(SuperClass) : Serializable<K>.SerializableLocal & Initable
->Serializable : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>SomeHowNotOkay : K & { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class A extends Serializable(SuperClass) {    } : K & { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>A : K & { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Serializable(SuperClass) : Initable & Serializable<K>.SerializableLocal
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Serializable : <K_1 extends Initable & Constructor<Initable>>(SuperClass: K_1) => K_1 & { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >SuperClass : K
+>           : ^
 
     };
 };

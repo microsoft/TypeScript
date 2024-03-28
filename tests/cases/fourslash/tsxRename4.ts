@@ -17,4 +17,4 @@
 ////[|<[|{| "contextRangeIndex": 7 |}div|]> </[|{| "contextRangeIndex": 7 |}div|]>|]
 
 verify.noErrors();
-verify.rangesWithSameTextAreRenameLocations("MyClass", "div");
+verify.baselineRenameAtRangesWithText("MyClass", "div");

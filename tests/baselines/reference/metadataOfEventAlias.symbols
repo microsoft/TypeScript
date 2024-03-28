@@ -1,9 +1,11 @@
-=== tests/cases/compiler/event.ts ===
+//// [tests/cases/compiler/metadataOfEventAlias.ts] ////
+
+=== event.ts ===
 export interface Event { title: string };
 >Event : Symbol(Event, Decl(event.ts, 0, 0))
 >title : Symbol(Event.title, Decl(event.ts, 0, 24))
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { Event } from './event';
 >Event : Symbol(Event, Decl(test.ts, 0, 8))
 

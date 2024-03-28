@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invariantGenericErrorElaboration.ts] ////
+
 //// [invariantGenericErrorElaboration.ts]
 // Repro from #19746
 

@@ -1,15 +1,23 @@
-=== tests/cases/compiler/defineVariables_useDefineForClassFields.ts ===
+//// [tests/cases/compiler/defineVariables_useDefineForClassFields.ts] ////
+
+=== defineVariables_useDefineForClassFields.ts ===
 const a = () => b()
 >a : () => any
+>  : ^^^^^^^^^
 >() => b() : () => any
+>          : ^^^^^^^^^
 >b() : any
 >b : () => any
+>  : ^^^^^^^^^
 
 const b = () => null
 >b : () => any
+>  : ^^^^^^^^^
 >() => null : () => any
+>           : ^^^^^^^^^
 
 a()
 >a() : any
 >a : () => any
+>  : ^^^^^^^^^
 

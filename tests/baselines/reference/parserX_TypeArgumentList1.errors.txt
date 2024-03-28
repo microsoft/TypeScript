@@ -1,15 +1,15 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,1): error TS2304: Cannot find name 'Foo'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,5): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,7): error TS2304: Cannot find name 'B'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,9): error TS1127: Invalid character.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,11): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,14): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts(1,14): error TS2695: Left side of comma operator is unused and has no side effects.
+parserX_TypeArgumentList1.ts(1,1): error TS2304: Cannot find name 'Foo'.
+parserX_TypeArgumentList1.ts(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
+parserX_TypeArgumentList1.ts(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
+parserX_TypeArgumentList1.ts(1,5): error TS2304: Cannot find name 'A'.
+parserX_TypeArgumentList1.ts(1,7): error TS2304: Cannot find name 'B'.
+parserX_TypeArgumentList1.ts(1,9): error TS1127: Invalid character.
+parserX_TypeArgumentList1.ts(1,11): error TS2304: Cannot find name 'C'.
+parserX_TypeArgumentList1.ts(1,14): error TS2695: Left side of comma operator is unused and has no side effects.
+parserX_TypeArgumentList1.ts(1,14): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts (9 errors) ====
+==== parserX_TypeArgumentList1.ts (9 errors) ====
     Foo<A,B,\ C>(4, 5, 6);
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.

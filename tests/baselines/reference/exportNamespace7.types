@@ -1,38 +1,56 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace7.ts] ////
+
 === /a.ts ===
 export class A {}
 >A : A
+>  : ^
 
 export class B {}
 >B : B
+>  : ^
 
 export class C {}
 >C : C
+>  : ^
 
 === /b.ts ===
 export type * from "./a";
 export class C {}
 >C : C
+>  : ^
 
 === /c.ts ===
 import { A, B, C } from "./b";
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 let _: A = new A();  // Error
 >_ : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 let __: B = new B(); // Error
 >__ : B
+>   : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 let ___: C = new C(); // Ok
 >___ : C
+>    : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 === /d.ts ===
 
@@ -41,21 +59,33 @@ export type * from "./b";
 === /e.ts ===
 import { A, B, C } from "./d";
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 let _: A = new A();   // Error
 >_ : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 let __: B = new B();  // Error
 >__ : B
+>   : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 let ___: C = new C(); // Error
 >___ : C
+>    : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 

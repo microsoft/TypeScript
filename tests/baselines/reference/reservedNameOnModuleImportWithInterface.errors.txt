@@ -1,7 +1,7 @@
-tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts(6,12): error TS2438: Import name cannot be 'string'.
+reservedNameOnModuleImportWithInterface.ts(6,12): error TS2438: Import name cannot be 'string'.
 
 
-==== tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts (1 errors) ====
+==== reservedNameOnModuleImportWithInterface.ts (1 errors) ====
     declare module test {
         interface mi_string { }
         module mi_string { }

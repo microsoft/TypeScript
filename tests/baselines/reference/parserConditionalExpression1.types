@@ -1,34 +1,67 @@
-=== tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts] ////
+
+=== parserConditionalExpression1.ts ===
 (a=this.R[c])?a.JW||(a.e5(this,c),a.JW=_.l):this.A
 >(a=this.R[c])?a.JW||(a.e5(this,c),a.JW=_.l):this.A : any
+>                                                   : ^^^
 >(a=this.R[c]) : any
+>              : ^^^
 >a=this.R[c] : any
+>            : ^^^
 >a : any
+>  : ^^^
 >this.R[c] : any
+>          : ^^^
 >this.R : any
+>       : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >R : any
+>  : ^^^
 >c : any
+>  : ^^^
 >a.JW||(a.e5(this,c),a.JW=_.l) : any
+>                              : ^^^
 >a.JW : any
+>     : ^^^
 >a : any
+>  : ^^^
 >JW : any
+>   : ^^^
 >(a.e5(this,c),a.JW=_.l) : any
+>                        : ^^^
 >a.e5(this,c),a.JW=_.l : any
+>                      : ^^^
 >a.e5(this,c) : any
+>             : ^^^
 >a.e5 : any
+>     : ^^^
 >a : any
+>  : ^^^
 >e5 : any
+>   : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >a.JW=_.l : any
+>         : ^^^
 >a.JW : any
+>     : ^^^
 >a : any
+>  : ^^^
 >JW : any
+>   : ^^^
 >_.l : any
+>    : ^^^
 >_ : any
+>  : ^^^
 >l : any
+>  : ^^^
 >this.A : any
+>       : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >A : any
+>  : ^^^
 

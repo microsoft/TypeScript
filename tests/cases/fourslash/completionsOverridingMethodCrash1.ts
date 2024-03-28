@@ -21,8 +21,9 @@ verify.completions({
     includes: [
         {
             name: "setState",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}",
+            filterText: "setState",
         }
     ]
 });

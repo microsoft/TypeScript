@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedInterfaceinNamespace3.ts(10,15): error TS6196: 'i3' is declared but never used.
+unusedInterfaceinNamespace3.ts(10,15): error TS6196: 'i3' is declared but never used.
 
 
-==== tests/cases/compiler/unusedInterfaceinNamespace3.ts (1 errors) ====
+==== unusedInterfaceinNamespace3.ts (1 errors) ====
     namespace Validation {
         interface i1 {
     

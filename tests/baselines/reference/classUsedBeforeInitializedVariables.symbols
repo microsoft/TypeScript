@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classUsedBeforeInitializedVariables.ts ===
+//// [tests/cases/compiler/classUsedBeforeInitializedVariables.ts] ////
+
+=== classUsedBeforeInitializedVariables.ts ===
 class Test {
 >Test : Symbol(Test, Decl(classUsedBeforeInitializedVariables.ts, 0, 0))
 

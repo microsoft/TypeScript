@@ -1,161 +1,237 @@
-=== tests/cases/compiler/typeGuardConstructorDerivedClass.ts ===
+//// [tests/cases/compiler/typeGuardConstructorDerivedClass.ts] ////
+
+=== typeGuardConstructorDerivedClass.ts ===
 // Derived class with different structures
 class C1 {
 >C1 : C1
+>   : ^^
 
     property1: number;
 >property1 : number
+>          : ^^^^^^
 }
 
 class C2 extends C1 {
 >C2 : C2
+>   : ^^
 >C1 : C1
+>   : ^^
 
     property2: number;
 >property2 : number
+>          : ^^^^^^
 }
 
 let var1: C2 | string;
 >var1 : string | C2
+>     : ^^^^^^^^^^^
 
 if (var1.constructor === C1) {
 >var1.constructor === C1 : boolean
+>                        : ^^^^^^^
 >var1.constructor : Function
+>                 : ^^^^^^^^
 >var1 : string | C2
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
     var1; // never
 >var1 : never
+>     : ^^^^^
 
     var1.property1; // error
 >var1.property1 : any
+>               : ^^^
 >var1 : never
+>     : ^^^^^
 >property1 : any
+>          : ^^^
 }
 if (var1.constructor === C2) {
 >var1.constructor === C2 : boolean
+>                        : ^^^^^^^
 >var1.constructor : Function
+>                 : ^^^^^^^^
 >var1 : string | C2
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
     var1; // C2
 >var1 : C2
+>     : ^^
 
     var1.property1; // number
 >var1.property1 : number
+>               : ^^^^^^
 >var1 : C2
+>     : ^^
 >property1 : number
+>          : ^^^^^^
 }
 
 // Derived classes with the same structure
 class C3 {}
 >C3 : C3
+>   : ^^
 
 class C4 extends C3 {}
 >C4 : C4
+>   : ^^
 >C3 : C3
+>   : ^^
 
 let var2: C4 | string;
 >var2 : string | C4
+>     : ^^^^^^^^^^^
 
 if (var2.constructor === C3) {
 >var2.constructor === C3 : boolean
+>                        : ^^^^^^^
 >var2.constructor : Function
+>                 : ^^^^^^^^
 >var2 : string | C4
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
     var2; // never
 >var2 : never
+>     : ^^^^^
 }
 if (var2.constructor === C4) {
 >var2.constructor === C4 : boolean
+>                        : ^^^^^^^
 >var2.constructor : Function
+>                 : ^^^^^^^^
 >var2 : string | C4
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 
     var2; // C4
 >var2 : C4
+>     : ^^
 }
 
 // Disjointly structured classes
 class C5 {
 >C5 : C5
+>   : ^^
 
     property1: number;
 >property1 : number
+>          : ^^^^^^
 }
 
 class C6 {
 >C6 : C6
+>   : ^^
 
     property2: number;
 >property2 : number
+>          : ^^^^^^
 }
 
 let let3: C6 | string;
 >let3 : string | C6
+>     : ^^^^^^^^^^^
 
 if (let3.constructor === C5) {
 >let3.constructor === C5 : boolean
+>                        : ^^^^^^^
 >let3.constructor : Function
+>                 : ^^^^^^^^
 >let3 : string | C6
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C5 : typeof C5
+>   : ^^^^^^^^^
 
     let3; // never
 >let3 : never
+>     : ^^^^^
 }
 if (let3.constructor === C6) {
 >let3.constructor === C6 : boolean
+>                        : ^^^^^^^
 >let3.constructor : Function
+>                 : ^^^^^^^^
 >let3 : string | C6
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C6 : typeof C6
+>   : ^^^^^^^^^
 
     let3; // C6
 >let3 : C6
+>     : ^^
 }
 
 // Classes with the same structure
 class C7 {
 >C7 : C7
+>   : ^^
 
     property1: number
 >property1 : number
+>          : ^^^^^^
 }
 
 class C8 {
 >C8 : C8
+>   : ^^
 
     property1: number;
 >property1 : number
+>          : ^^^^^^
 }
 
 let let4: C8 | string;
 >let4 : string | C8
+>     : ^^^^^^^^^^^
 
 if (let4.constructor === C7) {
 >let4.constructor === C7 : boolean
+>                        : ^^^^^^^
 >let4.constructor : Function
+>                 : ^^^^^^^^
 >let4 : string | C8
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C7 : typeof C7
+>   : ^^^^^^^^^
 
     let4; // never
 >let4 : never
+>     : ^^^^^
 }
 if (let4.constructor === C8) {
 >let4.constructor === C8 : boolean
+>                        : ^^^^^^^
 >let4.constructor : Function
+>                 : ^^^^^^^^
 >let4 : string | C8
+>     : ^^^^^^^^^^^
 >constructor : Function
+>            : ^^^^^^^^
 >C8 : typeof C8
+>   : ^^^^^^^^^
 
     let4; // C8
 >let4 : C8
+>     : ^^
 }
 

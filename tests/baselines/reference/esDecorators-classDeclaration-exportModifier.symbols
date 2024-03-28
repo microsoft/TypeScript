@@ -1,46 +1,48 @@
-=== tests/cases/conformance/esDecorators/classDeclaration/global.js ===
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.ts] ////
+
+=== global.js ===
 /** @type {*} */
 var dec;
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file1.js ===
+=== file1.js ===
 // ok
 @dec export class C1 { }
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >C1 : Symbol(C1, Decl(file1.js, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file2.js ===
+=== file2.js ===
 // ok
 @dec export default class C2 {}
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >C2 : Symbol(C2, Decl(file2.js, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file3.js ===
+=== file3.js ===
 // error
 export @dec default class C3 {}
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >C3 : Symbol(C3, Decl(file3.js, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file4.js ===
+=== file4.js ===
 // ok
 export @dec class C4 {}
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >C4 : Symbol(C4, Decl(file4.js, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file5.js ===
+=== file5.js ===
 // ok
 export default @dec class C5 {}
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >C5 : Symbol(C5, Decl(file5.js, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file6.js ===
+=== file6.js ===
 // error
 @dec export @dec class C6 {}
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >dec : Symbol(dec, Decl(global.js, 1, 3))
 >C6 : Symbol(C6, Decl(file6.js, 0, 0))
 
-=== tests/cases/conformance/esDecorators/classDeclaration/file7.js ===
+=== file7.js ===
 // error
 @dec export default @dec class C7 {}
 >dec : Symbol(dec, Decl(global.js, 1, 3))

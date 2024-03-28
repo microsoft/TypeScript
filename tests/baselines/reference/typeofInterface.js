@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofInterface.ts] ////
+
 //// [typeofInterface.ts]
 var I: { a: string};
 

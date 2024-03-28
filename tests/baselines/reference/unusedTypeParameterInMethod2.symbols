@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameterInMethod2.ts ===
+//// [tests/cases/compiler/unusedTypeParameterInMethod2.ts] ////
+
+=== unusedTypeParameterInMethod2.ts ===
 class A {
 >A : Symbol(A, Decl(unusedTypeParameterInMethod2.ts, 0, 0))
 

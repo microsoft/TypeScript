@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts] ////
+
 //// [interfaceWithMultipleBaseTypes2.ts]
 interface Base {
     x: {

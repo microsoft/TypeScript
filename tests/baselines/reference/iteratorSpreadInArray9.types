@@ -1,36 +1,54 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts] ////
+
+=== iteratorSpreadInArray9.ts ===
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
+>               : ^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: symbol; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: Symbol()        } : { value: symbol; }
+>                                      : ^^^^^^^^^^^^^^^^^^
 
             value: Symbol()
 >value : symbol
+>      : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var array = [...new SymbolIterator];
 >array : symbol[]
+>      : ^^^^^^^^
 >[...new SymbolIterator] : symbol[]
+>                        : ^^^^^^^^
 >...new SymbolIterator : symbol
+>                      : ^^^^^^
 >new SymbolIterator : SymbolIterator
+>                   : ^^^^^^^^^^^^^^
 >SymbolIterator : typeof SymbolIterator
+>               : ^^^^^^^^^^^^^^^^^^^^^
 

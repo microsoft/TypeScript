@@ -1,22 +1,22 @@
-tests/cases/compiler/overloadConsecutiveness.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(3,14): error TS1144: '{' or ';' expected.
-tests/cases/compiler/overloadConsecutiveness.ts(3,25): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(4,14): error TS1144: '{' or ';' expected.
-tests/cases/compiler/overloadConsecutiveness.ts(5,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(5,17): error TS1128: Declaration or statement expected.
-tests/cases/compiler/overloadConsecutiveness.ts(5,28): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(8,2): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(8,6): error TS1144: '{' or ';' expected.
-tests/cases/compiler/overloadConsecutiveness.ts(8,8): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(9,2): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(9,6): error TS1144: '{' or ';' expected.
-tests/cases/compiler/overloadConsecutiveness.ts(10,2): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/overloadConsecutiveness.ts(10,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/overloadConsecutiveness.ts(10,11): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(3,14): error TS1144: '{' or ';' expected.
+overloadConsecutiveness.ts(3,25): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(4,14): error TS1144: '{' or ';' expected.
+overloadConsecutiveness.ts(5,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(5,17): error TS1128: Declaration or statement expected.
+overloadConsecutiveness.ts(5,28): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(8,2): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(8,6): error TS1144: '{' or ';' expected.
+overloadConsecutiveness.ts(8,8): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(9,2): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(9,6): error TS1144: '{' or ';' expected.
+overloadConsecutiveness.ts(10,2): error TS2391: Function implementation is missing or not immediately following the declaration.
+overloadConsecutiveness.ts(10,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+overloadConsecutiveness.ts(10,11): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== tests/cases/compiler/overloadConsecutiveness.ts (16 errors) ====
+==== overloadConsecutiveness.ts (16 errors) ====
     // Making sure compiler won't break with declarations that are consecutive in the AST but not consecutive in the source. Syntax errors intentional.
     
     function f1(), function f1();

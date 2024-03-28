@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitRetainsJsdocyComments.ts] ////
+
 //// [declarationEmitRetainsJsdocyComments.ts]
 /**
  * comment1

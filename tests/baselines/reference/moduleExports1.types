@@ -1,47 +1,79 @@
-=== tests/cases/compiler/moduleExports1.ts ===
+//// [tests/cases/compiler/moduleExports1.ts] ////
+
+=== moduleExports1.ts ===
 export module TypeScript.Strasse.Street {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 >Strasse : typeof Strasse
+>        : ^^^^^^^^^^^^^^
 >Street : typeof Street
+>       : ^^^^^^^^^^^^^
 
 	export class Rue {
 >Rue : Rue
+>    : ^^^
 
 		public address:string;
 >address : string
+>        : ^^^^^^
 	}	
 }
 
 var rue = new TypeScript.Strasse.Street.Rue();
 >rue : TypeScript.Strasse.Street.Rue
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new TypeScript.Strasse.Street.Rue() : TypeScript.Strasse.Street.Rue
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript.Strasse.Street.Rue : typeof TypeScript.Strasse.Street.Rue
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript.Strasse.Street : typeof TypeScript.Strasse.Street
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript.Strasse : typeof TypeScript.Strasse
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 >Strasse : typeof TypeScript.Strasse
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Street : typeof TypeScript.Strasse.Street
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Rue : typeof TypeScript.Strasse.Street.Rue
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 rue.address = "1 Main Street";
 >rue.address = "1 Main Street" : "1 Main Street"
+>                              : ^^^^^^^^^^^^^^^
 >rue.address : string
+>            : ^^^^^^
 >rue : TypeScript.Strasse.Street.Rue
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >address : string
+>        : ^^^^^^
 >"1 Main Street" : "1 Main Street"
+>                : ^^^^^^^^^^^^^^^
 
 void 0;
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 if (!module.exports) module.exports = "";
 >!module.exports : boolean
+>                : ^^^^^^^
 >module.exports : any
+>               : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >module.exports = "" : ""
+>                    : ^^
 >module.exports : any
+>               : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >"" : ""
+>   : ^^
 

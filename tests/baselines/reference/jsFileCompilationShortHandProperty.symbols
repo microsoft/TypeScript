@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationShortHandProperty.ts] ////
+
+=== a.js ===
 function foo() {
 >foo : Symbol(foo, Decl(a.js, 0, 0))
 
@@ -17,3 +19,4 @@ function foo() {
 
     };
 }
+

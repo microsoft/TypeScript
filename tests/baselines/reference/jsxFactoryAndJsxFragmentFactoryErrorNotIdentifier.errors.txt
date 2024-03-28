@@ -2,7 +2,7 @@ error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid iden
 
 
 !!! error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
-==== tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx (0 errors) ====
+==== jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx (0 errors) ====
     declare var h: any;
     
     <></>;

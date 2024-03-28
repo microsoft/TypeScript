@@ -1,104 +1,146 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importSpecifiers1.ts] ////
+
 === /mod.ts ===
 export const as = 0;
 >as : 0
+>   : ^
 >0 : 0
+>  : ^
 
 export const type = 0;
 >type : 0
+>     : ^
 >0 : 0
+>  : ^
 
 export const something = 0;
 >something : 0
+>          : ^
 >0 : 0
+>  : ^
 
 === /a.ts ===
 import { type } from "./mod.js";
 >type : 0
+>     : ^
 
 import { type as } from "./mod.js";
 >as : 0
+>   : ^
 
 type;
 >type : 0
+>     : ^
 
 as; // Error (used in emitting position)
 >as : 0
+>   : ^
 
 === /b.ts ===
 import { type as as } from "./mod.js";
 >type : 0
+>     : ^
 >as : 0
+>   : ^
 
 type; // Error (cannot resolve name)
 >type : any
+>     : ^^^
 
 as;
 >as : 0
+>   : ^
 
 === /c.ts ===
 import { type as as as } from "./mod.js";
 >as : 0
+>   : ^
 >as : 0
+>   : ^
 
 type; // Error (cannot resolve name)
 >type : any
+>     : ^^^
 
 as; // Error (used in emitting position)
 >as : 0
+>   : ^
 
 === /d.ts ===
 import { type as as as as } from "./mod.js"; // Error
 >as : 0
+>   : ^
 >as : 0
+>   : ^
 >as : 0
+>   : ^
 
 === /e.ts ===
 import { type type as as } from "./mod.js";
 >type : 0
+>     : ^
 >as : 0
+>   : ^
 
 import { type as type } from "./mod.js";
 >type : 0
+>     : ^
 >type : 0
+>     : ^
 
 type;
 >type : 0
+>     : ^
 
 as; // Error (used in emitting position)
 >as : 0
+>   : ^
 
 === /f.ts ===
 import { type import } from "./mod.js"; // Error
 >import : any
+>       : ^^^
 
 import { type as export } from "./mod.js"; // Error
 >type : 0
+>     : ^
 >export : 0
+>       : ^
 
 import { type as as export } from "./mod.js"; // Error
 >as : 0
+>   : ^
 >export : 0
+>       : ^
 
 import { type something } from "./mod.js";
 >something : 0
+>          : ^
 
 import { type something as s } from "./mod.js";
 >something : 0
+>          : ^
 >s : 0
+>  : ^
 
 type; // Error (cannot resolve name)
 >type : any
+>     : ^^^
 
 as; // Error (cannot resolve name)
 >as : any
+>   : ^^^
 
 something; // Error (used in emitting position)
 >something : 0
+>          : ^
 
 s; // Error (used in emitting position)
 >s : 0
+>  : ^
 
 === /g.ts ===
 import type { type something } from "./mod.js"; // Error
 >something : any
+>          : ^^^
 

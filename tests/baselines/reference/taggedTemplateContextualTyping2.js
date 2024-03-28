@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping2.ts] ////
+
 //// [taggedTemplateContextualTyping2.ts]
 type FuncType1 = (x: <T>(p: T) => T) => typeof x;
 type FuncType2 = (x: <S, T>(p: T) => T) => typeof x;

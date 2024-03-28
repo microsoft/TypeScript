@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInFunction.ts] ////
+
 //// [collisionThisExpressionAndLocalVarInFunction.ts]
 var console: {
     log(val: any);

@@ -1,147 +1,203 @@
-=== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts ===
+//// [tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts] ////
+
+=== errorSuperCalls.ts ===
 //super call in class constructor with no base type
 class NoBase {
 >NoBase : NoBase
+>       : ^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 
     //super call in class member function with no base type
     fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 
     //super call in class accessor (get and set) with no base type
     get foo() {
 >foo : any
+>    : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
         return null;
     }
     set foo(v) {
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 
     //super call in class member initializer with no base type
     p = super();
 >p : void
+>  : ^^^^
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
     //super call in static class member function with no base type
     static fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 
     //super call in static class member initializer with no base type
     static k = super();
 >k : void
+>  : ^^^^
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
     //super call in static class accessor (get and set) with no base type
     static get q() {
 >q : any
+>  : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
         return null;
     }
     static set q(n) {
 >q : any
+>  : ^^^
 >n : any
+>  : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 }
 
 class Base<T> { private n: T; }
 >Base : Base<T>
+>     : ^^^^^^^
 >n : T
+>  : ^
 
 class Derived<T> extends Base<T> {
 >Derived : Derived<T>
+>        : ^^^^^^^^^^
 >Base : Base<T>
+>     : ^^^^^^^
 
     //super call with type arguments 
     constructor() {
         super<string>();
 >super<string>() : void
+>                : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }
 
 
 class OtherBase {
 >OtherBase : OtherBase
+>          : ^^^^^^^^^
 
     private n: string;
 >n : string
+>  : ^^^^^^
 }
 
 class OtherDerived extends OtherBase {
 >OtherDerived : OtherDerived
+>             : ^^^^^^^^^^^^
 >OtherBase : OtherBase
+>          : ^^^^^^^^^
 
     //super call in class member initializer of derived type
     t = super();
 >t : void
+>  : ^^^^
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
     fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
         //super call in class member function of derived type
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 
     //super call in class accessor (get and set) of derived type
     get foo() {
 >foo : any
+>    : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 
         return null;
     }
     set foo(n) {
 >foo : any
+>    : ^^^
 >n : any
+>  : ^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 }
 

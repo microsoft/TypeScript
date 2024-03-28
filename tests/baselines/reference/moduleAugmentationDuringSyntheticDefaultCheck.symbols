@@ -1,10 +1,12 @@
-=== tests/cases/compiler/idx.test.ts ===
+//// [tests/cases/compiler/moduleAugmentationDuringSyntheticDefaultCheck.ts] ////
+
+=== idx.test.ts ===
 /// <reference path="./idx" />
 
 import moment = require("moment-timezone");
 >moment : Symbol(moment, Decl(idx.test.ts, 0, 0))
 
-=== tests/cases/compiler/node_modules/moment/index.d.ts ===
+=== node_modules/moment/index.d.ts ===
 declare function moment(): moment.Moment;
 >moment : Symbol(moment, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
 >moment : Symbol(moment, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
@@ -24,7 +26,7 @@ declare namespace moment {
 export = moment;
 >moment : Symbol(moment, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
 
-=== tests/cases/compiler/node_modules/moment-timezone/index.d.ts ===
+=== node_modules/moment-timezone/index.d.ts ===
 import * as moment from 'moment';
 >moment : Symbol(moment, Decl(index.d.ts, 0, 6))
 
@@ -41,7 +43,7 @@ declare module "moment" {
 >tz : Symbol(Moment.tz, Decl(index.d.ts, 3, 22))
     }
 }
-=== tests/cases/compiler/idx.ts ===
+=== idx.ts ===
 import * as _moment from "moment";
 >_moment : Symbol(_moment, Decl(idx.ts, 0, 6))
 

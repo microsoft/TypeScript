@@ -1,14 +1,20 @@
-=== tests/cases/compiler/duplicateLabel4.ts ===
+//// [tests/cases/compiler/duplicateLabel4.ts] ////
+
+=== duplicateLabel4.ts ===
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 }
 
 target: 
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 }

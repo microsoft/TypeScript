@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitExpandoWithGenericConstraint.ts ===
+//// [tests/cases/compiler/declarationEmitExpandoWithGenericConstraint.ts] ////
+
+=== declarationEmitExpandoWithGenericConstraint.ts ===
 export interface Point {
 >Point : Symbol(Point, Decl(declarationEmitExpandoWithGenericConstraint.ts, 0, 0), Decl(declarationEmitExpandoWithGenericConstraint.ts, 10, 12), Decl(declarationEmitExpandoWithGenericConstraint.ts, 11, 73))
 

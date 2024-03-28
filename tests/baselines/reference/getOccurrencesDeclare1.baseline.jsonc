@@ -1,0 +1,66 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare1.ts ===
+// --- (line: 27) skipped ---
+//     export interface I1 {
+//     }
+// 
+//     export /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] module ma.m1.m2.m3 {
+//         interface I2 {
+//         }
+//     }
+// --- (line: 35) skipped ---
+
+// --- (line: 45) skipped ---
+//         }
+//     }
+// 
+//     [|{| kind: "none" |}declare|] var ambientThing: number;
+//     export var exportedThing = 10;
+//     [|{| kind: "none" |}declare|] function foo(): string;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare1.ts ===
+// --- (line: 27) skipped ---
+//     export interface I1 {
+//     }
+// 
+//     export [|{| kind: "none" |}declare|] module ma.m1.m2.m3 {
+//         interface I2 {
+//         }
+//     }
+// --- (line: 35) skipped ---
+
+// --- (line: 45) skipped ---
+//         }
+//     }
+// 
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] var ambientThing: number;
+//     export var exportedThing = 10;
+//     [|{| kind: "none" |}declare|] function foo(): string;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesDeclare1.ts ===
+// --- (line: 27) skipped ---
+//     export interface I1 {
+//     }
+// 
+//     export [|{| kind: "none" |}declare|] module ma.m1.m2.m3 {
+//         interface I2 {
+//         }
+//     }
+// --- (line: 35) skipped ---
+
+// --- (line: 45) skipped ---
+//         }
+//     }
+// 
+//     [|{| kind: "none" |}declare|] var ambientThing: number;
+//     export var exportedThing = 10;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}declare|] function foo(): string;
+// }

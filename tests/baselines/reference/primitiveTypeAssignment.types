@@ -1,13 +1,21 @@
-=== tests/cases/compiler/primitiveTypeAssignment.ts ===
+//// [tests/cases/compiler/primitiveTypeAssignment.ts] ////
+
+=== primitiveTypeAssignment.ts ===
 var x = any;
 >x : any
+>  : ^^^
 >any : any
+>    : ^^^
 
 var y = number;
 >y : any
+>  : ^^^
 >number : any
+>       : ^^^
 
 var z = boolean;
 >z : any
+>  : ^^^
 >boolean : any
+>        : ^^^
 

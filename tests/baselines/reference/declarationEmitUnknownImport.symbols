@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitUnknownImport.ts ===
+//// [tests/cases/compiler/declarationEmitUnknownImport.ts] ////
+
+=== declarationEmitUnknownImport.ts ===
 import Foo = SomeNonExistingName
 >Foo : Symbol(Foo, Decl(declarationEmitUnknownImport.ts, 0, 0))
 

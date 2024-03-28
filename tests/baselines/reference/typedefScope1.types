@@ -1,26 +1,36 @@
-=== tests/cases/conformance/jsdoc/typedefScope1.js ===
+//// [tests/cases/conformance/jsdoc/typedefScope1.ts] ////
+
+=== typedefScope1.js ===
 function B1() {
 >B1 : () => void
+>   : ^^^^^^^^^^
 
     /** @typedef {number} B */
     /** @type {B} */
     var ok1 = 0;
 >ok1 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 function B2() {
 >B2 : () => void
+>   : ^^^^^^^^^^
 
     /** @typedef {string} B */
     /** @type {B} */
     var ok2 = 'hi';
 >ok2 : string
+>    : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 }
 
 /** @type {B} */
 var notOK = 0;
 >notOK : B
+>      : ^
 >0 : 0
+>  : ^
 

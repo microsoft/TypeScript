@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesEnum3.ts] ////
+
 //// [augmentedTypesEnum3.ts]
 module E {
     var t;

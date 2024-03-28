@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx] ////
+
 //// [tsxNotUsingApparentTypeOfSFC.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

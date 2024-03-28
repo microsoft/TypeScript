@@ -1,6 +1,11 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments02_ES6.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments02_ES6.ts] ////
+
+=== emitArrowFunctionWhenUsingArguments02_ES6.ts ===
 var a = () => arguments;
 >a : () => any
+>  : ^^^^^^^^^
 >() => arguments : () => any
+>                : ^^^^^^^^^
 >arguments : any
+>          : ^^^
 

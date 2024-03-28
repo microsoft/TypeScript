@@ -1,27 +1,38 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts] ////
+
+=== privateNamesInNestedClasses-2.ts ===
 class A {
 >A : A
+>  : ^
 
     static #x = 5;
 >#x : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 
     constructor () {
         class B {
 >B : B
+>  : ^
 
             #x = 5;
 >#x : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 
             constructor() {
                 class C {
 >C : C
+>  : ^
 
                     constructor() {
                         A.#x // error
 >A.#x : any
+>     : ^^^
 >A : typeof A
+>  : ^^^^^^^^
                     }
                 }
             }

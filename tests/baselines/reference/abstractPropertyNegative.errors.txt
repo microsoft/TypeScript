@@ -1,24 +1,20 @@
-tests/cases/compiler/abstractPropertyNegative.ts(10,18): error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
-tests/cases/compiler/abstractPropertyNegative.ts(15,5): error TS1244: Abstract methods can only appear within an abstract class.
-tests/cases/compiler/abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
-tests/cases/compiler/abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a read-only property.
-tests/cases/compiler/abstractPropertyNegative.ts(25,5): error TS2416: Property 'num' in type 'WrongTypePropertyImpl' is not assignable to the same property in base type 'WrongTypeProperty'.
+abstractPropertyNegative.ts(13,7): error TS2654: Non-abstract class 'C' is missing implementations for the following members of 'B': 'prop', 'readonlyProp', 'm', 'mismatch'.
+abstractPropertyNegative.ts(15,5): error TS1253: Abstract properties can only appear within an abstract class.
+abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.
+abstractPropertyNegative.ts(19,3): error TS2540: Cannot assign to 'ro' because it is a read-only property.
+abstractPropertyNegative.ts(25,5): error TS2416: Property 'num' in type 'WrongTypePropertyImpl' is not assignable to the same property in base type 'WrongTypeProperty'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/abstractPropertyNegative.ts(31,9): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl' is not assignable to the same property in base type 'WrongTypeAccessor'.
+abstractPropertyNegative.ts(31,9): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl' is not assignable to the same property in base type 'WrongTypeAccessor'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/abstractPropertyNegative.ts(34,5): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl2' is not assignable to the same property in base type 'WrongTypeAccessor'.
+abstractPropertyNegative.ts(34,5): error TS2416: Property 'num' in type 'WrongTypeAccessorImpl2' is not assignable to the same property in base type 'WrongTypeAccessor'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/abstractPropertyNegative.ts(38,18): error TS2676: Accessors must both be abstract or non-abstract.
-tests/cases/compiler/abstractPropertyNegative.ts(39,9): error TS2676: Accessors must both be abstract or non-abstract.
-tests/cases/compiler/abstractPropertyNegative.ts(40,9): error TS2676: Accessors must both be abstract or non-abstract.
-tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstract or non-abstract.
+abstractPropertyNegative.ts(38,18): error TS2676: Accessors must both be abstract or non-abstract.
+abstractPropertyNegative.ts(39,9): error TS2676: Accessors must both be abstract or non-abstract.
+abstractPropertyNegative.ts(40,9): error TS2676: Accessors must both be abstract or non-abstract.
+abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstract or non-abstract.
 
 
-==== tests/cases/compiler/abstractPropertyNegative.ts (15 errors) ====
+==== abstractPropertyNegative.ts (11 errors) ====
     interface A {
         prop: string;
         m(): string;
@@ -29,23 +25,15 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
         abstract get readonlyProp(): string;
         abstract m(): string;
         abstract get mismatch(): string;
-                     ~~~~~~~~
-!!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
-        abstract set mismatch(val: number); // error, not same type
+        abstract set mismatch(val: number);
     }
     class C extends B {
           ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
-          ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
-          ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
-          ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'readonlyProp' from class 'B'.
+!!! error TS2654: Non-abstract class 'C' is missing implementations for the following members of 'B': 'prop', 'readonlyProp', 'm', 'mismatch'.
         readonly ro = "readonly please";
         abstract notAllowed: string;
         ~~~~~~~~
-!!! error TS1244: Abstract methods can only appear within an abstract class.
+!!! error TS1253: Abstract properties can only appear within an abstract class.
         get concreteWithNoBody(): string;
                                         ~
 !!! error TS1005: '{' expected.

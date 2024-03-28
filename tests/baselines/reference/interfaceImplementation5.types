@@ -1,39 +1,54 @@
-=== tests/cases/compiler/interfaceImplementation5.ts ===
+//// [tests/cases/compiler/interfaceImplementation5.ts] ////
+
+=== interfaceImplementation5.ts ===
 interface I1 {
     getset1:number;
 >getset1 : number
+>        : ^^^^^^
 }
 
 class C1 implements I1 {
 >C1 : C1
+>   : ^^
 
     public get getset1(){return 1;}
 >getset1 : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 class C2 implements I1 {
 >C2 : C2
+>   : ^^
 
     public set getset1(baz:number){}
 >getset1 : number
+>        : ^^^^^^
 >baz : number
+>    : ^^^^^^
 }
 
 class C3 implements I1 {
 >C3 : C3
+>   : ^^
 
     public get getset1(){return 1;}
 >getset1 : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
     public set getset1(baz:number){}
 >getset1 : number
+>        : ^^^^^^
 >baz : number
+>    : ^^^^^^
 }
 
 class C4 implements I1 {
 >C4 : C4
+>   : ^^
 
     public get getset1(){var x:any; return x;}
 >getset1 : any
@@ -43,6 +58,7 @@ class C4 implements I1 {
 
 class C5 implements I1 {
 >C5 : C5
+>   : ^^
 
     public set getset1(baz:any){}
 >getset1 : any
@@ -51,6 +67,7 @@ class C5 implements I1 {
 
 class C6 implements I1 {
 >C6 : C6
+>   : ^^
 
     public set getset1(baz:any){}
 >getset1 : any
