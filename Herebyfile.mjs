@@ -270,6 +270,27 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             );
         }
 
+        const downlevelLetConst = true;
+        if (downlevelLetConst) {
+            options.plugins = (options.plugins ?? []).concat({
+                name: "let-const",
+                setup: build => {
+                    build.onEnd(async () => {
+                        await exec(process.execPath, [
+                            "./node_modules/@babel/cli/bin/babel.js",
+                            "--plugins",
+                            "@babel/plugin-transform-block-scoping",
+                            outfile,
+                            "--compact",
+                            "false",
+                            "--out-file",
+                            outfile,
+                        ]);
+                    });
+                },
+            });
+        }
+
         return options;
     });
 
