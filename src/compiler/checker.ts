@@ -26533,12 +26533,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // all co-variant inferences are subtypes of it (i.e. it isn't one of a conflicting set of candidates), it is
                     // a subtype of some contra-variant inference, and no other type parameter is constrained to this type parameter
                     // and has inferences that would conflict. Otherwise, we prefer the contra-variant inference.
+                    // Similarly ignore co-variant `any` inference when both are available as almost everything is assignable to it
+                    // and it would spoil the overall inference.
                     const preferCovariantType = inferredCovariantType && (!inferredContravariantType ||
-                        !(inferredCovariantType.flags & TypeFlags.Never) &&
-                            some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
+                        !(inferredCovariantType.flags & (TypeFlags.Never | TypeFlags.Any)) &&
+                            some(inference.contraCandidates, t => isTypeAssignableTo(inferredCovariantType, t)) &&
                             every(context.inferences, other =>
                                 other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
-                                every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType))));
+                                every(other.candidates, t => isTypeAssignableTo(t, inferredCovariantType))));
                     inferredType = preferCovariantType ? inferredCovariantType : inferredContravariantType;
                     fallbackType = preferCovariantType ? inferredContravariantType : inferredCovariantType;
                 }
