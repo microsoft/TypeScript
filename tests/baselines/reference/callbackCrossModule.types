@@ -7,43 +7,64 @@
  */
 module.exports = C
 >module.exports = C : typeof C
+>                   : ^^^^^^^^
 >module.exports : typeof C
+>               : ^^^^^^^^
 >module : { exports: typeof C; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof C
+>        : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
     this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 === use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
 >f : (k: import('./mod1').Con) => any
+>  : ^^^^                    ^^^^^^^^
 >k : import("mod1").Con
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (1 === 2 - 1) {
 >1 === 2 - 1 : boolean
+>            : ^^^^^^^
 >1 : 1
+>  : ^
 >2 - 1 : number
+>      : ^^^^^^
 >2 : 2
+>  : ^
 >1 : 1
+>  : ^
 
         // I guess basic math works!
     }
     return k({ ok: true})
 >k({ ok: true}) : any
 >k : import("mod1").Con
+>  : ^^^^^^^^^^^^^^^^^^
 >{ ok: true} : { ok: boolean; }
+>            : ^^^^^^^^^^^^^^^^
 >ok : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 
 

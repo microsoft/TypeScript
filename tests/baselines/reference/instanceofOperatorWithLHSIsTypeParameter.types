@@ -3,14 +3,19 @@
 === instanceofOperatorWithLHSIsTypeParameter.ts ===
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
+>    : ^ ^^^^^ ^^^^^^^^^
 >t : T
+>  : ^
 
     var x: any;
 >x : any
 
     var r = t instanceof x;
 >r : boolean
+>  : ^^^^^^^
 >t instanceof x : boolean
+>               : ^^^^^^^
 >t : T
+>  : ^
 >x : any
 }

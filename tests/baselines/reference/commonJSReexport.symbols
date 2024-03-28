@@ -12,19 +12,17 @@ hardline
 >hardline : Symbol(hardline, Decl(main.js, 0, 7))
 
 === first.js ===
-// #41422, based on prettier's exports
-
 const hardline = { type: "hard" }
->hardline : Symbol(hardline, Decl(first.js, 2, 5))
->type : Symbol(type, Decl(first.js, 2, 18))
+>hardline : Symbol(hardline, Decl(first.js, 0, 5))
+>type : Symbol(type, Decl(first.js, 0, 18))
 
 module.exports = {
 >module.exports : Symbol(module.exports, Decl(first.js, 0, 0))
->module : Symbol(module, Decl(first.js, 2, 33))
+>module : Symbol(module, Decl(first.js, 0, 33))
 >exports : Symbol(module.exports, Decl(first.js, 0, 0))
 
   hardline
->hardline : Symbol(hardline, Decl(first.js, 3, 18))
+>hardline : Symbol(hardline, Decl(first.js, 1, 18))
 }
 
 

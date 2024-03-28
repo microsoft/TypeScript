@@ -136,7 +136,7 @@ export const unrelated = 10;
 
 /home/src/lib/tsc.js -w project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles --extendedDiagnostics
 Output::
-[[90m12:01:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /home/src/projects CaseSensitiveFileNames: false
 Synchronizing program
@@ -267,7 +267,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -410,7 +410,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -452,7 +452,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -567,7 +567,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -595,7 +595,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -666,7 +666,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -698,7 +698,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:46 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -795,7 +795,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:48 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -856,7 +856,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -978,7 +978,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -1022,7 +1022,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:13 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1129,7 +1129,7 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:16 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -1190,7 +1190,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:26 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

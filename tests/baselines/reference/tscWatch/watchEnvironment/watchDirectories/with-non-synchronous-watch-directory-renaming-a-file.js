@@ -30,9 +30,9 @@ export const x = 10;
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -126,13 +126,13 @@ Invoking Timeout callback:: timeoutId:: 1:: timerToUpdateProgram
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -208,14 +208,14 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "./file2";
 [7m [0m [91m                  ~~~~~~~~~[0m
 
-[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

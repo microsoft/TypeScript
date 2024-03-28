@@ -3,18 +3,22 @@
 === f1.ts ===
 export class A {};
 >A : A
+>  : ^
 
 === f2.ts ===
 // change the shape of Array<T>
 import {A} from "./f1";
 >A : typeof A
+>  : ^^^^^^^^
 
 declare global {
 >global : any
+>       : ^^^
 
     interface Array<T> {
         getCountAsString(): string;
 >getCountAsString : () => string
+>                 : ^^^^^^      
     }
 }
 
@@ -23,16 +27,27 @@ import "./f2";
 
 let x = [1];
 >x : number[]
+>  : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 let y = x.getCountAsString().toLowerCase();
 >y : string
+>  : ^^^^^^
 >x.getCountAsString().toLowerCase() : string
+>                                   : ^^^^^^
 >x.getCountAsString().toLowerCase : () => string
+>                                 : ^^^^^^^^^^^^
 >x.getCountAsString() : string
+>                     : ^^^^^^
 >x.getCountAsString : () => string
+>                   : ^^^^^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 >getCountAsString : () => string
+>                 : ^^^^^^^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^^^^^^^
 

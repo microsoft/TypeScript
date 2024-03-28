@@ -3,4 +3,5 @@
 === VariableDeclaration6_es6.ts ===
 let
 >let : any
+>    : ^^^
 

@@ -41,7 +41,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -52,7 +52,7 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -171,7 +171,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -182,7 +182,7 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

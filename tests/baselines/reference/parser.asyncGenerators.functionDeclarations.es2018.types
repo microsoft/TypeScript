@@ -3,156 +3,211 @@
 === functionDeclarationIsOk.ts ===
 async function * f1() {
 >f1 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 === awaitNameIsOk.ts ===
 async function * await() {
 >await : () => AsyncGenerator<never, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 === yieldNameIsOk.ts ===
 async function * yield() {
 >yield : () => AsyncGenerator<never, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 === awaitParameterIsError.ts ===
 async function * f4(await) {
 >f4 : (await: any) => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : any
+>      : ^^^
 }
 === yieldParameterIsError.ts ===
 async function * f5(yield) {
 >f5 : (yield: any) => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : any
+>      : ^^^
 }
 === awaitInParameterInitializerIsError.ts ===
 async function * f6(a = await 1) {
 >f6 : (a?: number) => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 }
 === yieldInParameterInitializerIsError.ts ===
 async function * f7(a = yield) {
 >f7 : (a?: any) => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >yield : any
+>      : ^^^
 }
 === nestedAsyncGeneratorIsOk.ts ===
 async function * f8() {
 >f8 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async function * g() {
 >g : () => AsyncGenerator<never, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 === nestedFunctionDeclarationNamedYieldIsError.ts ===
 async function * f9() {
 >f9 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function yield() {
 >yield : () => void
+>      : ^^^^^^^^^^
     }
 }
 === nestedFunctionExpressionNamedYieldIsError.ts ===
 async function * f10() {
 >f10 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = function yield() {
 >x : () => void
+>  : ^^^^^^^^^^
 >function yield() {    } : () => void
+>                        : ^^^^^^^^^^
 >yield : () => void
+>      : ^^^^^^^^^^
 
     };
 }
 === nestedFunctionDeclarationNamedAwaitIsError.ts ===
 async function * f11() {
 >f11 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function await() {
 >await : () => void
+>      : ^^^^^^^^^^
     }
 }
 === nestedFunctionExpressionNamedAwaitIsError.ts ===
 async function * f12() {
 >f12 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = function yield() {
 >x : () => void
+>  : ^^^^^^^^^^
 >function yield() {    } : () => void
+>                        : ^^^^^^^^^^
 >yield : () => void
+>      : ^^^^^^^^^^
 
     };
 }
 === yieldIsOk.ts ===
 async function * f13() {
 >f13 : () => AsyncGenerator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
+>      : ^^^
 }
 === yieldWithValueIsOk.ts ===
 async function * f14() {
 >f14 : () => AsyncGenerator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 }
 === yieldStarMissingValueIsError.ts ===
 async function * f15() {
 >f15 : () => AsyncGenerator<any, void, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield *;
 >yield * : any
+>        : ^^^
 > : any
+> : ^^^
 }
 === yieldStarWithValueIsOk.ts ===
 async function * f16() {
 >f16 : () => AsyncGenerator<any, void, undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield * [];
 >yield * [] : any
+>           : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 === awaitWithValueIsOk.ts ===
 async function * f17() {
 >f17 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 }
 === awaitMissingValueIsError.ts ===
 async function * f18() {
 >f18 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     await;
 >await : any
+>      : ^^^
 > : any
+> : ^^^
 }
 === awaitAsTypeIsOk.ts ===
 interface await {}
 async function * f19() {
 >f19 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: await;
 >x : await
+>  : ^^^^^
 }
 === yieldAsTypeIsOk.ts ===
 interface yield {}
 async function * f20() {
 >f20 : () => AsyncGenerator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: yield;
 >x : yield
+>  : ^^^^^
 }
 === yieldInNestedComputedPropertyIsOk.ts ===
 async function * f21() {
 >f21 : () => AsyncGenerator<any, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = { [yield]: 1 };
 >x : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ [yield]: 1 } : { [x: number]: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[yield] : number
+>        : ^^^^^^
 >yield : any
+>      : ^^^
 >1 : 1
+>  : ^
 }
 

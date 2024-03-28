@@ -33,7 +33,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeP = void 0;
+exports.makeP = makeP;
 var React = require("react");
 function makeP(Ctor) {
     return /** @class */ (function (_super) {
@@ -47,4 +47,3 @@ function makeP(Ctor) {
         return class_1;
     }(React.PureComponent));
 }
-exports.makeP = makeP;

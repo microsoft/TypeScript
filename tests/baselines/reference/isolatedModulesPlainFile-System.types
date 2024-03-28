@@ -3,10 +3,15 @@
 === isolatedModulesPlainFile-System.ts ===
 declare function run(a: number): void;
 >run : (a: number) => void
+>    : ^^^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 
 run(1);
 >run(1) : void
+>       : ^^^^
 >run : (a: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 

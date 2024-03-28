@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/coAndContraVariantInferences6.ts] ////
+
+=== coAndContraVariantInferences6.ts ===
+// https://github.com/microsoft/TypeScript/issues/57911
+
+interface ExactProps {
+>ExactProps : Symbol(ExactProps, Decl(coAndContraVariantInferences6.ts, 0, 0))
+
+  value: "A" | "B";
+>value : Symbol(ExactProps.value, Decl(coAndContraVariantInferences6.ts, 2, 22))
+}
+interface FunctionComponent<P = {}> {
+>FunctionComponent : Symbol(FunctionComponent, Decl(coAndContraVariantInferences6.ts, 4, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 5, 28))
+
+  (props: P): ReactElement<any> | null;
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 6, 3))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 5, 28))
+>ReactElement : Symbol(ReactElement, Decl(coAndContraVariantInferences6.ts, 13, 1))
+}
+declare class Component<P> {
+>Component : Symbol(Component, Decl(coAndContraVariantInferences6.ts, 7, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 8, 24))
+
+  constructor(props: P);
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 9, 14))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 8, 24))
+}
+interface ComponentClass<P = {}> {
+>ComponentClass : Symbol(ComponentClass, Decl(coAndContraVariantInferences6.ts, 10, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 11, 25))
+
+  new (props: P): Component<P>;
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 12, 7))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 11, 25))
+>Component : Symbol(Component, Decl(coAndContraVariantInferences6.ts, 7, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 11, 25))
+}
+
+interface ReactElement<
+>ReactElement : Symbol(ReactElement, Decl(coAndContraVariantInferences6.ts, 13, 1))
+
+  T extends string | JSXElementConstructor<any> =
+>T : Symbol(T, Decl(coAndContraVariantInferences6.ts, 15, 23))
+>JSXElementConstructor : Symbol(JSXElementConstructor, Decl(coAndContraVariantInferences6.ts, 21, 1))
+
+    | string
+    | JSXElementConstructor<any>,
+>JSXElementConstructor : Symbol(JSXElementConstructor, Decl(coAndContraVariantInferences6.ts, 21, 1))
+
+> {
+  type: T;
+>type : Symbol(ReactElement.type, Decl(coAndContraVariantInferences6.ts, 19, 3))
+>T : Symbol(T, Decl(coAndContraVariantInferences6.ts, 15, 23))
+}
+
+type JSXElementConstructor<P> =
+>JSXElementConstructor : Symbol(JSXElementConstructor, Decl(coAndContraVariantInferences6.ts, 21, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 23, 27))
+
+  | ((props: P) => ReactElement<any> | null)
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 24, 6))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 23, 27))
+>ReactElement : Symbol(ReactElement, Decl(coAndContraVariantInferences6.ts, 13, 1))
+
+  | (new (props: P) => Component<any>);
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 25, 10))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 23, 27))
+>Component : Symbol(Component, Decl(coAndContraVariantInferences6.ts, 7, 1))
+
+declare function createElementIsolated<P extends {}>(
+>createElementIsolated : Symbol(createElementIsolated, Decl(coAndContraVariantInferences6.ts, 25, 39))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 27, 39))
+
+  type: FunctionComponent<P> | ComponentClass<P> | string,
+>type : Symbol(type, Decl(coAndContraVariantInferences6.ts, 27, 53))
+>FunctionComponent : Symbol(FunctionComponent, Decl(coAndContraVariantInferences6.ts, 4, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 27, 39))
+>ComponentClass : Symbol(ComponentClass, Decl(coAndContraVariantInferences6.ts, 10, 1))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 27, 39))
+
+  props?: P | null,
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 28, 58))
+>P : Symbol(P, Decl(coAndContraVariantInferences6.ts, 27, 39))
+
+): void;
+
+declare let WrapperIsolated: JSXElementConstructor<ExactProps>;
+>WrapperIsolated : Symbol(WrapperIsolated, Decl(coAndContraVariantInferences6.ts, 32, 11))
+>JSXElementConstructor : Symbol(JSXElementConstructor, Decl(coAndContraVariantInferences6.ts, 21, 1))
+>ExactProps : Symbol(ExactProps, Decl(coAndContraVariantInferences6.ts, 0, 0))
+
+createElementIsolated(WrapperIsolated, { value: "C" });
+>createElementIsolated : Symbol(createElementIsolated, Decl(coAndContraVariantInferences6.ts, 25, 39))
+>WrapperIsolated : Symbol(WrapperIsolated, Decl(coAndContraVariantInferences6.ts, 32, 11))
+>value : Symbol(value, Decl(coAndContraVariantInferences6.ts, 33, 40))
+
+declare const props: any[];
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 35, 13))
+
+declare const stat: any;
+>stat : Symbol(stat, Decl(coAndContraVariantInferences6.ts, 36, 13))
+
+[].push.apply(props, stat.properties);
+>[].push.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>[].push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>props : Symbol(props, Decl(coAndContraVariantInferences6.ts, 35, 13))
+>stat : Symbol(stat, Decl(coAndContraVariantInferences6.ts, 36, 13))
+

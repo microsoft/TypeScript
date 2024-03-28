@@ -26,8 +26,8 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [
-    Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code,
     Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
+    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
 ];
 const fixId = "convertToTypeOnlyImport";
 
@@ -37,8 +37,8 @@ registerCodeFix({
         const declaration = getDeclaration(context.sourceFile, context.span.start);
         if (declaration) {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration));
-            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
-                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent))
+            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && isImportDeclaration(declaration.parent.parent.parent) && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
+                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent as ImportDeclaration))
                 : undefined;
             const mainAction = createCodeFixAction(
                 fixId,
@@ -71,6 +71,7 @@ registerCodeFix({
             }
             else if (
                 errorDeclaration?.kind === SyntaxKind.ImportSpecifier
+                && isImportDeclaration(errorDeclaration.parent.parent.parent)
                 && !fixedImportDeclarations.has(errorDeclaration.parent.parent.parent)
                 && canConvertImportDeclarationForSpecifier(errorDeclaration, diag.file, context.program)
             ) {

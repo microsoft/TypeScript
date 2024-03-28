@@ -3,9 +3,15 @@
 === templateStringWithPropertyAccessES6.ts ===
 `abc${0}abc`.indexOf(`abc`);
 >`abc${0}abc`.indexOf(`abc`) : number
+>                            : ^^^^^^
 >`abc${0}abc`.indexOf : (searchString: string, position?: number) => number
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`abc${0}abc` : "abc0abc"
+>             : ^^^^^^^^^
 >0 : 0
+>  : ^
 >indexOf : (searchString: string, position?: number) => number
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`abc` : "abc"
+>      : ^^^^^
 

@@ -3,11 +3,14 @@
 === external.d.ts ===
 export var x: number
 >x : number
+>  : ^^^^^^
 
 === main.ts ===
 declare module "M" {
 >"M" : typeof import("M")
+>    : ^^^^^^^^^^^^^^^^^^
 
     import {x} from "external"
 >x : number
+>  : ^^^^^^
 }

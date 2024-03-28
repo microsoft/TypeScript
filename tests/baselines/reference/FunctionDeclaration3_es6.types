@@ -3,6 +3,9 @@
 === FunctionDeclaration3_es6.ts ===
 function f(yield = yield) {
 >f : (yield?: any) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >yield : any
+>      : ^^^
 >yield : any
+>      : ^^^
 }

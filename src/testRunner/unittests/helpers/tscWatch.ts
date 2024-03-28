@@ -138,7 +138,6 @@ export function createBaseline(system: TestServerHost, modifySystem?: (sys: Test
 export function createSolutionBuilderWithWatchHostForBaseline(sys: TestServerHost, cb: ts.ExecuteCommandLineCallbacks) {
     const host = ts.createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true), ts.createWatchStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
-    host.afterEmitBundle = cb;
     return host;
 }
 

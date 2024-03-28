@@ -3,6 +3,7 @@
 === superCallBeforeThisAccessing5.ts ===
 class D extends null {
 >D : D
+>  : ^
 
     private _t;
 >_t : any
@@ -11,7 +12,9 @@ class D extends null {
         this._t;  // No error
 >this._t : any
 >this : this
+>     : ^^^^
 >_t : any
+>   : ^^^
     }
 }
 

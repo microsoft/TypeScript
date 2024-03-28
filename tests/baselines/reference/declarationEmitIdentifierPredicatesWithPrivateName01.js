@@ -12,11 +12,10 @@ export function f(x: any): x is I {
 //// [declarationEmitIdentifierPredicatesWithPrivateName01.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 function f(x) {
     return typeof x.a === "number";
 }
-exports.f = f;
 
 
 //// [declarationEmitIdentifierPredicatesWithPrivateName01.d.ts]
