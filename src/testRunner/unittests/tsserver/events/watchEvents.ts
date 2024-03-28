@@ -93,8 +93,8 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     function updateFileOnHost(session: TestSession, file: string, log: string, content?: string) {
         // Change b.ts
         session.logger.log(`${log}: ${file}`);
-        if (content) session.host.appendFile(file, content);
-        else session.host.writeFile(file, session.host.readFile("/user/username/projects/myproject/a.ts")!);
+        if (content && session.host.fileExists(file)) session.host.appendFile(file, content);
+        else session.host.writeFile(file, content ?? session.host.readFile("/user/username/projects/myproject/a.ts")!);
         session.host.runQueuedTimeoutCallbacks();
     }
 
@@ -150,12 +150,13 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         session: TestSession,
         file: string,
         eventType: "created" | "deleted" | "updated",
+        eventPath?: string,
     ) {
         return collectWatchChanges(
             session,
             (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches,
             file,
-            file,
+            eventPath ?? file,
             eventType,
         );
     }
@@ -185,21 +186,21 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         }
     }
 
-    function addFile(session: TestSession, path: string) {
-        updateFileOnHost(session, path, "Add file");
+    function addFile(session: TestSession, path: string, content?: string, eventPath?: string) {
+        updateFileOnHost(session, path, "Add file", content);
         invokeWatchChange(
             session,
-            collectDirectoryWatcherChanges(session, "/user/username/projects/myproject", path, "created"),
+            collectDirectoryWatcherChanges(session, ts.getDirectoryPath(path), eventPath ?? path, "created"),
         );
         session.host.runQueuedTimeoutCallbacks();
     }
 
-    function changeFile(session: TestSession, path: string, content?: string) {
+    function changeFile(session: TestSession, path: string, content?: string, eventPath?: string) {
         updateFileOnHost(session, path, "Change File", content);
         invokeWatchChange(
             session,
-            collectFileWatcherChanges(session, path, "updated"),
-            collectDirectoryWatcherChanges(session, ts.getDirectoryPath(path), path, "updated"),
+            collectFileWatcherChanges(session, path, "updated", eventPath),
+            collectDirectoryWatcherChanges(session, ts.getDirectoryPath(path), eventPath ?? path, "updated"),
         );
         session.host.runQueuedTimeoutCallbacks();
     }
@@ -320,5 +321,82 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         npmInstall(session);
 
         baselineTsserverLogs("events/watchEvents", `canUseWatchEvents without canUseEvents`, session);
+    });
+
+    it("canUseWatchEvents on windows", () => {
+        const inputHost = createServerHost({
+            "c:\\projects\\myproject\\tsconfig.json": "{}",
+            "c:\\projects\\myproject\\a.ts": `export class a { prop = "hello"; foo() { return this.prop; } }`,
+            "c:\\projects\\myproject\\b.ts": `export class b { prop = "hello"; foo() { return this.prop; } }`,
+            "c:\\projects\\myproject\\m.ts": `import { x } from "something"`,
+            "c:\\projects\\myproject\\node_modules\\something\\index.d.ts": `export const x = 10;`,
+            [libFile.path]: libFile.content,
+        }, { windowsStyleRoot: "c:\\" });
+        const logger = createLoggerWithInMemoryLogs(inputHost);
+        const host = createTestServerHostWithCustomWatch(logger);
+
+        const session = createSessionWithCustomEventHandler({ host, canUseWatchEvents: true, logger }, handleWatchEvents);
+        openFilesForSession(["c:\\projects\\myproject\\a.ts"], session);
+
+        // Directory watcher
+        addFile(session, "c:/projects/myproject/c.ts", `export xyx = 10;`, "c:\\projects\\myproject\\c.ts");
+
+        // File Watcher
+        changeFile(session, "c:/projects/myproject/b.ts", "export const ss = 20;", "c:\\projects\\myproject\\b.ts");
+
+        // Close watcher
+        openFilesForSession(["c:\\projects\\myproject\\b.ts"], session);
+
+        // Re watch
+        closeFilesForSession(["c:\\projects\\myproject\\b.ts"], session);
+
+        // Update c.ts
+        changeFile(session, "c:/projects/myproject/c.ts", "export const ss = 20;", "c:\\projects\\myproject\\b.ts");
+
+        // Update with npm install
+        session.logger.log("update with npm install");
+        session.host.appendFile("c:\\projects\\myproject\\node_modules\\something\\index.d.ts", `export const y = 20;`);
+        session.host.runQueuedTimeoutCallbacks();
+        invokeWatchChange(
+            session,
+            collectDirectoryWatcherChanges(
+                session,
+                "c:/projects/myproject/node_modules",
+                "c:\\projects\\myproject\\node_modules\\something\\index.d.ts",
+                "updated",
+            ),
+        );
+        session.host.runQueuedTimeoutCallbacks();
+        host.runQueuedTimeoutCallbacks();
+
+        // Add and change multiple files - combine and send multiple requests together
+        updateFileOnHost(session, "c:/projects/myproject/d.ts", "Add file", "export const yy = 10;");
+        updateFileOnHost(session, "c:/projects/myproject/c.ts", "Change File", `export const z = 30;`);
+        updateFileOnHost(session, "c:/projects/myproject/e.ts", "Add File", "export const zz = 40;");
+        invokeWatchChange(
+            session,
+            collectDirectoryWatcherChanges(session, "c:/projects/myproject", "c:\\projects\\myproject\\d.ts", "created"),
+            collectFileWatcherChanges(session, "c:/projects/myproject/c.ts", "updated", "c:\\projects\\myproject\\c.ts"),
+            collectDirectoryWatcherChanges(session, "c:/projects/myproject", "c:\\projects\\myproject\\c.ts", "updated"),
+            collectDirectoryWatcherChanges(session, "c:/projects/myproject", "c:\\projects\\myproject\\e.ts", "created"),
+        );
+        session.host.runQueuedTimeoutCallbacks();
+
+        baselineTsserverLogs("events/watchEvents", `canUseWatchEvents on windows`, session);
+        function handleWatchEvents(event: ts.server.ProjectServiceEvent) {
+            switch (event.eventName) {
+                case ts.server.CreateFileWatcherEvent:
+                    host.factoryData.watchFile(event.data);
+                    break;
+                case ts.server.CreateDirectoryWatcherEvent:
+                    host.factoryData.watchDirectory(event.data);
+                    break;
+                case ts.server.CloseFileWatcherEvent:
+                    host.factoryData.closeWatcher(event.data);
+                    break;
+                default:
+                    break;
+            }
+        }
     });
 });
