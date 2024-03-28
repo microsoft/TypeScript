@@ -305,6 +305,7 @@ import {
     sys,
     System,
     targetOptionDeclaration,
+    textRangeContainsTextRange,
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
@@ -2921,11 +2922,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, nodesToCheck, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
         });
     }
 
-    function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+    function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, nodesToCheck: Node[] | undefined, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
         const flatDiagnostics = flatten(allDiagnostics);
         if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
             return flatDiagnostics;
@@ -2934,7 +2935,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
         for (const errorExpectation of directives.getUnusedExpectations()) {
-            diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+            if (!nodesToCheck || nodesToCheck.some(node => textRangeContainsTextRange(node, errorExpectation.range))) {
+                diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+            }
         }
 
         return diagnostics;

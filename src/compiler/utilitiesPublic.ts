@@ -349,6 +349,10 @@ export function textRangeContainsPositionInclusive(range: TextRange, position: n
     return position >= range.pos && position <= range.end;
 }
 
+export function textRangeContainsTextRange(range: TextRange, otherRange: TextRange): boolean {
+    return otherRange.pos >= range.pos && otherRange.end <= range.end;
+}
+
 // Returns true if 'span' contains 'other'.
 export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
     return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
