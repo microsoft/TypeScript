@@ -1096,15 +1096,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (circular) {
                 text = `${text}#${getDebugFlowNodeId(flowNode)}`;
             }
-            if (hasNode(flowNode)) {
-                if (flowNode.node) {
-                    text += ` (${getNodeText(flowNode.node)})`;
-                }
-            }
-            else if (isFlowSwitchClause(flowNode)) {
+            if (isFlowSwitchClause(flowNode)) {
                 const clauses: string[] = [];
-                for (let i = flowNode.node.clauseStart; i < flowNode.node.clauseEnd; i++) {
-                    const clause = flowNode.node.switchStatement.caseBlock.clauses[i];
+                for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
+                    const clause = flowNode.node.caseBlock.clauses[i];
                     if (isDefaultClause(clause)) {
                         clauses.push("default");
                     }
@@ -1113,6 +1108,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
                 text += ` (${clauses.join(", ")})`;
+            }
+            else if (hasNode(flowNode)) {
+                if (flowNode.node) {
+                    text += ` (${getNodeText(flowNode.node)})`;
+                }
             }
             return circular === "circularity" ? `Circular(${text})` : text;
         }

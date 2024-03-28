@@ -27794,7 +27794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (flags & FlowFlags.SwitchClause) {
                 // The control flow path representing an unmatched value in a switch statement with
                 // no default clause is unreachable if the switch statement is exhaustive.
-                if ((flow as FlowSwitchClause).node.clauseStart === (flow as FlowSwitchClause).node.clauseEnd && isExhaustiveSwitchStatement((flow as FlowSwitchClause).node.switchStatement)) {
+                if ((flow as FlowSwitchClause).clauseStart === (flow as FlowSwitchClause).clauseEnd && isExhaustiveSwitchStatement((flow as FlowSwitchClause).node)) {
                     return false;
                 }
                 flow = (flow as FlowSwitchClause).antecedent;
@@ -28170,31 +28170,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
-            const { switchStatement, clauseStart, clauseEnd } = flow.node;
-            const expr = skipParentheses(switchStatement.expression);
+            const expr = skipParentheses(flow.node.expression);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             let type = getTypeFromFlowType(flowType);
             if (isMatchingReference(reference, expr)) {
-                type = narrowTypeBySwitchOnDiscriminant(type, switchStatement, clauseStart, clauseEnd);
+                type = narrowTypeBySwitchOnDiscriminant(type, flow.node, flow.clauseStart, flow.clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
-                type = narrowTypeBySwitchOnTypeOf(type, switchStatement, clauseStart, clauseEnd);
+                type = narrowTypeBySwitchOnTypeOf(type, flow.node, flow.clauseStart, flow.clauseEnd);
             }
             else if (expr.kind === SyntaxKind.TrueKeyword) {
-                type = narrowTypeBySwitchOnTrue(type, switchStatement, clauseStart, clauseEnd);
+                type = narrowTypeBySwitchOnTrue(type, flow.node, flow.clauseStart, flow.clauseEnd);
             }
             else {
                 if (strictNullChecks) {
                     if (optionalChainContainsReference(expr, reference)) {
-                        type = narrowTypeBySwitchOptionalChainContainment(type, switchStatement, clauseStart, clauseEnd, t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
+                        type = narrowTypeBySwitchOptionalChainContainment(type, flow.node, flow.clauseStart, flow.clauseEnd, t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
                     }
                     else if (expr.kind === SyntaxKind.TypeOfExpression && optionalChainContainsReference((expr as TypeOfExpression).expression, reference)) {
-                        type = narrowTypeBySwitchOptionalChainContainment(type, switchStatement, clauseStart, clauseEnd, t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
+                        type = narrowTypeBySwitchOptionalChainContainment(type, flow.node, flow.clauseStart, flow.clauseEnd, t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
                     }
                 }
                 const access = getDiscriminantPropertyAccess(expr, type);
                 if (access) {
-                    type = narrowTypeBySwitchOnDiscriminantProperty(type, access, switchStatement, clauseStart, clauseEnd);
+                    type = narrowTypeBySwitchOnDiscriminantProperty(type, access, flow.node, flow.clauseStart, flow.clauseEnd);
                 }
             }
             return createFlowType(type, isIncomplete(flowType));
@@ -28206,7 +28205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let seenIncomplete = false;
             let bypassFlow: FlowSwitchClause | undefined;
             for (const antecedent of flow.antecedents!) {
-                if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (antecedent as FlowSwitchClause).node.clauseStart === (antecedent as FlowSwitchClause).node.clauseEnd) {
+                if (!bypassFlow && antecedent.flags & FlowFlags.SwitchClause && (antecedent as FlowSwitchClause).clauseStart === (antecedent as FlowSwitchClause).clauseEnd) {
                     // The antecedent is the bypass branch of a potentially exhaustive switch statement.
                     bypassFlow = antecedent as FlowSwitchClause;
                     continue;
@@ -28237,7 +28236,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If the bypass flow contributes a type we haven't seen yet and the switch statement
                 // isn't exhaustive, process the bypass flow type. Since exhaustiveness checks increase
                 // the risk of circularities, we only want to perform them when they make a difference.
-                if (!(type.flags & TypeFlags.Never) && !contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.node.switchStatement)) {
+                if (!(type.flags & TypeFlags.Never) && !contains(antecedentTypes, type) && !isExhaustiveSwitchStatement(bypassFlow.node)) {
                     if (type === declaredType && declaredType === initialType) {
                         return type;
                     }

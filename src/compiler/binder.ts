@@ -76,7 +76,6 @@ import {
     FlowReduceLabel,
     FlowStart,
     FlowSwitchClause,
-    FlowSwitchClauseInfo,
     FlowUnreachable,
     forEach,
     forEachChild,
@@ -510,20 +509,12 @@ export function createFlowNode(flags: FlowFlags.Start): FlowStart;
 export function createFlowNode(flags: FlowFlags.BranchLabel | FlowFlags.LoopLabel): FlowLabel;
 export function createFlowNode(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, node: Expression | VariableDeclaration | BindingElement, antecedent: FlowNode): FlowAssignment | FlowArrayMutation;
 export function createFlowNode(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, node: Expression, antecedent: FlowNode): FlowCondition;
-export function createFlowNode(flags: FlowFlags.SwitchClause, node: FlowSwitchClauseInfo, antecedent: FlowNode): FlowSwitchClause;
+export function createFlowNode(flags: FlowFlags.SwitchClause, node: SwitchStatement, antecedent: FlowNode): FlowSwitchClause;
 export function createFlowNode(flags: FlowFlags.Call, node: CallExpression, antecedent: FlowNode): FlowCall;
 export function createFlowNode(flags: FlowFlags.ReduceLabel, node: FlowLabel, antecedent: FlowNode, antecedents: FlowNode[]): FlowReduceLabel;
 export function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode;
-export function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode {
-    return new (FlowNode as any)(flags, node, antecedent, antecedents);
-}
-
-function FlowNode(this: FlowNodeBase, flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]) {
-    this.flags = flags;
-    this.id = undefined;
-    this.node = node;
-    this.antecedent = antecedent;
-    this.antecedents = antecedents;
+export function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNodeBase {
+    return { flags, node, antecedent, antecedents };
 }
 
 const binder = /* @__PURE__ */ createBinder();
@@ -1391,7 +1382,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
         setFlowNodeReferenced(antecedent);
-        return createFlowNode(FlowFlags.SwitchClause, { switchStatement, clauseStart, clauseEnd }, antecedent);
+        const result = createFlowNode(FlowFlags.SwitchClause, switchStatement, antecedent);
+        result.clauseStart = clauseStart;
+        result.clauseEnd = clauseEnd;
+        return result;
     }
 
     function createFlowMutation(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement): FlowNode {

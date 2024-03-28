@@ -4102,14 +4102,14 @@ export type FlowNode =
 
 export interface FlowNodeBase {
     flags: FlowFlags;
-    id: number | undefined; // Node id used by flow type cache in checker
+    id?: number; // Node id used by flow type cache in checker
     node: unknown;
     antecedent: FlowNode | undefined;
     antecedents: FlowNode[] | undefined;
 }
 
 export interface FlowUnreachable extends FlowNodeBase {
-    node: undefined,
+    node: undefined;
     antecedent: undefined;
     antecedents: undefined;
 }
@@ -4154,13 +4154,9 @@ export interface FlowCondition extends FlowNodeBase {
 
 // dprint-ignore
 export interface FlowSwitchClause extends FlowNodeBase {
-    node: FlowSwitchClauseInfo;
+    node: SwitchStatement;
     antecedent: FlowNode;
     antecedents: undefined;
-}
-
-export interface FlowSwitchClauseInfo {
-    switchStatement: SwitchStatement;
     clauseStart: number;   // Start index of case/default clause range
     clauseEnd: number;     // End index of case/default clause range
 }
