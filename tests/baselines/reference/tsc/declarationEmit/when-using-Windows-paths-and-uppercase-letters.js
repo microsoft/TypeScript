@@ -146,18 +146,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=type-helpers.js.map
 
 //// [D:/Work/pkg1/dist/utils/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/utils/index.ts"],"names":[],"mappings":";;;AAEA,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC;AAND,kCAMC"}
 
 //// [D:/Work/pkg1/dist/utils/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PartialType = PartialType;
+exports.PartialType = void 0;
 function PartialType(classRef) {
     class PartialClassType {
         constructor() { }
     }
     return PartialClassType;
 }
+exports.PartialType = PartialType;
 //# sourceMappingURL=index.js.map
 
 //// [D:/Work/pkg1/dist/utils/index.d.ts]
