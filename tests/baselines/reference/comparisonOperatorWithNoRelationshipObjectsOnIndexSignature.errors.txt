@@ -1,27 +1,35 @@
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(26,12): error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(27,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(28,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(29,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(31,12): error TS2365: Operator '<' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(32,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(33,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(34,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(37,12): error TS2365: Operator '>' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(38,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(39,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(40,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(42,12): error TS2365: Operator '>' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(43,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(44,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(45,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(48,12): error TS2365: Operator '<=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(49,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(50,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(51,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(53,12): error TS2365: Operator '<=' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(54,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(55,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(56,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(59,12): error TS2365: Operator '>=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(60,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(61,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(62,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(64,12): error TS2365: Operator '>=' cannot be applied to types '{ [b: string]: number; }' and '{ [a: string]: string; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(65,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: C; }' and '{ [index: string]: Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(66,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(67,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(70,12): error TS2367: This comparison appears to be unintentional because the types '{ [a: string]: string; }' and '{ [b: string]: number; }' have no overlap.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(71,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: string]: Base; }' and '{ [index: string]: C; }' have no overlap.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(72,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: Base; }' and '{ [index: number]: C; }' have no overlap.
@@ -48,7 +56,7 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(109,12): error TS
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
 
 
-==== comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts (48 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts (56 errors) ====
     class Base {
         public a: string;
     }
@@ -84,6 +92,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
     var r1a4 = a4 < b4;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
     
     var r1b1 = b1 < a1;
                ~~~~~~~
@@ -95,6 +105,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
     var r1b4 = b4 < a4;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
     
     // operator >
     var r2a1 = a1 > b1;
@@ -107,6 +119,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
     var r2a4 = a4 > b4;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
     
     var r2b1 = b1 > a1;
                ~~~~~~~
@@ -118,6 +132,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
     var r2b4 = b4 > a4;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
     
     // operator <=
     var r3a1 = a1 <= b1;
@@ -130,6 +146,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
     var r3a4 = a4 <= b4;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
     
     var r3b1 = b1 <= a1;
                ~~~~~~~~
@@ -141,6 +159,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
     var r3b4 = b4 <= a4;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
     
     // operator >=
     var r4a1 = a1 >= b1;
@@ -153,6 +173,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
     var r4a4 = a4 >= b4;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Derived; }' and '{ [index: string]: Base; }'.
     
     var r4b1 = b1 >= a1;
                ~~~~~~~~
@@ -164,6 +186,8 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS
                ~~~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: C; }' and '{ [index: number]: Base; }'.
     var r4b4 = b4 >= a4;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: number]: Derived; }'.
     
     // operator ==
     var r5a1 = a1 == b1;

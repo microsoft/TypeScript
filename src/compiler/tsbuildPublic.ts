@@ -1584,7 +1584,7 @@ function getBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, 
 function checkConfigFileUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
     // Check tsconfig time
     const tsconfigTime = getModifiedTime(state, configFile);
-    if (oldestOutputFileTime < tsconfigTime) {
+    if (oldestOutputFileTime.getTime() < tsconfigTime.getTime()) {
         return {
             type: UpToDateStatusType.OutOfDateWithSelf,
             outOfDateOutputFileName: oldestOutputFileName,
@@ -1735,7 +1735,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         }
 
         // If an buildInfo is older than the newest input, we can stop checking
-        if (buildInfoTime && buildInfoTime < inputTime) {
+        if (buildInfoTime && buildInfoTime.getTime() < inputTime.getTime()) {
             let version: string | undefined;
             let currentVersion: string | undefined;
             if (buildInfoProgram) {
@@ -1756,7 +1756,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             }
         }
 
-        if (inputTime > newestInputFileTime) {
+        if (inputTime.getTime() > newestInputFileTime.getTime()) {
             newestInputFileName = inputFile;
             newestInputFileTime = inputTime;
         }
@@ -1801,7 +1801,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             }
 
             // If an output is older than the newest input, we can stop checking
-            if (outputTime < newestInputFileTime) {
+            if (outputTime.getTime() < newestInputFileTime.getTime()) {
                 return {
                     type: UpToDateStatusType.OutOfDateWithSelf,
                     outOfDateOutputFileName: output,
@@ -1811,7 +1811,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
 
             // No need to get newestDeclarationFileContentChangedTime since thats needed only for composite projects
             // And composite projects are the only ones that can be referenced
-            if (outputTime < oldestOutputFileTime) {
+            if (outputTime.getTime() < oldestOutputFileTime.getTime()) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
             }
@@ -1825,7 +1825,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         for (const { ref, refStatus, resolvedConfig, resolvedRefPath } of referenceStatuses) {
             // If the upstream project's newest file is older than our oldest output, we
             // can't be out of date because of it
-            if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
+            if (refStatus.newestInputFileTime && refStatus.newestInputFileTime.getTime() <= oldestOutputFileTime.getTime()) {
                 continue;
             }
 
@@ -1841,7 +1841,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // If the upstream project has only change .d.ts files, and we've built
             // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
             const newestDeclarationFileContentChangedTime = getLatestChangedDtsTime(state, resolvedConfig.options, resolvedRefPath);
-            if (newestDeclarationFileContentChangedTime && newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
+            if (newestDeclarationFileContentChangedTime && newestDeclarationFileContentChangedTime.getTime() <= oldestOutputFileTime.getTime()) {
                 pseudoUpToDate = true;
                 continue;
             }

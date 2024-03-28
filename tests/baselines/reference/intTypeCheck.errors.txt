@@ -8,6 +8,7 @@ intTypeCheck.ts(100,20): error TS2351: This expression is not constructable.
 intTypeCheck.ts(101,5): error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
 intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
 intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
+intTypeCheck.ts(106,16): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(106,20): error TS1109: Expression expected.
 intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(107,21): error TS2351: This expression is not constructable.
@@ -21,6 +22,7 @@ intTypeCheck.ts(114,17): error TS2350: Only a void function can be called with t
 intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not assignable to type 'i2'.
   Type 'Base' provides no match for the signature '(): any'.
 intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
+intTypeCheck.ts(120,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(120,21): error TS1109: Expression expected.
 intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(121,21): error TS2351: This expression is not constructable.
@@ -35,6 +37,7 @@ intTypeCheck.ts(129,5): error TS2322: Type 'Base' is not assignable to type 'i3'
 intTypeCheck.ts(131,5): error TS2322: Type '() => void' is not assignable to type 'i3'.
   Type '() => void' provides no match for the signature 'new (): any'.
 intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
+intTypeCheck.ts(134,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(134,21): error TS1109: Expression expected.
 intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(135,21): error TS2351: This expression is not constructable.
@@ -42,6 +45,7 @@ intTypeCheck.ts(135,21): error TS2351: This expression is not constructable.
 intTypeCheck.ts(142,21): error TS2351: This expression is not constructable.
   Type 'i4' has no construct signatures.
 intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
+intTypeCheck.ts(148,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(148,21): error TS1109: Expression expected.
 intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(149,21): error TS2351: This expression is not constructable.
@@ -54,6 +58,7 @@ intTypeCheck.ts(156,21): error TS2351: This expression is not constructable.
 intTypeCheck.ts(157,5): error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
 intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
 intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
+intTypeCheck.ts(162,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(162,21): error TS1109: Expression expected.
 intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(163,21): error TS2351: This expression is not constructable.
@@ -69,6 +74,7 @@ intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not assignable to type 'i6'
 intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
   Type 'void' is not assignable to type 'number'.
 intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
+intTypeCheck.ts(176,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(176,21): error TS1109: Expression expected.
 intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(177,21): error TS2351: This expression is not constructable.
@@ -83,6 +89,7 @@ intTypeCheck.ts(185,17): error TS2352: Conversion of type 'Base' to type 'i7' ma
 intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
   Type '() => void' provides no match for the signature 'new (): any'.
 intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
+intTypeCheck.ts(190,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(190,21): error TS1109: Expression expected.
 intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(191,21): error TS2351: This expression is not constructable.
@@ -90,13 +97,14 @@ intTypeCheck.ts(191,21): error TS2351: This expression is not constructable.
 intTypeCheck.ts(198,21): error TS2351: This expression is not constructable.
   Type 'i8' has no construct signatures.
 intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
+intTypeCheck.ts(204,17): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 intTypeCheck.ts(204,21): error TS1109: Expression expected.
 intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
 intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 
 
-==== intTypeCheck.ts (63 errors) ====
+==== intTypeCheck.ts (71 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -221,6 +229,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj9: i1 = new <i1> anyVar;
         ~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i1'.
+                   ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                        ~
 !!! error TS1109: Expression expected.
                         ~~
@@ -256,6 +266,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj20: i2 = new <i2> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i2'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -292,6 +304,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj31: i3 = new <i3> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i3'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -318,6 +332,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj42: i4 = new <i4> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i4'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -353,6 +369,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj53: i5 = new <i5> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i5'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -391,6 +409,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj64: i6 = new <i6> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i6'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -427,6 +447,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj75: i7 = new <i7> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i7'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -453,6 +475,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     var obj86: i8 = new <i8> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i8'.
+                    ~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~

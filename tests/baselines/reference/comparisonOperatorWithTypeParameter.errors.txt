@@ -30,9 +30,25 @@ comparisonOperatorWithTypeParameter.ts(37,15): error TS2367: This comparison app
 comparisonOperatorWithTypeParameter.ts(38,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
 comparisonOperatorWithTypeParameter.ts(39,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
 comparisonOperatorWithTypeParameter.ts(40,15): error TS2367: This comparison appears to be unintentional because the types 'V' and 'T' have no overlap.
+comparisonOperatorWithTypeParameter.ts(43,15): error TS2365: Operator '<' cannot be applied to types 'T' and '{}'.
+comparisonOperatorWithTypeParameter.ts(44,15): error TS2365: Operator '>' cannot be applied to types 'T' and '{}'.
+comparisonOperatorWithTypeParameter.ts(45,15): error TS2365: Operator '<=' cannot be applied to types 'T' and '{}'.
+comparisonOperatorWithTypeParameter.ts(46,15): error TS2365: Operator '>=' cannot be applied to types 'T' and '{}'.
+comparisonOperatorWithTypeParameter.ts(52,15): error TS2365: Operator '<' cannot be applied to types '{}' and 'T'.
+comparisonOperatorWithTypeParameter.ts(53,15): error TS2365: Operator '>' cannot be applied to types '{}' and 'T'.
+comparisonOperatorWithTypeParameter.ts(54,15): error TS2365: Operator '<=' cannot be applied to types '{}' and 'T'.
+comparisonOperatorWithTypeParameter.ts(55,15): error TS2365: Operator '>=' cannot be applied to types '{}' and 'T'.
+comparisonOperatorWithTypeParameter.ts(61,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'Object'.
+comparisonOperatorWithTypeParameter.ts(62,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'Object'.
+comparisonOperatorWithTypeParameter.ts(63,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'Object'.
+comparisonOperatorWithTypeParameter.ts(64,15): error TS2365: Operator '>=' cannot be applied to types 'T' and 'Object'.
+comparisonOperatorWithTypeParameter.ts(70,15): error TS2365: Operator '<' cannot be applied to types 'Object' and 'T'.
+comparisonOperatorWithTypeParameter.ts(71,15): error TS2365: Operator '>' cannot be applied to types 'Object' and 'T'.
+comparisonOperatorWithTypeParameter.ts(72,15): error TS2365: Operator '<=' cannot be applied to types 'Object' and 'T'.
+comparisonOperatorWithTypeParameter.ts(73,15): error TS2365: Operator '>=' cannot be applied to types 'Object' and 'T'.
 
 
-==== comparisonOperatorWithTypeParameter.ts (32 errors) ====
+==== comparisonOperatorWithTypeParameter.ts (48 errors) ====
     var a: {};
     var b: Object;
     
@@ -140,36 +156,68 @@ comparisonOperatorWithTypeParameter.ts(40,15): error TS2367: This comparison app
     
         // ok
         var re1 = t < a;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and '{}'.
         var re2 = t > a;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and '{}'.
         var re3 = t <= a;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and '{}'.
         var re4 = t >= a;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and '{}'.
         var re5 = t == a;
         var re6 = t != a;
         var re7 = t === a;
         var re8 = t !== a;
     
         var rf1 = a < t;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{}' and 'T'.
         var rf2 = a > t;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{}' and 'T'.
         var rf3 = a <= t;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{}' and 'T'.
         var rf4 = a >= t;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{}' and 'T'.
         var rf5 = a == t;
         var rf6 = a != t;
         var rf7 = a === t;
         var rf8 = a !== t;
     
         var rg1 = t < b;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'Object'.
         var rg2 = t > b;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and 'Object'.
         var rg3 = t <= b;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and 'Object'.
         var rg4 = t >= b;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'Object'.
         var rg5 = t == b;
         var rg6 = t != b;
         var rg7 = t === b;
         var rg8 = t !== b;
     
         var rh1 = b < t;
+                  ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'Object' and 'T'.
         var rh2 = b > t;
+                  ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'Object' and 'T'.
         var rh3 = b <= t;
+                  ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'Object' and 'T'.
         var rh4 = b >= t;
+                  ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'Object' and 'T'.
         var rh5 = b == t;
         var rh6 = b != t;
         var rh7 = b === t;
