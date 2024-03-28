@@ -270,6 +270,16 @@ function inferWithRest(x: string | null, ...f: ["a", "b"]) {
   return typeof x === 'string';
 }
 
+// https://github.com/microsoft/TypeScript/issues/57947
+declare const foobar:
+  | { type: "foo"; foo: number }
+  | { type: "bar"; bar: string };
+
+const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+if (foobarPred(foobar)) {
+  foobar.foo;
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -524,6 +534,10 @@ function inferWithRest(x) {
     }
     return typeof x === 'string';
 }
+var foobarPred = function (fb) { return fb.type === "foo"; };
+if (foobarPred(foobar)) {
+    foobar.foo;
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -605,3 +619,14 @@ declare function narrowFromAny(x: any): x is number;
 declare const noInferenceFromRest: (f_0: "a" | "b") => boolean;
 declare const noInferenceFromImpossibleRest: () => boolean;
 declare function inferWithRest(x: string | null, ...f: ["a", "b"]): x is string;
+declare const foobar: {
+    type: "foo";
+    foo: number;
+} | {
+    type: "bar";
+    bar: string;
+};
+declare const foobarPred: (fb: typeof foobar) => fb is {
+    type: "foo";
+    foo: number;
+};

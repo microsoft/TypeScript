@@ -269,3 +269,13 @@ const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
 function inferWithRest(x: string | null, ...f: ["a", "b"]) {
   return typeof x === 'string';
 }
+
+// https://github.com/microsoft/TypeScript/issues/57947
+declare const foobar:
+  | { type: "foo"; foo: number }
+  | { type: "bar"; bar: string };
+
+const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+if (foobarPred(foobar)) {
+  foobar.foo;
+}

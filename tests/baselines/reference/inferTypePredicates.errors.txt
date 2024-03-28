@@ -316,3 +316,13 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
       return typeof x === 'string';
     }
     
+    // https://github.com/microsoft/TypeScript/issues/57947
+    declare const foobar:
+      | { type: "foo"; foo: number }
+      | { type: "bar"; bar: string };
+    
+    const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+    if (foobarPred(foobar)) {
+      foobar.foo;
+    }
+    
