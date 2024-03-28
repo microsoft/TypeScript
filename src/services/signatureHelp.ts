@@ -286,7 +286,7 @@ function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile
     if (!info) return undefined;
     const { list, argumentIndex } = info;
 
-    const argumentCount = getArgumentCount(list, checker);
+    const argumentCount = getArgumentIndexOrCount(checker, list, /*node*/ undefined);
     if (argumentIndex !== 0) {
         Debug.assertLessThan(argumentIndex, argumentCount);
     }
@@ -307,7 +307,7 @@ function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile, 
         //   - On the target of the call (parent.func)
         //   - On the 'new' keyword in a 'new' expression
         const list = findContainingList(node);
-        return list && { list, argumentIndex: getArgumentIndex(list, node, checker) };
+        return list && { list, argumentIndex: getArgumentIndexOrCount(checker, list, node) };
     }
 }
 
@@ -479,26 +479,32 @@ function chooseBetterSymbol(s: Symbol): Symbol {
         : s;
 }
 
-function getArgumentIndex(argumentsList: Node, node: Node, checker: TypeChecker) {
-    // The list we got back can include commas.  In the presence of errors it may
-    // also just have nodes without commas.  For example "Foo(a b c)" will have 3
-    // args without commas. We want to find what index we're at.  So we count
-    // forward until we hit ourselves.
-    //
-    // Note: the subtlety around trailing commas (in getArgumentCount) does not apply
-    // here.  That's because we're only walking forward until we hit the node we're
-    // on.  In that case, even if we're after the trailing comma, we'll still see
-    // that trailing comma in the list, and we'll have generated the appropriate
-    // arg index.
+function getSpreadElementCount(node: SpreadElement, checker: TypeChecker) {
+    const spreadType = checker.getTypeAtLocation(node.expression);
+    if (checker.isTupleType(spreadType)) {
+        const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
+        if (fixedLength === 0) {
+            return 0;
+        }
+        const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
+        return firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+    }
+    return 0;
+}
+
+function getArgumentIndexOrCount(checker: TypeChecker, argumentsList: Node, node: Node | undefined) {
+    // The list we got back can include commas. In the presence of errors it may
+    // also just have nodes without commas. For example "Foo(a b c)" will have 3
+    // args without commas.
     const args = argumentsList.getChildren();
     let argumentIndex = 0;
     let skipComma = false;
     for (const child of args) {
-        if (child === node) {
+        if (node && child === node) {
             if (!skipComma && child.kind === SyntaxKind.CommaToken) {
                 argumentIndex++;
             }
-            break;
+            return argumentIndex;
         }
         if (isSpreadElement(child)) {
             argumentIndex += getSpreadElementCount(child, checker);
@@ -516,50 +522,16 @@ function getArgumentIndex(argumentsList: Node, node: Node, checker: TypeChecker)
         }
         argumentIndex++;
     }
-    return argumentIndex;
-}
-
-function getSpreadElementCount(node: SpreadElement, checker: TypeChecker) {
-    const spreadType = checker.getTypeAtLocation(node.expression);
-    if (checker.isTupleType(spreadType)) {
-        const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
-        if (fixedLength === 0) {
-            return 0;
-        }
-        const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
-        return firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+    if (node) {
+        return argumentIndex;
     }
-    return 0;
-}
-
-function getArgumentCount(argumentsList: Node, checker: TypeChecker) {
     // The argument count for a list is normally the number of non-comma children it has.
     // For example, if you have "Foo(a,b)" then there will be three children of the arg
-    // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
-    // is a small subtlety.  If you have "Foo(a,)", then the child list will just have
-    // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
+    // list 'a' '<comma>' 'b'. So, in this case the arg count will be 2. However, there
+    // is a small subtlety. If you have "Foo(a,)", then the child list will just have
+    // 'a' '<comma>'. So, in the case where the last child is a comma, we increase the
     // arg count by one to compensate.
-    const args = argumentsList.getChildren();
-    let argumentCount = 0;
-    let skipComma = false;
-    for (const child of args) {
-        if (isSpreadElement(child)) {
-            argumentCount += getSpreadElementCount(child, checker);
-            skipComma = true;
-            continue;
-        }
-        if (child.kind !== SyntaxKind.CommaToken) {
-            argumentCount++;
-            skipComma = true;
-            continue;
-        }
-        if (skipComma) {
-            skipComma = false;
-            continue;
-        }
-        argumentCount++;
-    }
-    return args.length && last(args).kind === SyntaxKind.CommaToken ? argumentCount + 1 : argumentCount;
+    return args.length && last(args).kind === SyntaxKind.CommaToken ? argumentIndex + 1 : argumentIndex;
 }
 
 // spanIndex is either the index for a given template span.
