@@ -418,6 +418,7 @@ import {
     ImportOrExportSpecifier,
     ImportSpecifier,
     ImportTypeNode,
+    IncompleteType,
     IndexedAccessType,
     IndexedAccessTypeNode,
     IndexFlags,
@@ -1953,6 +1954,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var subtypeReductionCache = new Map<string, Type[]>();
     var decoratorContextOverrideTypeCache = new Map<string, Type>();
     var cachedTypes = new Map<string, Type>();
+    var incompleteTypes: IncompleteType[] = [];
     var evolvingArrayTypes: EvolvingArrayType[] = [];
     var undefinedProperties: SymbolTable = new Map();
     var markerTypes = new Set<number>();
@@ -27517,7 +27519,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createFlowType(type: Type, incomplete: boolean): FlowType {
-        return incomplete ? { flags: 0, type: type.flags & TypeFlags.Never ? silentNeverType : type } : type;
+        return incomplete ?
+            (incompleteTypes[type.id] ??= { flags: 0, type: type.flags & TypeFlags.Never ? silentNeverType : type }) :
+            type;
     }
 
     // An evolving array type tracks the element types that have so far been seen in an
