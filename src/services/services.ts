@@ -2021,7 +2021,7 @@ export function createLanguageService(
             return undefined;
         }
         const checkedSpans = normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd())));
-        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
+        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes, checkedSpans);
         return {
             diagnostics: semanticDiagnostics.slice(),
             spans: checkedSpans,
