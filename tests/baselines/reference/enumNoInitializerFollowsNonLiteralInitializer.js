@@ -8,6 +8,9 @@ import { foo } from "./helpers";
 enum A {
     a = foo,
     b,
+    c = 10,
+    d = (c)! satisfies number as any,
+    e,
 }
 
 //// [good.ts]
@@ -28,6 +31,14 @@ enum D {
     a = (2),
     b,
 }
+enum E {
+    a,
+    b,
+    c = a,
+    d,
+    e = d | b,
+    f,
+}
 
 
 //// [helpers.js]
@@ -43,6 +54,9 @@ var A;
 (function (A) {
     A[A["a"] = 2] = "a";
     A[A["b"] = 3] = "b";
+    A[A["c"] = 10] = "c";
+    A[A["d"] = (A.c)] = "d";
+    A[A["e"] = void 0] = "e";
 })(A || (A = {}));
 //// [good.js]
 "use strict";
@@ -68,3 +82,12 @@ var D;
     D[D["a"] = 2] = "a";
     D[D["b"] = 3] = "b";
 })(D || (D = {}));
+var E;
+(function (E) {
+    E[E["a"] = 0] = "a";
+    E[E["b"] = 1] = "b";
+    E[E["c"] = 0] = "c";
+    E[E["d"] = 1] = "d";
+    E[E["e"] = 1] = "e";
+    E[E["f"] = 2] = "f";
+})(E || (E = {}));
