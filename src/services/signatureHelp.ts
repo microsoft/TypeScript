@@ -286,7 +286,7 @@ function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile
     if (!info) return undefined;
     const { list, argumentIndex } = info;
 
-    const argumentCount = getArgumentIndexOrCount(checker, list, /*node*/ undefined);
+    const argumentCount = getArgumentCount(checker, list);
     if (argumentIndex !== 0) {
         Debug.assertLessThan(argumentIndex, argumentCount);
     }
@@ -307,7 +307,7 @@ function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile, 
         //   - On the target of the call (parent.func)
         //   - On the 'new' keyword in a 'new' expression
         const list = findContainingList(node);
-        return list && { list, argumentIndex: getArgumentIndexOrCount(checker, list, node) };
+        return list && { list, argumentIndex: getArgumentIndex(checker, list, node) };
     }
 }
 
@@ -490,6 +490,14 @@ function getSpreadElementCount(node: SpreadElement, checker: TypeChecker) {
         return firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
     }
     return 0;
+}
+
+function getArgumentIndex(checker: TypeChecker, argumentsList: Node, node: Node) {
+    return getArgumentIndexOrCount(checker, argumentsList, node);
+}
+
+function getArgumentCount(checker: TypeChecker, argumentsList: Node) {
+    return getArgumentIndexOrCount(checker, argumentsList, /*node*/ undefined);
 }
 
 function getArgumentIndexOrCount(checker: TypeChecker, argumentsList: Node, node: Node | undefined) {
