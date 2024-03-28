@@ -11757,7 +11757,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.type) {
             const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol, checkMode);
             // For a contextually typed parameter it is possible that a type has already
-            // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
+            // been assigned (in contextuallyCheckFunctionExpressionOrObjectLiteralMethod), and we want
             // to preserve this type. In fact, we need to _prefer_ that type, but it won't
             // be assigned until contextual typing is complete, so we need to defer in
             // cases where contextual typing may take place.
@@ -12148,6 +12148,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.type) {
             Debug.assertIsDefined(links.deferralParent);
             Debug.assertIsDefined(links.deferralConstituents);
+            const jsSyntheticRestParameterFunctionDeclaration = links.jsSyntheticRestParameterFunctionDeclaration;
+            if (jsSyntheticRestParameterFunctionDeclaration && isFunctionExpressionOrArrowFunction(jsSyntheticRestParameterFunctionDeclaration)) {
+                const contextualSignature = getContextualSignature(jsSyntheticRestParameterFunctionDeclaration);
+                if (contextualSignature) {
+                    return getRestTypeAtPosition(contextualSignature, jsSyntheticRestParameterFunctionDeclaration.parameters.length);
+                }
+            }
             links.type = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents) : getIntersectionType(links.deferralConstituents);
         }
         return links.type;
@@ -15404,7 +15411,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type that starts with `...`
      */
     function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration | JSDocSignature, parameters: Symbol[]): boolean {
-        if (isJSDocSignature(declaration) || !containsArgumentsReference(declaration)) {
+        if (!isFunctionLikeDeclaration(declaration) || !containsArgumentsReference(declaration)) {
             return false;
         }
         const lastParam = lastOrUndefined(declaration.parameters);
@@ -15424,6 +15431,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             syntheticArgsSymbol.links.deferralParent = neverType;
             syntheticArgsSymbol.links.deferralConstituents = [anyArrayType];
             syntheticArgsSymbol.links.deferralWriteConstituents = [anyArrayType];
+            syntheticArgsSymbol.links.jsSyntheticRestParameterFunctionDeclaration = declaration;
         }
         if (lastParamVariadicType) {
             // Replace the last parameter with a rest parameter.
@@ -15459,12 +15467,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 links.containsArgumentsReference = true;
             }
             else {
-                links.containsArgumentsReference = traverse((declaration as FunctionLikeDeclaration).body!);
+                links.containsArgumentsReference = traverse((declaration as FunctionLikeDeclaration).body);
             }
         }
         return links.containsArgumentsReference;
 
-        function traverse(node: Node): boolean {
+        function traverse(node: Node | undefined): boolean {
             if (!node) return false;
             switch (node.kind) {
                 case SyntaxKind.Identifier:
@@ -15475,7 +15483,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return (node as NamedDeclaration).name!.kind === SyntaxKind.ComputedPropertyName
-                        && traverse((node as NamedDeclaration).name!);
+                        && traverse((node as NamedDeclaration).name);
 
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
