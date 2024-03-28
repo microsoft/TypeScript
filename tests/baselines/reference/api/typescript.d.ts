@@ -5810,41 +5810,58 @@ declare namespace ts {
         Label = 12,
         Condition = 96,
     }
-    type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
+    type FlowNode = FlowUnreachable | FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
     interface FlowNodeBase {
         flags: FlowFlags;
-        id?: number;
+        id: number | undefined;
+    }
+    interface FlowUnreachable extends FlowNodeBase {
+        node: undefined;
+        antecedent: undefined;
+        antecedents: undefined;
     }
     interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
+        node: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | undefined;
+        antecedent: undefined;
+        antecedents: undefined;
     }
     interface FlowLabel extends FlowNodeBase {
+        node: undefined;
+        antecedent: undefined;
         antecedents: FlowNode[] | undefined;
     }
     interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
+        antecedents: undefined;
     }
     interface FlowCall extends FlowNodeBase {
         node: CallExpression;
         antecedent: FlowNode;
+        antecedents: undefined;
     }
     interface FlowCondition extends FlowNodeBase {
         node: Expression;
         antecedent: FlowNode;
+        antecedents: undefined;
     }
     interface FlowSwitchClause extends FlowNodeBase {
+        node: FlowSwitchClauseInfo;
+        antecedent: FlowNode;
+        antecedents: undefined;
+    }
+    interface FlowSwitchClauseInfo {
         switchStatement: SwitchStatement;
         clauseStart: number;
         clauseEnd: number;
-        antecedent: FlowNode;
     }
     interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
+        antecedents: undefined;
     }
     interface FlowReduceLabel extends FlowNodeBase {
-        target: FlowLabel;
+        node: FlowLabel;
         antecedents: FlowNode[];
         antecedent: FlowNode;
     }
@@ -9222,6 +9239,14 @@ declare namespace ts {
         clear(): void;
     }
     type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
+    function createFlowNode(flags: FlowFlags.Unreachable): FlowUnreachable;
+    function createFlowNode(flags: FlowFlags.Start): FlowStart;
+    function createFlowNode(flags: FlowFlags.BranchLabel | FlowFlags.LoopLabel): FlowLabel;
+    function createFlowNode(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, node: Expression | VariableDeclaration | BindingElement, antecedent: FlowNode): FlowAssignment | FlowArrayMutation;
+    function createFlowNode(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, node: Expression, antecedent: FlowNode): FlowCondition;
+    function createFlowNode(flags: FlowFlags.SwitchClause, node: FlowSwitchClauseInfo, antecedent: FlowNode): FlowSwitchClause;
+    function createFlowNode(flags: FlowFlags.Call, node: CallExpression, antecedent: FlowNode): FlowCall;
+    function createFlowNode(flags: FlowFlags.ReduceLabel, node: FlowLabel, antecedent: FlowNode, antecedents: FlowNode[]): FlowReduceLabel;
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
