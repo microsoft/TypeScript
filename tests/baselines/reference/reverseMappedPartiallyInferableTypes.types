@@ -47,7 +47,7 @@ export type PropsDefinition<T> = RecordPropsDefinition<T>;
 
 
 declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
->extend : <T>({ props }: { props: PropsDefinition<T>; }) => PropsDefinition<T>
+>extend : <T>({ props }: {    props: PropsDefinition<T>;}) => PropsDefinition<T>
 >props : RecordPropsDefinition<T>
 >props : RecordPropsDefinition<T>
 

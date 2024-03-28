@@ -184,7 +184,7 @@ declare function foo14(a: any): any;
 >a : any
 
 declare function foo15(a: { 
->foo15 : { (a: { (x: number): number[]; (x: string): string[]; }): typeof a; (a: any): any; }
+>foo15 : { (a: {    (x: number): number[];    (x: string): string[];}): typeof a; (a: any): any; }
 >a : { (x: number): number[]; (x: string): string[]; }
 
     (x: number): number[];
@@ -218,7 +218,7 @@ declare function foo16(a: any): any;
 >a : any
 
 declare function foo17(a: {
->foo17 : { (a: { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }): typeof a; (a: any): any; }
+>foo17 : { (a: {    (x: (a: number) => number): number[];    (x: (a: string) => string): string[];}): typeof a; (a: any): any; }
 >a : { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }
 
     (x: (a: number) => number): number[];
@@ -237,8 +237,8 @@ declare function foo17(a: any): any;
 >a : any
 
 declare function foo18(a: {
->foo18 : { (a: { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }): typeof a; (a: any): any; }
->a : { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }
+>foo18 : { (a: {    (x: {        (a: number): number;        (a: string): string;    }): any[];    (x: {        (a: boolean): boolean;        (a: Date): Date;    }): any[];}): typeof a; (a: any): any; }
+>a : { (x: {    (a: number): number;    (a: string): string;}): any[]; (x: {    (a: boolean): boolean;    (a: Date): Date;}): any[]; }
 
     (x: {
 >x : { (a: number): number; (a: string): string; }

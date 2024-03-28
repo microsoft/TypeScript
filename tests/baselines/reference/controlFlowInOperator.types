@@ -75,7 +75,7 @@ if (d in c) {
 // repro from https://github.com/microsoft/TypeScript/issues/54790
 
 function uniqueID_54790(
->uniqueID_54790 : (id: string | undefined, seenIDs: { [key: string]: string; }) => string
+>uniqueID_54790 : (id: string | undefined, seenIDs: {    [key: string]: string;}) => string
 
   id: string | undefined,
 >id : string

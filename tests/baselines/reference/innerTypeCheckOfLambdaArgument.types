@@ -2,7 +2,7 @@
 
 === innerTypeCheckOfLambdaArgument.ts ===
 function takesCallback(callback: (n) =>any) {
->takesCallback : (callback: (n: any) => any) => void
+>takesCallback : (callback: (n) => any) => void
 >callback : (n: any) => any
 >n : any
 

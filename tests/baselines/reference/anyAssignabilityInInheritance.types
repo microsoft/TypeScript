@@ -168,7 +168,7 @@ var r3 = foo3(a); // any
 >a : any
 
 declare function foo12(x: (x) => number): (x) => number;
->foo12 : { (x: (x: any) => number): (x: any) => number; (x: any): any; }
+>foo12 : { (x: (x) => number): (x) => number; (x: any): any; }
 >x : (x: any) => number
 >x : any
 >x : any

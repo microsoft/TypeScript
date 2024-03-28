@@ -45,7 +45,7 @@ function Baz<T>(arg: T) {
 }
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
->Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>Link : <U>(l: {    func: (arg: U) => void;}) => JSX.Element
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U

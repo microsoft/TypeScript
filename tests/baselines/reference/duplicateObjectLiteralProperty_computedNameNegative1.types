@@ -4,7 +4,7 @@
 // repro from https://github.com/microsoft/TypeScript/issues/56341
 
 function bar(props: { x?: string; y?: string }) {
->bar : (props: { x?: string | undefined; y?: string | undefined; }) => { [x: string]: number; }
+>bar : (props: {    x?: string;    y?: string;}) => { [x: string]: number; }
 >props : { x?: string | undefined; y?: string | undefined; }
 >x : string | undefined
 >y : string | undefined

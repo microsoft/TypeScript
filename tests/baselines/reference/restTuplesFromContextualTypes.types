@@ -53,7 +53,7 @@ declare const t1: [number, boolean, string];
 >t1 : [number, boolean, string]
 
 declare function f1(cb: (...args: typeof t1) => void): void;
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>f1 : (cb: (...args: typeof t1) => void) => void
 >cb : (args_0: number, args_1: boolean, args_2: string) => void
 >args : [number, boolean, string]
 >t1 : [number, boolean, string]
@@ -148,7 +148,7 @@ declare const t2: [number, boolean, ...string[]];
 >t2 : [number, boolean, ...string[]]
 
 declare function f2(cb: (...args: typeof t2) => void): void;
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>f2 : (cb: (...args: typeof t2) => void) => void
 >cb : (args_0: number, args_1: boolean, ...args_2: string[]) => void
 >args : [number, boolean, ...string[]]
 >t2 : [number, boolean, ...string[]]
@@ -248,7 +248,7 @@ declare const t3: [boolean, ...string[]];
 >t3 : [boolean, ...string[]]
 
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
 >cb : (x: number, args_0: boolean, ...args_1: string[]) => void
 >x : number
 >args : [boolean, ...string[]]

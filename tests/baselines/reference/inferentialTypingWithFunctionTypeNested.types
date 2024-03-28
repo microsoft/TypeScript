@@ -2,9 +2,9 @@
 
 === inferentialTypingWithFunctionTypeNested.ts ===
 declare function map<T, U>(x: T, f: () => { x: (s: T) => U }): U;
->map : <T, U>(x: T, f: () => { x: (s: T) => U; }) => U
+>map : <T, U>(x: T, f: () => {    x: (s: T) => U;}) => U
 >x : T
->f : () => { x: (s: T) => U; }
+>f : () => {    x: (s: T) => U;}
 >x : (s: T) => U
 >s : T
 

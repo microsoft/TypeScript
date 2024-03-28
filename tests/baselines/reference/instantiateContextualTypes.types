@@ -67,7 +67,7 @@ new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 // #22149
 
 declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
->useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? (s: string) => void : (n: number) => void) => void
+>useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)) => void
 >t : T
 >useIt : T extends string ? (s: string) => void : (n: number) => void
 >s : string

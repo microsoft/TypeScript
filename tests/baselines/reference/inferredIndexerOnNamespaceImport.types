@@ -14,7 +14,7 @@ import * as foo from "./foo";
 >foo : typeof foo
 
 function f(map: { [k: string]: number }) {
->f : (map: { [k: string]: number; }) => void
+>f : (map: {    [k: string]: number;}) => void
 >map : { [k: string]: number; }
 >k : string
 

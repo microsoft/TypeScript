@@ -4,7 +4,7 @@
 // from webpack/lib/Compilation.js and filed at #26427
 /** @param {{ [s: string]: number }} map */
 function mappy(map) {}
->mappy : (map: { [s: string]: number; }) => void
+>mappy : (map: {    [s: string]: number;}) => void
 >map : { [s: string]: number; }
 
 export class C {
