@@ -4640,8 +4640,8 @@ export interface Program extends ScriptReferenceHost {
     getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
-    /** The first time this is called, it will return global diagnostics (no location). */
-    getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+    /** The first time this is called without `nodesToCheck`, it will return global diagnostics (no location). */
+    getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[], nodesToCheckSpans?: TextSpan[]): readonly Diagnostic[];
     getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
     getConfigFileParsingDiagnostics(): readonly Diagnostic[];
     /** @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
@@ -5125,7 +5125,7 @@ export interface TypeChecker {
     /** @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
 
     // Should not be called directly.  Should only be accessed through the Program instance.
-    /** @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+    /** @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): Diagnostic[];
     /** @internal */ getGlobalDiagnostics(): Diagnostic[];
     /** @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
 
@@ -5956,6 +5956,7 @@ export const enum NodeCheckFlags {
     ContainsClassWithPrivateIdentifiers      = 1 << 20,  // Marked on all block-scoped containers containing a class with private identifiers.
     ContainsSuperPropertyInStaticInitializer = 1 << 21,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
     InCheckIdentifier                        = 1 << 22,
+    PartiallyTypeChecked                     = 1 << 23,  // Source file has been partially type checked
 }
 
 // dprint-ignore
@@ -5992,6 +5993,11 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    potentialThisCollisions?: Node[];
+    potentialNewTargetCollisions?: Node[];
+    potentialWeakMapSetCollisions?: Node[];
+    potentialReflectCollisions?: Node[];
+    potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
 }
 
 /** @internal */

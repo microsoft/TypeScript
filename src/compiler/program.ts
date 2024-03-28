@@ -324,6 +324,8 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
+    TextSpan,
+    textSpanContainsTextRange,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -2800,8 +2802,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
     }
 
-    function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-        return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
+    function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[], nodesToCheckSpans?: TextSpan[]): readonly Diagnostic[] {
+        return getDiagnosticsHelper(
+            sourceFile,
+            (sourceFile, cancellationToken) => getSemanticDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck, nodesToCheckSpans),
+            cancellationToken,
+        );
     }
 
     function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
@@ -2811,7 +2817,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-        return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken);
+        return getBindAndCheckDiagnosticsForFile(
+            sourceFile,
+            cancellationToken,
+            /*nodesToCheck*/ undefined,
+            /*nodesToCheckSpans*/ undefined);
     }
 
     function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
@@ -2865,18 +2875,36 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+    function getSemanticDiagnosticsForFile(
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        nodesToCheck: Node[] | undefined,
+        nodesToCheckSpans: TextSpan[] | undefined,
+    ): readonly Diagnostic[] {
         return concatenate(
-            filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
+            filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck, nodesToCheckSpans), options),
             getProgramDiagnostics(sourceFile),
         );
     }
 
-    function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+    function getBindAndCheckDiagnosticsForFile(
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        nodesToCheck: Node[] | undefined,
+        nodesToCheckSpans: TextSpan[] | undefined,
+    ): readonly Diagnostic[] {
+        if (nodesToCheck) {
+            return getBindAndCheckDiagnosticsForFileNoCache(sourceFile, cancellationToken, nodesToCheck, nodesToCheckSpans);
+        }
         return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
     }
 
-    function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+    function getBindAndCheckDiagnosticsForFileNoCache(
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        nodesToCheck?: Node[],
+        nodesToCheckSpans?: TextSpan[],
+    ): readonly Diagnostic[] {
         return runWithCancellationToken(() => {
             if (skipTypeChecking(sourceFile, options, program)) {
                 return emptyArray;
@@ -2898,17 +2926,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
                 || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
             let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-            let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+            let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken, nodesToCheck) : emptyArray;
             if (isPlainJs) {
                 bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, nodesToCheckSpans, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
         });
     }
 
-    function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+    function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, nodesToCheckSpans: TextSpan[] | undefined, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
         const flatDiagnostics = flatten(allDiagnostics);
         if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
             return flatDiagnostics;
@@ -2917,7 +2945,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
         for (const errorExpectation of directives.getUnusedExpectations()) {
-            diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+            if (!nodesToCheckSpans || nodesToCheckSpans.some(span => textSpanContainsTextRange(span, errorExpectation.range))) {
+                diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+            }
         }
 
         return diagnostics;

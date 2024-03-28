@@ -75,6 +75,7 @@ import {
     findAncestor,
     findChildOfKind,
     findPrecedingToken,
+    findTokenOnLeftOfPosition,
     first,
     firstDefined,
     firstOrOnly,
@@ -143,6 +144,7 @@ import {
     IntersectionType,
     isArray,
     isBindingPattern,
+    isBlockLike,
     isComputedPropertyName,
     isConstTypeReference,
     IScriptSnapshot,
@@ -181,6 +183,8 @@ import {
     isRightSideOfPropertyAccess,
     isRightSideOfQualifiedName,
     isSetAccessor,
+    isSourceElement,
+    isSourceFile,
     isStringOrNumericLiteralLike,
     isTagName,
     isTextWhiteSpaceLike,
@@ -223,6 +227,7 @@ import {
     NodeFlags,
     noop,
     normalizePath,
+    normalizeSpans,
     NumberLiteralType,
     NumericLiteral,
     ObjectAllocator,
@@ -252,6 +257,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     Rename,
     RenameInfo,
     RenameInfoOptions,
@@ -275,6 +281,7 @@ import {
     SignatureKind,
     singleElementArray,
     SmartSelectionRange,
+    some,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -297,7 +304,10 @@ import {
     TextChangeRange,
     TextInsertion,
     TextRange,
+    textRangeContainsTextSpan,
+    textRangeIntersectsWithTextSpan,
     TextSpan,
+    textSpanContainsTextRange,
     textSpanEnd,
     timestamp,
     TodoComment,
@@ -2001,6 +2011,102 @@ export function createLanguageService(
         return [...semanticDiagnostics, ...declarationDiagnostics];
     }
 
+    function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        synchronizeHostData();
+
+        const targetSourceFile = getValidSourceFile(fileName);
+
+        const nodes = getNodesForRanges(targetSourceFile, ranges);
+        if (!nodes) {
+            return undefined;
+        }
+        const checkedSpans = normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd())));
+        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes, checkedSpans);
+        return {
+            diagnostics: semanticDiagnostics.slice(),
+            spans: checkedSpans,
+        };
+    }
+
+    function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
+        const nodes: Node[] = [];
+        const spans = normalizeSpans(ranges.map(range => createTextSpanFromRange(range)));
+        for (const span of spans) {
+            const nodesForSpan = getNodesForSpan(file, span);
+            if (!nodesForSpan) {
+                return undefined;
+            }
+            nodes.push(...nodesForSpan);
+        }
+        if (!nodes.length) {
+            return undefined;
+        }
+        return nodes;
+    }
+
+    /**
+     * Gets nodes that overlap the given span to be partially checked.
+     * @returns an array of nodes that overlap the span and are source element nodes (c.f. {@link isSourceElement}),
+     * or undefined if a partial check would be the same as a whole file check.
+     */
+    function getNodesForSpan(file: SourceFile, span: TextSpan): Node[] | undefined {
+        // Span is the whole file
+        if (textSpanContainsTextRange(span, file)) {
+            return undefined;
+        }
+
+        const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
+        const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
+
+        const nodes = [];
+        enclosingNode.forEachChild(includeNodes);
+
+        if (file.end === span.start + span.length) {
+            nodes.push(file.endOfFileToken);
+        }
+
+        // Span would include the whole file
+        if (some(nodes, isSourceFile)) {
+            return undefined;
+        }
+
+        return nodes;
+
+        // The algorithm is the following:
+        // Starting from a node that contains the whole input span, we consider its children.
+        // If a child node is completely contained in the input span, then it or its source element ancestor should be included.
+        // If a child node does not overlap the input span, it should not be included.
+        // The interesting case is for nodes that overlap but are not contained by the span, i.e. nodes in the span boundary.
+        // For those boundary nodes, if it is a block-like node (i.e. it contains statements),
+        // we try to filter out the child statements that do not overlap the span.
+        // For boundary nodes that are not block-like, we simply include them (or their source element ancestor).
+        function includeNodes(node: Node): true | undefined {
+            if (!textRangeIntersectsWithTextSpan(node, span)) {
+                if (node.pos >= span.start + span.length) {
+                    return true;
+                }
+                return;
+            }
+            if (textSpanContainsTextRange(span, node) || !isBlockLike(node)) {
+                includeNode(node);
+                return;
+            }
+            const stmts = node.statements.filter(node => textRangeIntersectsWithTextSpan(node, span));
+            if (stmts.length === node.statements.length) {
+                includeNode(node);
+                return;
+            }
+            stmts.forEach(includeNodes);
+        }
+
+        function includeNode(node: Node): void {
+            while (node.parent && !isSourceElement(node)) {
+                node = node.parent;
+            }
+            nodes.push(node);
+        }
+    }
+
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
         synchronizeHostData();
         return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
@@ -3104,6 +3210,7 @@ export function createLanguageService(
         cleanupSemanticCache,
         getSyntacticDiagnostics,
         getSemanticDiagnostics,
+        getRegionSemanticDiagnostics,
         getSuggestionDiagnostics,
         getCompilerOptionsDiagnostics,
         getSyntacticClassifications,

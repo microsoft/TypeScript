@@ -298,9 +298,10 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
         : common;
 }
 
-export interface PendingErrorCheck {
+interface PendingErrorCheck {
     fileName: NormalizedPath;
-    project: Project;
+    ranges?: TextRange[];
+    project?: Project;
 }
 
 function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
@@ -961,6 +962,7 @@ export interface SessionOptions {
     serverMode?: LanguageServiceMode;
     throttleWaitMilliseconds?: number;
     noGetErrOnBackgroundUpdate?: boolean;
+    includeDiagnosticsDuration?: boolean;
 
     globalPlugins?: readonly string[];
     pluginProbeLocations?: readonly string[];
@@ -990,6 +992,12 @@ export class Session<TMessage = string> implements EventSender {
     private suppressDiagnosticEvents?: boolean;
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
+    private includeDiagnosticsDuration: boolean;
+
+    // Maps a file name to duration in milliseconds of semantic checking
+    private semanticCheckPerformance: Map<NormalizedPath, number>;
+
+    private diagnosticsTime: [number, number] | undefined;
 
     constructor(opts: SessionOptions) {
         this.host = opts.host;
@@ -1001,6 +1009,8 @@ export class Session<TMessage = string> implements EventSender {
         this.canUseEvents = opts.canUseEvents;
         this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
         this.noGetErrOnBackgroundUpdate = opts.noGetErrOnBackgroundUpdate;
+        this.includeDiagnosticsDuration = opts.includeDiagnosticsDuration ?? true;
+        this.semanticCheckPerformance = new Map();
 
         const { throttleWaitMilliseconds } = opts;
 
@@ -1137,7 +1147,7 @@ export class Session<TMessage = string> implements EventSender {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
                 this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
+                this.errorCheck.startNew(next => this.updateErrorCheck(next, mapDefined(openFiles, file => ({ fileName: toNormalizedPath(file) })), 100, /*requireOpen*/ true));
             }
 
             // Send project changed event
@@ -1255,6 +1265,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
@@ -1264,20 +1275,58 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
+        this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         tracing?.pop();
     }
 
-    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): boolean {
+        this.diagnosticsTime = this.hrtime();
+        tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
+        let diagnosticsResult;
+        if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
+            tracing?.pop();
+            return false;
+        }
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsResult.spans);
+        tracing?.pop();
+        return true;
+    }
+
+    // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
+    protected shouldDoRegionCheck(file: NormalizedPath): boolean {
+        const perf = this.semanticCheckPerformance.get(file);
+        return !!perf && perf > 1000;
+    }
+
+    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
         try {
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            const duration = hrTimeToMilliseconds(this.hrtime(this.diagnosticsTime));
+            if (kind === "semanticDiag") {
+                this.semanticCheckPerformance?.set(file, duration);
+            }
+
+            const body: protocol.DiagnosticEventBody = {
+                file,
+                diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
+                spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+            };
+            if (this.includeDiagnosticsDuration) {
+                body.duration = duration;
+            }
+            this.event<protocol.DiagnosticEventBody>(
+                body,
+                kind,
+            );
         }
         catch (err) {
             this.logError(err, kind);
@@ -1285,36 +1334,64 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-    private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
+    private updateErrorCheck(
+        next: NextStep,
+        checkList: PendingErrorCheck[],
+        ms: number,
+        requireOpen = true,
+    ) {
+        if (checkList.length === 0) {
+            return;
+        }
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;
         const followMs = Math.min(ms, 200);
 
+        const filesFullCheck: (PendingErrorCheck & { project: Project; })[] = [];
         let index = 0;
-        const goNext = () => {
+        const goNextAllCheck = () => {
             index++;
             if (checkList.length > index) {
-                next.delay("checkOne", followMs, checkOne);
+                return next.delay("checkOne", followMs, checkOne);
+            }
+            if (filesFullCheck.length) {
+                index = 0;
+                return next.delay("checkFullOne", followMs, checkFull);
             }
         };
+        const goNextSemanticCheck = () => {
+            index++;
+            if (filesFullCheck.length > index) {
+                return next.delay("checkFullOne", followMs, checkFull);
+            }
+        };
+
+        const doSemanticCheck = (fileName: NormalizedPath, project: Project, goToNext: () => void) => {
+            this.semanticCheck(fileName, project);
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            if (this.getPreferences(fileName).disableSuggestions) {
+                goToNext();
+                return;
+            }
+            next.immediate("suggestionCheck", () => {
+                this.suggestionCheck(fileName, project);
+                goToNext();
+            });
+        };
+
         const checkOne = () => {
             if (this.changeSeq !== seq) {
                 return;
             }
 
-            let item: string | PendingErrorCheck | undefined = checkList[index];
-            if (isString(item)) {
-                // Find out project for the file name
-                item = this.toPendingErrorCheck(item);
-                if (!item) {
-                    // Ignore file if there is no project for the file
-                    goNext();
-                    return;
-                }
+            const { fileName, project = this.projectService.tryGetDefaultProjectForFile(fileName), ranges } = checkList[index];
+            if (!project) {
+                return;
             }
-
-            const { fileName, project } = item;
 
             // Ensure the project is up to date before checking if this file is present in the project.
             updateProjectIfDirty(project);
@@ -1329,24 +1406,33 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNext();
+                goNextAllCheck();
                 return;
             }
-            next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project);
-                if (this.changeSeq !== seq) {
-                    return;
-                }
 
-                if (this.getPreferences(fileName).disableSuggestions) {
-                    goNext();
-                    return;
-                }
-                next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project);
-                    goNext();
+            if (ranges) {
+                return next.immediate("regionSemanticCheck", () => {
+                    const didRegionCheck = this.regionSemanticCheck(fileName, project, ranges);
+                    if (didRegionCheck) {
+                        filesFullCheck.push({ fileName, project });
+                        goNextAllCheck();
+                    }
+                    else { // If we opted out of region check, do semantic check as normal
+                        doSemanticCheck(fileName, project, goNextAllCheck);
+                    }
                 });
-            });
+            }
+
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project, goNextAllCheck));
+        };
+
+        const checkFull = () => {
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            const { fileName, project } = filesFullCheck[index];
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project, goNextSemanticCheck));
         };
 
         if (checkList.length > index && this.changeSeq === seq) {
@@ -2476,19 +2562,26 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private toPendingErrorCheck(uncheckedFileName: string): PendingErrorCheck | undefined {
-        const fileName = toNormalizedPath(uncheckedFileName);
-        const project = this.projectService.tryGetDefaultProjectForFile(fileName);
-        return project && { fileName, project };
-    }
-
-    private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+    private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
-        if (fileNames.length > 0) {
-            this.updateErrorCheck(next, fileNames, delay);
+        if (fileArgs.length > 0) {
+            const files = mapDefined(fileArgs.filter(isString), file => ({ fileName: toNormalizedPath(file) }));
+            const filesWithRange = mapDefined(fileArgs.filter((arg): arg is protocol.FileRangesRequestArgs => !isString(arg)), arg => {
+                const fileName = toNormalizedPath(arg.file);
+                const scriptInfo = this.projectService.getScriptInfo(fileName);
+                if (!scriptInfo) {
+                    return undefined;
+                }
+                const ranges = arg.ranges.map(range => this.getRange({ file: arg.file, ...range }, scriptInfo));
+                return {
+                    fileName,
+                    ranges,
+                };
+            });
+            this.updateErrorCheck(next, [...filesWithRange, ...files], delay);
         }
     }
 

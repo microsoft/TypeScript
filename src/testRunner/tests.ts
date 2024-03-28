@@ -191,6 +191,7 @@ import "./unittests/tsserver/projectReferencesSourcemap";
 import "./unittests/tsserver/projects";
 import "./unittests/tsserver/projectsWithReferences";
 import "./unittests/tsserver/refactors";
+import "./unittests/tsserver/regionDiagnostics";
 import "./unittests/tsserver/reload";
 import "./unittests/tsserver/reloadProjects";
 import "./unittests/tsserver/rename";
