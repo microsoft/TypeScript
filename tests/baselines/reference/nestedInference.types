@@ -277,3 +277,44 @@ match<{ type: "a" | "b" }>({ type: "a" }).with({
   }),
 });
 
+// https://github.com/microsoft/TypeScript/issues/57978
+interface Action<Value> {
+  _run(input: Value): Value;
+>_run : (input: Value) => Value
+>     : ^^^^^^^^     ^^^^^     
+>input : Value
+>      : ^^^^^
+}
+
+declare function minLength<Value extends string | any[]>(min: number): Action<Value>
+>minLength : <Value extends string | any[]>(min: number) => Action<Value>
+>          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^             
+>min : number
+>    : ^^^^^^
+
+declare function pipe1<TAction1 extends Action<string>>(
+>pipe1 : <TAction1 extends Action<string>>(action1: TAction1) => (input: string) => string
+>      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^                         
+
+  action1: TAction1,
+>action1 : TAction1
+>        : ^^^^^^^^
+
+): (input: string) => string;
+>input : string
+>      : ^^^^^^
+
+const Schema1 = pipe1(minLength(1));
+>Schema1 : (input: string) => string
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>pipe1(minLength(1)) : (input: string) => string
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>pipe1 : <TAction1 extends Action<string>>(action1: TAction1) => (input: string) => string
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>minLength(1) : Action<string>
+>             : ^^^^^^^^^^^^^^
+>minLength : <Value extends string | any[]>(min: number) => Action<Value>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+

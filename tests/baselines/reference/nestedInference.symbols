@@ -197,3 +197,39 @@ match<{ type: "a" | "b" }>({ type: "a" }).with({
   }),
 });
 
+// https://github.com/microsoft/TypeScript/issues/57978
+interface Action<Value> {
+>Action : Symbol(Action, Decl(nestedInference.ts, 57, 3))
+>Value : Symbol(Value, Decl(nestedInference.ts, 60, 17))
+
+  _run(input: Value): Value;
+>_run : Symbol(Action._run, Decl(nestedInference.ts, 60, 25))
+>input : Symbol(input, Decl(nestedInference.ts, 61, 7))
+>Value : Symbol(Value, Decl(nestedInference.ts, 60, 17))
+>Value : Symbol(Value, Decl(nestedInference.ts, 60, 17))
+}
+
+declare function minLength<Value extends string | any[]>(min: number): Action<Value>
+>minLength : Symbol(minLength, Decl(nestedInference.ts, 62, 1))
+>Value : Symbol(Value, Decl(nestedInference.ts, 64, 27))
+>min : Symbol(min, Decl(nestedInference.ts, 64, 57))
+>Action : Symbol(Action, Decl(nestedInference.ts, 57, 3))
+>Value : Symbol(Value, Decl(nestedInference.ts, 64, 27))
+
+declare function pipe1<TAction1 extends Action<string>>(
+>pipe1 : Symbol(pipe1, Decl(nestedInference.ts, 64, 84))
+>TAction1 : Symbol(TAction1, Decl(nestedInference.ts, 66, 23))
+>Action : Symbol(Action, Decl(nestedInference.ts, 57, 3))
+
+  action1: TAction1,
+>action1 : Symbol(action1, Decl(nestedInference.ts, 66, 56))
+>TAction1 : Symbol(TAction1, Decl(nestedInference.ts, 66, 23))
+
+): (input: string) => string;
+>input : Symbol(input, Decl(nestedInference.ts, 68, 4))
+
+const Schema1 = pipe1(minLength(1));
+>Schema1 : Symbol(Schema1, Decl(nestedInference.ts, 70, 5))
+>pipe1 : Symbol(pipe1, Decl(nestedInference.ts, 64, 84))
+>minLength : Symbol(minLength, Decl(nestedInference.ts, 62, 1))
+

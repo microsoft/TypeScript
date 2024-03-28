@@ -60,3 +60,16 @@ match<{ type: "a" | "b" }>({ type: "a" }).with({
     return a;
   }),
 });
+
+// https://github.com/microsoft/TypeScript/issues/57978
+interface Action<Value> {
+  _run(input: Value): Value;
+}
+
+declare function minLength<Value extends string | any[]>(min: number): Action<Value>
+
+declare function pipe1<TAction1 extends Action<string>>(
+  action1: TAction1,
+): (input: string) => string;
+
+const Schema1 = pipe1(minLength(1));
