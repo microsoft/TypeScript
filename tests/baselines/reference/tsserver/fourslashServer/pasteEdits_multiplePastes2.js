@@ -274,6 +274,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -298,18 +300,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { r, s } from \"./file1\";\n\n"
-              },
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "newText": "import { aa, bb } from \"./other\";\n\n"
+                "newText": "import { r, s } from \"./file1\";\nimport { aa, bb } from \"./other\";\n\n"
               },
               {
                 "start": {

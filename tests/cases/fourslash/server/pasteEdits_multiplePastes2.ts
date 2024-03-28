@@ -33,7 +33,6 @@ const u = 1;`,],
     newFileContents: {
         "/target.ts":
 `import { r, s } from "./file1";
-
 import { aa, bb } from "./other";
 
 const a = 1;

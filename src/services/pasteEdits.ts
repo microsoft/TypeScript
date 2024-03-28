@@ -19,7 +19,6 @@ import {
     forEachChild,
     formatting,
     getQuotePreference,
-    insertImports,
     isIdentifier,
     textChanges,
 } from "./_namespaces/ts";
@@ -85,10 +84,7 @@ function pasteEdits(
             });
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
             const importAdder = codefix.createImportAdder(updatedFile, updatedProgram!, preferences, host);
-            const imports = getTargetFileImportsAndAddExportInOldFile(copiedFrom.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copiedFrom.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
-            if (imports.length > 0) {
-                insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
-            }
+            getTargetFileImportsAndAddExportInOldFile(copiedFrom.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copiedFrom.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
             importAdder.writeFixes(changes, getQuotePreference(copiedFrom.file, preferences));
         }
         else {

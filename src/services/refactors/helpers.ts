@@ -1,7 +1,4 @@
 import {
-    getModuleSpecifier,
-} from "../../compiler/moduleSpecifiers";
-import {
     AnyImportOrRequireStatement,
     append,
     codefix,
@@ -20,8 +17,6 @@ import {
     LanguageServiceHost,
 } from "../types";
 import {
-    createModuleSpecifierResolutionHost,
-    makeStringLiteral,
     nodeSeenTracker,
     QuotePreference,
 } from "../utilities";
@@ -78,7 +73,7 @@ export function getTargetFileImportsAndAddExportInOldFile(
     useEsModuleSyntax: boolean,
     quotePreference: QuotePreference,
     importAdder?: codefix.ImportAdder,
-): readonly AnyImportOrRequireStatement[] {
+) {
     const copiedOldImports: AnyImportOrRequireStatement[] = [];
     /**
      * Recomputing the imports is preferred with importAdder because it manages multiple import additions for a file and writes then to a ChangeTracker,
@@ -93,28 +88,17 @@ export function getTargetFileImportsAndAddExportInOldFile(
             catch {
                 for (const oldStatement of oldFile.statements) {
                     forEachImportInStatement(oldStatement, i => {
-                        append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                        append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => checker.getSymbolAtLocation(name) === symbol));
                     });
                 }
             }
         });
     }
     else {
-        const targetSourceFile = program.getSourceFile(targetFile); // Would be undefined for a new file
+        // When target file does not exist
         for (const oldStatement of oldFile.statements) {
             forEachImportInStatement(oldStatement, i => {
-                // Recomputing module specifier
-                const moduleSpecifier = moduleSpecifierFromImport(i);
-                const compilerOptions = program.getCompilerOptions();
-                const resolved = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier);
-                const fileName = resolved?.resolvedModule?.resolvedFileName;
-                if (fileName && targetSourceFile) {
-                    const newModuleSpecifier = getModuleSpecifier(compilerOptions, targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));
-                    append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
-                }
-                else {
-                    append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
-                }
+                append(copiedOldImports, filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
             });
         }
     }
@@ -123,7 +107,7 @@ export function getTargetFileImportsAndAddExportInOldFile(
     const targetFileSourceFile = program.getSourceFile(targetFile);
     let oldFileDefault: Identifier | undefined;
     const oldFileNamedImports: string[] = [];
-    const oldFileNonExportedSymbols: Symbol[] = [];
+    const oldFileSymbols: Symbol[] = [];
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach(symbol => {
         if (!symbol.declarations) {
@@ -137,12 +121,9 @@ export function getTargetFileImportsAndAddExportInOldFile(
             const top = getTopLevelDeclarationStatement(decl);
             if (markSeenTop(top)) {
                 addExportToChanges(oldFile, top, name, changes, useEsModuleSyntax);
-                oldFileNonExportedSymbols.push(symbol);
+                oldFileSymbols.push(symbol);
             }
-            if (importAdder && !checker.isUnknownSymbol(symbol) && symbol.parent) {
-                oldFileNamedImports.push(name.text);
-            }
-            else {
+            if (!importAdder) {
                 if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
                     oldFileDefault = name;
                 }
@@ -152,7 +133,8 @@ export function getTargetFileImportsAndAddExportInOldFile(
             }
         }
     });
-    return targetFileSourceFile
-        ? append(copiedOldImports, makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference, oldFileNonExportedSymbols, importAdder))
-        : append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
+
+    targetFileSourceFile ? makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference, oldFileSymbols, importAdder, targetFileSourceFile) :
+        append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
+    return copiedOldImports;
 }

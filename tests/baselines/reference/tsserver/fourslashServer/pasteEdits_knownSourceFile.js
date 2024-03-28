@@ -299,18 +299,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { a } from \"./file2\";\n\n"
-              },
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "newText": "import { b } from './file1';\n\n"
+                "newText": "import { b } from './file1';\nimport { a } from './file2';\n\n"
               },
               {
                 "start": {

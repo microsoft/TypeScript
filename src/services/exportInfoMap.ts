@@ -90,14 +90,6 @@ export interface SymbolExportInfo {
     isFromPackageJson: boolean;
 }
 
-/** @internal */
-export interface SymbolInfo {
-    readonly symbol: Symbol;
-    importKind: ImportKind;
-    targetFlags: SymbolFlags;
-    targetFilePath: string;
-}
-
 interface CachedSymbolExportInfo {
     // Used to rehydrate `symbol` and `moduleSymbol` when transient
     id: number;

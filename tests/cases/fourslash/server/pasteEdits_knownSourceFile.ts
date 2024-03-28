@@ -35,9 +35,8 @@ const c = a + b;
 const t = 9;`,
 
         "/target.ts": 
-`import { a } from "./file2";
-
-import { b } from './file1';
+`import { b } from './file1';
+import { a } from './file2';
 
 export const tt = 2;
 const c = a + b;
