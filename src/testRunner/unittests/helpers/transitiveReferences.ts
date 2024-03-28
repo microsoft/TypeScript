@@ -23,6 +23,8 @@ export function getFsContentsForTransitiveReferencesBConfig() {
     return jsonToReadableText({
         compilerOptions: {
             composite: true,
+            module: "nodenext",
+            target: "es5",
             baseUrl: "./",
             paths: {
                 "@ref/*": ["./*"],
@@ -35,7 +37,7 @@ export function getFsContentsForTransitiveReferencesBConfig() {
 
 export function getFsContentsForTransitiveReferencesAConfig() {
     return jsonToReadableText({
-        compilerOptions: { composite: true },
+        compilerOptions: { composite: true, module: "nodenext", target: "es5" },
         files: ["a.ts"],
     });
 }
@@ -61,6 +63,8 @@ export function getFsContentsForTransitiveReferences(): FsContents {
         "/user/username/projects/transitiveReferences/tsconfig.c.json": jsonToReadableText({
             files: ["c.ts"],
             compilerOptions: {
+                module: "nodenext",
+                target: "es5",
                 baseUrl: "./",
                 paths: {
                     "@ref/*": ["./refs/*"],
