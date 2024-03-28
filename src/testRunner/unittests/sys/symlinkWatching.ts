@@ -167,11 +167,10 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         fsWatch: FsWatch<System>,
         dir: string,
         link: string,
-        isMacOs: boolean,
-        isWindows: boolean,
+        osFlavor: TestServerHostOsFlavor,
     ) {
         it(`watchDirectory using fsEvents`, async () => {
-            const tableOfEvents: FsEventsForWatchDirectory = isMacOs ?
+            const tableOfEvents: FsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
                 {
                     fileCreate: [
                         { event: "rename", fileName: "file1.ts" },
@@ -202,7 +201,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                         { event: "rename", fileName: "file2.ts" },
                     ],
                 } :
-                isWindows ?
+                osFlavor === TestServerHostOsFlavor.Windows ?
                 {
                     fileCreate: [
                         { event: "rename", fileName: "file1.ts" },
@@ -332,9 +331,9 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         fsWatch: FsWatch<System>,
         dir: string,
         link: string,
-        isMacOs: boolean,
+        osFlavor: TestServerHostOsFlavor.Windows | TestServerHostOsFlavor.MacOs,
     ) {
-        const tableOfEvents: RecursiveFsEventsForWatchDirectory = isMacOs ?
+        const tableOfEvents: RecursiveFsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
             {
                 fileCreate: [
                     { event: "rename", fileName: "sub/folder/file1.ts" },
@@ -611,8 +610,11 @@ describe("unittests:: sys:: symlinkWatching::", () => {
 
     describe("with ts.sys::", () => {
         const root = ts.normalizePath(IO.joinPath(IO.getWorkspaceRoot(), "tests/baselines/symlinks"));
-        const isMacOs = process.platform === "darwin";
-        const isWindows = process.platform === "win32";
+        const osFlavor = process.platform === "darwin" ?
+            TestServerHostOsFlavor.MacOs :
+            process.platform === "win32" ?
+            TestServerHostOsFlavor.Windows :
+            TestServerHostOsFlavor.Linux;
         before(() => {
             cleanup();
         });
@@ -678,12 +680,11 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 (dir, _recursive, cb) => fs.watch(dir, { persistent: true }, cb),
                 `${root}/dirfsevents`,
                 `${root}/linkeddirfsevents`,
-                isMacOs,
-                isWindows,
+                osFlavor,
             );
         });
 
-        if (isMacOs || isWindows) {
+        if (osFlavor !== TestServerHostOsFlavor.Linux) {
             describe("recursive watchDirectory using fsEvents", () => {
                 before(() => {
                     setupRecursiveFsEvents("recursivefsevents");
@@ -695,7 +696,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                     (dir, recursive, cb) => fs.watch(dir, { persistent: true, recursive }, cb),
                     `${root}/recursivefsevents`,
                     `${root}/linkedrecursivefsevents`,
-                    isMacOs,
+                    osFlavor,
                 );
             });
         }
@@ -741,34 +742,20 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             getFileName(),
         );
 
-        verifyWatchDirectoryUsingFsEvents(
-            getSys(TestServerHostOsFlavor.Windows),
-            (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
-            `${root}/folder`,
-            `${root}/linked`,
-            /*isMacOs*/ false,
-            /*isWindows*/ true,
-        );
+        function verifyWatchDirectoryUsingFsEventsTestServerHost(osFlavor: TestServerHostOsFlavor) {
+            verifyWatchDirectoryUsingFsEvents(
+                getSys(osFlavor),
+                (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
+                `${root}/folder`,
+                `${root}/linked`,
+                osFlavor,
+            );
+        }
+        verifyWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.Windows);
+        verifyWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.MacOs);
+        verifyWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.Linux);
 
-        verifyWatchDirectoryUsingFsEvents(
-            getSys(TestServerHostOsFlavor.MacOs),
-            (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
-            `${root}/folder`,
-            `${root}/linked`,
-            /*isMacOs*/ true,
-            /*isWindows*/ false,
-        );
-
-        verifyWatchDirectoryUsingFsEvents(
-            getSys(TestServerHostOsFlavor.Linux),
-            (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
-            `${root}/folder`,
-            `${root}/linked`,
-            /*isMacOs*/ false,
-            /*isWindows*/ false,
-        );
-
-        function getRecursiveSys(osFlavor: TestServerHostOsFlavor.Windows | TestServerHostOsFlavor.MacOs) {
+        function getRecursiveSys(osFlavor: TestServerHostOsFlavor) {
             return createWatchedSystem({
                 ...getRecursiveFs("recursivefsevents"),
                 ...getRecursiveFs("recursivefseventssub"),
@@ -786,20 +773,16 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             }
         }
 
-        verifyRecursiveWatchDirectoryUsingFsEvents(
-            getRecursiveSys(TestServerHostOsFlavor.Windows),
-            (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
-            `${root}/recursivefsevents`,
-            `${root}/linkedrecursivefsevents`,
-            /*isMacOs*/ false,
-        );
-
-        verifyRecursiveWatchDirectoryUsingFsEvents(
-            getRecursiveSys(TestServerHostOsFlavor.MacOs),
-            (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
-            `${root}/recursivefsevents`,
-            `${root}/linkedrecursivefsevents`,
-            /*isMacOs*/ true,
-        );
+        function verifyRecursiveWatchDirectoryUsingFsEventsTestServerHost(osFlavor: TestServerHostOsFlavor.Windows | TestServerHostOsFlavor.MacOs) {
+            verifyRecursiveWatchDirectoryUsingFsEvents(
+                getRecursiveSys(osFlavor),
+                (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
+                `${root}/recursivefsevents`,
+                `${root}/linkedrecursivefsevents`,
+                osFlavor,
+            );
+        }
+        verifyRecursiveWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.Windows);
+        verifyRecursiveWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.MacOs);
     });
 });
