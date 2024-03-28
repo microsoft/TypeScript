@@ -276,7 +276,7 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

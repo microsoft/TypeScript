@@ -188,9 +188,9 @@ FsWatchesRecursive *deleted*::
 
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] Starting compilation in watch mode...
+[[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

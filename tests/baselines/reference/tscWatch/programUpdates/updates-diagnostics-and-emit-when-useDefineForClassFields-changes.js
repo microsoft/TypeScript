@@ -109,14 +109,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
 
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
 
 

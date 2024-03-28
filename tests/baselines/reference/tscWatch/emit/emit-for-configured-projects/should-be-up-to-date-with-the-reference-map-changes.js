@@ -149,14 +149,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -214,14 +214,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -284,9 +284,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -344,7 +344,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
@@ -361,7 +361,7 @@ Output::
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:01:16 AM[0m] Found 3 errors. Watching for file changes.
+[[90m12:01:05 AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -426,9 +426,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

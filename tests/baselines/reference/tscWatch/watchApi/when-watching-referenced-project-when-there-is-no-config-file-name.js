@@ -162,13 +162,13 @@ After running Timeout callback:: count: 0
 Output::
 Synchronizing program
 Loading config file: /user/username/projects/project/lib/tsconfig.json
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/project/app.ts"]
   options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

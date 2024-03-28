@@ -796,7 +796,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
 ../../../../a/lib/lib.d.ts
@@ -813,7 +813,7 @@ logic/index.d.ts
   File is output of project reference source 'logic/index.ts'
 tests/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1100,7 +1100,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:02 AM[0m] File change detected. Starting incremental compilation...
 
 Reusing resolution of module '../core/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/index.ts'.
 Reusing resolution of module '../logic/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/logic/index.ts'.
@@ -1123,7 +1123,7 @@ logic/decls/index.d.ts
   File is output of project reference source 'logic/index.ts'
 tests/index.ts
   Part of 'files' list in tsconfig.json
-[[90m12:02:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

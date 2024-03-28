@@ -123,7 +123,7 @@ Output::
 [7m2[0m export var x = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:27 AM[0m] Found 2 errors. Watching for file changes.
 
 
 

@@ -170,7 +170,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
@@ -194,7 +194,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
-[[90m12:00:50 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:47 AM[0m] Found 2 errors. Watching for file changes.
 
 
 

@@ -245,7 +245,7 @@ Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:23 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

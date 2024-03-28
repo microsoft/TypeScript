@@ -89,14 +89,14 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'haha'.
 
 [7m3[0m                             "haha": 123
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:00:23 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -140,9 +140,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

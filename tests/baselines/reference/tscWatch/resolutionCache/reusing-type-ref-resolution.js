@@ -457,7 +457,7 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:01:01 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:59 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -690,7 +690,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
@@ -732,7 +732,7 @@ node_modules/pkg3/index.d.ts
   Type library referenced via 'pkg3' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:12 AM[0m] Found 1 error. Watching for file changes.
 
 
 
