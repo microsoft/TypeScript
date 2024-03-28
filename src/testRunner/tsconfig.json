@@ -15,6 +15,7 @@
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
         { "path": "../deprecatedCompat" },
+        { "path": "../incrementalVerifier" },
         { "path": "../harness" }
     ],
     "include": ["**/*"]

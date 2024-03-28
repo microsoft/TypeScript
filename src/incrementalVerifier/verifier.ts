@@ -1,5 +1,6 @@
 import * as ts from "./_namespaces/ts";
 
+/** @internal */
 export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry) {
     const str: string[] = [];
     documentRegistry.getBuckets().forEach((bucketEntries, key) => {
@@ -193,12 +194,14 @@ function getProgramStructure(program: ts.Program | undefined) {
     return baseline.join("\n");
 }
 
+/** @internal */
 export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string) {
     const actual = getProgramStructure(actualProgram);
     const expected = getProgramStructure(expectedProgram);
     ts.Debug.assert(actual === expected, `Program verification:: ${projectName}`);
 }
 
+/** @internal */
 export function verifyResolutionCache(
     actual: ts.ResolutionCache,
     actualProgram: ts.Program,
@@ -583,11 +586,13 @@ function onProjectCreation(project: ts.server.Project) {
     (project as ts.ResolutionCacheHost).afterResolveSingleModuleNameWithoutWatching = afterResolveSingleModuleNameWithoutWatching;
 }
 
+/** @internal */
 export interface IncrementalVerifierCallbacks {
     beforeVerification?(): any;
     afterVerification?(dataFromBefore: any): void;
 }
 
+/** @internal */
 export function incrementalVerifier(service: ts.server.ProjectService) {
     service.verifyDocumentRegistry = withIncrementalVerifierCallbacks(service, verifyDocumentRegistry);
     service.verifyProgram = withIncrementalVerifierCallbacks(service, verifyProgram);

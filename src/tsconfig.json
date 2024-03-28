@@ -7,6 +7,7 @@
         { "path": "./deprecatedCompat" },
         { "path": "./executeCommandLine" },
         { "path": "./harness" },
+        { "path": "./incrementalVerifier" },
         { "path": "./jsTyping" },
         { "path": "./server" },
         { "path": "./services" },

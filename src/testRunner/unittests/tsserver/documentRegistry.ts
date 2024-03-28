@@ -1,6 +1,6 @@
 import {
     reportDocumentRegistryStats,
-} from "../../../harness/incrementalUtils";
+} from "../../../incrementalVerifier/verifier";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,

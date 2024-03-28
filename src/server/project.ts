@@ -1666,7 +1666,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const elapsed = timestamp() - start;
         this.sendPerformanceEvent("UpdateGraph", elapsed);
         this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} projectStateVersion: ${this.projectStateVersion} projectProgramVersion: ${this.projectProgramVersion} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
-        if (this.projectService.logger.isTestLogger) {
+        if (this.projectService.logger.isTestLogger || this.projectService.verifyProgram !== noop) {
             if (this.program !== oldProgram) {
                 this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
             }

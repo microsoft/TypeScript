@@ -1,13 +1,10 @@
 {
     "extends": "../tsconfig-base",
-    "compilerOptions": {
-    },
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
-        { "path": "../server" },
-        { "path": "../incrementalVerifier" }
+        { "path": "../server" }
     ],
     "include": ["**/*"]
 }
