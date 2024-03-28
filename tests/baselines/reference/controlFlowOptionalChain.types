@@ -135,7 +135,7 @@ d.toString();
 // type predicates
 declare const f: undefined | ((x: any) => x is number);
 >f : ((x: any) => x is number) | undefined
->  : ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^   ^^^^^           ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -202,9 +202,9 @@ f(x);
 
 declare const o2: { f(x: any): x is number; } | undefined;
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^   ^^^           ^^^^^^^^^^^^^^^
 >f : (x: any) => x is number
->  : ^^^^   ^^^^^^^^^^^^^^^^
+>  : ^^^^   ^^^^^           
 >x : any
 >  : ^^^
 
@@ -831,7 +831,7 @@ o5.x.y.z.w;
 interface Base {
     f(): this is Derived;
 >f : () => this is Derived
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^               
 }
 
 interface Derived extends Base {
@@ -910,19 +910,19 @@ o6.f;
 // asserts
 declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
 >isDefined : <T>(value: T) => asserts value is NonNullable<T>
->          : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^ ^^^^^                               
 >value : T
 >      : ^
 
 declare const isString: (value: unknown) => asserts value is string;
 >isString : (value: unknown) => asserts value is string
->         : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^       ^^^^^                       
 >value : unknown
 >      : ^^^^^^^
 
 declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
 >maybeIsString : ((value: unknown) => asserts value is string) | undefined
->              : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^       ^^^^^                       ^^^^^^^^^^^^^
 >value : unknown
 >      : ^^^^^^^
 
@@ -2726,13 +2726,13 @@ function f23(o: Thing | undefined) {
 
 declare function assert(x: unknown): asserts x;
 >assert : (x: unknown) => asserts x
->       : ^^^^       ^^^^^^^^^^^^^^
+>       : ^^^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 
 declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
 >assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
->              : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^ ^^^^^                           
 >x : T
 >  : ^
 

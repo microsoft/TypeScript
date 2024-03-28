@@ -43,9 +43,9 @@ const getName1 = (person?: Person): string => {
 
 const isString = (value: any): value is string => {
 >isString : (value: any) => value is string
->         : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^   ^^^^^               
 >(value: any): value is string => {  return typeof value === 'string';} : (value: any) => value is string
->                                                                       : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^^^^^^^^   ^^^^^               
 >value : any
 
   return typeof value === 'string';

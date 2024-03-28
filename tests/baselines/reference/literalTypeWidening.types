@@ -454,7 +454,7 @@ function doWork<T>(): Result<T> {
 
 function isSuccess<T>(result: Result<T>): result is T {
 >isSuccess : <T>(result: Result<T>) => result is T
->          : ^ ^^^^^^^^^^         ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^         ^^^^^           
 >result : Result<T>
 >       : ^^^^^^^^^
 
@@ -470,8 +470,8 @@ function isSuccess<T>(result: Result<T>): result is T {
 }
 
 function isFailure<T>(result: Result<T>): result is FAILURE {
->isFailure : <T>(result: Result<T>) => result is "FAILURE"
->          : ^ ^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^
+>isFailure : <T>(result: Result<T>) => result is FAILURE
+>          : ^ ^^^^^^^^^^         ^^^^^                 
 >result : Result<T>
 >       : ^^^^^^^^^
 
@@ -650,7 +650,7 @@ export const langCodes = keys(langCodeSet)
 >keys(langCodeSet) : ("fr" | "en" | "es" | "it" | "nl")[]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

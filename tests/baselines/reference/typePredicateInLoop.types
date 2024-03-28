@@ -17,9 +17,9 @@ interface TypeExt extends Type {
 
 const guard = (arg: Type): arg is TypeExt => arg.type === 1;
 >guard : (arg: Type) => arg is TypeExt
->      : ^^^^^^    ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^    ^^^^^              
 >(arg: Type): arg is TypeExt => arg.type === 1 : (arg: Type) => arg is TypeExt
->                                              : ^^^^^^    ^^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^    ^^^^^              
 >arg : Type
 >    : ^^^^
 >arg.type === 1 : boolean

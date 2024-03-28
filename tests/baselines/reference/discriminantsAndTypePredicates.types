@@ -13,7 +13,7 @@ interface B { type: 'B' }
 
 function isA(x: A | B): x is A { return x.type === 'A'; }
 >isA : (x: A | B) => x is A
->    : ^^^^     ^^^^^^^^^^^
+>    : ^^^^     ^^^^^      
 >x : A | B
 >  : ^^^^^
 >x.type === 'A' : boolean
@@ -29,7 +29,7 @@ function isA(x: A | B): x is A { return x.type === 'A'; }
 
 function isB(x: A | B): x is B { return x.type === 'B'; }
 >isB : (x: A | B) => x is B
->    : ^^^^     ^^^^^^^^^^^
+>    : ^^^^     ^^^^^      
 >x : A | B
 >  : ^^^^^
 >x.type === 'B' : boolean

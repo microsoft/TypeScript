@@ -9,7 +9,7 @@ type Falsy = false | 0 | 0n | '' | null | undefined;
 
 declare function isFalsy(value: unknown): value is Falsy;
 >isFalsy : (value: unknown) => value is Falsy
->        : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^^^              
 >value : unknown
 >      : ^^^^^^^
 
@@ -75,7 +75,7 @@ function fx3<T extends string | number>(x: T) {
 
 declare function isA(obj: unknown): obj is { a: false } | { b: 0 };
 >isA : (obj: unknown) => obj is { a: false; } | { b: 0; }
->    : ^^^^^^       ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^ ^^^
+>    : ^^^^^^       ^^^^^                                
 >obj : unknown
 >    : ^^^^^^^
 >a : false
@@ -137,7 +137,7 @@ declare class YS extends Y { ys: string }
 
 declare function isXSorY(obj: unknown): obj is XS | Y;
 >isXSorY : (obj: unknown) => obj is XS | Y
->        : ^^^^^^       ^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^^^^             
 >obj : unknown
 >    : ^^^^^^^
 
@@ -183,7 +183,7 @@ function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 
 declare function isEmptyStrOrUndefined(mixed: any): mixed is "" | undefined;
 >isEmptyStrOrUndefined : (mixed: any) => mixed is "" | undefined
->                      : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^   ^^^^^                       
 >mixed : any
 
 function fx10(s: string | undefined) {
@@ -228,7 +228,7 @@ function fx10(s: string | undefined) {
 
 function f1(x: any): asserts x is number | undefined { }
 >f1 : (x: any) => asserts x is number | undefined
->   : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^   ^^^^^                               
 >x : any
 
 let v1: number | string | undefined;
@@ -249,7 +249,7 @@ v1;  // number | undefined
 
 function f2(x: any): asserts x is 6 | undefined { }
 >f2 : (x: any) => asserts x is 6 | undefined
->   : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^   ^^^^^                          
 >x : any
 
 let v2: number | string | undefined;
@@ -271,38 +271,38 @@ v2;  // 6 | undefined
 // #39105
 
 declare function isEmptyString(value: string): value is '';
->isEmptyString : (value: string) => value is ""
->              : ^^^^^^^^      ^^^^^^^^^^^^^^^^
+>isEmptyString : (value: string) => value is ''
+>              : ^^^^^^^^      ^^^^^           
 >value : string
 >      : ^^^^^^
 
 declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
->                   : ^^^^^^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
+>                   : ^^^^^^^^                         ^^^^^                              
 >value : string | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function isZero(value: number): value is 0;
 >isZero : (value: number) => value is 0
->       : ^^^^^^^^      ^^^^^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^^^          
 >value : number
 >      : ^^^^^^
 
 declare function isMaybeZero(value: number | null | undefined): value is 0 | null | undefined;
 >isMaybeZero : (value: number | null | undefined) => value is 0 | null | undefined
->            : ^^^^^^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^                         ^^^^^                             
 >value : number | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function isEmptyArray<T>(value: T[]): value is [];
 >isEmptyArray : <T>(value: T[]) => value is []
->             : ^ ^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^   ^^^^^           
 >value : T[]
 >      : ^^^
 
 declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^^                      ^^^^^                              
 >value : T[] | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -517,7 +517,7 @@ type EmptyString = '' | null | undefined;
 
 function isEmpty(value: string | EmptyString): value is EmptyString {
 >isEmpty : (value: string | EmptyString) => value is EmptyString
->        : ^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^                    ^^^^^                    
 >value : string | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -565,7 +565,7 @@ if (isEmpty(test)) {
 
 declare function assert<T>(value: any): asserts value is T
 >assert : <T>(value: any) => asserts value is T
->       : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^   ^^^^^                  
 >value : any
 
 function test1(foo: number | string | boolean) {
@@ -590,8 +590,8 @@ function test1(foo: number | string | boolean) {
 // Repro from #46909
 
 function check1(x: unknown): x is (string | 0) {
->check1 : (x: unknown) => x is string | 0
->       : ^^^^       ^^^^^^^^^^^^^^^^^^^^
+>check1 : (x: unknown) => x is (string | 0)
+>       : ^^^^       ^^^^^                 
 >x : unknown
 >  : ^^^^^^^
 
@@ -615,8 +615,8 @@ function check1(x: unknown): x is (string | 0) {
 }
 
 function check2(x: unknown): x is ("hello" | 0) {
->check2 : (x: unknown) => x is 0 | "hello"
->       : ^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>check2 : (x: unknown) => x is ("hello" | 0)
+>       : ^^^^       ^^^^^                  
 >x : unknown
 >  : ^^^^^^^
 
@@ -717,7 +717,7 @@ function test3(x: unknown) {
 
 function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null {}
 >assertRelationIsNullOrStringArray : (v: (string | number)[] | null) => asserts v is string[] | null
->                                  : ^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^                          ^^^^^                            
 >v : (string | number)[] | null
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -756,7 +756,7 @@ type MyDiscriminatedUnion = { type: 'A', aProp: number } | { type: 'B', bProp: s
 
 declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^       ^^^^^                            
 >item : unknown
 >     : ^^^^^^^
 
