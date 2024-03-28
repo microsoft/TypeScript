@@ -3126,8 +3126,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
         default:
             const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile, checker);
             return argInfo ?
-                // At `,`, treat this as the next argument after the comma.
-                checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0)) :
+                checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex) :
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                 // completion at `x ===/**/` should be for the right side
                 checker.getTypeAtLocation(parent.left) :
