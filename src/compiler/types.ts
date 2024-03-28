@@ -5637,7 +5637,7 @@ export interface EmitResolver {
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
-    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
+    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
 }
 
