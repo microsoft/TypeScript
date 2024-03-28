@@ -1579,6 +1579,8 @@ export const optionDeclarations: CommandLineOption[] = [
 ];
 
 // These aren't available via CLI or config (yet), but we still want to handle them correctly
+// They'll be included in the result of `getOptionsNameMap()`, so they serialize and deserialize correctly,
+// but not in any of the category-specific lists or help menus.
 /** @internal */
 export const privateOptionDeclarations: CommandLineOption[] = [
     {
