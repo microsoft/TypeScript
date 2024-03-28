@@ -2023,7 +2023,7 @@ export function createLanguageService(
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
         return {
             diagnostics: semanticDiagnostics.slice(),
-            spans: normalizeSpans(nodes.map(node => createTextSpanFromNode(node, targetSourceFile))),
+            spans: normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd()))),
         };
     }
 
