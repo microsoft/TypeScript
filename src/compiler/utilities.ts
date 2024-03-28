@@ -193,6 +193,7 @@ import {
     getParseTreeNode,
     getPathComponents,
     getPathFromPathComponents,
+    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getResolutionModeOverride,
     getRootLength,
@@ -472,6 +473,7 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    resolvePath,
     ReturnStatement,
     SatisfiesExpression,
     ScriptKind,
@@ -6294,6 +6296,21 @@ export function getPossibleOriginalInputExtensionForExtension(path: string) {
         fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs] :
         fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
+}
+
+/** @internal */
+export function getPossibleOriginalInputPathWithoutChangingExt(
+    filePath: string,
+    ignoreCase: boolean,
+    outputDir: string | undefined,
+    getCommonSourceDirectory: () => string,
+): string {
+    return outputDir ?
+        resolvePath(
+            getCommonSourceDirectory(),
+            getRelativePathFromDirectory(outputDir, filePath, ignoreCase),
+        ) :
+        filePath;
 }
 
 /**
