@@ -10,7 +10,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "module": "AMD",
+          "module": "amd",
           "noLib": true
         }
       },

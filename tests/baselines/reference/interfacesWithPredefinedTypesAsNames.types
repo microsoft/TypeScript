@@ -7,8 +7,11 @@ interface string { }
 interface boolean { }
 interface void {}
 >interface : any
+>          : ^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 interface unknown {}
 interface never {}

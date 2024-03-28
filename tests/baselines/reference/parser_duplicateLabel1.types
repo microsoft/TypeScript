@@ -3,10 +3,13 @@
 === parser_duplicateLabel1.ts ===
 target:
 >target : any
+>       : ^^^
 
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 }

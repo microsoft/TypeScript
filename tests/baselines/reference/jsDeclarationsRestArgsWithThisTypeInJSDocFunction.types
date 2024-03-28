@@ -3,12 +3,15 @@
 === bug38550.js ===
 export class Clazz {
 >Clazz : Clazz
+>      : ^^^^^
 
   /**
    * @param {function(this:Object, ...*):*} functionDeclaration
    */
   method(functionDeclaration) {}
 >method : (functionDeclaration: (this: any, ...args: any[]) => any) => void
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >functionDeclaration : (this: any, ...arg1: any[]) => any
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

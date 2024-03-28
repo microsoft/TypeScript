@@ -91,14 +91,20 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
                 baseline.push("Shape signatures in builder refreshed for::");
                 internalState.hasCalledUpdateShapeSignature.forEach((path: ts.Path) => {
                     const info = state.fileInfos.get(path);
-                    if (info?.version === info?.signature || !info?.signature) {
-                        baseline.push(path + " (used version)");
-                    }
-                    else if (internalState.filesChangingSignature?.has(path)) {
-                        baseline.push(path + " (computed .d.ts during emit)");
-                    }
-                    else {
-                        baseline.push(path + " (computed .d.ts)");
+                    const signatureInfo = internalState.signatureInfo?.get(path)!;
+                    switch (signatureInfo) {
+                        case ts.SignatureInfo.ComputedDts:
+                            baseline.push(path + " (computed .d.ts)");
+                            break;
+                        case ts.SignatureInfo.StoredSignatureAtEmit:
+                            baseline.push(path + " (computed .d.ts during emit)");
+                            break;
+                        case ts.SignatureInfo.UsedVersion:
+                            ts.Debug.assert(info?.version === info?.signature || !info?.signature);
+                            baseline.push(path + " (used version)");
+                            break;
+                        default:
+                            ts.Debug.assertNever(signatureInfo);
                     }
                 });
             }
@@ -141,12 +147,11 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
 export type ReadableProgramBuildInfoRoot =
     | [original: ts.ProgramBuildInfoFileId, readable: string]
     | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
+export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
     referencedMap: ts.MapLike<string[]> | undefined;
-    exportedModulesMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
     emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
     affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
@@ -201,7 +206,6 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
-            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
             semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value => toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),

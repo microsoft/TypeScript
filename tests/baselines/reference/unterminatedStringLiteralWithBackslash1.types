@@ -3,4 +3,5 @@
 === unterminatedStringLiteralWithBackslash1.ts ===
 "\
 >"\ : ""
+>   : ^^
 

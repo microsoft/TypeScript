@@ -3,30 +3,41 @@
 === foo3.ts ===
 import foo2 = require('./foo2')
 >foo2 : { x: typeof import("foo1"); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class x extends foo2.x {}
 >x : x
+>  : ^
 >foo2.x : import("foo1")
+>       : ^^^^^^^^^^^^^^^^^^^^
 >foo2 : { x: typeof import("foo1"); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : typeof import("foo1")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 === foo1.ts ===
 class x{}
 >x : x
+>  : ^
 
 export = x; 
 >x : x
+>  : ^
 
 === foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 
 export = {
 >{    x: foo1} : { x: typeof foo1; }
+>              : ^^^^^^^^^^^^^^^^^^^
 
     x: foo1
 >x : typeof foo1
+>  : ^^^^^^^^^^^
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 }
 

@@ -21,11 +21,13 @@ defaults:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-14
         node-version:
           - '20'
           - '18'
@@ -35,9 +37,15 @@ jobs:
           - 'true'
         include:
           - node-version: '*'
-            bundle: 'false'
+            bundle: false
+            os: ubuntu-latest
+        exclude:
+          # No Node 14 on ARM macOS
+          - node-version: '14'
+            os: macos-14
 
-    name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
+    runs-on: ${{ matrix.os }}
+    name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
 
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -49,8 +57,13 @@ jobs:
       - run: npm ci
 
       - name: Tests
+        id: test
         # run tests, but lint separately
         run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+
+      - name: Print baseline diff on failure
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        run: git diff --diff-filter=AM --no-index -- ./tests/baselines/reference ./tests/baselines/local
 
   lint:
     runs-on: ubuntu-latest
@@ -77,7 +90,7 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      - uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+      - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}

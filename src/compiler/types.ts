@@ -439,6 +439,7 @@ export const enum SyntaxKind {
     JSDocPropertyTag,
     JSDocThrowsTag,
     JSDocSatisfiesTag,
+    JSDocImportTag,
 
     // Synthesized list
     SyntaxList,
@@ -481,9 +482,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocSatisfiesTag,
+    LastJSDocNode = JSDocImportTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocSatisfiesTag,
+    LastJSDocTagNode = JSDocImportTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }
@@ -1036,7 +1037,8 @@ export type ForEachChildNodes =
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocSatisfiesTag
-    | JSDocOverloadTag;
+    | JSDocOverloadTag
+    | JSDocImportTag;
 
 /** @internal */
 export type HasChildren =
@@ -3646,7 +3648,7 @@ export type NamedExportBindings =
 // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
 export interface ImportClause extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportClause;
-    readonly parent: ImportDeclaration;
+    readonly parent: ImportDeclaration | JSDocImportTag;
     readonly isTypeOnly: boolean;
     readonly name?: Identifier; // Default binding
     readonly namedBindings?: NamedImportBindings;
@@ -3782,6 +3784,7 @@ export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
 export interface FileReference extends TextRange {
     fileName: string;
     resolutionMode?: ResolutionMode;
+    preserve?: boolean;
 }
 
 export interface CheckJsDirective extends TextRange {
@@ -4057,6 +4060,14 @@ export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
     readonly _jsDocSatisfiesExpressionBrand: never;
 }
 
+export interface JSDocImportTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocImportTag;
+    readonly parent: JSDoc;
+    readonly importClause?: ImportClause;
+    readonly moduleSpecifier: Expression;
+    readonly attributes?: ImportAttributes;
+}
+
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
 // dprint-ignore
 export const enum FlowFlags {
@@ -4326,7 +4337,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ localJsxFactory?: EntityName;
     /** @internal */ localJsxFragmentFactory?: EntityName;
 
-    /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 
     /** @internal */ jsDocParsingMode?: JSDocParsingMode;
@@ -4368,9 +4378,6 @@ export const enum CommentDirectiveType {
     ExpectError,
     Ignore,
 }
-
-/** @internal */
-export type ExportedModulesFromDeclarationEmit = readonly Symbol[];
 
 export interface Bundle extends Node {
     readonly kind: SyntaxKind.Bundle;
@@ -4727,9 +4734,14 @@ export interface Program extends ScriptReferenceHost {
     getProjectReferences(): readonly ProjectReference[] | undefined;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
     /** @internal */ getProjectReferenceRedirect(fileName: string): string | undefined;
-    /** @internal */ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+    /**
+     * @internal
+     * Get the referenced project if the file is input file from that reference project
+     */
+    getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     /** @internal */ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getBuildInfo?(): BuildInfo;
     /** @internal */ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
@@ -4844,9 +4856,9 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
 
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
@@ -5024,12 +5036,9 @@ export interface TypeChecker {
     getApparentType(type: Type): Type;
     /** @internal */ getSuggestedSymbolForNonexistentProperty(name: MemberName | string, containingType: Type): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | string, containingType: Type): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentProperty(name: MemberName | string, containingType: Type): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
     getBaseConstraintOfType(type: Type): Type | undefined;
     getDefaultFromTypeParameter(type: Type): Type | undefined;
 
@@ -5443,7 +5452,10 @@ export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | Assert
 export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
 /** @internal */
-export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
+export type AnyImportOrJsDocImport = AnyImportSyntax | JSDocImportTag;
+
+/** @internal */
+export type AnyImportOrRequire = AnyImportOrJsDocImport | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
 /** @internal */
 export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
@@ -5478,7 +5490,7 @@ export interface ValidImportTypeNode extends ImportTypeNode {
 
 /** @internal */
 export type AnyValidImportOrReExport =
-    | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral; }
+    | (ImportDeclaration | ExportDeclaration | JSDocImportTag) & { moduleSpecifier: StringLiteral; }
     | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral; }; }
     | RequireOrImportCall
     | ValidImportTypeNode;
@@ -5503,7 +5515,7 @@ export interface RequireVariableDeclarationList extends VariableDeclarationList 
 
 /** @internal */
 export type LateVisibilityPaintedStatement =
-    | AnyImportSyntax
+    | AnyImportOrJsDocImport
     | VariableStatement
     | ClassDeclaration
     | FunctionDeclaration
@@ -5618,20 +5630,15 @@ export interface EmitResolver {
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
-    moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
     isArgumentsLocalBinding(node: Identifier): boolean;
     getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined;
-    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined;
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
-    tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
 }
 
 // dprint-ignore
@@ -6220,6 +6227,7 @@ export const enum ObjectFlags {
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
+    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
@@ -6428,6 +6436,12 @@ export interface AnonymousType extends ObjectType {
     target?: AnonymousType; // Instantiation target
     mapper?: TypeMapper; // Instantiation mapper
     instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+}
+
+/** @internal */
+// A SingleSignatureType may have bespoke outer type parameters to handle free type variable inferences
+export interface SingleSignatureType extends AnonymousType {
+    outerTypeParameters?: TypeParameter[];
 }
 
 /** @internal */
@@ -6715,6 +6729,8 @@ export interface Signature {
     isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     /** @internal */
     instantiations?: Map<string, Signature>;    // Generic signature instantiation cache
+    /** @internal */
+    implementationSignatureCache?: Signature;  // Copy of the signature with fresh type parameters to use in checking the body of a potentially self-referential generic function (deferred)
 }
 
 export const enum IndexKind {
@@ -7277,6 +7293,9 @@ export const enum ScriptKind {
     Deferred = 7,
 }
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -7796,7 +7815,7 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ getSymlinkCache?(): SymlinkCache;
 
     // For testing:
-    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ storeSignatureInfo?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;
@@ -8035,6 +8054,65 @@ export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => b
 
 export type EmitHelperUniqueNameCallback = (name: string) => string;
 
+/**
+ * Indicates the minimum `ScriptTarget` (inclusive) after which a specific language feature is no longer transpiled.
+ *
+ * @internal
+ */
+export const enum LanguageFeatureMinimumTarget {
+    // ES2015 Features
+    Classes = ScriptTarget.ES2015,
+    ForOf = ScriptTarget.ES2015,
+    Generators = ScriptTarget.ES2015,
+    Iteration = ScriptTarget.ES2015,
+    SpreadElements = ScriptTarget.ES2015,
+    RestElements = ScriptTarget.ES2015,
+    TaggedTemplates = ScriptTarget.ES2015,
+    DestructuringAssignment = ScriptTarget.ES2015,
+    BindingPatterns = ScriptTarget.ES2015,
+    ArrowFunctions = ScriptTarget.ES2015,
+    BlockScopedVariables = ScriptTarget.ES2015,
+    ObjectAssign = ScriptTarget.ES2015,
+
+    // ES2016 Features
+    Exponentiation = ScriptTarget.ES2016, // `x ** y`
+
+    // ES2017 Features
+    AsyncFunctions = ScriptTarget.ES2017, // `async function f() {}`
+
+    // ES2018 Features
+    ForAwaitOf = ScriptTarget.ES2018, // `for await (const x of y)`
+    AsyncGenerators = ScriptTarget.ES2018, // `async function * f() { }`
+    AsyncIteration = ScriptTarget.ES2018, // `Symbol.asyncIterator`
+    ObjectSpreadRest = ScriptTarget.ES2018, // `{ ...obj }`
+
+    // ES2019 Features
+    BindinglessCatch = ScriptTarget.ES2019, // `try { } catch { }`
+
+    // ES2020 Features
+    BigInt = ScriptTarget.ES2020, // `0n`
+    NullishCoalesce = ScriptTarget.ES2020, // `a ?? b`
+    OptionalChaining = ScriptTarget.ES2020, // `a?.b`
+
+    // ES2021 Features
+    LogicalAssignment = ScriptTarget.ES2021, // `a ||= b`, `a &&= b`, `a ??= b`
+
+    // ES2022 Features
+    TopLevelAwait = ScriptTarget.ES2022,
+    ClassFields = ScriptTarget.ES2022,
+    PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
+
+    // ES2023 Features
+    ShebangComments = ScriptTarget.ESNext,
+
+    // Upcoming Features
+    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+    UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
+    ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
+}
+
 // dprint-ignore
 /**
  * Used by the checker, this enum keeps track of external emit helpers that should be type
@@ -8117,8 +8195,6 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     getSourceFiles(): readonly SourceFile[];
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
-
-    getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
     getCommonSourceDirectory(): string;
     getCanonicalFileName(fileName: string): string;
@@ -8719,6 +8795,8 @@ export interface NodeFactory {
     updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
     createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
     updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+    createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
+    updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -9542,8 +9620,6 @@ export interface SymbolTracker {
     reportLikelyUnsafeImportRequiredError?(specifier: string): void;
     reportTruncationError?(): void;
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
-    trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
-    trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
 }
@@ -9722,6 +9798,7 @@ export const commentPragmas = {
             { name: "path", optional: true, captureSpan: true },
             { name: "no-default-lib", optional: true },
             { name: "resolution-mode", optional: true },
+            { name: "preserve", optional: true },
         ],
         kind: PragmaKindFlags.TripleSlashXML,
     },
@@ -9845,13 +9922,49 @@ export interface CommentDirectivesMap {
 export interface UserPreferences {
     readonly disableSuggestions?: boolean;
     readonly quotePreference?: "auto" | "double" | "single";
+    /**
+     * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+     * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+     */
     readonly includeCompletionsForModuleExports?: boolean;
+    /**
+     * Enables auto-import-style completions on partially-typed import statements. E.g., allows
+     * `import write|` to be completed to `import { writeFile } from "fs"`.
+     */
     readonly includeCompletionsForImportStatements?: boolean;
+    /**
+     * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
+     */
     readonly includeCompletionsWithSnippetText?: boolean;
+    /**
+     * Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled,
+     * member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined
+     * values, with insertion text to replace preceding `.` tokens with `?.`.
+     */
     readonly includeAutomaticOptionalChainCompletions?: boolean;
+    /**
+     * If enabled, the completion list will include completions with invalid identifier names.
+     * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+     */
     readonly includeCompletionsWithInsertText?: boolean;
+    /**
+     * If enabled, completions for class members (e.g. methods and properties) will include
+     * a whole declaration for the member.
+     * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
+     * `class A { foo }`.
+     */
     readonly includeCompletionsWithClassMemberSnippets?: boolean;
+    /**
+     * If enabled, object literal methods will have a method declaration completion entry in addition
+     * to the regular completion entry containing just the method name.
+     * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
+     * in addition to `const objectLiteral: T = { foo }`.
+     */
     readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+    /**
+     * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
+     * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
+     */
     readonly useLabelDetailsInCompletionEntries?: boolean;
     readonly allowIncompleteCompletions?: boolean;
     readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
@@ -9874,15 +9987,77 @@ export interface UserPreferences {
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
     readonly preferTypeOnlyAutoImports?: boolean;
+    /**
+     * Indicates whether imports should be organized in a case-insensitive manner.
+     */
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
+    /**
+     * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
+     * of their code points, or via "unicode" collation (via the
+     * [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale
+     * specified in {@link organizeImportsCollationLocale}.
+     *
+     * Default: `"ordinal"`.
+     */
     readonly organizeImportsCollation?: "ordinal" | "unicode";
+    /**
+     * Indicates the locale to use for "unicode" collation. If not specified, the locale `"en"` is used as an invariant
+     * for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     *
+     * Default: `"en"`
+     */
     readonly organizeImportsLocale?: string;
+    /**
+     * Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate
+     * strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     *
+     * Default: `false`
+     */
     readonly organizeImportsNumericCollation?: boolean;
+    /**
+     * Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When
+     * `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified
+     * in {@link organizeImportsCollationLocale}.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
+     *
+     * Default: `true`
+     */
     readonly organizeImportsAccentCollation?: boolean;
+    /**
+     * Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
+     * specified in {@link organizeImportsCollationLocale} is used.
+     *
+     * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`. This preference is also
+     * ignored if we are using case-insensitive sorting, which occurs when {@link organizeImportsIgnoreCase} is `true`,
+     * or if {@link organizeImportsIgnoreCase} is `"auto"` and the auto-detected case sensitivity is determined to be
+     * case-insensitive.
+     *
+     * Default: `false`
+     */
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
-    readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    /**
+     * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
+     * type-only.
+     *
+     * Default: `last`
+     */
+    readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
+    /**
+     * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
+     */
     readonly excludeLibrarySymbolsInNavTo?: boolean;
+    readonly lazyConfiguredProjectsFromExternalProject?: boolean;
+    readonly displayPartsForJSDoc?: boolean;
+    readonly generateReturnInDocTemplate?: boolean;
+    readonly disableLineTextInReferences?: boolean;
 }
+
+export type OrganizeImportsTypeOrder = "last" | "inline" | "first";
 
 /** Represents a bigint literal value without requiring bigint support */
 export interface PseudoBigInt {
@@ -9895,4 +10070,10 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
+}
+
+/** @internal */
+export interface EvaluationResolver {
+    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
+    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
 }

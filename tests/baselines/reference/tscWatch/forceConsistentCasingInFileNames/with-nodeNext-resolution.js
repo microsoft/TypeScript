@@ -49,7 +49,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/Users/name/projects/web/src/package.json' does not exist.
 File '/Users/name/projects/web/package.json' does not exist.
@@ -111,7 +111,7 @@ node_modules/@types/yargs/index.d.ts
 src/bin.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

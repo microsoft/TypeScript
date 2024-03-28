@@ -3,11 +3,15 @@
 === fieldAndGetterWithSameName.ts ===
 export class C {
 >C : C
+>  : ^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
   get x(): number { return 1; }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

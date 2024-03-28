@@ -31,15 +31,15 @@ export interface BuilderProgramHost {
      */
     writeFile?: WriteFileCallback;
     /**
-     * Store the list of files that update signature during the emit
+     * Store information about the signature
      *
      * @internal
      */
-    storeFilesChangingSignatureDuringEmit?: boolean;
+    storeSignatureInfo?: boolean;
 }
 
 /** @internal */
-export type HostForComputeHash = Pick<BuilderProgramHost, "createHash">;
+export type HostForComputeHash = Pick<BuilderProgramHost, "createHash" | "storeSignatureInfo">;
 
 /**
  * Builder to manage the program state changes

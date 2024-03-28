@@ -183,12 +183,12 @@
 // | in
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -230,14 +230,14 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | interface URIError
 // | var URIError: URIErrorConstructor
@@ -341,12 +341,12 @@
 // | in
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -396,14 +396,14 @@
 // | (message?: string) => TypeError (+1 overload)
 // | interface TypeError
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | var URIError: URIErrorConstructor
 // | (message?: string) => URIError (+1 overload)
@@ -521,12 +521,12 @@
 // | in
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -568,14 +568,14 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | interface URIError
 // | var URIError: URIErrorConstructor
@@ -682,12 +682,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -738,14 +738,14 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
@@ -897,12 +897,12 @@
 // | in
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -944,14 +944,14 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | interface URIError
 // | var URIError: URIErrorConstructor
@@ -1055,12 +1055,12 @@
 // | in
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -1110,14 +1110,14 @@
 // | (message?: string) => TypeError (+1 overload)
 // | interface TypeError
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | var URIError: URIErrorConstructor
 // | (message?: string) => URIError (+1 overload)
@@ -1248,12 +1248,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
+// | interface Int8Array
+// | var Int8Array: Int8ArrayConstructor
 // | interface Int16Array
 // | var Int16Array: Int16ArrayConstructor
 // | interface Int32Array
 // | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
-// | var Int8Array: Int8ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -1304,14 +1304,14 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
 // | interface Uint8Array
 // | var Uint8Array: Uint8ArrayConstructor
 // | interface Uint8ClampedArray
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
@@ -5194,6 +5194,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -5297,60 +5351,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -6474,114 +6474,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -6685,6 +6577,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11059,6 +11059,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -11162,60 +11216,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -12878,114 +12878,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -13089,6 +12981,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -17334,6 +17334,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -17437,60 +17491,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -18614,114 +18614,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -18825,6 +18717,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -22927,6 +22927,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -23030,60 +23084,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -24315,114 +24315,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -24526,6 +24418,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -28838,6 +28838,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -28941,60 +28995,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -30118,114 +30118,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -30329,6 +30221,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -34703,6 +34703,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -34806,60 +34860,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -36522,114 +36522,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -36733,6 +36625,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -40911,6 +40911,60 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -41014,60 +41068,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -42299,114 +42299,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -42510,6 +42402,114 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]

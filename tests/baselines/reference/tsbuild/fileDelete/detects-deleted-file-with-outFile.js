@@ -128,19 +128,17 @@ declare module "child" {
 define("child2", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.child2 = void 0;
+    exports.child2 = child2;
     function child2() {
     }
-    exports.child2 = child2;
 });
 define("child", ["require", "exports", "child2"], function (require, exports, child2_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.child = void 0;
+    exports.child = child;
     function child() {
         (0, child2_1.child2)();
     }
-    exports.child = child;
 });
 
 
@@ -192,11 +190,10 @@ declare module "main" {
 define("main", ["require", "exports", "child"], function (require, exports, child_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.main = void 0;
+    exports.main = main;
     function main() {
         (0, child_1.child)();
     }
-    exports.main = main;
 });
 
 

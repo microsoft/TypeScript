@@ -1,6 +1,0 @@
-error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-==== emptyFile-souremap.ts (0 errors) ====
-    

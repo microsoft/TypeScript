@@ -29,7 +29,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -w -p . --extendedDiagnostics
 Output::
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -49,7 +49,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@type
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -135,7 +135,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading config file: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
@@ -146,7 +146,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 [7m1[0m export const aNumber: number = "string"
 [7m [0m [91m                      ~~~~~~[0m
 
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

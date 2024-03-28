@@ -4,4 +4,5 @@
 /** @type {function(): number} */
 function f() {}
 >f : () => number
+>  : ^^^^^^      
 

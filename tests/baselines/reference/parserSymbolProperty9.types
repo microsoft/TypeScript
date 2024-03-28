@@ -3,10 +3,15 @@
 === parserSymbolProperty9.ts ===
 var x: {
 >x : { [Symbol.toPrimitive]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     [Symbol.toPrimitive]: string
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 }

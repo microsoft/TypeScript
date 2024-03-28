@@ -5,6 +5,7 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
+    getSampleProjectConfigWithNodeNext,
     getSysForSampleProjectReferences,
 } from "../helpers/sampleProjectReferences";
 import {
@@ -27,54 +28,63 @@ import {
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
-    verifyTscWatch({
-        scenario: "projectsWithReferences",
-        subScenario: "on sample project",
-        sys: () =>
-            solutionBuildWithBaseline(
-                getSysForSampleProjectReferences(),
-                ["tests"],
-            ),
-        commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
-        edits: [
-            {
-                caption: "local edit in logic ts, and build logic",
-                edit: sys => {
-                    sys.appendFile("/user/username/projects/sample1/logic/index.ts", `function foo() { }`);
-                    const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
-                    solutionBuilder.build();
+    function verify(withNodeNext: boolean) {
+        verifyTscWatch({
+            scenario: "projectsWithReferences",
+            subScenario: `on sample project${withNodeNext ? " with nodenext" : ""}`,
+            sys: () =>
+                solutionBuildWithBaseline(
+                    getSysForSampleProjectReferences(withNodeNext),
+                    ["tests"],
+                ),
+            commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
+            edits: [
+                {
+                    caption: "local edit in logic ts, and build logic",
+                    edit: sys => {
+                        sys.appendFile("/user/username/projects/sample1/logic/index.ts", `function foo() { }`);
+                        const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
+                        solutionBuilder.build();
+                    },
+                    // not ideal, but currently because of d.ts but no new file is written
+                    // There will be timeout queued even though file contents are same
+                    timeouts: noop,
                 },
-                // not ideal, but currently because of d.ts but no new file is written
-                // There will be timeout queued even though file contents are same
-                timeouts: noop,
-            },
-            {
-                caption: "non local edit in logic ts, and build logic",
-                edit: sys => {
-                    sys.appendFile("/user/username/projects/sample1/logic/index.ts", `export function gfoo() { }`);
-                    const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
-                    solutionBuilder.build();
+                {
+                    caption: "non local edit in logic ts, and build logic",
+                    edit: sys => {
+                        sys.appendFile("/user/username/projects/sample1/logic/index.ts", `export function gfoo() { }`);
+                        const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
+                        solutionBuilder.build();
+                    },
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-            {
-                caption: "change in project reference config file builds correctly",
-                edit: sys => {
-                    sys.writeFile(
-                        "/user/username/projects/sample1/logic/tsconfig.json",
-                        jsonToReadableText({
-                            compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
-                            references: [{ path: "../core" }],
-                        }),
-                    );
-                    const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
-                    solutionBuilder.build();
+                {
+                    caption: "change in project reference config file builds correctly",
+                    edit: sys => {
+                        sys.writeFile(
+                            "/user/username/projects/sample1/logic/tsconfig.json",
+                            jsonToReadableText({
+                                compilerOptions: {
+                                    ...getSampleProjectConfigWithNodeNext(withNodeNext),
+                                    composite: true,
+                                    declaration: true,
+                                    declarationDir: "decls",
+                                },
+                                references: [{ path: "../core" }],
+                            }),
+                        );
+                        const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
+                        solutionBuilder.build();
+                    },
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-        ],
-        baselineDependencies: true,
-    });
+            ],
+            baselineDependencies: true,
+        });
+    }
+    verify(/*withNodeNext*/ false);
+    verify(/*withNodeNext*/ true);
 
     function changeCompilerOpitonsPaths(sys: TestServerHost, config: string, newPaths: object) {
         const configJson = JSON.parse(sys.readFile(config)!);
