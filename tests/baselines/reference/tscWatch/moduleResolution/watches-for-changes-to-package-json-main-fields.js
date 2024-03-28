@@ -52,7 +52,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --project ./packages/pkg1/tsconfig.json -w --traceResolution
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -82,7 +82,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -189,7 +189,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -216,7 +216,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m              ~~~~~~[0m
 
-[[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -319,7 +319,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -349,7 +349,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:06 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

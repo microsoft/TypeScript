@@ -3,6 +3,7 @@
 === /a.js ===
 export function Foo() { }
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 /**
  * @overload
@@ -24,12 +25,20 @@ export function Foo() { }
  */
 Foo.prototype.bar = function (a, b) { }
 >Foo.prototype.bar = function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
+>                                        : ^^^^^^      ^^^    ^^^^^^      ^^^^^      ^^^    ^^^
 >Foo.prototype.bar : any
 >Foo.prototype : any
+>              : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >bar : any
+>    : ^^^
 >function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 

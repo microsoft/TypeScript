@@ -3,7 +3,11 @@
 === parserArrayLiteralExpression6.ts ===
 var v = [,1];
 >v : number[]
+>  : ^^^^^^^^
 >[,1] : number[]
+>     : ^^^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >1 : 1
+>  : ^
 

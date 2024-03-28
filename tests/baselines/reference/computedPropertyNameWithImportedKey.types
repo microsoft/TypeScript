@@ -3,17 +3,24 @@
 === /a.ts ===
 export const a = Symbol();
 >a : unique symbol
+>  : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 === /b.ts ===
 import { a } from "./a";
 >a : unique symbol
+>  : ^^^^^^^^^^^^^
 
 export function fn({ [a]: value }: any): string {
 >fn : ({ [a]: value }: any) => string
+>   : ^^^^^^^^^^^^^^^^^   ^^^^^      
 >a : unique symbol
+>  : ^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
     return value;
 >value : any

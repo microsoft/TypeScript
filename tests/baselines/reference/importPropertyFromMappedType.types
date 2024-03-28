@@ -3,17 +3,22 @@
 === errors.d.ts ===
 export = createHttpError;
 >createHttpError : createHttpError.NamedConstructors
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const createHttpError: createHttpError.NamedConstructors;
 >createHttpError : createHttpError.NamedConstructors
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createHttpError : any
+>                : ^^^
 
 declare namespace createHttpError {
     type NamedConstructors =  { [P in 'NotFound']: unknown;}
->NamedConstructors : { NotFound: unknown; }
+>NamedConstructors : NamedConstructors
+>                  : ^^^^^^^^^^^^^^^^^
 }
 
 === main.ts ===
 import { NotFound } from './errors'
 >NotFound : unknown
+>         : ^^^^^^^
 

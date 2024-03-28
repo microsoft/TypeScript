@@ -35,7 +35,6 @@ import {
     identity,
     ImplementationLocation,
     InlayHint,
-    InlayHintKind,
     InteractiveRefactorArguments,
     isString,
     JSDocTagInfo,
@@ -779,7 +778,7 @@ export class SessionClient implements LanguageService {
             return ({
                 ...item,
                 position: this.lineOffsetToPosition(file, position),
-                kind: item.kind as InlayHintKind,
+                kind: item.kind,
                 displayParts: displayParts?.map(({ text, span }) => ({
                     text,
                     span: span && {

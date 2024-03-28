@@ -31,14 +31,14 @@ interface Array<T> { length: number; [n: number]: T; }
 tsc --w
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96muser/username/projects/myproject/main.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m1[0m export const x: string = 10;
 [7m [0m [91m             ~[0m
 
-[[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -209,14 +209,14 @@ FsWatchesRecursive *deleted*::
 tsc --w
 Output::
 >> Screen clear
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96muser/username/projects/myproject/main.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m1[0m export const x: string = 10;
 [7m [0m [91m             ~[0m
 
-[[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -386,9 +386,9 @@ FsWatchesRecursive *deleted*::
 tsc --w
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -4,12 +4,18 @@
 // #31114
 declare function f<T>(value: T | number): void;
 >f : <T>(value: T | number) => void
+>  : ^ ^^^^^^^^^          ^^^^^    
 >value : number | T
+>      : ^^^^^^^^^^
 
 f((a: any) => "")
 >f((a: any) => "") : void
+>                  : ^^^^
 >f : <T>(value: number | T) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a: any) => "" : (a: any) => ""
+>               : ^^^^   ^^^^^^^
 >a : any
 >"" : ""
+>   : ^^
 

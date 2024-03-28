@@ -7,15 +7,20 @@
 
 class C {
 >C : C
+>  : ^
 
     /** @type {Foo} */
     foo(a, b) {}
 >foo : (a: string, b: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     /** @type {(optional?) => void} */
     methodWithOptionalParameters() {}
 >methodWithOptionalParameters : (optional?: any) => void
+>                             : ^^^^^^^^^^^^^^^^^^^^    
 }
 

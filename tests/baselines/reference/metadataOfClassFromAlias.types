@@ -3,27 +3,36 @@
 === auxiliry.ts ===
 export class SomeClass {
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 
     field: string;
 >field : string
+>      : ^^^^^^
 }
 
 === test.ts ===
 import { SomeClass } from './auxiliry';
 >SomeClass : typeof SomeClass
+>          : ^^^^^^^^^^^^^^^^
 
 function annotation(): PropertyDecorator {
 >annotation : () => PropertyDecorator
+>           : ^^^^^^                 
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void
+>                           : ^^^^^^^^^   ^^^^^    
 >target : any
 }
 export class ClassA {
 >ClassA : ClassA
+>       : ^^^^^^
 
     @annotation() array: SomeClass | null;
 >annotation() : PropertyDecorator
+>             : ^^^^^^^^^^^^^^^^^
 >annotation : () => PropertyDecorator
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >array : SomeClass
+>      : ^^^^^^^^^
 }

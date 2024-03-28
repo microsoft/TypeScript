@@ -5,9 +5,12 @@
 // NOTE: In non-strictNullChecks mode, `undefined` (the default sent value) is assignable to everything.
 function* f() {
 >f : () => IterableIterator<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x: string = yield 1;
 >x : string
+>  : ^^^^^^
 >yield 1 : any
 >1 : 1
+>  : ^
 }

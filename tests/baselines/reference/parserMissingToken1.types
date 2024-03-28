@@ -3,6 +3,9 @@
 === parserMissingToken1.ts ===
 a / finally
 >a / : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 
