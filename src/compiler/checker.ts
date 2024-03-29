@@ -39822,6 +39822,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
                 }
                 else if (type.symbol.valueDeclaration!.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node)) {
+                    // TODO(jakebailey): this error is no longer produced
                     error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
                 }
             }
@@ -39834,9 +39835,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const otherFile = getSourceFileOfNode(constEnumDeclaration);
         if (!otherFile.isDeclarationFile) {
             // This file can only have come from the current project.
-            if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(use)) {
-                return false;
-            }
             return shouldPreserveConstEnums(compilerOptions);
         }
         const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(otherFile.resolvedPath);
