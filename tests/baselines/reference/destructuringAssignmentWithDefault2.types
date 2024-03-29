@@ -2,8 +2,8 @@
 
 === destructuringAssignmentWithDefault2.ts ===
 const a: { x?: number; y?: number } = { };
->a : { x?: number | undefined; y?: number | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : number | undefined

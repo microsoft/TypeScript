@@ -539,8 +539,8 @@ type DistributeActors<TActor> = TActor extends { src: infer TSrc }
 
 interface MachineConfig<TActor extends ProvidedActor> {
   types?: {
->types : { actors?: TActor | undefined; } | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>types : { actors?: TActor; } | undefined
+>      : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 
     actors?: TActor;
 >actors : TActor | undefined

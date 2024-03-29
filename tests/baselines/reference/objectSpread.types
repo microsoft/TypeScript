@@ -665,14 +665,14 @@ function container(
 >   : ^^^^^^
 
     optionalString: { sn?: string },
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
 >sn : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 
     optionalNumber: { sn?: number }) {
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 >sn : number | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -707,8 +707,8 @@ function container(
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
->allOptional : { sn?: string | number | undefined; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>allOptional : { sn?: string | number; }
+>            : ^^^^^^^               ^^^
 >sn : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }

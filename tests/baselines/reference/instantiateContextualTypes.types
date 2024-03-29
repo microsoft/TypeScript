@@ -324,8 +324,8 @@ interface ComponentClass<P = {}> {
 }
 
 type CreateElementChildren<P> =
->CreateElementChildren : P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>CreateElementChildren : P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   P extends { children?: infer C }
 >children : C | undefined

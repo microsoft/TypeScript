@@ -17,8 +17,8 @@ declare class Component<P, S> {
 >       : ^^^^^^  
 
     props: Readonly<{ children?: {} }> & Readonly<P>;
->props : Readonly<{ children?: {} | undefined; }> & Readonly<P>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : Readonly<{ children?: {}; }> & Readonly<P>
+>      : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >children : {} | undefined
 >         : ^^^^^^^^^^^^^^
 }

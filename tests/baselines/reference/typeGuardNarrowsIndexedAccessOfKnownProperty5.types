@@ -2,10 +2,10 @@
 
 === typeGuardNarrowsIndexedAccessOfKnownProperty5.ts ===
 const a: { key?: { x?: number } } = {};
->a : { key?: { x?: number | undefined; } | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->key : { x?: number | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { key?: { x?: number; }; }
+>  : ^^^^^^^^               ^^^
+>key : { x?: number; } | undefined
+>    : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >{} : {}
@@ -53,8 +53,8 @@ if (a[aIndex] && a[aIndex].x) {
 const b: { key: { x?: number } } = { key: {} };
 >b : { key: { x?: number; }; }
 >  : ^^^^^^^               ^^^
->key : { x?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : { x?: number; }
+>    : ^^^^^^      ^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >{ key: {} } : { key: {}; }

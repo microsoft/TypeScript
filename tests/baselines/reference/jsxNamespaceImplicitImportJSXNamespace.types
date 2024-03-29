@@ -118,8 +118,8 @@ export function jsx(
 >     : ^^^^^^
 
     props: JSXInternal.HTMLAttributes &
->props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^
 >JSXInternal : any
 >            : ^^^
 
@@ -145,8 +145,8 @@ export function jsx<P>(
 >     : ^^^^^^^^^^^^^^^^
 
     props: Attributes & P & { children?: ComponentChild },
->props : P & { children?: ComponentChild | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : P & { children?: ComponentChild; }
+>      : ^^^^^^^^^^^^^^^^^              ^^^
 >children : ComponentChild | undefined
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -166,8 +166,8 @@ export function jsxs(
 >     : ^^^^^^
 
     props: JSXInternal.HTMLAttributes &
->props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[]; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 >JSXInternal : any
 >            : ^^^
 
@@ -193,8 +193,8 @@ export function jsxs<P>(
 >     : ^^^^^^^^^^^^^^^^
 
     props: Attributes & P & { children?: ComponentChild[] },
->props : P & { children?: ComponentChild[] | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : P & { children?: ComponentChild[]; }
+>      : ^^^^^^^^^^^^^^^^^                ^^^
 >children : ComponentChild[] | undefined
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -214,8 +214,8 @@ export function jsxDEV(
 >     : ^^^^^^
 
     props: JSXInternal.HTMLAttributes &
->props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^
 >JSXInternal : any
 >            : ^^^
 
@@ -241,8 +241,8 @@ export function jsxDEV<P>(
 >     : ^^^^^^^^^^^^^^^^
 
     props: Attributes & P & { children?: ComponentChildren },
->props : P & { children?: ComponentChildren | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : P & { children?: ComponentChildren; }
+>      : ^^^^^^^^^^^^^^^^^                 ^^^
 >children : ComponentChildren | undefined
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
