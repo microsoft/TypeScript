@@ -84,7 +84,6 @@ export interface TestServerHostCreationParameters {
     windowsStyleRoot?: string;
     environmentVariables?: Map<string, string>;
     runWithFallbackPolling?: boolean;
-    inodeWatching?: boolean;
     osFlavor?: TestServerHostOsFlavor;
 }
 
@@ -360,7 +359,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     importPlugin?: (root: string, moduleName: string) => Promise<ModuleImportResult>;
     public storeSignatureInfo = true;
     watchFile: HostWatchFile;
-    private inodeWatching: boolean | undefined;
+    private inodeWatching: boolean;
     private readonly inodes?: Map<Path, number>;
     watchDirectory: HostWatchDirectory;
     service?: server.ProjectService;
@@ -375,7 +374,6 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             windowsStyleRoot,
             environmentVariables,
             runWithFallbackPolling,
-            inodeWatching,
             osFlavor,
         }: TestServerHostCreationParameters = {},
     ) {
@@ -393,10 +391,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
         const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
-        if (inodeWatching) {
-            this.inodeWatching = true;
-            this.inodes = new Map();
-        }
+        this.inodeWatching = this.osFlavor !== TestServerHostOsFlavor.Windows;
+        if (this.inodeWatching) this.inodes = new Map();
 
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             // We dont have polling watch file
@@ -415,7 +411,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             realpath: this.realpath.bind(this),
             tscWatchFile,
             tscWatchDirectory,
-            inodeWatching: !!this.inodeWatching,
+            inodeWatching: this.inodeWatching,
             fsWatchWithTimestamp: this.osFlavor === TestServerHostOsFlavor.MacOs,
             sysLog: s => this.write(s + this.newLine),
         });
@@ -707,15 +703,20 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         cb: FsWatchCallback,
     ) {
         if (this.runWithFallbackPolling) throw new Error("Need to use fallback polling instead of file system native watching");
-        const path = this.toPath(fileOrDirectory);
-        // Error if the path does not exist
-        if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
+        let inode: number | undefined;
+        if (this.inodeWatching) {
+            const entry = this.getRealFileOrFolder(fileOrDirectory);
+            // Error if the path does not exist
+            if (!entry) throw new Error("Cannot watch missing file or folder");
+            inode = this.inodes?.get(entry.path);
+            if (inode === undefined) throw new Error("inode not found");
+        }
         const result = this.watchUtils.fsWatch(
             this.toNormalizedAbsolutePath(fileOrDirectory),
             recursive,
             {
                 cb,
-                inode: this.inodes?.get(path),
+                inode,
             },
         ) as FsWatchWorkerWatcher;
         result.on = noop;

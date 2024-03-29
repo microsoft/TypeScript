@@ -600,7 +600,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
-                        inodeWatching: true,
+                        osFlavor: TestServerHostOsFlavor.MacOs,
                     },
                 ),
             edits: [
@@ -631,7 +631,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
-                        inodeWatching: true,
+                        osFlavor: TestServerHostOsFlavor.MacOs,
                     },
                 ),
             edits: [
@@ -665,7 +665,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
-                        inodeWatching: true,
+                        osFlavor: TestServerHostOsFlavor.MacOs,
                     },
                 ),
             edits: [

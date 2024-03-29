@@ -516,7 +516,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
             path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
             content: `export function randomSeed(): string;`,
         };
-        const host = createServerHost([config, main, randomSeed, libFile], { inodeWatching: true, osFlavor: TestServerHostOsFlavor.Linux });
+        const host = createServerHost([config, main, randomSeed, libFile], { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([main], session);
         verifyGetErrRequest({ session, files: [main] });
