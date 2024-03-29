@@ -235,7 +235,6 @@ import {
     GenericType,
     GetAccessorDeclaration,
     getAliasDeclarationFromName,
-    getAllAccessorDeclarations,
     getAllJSDocTags,
     getAllowSyntheticDefaultImports,
     getAncestor,
@@ -8507,7 +8506,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getDeclarationWithTypeAnnotation(symbol: Symbol, enclosingDeclaration: Node | undefined) {
-            return symbol.declarations && find(symbol.declarations, s => !!getEffectiveTypeAnnotationNode(s) && (!enclosingDeclaration || !!findAncestor(s, n => n === enclosingDeclaration)));
+            return symbol.declarations && find(symbol.declarations, s => !!getNonlocalEffectiveTypeAnnotationNode(s) && (!enclosingDeclaration || !!findAncestor(s, n => n === enclosingDeclaration)));
         }
 
         function existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing: TypeNode, type: Type) {
@@ -8530,7 +8529,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const declWithExistingAnnotation = getDeclarationWithTypeAnnotation(symbol, getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration));
                 if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
                     // try to reuse the existing annotation
-                    const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
+                    const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
                     const result = tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined, includePrivateSymbol, bundled);
                     if (result) {
                         return result;
@@ -8583,7 +8582,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const typePredicate = getTypePredicateOfSignature(signature);
             const type = getReturnTypeOfSignature(signature);
             if (!isErrorType(type) && context.enclosingDeclaration) {
-                const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+                const annotation = signature.declaration && getNonlocalEffectiveReturnTypeAnnotationNode(signature.declaration);
                 const enclosingDeclarationIgnoringFakeScope = getEnclosingDeclarationIgnoringFakeScope(context.enclosingDeclaration);
                 if (!!findAncestor(annotation, n => n === enclosingDeclarationIgnoringFakeScope) && annotation) {
                     const annotated = getTypeFromTypeNode(annotation);
@@ -48696,6 +48695,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isFunctionLike(declaration) || isExportAssignment(declaration) || isVariableLike(declaration);
     }
 
+    function getAllAccessorDeclarationsForDeclaration(accessor: AccessorDeclaration): AllAccessorDeclarations {
+        accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
+        const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
+        const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfDeclaration(accessor), otherKind);
+        const firstAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? otherAccessor : accessor;
+        const secondAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? accessor : otherAccessor;
+        const setAccessor = accessor.kind === SyntaxKind.SetAccessor ? accessor : otherAccessor as SetAccessorDeclaration;
+        const getAccessor = accessor.kind === SyntaxKind.GetAccessor ? accessor : otherAccessor as GetAccessorDeclaration;
+        return {
+            firstAccessor,
+            secondAccessor,
+            setAccessor,
+            getAccessor,
+        };
+    }
+
     function getPossibleTypeNodeReuseExpression(declaration: DeclarationWithPotentialInnerNodeReuse) {
         return isFunctionLike(declaration) && !isSetAccessor(declaration)
             ? getSingleReturnExpression(declaration)
@@ -48704,7 +48719,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : !!(declaration as HasInitializer).initializer
             ? (declaration as HasInitializer & typeof declaration).initializer
             : isParameter(declaration) && isSetAccessor(declaration.parent)
-            ? getSingleReturnExpression(getAllAccessorDeclarations(getSymbolOfDeclaration(declaration.parent)?.declarations, declaration.parent).getAccessor)
+            ? getSingleReturnExpression(getAllAccessorDeclarationsForDeclaration(declaration.parent).getAccessor)
             : undefined;
     }
 
@@ -48894,6 +48909,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getNonlocalEffectiveTypeAnnotationNode(node: Node) {
+        const direct = getEffectiveTypeAnnotationNode(node);
+        if (direct) {
+            return direct;
+        }
+        if (node.kind === SyntaxKind.Parameter && node.parent.kind === SyntaxKind.SetAccessor) {
+            const other = getAllAccessorDeclarationsForDeclaration(node.parent as SetAccessorDeclaration).getAccessor;
+            if (other) {
+                return getEffectiveReturnTypeNode(other);
+            }
+        }
+        return undefined;
+    }
+
+    function getNonlocalEffectiveReturnTypeAnnotationNode(node: SignatureDeclaration | JSDocSignature) {
+        const direct = getEffectiveReturnTypeNode(node);
+        if (direct) {
+            return direct;
+        }
+        if (node.kind === SyntaxKind.GetAccessor) {
+            const other = getAllAccessorDeclarationsForDeclaration(node).setAccessor;
+            if (other) {
+                const param = getSetAccessorValueParameter(other);
+                if (param) {
+                    return getEffectiveTypeAnnotationNode(param);
+                }
+            }
+        }
+        return undefined;
+    }
+
     function createResolver(): EmitResolver {
         return {
             getReferencedExportContainer,
@@ -48949,21 +48995,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             getJsxFactoryEntity,
             getJsxFragmentFactoryEntity,
-            getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
-                accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
-                const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfDeclaration(accessor), otherKind);
-                const firstAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? otherAccessor : accessor;
-                const secondAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? accessor : otherAccessor;
-                const setAccessor = accessor.kind === SyntaxKind.SetAccessor ? accessor : otherAccessor as SetAccessorDeclaration;
-                const getAccessor = accessor.kind === SyntaxKind.GetAccessor ? accessor : otherAccessor as GetAccessorDeclaration;
-                return {
-                    firstAccessor,
-                    secondAccessor,
-                    setAccessor,
-                    getAccessor,
-                };
-            },
             isBindingCapturedByNode: (node, decl) => {
                 const parseNode = getParseTreeNode(node);
                 const parseDecl = getParseTreeNode(decl);
@@ -49280,7 +49311,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else if (legacyDecorators && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor)) {
-                    const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node as AccessorDeclaration);
+                    const accessors = getAllAccessorDeclarationsForDeclaration(node as AccessorDeclaration);
                     if (hasDecorators(accessors.firstAccessor) && node === accessors.secondAccessor) {
                         return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
                     }
