@@ -5,33 +5,46 @@ declare namespace MyClass {
     export interface Bar {
         doer: (x: string) => void;
 >doer : (x: string) => void
+>     : ^^^^      ^^^^^    
 >x : string
+>  : ^^^^^^
     }
 }
 declare class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     field: string;
 >field : string
+>      : ^^^^^^
 
     static Bar: (x: string, y?: number) => void;
 >Bar : (x: string, y?: number) => void
+>    : ^^^^      ^^^^^^      ^^^^^    
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     constructor(x: MyClass.Bar);
 >x : MyClass.Bar
+>  : ^^^^^^^^^^^
 >MyClass : any
+>        : ^^^
 }
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     const Foo: typeof MyClass;
 >Foo : typeof MyClass
+>    : ^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 }
 export = MyClass;
 >MyClass : MyClass
+>        : ^^^^^^^
 
 === index.js ===
 /**
@@ -40,34 +53,58 @@ export = MyClass;
 
 let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
 >a : import("externs")
+>  : ^^^^^^^^^^^^^^^^^
 >(/** @type {*} */(undefined)) : import("externs")
+>                              : ^^^^^^^^^^^^^^^^^
 >(undefined) : any
 >undefined : undefined
+>          : ^^^^^^^^^
 
 a = new Foo({doer: Foo.Bar});
 >a = new Foo({doer: Foo.Bar}) : import("externs")
+>                             : ^^^^^^^^^^^^^^^^^
 >a : import("externs")
+>  : ^^^^^^^^^^^^^^^^^
 >new Foo({doer: Foo.Bar}) : import("externs")
+>                         : ^^^^^^^^^^^^^^^^^
 >Foo : typeof import("externs")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doer : (x: string, y?: number) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Foo.Bar : (x: string, y?: number) => void
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Foo : typeof import("externs")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : (x: string, y?: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 >q : import("externs").Bar
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >({ doer: q => q }) : import("externs").Bar
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >{ doer: q => q } : { doer: (q: string) => string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doer : (q: string) => string
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >q => q : (q: string) => string
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >q : string
+>  : ^^^^^^
 >q : string
+>  : ^^^^^^
 
 const r = /** @type {typeof import("./externs").Bar} */(r => r);
 >r : (x: string, y?: number) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(r => r) : (x: string, y?: number) => void
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r => r : (r: string) => string
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >r : string
+>  : ^^^^^^
 >r : string
+>  : ^^^^^^
 

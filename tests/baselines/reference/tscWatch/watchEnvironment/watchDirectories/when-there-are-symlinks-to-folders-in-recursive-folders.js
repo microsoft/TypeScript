@@ -32,7 +32,7 @@ export {}
 
 /a/lib/tsc.js --w
 Output::
-[[90m12:00:45 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /home/user/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -65,7 +65,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory

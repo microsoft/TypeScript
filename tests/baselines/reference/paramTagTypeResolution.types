@@ -3,16 +3,24 @@
 === main.js ===
 var f = require('./first');
 >f : <T>(x: T, k: (t: T) => void) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require('./first') : <T>(x: T, k: (t: T) => void) => void
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./first' : "./first"
+>          : ^^^^^^^^^
 
 f(1, n => { })
 >f(1, n => { }) : void
+>               : ^^^^
 >f : <T>(x: T, k: (t: T) => void) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >n => { } : (n: number) => void
+>         : ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 === first.js ===
 /** @template T
@@ -21,13 +29,23 @@ f(1, n => { })
  */
 module.exports = function (x, k) { return k(x) }
 >module.exports = function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
+>                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >module.exports : <T>(x: T, k: (t: T) => void) => void
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: <T>(x: T, k: (t: T) => void) => void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : <T>(x: T, k: (t: T) => void) => void
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >k : (t: T) => void
+>  : ^^^^^^^^^^^^^^
 >k(x) : void
+>     : ^^^^
 >k : (t: T) => void
+>  : ^^^^^^^^^^^^^^
 >x : T
+>  : ^
 

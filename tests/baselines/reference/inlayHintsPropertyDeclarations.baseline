@@ -7,3 +7,12 @@
   "kind": "Type",
   "whitespaceBefore": true
 }
+
+    d;
+     ^
+{
+  "text": ": number | null",
+  "position": 50,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

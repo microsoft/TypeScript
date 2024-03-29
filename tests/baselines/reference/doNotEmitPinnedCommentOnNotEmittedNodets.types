@@ -3,17 +3,23 @@
 === doNotEmitPinnedCommentOnNotEmittedNodets.ts ===
 class C {
 >C : C
+>  : ^
 
     /*! remove pinned comment anywhere else */
     public foo(x: string, y: any)
 >foo : (x: string, y: any) => any
+>    : ^^^^      ^^^^^   ^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : any
 
     public foo(x: string, y: number) { }
 >foo : (x: string, y: any) => any
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 /*! remove pinned comment anywhere else */

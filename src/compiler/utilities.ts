@@ -34,9 +34,6 @@ import {
     BindingElement,
     BindingElementOfBareOrAccessedRequire,
     Block,
-    BundleFileSection,
-    BundleFileSectionKind,
-    BundleFileTextLike,
     CallExpression,
     CallLikeExpression,
     CallSignatureDeclaration,
@@ -122,6 +119,7 @@ import {
     EqualsToken,
     equateValues,
     escapeLeadingUnderscores,
+    EvaluationResolver,
     every,
     ExportAssignment,
     ExportDeclaration,
@@ -357,10 +355,10 @@ import {
     JSDocArray,
     JSDocCallbackTag,
     JSDocEnumTag,
+    JSDocImportTag,
     JSDocMemberName,
     JSDocOverloadTag,
     JSDocParameterTag,
-    JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
     JSDocSatisfiesTag,
     JSDocSignature,
@@ -514,6 +512,7 @@ import {
     SyntaxKind,
     SyntaxList,
     TaggedTemplateExpression,
+    TemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
     TemplateLiteralToken,
@@ -1342,6 +1341,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
                 "from",
                 "of",
             ],
+            esnext: [
+                "fromAsync",
+            ],
         })),
         ObjectConstructor: new Map(Object.entries({
             es2015: [
@@ -1878,12 +1880,8 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
         return true;
     }
     if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
-        // ECMAScript Modules are always strict.
-        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
-            return true;
-        }
-        // Other modules are strict unless otherwise specified.
-        return !compilerOptions.noImplicitUseStrict;
+        // Modules are always strict.
+        return true;
     }
     return false;
 }
@@ -3986,13 +3984,14 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode | JSDocImportTag): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -4021,6 +4020,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
     switch (node.parent.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return node.parent as AnyValidImportOrReExport;
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
@@ -4035,10 +4035,11 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 }
 
 /** @internal */
-export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration): Expression | undefined {
+export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration | JSDocImportTag): Expression | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return node.moduleSpecifier;
         case SyntaxKind.ImportEqualsDeclaration:
             return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
@@ -4068,8 +4069,8 @@ export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqua
 }
 
 /** @internal */
-export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
-    return node.kind === SyntaxKind.ImportDeclaration && !!node.importClause && !!node.importClause.name;
+export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration | JSDocImportTag): boolean {
+    return (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.JSDocImportTag) && !!node.importClause && !!node.importClause.name;
 }
 
 /** @internal */
@@ -6082,10 +6083,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         }
     }
 
-    function getTextPosWithWriteLine() {
-        return lineStart ? output.length : (output.length + newLine.length);
-    }
-
     reset();
 
     return {
@@ -6118,7 +6115,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         writeSymbol: (s, _) => write(s),
         writeTrailingSemicolon: write,
         writeComment,
-        getTextPosWithWriteLine,
     };
 }
 
@@ -6300,11 +6296,6 @@ export function getPossibleOriginalInputExtensionForExtension(path: string) {
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
 }
 
-/** @internal */
-export function outFile(options: CompilerOptions) {
-    return options.outFile || options.out;
-}
-
 /**
  * Returns 'undefined' if and only if 'options.paths' is undefined.
  *
@@ -6337,7 +6328,7 @@ export interface EmitFileNames {
  */
 export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile, forceDtsEmit?: boolean): readonly SourceFile[] {
     const options = host.getCompilerOptions();
-    if (outFile(options)) {
+    if (options.outFile) {
         const moduleKind = getEmitModuleKind(options);
         const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
         // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
@@ -6379,7 +6370,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (!isJsonSourceFile(sourceFile)) return true;
     if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
-    if (outFile(options)) return true;
+    if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
     if (!options.outDir) return false;
     // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
@@ -6535,7 +6526,7 @@ export function identifierIsThisKeyword(id: Identifier): boolean {
 }
 
 /** @internal */
-export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
+export function getAllAccessorDeclarations(declarations: readonly Declaration[] | undefined, accessor: AccessorDeclaration): AllAccessorDeclarations {
     // TODO: GH#18217
     let firstAccessor!: AccessorDeclaration;
     let secondAccessor!: AccessorDeclaration;
@@ -8059,17 +8050,6 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     return node.argumentExpression;
 }
 
-/** @deprecated @internal */
-export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
-    switch (section.kind) {
-        case BundleFileSectionKind.Text:
-        case BundleFileSectionKind.Internal:
-            return true;
-        default:
-            return false;
-    }
-}
-
 /** @internal */
 export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
     return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
@@ -8622,7 +8602,8 @@ export const computedOptions = createComputedCompilerOptions({
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
-            return compilerOptions.target ??
+            const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
+            return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
@@ -8884,11 +8865,6 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
             return false;
     }
     return true;
-}
-
-/** @internal */
-export function importNameElisionDisabled(options: CompilerOptions) {
-    return options.verbatimModuleSyntax || options.isolatedModules && options.preserveValueImports;
 }
 
 /** @internal */
@@ -10517,7 +10493,7 @@ export function canHaveExportModifier(node: Node): node is Extract<HasModifiers,
 }
 
 /** @internal */
-export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+export function isOptionalJSDocPropertyLikeTag(node: Node): boolean {
     if (!isJSDocPropertyLikeTag(node)) {
         return false;
     }
@@ -10546,7 +10522,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
         node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) => isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType)
+        || getJSDocParameterTags(node).some(isOptionalJSDocPropertyLikeTag)
     );
 }
 
@@ -10670,4 +10646,118 @@ export function replaceFirstStar(s: string, replacement: string): string {
 /** @internal */
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
+}
+
+/** @internal */
+export function isSyntacticallyString(expr: Expression): boolean {
+    expr = skipOuterExpressions(expr);
+    switch (expr.kind) {
+        case SyntaxKind.BinaryExpression:
+            const left = (expr as BinaryExpression).left;
+            const right = (expr as BinaryExpression).right;
+            return (
+                (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken &&
+                (isSyntacticallyString(left) || isSyntacticallyString(right))
+            );
+        case SyntaxKind.TemplateExpression:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function createEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression }: EvaluationResolver) {
+    function evaluate(expr: TemplateExpression, location?: Declaration): string;
+    function evaluate(expr: Expression, location?: Declaration): string | number | undefined;
+    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
+        switch (expr.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
+                if (typeof value === "number") {
+                    switch ((expr as PrefixUnaryExpression).operator) {
+                        case SyntaxKind.PlusToken:
+                            return value;
+                        case SyntaxKind.MinusToken:
+                            return -value;
+                        case SyntaxKind.TildeToken:
+                            return ~value;
+                    }
+                }
+                break;
+            case SyntaxKind.BinaryExpression:
+                const left = evaluate((expr as BinaryExpression).left, location);
+                const right = evaluate((expr as BinaryExpression).right, location);
+                if (typeof left === "number" && typeof right === "number") {
+                    switch ((expr as BinaryExpression).operatorToken.kind) {
+                        case SyntaxKind.BarToken:
+                            return left | right;
+                        case SyntaxKind.AmpersandToken:
+                            return left & right;
+                        case SyntaxKind.GreaterThanGreaterThanToken:
+                            return left >> right;
+                        case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                            return left >>> right;
+                        case SyntaxKind.LessThanLessThanToken:
+                            return left << right;
+                        case SyntaxKind.CaretToken:
+                            return left ^ right;
+                        case SyntaxKind.AsteriskToken:
+                            return left * right;
+                        case SyntaxKind.SlashToken:
+                            return left / right;
+                        case SyntaxKind.PlusToken:
+                            return left + right;
+                        case SyntaxKind.MinusToken:
+                            return left - right;
+                        case SyntaxKind.PercentToken:
+                            return left % right;
+                        case SyntaxKind.AsteriskAsteriskToken:
+                            return left ** right;
+                    }
+                }
+                else if (
+                    (typeof left === "string" || typeof left === "number") &&
+                    (typeof right === "string" || typeof right === "number") &&
+                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
+                ) {
+                    return "" + left + right;
+                }
+                break;
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return (expr as StringLiteralLike).text;
+            case SyntaxKind.TemplateExpression:
+                return evaluateTemplateExpression(expr as TemplateExpression, location);
+            case SyntaxKind.NumericLiteral:
+                return +(expr as NumericLiteral).text;
+            case SyntaxKind.ParenthesizedExpression:
+                return evaluate((expr as ParenthesizedExpression).expression, location);
+            case SyntaxKind.Identifier:
+                return evaluateEntityNameExpression(expr as Identifier, location);
+            case SyntaxKind.PropertyAccessExpression:
+                if (isEntityNameExpression(expr)) {
+                    return evaluateEntityNameExpression(expr, location);
+                }
+                break;
+            case SyntaxKind.ElementAccessExpression:
+                return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
+        }
+        return undefined;
+    }
+
+    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
+        let result = expr.head.text;
+        for (const span of expr.templateSpans) {
+            const value = evaluate(span.expression, location);
+            if (value === undefined) {
+                return undefined;
+            }
+            result += value;
+            result += span.literal.text;
+        }
+        return result;
+    }
+    return evaluate;
 }

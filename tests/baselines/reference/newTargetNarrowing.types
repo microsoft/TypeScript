@@ -3,34 +3,55 @@
 === newTargetNarrowing.ts ===
 function foo(x: true) { }
 >foo : (x: true) => void
+>    : ^^^^    ^^^^^^^^^
 >x : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 function f() {
 >f : typeof f
+>  : ^^^^^^^^
 
   if (new.target.marked === true) {
 >new.target.marked === true : boolean
+>                           : ^^^^^^^
 >new.target.marked : boolean
+>                  : ^^^^^^^
 >new.target : typeof f
+>           : ^^^^^^^^
 >target : typeof f
+>       : ^^^^^^^^
 >marked : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
     foo(new.target.marked);
 >foo(new.target.marked) : void
+>                       : ^^^^
 >foo : (x: true) => void
+>    : ^^^^^^^^^^^^^^^^^
 >new.target.marked : true
+>                  : ^^^^
 >new.target : typeof f
+>           : ^^^^^^^^
 >target : typeof f
+>       : ^^^^^^^^
 >marked : true
+>       : ^^^^
   }
 }
 
 f.marked = true;
 >f.marked = true : true
+>                : ^^^^
 >f.marked : boolean
+>         : ^^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 >marked : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 

@@ -3,6 +3,9 @@
 === asOperator2.ts ===
 var x = 23 as string;
 >x : string
+>  : ^^^^^^
 >23 as string : string
+>             : ^^^^^^
 >23 : 23
+>   : ^^
 

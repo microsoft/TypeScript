@@ -87,7 +87,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-105541926-/// <reference types=\"sometype\" />\nexport declare const theNum: TheNum;\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./pkg1_index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-11475605505-export declare const theNum: TheNum;\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./pkg1_index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -110,10 +110,10 @@ exitCode:: ExitStatus.Success
       "./pkg1_index.ts": {
         "original": {
           "version": "-9601687719-export const theNum: TheNum = \"type1\";",
-          "signature": "-105541926-/// <reference types=\"sometype\" />\nexport declare const theNum: TheNum;\n"
+          "signature": "-11475605505-export declare const theNum: TheNum;\n"
         },
         "version": "-9601687719-export const theNum: TheNum = \"type1\";",
-        "signature": "-105541926-/// <reference types=\"sometype\" />\nexport declare const theNum: TheNum;\n"
+        "signature": "-11475605505-export declare const theNum: TheNum;\n"
       },
       "./typeroot1/sometype/index.d.ts": {
         "original": {
@@ -135,7 +135,6 @@ exitCode:: ExitStatus.Success
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./pkg1_index.ts",
@@ -144,11 +143,10 @@ exitCode:: ExitStatus.Success
     "latestChangedDtsFile": "./pkg1_index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1036
+  "size": 976
 }
 
 //// [/src/packages/pkg1_index.d.ts]
-/// <reference types="sometype" />
 export declare const theNum: TheNum;
 
 
@@ -160,7 +158,7 @@ exports.theNum = "type1";
 
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"812075564-/// <reference types=\"sometype\" />\nexport declare const theNum: TheNum2;\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./pkg2_index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-13622769679-export declare const theNum: TheNum2;\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./pkg2_index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -183,10 +181,10 @@ exports.theNum = "type1";
       "./pkg2_index.ts": {
         "original": {
           "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
-          "signature": "812075564-/// <reference types=\"sometype\" />\nexport declare const theNum: TheNum2;\n"
+          "signature": "-13622769679-export declare const theNum: TheNum2;\n"
         },
         "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
-        "signature": "812075564-/// <reference types=\"sometype\" />\nexport declare const theNum: TheNum2;\n"
+        "signature": "-13622769679-export declare const theNum: TheNum2;\n"
       },
       "./typeroot2/sometype/index.d.ts": {
         "original": {
@@ -208,7 +206,6 @@ exports.theNum = "type1";
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./pkg2_index.ts",
@@ -217,11 +214,10 @@ exports.theNum = "type1";
     "latestChangedDtsFile": "./pkg2_index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1038
+  "size": 979
 }
 
 //// [/src/packages/pkg2_index.d.ts]
-/// <reference types="sometype" />
 export declare const theNum: TheNum2;
 
 

@@ -18,6 +18,7 @@ import {
     ClassDeclaration,
     codefix,
     combinePaths,
+    Comparison,
     concatenate,
     contains,
     createModuleSpecifierResolutionHost,
@@ -50,14 +51,17 @@ import {
     GetCanonicalFileName,
     getDecorators,
     getDirectoryPath,
+    getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getModifiers,
+    getNormalizedAbsolutePath,
     getPropertySymbolFromBindingElement,
     getQuotePreference,
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
     getSourceFileOfNode,
+    getStringComparer,
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getUniqueName,
@@ -164,6 +168,7 @@ const moveToFileAction = {
 registerRefactor(refactorNameForMoveToFile, {
     kinds: [moveToFileAction.kind],
     getAvailableActions: function getRefactorActionsToMoveToFile(context, interactiveRefactorArguments): readonly ApplicableRefactorInfo[] {
+        const file = context.file;
         const statements = getStatementsToMove(context);
         if (!interactiveRefactorArguments) {
             return emptyArray;
@@ -171,7 +176,6 @@ registerRefactor(refactorNameForMoveToFile, {
         /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
          *  This condition is used in order to show less often the `Move to file` code action */
         if (context.endPosition !== undefined) {
-            const file = context.file;
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
             const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
             if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
@@ -179,7 +183,11 @@ registerRefactor(refactorNameForMoveToFile, {
             }
         }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
-            return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
+            const affectedTextRange = {
+                start: { line: getLineAndCharacterOfPosition(file, statements.all[0].getStart(file)).line, offset: getLineAndCharacterOfPosition(file, statements.all[0].getStart(file)).character },
+                end: { line: getLineAndCharacterOfPosition(file, last(statements.all).end).line, offset: getLineAndCharacterOfPosition(file, last(statements.all).end).character },
+            };
+            return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, range: affectedTextRange }] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
@@ -429,7 +437,12 @@ export function updateImportsInOtherFiles(
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
-                const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), targetFileName);
+                const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(getNormalizedAbsolutePath(oldFile.fileName, program.getCurrentDirectory())), targetFileName);
+
+                // no self-imports
+
+                if (getStringComparer(!program.useCaseSensitiveFileNames())(pathToTargetFileWithExtension, sourceFile.fileName) === Comparison.EqualTo) return;
+
                 const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
@@ -581,7 +594,7 @@ export function makeImportOrRequire(
     useEs6Imports: boolean,
     quotePreference: QuotePreference,
 ): AnyImportOrRequireStatement | undefined {
-    const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
+    const pathToTargetFile = resolvePath(getDirectoryPath(getNormalizedAbsolutePath(sourceFile.fileName, program.getCurrentDirectory())), targetFileNameWithExtension);
     const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
 
     if (useEs6Imports) {

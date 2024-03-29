@@ -690,11 +690,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
     });
 
     describe("with fsWatch with fsWatchWithTimestamp", () => {
-        function verify(fsWatchWithTimestamp: boolean) {
+        function verify(fsWatchWithTimestamp: boolean, watchFile?: "useFsEventsOnParentDirectory") {
             verifyTscWatch({
                 scenario,
-                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}`,
-                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}${watchFile ? ` ${watchFile}` : ""}`,
+                commandLineArgs: ["-w", "--extendedDiagnostics", ...(watchFile ? ["--watchFile", watchFile] : [])],
                 sys: () =>
                     createWatchedSystem(
                         {
@@ -710,7 +710,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 edits: [
                     {
                         caption: "emulate access",
-                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", "/user/username/projects/myproject/main.ts", /*useTildeSuffix*/ undefined),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
@@ -723,6 +723,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         }
         verify(/*fsWatchWithTimestamp*/ true);
         verify(/*fsWatchWithTimestamp*/ false);
+        verify(/*fsWatchWithTimestamp*/ true, "useFsEventsOnParentDirectory");
+        verify(/*fsWatchWithTimestamp*/ false, "useFsEventsOnParentDirectory");
     });
 
     verifyTscWatch({
@@ -742,7 +744,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", "/user/username/projects/project/main.ts", /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -752,7 +754,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", "/user/username/projects/project/main.ts", /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

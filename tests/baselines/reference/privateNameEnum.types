@@ -3,8 +3,10 @@
 === privateNameEnum.ts ===
 enum E {
 >E : E
+>  : ^
 
     #x
 >#x : E.__missing
+>   : ^^^^^^^^^^^
 }
 

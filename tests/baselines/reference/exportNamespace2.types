@@ -3,25 +3,34 @@
 === a.ts ===
 export class A {}
 >A : A
+>  : ^
 
 === b.ts ===
 export * as a from './a';
 >a : typeof import("a")
+>  : ^^^^^^^^^^^^^^^^^^
 
 === c.ts ===
 import type { a } from './b';
 >a : any
+>  : ^^^
 
 export { a };
 >a : typeof a
+>  : ^^^^^^^^
 
 === d.ts ===
 import { a } from './c';
 >a : typeof a
+>  : ^^^^^^^^
 
 new a.A(); // Error
 >new a.A() : a.A
+>          : ^^^
 >a.A : typeof a.A
+>    : ^^^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >A : typeof a.A
+>  : ^^^^^^^^^^
 

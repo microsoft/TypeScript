@@ -54,14 +54,13 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/exec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/exec.js",
                     },
                     files: [
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -79,7 +78,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/compositeExec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/compositeExec.js",
                         composite: true,
                         declarationMap: true,
@@ -88,7 +86,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -115,14 +113,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
             if (tempFile) files.push(tempFile);
-
-            const rootNames = [containerConfig.path];
-            const host = createServerHost(files);
-            // Can't use createHostWithSolutionBuild. This test used to work,
-            // but no longer does since prepend isn't allowed in project references.
-            // We just baseline and assert nothing about the output.
-            solutionBuildWithBaseline(host, rootNames);
-
+            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
             const session = new TestSession(host);
             return { files, session, containerConfig, containerCompositeExecIndex };
         }
@@ -354,6 +345,35 @@ function foo() {
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
         baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
+    });
+
+    it("referencing const enum from referenced project with preserveConstEnums", () => {
+        const projectLocation = `/user/username/projects/project`;
+        const utilsIndex: File = {
+            path: `${projectLocation}/src/utils/index.ts`,
+            content: "export const enum E { A = 1 }",
+        };
+        const utilsDeclaration: File = {
+            path: `${projectLocation}/src/utils/index.d.ts`,
+            content: "export declare const enum E { A = 1 }",
+        };
+        const utilsConfig: File = {
+            path: `${projectLocation}/src/utils/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: true } }),
+        };
+        const projectIndex: File = {
+            path: `${projectLocation}/src/project/index.ts`,
+            content: `import { E } from "../utils"; E.A;`,
+        };
+        const projectConfig: File = {
+            path: `${projectLocation}/src/project/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }] }),
+        };
+        const host = createServerHost([libFile, utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
+        const session = new TestSession(host);
+        openFilesForSession([projectIndex], session);
+        verifyGetErrRequest({ session, files: [projectIndex] });
+        baselineTsserverLogs("projectReferences", `referencing const enum from referenced project with preserveConstEnums`, session);
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -1088,7 +1108,7 @@ export function bar() {}`,
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 }),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
 
             closeFilesForSession([main, dummyFilePath], session);
 
@@ -1099,7 +1119,7 @@ export function bar() {}`,
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo"),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 

@@ -1,10 +1,6 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+/main.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== /mod2.ts (0 errors) ====
     import { Cls } from "./main";
     import "./mod1";
@@ -12,13 +8,14 @@ error TS5102: Option 'out' has been removed. Please remove it from your configur
     export const cls = Cls;
     export const foo = new Cls().foo();
     export const bar = Cls.bar();
+    
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     
 ==== /main.ts (1 errors) ====
     export class Cls {
                  ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
         x
     }
     

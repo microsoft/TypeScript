@@ -128,42 +128,43 @@ export class CompilerBaselineRunner extends RunnerBase {
 
 class CompilerTest {
     private static varyBy: readonly string[] = [
-        "module",
-        "moduleResolution",
-        "moduleDetection",
+        "allowArbitraryExtensions",
         "allowImportingTsExtensions",
-        "target",
-        "jsx",
-        "noEmit",
-        "removeComments",
-        "importHelpers",
-        "importHelpers",
-        "downlevelIteration",
-        "isolatedModules",
-        "verbatimModuleSyntax",
-        "strict",
-        "noImplicitAny",
-        "strictNullChecks",
-        "strictFunctionTypes",
-        "strictBindCallApply",
-        "strictPropertyInitialization",
-        "noImplicitThis",
-        "alwaysStrict",
         "allowSyntheticDefaultImports",
-        "esModuleInterop",
+        "alwaysStrict",
+        "downlevelIteration",
+        "experimentalDecorators",
         "emitDecoratorMetadata",
-        "skipDefaultLibCheck",
-        "preserveConstEnums",
-        "skipLibCheck",
+        "esModuleInterop",
         "exactOptionalPropertyTypes",
-        "useDefineForClassFields",
-        "useUnknownInCatchVariables",
-        "noUncheckedIndexedAccess",
+        "importHelpers",
+        "importHelpers",
+        "isolatedModules",
+        "jsx",
+        "module",
+        "moduleDetection",
+        "moduleResolution",
+        "noEmit",
+        "noImplicitAny",
+        "noImplicitThis",
         "noPropertyAccessFromIndexSignature",
+        "noUncheckedIndexedAccess",
+        "preserveConstEnums",
+        "removeComments",
+        "resolveJsonModule",
         "resolvePackageJsonExports",
         "resolvePackageJsonImports",
-        "resolveJsonModule",
-        "allowArbitraryExtensions",
+        "skipDefaultLibCheck",
+        "skipLibCheck",
+        "strict",
+        "strictBindCallApply",
+        "strictFunctionTypes",
+        "strictNullChecks",
+        "strictPropertyInitialization",
+        "target",
+        "useDefineForClassFields",
+        "useUnknownInCatchVariables",
+        "verbatimModuleSyntax",
     ];
     private fileName: string;
     private justName: string;
@@ -330,10 +331,6 @@ class CompilerTest {
     }
 
     public verifyTypesAndSymbols() {
-        if (this.fileName.includes("APISample")) {
-            return;
-        }
-
         const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols &&
             this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
         if (noTypesAndSymbols) {
