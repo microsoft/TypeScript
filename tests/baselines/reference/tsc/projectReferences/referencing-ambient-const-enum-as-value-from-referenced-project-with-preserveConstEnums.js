@@ -71,30 +71,7 @@ export const enum E2 { A = 1 }
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/index.ts[0m:[93m5[0m:[93m21[0m - [91merror[0m[90m TS2475: [0m'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
-
-[7m5[0m                     E; declare const x: E; E[x];
-[7m [0m [91m                    ~[0m
-
-[96msrc/project/index.ts[0m:[93m5[0m:[93m46[0m - [91merror[0m[90m TS2476: [0mA const enum member can only be accessed using a string literal.
-
-[7m5[0m                     E; declare const x: E; E[x];
-[7m [0m [91m                                             ~[0m
-
-[96msrc/project/index.ts[0m:[93m7[0m:[93m21[0m - [91merror[0m[90m TS2475: [0m'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
-
-[7m7[0m                     E2; declare const y: E2; E2[y];
-[7m [0m [91m                    ~~[0m
-
-[96msrc/project/index.ts[0m:[93m7[0m:[93m49[0m - [91merror[0m[90m TS2476: [0mA const enum member can only be accessed using a string literal.
-
-[7m7[0m                     E2; declare const y: E2; E2[y];
-[7m [0m [91m                                                ~[0m
-
-
-Found 4 errors in the same file, starting at: src/project/index.ts[90m:5[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 
 //// [/src/project/index.js]

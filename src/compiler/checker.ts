@@ -33884,7 +33884,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return objectType;
         }
 
-        if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
+        if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression) && !isUseOfPreservedConstEnum(node, objectType)) {
             error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
             return errorType;
         }
@@ -39815,18 +39815,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (node.parent.kind === SyntaxKind.TypeQuery && (node.parent as TypeQueryNode).exprName === node)) ||
             (node.parent.kind === SyntaxKind.ExportSpecifier); // We allow reexporting const enums
 
-        if (!ok) {
-            error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
-        }
-
-        if (getIsolatedModules(compilerOptions)) {
-            Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
-            const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
-            const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
-            if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node) && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
-                error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
+        if (!ok || getIsolatedModules(compilerOptions)) {
+            if (!isUseOfPreservedConstEnum(node, type)) {
+                if (!ok) {
+                    // TODO(jakebailey): make error message mention const enum preservation
+                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
+                }
+                else if (type.symbol.valueDeclaration!.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node)) {
+                    error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
+                }
             }
         }
+    }
+
+    function isUseOfPreservedConstEnum(use: Node, enumType: Type) {
+        Debug.assert(!!(enumType.symbol.flags & SymbolFlags.ConstEnum));
+        const constEnumDeclaration = enumType.symbol.valueDeclaration as EnumDeclaration;
+        const otherFile = getSourceFileOfNode(constEnumDeclaration);
+        if (!otherFile.isDeclarationFile) {
+            // This file can only have come from the current project.
+            if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(use)) {
+                return false;
+            }
+            return shouldPreserveConstEnums(compilerOptions);
+        }
+        const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(otherFile.resolvedPath);
+        return redirect && shouldPreserveConstEnums(redirect.commandLine.options);
     }
 
     function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {

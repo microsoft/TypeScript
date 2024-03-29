@@ -371,60 +371,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/project/src/project/index.ts",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 5,
-              "offset": 13
-            },
-            "end": {
-              "line": 5,
-              "offset": 14
-            },
-            "text": "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.",
-            "code": 2475,
-            "category": "error"
-          },
-          {
-            "start": {
-              "line": 5,
-              "offset": 38
-            },
-            "end": {
-              "line": 5,
-              "offset": 39
-            },
-            "text": "A const enum member can only be accessed using a string literal.",
-            "code": 2476,
-            "category": "error"
-          },
-          {
-            "start": {
-              "line": 7,
-              "offset": 13
-            },
-            "end": {
-              "line": 7,
-              "offset": 15
-            },
-            "text": "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.",
-            "code": 2475,
-            "category": "error"
-          },
-          {
-            "start": {
-              "line": 7,
-              "offset": 41
-            },
-            "end": {
-              "line": 7,
-              "offset": 42
-            },
-            "text": "A const enum member can only be accessed using a string literal.",
-            "code": 2476,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
