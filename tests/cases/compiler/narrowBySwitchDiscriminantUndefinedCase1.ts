@@ -1,5 +1,6 @@
 // @strict: true
 // @exactOptionalPropertyTypes: true, false
+// @noUncheckedIndexedAccess: true, false
 // @noEmit: true
 
 // https://github.com/microsoft/TypeScript/issues/57999
@@ -14,10 +15,21 @@ function func(arg: A) {
   switch (optionalProp) {
     case undefined:
       return undefined;
-
     case "hello":
       return "hello";
+    default:
+      assertUnreachable(optionalProp);
+  }
+}
 
+function func2() {
+  const optionalProp = ["hello" as const][Math.random()];
+
+  switch (optionalProp) {
+    case undefined:
+      return undefined;
+    case "hello":
+      return "hello";
     default:
       assertUnreachable(optionalProp);
   }
