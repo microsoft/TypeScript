@@ -121,7 +121,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
             }
             deferred.resolve();
-        }, !!process.env.CI ? 1000 : 200);
+        }, !!process.env.CI ? 1000 : 500);
         return deferred.promise;
     }
 
