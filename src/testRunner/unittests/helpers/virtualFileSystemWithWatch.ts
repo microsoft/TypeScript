@@ -85,7 +85,6 @@ export interface TestServerHostCreationParameters {
     environmentVariables?: Map<string, string>;
     runWithFallbackPolling?: boolean;
     inodeWatching?: boolean;
-    fsWatchWithTimestamp?: boolean;
     osFlavor?: TestServerHostOsFlavor;
 }
 
@@ -377,7 +376,6 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             environmentVariables,
             runWithFallbackPolling,
             inodeWatching,
-            fsWatchWithTimestamp,
             osFlavor,
         }: TestServerHostCreationParameters = {},
     ) {
@@ -418,7 +416,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             tscWatchFile,
             tscWatchDirectory,
             inodeWatching: !!this.inodeWatching,
-            fsWatchWithTimestamp,
+            fsWatchWithTimestamp: this.osFlavor === TestServerHostOsFlavor.MacOs,
             sysLog: s => this.write(s + this.newLine),
         });
         this.watchFile = watchFile;

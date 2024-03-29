@@ -691,10 +691,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
     });
 
     describe("with fsWatch with fsWatchWithTimestamp", () => {
-        function verify(fsWatchWithTimestamp: boolean, watchFile?: "useFsEventsOnParentDirectory") {
+        function verify(osFlavor: TestServerHostOsFlavor, watchFile?: "useFsEventsOnParentDirectory") {
             verifyTscWatch({
                 scenario,
-                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}${watchFile ? ` ${watchFile}` : ""}`,
+                subScenario: `fsWatch/fsWatchWithTimestamp ${osFlavor === TestServerHostOsFlavor.MacOs}${watchFile ? ` ${watchFile}` : ""}`,
                 commandLineArgs: ["-w", "--extendedDiagnostics", ...(watchFile ? ["--watchFile", watchFile] : [])],
                 sys: () =>
                     createWatchedSystem(
@@ -705,7 +705,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         },
                         {
                             currentDirectory: "/user/username/projects/myproject",
-                            fsWatchWithTimestamp,
+                            osFlavor,
                         },
                     ),
                 edits: [
@@ -722,10 +722,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 ],
             });
         }
-        verify(/*fsWatchWithTimestamp*/ true);
-        verify(/*fsWatchWithTimestamp*/ false);
-        verify(/*fsWatchWithTimestamp*/ true, "useFsEventsOnParentDirectory");
-        verify(/*fsWatchWithTimestamp*/ false, "useFsEventsOnParentDirectory");
+        verify(TestServerHostOsFlavor.MacOs);
+        verify(TestServerHostOsFlavor.Windows);
+        verify(TestServerHostOsFlavor.MacOs, "useFsEventsOnParentDirectory");
+        verify(TestServerHostOsFlavor.Windows, "useFsEventsOnParentDirectory");
     });
 
     verifyTscWatch({
