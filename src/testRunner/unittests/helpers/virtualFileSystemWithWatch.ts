@@ -83,7 +83,6 @@ export interface TestServerHostCreationParameters {
     newLine?: string;
     windowsStyleRoot?: string;
     environmentVariables?: Map<string, string>;
-    runWithoutRecursiveWatches?: boolean;
     runWithFallbackPolling?: boolean;
     inodeWatching?: boolean;
     fsWatchWithTimestamp?: boolean;
@@ -376,7 +375,6 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             newLine,
             windowsStyleRoot,
             environmentVariables,
-            runWithoutRecursiveWatches,
             runWithFallbackPolling,
             inodeWatching,
             fsWatchWithTimestamp,
@@ -386,7 +384,6 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
         this.newLine = newLine || "\n";
         this.osFlavor = osFlavor || TestServerHostOsFlavor.Windows;
-        if (this.osFlavor === TestServerHostOsFlavor.Linux) runWithoutRecursiveWatches = true;
         this.windowsStyleRoot = windowsStyleRoot;
         this.environmentVariables = environmentVariables;
         currentDirectory = currentDirectory || "/";
@@ -415,7 +412,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             fileSystemEntryExists: this.fileSystemEntryExists.bind(this),
             useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
             getCurrentDirectory: this.getCurrentDirectory.bind(this),
-            fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !runWithoutRecursiveWatches,
+            fsSupportsRecursiveFsWatch: !tscWatchDirectory && this.osFlavor !== TestServerHostOsFlavor.Linux,
             getAccessibleSortedChildDirectories: path => this.getDirectories(path),
             realpath: this.realpath.bind(this),
             tscWatchFile,
