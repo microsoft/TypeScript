@@ -6,7 +6,6 @@ import {
     canHaveSymbol,
     CheckFlags,
     contains,
-    countWhere,
     createPrinterWithRemoveComments,
     createTextSpan,
     createTextSpanFromBounds,
@@ -60,7 +59,6 @@ import {
     JsxTagNameExpression,
     last,
     lastOrUndefined,
-    length,
     ListFormat,
     map,
     mapToDisplayParts,
@@ -288,7 +286,7 @@ function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile
     if (!info) return undefined;
     const { list, argumentIndex } = info;
 
-    const argumentCount = getArgumentCount(list, /*ignoreTrailingComma*/ isInString(sourceFile, position, node), checker);
+    const argumentCount = getArgumentCount(checker, list);
     if (argumentIndex !== 0) {
         Debug.assertLessThan(argumentIndex, argumentCount);
     }
@@ -309,7 +307,7 @@ function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile, 
         //   - On the target of the call (parent.func)
         //   - On the 'new' keyword in a 'new' expression
         const list = findContainingList(node);
-        return list && { list, argumentIndex: getArgumentIndex(list, node, checker) };
+        return list && { list, argumentIndex: getArgumentIndex(checker, list, node) };
     }
 }
 
@@ -481,37 +479,6 @@ function chooseBetterSymbol(s: Symbol): Symbol {
         : s;
 }
 
-function getArgumentIndex(argumentsList: Node, node: Node, checker: TypeChecker) {
-    // The list we got back can include commas.  In the presence of errors it may
-    // also just have nodes without commas.  For example "Foo(a b c)" will have 3
-    // args without commas. We want to find what index we're at.  So we count
-    // forward until we hit ourselves, only incrementing the index if it isn't a
-    // comma.
-    //
-    // Note: the subtlety around trailing commas (in getArgumentCount) does not apply
-    // here.  That's because we're only walking forward until we hit the node we're
-    // on.  In that case, even if we're after the trailing comma, we'll still see
-    // that trailing comma in the list, and we'll have generated the appropriate
-    // arg index.
-    const args = argumentsList.getChildren();
-    let argumentIndex = 0;
-    for (let pos = 0; pos < length(args); pos++) {
-        const child = args[pos];
-        if (child === node) {
-            break;
-        }
-        if (isSpreadElement(child)) {
-            argumentIndex = argumentIndex + getSpreadElementCount(child, checker) + (pos > 0 ? pos : 0);
-        }
-        else {
-            if (child.kind !== SyntaxKind.CommaToken) {
-                argumentIndex++;
-            }
-        }
-    }
-    return argumentIndex;
-}
-
 function getSpreadElementCount(node: SpreadElement, checker: TypeChecker) {
     const spreadType = checker.getTypeAtLocation(node.expression);
     if (checker.isTupleType(spreadType)) {
@@ -525,32 +492,54 @@ function getSpreadElementCount(node: SpreadElement, checker: TypeChecker) {
     return 0;
 }
 
-function getArgumentCount(argumentsList: Node, ignoreTrailingComma: boolean, checker: TypeChecker) {
+function getArgumentIndex(checker: TypeChecker, argumentsList: Node, node: Node) {
+    return getArgumentIndexOrCount(checker, argumentsList, node);
+}
+
+function getArgumentCount(checker: TypeChecker, argumentsList: Node) {
+    return getArgumentIndexOrCount(checker, argumentsList, /*node*/ undefined);
+}
+
+function getArgumentIndexOrCount(checker: TypeChecker, argumentsList: Node, node: Node | undefined) {
+    // The list we got back can include commas. In the presence of errors it may
+    // also just have nodes without commas. For example "Foo(a b c)" will have 3
+    // args without commas.
+    const args = argumentsList.getChildren();
+    let argumentIndex = 0;
+    let skipComma = false;
+    for (const child of args) {
+        if (node && child === node) {
+            if (!skipComma && child.kind === SyntaxKind.CommaToken) {
+                argumentIndex++;
+            }
+            return argumentIndex;
+        }
+        if (isSpreadElement(child)) {
+            argumentIndex += getSpreadElementCount(child, checker);
+            skipComma = true;
+            continue;
+        }
+        if (child.kind !== SyntaxKind.CommaToken) {
+            argumentIndex++;
+            skipComma = true;
+            continue;
+        }
+        if (skipComma) {
+            skipComma = false;
+            continue;
+        }
+        argumentIndex++;
+    }
+    if (node) {
+        return argumentIndex;
+    }
     // The argument count for a list is normally the number of non-comma children it has.
     // For example, if you have "Foo(a,b)" then there will be three children of the arg
-    // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
-    // is a small subtlety.  If you have "Foo(a,)", then the child list will just have
-    // 'a' '<comma>'.  So, in the case where the last child is a comma, we increase the
+    // list 'a' '<comma>' 'b'. So, in this case the arg count will be 2. However, there
+    // is a small subtlety. If you have "Foo(a,)", then the child list will just have
+    // 'a' '<comma>'. So, in the case where the last child is a comma, we increase the
     // arg count by one to compensate.
-    //
-    // Note: this subtlety only applies to the last comma.  If you had "Foo(a,," then
-    // we'll have: 'a' '<comma>' '<missing>'
-    // That will give us 2 non-commas.  We then add one for the last comma, giving us an
-    // arg count of 3.
-    const listChildren = argumentsList.getChildren();
-
-    let argumentCount = 0;
-    for (const child of listChildren) {
-        if (isSpreadElement(child)) {
-            argumentCount = argumentCount + getSpreadElementCount(child, checker);
-        }
-    }
-
-    argumentCount = argumentCount + countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
-    if (!ignoreTrailingComma && listChildren.length > 0 && last(listChildren).kind === SyntaxKind.CommaToken) {
-        argumentCount++;
-    }
-    return argumentCount;
+    return args.length && last(args).kind === SyntaxKind.CommaToken ? argumentIndex + 1 : argumentIndex;
 }
 
 // spanIndex is either the index for a given template span.

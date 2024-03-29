@@ -50,6 +50,7 @@ import {
     FunctionTypeNode,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
+    getAllAccessorDeclarations,
     getCommentRange,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
@@ -119,6 +120,7 @@ import {
     isMethodSignature,
     isModifier,
     isModuleDeclaration,
+    isObjectLiteralExpression,
     isOmittedExpression,
     isPrivateIdentifier,
     isSemicolonClassElement,
@@ -728,7 +730,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, getAllAccessorDeclarations(isObjectLiteralExpression(input.parent) ? input.parent.properties : input.parent.members, input));
                     newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
                 }
             }
@@ -1037,7 +1039,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, getAllAccessorDeclarations(isObjectLiteralExpression(input.parent) ? input.parent.properties : input.parent.members, input));
                     return cleanup(factory.updateGetAccessorDeclaration(
                         input,
                         ensureModifiers(input),
