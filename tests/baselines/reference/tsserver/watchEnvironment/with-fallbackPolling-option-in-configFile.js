@@ -1,7 +1,7 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -14,17 +14,17 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/commonFile2.ts]
+//// [/a/b/commonFile2.ts] Inode:: 5
 let y = 1
 
-//// [/a/b/tsconfig.json]
+//// [/a/b/tsconfig.json] Inode:: 6
 {
   "watchOptions": {
     "fallbackPolling": "PriorityInterval"
   }
 }
 
-//// [/a/b/commonFile1.ts]
+//// [/a/b/commonFile1.ts] Inode:: 7
 let x = 1
 
 

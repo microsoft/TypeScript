@@ -83,10 +83,7 @@ export interface TestServerHostCreationParameters {
     newLine?: string;
     windowsStyleRoot?: string;
     environmentVariables?: Map<string, string>;
-    runWithoutRecursiveWatches?: boolean;
     runWithFallbackPolling?: boolean;
-    inodeWatching?: boolean;
-    fsWatchWithTimestamp?: boolean;
     osFlavor?: TestServerHostOsFlavor;
 }
 
@@ -362,7 +359,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     importPlugin?: (root: string, moduleName: string) => Promise<ModuleImportResult>;
     public storeSignatureInfo = true;
     watchFile: HostWatchFile;
-    private inodeWatching: boolean | undefined;
+    private inodeWatching: boolean;
     private readonly inodes?: Map<Path, number>;
     watchDirectory: HostWatchDirectory;
     service?: server.ProjectService;
@@ -376,17 +373,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             newLine,
             windowsStyleRoot,
             environmentVariables,
-            runWithoutRecursiveWatches,
             runWithFallbackPolling,
-            inodeWatching,
-            fsWatchWithTimestamp,
             osFlavor,
         }: TestServerHostCreationParameters = {},
     ) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
         this.newLine = newLine || "\n";
         this.osFlavor = osFlavor || TestServerHostOsFlavor.Windows;
-        if (this.osFlavor === TestServerHostOsFlavor.Linux) runWithoutRecursiveWatches = true;
         this.windowsStyleRoot = windowsStyleRoot;
         this.environmentVariables = environmentVariables;
         currentDirectory = currentDirectory || "/";
@@ -398,10 +391,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
         const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
-        if (inodeWatching) {
-            this.inodeWatching = true;
-            this.inodes = new Map();
-        }
+        this.inodeWatching = this.osFlavor !== TestServerHostOsFlavor.Windows;
+        if (this.inodeWatching) this.inodes = new Map();
 
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             // We dont have polling watch file
@@ -415,13 +406,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             fileSystemEntryExists: this.fileSystemEntryExists.bind(this),
             useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
             getCurrentDirectory: this.getCurrentDirectory.bind(this),
-            fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !runWithoutRecursiveWatches,
+            fsSupportsRecursiveFsWatch: this.osFlavor !== TestServerHostOsFlavor.Linux,
             getAccessibleSortedChildDirectories: path => this.getDirectories(path),
             realpath: this.realpath.bind(this),
             tscWatchFile,
             tscWatchDirectory,
-            inodeWatching: !!this.inodeWatching,
-            fsWatchWithTimestamp,
+            inodeWatching: this.inodeWatching,
+            fsWatchWithTimestamp: this.osFlavor === TestServerHostOsFlavor.MacOs,
             sysLog: s => this.write(s + this.newLine),
         });
         this.watchFile = watchFile;
@@ -712,15 +703,20 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         cb: FsWatchCallback,
     ) {
         if (this.runWithFallbackPolling) throw new Error("Need to use fallback polling instead of file system native watching");
-        const path = this.toPath(fileOrDirectory);
-        // Error if the path does not exist
-        if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
+        let inode: number | undefined;
+        if (this.inodeWatching) {
+            const entry = this.getRealFileOrFolder(fileOrDirectory);
+            // Error if the path does not exist
+            if (!entry) throw new Error("Cannot watch missing file or folder");
+            inode = this.inodes?.get(entry.path);
+            if (inode === undefined) throw new Error("inode not found");
+        }
         const result = this.watchUtils.fsWatch(
             this.toNormalizedAbsolutePath(fileOrDirectory),
             recursive,
             {
                 cb,
-                inode: this.inodes?.get(path),
+                inode,
             },
         ) as FsWatchWorkerWatcher;
         result.on = noop;
