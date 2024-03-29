@@ -2,8 +2,8 @@
 
 === logicalAssignment9.ts ===
 declare let x: { a?: boolean };
->x : { a?: boolean | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: boolean; }
+>  : ^^^^^^       ^^^
 >a : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 

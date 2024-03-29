@@ -15,8 +15,8 @@ const Foo = (props: any) => null;
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => null
 >      : ^^^^                  ^^^^^^^^^
->x : { name?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { name?: string; }
+>  : ^^^^^^^^^      ^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 

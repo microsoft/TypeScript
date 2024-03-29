@@ -1492,8 +1492,8 @@ function f12(x: { a: string }) {
 function f13(x: { a?: string }) {
 >f13 : (x: { a?: string; }) => void
 >    : ^^^^               ^^^^^^^^^
->x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

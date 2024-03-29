@@ -56,12 +56,12 @@ o3.b?.c;
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare const o4: { b?: { c: { d?: { e: string } } } };
->o4 : { b?: { c: { d?: { e: string; }; }; } | undefined; }
->   : ^^^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^
+>o4 : { b?: { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^                               ^^^
 >b : { c: { d?: { e: string; }; }; } | undefined
 >  : ^^^^^                       ^^^^^^^^^^^^^^^
->c : { d?: { e: string; } | undefined; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string
@@ -92,8 +92,8 @@ declare const o5: { b?(): { c: { d?: { e: string } } } };
 >   : ^^^^^^^^                               ^^^
 >b : (() => { c: { d?: { e: string; }; }; }) | undefined
 >  : ^^^^^^^                               ^^^^^^^^^^^^^
->c : { d?: { e: string; } | undefined; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string

@@ -106,12 +106,12 @@ delete (o3.b?.c);
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare const o4: { b?: { c: { d?: { e: string } } } };
->o4 : { b?: { c: { d?: { e: string; }; }; } | undefined; }
->   : ^^^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^
+>o4 : { b?: { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^                               ^^^
 >b : { c: { d?: { e: string; }; }; } | undefined
 >  : ^^^^^                       ^^^^^^^^^^^^^^^
->c : { d?: { e: string; } | undefined; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string
@@ -192,8 +192,8 @@ declare const o5: { b?(): { c: { d?: { e: string } } } };
 >   : ^^^^^^^^                               ^^^
 >b : (() => { c: { d?: { e: string; }; }; }) | undefined
 >  : ^^^^^^^                               ^^^^^^^^^^^^^
->c : { d?: { e: string; } | undefined; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string
@@ -250,12 +250,12 @@ delete (o5.b?.().c.d?.e);
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare const o6: { b?: { c: { d?: { e: string } } } };
->o6 : { b?: { c: { d?: { e: string; }; }; } | undefined; }
->   : ^^^^^^^^^^^                       ^^^^^^^^^^^^^^^^^^
+>o6 : { b?: { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^                               ^^^
 >b : { c: { d?: { e: string; }; }; } | undefined
 >  : ^^^^^                       ^^^^^^^^^^^^^^^
->c : { d?: { e: string; } | undefined; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string

@@ -6,8 +6,8 @@ type X = {
 >  : ^
 
   y?: {
->y : { z?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : { z?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
     z?: string;
 >z : string | undefined

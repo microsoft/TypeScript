@@ -431,8 +431,8 @@ class Test10 {
 >       : ^^^^^^
 
     a?: { b?: string }
->a : { b?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -533,8 +533,8 @@ class Test11 {
 >       : ^^^^^^
 
     this?: { x?: string };
->this : { x?: string | undefined; } | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { x?: string; } | undefined
+>     : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     

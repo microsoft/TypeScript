@@ -387,8 +387,8 @@ o3.x;
 >  : ^^^^^
 
 declare const o4: { x?: { y: boolean } };
->o4 : { x?: { y: boolean; } | undefined; }
->   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>o4 : { x?: { y: boolean; }; }
+>   : ^^^^^^               ^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean
@@ -504,12 +504,12 @@ o4.x.y;
 >  : ^^^^^^^
 
 declare const o5: { x?: { y: { z?: { w: boolean } } } };
->o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
->   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
+>   : ^^^^^^                                ^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; } | undefined; }
->  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; }; }
+>  : ^^^^^^               ^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean

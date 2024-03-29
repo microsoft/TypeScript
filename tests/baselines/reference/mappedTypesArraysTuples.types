@@ -206,8 +206,8 @@ let y21 = nonpartial(x21);
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x22: { a: number | undefined, b?: string[] };
->x22 : { a: number | undefined; b?: string[] | undefined; }
->    : ^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x22 : { a: number | undefined; b?: string[]; }
+>    : ^^^^^                  ^^^^^^        ^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : string[] | undefined
