@@ -121,7 +121,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
             }
             deferred.resolve();
-        }, 4000);
+        }, !!process.env.CI ? 1000 : 200);
         return deferred.promise;
     }
 
@@ -150,6 +150,19 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             (ts.isString(expected.event) ? actual.event === expected.event : ts.contains(expected.event, actual.event));
     }
 
+    function osFlavorToString(osFlavor: TestServerHostOsFlavor) {
+        switch (osFlavor) {
+            case TestServerHostOsFlavor.Windows:
+                return "Windows";
+            case TestServerHostOsFlavor.MacOs:
+                return "MacOs";
+            case TestServerHostOsFlavor.Linux:
+                return "Linux";
+            default:
+                ts.Debug.assertNever(osFlavor);
+        }
+    }
+
     interface FsEventsForWatchDirectory extends Record<string, readonly ExpectedEventAndFileName[] | undefined> {
         // The first time events are most of the time are not predictable, so just create random file for that reason
         init?: readonly ExpectedEventAndFileName[];
@@ -169,7 +182,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         link: string,
         osFlavor: TestServerHostOsFlavor,
     ) {
-        it(`watchDirectory using fsEvents`, async () => {
+        it(`watchDirectory using fsEvents ${osFlavorToString(osFlavor)}`, async () => {
             const tableOfEvents: FsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
                 {
                     fileCreate: [
@@ -443,7 +456,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 parallelLinkFileDelete: undefined,
             };
 
-        it(`recursive watchDirectory using fsEvents`, async () => {
+        it(`recursive watchDirectory using fsEvents ${osFlavorToString(osFlavor)}`, async () => {
             await testWatchDirectoryOperations(
                 sys,
                 fsWatch,
@@ -466,7 +479,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             );
         });
 
-        it(`recursive watchDirectory using fsEvents when linked in same folder`, async () => {
+        it(`recursive watchDirectory using fsEvents when linked in same folder ${osFlavorToString(osFlavor)}`, async () => {
             await testWatchDirectoryOperations(
                 sys,
                 fsWatch,
@@ -485,7 +498,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             );
         });
 
-        it(`recursive watchDirectory using fsEvents when links not in directory`, async () => {
+        it(`recursive watchDirectory using fsEvents when links not in directory ${osFlavorToString(osFlavor)}`, async () => {
             await testWatchDirectoryOperations(
                 sys,
                 fsWatch,
