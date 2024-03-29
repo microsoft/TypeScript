@@ -3,15 +3,19 @@
 === decorated.ts ===
 function decorate(target: any) { }
 >decorate : (target: any) => void
+>         : ^^^^^^^^^   ^^^^^^^^^
 >target : any
 
 @decorate
 >decorate : (target: any) => void
+>         : ^^^^^^^^^^^^^^^^^^^^^
 
 export default class Decorated { }
 >Decorated : Decorated
+>          : ^^^^^^^^^
 
 === undecorated.ts ===
 import Decorated from 'decorated';
 >Decorated : typeof Decorated
+>          : ^^^^^^^^^^^^^^^^
 

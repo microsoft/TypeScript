@@ -8,36 +8,50 @@ export * from "./account";
 export interface Account {
     myAccNum: number;
 >myAccNum : number
+>         : ^^^^^^
 }
 interface Account2 {
     myAccNum: number;
 >myAccNum : number
+>         : ^^^^^^
 }
 export { Account2 as Acc };
 >Account2 : any
+>         : ^^^
 >Acc : any
+>    : ^^^
 
 === index.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     interface Account {
         someProp: number;
 >someProp : number
+>         : ^^^^^^
     }
     interface Acc {
         someProp: number;
 >someProp : number
+>         : ^^^^^^
     }
 }
 import * as model from "./model";
 >model : typeof model
+>      : ^^^^^^^^^^^^
 
 export const func = (account: model.Account, acc2: model.Acc) => {};
 >func : (account: model.Account, acc2: model.Acc) => void
+>     : ^^^^^^^^^^             ^^^^^^^^         ^^^^^^^^^
 >(account: model.Account, acc2: model.Acc) => {} : (account: model.Account, acc2: model.Acc) => void
+>                                                : ^^^^^^^^^^             ^^^^^^^^         ^^^^^^^^^
 >account : model.Account
+>        : ^^^^^^^^^^^^^
 >model : any
+>      : ^^^
 >acc2 : model.Acc
+>     : ^^^^^^^^^
 >model : any
+>      : ^^^
 

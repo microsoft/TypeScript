@@ -3,18 +3,24 @@
 === privateNameUncheckedJsOptionalChain.js ===
 class C {
 >C : C
+>  : ^
 
     #bar;
 >#bar : any
+>     : ^^^
 
     constructor () {
         this?.#foo;
 >this?.#foo : any
+>           : ^^^
 >this : this
+>     : ^^^^
 
         this?.#bar;
 >this?.#bar : any
+>           : ^^^
 >this : this
+>     : ^^^^
     }
 }
 

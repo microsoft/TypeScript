@@ -3,16 +3,22 @@
 === es6ImportNamedImportNoNamedExports_0.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export = a;
 >a : number
+>  : ^^^^^^
 
 === es6ImportNamedImportNoNamedExports_1.ts ===
 import { a } from "./es6ImportNamedImportNoNamedExports_0";
 >a : any
+>  : ^^^
 
 import { a as x } from "./es6ImportNamedImportNoNamedExports_0";
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 

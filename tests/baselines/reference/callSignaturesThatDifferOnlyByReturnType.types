@@ -12,29 +12,36 @@ interface I {
 
     <T>(x: T): number;
 >x : T
+>  : ^
 
     <T>(x: T): string; // error
 >x : T
+>  : ^
 }
 
 interface I2 {
     <T>(x: T): number;
 >x : T
+>  : ^
 
     <T>(x: T): string; // error
 >x : T
+>  : ^
 }
 
 interface I3<T> {
     (x: T): number;
 >x : T
+>  : ^
 
     (x: T): string; // error
 >x : T
+>  : ^
 }
 
 var a: {
 >a : { (x: any, y: any): Object; (x: any, y: any): any; }
+>  : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^   ^^^
 
     (x, y): Object;
 >x : any
@@ -47,10 +54,13 @@ var a: {
 
 var a2: {
 >a2 : { <T>(x: T): number; <T_1>(x: T_1): string; }
+>   : ^^^ ^^^^^ ^^^      ^^^   ^^^^^^^^^^^      ^^^
 
     <T>(x: T): number;
 >x : T
+>  : ^
 
     <T>(x: T): string; // error
 >x : T
+>  : ^
 }

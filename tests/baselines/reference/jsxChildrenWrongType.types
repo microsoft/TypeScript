@@ -4,7 +4,7 @@
 Assignability cache: 400 / 400 (nearest 100)
 Type Count: 1,400 / 1,400 (nearest 100)
 Instantiation count: 1,500 / 1,500 (nearest 500)
-Symbol count: 31,500 / 31,500 (nearest 500)
+Symbol count: 32,000 / 32,000 (nearest 500)
 
 === other.tsx ===
 /// <reference path="react18/react18.d.ts" />
@@ -14,30 +14,44 @@ Symbol count: 31,500 / 31,500 (nearest 500)
 interface PropsType {
     children: [string, number?] | Iterable<boolean>;
 >children : [string, number?] | Iterable<boolean>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare class Foo extends React.Component<PropsType, {}> {}
 >Foo : Foo
+>    : ^^^
 >React.Component : React.Component<PropsType, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
 const b = (
 >b : JSX.Element
+>  : ^^^^^^^^^^^
 >(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : JSX.Element
+>                                                               : ^^^^^^^^^^^
 
     <Foo>
 ><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : JSX.Element
+>                                                         : ^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         {<div/> as unknown}
 ><div/> as unknown : unknown
+>                  : ^^^^^^^
 ><div/> : JSX.Element
+>       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
         {"aa"}
 >"aa" : "aa"
+>     : ^^^^
 
     </Foo>
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 );

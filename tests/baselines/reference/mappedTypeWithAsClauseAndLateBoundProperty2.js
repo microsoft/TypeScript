@@ -12,7 +12,10 @@ export const thing = null;
 export declare const thing: {
     [x: number]: number;
     toString: () => string;
-    toLocaleString: () => string;
+    toLocaleString: {
+        (): string;
+        (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
+    };
     pop: () => number;
     push: (...items: number[]) => number;
     concat: {
@@ -109,14 +112,17 @@ export declare const thing: {
 //// [DtsFileErrors]
 
 
-mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(27,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
 ==== mappedTypeWithAsClauseAndLateBoundProperty2.d.ts (1 errors) ====
     export declare const thing: {
         [x: number]: number;
         toString: () => string;
-        toLocaleString: () => string;
+        toLocaleString: {
+            (): string;
+            (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
+        };
         pop: () => number;
         push: (...items: number[]) => number;
         concat: {

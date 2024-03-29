@@ -3,6 +3,7 @@
 === hybrid/index.d.ts ===
 export function sayHello(): string;
 >sayHello : () => string
+>         : ^^^^^^      
 
 === path.d.ts ===
 declare const anything: any;
@@ -10,6 +11,7 @@ declare const anything: any;
 
 export = anything;
 >anything : any
+>         : ^^^
 
 === fs.d.ts ===
 declare const anything: any;
@@ -17,13 +19,16 @@ declare const anything: any;
 
 export = anything;
 >anything : any
+>         : ^^^
 
 === mjts.ts ===
 import { sayHello } from "./hybrid";
 >sayHello : () => string
+>         : ^^^^^^^^^^^^
 
 import path from "./path";
 >path : any
+>     : ^^^
 
 import * as fs from "./fs";
 >fs : any
@@ -33,7 +38,9 @@ path;
 
 sayHello();
 >sayHello() : string
+>           : ^^^^^^
 >sayHello : () => string
+>         : ^^^^^^^^^^^^
 
 fs;
 >fs : any

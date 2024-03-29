@@ -3,13 +3,17 @@
 === a.js ===
 @SomeDecorator
 >SomeDecorator : any
+>              : ^^^
 
 class SomeClass {
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 
     foo(x: number) {
 >foo : (x: number) => void
+>    : ^^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     }
 }

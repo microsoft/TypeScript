@@ -3,14 +3,18 @@
 === parserExportAssignment9.ts ===
 namespace Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
   export default foo;
 >foo : any
+>    : ^^^
 }
 
 module Bar {
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
   export default bar;
 >bar : any
+>    : ^^^
 }

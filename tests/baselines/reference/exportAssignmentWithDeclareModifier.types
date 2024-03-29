@@ -3,7 +3,9 @@
 === exportAssignmentWithDeclareModifier.ts ===
 var x;
 >x : any
+>  : ^^^
 
 declare export = x;
 >x : any
+>  : ^^^
 

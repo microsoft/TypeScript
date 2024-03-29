@@ -3,11 +3,15 @@
 === deleteOperatorInStrictMode.ts ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 var a;
 >a : any
+>  : ^^^
 
 delete a;
 >delete a : boolean
+>         : ^^^^^^^
 >a : any
+>  : ^^^
 

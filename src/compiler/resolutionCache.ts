@@ -750,7 +750,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 else impliedFormatPackageJsons.delete(newFile.resolvedPath);
             });
             impliedFormatPackageJsons.forEach((existing, path) => {
-                if (!newProgram?.getSourceFileByPath(path)) {
+                const newFile = newProgram?.getSourceFileByPath(path);
+                if (!newFile || newFile.resolvedPath !== path) {
                     existing.forEach(location => fileWatchesOfAffectingLocations.get(location)!.files--);
                     impliedFormatPackageJsons.delete(path);
                 }

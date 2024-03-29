@@ -4,12 +4,15 @@
 // Test #16139
 function Foo() {
 >Foo : (...args: any[]) => any
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arguments;
 >arguments : IArguments
+>          : ^^^^^^^^^^
 
     return new Foo();
 >new Foo() : any
 >Foo : (...args: any[]) => any
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 

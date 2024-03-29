@@ -3,37 +3,53 @@
 === a.d.ts ===
 export declare const timestampSymbol: unique symbol;
 >timestampSymbol : unique symbol
+>                : ^^^^^^^^^^^^^
 
 export declare const Timestamp: {
 >Timestamp : { [timestampSymbol]: true; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [TKey in typeof timestampSymbol]: true;
 >timestampSymbol : unique symbol
+>                : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 };
 
 export declare function now(): typeof Timestamp;
 >now : () => typeof Timestamp
+>    : ^^^^^^                
 >Timestamp : { [timestampSymbol]: true; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === b.ts ===
 import * as x from "./a";
 >x : typeof x
+>  : ^^^^^^^^
 
 export const timestamp = x.now();
 >timestamp : { [x.timestampSymbol]: true; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.now() : { [x.timestampSymbol]: true; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.now : () => { [x.timestampSymbol]: true; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >now : () => { [x.timestampSymbol]: true; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === c.ts ===
 import { now } from "./a";
 >now : () => { [timestampSymbol]: true; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const timestamp = now();
 >timestamp : { [timestampSymbol]: true; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >now() : { [timestampSymbol]: true; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >now : () => { [timestampSymbol]: true; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

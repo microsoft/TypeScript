@@ -85,10 +85,10 @@ Input::
 //// [/a/username/project/src/file1.ts] deleted
 
 Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+2: timerToUpdateProgram
 
 After running Timeout callback:: count: 1
 Output::
@@ -124,7 +124,7 @@ FsWatches *deleted*::
   {}
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 
 Program root files: [
