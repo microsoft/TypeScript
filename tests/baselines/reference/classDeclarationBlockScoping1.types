@@ -3,10 +3,12 @@
 === classDeclarationBlockScoping1.ts ===
 class C {
 >C : C
+>  : ^
 }
 
 {
     class C {
 >C : C
+>  : ^
     }
 }

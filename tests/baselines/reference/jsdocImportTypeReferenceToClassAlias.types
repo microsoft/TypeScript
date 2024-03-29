@@ -3,29 +3,43 @@
 === mod1.js ===
 class C {
 >C : C
+>  : ^
 
     s() { }
 >s : () => void
+>  : ^^^^^^^^^^
 }
 module.exports.C = C
 >module.exports.C = C : typeof C
+>                     : ^^^^^^^^
 >module.exports.C : typeof C
+>                 : ^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 === test.js ===
 /** @typedef {import('./mod1').C} X */
 /** @param {X} c */
 function demo(c) {
 >demo : (c: X) => void
+>     : ^^^^ ^^^^^^^^^
 >c : import("mod1").C
+>  : ^^^^^^^^^^^^^^^^
 
     c.s
 >c.s : () => void
+>    : ^^^^^^^^^^
 >c : import("mod1").C
+>  : ^^^^^^^^^^^^^^^^
 >s : () => void
+>  : ^^^^^^^^^^
 }
 

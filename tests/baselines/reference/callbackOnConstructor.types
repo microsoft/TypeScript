@@ -3,10 +3,13 @@
 === callbackOnConstructor.js ===
 export class Preferences {
 >Preferences : Preferences
+>            : ^^^^^^^^^^^
 
   assignability = "no"
 >assignability : string
+>              : ^^^^^^
 >"no" : "no"
+>     : ^^^^
 
   /**
    * @callback ValueGetter_2
@@ -20,11 +23,19 @@ export class Preferences {
 /** @type {ValueGetter_2} */
 var ooscope2 = s => s.length > 0
 >ooscope2 : (name: string) => string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s => s.length > 0 : (s: string) => string | number | boolean
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.length > 0 : boolean
+>             : ^^^^^^^
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 

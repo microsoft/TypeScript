@@ -3,9 +3,13 @@
 === a.js ===
 export const kSymbol = Symbol("my-symbol");
 >kSymbol : unique symbol
+>        : ^^^^^^^^^^^^^
 >Symbol("my-symbol") : unique symbol
+>                    : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"my-symbol" : "my-symbol"
+>            : ^^^^^^^^^^^
 
 /**
  * @typedef {{[kSymbol]: true}} WithSymbol
@@ -17,9 +21,12 @@ export const kSymbol = Symbol("my-symbol");
  */
 export function b(value) {
 >b : (value: import('./a').WithSymbol) => import('./a').WithSymbol
+>  : ^^^^^^^^                        ^^^^^                        
 >value : import("a").WithSymbol
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 
     return value;
 >value : import("a").WithSymbol
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 }
 

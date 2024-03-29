@@ -347,6 +347,35 @@ function foo() {
         baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
     });
 
+    it("referencing const enum from referenced project with preserveConstEnums", () => {
+        const projectLocation = `/user/username/projects/project`;
+        const utilsIndex: File = {
+            path: `${projectLocation}/src/utils/index.ts`,
+            content: "export const enum E { A = 1 }",
+        };
+        const utilsDeclaration: File = {
+            path: `${projectLocation}/src/utils/index.d.ts`,
+            content: "export declare const enum E { A = 1 }",
+        };
+        const utilsConfig: File = {
+            path: `${projectLocation}/src/utils/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: true } }),
+        };
+        const projectIndex: File = {
+            path: `${projectLocation}/src/project/index.ts`,
+            content: `import { E } from "../utils"; E.A;`,
+        };
+        const projectConfig: File = {
+            path: `${projectLocation}/src/project/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }] }),
+        };
+        const host = createServerHost([libFile, utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
+        const session = new TestSession(host);
+        openFilesForSession([projectIndex], session);
+        verifyGetErrRequest({ session, files: [projectIndex] });
+        baselineTsserverLogs("projectReferences", `referencing const enum from referenced project with preserveConstEnums`, session);
+    });
+
     describe("when references are monorepo like with symlinks", () => {
         interface Packages {
             bPackageJson: File;
@@ -1079,7 +1108,7 @@ export function bar() {}`,
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 }),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
 
             closeFilesForSession([main, dummyFilePath], session);
 
@@ -1090,7 +1119,7 @@ export function bar() {}`,
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo"),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 

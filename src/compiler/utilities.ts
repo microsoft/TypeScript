@@ -119,6 +119,7 @@ import {
     EqualsToken,
     equateValues,
     escapeLeadingUnderscores,
+    EvaluationResolver,
     every,
     ExportAssignment,
     ExportDeclaration,
@@ -354,6 +355,7 @@ import {
     JSDocArray,
     JSDocCallbackTag,
     JSDocEnumTag,
+    JSDocImportTag,
     JSDocMemberName,
     JSDocOverloadTag,
     JSDocParameterTag,
@@ -510,6 +512,7 @@ import {
     SyntaxKind,
     SyntaxList,
     TaggedTemplateExpression,
+    TemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
     TemplateLiteralToken,
@@ -1337,6 +1340,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2015: [
                 "from",
                 "of",
+            ],
+            esnext: [
+                "fromAsync",
             ],
         })),
         ObjectConstructor: new Map(Object.entries({
@@ -3978,13 +3984,14 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode | JSDocImportTag): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -4013,6 +4020,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
     switch (node.parent.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return node.parent as AnyValidImportOrReExport;
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
@@ -4027,10 +4035,11 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 }
 
 /** @internal */
-export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration): Expression | undefined {
+export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration | JSDocImportTag): Expression | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return node.moduleSpecifier;
         case SyntaxKind.ImportEqualsDeclaration:
             return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
@@ -4060,8 +4069,8 @@ export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqua
 }
 
 /** @internal */
-export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
-    return node.kind === SyntaxKind.ImportDeclaration && !!node.importClause && !!node.importClause.name;
+export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration | JSDocImportTag): boolean {
+    return (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.JSDocImportTag) && !!node.importClause && !!node.importClause.name;
 }
 
 /** @internal */
@@ -6517,7 +6526,7 @@ export function identifierIsThisKeyword(id: Identifier): boolean {
 }
 
 /** @internal */
-export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
+export function getAllAccessorDeclarations(declarations: readonly Declaration[] | undefined, accessor: AccessorDeclaration): AllAccessorDeclarations {
     // TODO: GH#18217
     let firstAccessor!: AccessorDeclaration;
     let secondAccessor!: AccessorDeclaration;
@@ -10656,4 +10665,99 @@ export function isSyntacticallyString(expr: Expression): boolean {
             return true;
     }
     return false;
+}
+
+/** @internal */
+export function createEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression }: EvaluationResolver) {
+    function evaluate(expr: TemplateExpression, location?: Declaration): string;
+    function evaluate(expr: Expression, location?: Declaration): string | number | undefined;
+    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
+        switch (expr.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
+                if (typeof value === "number") {
+                    switch ((expr as PrefixUnaryExpression).operator) {
+                        case SyntaxKind.PlusToken:
+                            return value;
+                        case SyntaxKind.MinusToken:
+                            return -value;
+                        case SyntaxKind.TildeToken:
+                            return ~value;
+                    }
+                }
+                break;
+            case SyntaxKind.BinaryExpression:
+                const left = evaluate((expr as BinaryExpression).left, location);
+                const right = evaluate((expr as BinaryExpression).right, location);
+                if (typeof left === "number" && typeof right === "number") {
+                    switch ((expr as BinaryExpression).operatorToken.kind) {
+                        case SyntaxKind.BarToken:
+                            return left | right;
+                        case SyntaxKind.AmpersandToken:
+                            return left & right;
+                        case SyntaxKind.GreaterThanGreaterThanToken:
+                            return left >> right;
+                        case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                            return left >>> right;
+                        case SyntaxKind.LessThanLessThanToken:
+                            return left << right;
+                        case SyntaxKind.CaretToken:
+                            return left ^ right;
+                        case SyntaxKind.AsteriskToken:
+                            return left * right;
+                        case SyntaxKind.SlashToken:
+                            return left / right;
+                        case SyntaxKind.PlusToken:
+                            return left + right;
+                        case SyntaxKind.MinusToken:
+                            return left - right;
+                        case SyntaxKind.PercentToken:
+                            return left % right;
+                        case SyntaxKind.AsteriskAsteriskToken:
+                            return left ** right;
+                    }
+                }
+                else if (
+                    (typeof left === "string" || typeof left === "number") &&
+                    (typeof right === "string" || typeof right === "number") &&
+                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
+                ) {
+                    return "" + left + right;
+                }
+                break;
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return (expr as StringLiteralLike).text;
+            case SyntaxKind.TemplateExpression:
+                return evaluateTemplateExpression(expr as TemplateExpression, location);
+            case SyntaxKind.NumericLiteral:
+                return +(expr as NumericLiteral).text;
+            case SyntaxKind.ParenthesizedExpression:
+                return evaluate((expr as ParenthesizedExpression).expression, location);
+            case SyntaxKind.Identifier:
+                return evaluateEntityNameExpression(expr as Identifier, location);
+            case SyntaxKind.PropertyAccessExpression:
+                if (isEntityNameExpression(expr)) {
+                    return evaluateEntityNameExpression(expr, location);
+                }
+                break;
+            case SyntaxKind.ElementAccessExpression:
+                return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
+        }
+        return undefined;
+    }
+
+    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
+        let result = expr.head.text;
+        for (const span of expr.templateSpans) {
+            const value = evaluate(span.expression, location);
+            if (value === undefined) {
+                return undefined;
+            }
+            result += value;
+            result += span.literal.text;
+        }
+        return result;
+    }
+    return evaluate;
 }

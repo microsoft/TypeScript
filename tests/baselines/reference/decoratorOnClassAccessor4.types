@@ -3,15 +3,22 @@
 === decoratorOnClassAccessor4.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>    : ^ ^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                          ^^^^^                          
 >target : any
 >propertyKey : string
+>            : ^^^^^^
 >descriptor : TypedPropertyDescriptor<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     @dec set accessor(value: number) { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >accessor : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 }

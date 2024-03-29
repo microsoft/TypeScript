@@ -4,21 +4,29 @@
 ///<reference path='instanceOfInExternalModules_require.ts'/>
 import Bar = require("instanceOfInExternalModules_require");
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
 function IsFoo(value: any): boolean {
 >IsFoo : (value: any) => boolean
+>      : ^^^^^^^^   ^^^^^       
 >value : any
 
     return value instanceof Bar.Foo;
 >value instanceof Bar.Foo : boolean
+>                         : ^^^^^^^
 >value : any
 >Bar.Foo : typeof Bar.Foo
+>        : ^^^^^^^^^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >Foo : typeof Bar.Foo
+>    : ^^^^^^^^^^^^^^
 }
 
 === instanceOfInExternalModules_require.ts ===
 export class Foo { foo: string; }
 >Foo : Foo
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 

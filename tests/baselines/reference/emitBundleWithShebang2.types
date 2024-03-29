@@ -4,17 +4,23 @@
 #!/usr/bin/env gjs
 class Doo {}
 >Doo : Doo
+>    : ^^^
 
 class Scooby extends Doo {}
 >Scooby : Scooby
+>       : ^^^^^^
 >Doo : Doo
+>    : ^^^
 
 === test2.ts ===
 #!/usr/bin/env js
 class Dood {}
 >Dood : Dood
+>     : ^^^^
 
 class Scoobyd extends Dood {}
 >Scoobyd : Scoobyd
+>        : ^^^^^^^
 >Dood : Dood
+>     : ^^^^
 

@@ -3,19 +3,25 @@
 === bar.d.ts ===
 import * as foo from './foo'
 >foo : { default: Root; }
+>    : ^^^^^^^^^^^^^^^^^^
 
 export as namespace foo
 >foo : { default: Root; }
+>    : ^^^^^^^^^^^^^^^^^^
 
 export = foo;
 >foo : { default: Root; }
+>    : ^^^^^^^^^^^^^^^^^^
 
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     const foo: typeof foo;
 >foo : Root
+>    : ^^^^
 >foo : Root
+>    : ^^^^
 }
 
 === foo.d.ts ===
@@ -25,11 +31,14 @@ interface Root {
      */
     default: Root;
 >default : Root
+>        : ^^^^
 }
 
 declare const root: Root;
 >root : Root
+>     : ^^^^
 
 export = root;
 >root : Root
+>     : ^^^^
 

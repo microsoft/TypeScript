@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,10 +13,10 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 9
 {
   "files": [
     "main.ts"
@@ -26,7 +26,7 @@ export const x = 10;
 
 /a/lib/tsc.js -w --extendedDiagnostics
 Output::
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -40,11 +40,11 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_mod
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -60,11 +60,11 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 /user/username/projects/myproject/main.ts: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":9}
 
 Program root files: [
   "/user/username/projects/myproject/main.ts"
@@ -103,7 +103,7 @@ exitCode:: ExitStatus.undefined
 Change:: modify file contents
 
 Input::
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;export const y = 10;
 
 
@@ -122,16 +122,16 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;

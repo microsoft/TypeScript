@@ -197,7 +197,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: jsFile.path },
-        }).response as ts.server.protocol.Diagnostic[];
+        });
         baselineTsserverLogs("skipLibCheck", "reports semantic error in configured project with tscheck", session);
     });
 

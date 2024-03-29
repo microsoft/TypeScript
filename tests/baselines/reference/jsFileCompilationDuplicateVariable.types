@@ -3,10 +3,14 @@
 === a.ts ===
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 === b.js ===
 var x = "hello"; // Error is recorded here, but suppressed because the js file isn't checked
 >x : number
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
