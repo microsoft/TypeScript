@@ -163,7 +163,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     const files = [file, configFile, libFile];
                     const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-                    return createWatchedSystem(files, { environmentVariables });
+                    return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
                 },
                 edits: [
                     {
@@ -231,7 +231,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
                 const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-                return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables, currentDirectory: cwd });
             },
         });
 

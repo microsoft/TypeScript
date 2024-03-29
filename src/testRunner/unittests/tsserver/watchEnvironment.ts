@@ -53,7 +53,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             const files = [index, file1, configFile, libFile];
             const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-            const host = createServerHost(files, { environmentVariables });
+            const host = createServerHost(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
             const session = new TestSession(host);
             openFilesForSession([index], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
@@ -142,7 +142,10 @@ describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", ()
         };
         const environmentVariables = new Map<string, string>();
         environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-        const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
+        const host = createServerHost(
+            [index, file1, configFile, libFile, nodeModulesExistingUnusedFile],
+            { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables },
+        );
         const session = new TestSession(host);
         openFilesForSession([index], session);
 
