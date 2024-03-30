@@ -1182,6 +1182,16 @@ export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFil
 }
 
 /** @internal */
+export function getNonModifierTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
+    const lastModifier = !nodeIsMissing(node) && canHaveModifiers(node) && node.modifiers ? last(node.modifiers) : undefined;
+    if (!lastModifier) {
+        return getTokenPosOfNode(node, sourceFile);
+    }
+
+    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastModifier.end);
+}
+
+/** @internal */
 export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
     return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
 }
