@@ -3,12 +3,14 @@
 === jsdocParameterParsingInvalidName.ts ===
 class c {
 >c : c
+>  : ^
 
     /**
      * @param {string} [`foo]
      */
     method(foo) {
 >method : (foo: any) => void
+>       : ^^^^^^^^^^^^^^^^^^
 >foo : any
     }
 }

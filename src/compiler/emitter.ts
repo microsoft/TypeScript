@@ -243,6 +243,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocNameReference,
     JSDocNonNullableType,
     JSDocNullableType,
@@ -1107,20 +1108,14 @@ export const notImplementedResolver: EmitResolver = {
     getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,
     isOptionalParameter: notImplemented,
-    moduleExportsSomeValue: notImplemented,
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
-    getTypeReferenceDirectivesForEntityName: notImplemented,
-    getTypeReferenceDirectivesForSymbol: notImplemented,
     isLiteralConstDeclaration: notImplemented,
     getJsxFactoryEntity: notImplemented,
     getJsxFragmentFactoryEntity: notImplemented,
-    getAllAccessorDeclarations: notImplemented,
-    getSymbolOfExternalModuleSpecifier: notImplemented,
     isBindingCapturedByNode: notImplemented,
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
-    tryFindAmbientModule: notImplemented,
 };
 
 const enum PipelinePhase {
@@ -1834,6 +1829,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocSeeTag:
                     return emitJSDocSeeTag(node as JSDocSeeTag);
+                case SyntaxKind.JSDocImportTag:
+                    return emitJSDocImportTag(node as JSDocImportTag);
                 // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
 
                 // Transformation nodes
@@ -4027,6 +4024,25 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitJSDocComment(tag.comment);
     }
 
+    function emitJSDocImportTag(tag: JSDocImportTag) {
+        emitJSDocTagName(tag.tagName);
+        writeSpace();
+
+        if (tag.importClause) {
+            emit(tag.importClause);
+            writeSpace();
+
+            emitTokenWithComment(SyntaxKind.FromKeyword, tag.importClause.end, writeKeyword, tag);
+            writeSpace();
+        }
+
+        emitExpression(tag.moduleSpecifier);
+        if (tag.attributes) {
+            emitWithLeadingSpace(tag.attributes);
+        }
+        emitJSDocComment(tag.comment);
+    }
+
     function emitJSDocNameReference(node: JSDocNameReference) {
         writeSpace();
         writePunctuation("{");
@@ -4201,21 +4217,21 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 writeLine();
             }
         }
-        for (const directive of files) {
-            writeComment(`/// <reference path="${directive.fileName}" />`);
-            writeLine();
+
+        function writeDirectives(kind: "path" | "types" | "lib", directives: readonly FileReference[]) {
+            for (const directive of directives) {
+                const resolutionMode = directive.resolutionMode
+                    ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
+                    : "";
+                const preserve = directive.preserve ? `preserve="true" ` : "";
+                writeComment(`/// <reference ${kind}="${directive.fileName}" ${resolutionMode}${preserve}/>`);
+                writeLine();
+            }
         }
-        for (const directive of types) {
-            const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
-                ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"`
-                : "";
-            writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}/>`);
-            writeLine();
-        }
-        for (const directive of libs) {
-            writeComment(`/// <reference lib="${directive.fileName}" />`);
-            writeLine();
-        }
+
+        writeDirectives("path", files);
+        writeDirectives("types", types);
+        writeDirectives("lib", libs);
     }
 
     function emitSourceFileWorker(node: SourceFile) {

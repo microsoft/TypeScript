@@ -3,14 +3,19 @@
 === m1.ts ===
 enum foo { A }
 >foo : foo
+>    : ^^^
 >A : foo.A
+>  : ^^^^^
 
 module foo {
     const enum E { X }
 >E : E
+>  : ^
 >X : E.X
+>  : ^^^
 }
 
 export = foo
 >foo : foo
+>    : ^^^
 

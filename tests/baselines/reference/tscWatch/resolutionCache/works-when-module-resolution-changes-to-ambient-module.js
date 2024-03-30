@@ -20,14 +20,14 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w /users/username/projects/project/foo.ts
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mfoo.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
 
 [7m1[0m import * as fs from "fs";
 [7m [0m [91m                    ~~~~[0m
 
-[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -133,9 +133,9 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

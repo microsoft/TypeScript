@@ -4,20 +4,25 @@
 interface PropertyDescriptor2 {
     configurable?: boolean;
 >configurable : boolean
+>             : ^^^^^^^
 
     enumerable?: boolean;
 >enumerable : boolean
+>           : ^^^^^^^
 
     value?: any;
 >value : any
 
     writable?: boolean;
 >writable : boolean
+>         : ^^^^^^^
 
     get?(): any;
 >get : () => any
+>    : ^^^^^^   
 
     set?(v: any): void;
 >set : (v: any) => void
+>    : ^^^^   ^^^^^    
 >v : any
 }

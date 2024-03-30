@@ -3,10 +3,14 @@
 === duplicateTypeParameters2.ts ===
 class A { public foo() { } }
 >A : A
+>  : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 class B { public bar() { } }
 >B : B
+>  : ^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 interface I<T extends A, T extends B> {}

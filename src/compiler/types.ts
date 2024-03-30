@@ -440,6 +440,7 @@ export const enum SyntaxKind {
     JSDocPropertyTag,
     JSDocThrowsTag,
     JSDocSatisfiesTag,
+    JSDocImportTag,
 
     // Synthesized list
     SyntaxList,
@@ -482,9 +483,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocSatisfiesTag,
+    LastJSDocNode = JSDocImportTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocSatisfiesTag,
+    LastJSDocTagNode = JSDocImportTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }
@@ -1037,7 +1038,8 @@ export type ForEachChildNodes =
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocSatisfiesTag
-    | JSDocOverloadTag;
+    | JSDocOverloadTag
+    | JSDocImportTag;
 
 /** @internal */
 export type HasChildren =
@@ -3656,7 +3658,7 @@ export type NamedExportBindings =
 // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
 export interface ImportClause extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportClause;
-    readonly parent: ImportDeclaration;
+    readonly parent: ImportDeclaration | JSDocImportTag;
     readonly isTypeOnly: boolean;
     readonly name?: Identifier; // Default binding
     readonly namedBindings?: NamedImportBindings;
@@ -3792,6 +3794,7 @@ export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
 export interface FileReference extends TextRange {
     fileName: string;
     resolutionMode?: ResolutionMode;
+    preserve?: boolean;
 }
 
 export interface CheckJsDirective extends TextRange {
@@ -4065,6 +4068,14 @@ export interface JSDocSatisfiesTag extends JSDocTag {
 /** @internal */
 export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
     readonly _jsDocSatisfiesExpressionBrand: never;
+}
+
+export interface JSDocImportTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocImportTag;
+    readonly parent: JSDoc;
+    readonly importClause?: ImportClause;
+    readonly moduleSpecifier: Expression;
+    readonly attributes?: ImportAttributes;
 }
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
@@ -4733,9 +4744,14 @@ export interface Program extends ScriptReferenceHost {
     getProjectReferences(): readonly ProjectReference[] | undefined;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
     /** @internal */ getProjectReferenceRedirect(fileName: string): string | undefined;
-    /** @internal */ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+    /**
+     * @internal
+     * Get the referenced project if the file is input file from that reference project
+     */
+    getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     /** @internal */ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getBuildInfo?(): BuildInfo;
     /** @internal */ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
@@ -4850,9 +4866,9 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
 
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
@@ -5030,12 +5046,9 @@ export interface TypeChecker {
     getApparentType(type: Type): Type;
     /** @internal */ getSuggestedSymbolForNonexistentProperty(name: MemberName | string, containingType: Type): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | string, containingType: Type): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentProperty(name: MemberName | string, containingType: Type): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
     getBaseConstraintOfType(type: Type): Type | undefined;
     getDefaultFromTypeParameter(type: Type): Type | undefined;
 
@@ -5449,7 +5462,10 @@ export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | Assert
 export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
 /** @internal */
-export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
+export type AnyImportOrJsDocImport = AnyImportSyntax | JSDocImportTag;
+
+/** @internal */
+export type AnyImportOrRequire = AnyImportOrJsDocImport | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
 /** @internal */
 export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
@@ -5484,7 +5500,7 @@ export interface ValidImportTypeNode extends ImportTypeNode {
 
 /** @internal */
 export type AnyValidImportOrReExport =
-    | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral; }
+    | (ImportDeclaration | ExportDeclaration | JSDocImportTag) & { moduleSpecifier: StringLiteral; }
     | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral; }; }
     | RequireOrImportCall
     | ValidImportTypeNode;
@@ -5509,7 +5525,7 @@ export interface RequireVariableDeclarationList extends VariableDeclarationList 
 
 /** @internal */
 export type LateVisibilityPaintedStatement =
-    | AnyImportSyntax
+    | AnyImportOrJsDocImport
     | VariableStatement
     | ClassDeclaration
     | FunctionDeclaration
@@ -5624,20 +5640,14 @@ export interface EmitResolver {
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
-    moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
     isArgumentsLocalBinding(node: Identifier): boolean;
     getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined;
-    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined;
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
-    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
-    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
+    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
-    tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
 }
 
 // dprint-ignore
@@ -6226,6 +6236,7 @@ export const enum ObjectFlags {
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
+    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
@@ -6434,6 +6445,12 @@ export interface AnonymousType extends ObjectType {
     target?: AnonymousType; // Instantiation target
     mapper?: TypeMapper; // Instantiation mapper
     instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+}
+
+/** @internal */
+// A SingleSignatureType may have bespoke outer type parameters to handle free type variable inferences
+export interface SingleSignatureType extends AnonymousType {
+    outerTypeParameters?: TypeParameter[];
 }
 
 /** @internal */
@@ -6721,6 +6738,8 @@ export interface Signature {
     isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     /** @internal */
     instantiations?: Map<string, Signature>;    // Generic signature instantiation cache
+    /** @internal */
+    implementationSignatureCache?: Signature;  // Copy of the signature with fresh type parameters to use in checking the body of a potentially self-referential generic function (deferred)
 }
 
 export const enum IndexKind {
@@ -8186,8 +8205,6 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
 
-    getLibFileFromReference(ref: FileReference): SourceFile | undefined;
-
     getCommonSourceDirectory(): string;
     getCanonicalFileName(fileName: string): string;
 
@@ -8787,6 +8804,8 @@ export interface NodeFactory {
     updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
     createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
     updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+    createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
+    updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -9612,8 +9631,6 @@ export interface SymbolTracker {
     reportLikelyUnsafeImportRequiredError?(specifier: string): void;
     reportTruncationError?(): void;
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
-    trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
-    trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
 }
@@ -9792,6 +9809,7 @@ export const commentPragmas = {
             { name: "path", optional: true, captureSpan: true },
             { name: "no-default-lib", optional: true },
             { name: "resolution-mode", optional: true },
+            { name: "preserve", optional: true },
         ],
         kind: PragmaKindFlags.TripleSlashXML,
     },
@@ -10063,4 +10081,10 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
+}
+
+/** @internal */
+export interface EvaluationResolver {
+    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
+    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
 }

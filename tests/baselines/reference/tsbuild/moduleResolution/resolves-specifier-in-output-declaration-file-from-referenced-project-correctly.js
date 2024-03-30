@@ -55,13 +55,13 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -b packages/pkg1 --verbose --traceResolution
 Output::
-[[90m12:00:39 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/pkg2/tsconfig.json
     * packages/pkg1/tsconfig.json
 
-[[90m12:00:40 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:41 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -70,9 +70,9 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-[[90m12:00:58 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
 
-[[90m12:00:59 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.

@@ -11,9 +11,11 @@ Symbol count: 25,500 / 25,500 (nearest 500)
 
 type A<T> = T;
 >A : T
+>  : ^
 
 type B<T> = T extends any[]
 >B : B<T>
+>  : ^^^^
 
     ? never
     : A<T> extends infer key
@@ -24,10 +26,14 @@ type B<T> = T extends any[]
 
 function foo<T>() {
 >foo : <T>() => void
+>    : ^^^^^^^^^^^^^
 
     `${a}` as B<T>;
 >`${a}` as B<T> : B<T>
+>               : ^^^^
 >`${a}` : string
+>       : ^^^^^^
 >a : any
+>  : ^^^
 }
 

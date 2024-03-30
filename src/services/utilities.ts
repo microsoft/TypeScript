@@ -188,6 +188,7 @@ import {
     isInternalModuleImportEqualsDeclaration,
     isJSDoc,
     isJSDocCommentContainingNode,
+    isJSDocImportTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkLike,
@@ -258,6 +259,7 @@ import {
     isWhiteSpaceSingleLine,
     isYieldExpression,
     IterationStatement,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkDisplayPart,
@@ -1244,7 +1246,7 @@ function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
     }
 }
 
-function getAdjustedLocationForImportDeclaration(node: ImportDeclaration, forRename: boolean) {
+function getAdjustedLocationForImportDeclaration(node: ImportDeclaration | JSDocImportTag, forRename: boolean) {
     if (node.importClause) {
         if (node.importClause.name && node.importClause.namedBindings) {
             // do not adjust if we have both a name and named bindings
@@ -2322,8 +2324,13 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 
 /** @internal */
 export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
-    if (node.isUnterminated) return undefined;
-    return createTextSpanFromBounds(node.getStart() + 1, node.getEnd() - 1);
+    let replacementEnd = node.getEnd() - 1;
+    if (node.isUnterminated) {
+        // we return no replacement range only if unterminated string is empty
+        if (node.getStart() === replacementEnd) return undefined;
+        replacementEnd = node.getEnd();
+    }
+    return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
 
 /** @internal */
@@ -2573,6 +2580,7 @@ export function isModuleSpecifierLike(node: Node): node is StringLiteralLike {
     return isStringLiteralLike(node) && (
         isExternalModuleReference(node.parent) ||
         isImportDeclaration(node.parent) ||
+        isJSDocImportTag(node.parent) ||
         isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) && node.parent.arguments[0] === node ||
         isImportCall(node.parent) && node.parent.arguments[0] === node
     );

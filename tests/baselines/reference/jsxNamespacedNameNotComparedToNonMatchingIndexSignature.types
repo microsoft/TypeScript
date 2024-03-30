@@ -11,21 +11,28 @@ Symbol count: 70,000 / 70,000 (nearest 500)
 
 declare module "react" {
 >"react" : typeof import("react")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     interface Attributes {
         [key: `do-${string}`]: Function;
 >key : `do-${string}`
+>    : ^^^^^^^^^^^^^^
 
         "ns:thing"?: string;
 >"ns:thing" : string
+>           : ^^^^^^
     }
 }
 
 export const tag = <div ns:thing="a"/>
 >tag : JSX.Element
+>    : ^^^^^^^^^^^
 ><div ns:thing="a"/> : JSX.Element
+>                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >ns:thing : string
+>         : ^^^^^^
 >ns : error
 >thing : error
 

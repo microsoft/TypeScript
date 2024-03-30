@@ -2,33 +2,46 @@
 
 === types.ts ===
 type Fns = Record<string, (...params: unknown[]) => unknown>
->Fns : { [x: string]: (...params: unknown[]) => unknown; }
+>Fns : Fns
+>    : ^^^
 >params : unknown[]
+>       : ^^^^^^^^^
 
 type Map<T extends Fns> = { [K in keyof T]: T[K]; };
 >Map : Map<T>
+>    : ^^^^^^
 
 type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
 >AllArg : AllArg<T>
+>       : ^^^^^^^^^
 
 function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
 >fn : <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>
+>   : ^ ^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^ ^^^^^              
 >x : Map<T["x"]>
+>  : ^^^^^^^^^^^
 >sliceIndex : T
+>           : ^
 
     return null!;
 >null! : null
+>      : ^^^^
 }
 
 export default { fn };
 >{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === reexport.ts ===
 import test from "./types";
 >test : { fn: <T_1 extends { x: T_1["x"] extends infer T extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T]: T_1["x"][K]; } : never; }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export default { test };
 >{ test } : { test: { fn: <T_1 extends { x: T_1["x"] extends infer T extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T]: T_1["x"][K]; } : never; }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never; }; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : { fn: <T_1 extends { x: T_1["x"] extends infer T extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T]: T_1["x"][K]; } : never; }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

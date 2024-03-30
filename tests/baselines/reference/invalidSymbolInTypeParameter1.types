@@ -3,10 +3,14 @@
 === invalidSymbolInTypeParameter1.ts ===
 function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
     var cats = new Array<WAWA>(); // WAWA is not a valid type
 >cats : WAWA[]
+>     : ^^^^^^
 >new Array<WAWA>() : WAWA[]
+>                  : ^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 }
 

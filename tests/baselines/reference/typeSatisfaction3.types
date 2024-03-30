@@ -2,25 +2,31 @@
 
 === typeSatisfaction3.ts ===
 type T1 = {
->T1 : { p: string; }
+>T1 : T1
+>   : ^^
 
     p: string;
 >p : string
+>  : ^^^^^^
 }
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     p: number;
 >p : number
+>  : ^^^^^^
 
 } satisfies T1;
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     p: string;
 >p : string
+>  : ^^^^^^
 
 } satisfies T1;
 
