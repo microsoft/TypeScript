@@ -19867,6 +19867,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+            if (type.objectFlags & ObjectFlags.SingleSignatureType) {
+                const singleSignatureType = type as SingleSignatureType;
+                const isConstructor = !!singleSignatureType.constructSignatures!.length;
+                const signatureClone = cloneSignature(isConstructor ? singleSignatureType.constructSignatures![0] : singleSignatureType.callSignatures![0]);
+                signatureClone.mapper = combineTypeMappers(signatureClone.mapper, mapper);
+                const clone = createObjectType(singleSignatureType.objectFlags, createSymbol(SymbolFlags.Function, InternalSymbolName.Function)) as SingleSignatureType;
+                if (singleSignatureType.symbol.declarations) {
+                    clone.symbol.declarations = singleSignatureType.symbol.declarations;
+                    clone.symbol.valueDeclaration = singleSignatureType.symbol.valueDeclaration;
+                }
+                clone.outerTypeParameters = singleSignatureType.outerTypeParameters;
+                clone.members = singleSignatureType.members;
+                clone.properties = singleSignatureType.properties;
+                clone.callSignatures = isConstructor ? singleSignatureType.callSignatures : [signatureClone];
+                clone.constructSignatures = isConstructor ? [signatureClone] : singleSignatureType.constructSignatures;
+                clone.indexInfos = singleSignatureType.indexInfos;
+                signatureClone.isolatedSignatureType = clone;
+                return clone;
+            }
             return result;
         }
         return type;
