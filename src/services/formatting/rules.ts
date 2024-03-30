@@ -223,6 +223,7 @@ export function getAllRules(): RuleSpec[] {
                 SyntaxKind.FromKeyword,
                 SyntaxKind.KeyOfKeyword,
                 SyntaxKind.InferKeyword,
+                SyntaxKind.SatisfiesKeyword,
             ],
             anyToken,
             [isNonJsxSameLineTokenContext],
