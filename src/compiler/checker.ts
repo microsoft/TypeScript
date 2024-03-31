@@ -37670,15 +37670,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
         const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
             expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
-            createFlowNode(FlowFlags.Start);
-        const trueCondition = createFlowNode(FlowFlags.TrueCondition, expr, antecedent);
+            createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined, /*antecedents*/ undefined);
+        const trueCondition = createFlowNode(FlowFlags.TrueCondition, expr, antecedent, /*antecedents*/ undefined);
 
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
         if (trueType === initType) return undefined;
 
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
-        const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
+        const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent, /*antecedents*/ undefined);
         const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
         return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }

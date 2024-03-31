@@ -559,6 +559,7 @@ export namespace Debug {
                 attachFlowNodeDebugInfoWorker(flowNode);
             }
         }
+        return flowNode;
     }
 
     let nodeArrayProto: NodeArray<Node> | undefined;
