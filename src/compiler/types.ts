@@ -4630,7 +4630,7 @@ export interface Program extends ScriptReferenceHost {
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
     /** The first time this is called without `nodesToCheck`, it will return global diagnostics (no location). */
-    getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[], nodesToCheckSpans?: TextSpan[]): readonly Diagnostic[];
+    getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): readonly Diagnostic[];
     getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
     getConfigFileParsingDiagnostics(): readonly Diagnostic[];
     /** @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
