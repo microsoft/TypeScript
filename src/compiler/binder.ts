@@ -146,7 +146,6 @@ import {
     isDeclarationStatement,
     isDestructuringAssignment,
     isDottedName,
-    isElementAccessExpression,
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
@@ -188,7 +187,6 @@ import {
     isModuleExportsAccessExpression,
     isNamedDeclaration,
     isNamespaceExport,
-    isNonNullExpression,
     isNullishCoalesce,
     isObjectLiteralExpression,
     isObjectLiteralMethod,
@@ -1250,11 +1248,24 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function isNarrowableReference(expr: Expression): boolean {
-        return isDottedName(expr)
-            || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
-            || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
-            || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) && isNarrowableReference(expr.expression)
-            || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
+        switch (expr.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.MetaProperty:
+                return true;
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.NonNullExpression:
+                return isNarrowableReference((expr as PropertyAccessExpression | ParenthesizedExpression | NonNullExpression).expression);
+            case SyntaxKind.ElementAccessExpression:
+                return (isStringOrNumericLiteralLike((expr as ElementAccessExpression).argumentExpression) || isEntityNameExpression((expr as ElementAccessExpression).argumentExpression)) &&
+                    isNarrowableReference((expr as ElementAccessExpression).expression);
+            case SyntaxKind.BinaryExpression:
+                return (expr as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference((expr as BinaryExpression).right) ||
+                    isAssignmentOperator((expr as BinaryExpression).operatorToken.kind) && isLeftHandSideExpression((expr as BinaryExpression).left);
+        }
+        return false;
     }
 
     function containsNarrowableReference(expr: Expression): boolean {
