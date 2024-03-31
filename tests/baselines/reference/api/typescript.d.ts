@@ -9239,15 +9239,7 @@ declare namespace ts {
         clear(): void;
     }
     type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
-    function createFlowNode(flags: FlowFlags.Unreachable): FlowUnreachable;
-    function createFlowNode(flags: FlowFlags.Start): FlowStart;
-    function createFlowNode(flags: FlowFlags.BranchLabel | FlowFlags.LoopLabel): FlowLabel;
-    function createFlowNode(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, node: Expression | VariableDeclaration | BindingElement, antecedent: FlowNode): FlowAssignment | FlowArrayMutation;
-    function createFlowNode(flags: FlowFlags.TrueCondition | FlowFlags.FalseCondition, node: Expression, antecedent: FlowNode): FlowCondition;
-    function createFlowNode(flags: FlowFlags.SwitchClause, node: SwitchStatement, antecedent: FlowNode): FlowSwitchClause;
-    function createFlowNode(flags: FlowFlags.Call, node: CallExpression, antecedent: FlowNode): FlowCall;
-    function createFlowNode(flags: FlowFlags.ReduceLabel, node: FlowLabel, antecedent: FlowNode, antecedents: FlowNode[]): FlowReduceLabel;
-    function createFlowNode(flags: FlowFlags, node?: unknown, antecedent?: FlowNode, antecedents?: FlowNode[]): FlowNode;
+    function createFlowNode(flags: FlowFlags, node: unknown, antecedent: FlowNode | undefined, antecedents: FlowNode[] | undefined): FlowNode;
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
