@@ -3,15 +3,21 @@
 === bug27342.js ===
 module.exports = {}
 >module.exports = {} : typeof module.exports
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /**
  * @type {exports}
  */
 var x
 >x : typeof import("bug27342")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

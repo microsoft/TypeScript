@@ -1770,7 +1770,7 @@
           ],
           "documentation": [
             {
-              "text": "Converts all the alphabetic characters in a string to lowercase, according to the current locale's case mappings.",
+              "text": "Converts all the alphabetic characters in a string to lowercase, using the current locale's case mappings.",
               "kind": "text"
             }
           ]
@@ -1832,7 +1832,7 @@
           ],
           "documentation": [
             {
-              "text": "Converts all the alphabetic characters in a string to uppercase, according to the current locale's case mappings.",
+              "text": "Converts all the alphabetic characters in a string to uppercase, using the current locale's case mappings.",
               "kind": "text"
             }
           ]

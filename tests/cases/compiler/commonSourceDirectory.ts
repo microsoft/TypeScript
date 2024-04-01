@@ -12,7 +12,7 @@ declare module "bar" {
 }
 
 // @filename: /app/index.ts
-/// <reference path="../types/bar.d.ts"/>
+/// <reference path="../types/bar.d.ts" preserve="true" />
 import { x } from "foo";
 import { y } from "bar";
 x + y;

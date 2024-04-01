@@ -3,24 +3,35 @@
 === foo.js ===
 class C {
 >C : C
+>  : ^
 
     constructor() {
         if (cond) {
 >cond : any
+>     : ^^^
 
             this.p = null;
 >this.p = null : null
+>              : ^^^^
 >this.p : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
         }
         else {
             this.p = 0;
 >this.p = 0 : 0
+>           : ^
 >this.p : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >0 : 0
+>  : ^
         }
     }
 }
@@ -28,10 +39,17 @@ class C {
 === bar.ts ===
 (new C()).p = "string"; // Error
 >(new C()).p = "string" : "string"
+>                       : ^^^^^^^^
 >(new C()).p : number
+>            : ^^^^^^
 >(new C()) : C
+>          : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >p : number
+>  : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 

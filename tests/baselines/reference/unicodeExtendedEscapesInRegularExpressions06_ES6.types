@@ -5,5 +5,7 @@
 //  1. Assert: 0 ≤ cp ≤ 0x10FFFF.
 var x = /\u{10FFFF}/g;
 >x : RegExp
+>  : ^^^^^^
 >/\u{10FFFF}/g : RegExp
+>              : ^^^^^^
 

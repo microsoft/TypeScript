@@ -11,4 +11,5 @@ export default "dir1/dir2/a.ts";
 === /dir1/dir2/dir3/index.ts ===
 import a from "a";
 >a : "dir1/dir2/a.ts"
+>  : ^^^^^^^^^^^^^^^^
 

@@ -4,12 +4,18 @@
 /// <reference types="alpha" />
 var x: string = alpha.a;
 >x : string
+>  : ^^^^^^
 >alpha.a : string
+>        : ^^^^^^
 >alpha : { a: string; }
+>      : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 === /node_modules/@types/alpha/index.d.ts ===
 declare var alpha: { a: string };
 >alpha : { a: string; }
+>      : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 

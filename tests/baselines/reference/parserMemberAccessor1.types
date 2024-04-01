@@ -3,11 +3,15 @@
 === parserMemberAccessor1.ts ===
 class C {
 >C : C
+>  : ^
 
   get foo() { }
 >foo : void
+>    : ^^^^
 
   set foo(a) { }
 >foo : void
+>    : ^^^^
 >a : void
+>  : ^^^^
 }

@@ -8,33 +8,41 @@
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^ 
 
     <T extends Date>(x: T): T;
 >x : T
+>  : ^
 
 };
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     <T extends number>(x: T): T;
 >x : T
+>  : ^
 
 };
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     <T>(x: T): T;
 >x : T
+>  : ^
 
 };
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     <T>(x: any): any;
 >x : any
+>  : ^^^
 
 };
 

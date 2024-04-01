@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/mappedArrayTupleIntersections.ts] ////
+
+=== mappedArrayTupleIntersections.ts ===
+type Box<T> = { value: T };
+>Box : Box<T>
+>    : ^^^^^^
+>value : T
+>      : ^
+
+type Boxify<T> = { [K in keyof T]: Box<T[K]> };
+>Boxify : Boxify<T>
+>       : ^^^^^^^^^
+
+type T1 = Boxify<string[]>;
+>T1 : Box<string>[]
+>   : ^^^^^^^^^^^^^
+
+type T2 = Boxify<[string, string]>;
+>T2 : [Box<string>, Box<string>]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type T3 = Boxify<string[] & unknown[]>;
+>T3 : Box<string>[] & Box<unknown>[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type T4 = Boxify<string[] & [string, string]>;
+>T4 : Box<string>[] & [Box<string>, Box<string>]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type T5 = Boxify<string[] & { x: string }>;
+>T5 : Boxify<string[] & { x: string; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>x : string
+>  : ^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/57744
+
+type MustBeArray<T extends any[]> = T;
+>MustBeArray : T
+>            : ^
+
+type Hmm<T extends any[]> = T extends number[] ?
+>Hmm : Hmm<T>
+>    : ^^^^^^
+
+    MustBeArray<{ [I in keyof T]: 1 }> :
+    never;
+
+type X = Hmm<[3, 4, 5]>;
+>X : [1, 1, 1]
+>  : ^^^^^^^^^
+

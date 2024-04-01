@@ -3,6 +3,7 @@
 === parser509546_1.ts ===
 export class Logger { 
 >Logger : Logger
+>       : ^^^^^^
 
      public
 >public : any

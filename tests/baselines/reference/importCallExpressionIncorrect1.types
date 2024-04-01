@@ -3,11 +3,15 @@
 === 0.ts ===
 export function foo() { return "foo"; }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 === 1.ts ===
 import
 import { foo } from './0';
 > : any
+> : ^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 

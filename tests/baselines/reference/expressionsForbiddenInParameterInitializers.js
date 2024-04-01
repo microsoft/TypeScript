@@ -47,7 +47,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo2 = exports.foo = void 0;
+exports.foo = foo;
+exports.foo2 = foo2;
 function foo(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
         var _c, foo, _d;
@@ -70,7 +71,6 @@ function foo(_a) {
         });
     });
 }
-exports.foo = foo;
 function foo2(_a) {
     var _b, foo, _c;
     return __generator(this, function (_d) {
@@ -91,4 +91,3 @@ function foo2(_a) {
         }
     });
 }
-exports.foo2 = foo2;

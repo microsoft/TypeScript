@@ -3,5 +3,7 @@
 === privateNamesNotAllowedInVariableDeclarations.ts ===
 const #foo = 3;
 >#foo : 3
+>     : ^
 >3 : 3
+>  : ^
 

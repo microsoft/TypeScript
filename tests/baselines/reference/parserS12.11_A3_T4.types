@@ -14,40 +14,57 @@
 
 function SwitchTest(value){
 >SwitchTest : (value: any) => number
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
   var result = 0;
 >result : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
   
   switch(value) {
 >value : any
+>      : ^^^
 
     case:
 > : any
+> : ^^^
 
       result += 2;
 >result += 2 : number
+>            : ^^^^^^
 >result : number
+>       : ^^^^^^
 >2 : 2
+>  : ^
 
     default:
       result += 32;
 >result += 32 : number
+>             : ^^^^^^
 >result : number
+>       : ^^^^^^
 >32 : 32
+>   : ^^
 
       break;
   }
   
   return result;
 >result : number
+>       : ^^^^^^
 }
 
 var x = SwitchTest(0);
 >x : number
+>  : ^^^^^^
 >SwitchTest(0) : number
+>              : ^^^^^^
 >SwitchTest : (value: any) => number
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 

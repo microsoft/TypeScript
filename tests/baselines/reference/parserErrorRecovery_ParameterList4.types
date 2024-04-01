@@ -3,5 +3,7 @@
 === parserErrorRecovery_ParameterList4.ts ===
 function f(a,¬) {
 >f : (a: any) => void
+>  : ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 }

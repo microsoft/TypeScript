@@ -3,22 +3,27 @@
 === renderer.d.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: any;
 >e : string
+>  : ^^^^^^
         }
     }
 }
 export function h(): void;
 >h : () => void
+>  : ^^^^^^    
 
 export function jsx(): void;
 >jsx : () => void
+>    : ^^^^^^    
 
 export function Fragment(): void;
 >Fragment : () => void
+>         : ^^^^^^    
 
 === preacty.tsx ===
 /**
@@ -27,25 +32,36 @@ export function Fragment(): void;
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
+>  : ^^^^^^^^^^
 >Fragment : () => void
+>         : ^^^^^^^^^^
 
 <><div></div></>
 ><><div></div></> : any
+>                 : ^^^
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 === snabbdomy.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
+>    : ^^^^^^^^^^
 
 <><span></span></>
 ><><span></span></> : any
+>                   : ^^^
 ><span></span> : any
+>              : ^^^
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 
 === preacty-only-fragment.tsx ===
 /**
@@ -54,19 +70,24 @@ import {jsx} from "./renderer";
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
+>  : ^^^^^^^^^^
 >Fragment : () => void
+>         : ^^^^^^^^^^
 
 <></>
 ><></> : any
+>      : ^^^
 
 === snabbdomy-only-fragment.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
+>    : ^^^^^^^^^^
 
 <></>
 ><></> : any
+>      : ^^^
 
 === preacty-only-fragment-no-jsx.tsx ===
 /**
@@ -75,9 +96,11 @@ import {jsx} from "./renderer";
  */
 import {Fragment} from "./renderer";
 >Fragment : () => void
+>         : ^^^^^^^^^^
 
 <></>
 ><></> : any
+>      : ^^^
 
 === snabbdomy-only-fragment-no-jsx.tsx ===
 /* @jsx jsx */
@@ -85,6 +108,7 @@ import {Fragment} from "./renderer";
 import {} from "./renderer";
 <></>
 ><></> : any
+>      : ^^^
 
 === preacty-no-fragment.tsx ===
 /**
@@ -93,23 +117,32 @@ import {} from "./renderer";
  */
 import {h, Fragment} from "./renderer";
 >h : () => void
+>  : ^^^^^^^^^^
 >Fragment : () => void
+>         : ^^^^^^^^^^
 
 <div></div>
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 === snabbdomy-no-fragment.tsx ===
 /* @jsx jsx */
 /* @jsxfrag null */
 import {jsx} from "./renderer";
 >jsx : () => void
+>    : ^^^^^^^^^^
 
 <div></div>
 ><div></div> : any
+>            : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 === preacty-only-component.tsx ===
 /**
@@ -117,11 +150,15 @@ import {jsx} from "./renderer";
  */
 import {h} from "./renderer";
 >h : () => void
+>  : ^^^^^^^^^^
 
 function Component() { return null; }
 >Component : () => any
+>          : ^^^^^^^^^
 
 <Component />
 ><Component /> : any
+>              : ^^^
 >Component : () => any
+>          : ^^^^^^^^^
 

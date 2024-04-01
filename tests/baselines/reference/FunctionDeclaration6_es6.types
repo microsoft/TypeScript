@@ -3,6 +3,9 @@
 === FunctionDeclaration6_es6.ts ===
 function*foo(a = yield) {
 >foo : (a?: any) => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >yield : any
+>      : ^^^
 }

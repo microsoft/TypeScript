@@ -122,6 +122,7 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
+    isSyntacticallyString,
     isTemplateLiteral,
     isTryStatement,
     JsxOpeningElement,
@@ -1121,7 +1122,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let decorators: Decorator[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
                 decorators = append(decorators, factory.createDecorator(typeMetadata));
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1140,7 +1141,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let properties: ObjectLiteralElementLike[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
                 properties = append(properties, typeProperty);
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1922,7 +1923,7 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+        const outerAssignment = isSyntacticallyString(valueExpression) ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(

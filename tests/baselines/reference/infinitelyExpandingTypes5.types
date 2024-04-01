@@ -4,29 +4,40 @@
 interface Query<T> {
     foo(x: T): Query<T[]>;
 >foo : (x: T) => Query<T[]>
+>    : ^^^^ ^^^^^          
 >x : T
+>  : ^
 }
 
 interface Enumerator<T> {
     (action: (item: T, index: number) => boolean): boolean;
 >action : (item: T, index: number) => boolean
+>       : ^^^^^^^ ^^^^^^^^^      ^^^^^       
 >item : T
+>     : ^
 >index : number
+>      : ^^^^^^
 }
 
 function from<T>(array: T[]): Query<T>;
 >from : { <T>(array: T[]): Query<T>; <T_1>(enumerator: Enumerator<T_1>): Query<T_1>; }
+>     : ^^^ ^^^^^^^^^   ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array : T[]
+>      : ^^^
 
 function from<T>(enumerator: Enumerator<T>): Query<T>;
 >from : { <T_1>(array: T_1[]): Query<T_1>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^             ^^^        ^^^
 >enumerator : Enumerator<T>
+>           : ^^^^^^^^^^^^^
 
 function from(arg: any): any {
 >from : { <T>(array: T[]): Query<T>; <T_1>(enumerator: Enumerator<T_1>): Query<T_1>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : any
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 

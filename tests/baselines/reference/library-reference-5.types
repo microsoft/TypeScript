@@ -9,13 +9,16 @@
 /// <reference types="alpha" />
 declare var foo: any;
 >foo : any
+>    : ^^^
 
 === /node_modules/foo/node_modules/alpha/index.d.ts ===
 declare var alpha: any;
 >alpha : any
+>      : ^^^
 
 === /node_modules/bar/index.d.ts ===
 /// <reference types="alpha" />
 declare var bar: any;
 >bar : any
+>    : ^^^
 

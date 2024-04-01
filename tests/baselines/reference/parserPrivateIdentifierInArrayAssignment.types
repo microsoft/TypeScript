@@ -3,7 +3,10 @@
 === parserPrivateIdentifierInArrayAssignment.ts ===
 [#abc]=
 >[#abc]= : any
+>        : ^^^
 >[#abc] : [any]
+>       : ^^^^^
 
 > : any
+> : ^^^
 

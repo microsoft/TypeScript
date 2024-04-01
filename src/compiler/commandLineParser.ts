@@ -144,6 +144,9 @@ export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), (
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -233,6 +236,8 @@ const libEntries: [string, string][] = [
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["esnext.object", "lib.esnext.object.d.ts"],
+    ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.regexp", "lib.esnext.regexp.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];

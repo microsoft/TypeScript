@@ -47,7 +47,7 @@ const bigNum: bigint = 0n;
 
 const typedArray = new Uint8Array(3);
 >typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
 typedArray[bigNum] = 0xAA; // should error
 >typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))

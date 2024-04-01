@@ -2,7 +2,7 @@ import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 
 export function encodeString(s: string): string {
-    return ts.sys.bufferFrom!(s).toString("utf8");
+    return Buffer.from(s).toString("utf8");
 }
 
 export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {

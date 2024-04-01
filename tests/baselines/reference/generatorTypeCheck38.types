@@ -6,10 +6,12 @@ var yield;
 
 function* g() {
 >g : () => Generator<number, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield 0;
 >yield 0 : any
 >0 : 0
+>  : ^
 
     var v: typeof yield;
 >v : any
