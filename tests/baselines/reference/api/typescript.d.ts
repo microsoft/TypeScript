@@ -8292,7 +8292,7 @@ declare namespace ts {
         noUncheckedIndexedAccess?: boolean | undefined;
         noImplicitOverride?: boolean | undefined;
         noPropertyAccessFromIndexSignature?: boolean | undefined;
-        moduleResolution?: "node16" | "nodenext" | "node10" | "node" | "classic" | "bundler" | undefined;
+        moduleResolution?: "node" | "node16" | "nodenext" | "node10" | "classic" | "bundler" | undefined;
         baseUrl?: string | undefined;
         paths?: Record<string, any> | undefined;
         rootDirs?: string[] | undefined;
