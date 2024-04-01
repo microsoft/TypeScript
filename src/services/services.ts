@@ -2059,7 +2059,7 @@ export function createLanguageService(
         const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
 
         const nodes = [];
-        enclosingNode.forEachChild(includeNodes);
+        includeNodes(enclosingNode);
 
         if (file.end === span.start + span.length) {
             nodes.push(file.endOfFileToken);
