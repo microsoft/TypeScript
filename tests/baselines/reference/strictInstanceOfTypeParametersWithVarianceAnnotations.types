@@ -1,0 +1,299 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts] ////
+
+=== strictInstanceOfTypeParametersWithVarianceAnnotations.ts ===
+class UnconstrainedCovariant<out T> {
+>UnconstrainedCovariant : UnconstrainedCovariant<T>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    x: T;
+>x : T
+>  : ^
+}
+
+declare const unc_covariant: unknown;
+>unc_covariant : unknown
+>              : ^^^^^^^
+
+if (unc_covariant instanceof UnconstrainedCovariant) {
+>unc_covariant instanceof UnconstrainedCovariant : boolean
+>                                                : ^^^^^^^
+>unc_covariant : unknown
+>              : ^^^^^^^
+>UnconstrainedCovariant : typeof UnconstrainedCovariant
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let unknown_covariant: UnconstrainedCovariant<unknown> = unc_covariant;
+>unknown_covariant : UnconstrainedCovariant<unknown>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_covariant : UnconstrainedCovariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let never_covariant: UnconstrainedCovariant<never> = unc_covariant;  // Error
+>never_covariant : UnconstrainedCovariant<never>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_covariant : UnconstrainedCovariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let any_covariant: UnconstrainedCovariant<any> = unc_covariant;
+>any_covariant : UnconstrainedCovariant<any>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_covariant : UnconstrainedCovariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let sub_covariant: UnconstrainedCovariant<"literal"> = unc_covariant;  // Error
+>sub_covariant : UnconstrainedCovariant<"literal">
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_covariant : UnconstrainedCovariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class ConstrainedCovariant<out T extends string> {
+>ConstrainedCovariant : ConstrainedCovariant<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    x: T;
+>x : T
+>  : ^
+}
+
+declare const con_covariant: unknown;
+>con_covariant : unknown
+>              : ^^^^^^^
+
+if (con_covariant instanceof ConstrainedCovariant) {
+>con_covariant instanceof ConstrainedCovariant : boolean
+>                                              : ^^^^^^^
+>con_covariant : unknown
+>              : ^^^^^^^
+>ConstrainedCovariant : typeof ConstrainedCovariant
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let never_covariant: ConstrainedCovariant<never> = con_covariant;  // Error
+>never_covariant : ConstrainedCovariant<never>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_covariant : ConstrainedCovariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let any_covariant: ConstrainedCovariant<any> = con_covariant;
+>any_covariant : ConstrainedCovariant<any>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_covariant : ConstrainedCovariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let constraint_covariant: ConstrainedCovariant<string> = con_covariant;
+>constraint_covariant : ConstrainedCovariant<string>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_covariant : ConstrainedCovariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let sub_covariant: ConstrainedCovariant<"literal"> = con_covariant;  // Error
+>sub_covariant : ConstrainedCovariant<"literal">
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_covariant : ConstrainedCovariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class UnconstrainedContravariant<in T> {
+>UnconstrainedContravariant : UnconstrainedContravariant<T>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    f: (x: T) => void;
+>f : (x: T) => void
+>  : ^ ^^ ^^^^^    
+>x : T
+>  : ^
+}
+
+declare const unc_contravariant: unknown;
+>unc_contravariant : unknown
+>                  : ^^^^^^^
+
+if (unc_contravariant instanceof UnconstrainedContravariant) {
+>unc_contravariant instanceof UnconstrainedContravariant : boolean
+>                                                        : ^^^^^^^
+>unc_contravariant : unknown
+>                  : ^^^^^^^
+>UnconstrainedContravariant : typeof UnconstrainedContravariant
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let unknown_covariant: UnconstrainedContravariant<unknown> = unc_contravariant;  // Error
+>unknown_covariant : UnconstrainedContravariant<unknown>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_contravariant : UnconstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let never_covariant: UnconstrainedContravariant<never> = unc_contravariant;
+>never_covariant : UnconstrainedContravariant<never>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_contravariant : UnconstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let any_covariant: UnconstrainedContravariant<any> = unc_contravariant;  // Error
+>any_covariant : UnconstrainedContravariant<any>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_contravariant : UnconstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let constraint_covariant: UnconstrainedContravariant<string> = unc_contravariant;  // Error
+>constraint_covariant : UnconstrainedContravariant<string>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_contravariant : UnconstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let sub_covariant: UnconstrainedContravariant<"literal"> = unc_contravariant;  // Error
+>sub_covariant : UnconstrainedContravariant<"literal">
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_contravariant : UnconstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class ConstrainedContravariant<in T extends string> {
+>ConstrainedContravariant : ConstrainedContravariant<T>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    f: (x: T) => void;
+>f : (x: T) => void
+>  : ^ ^^ ^^^^^    
+>x : T
+>  : ^
+}
+
+declare const con_contravariant: unknown;
+>con_contravariant : unknown
+>                  : ^^^^^^^
+
+if (con_contravariant instanceof ConstrainedContravariant) {
+>con_contravariant instanceof ConstrainedContravariant : boolean
+>                                                      : ^^^^^^^
+>con_contravariant : unknown
+>                  : ^^^^^^^
+>ConstrainedContravariant : typeof ConstrainedContravariant
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let never_covariant: ConstrainedContravariant<never> = con_contravariant;
+>never_covariant : ConstrainedContravariant<never>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_contravariant : ConstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let any_covariant: ConstrainedContravariant<any> = con_contravariant;  // Error
+>any_covariant : ConstrainedContravariant<any>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_contravariant : ConstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let constraint_covariant: ConstrainedContravariant<string> = con_contravariant;  // Error
+>constraint_covariant : ConstrainedContravariant<string>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_contravariant : ConstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let sub_covariant: ConstrainedContravariant<"literal"> = con_contravariant;  // Error
+>sub_covariant : ConstrainedContravariant<"literal">
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_contravariant : ConstrainedContravariant<never>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class UnconstrainedInvariant<in out T> {
+>UnconstrainedInvariant : UnconstrainedInvariant<T>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    f: (x: T) => T;
+>f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
+>x : T
+>  : ^
+}
+
+declare const unc_invariant: unknown;
+>unc_invariant : unknown
+>              : ^^^^^^^
+
+if (unc_invariant instanceof UnconstrainedInvariant) {
+>unc_invariant instanceof UnconstrainedInvariant : boolean
+>                                                : ^^^^^^^
+>unc_invariant : unknown
+>              : ^^^^^^^
+>UnconstrainedInvariant : typeof UnconstrainedInvariant
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let unknown_covariant: UnconstrainedInvariant<unknown> = unc_invariant;
+>unknown_covariant : UnconstrainedInvariant<unknown>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_invariant : UnconstrainedInvariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let never_covariant: UnconstrainedInvariant<never> = unc_invariant;  // Error
+>never_covariant : UnconstrainedInvariant<never>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_invariant : UnconstrainedInvariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let any_covariant: UnconstrainedInvariant<any> = unc_invariant;
+>any_covariant : UnconstrainedInvariant<any>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_invariant : UnconstrainedInvariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let constraint_covariant: UnconstrainedInvariant<string> = unc_invariant;  // Error
+>constraint_covariant : UnconstrainedInvariant<string>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_invariant : UnconstrainedInvariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let sub_covariant: UnconstrainedInvariant<"literal"> = unc_invariant;  // Error
+>sub_covariant : UnconstrainedInvariant<"literal">
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unc_invariant : UnconstrainedInvariant<unknown>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class ConstrainedInvariant<in out T extends string> {
+>ConstrainedInvariant : ConstrainedInvariant<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    f: (x: T) => T;
+>f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
+>x : T
+>  : ^
+}
+
+declare const con_invariant: unknown;
+>con_invariant : unknown
+>              : ^^^^^^^
+
+if (con_invariant instanceof ConstrainedInvariant) {
+>con_invariant instanceof ConstrainedInvariant : boolean
+>                                              : ^^^^^^^
+>con_invariant : unknown
+>              : ^^^^^^^
+>ConstrainedInvariant : typeof ConstrainedInvariant
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let never_covariant: ConstrainedInvariant<never> = con_invariant;  // Error
+>never_covariant : ConstrainedInvariant<never>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_invariant : ConstrainedInvariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let any_covariant: ConstrainedInvariant<any> = con_invariant;
+>any_covariant : ConstrainedInvariant<any>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_invariant : ConstrainedInvariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let constraint_covariant: ConstrainedInvariant<string> = con_invariant;
+>constraint_covariant : ConstrainedInvariant<string>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_invariant : ConstrainedInvariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    let sub_covariant: ConstrainedInvariant<"literal"> = con_invariant;  // Error
+>sub_covariant : ConstrainedInvariant<"literal">
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>con_invariant : ConstrainedInvariant<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

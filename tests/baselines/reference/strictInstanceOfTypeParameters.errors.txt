@@ -1,0 +1,54 @@
+strictInstanceOfTypeParameters.ts(9,13): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+strictInstanceOfTypeParameters.ts(10,5): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+strictInstanceOfTypeParameters.ts(11,7): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+strictInstanceOfTypeParameters.ts(35,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== strictInstanceOfTypeParameters.ts (4 errors) ====
+    class Unconstrained<T> {
+        value: T;
+        read: (value: T) => void;
+    }
+    
+    declare const x: unknown;
+    
+    if (x instanceof Unconstrained) {
+        x.value.toUpperCase();
+                ~~~~~~~~~~~
+!!! error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+        x.value++;
+        ~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+        x.value();
+          ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+    
+        if (typeof x.value === "string") {
+            x.value.toUpperCase();
+        }
+        if (typeof x.value === "number") {
+            x.value++;
+        }
+    
+        x.read(1);
+        x.read("foo");
+    }
+    
+    class Constrained<T extends number> {
+        value: T;
+        read: (value: T) => void;
+    }
+    
+    declare const y: unknown;
+    
+    if (y instanceof Constrained) {
+        y.value++;
+    
+        y.read(1);
+        y.read("foo");
+               ~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    }
+    

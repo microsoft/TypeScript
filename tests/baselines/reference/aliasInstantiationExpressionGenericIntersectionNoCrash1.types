@@ -17,18 +17,18 @@ declare const Err: typeof ErrImpl & (<T>() => T);
 >        : ^^^^^^^^^^^^^^
 
 type ErrAlias<U> = typeof Err<U>;
->ErrAlias : { new (): ErrImpl<U>; prototype: ErrImpl<any>; } & (() => U)
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ErrAlias : { new (): ErrImpl<U>; prototype: ErrImpl<unknown>; } & (() => U)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Err : typeof ErrImpl & (<T>() => T)
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const e: ErrAlias<number>;
->e : { new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e : { new (): ErrImpl<number>; prototype: ErrImpl<unknown>; } & (() => number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 e as ErrAlias<string>;
->e as ErrAlias<string> : { new (): ErrImpl<string>; prototype: ErrImpl<any>; } & (() => string)
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->e : { new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e as ErrAlias<string> : { new (): ErrImpl<string>; prototype: ErrImpl<unknown>; } & (() => string)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e : { new (): ErrImpl<number>; prototype: ErrImpl<unknown>; } & (() => number)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

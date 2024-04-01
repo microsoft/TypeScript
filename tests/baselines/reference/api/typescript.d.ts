@@ -6967,6 +6967,7 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        strictInstanceOfTypeParameters?: boolean;
         stripInternal?: boolean;
         /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
