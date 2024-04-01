@@ -14,6 +14,11 @@ import {
     TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch";
 describe("unittests:: sys:: symlinkWatching::", () => {
+    if (process.versions.bun) {
+        // TODO: these tests do not work in Bun
+        return;
+    }
+
     function delayedOp(op: () => void, delay: number) {
         ts.sys.setTimeout!(op, delay);
     }
