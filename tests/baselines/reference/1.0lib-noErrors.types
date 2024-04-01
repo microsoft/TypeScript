@@ -1212,7 +1212,7 @@ interface Date {
 >getUTCMilliseconds : () => number
 >                   : ^^^^^^      
 
-    /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
+    /** Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer. */
     getTimezoneOffset(): number;
 >getTimezoneOffset : () => number
 >                  : ^^^^^^      
