@@ -44,12 +44,24 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package
 Info seq  [hh:mm:ss:mss] For info: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -108,17 +120,41 @@ c:/project/node_modules/.store/aws-sdk-virtual-adfe098/jsconfig.json: *new*
   {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/jsconfig.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.js: *new*
   {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.ts: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/.store/jsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/tsconfig.js: *new*
   {"pollingInterval":2000}
 c:/project/node_modules/.store/tsconfig.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/.store/tsconfig.ts: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/jsconfig.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
@@ -244,19 +280,43 @@ c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts: *new*
   {"pollingInterval":500}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/jsconfig.json:
   {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.js:
+  {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.json:
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.js:
   {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.json:
   {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.ts:
+  {"pollingInterval":2000}
 c:/project/node_modules/.store/jsconfig.json:
   {"pollingInterval":2000}
+c:/project/node_modules/.store/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/tsconfig.js:
+  {"pollingInterval":2000}
 c:/project/node_modules/.store/tsconfig.json:
+  {"pollingInterval":2000}
+c:/project/node_modules/.store/tsconfig.ts:
   {"pollingInterval":2000}
 c:/project/node_modules/@remix-run/server-runtime/index.d.ts: *new*
   {"pollingInterval":500}
 c:/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.js:
+  {"pollingInterval":2000}
 c:/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.ts:
   {"pollingInterval":2000}
 c:/project/package.json: *new*
   {"pollingInterval":250}

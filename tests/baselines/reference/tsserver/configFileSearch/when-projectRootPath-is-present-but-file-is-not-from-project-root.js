@@ -30,10 +30,19 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace
 Info seq  [hh:mm:ss:mss] For info: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/General/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /root/teams/VSCode68/Shared Documents/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -68,17 +77,35 @@ PolledWatches::
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules/@types: *new*
   {"pollingInterval":500}
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/node_modules/@types: *new*
   {"pollingInterval":500}
+/root/teams/VSCode68/Shared Documents/General/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/jsconfig.json: *new*
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/node_modules/@types: *new*
   {"pollingInterval":500}
+/root/teams/VSCode68/Shared Documents/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /root/teams/VSCode68/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -240,17 +267,35 @@ PolledWatches::
   {"pollingInterval":500}
 /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/node_modules/@types:
   {"pollingInterval":500}
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.js:
+  {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.json:
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/tsconfig.ts:
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/node_modules/@types:
   {"pollingInterval":500}
+/root/teams/VSCode68/Shared Documents/General/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/tsconfig.js:
+  {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/General/tsconfig.json:
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/General/tsconfig.ts:
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/jsconfig.json:
   {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/node_modules/@types:
   {"pollingInterval":500}
+/root/teams/VSCode68/Shared Documents/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/tsconfig.js:
+  {"pollingInterval":2000}
 /root/teams/VSCode68/Shared Documents/tsconfig.json:
+  {"pollingInterval":2000}
+/root/teams/VSCode68/Shared Documents/tsconfig.ts:
   {"pollingInterval":2000}
 /root/teams/VSCode68/node_modules/@types:
   {"pollingInterval":500}

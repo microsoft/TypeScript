@@ -384,6 +384,18 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
   {
+    "key": "/a/b/models/tsconfig.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/a/b/models/tsconfig.ts",
+    "count": 1
+  },
+  {
+    "key": "/a/b/models/tsconfig.js",
+    "count": 1
+  },
+  {
     "key": "/a/b/models/tsconfig.json",
     "count": 1
   },

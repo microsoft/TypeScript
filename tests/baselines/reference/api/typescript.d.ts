@@ -9291,10 +9291,6 @@ declare namespace ts {
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
     function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
-    function loadConfigFromDefaultType(configFileName: string, _optionsToExtend: CompilerOptions | undefined, _host: ParseConfigFileHost, _extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, _watchOptionsToExtend?: WatchOptions, _extraFileExtensions?: readonly FileExtensionInfo[]): {
-        configText: string;
-        errors: Diagnostic[];
-    } | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file

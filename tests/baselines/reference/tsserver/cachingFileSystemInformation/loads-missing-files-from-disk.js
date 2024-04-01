@@ -37,6 +37,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/project
 Info seq  [hh:mm:ss:mss] For info: /users/username/projects/project/foo.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -86,7 +89,13 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -111,6 +120,18 @@ Info seq  [hh:mm:ss:mss] foo.ts(1,17): error TS2792: Cannot find module 'bar'. D
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
   {
+    "key": "/users/username/projects/project/tsconfig.d.ts",
+    "count": 2
+  },
+  {
+    "key": "/users/username/projects/project/tsconfig.ts",
+    "count": 2
+  },
+  {
+    "key": "/users/username/projects/project/tsconfig.js",
+    "count": 2
+  },
+  {
     "key": "/users/username/projects/project/tsconfig.json",
     "count": 2
   },
@@ -119,11 +140,35 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
     "count": 2
   },
   {
+    "key": "/users/username/projects/tsconfig.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/users/username/projects/tsconfig.ts",
+    "count": 1
+  },
+  {
+    "key": "/users/username/projects/tsconfig.js",
+    "count": 1
+  },
+  {
     "key": "/users/username/projects/tsconfig.json",
     "count": 1
   },
   {
     "key": "/users/username/projects/jsconfig.json",
+    "count": 1
+  },
+  {
+    "key": "/users/username/tsconfig.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/users/username/tsconfig.ts",
+    "count": 1
+  },
+  {
+    "key": "/users/username/tsconfig.js",
     "count": 1
   },
   {
@@ -135,11 +180,35 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
     "count": 1
   },
   {
+    "key": "/users/tsconfig.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/users/tsconfig.ts",
+    "count": 1
+  },
+  {
+    "key": "/users/tsconfig.js",
+    "count": 1
+  },
+  {
     "key": "/users/tsconfig.json",
     "count": 1
   },
   {
     "key": "/users/jsconfig.json",
+    "count": 1
+  },
+  {
+    "key": "/tsconfig.d.ts",
+    "count": 1
+  },
+  {
+    "key": "/tsconfig.ts",
+    "count": 1
+  },
+  {
+    "key": "/tsconfig.js",
     "count": 1
   },
   {

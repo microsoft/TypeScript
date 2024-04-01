@@ -36,8 +36,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: c:/project/node_modules/aws-sdk
 Info seq  [hh:mm:ss:mss] For info: c:/project/node_modules/aws-sdk/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/aws-sdk/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/aws-sdk/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/aws-sdk/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/aws-sdk/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/aws-sdk/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -90,11 +96,23 @@ watchedFiles::
   {"pollingInterval":500}
 c:/project/node_modules/aws-sdk/jsconfig.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/aws-sdk/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/aws-sdk/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/aws-sdk/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/aws-sdk/tsconfig.ts: *new*
   {"pollingInterval":2000}
 c:/project/node_modules/jsconfig.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
@@ -221,11 +239,23 @@ c:/project/node_modules/aws-sdk/jsconfig.json:
   {"pollingInterval":2000}
 c:/project/node_modules/aws-sdk/package.json: *new*
   {"pollingInterval":2000}
+c:/project/node_modules/aws-sdk/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/aws-sdk/tsconfig.js:
+  {"pollingInterval":2000}
 c:/project/node_modules/aws-sdk/tsconfig.json:
+  {"pollingInterval":2000}
+c:/project/node_modules/aws-sdk/tsconfig.ts:
   {"pollingInterval":2000}
 c:/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.js:
+  {"pollingInterval":2000}
 c:/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+c:/project/node_modules/tsconfig.ts:
   {"pollingInterval":2000}
 c:/project/package.json: *new*
   {"pollingInterval":250}

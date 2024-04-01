@@ -104,6 +104,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: e:/myproject/src
 Info seq  [hh:mm:ss:mss] For info: e:/myproject/src/app.js :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -162,7 +165,13 @@ e:/myproject/src/node_modules: *new*
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
+e:/myproject/src/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+e:/myproject/src/tsconfig.js: *new*
+  {"pollingInterval":2000}
 e:/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+e:/myproject/src/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -364,7 +373,13 @@ e:/myproject/src/node_modules:
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types:
   {"pollingInterval":500}
+e:/myproject/src/tsconfig.d.ts:
+  {"pollingInterval":2000}
+e:/myproject/src/tsconfig.js:
+  {"pollingInterval":2000}
 e:/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
+e:/myproject/src/tsconfig.ts:
   {"pollingInterval":2000}
 
 FsWatches::

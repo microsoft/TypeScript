@@ -70,6 +70,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/san2
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/san2/x.js :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -99,7 +102,13 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/san2/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/san2/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/user/username/projects/san2/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /user/username/projects/san2/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/san2/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 Projects::
@@ -277,7 +286,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/san2/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/san2/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/user/username/projects/san2/tsconfig.js:
+  {"pollingInterval":2000}
 /user/username/projects/san2/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/san2/tsconfig.ts:
   {"pollingInterval":2000}
 
 Projects::

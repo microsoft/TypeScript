@@ -46,10 +46,19 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /Library/Caches/typescript/node_modules/@types/react-router-dom
 Info seq  [hh:mm:ss:mss] For info: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -106,13 +115,31 @@ watchedFiles::
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json: *new*
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.ts: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.js: *new*
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/tsconfig.json: *new*
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.ts: *new*
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/jsconfig.json: *new*
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /lib.d.ts: *new*
   {"pollingInterval":500}
@@ -283,13 +310,31 @@ watchedFiles::
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.js:
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.js:
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/tsconfig.json:
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.ts:
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/jsconfig.json:
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.js:
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.ts:
   {"pollingInterval":2000}
 /lib.d.ts:
   {"pollingInterval":500}
@@ -988,13 +1033,31 @@ watchedFiles::
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.js:
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.js:
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/tsconfig.json:
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/@types/tsconfig.ts:
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/jsconfig.json:
   {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.js:
+  {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/Library/Caches/typescript/node_modules/tsconfig.ts:
   {"pollingInterval":2000}
 /lib.d.ts:
   {"pollingInterval":500}

@@ -2117,6 +2117,7 @@ export function getParsedCommandLineOfConfigFile(
     return parsedResult;
 }
 
+/** @internal */
 export function loadConfigFromDefaultType(
     configFileName: string,
 ): { configText: string, errors: Diagnostic[] } | undefined {

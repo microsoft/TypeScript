@@ -89,8 +89,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.d.ts 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.ts 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.js 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.d.ts 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.ts 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.js 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 {"excludeDirectories":["node_modules"]} WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -139,9 +145,21 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.ts: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}

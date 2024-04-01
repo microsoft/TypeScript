@@ -38,8 +38,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package
 Info seq  [hh:mm:ss:mss] For info: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -90,9 +96,21 @@ watchedFiles::
   {"pollingInterval":2000}
 /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/jsconfig.json: *new*
   {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.json: *new*
   {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.ts: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
@@ -202,9 +220,21 @@ watchedFiles::
   {"pollingInterval":500}
 /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/jsconfig.json:
   {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.js:
+  {"pollingInterval":2000}
 /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.json:
   {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.ts:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.js:
+  {"pollingInterval":2000}
 /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.json:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.ts:
   {"pollingInterval":2000}
 /project/package.json: *new*
   {"pollingInterval":250}

@@ -20,8 +20,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a/b
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/b/app.js :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -64,7 +70,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/b/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /user/username/projects/a/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/b/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -72,7 +84,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/a/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /user/username/projects/a/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -224,7 +242,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/tsconfig.js:
+  {"pollingInterval":2000}
 /user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/tsconfig.ts:
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json:
   {"pollingInterval":2000}
@@ -232,7 +256,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.js:
+  {"pollingInterval":2000}
 /user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.ts:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
@@ -479,7 +509,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/b/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/tsconfig.js:
+  {"pollingInterval":2000}
 /user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/tsconfig.ts:
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json:
   {"pollingInterval":2000}
@@ -487,7 +523,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.js:
+  {"pollingInterval":2000}
 /user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.ts:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}

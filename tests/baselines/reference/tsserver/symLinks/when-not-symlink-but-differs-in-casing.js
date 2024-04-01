@@ -52,12 +52,24 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: c:/temp/replay/axios-src/lib/core
 Info seq  [hh:mm:ss:mss] For info: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -125,23 +137,47 @@ c:/temp/replay/axios-src/lib/core/jsconfig.json: *new*
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/core/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.ts: *new*
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/jsconfig.json: *new*
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.ts: *new*
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/temp/replay/axios-src/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.ts: *new*
   {"pollingInterval":2000}
 c:/temp/replay/jsconfig.json: *new*
   {"pollingInterval":2000}
 c:/temp/replay/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/temp/replay/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.js: *new*
+  {"pollingInterval":2000}
 c:/temp/replay/tsconfig.json: *new*
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -347,7 +383,13 @@ c:/temp/replay/axios-src/lib/core/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/settle.js: *new*
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/core/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/jsconfig.json:
   {"pollingInterval":2000}
@@ -355,11 +397,23 @@ c:/temp/replay/axios-src/lib/node_modules: *new*
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/jsconfig.json:
   {"pollingInterval":2000}
@@ -367,7 +421,13 @@ c:/temp/replay/node_modules: *new*
   {"pollingInterval":500}
 c:/temp/replay/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.ts:
   {"pollingInterval":2000}
 
 FsWatches::
@@ -589,7 +649,13 @@ c:/temp/replay/axios-src/lib/core/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/settle.js:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/core/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/jsconfig.json:
   {"pollingInterval":2000}
@@ -597,11 +663,23 @@ c:/temp/replay/axios-src/lib/node_modules:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/jsconfig.json:
   {"pollingInterval":2000}
@@ -609,7 +687,13 @@ c:/temp/replay/node_modules:
   {"pollingInterval":500}
 c:/temp/replay/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.ts:
   {"pollingInterval":2000}
 
 FsWatches::
@@ -736,7 +820,13 @@ c:/temp/replay/axios-src/lib/core/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/core/settle.js:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/core/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/core/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/core/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/jsconfig.json:
   {"pollingInterval":2000}
@@ -744,11 +834,23 @@ c:/temp/replay/axios-src/lib/node_modules:
   {"pollingInterval":500}
 c:/temp/replay/axios-src/lib/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/lib/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/lib/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/lib/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/axios-src/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/axios-src/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/axios-src/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/axios-src/tsconfig.ts:
   {"pollingInterval":2000}
 c:/temp/replay/jsconfig.json:
   {"pollingInterval":2000}
@@ -756,7 +858,13 @@ c:/temp/replay/node_modules:
   {"pollingInterval":500}
 c:/temp/replay/node_modules/@types:
   {"pollingInterval":500}
+c:/temp/replay/tsconfig.d.ts:
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.js:
+  {"pollingInterval":2000}
 c:/temp/replay/tsconfig.json:
+  {"pollingInterval":2000}
+c:/temp/replay/tsconfig.ts:
   {"pollingInterval":2000}
 
 FsWatches::

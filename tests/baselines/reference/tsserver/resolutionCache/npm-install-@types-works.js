@@ -32,6 +32,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/temp
 Info seq  [hh:mm:ss:mss] For info: /a/b/projects/temp/a.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -81,7 +84,13 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/b/projects/temp/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /a/b/projects/temp/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -242,7 +251,13 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.js:
+  {"pollingInterval":2000}
 /a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.ts:
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
@@ -303,7 +318,13 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.js:
+  {"pollingInterval":2000}
 /a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.ts:
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::

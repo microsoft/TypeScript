@@ -34,6 +34,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /tests/cases/fourslash/server
 Info seq  [hh:mm:ss:mss] For info: /tests/cases/fourslash/server/a.js :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -84,7 +87,13 @@ watchedFiles::
   {"pollingInterval":500}
 /tests/cases/fourslash/server/jsconfig.json: *new*
   {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /tests/cases/fourslash/server/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.ts: *new*
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
@@ -928,7 +937,13 @@ watchedFiles::
   {"pollingInterval":500}
 /tests/cases/fourslash/server/jsconfig.json:
   {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.js:
+  {"pollingInterval":2000}
 /tests/cases/fourslash/server/tsconfig.json:
+  {"pollingInterval":2000}
+/tests/cases/fourslash/server/tsconfig.ts:
   {"pollingInterval":2000}
 
 watchedDirectories::

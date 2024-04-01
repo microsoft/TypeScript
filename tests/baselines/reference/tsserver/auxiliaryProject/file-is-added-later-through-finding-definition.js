@@ -66,6 +66,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Search path: /user/users/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/users/projects/myproject/index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/tsconfig.d.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/tsconfig.ts 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/tsconfig.js 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -116,7 +119,13 @@ After request
 PolledWatches::
 /user/users/projects/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
+/user/users/projects/myproject/tsconfig.d.ts: *new*
+  {"pollingInterval":2000}
+/user/users/projects/myproject/tsconfig.js: *new*
+  {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/users/projects/myproject/tsconfig.ts: *new*
   {"pollingInterval":2000}
 /user/users/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -238,7 +247,13 @@ After request
 PolledWatches::
 /user/users/projects/myproject/jsconfig.json:
   {"pollingInterval":2000}
+/user/users/projects/myproject/tsconfig.d.ts:
+  {"pollingInterval":2000}
+/user/users/projects/myproject/tsconfig.js:
+  {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+/user/users/projects/myproject/tsconfig.ts:
   {"pollingInterval":2000}
 /user/users/projects/node_modules: *new*
   {"pollingInterval":500}
