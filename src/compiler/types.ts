@@ -4174,6 +4174,18 @@ export interface SourceFileLike {
 }
 
 /** @internal */
+export interface FutureSourceFile {
+    readonly path: Path;
+    readonly fileName: string;
+    readonly impliedNodeFormat?: ResolutionMode;
+    readonly packageJsonScope?: PackageJsonInfo;
+    readonly externalModuleIndicator?: true | undefined;
+    readonly commonJsModuleIndicator?: true | undefined;
+    readonly statements: readonly never[];
+    readonly imports: readonly never[];
+}
+
+/** @internal */
 export interface RedirectInfo {
     /** Source file this redirects to. */
     readonly redirectTarget: SourceFile;

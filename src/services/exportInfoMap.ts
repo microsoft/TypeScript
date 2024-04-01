@@ -13,6 +13,7 @@ import {
     firstDefined,
     forEachAncestorDirectory,
     forEachEntry,
+    type FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getDirectoryPath,
@@ -477,7 +478,7 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
 }
 
 /** @internal */
-export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
     const start = timestamp();
     // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
     // which will invalidate the export map cache if things change, so pull it before
