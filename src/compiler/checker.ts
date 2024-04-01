@@ -1484,6 +1484,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
+    var strictInstanceOfTypeParameters = getStrictOptionValue(compilerOptions, "strictInstanceOfTypeParameters");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
 
     var checkBinaryExpression = createCheckBinaryExpression();
@@ -10534,13 +10535,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         })!.parent;
     }
 
+    function getInstanceTypeOfClassSymbol(classSymbol: Symbol): Type {
+        const classType = getDeclaredTypeOfSymbol(classSymbol) as GenericType;
+        const objectFlags = getObjectFlags(classType);
+        if (!(objectFlags & ObjectFlags.ClassOrInterface) || !classType.typeParameters) {
+            return classType;
+        }
+        const variances = getVariances(classType);
+        const isJs = some(classSymbol.declarations, isInJSFile);
+        const inferredTypes = calculateInferredTypeArguments(classType.typeParameters, isJs);
+        const typeArguments = map(inferredTypes, (inferredType, i) => {
+            if (!strictInstanceOfTypeParameters) {
+                return anyType;
+            }
+            const variance = variances[i];
+            switch (variance & VarianceFlags.VarianceMask) {
+                case VarianceFlags.Contravariant:
+                case VarianceFlags.Bivariant:
+                    return neverType;
+            }
+            return inferredType || unknownType;
+        });
+        return createTypeReference(classType, typeArguments);
+    }
+
     function getTypeOfPrototypeProperty(prototype: Symbol): Type {
-        // TypeScript 1.0 spec (April 2014): 8.4
         // Every class automatically contains a static property member named 'prototype',
-        // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
+        // the type of which is an instantiation of the class type.
+        // Type parameters on this class are instantiated with a type based on their constraint and variance.
         // It is an error to explicitly declare a static property member with the name 'prototype'.
-        const classType = getDeclaredTypeOfSymbol(getParentOfSymbol(prototype)!) as InterfaceType;
-        return classType.typeParameters ? createTypeReference(classType as GenericType, map(classType.typeParameters, _ => anyType)) : classType;
+        const classSymbol = getParentOfSymbol(prototype)!;
+        return getInstanceTypeOfClassSymbol(classSymbol);
     }
 
     // Return the type of the given property in the given type, or undefined if no such property exists
@@ -15059,6 +15084,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
         return typeArguments && typeArguments.slice();
+    }
+
+    /**
+     * Similar to `fillMissingTypeArguments` returns an array of type arguments that correspond to
+     * the input array of type parameters.
+     * However, this function infers the type of each argument to be the constraint of the type
+     * parameter; instantiating them with the other inferred type arguments.
+     */
+    function calculateInferredTypeArguments(typeParameters: readonly TypeParameter[] | undefined, isJavaScriptImplicitAny: boolean) {
+        const numTypeParameters = length(typeParameters);
+        if (!numTypeParameters) {
+            return [];
+        }
+        const result = [];
+        // Map invalid forward references in default types to the error type
+        for (let i = 0; i < numTypeParameters; i++) {
+            result[i] = errorType;
+        }
+        const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+        for (let i = 0; i < numTypeParameters; i++) {
+            let inferredType = getBaseConstraintOfType(typeParameters![i]);
+            if (isJavaScriptImplicitAny && inferredType && (isTypeIdenticalTo(inferredType, unknownType) || isTypeIdenticalTo(inferredType, emptyObjectType))) {
+                inferredType = anyType;
+            }
+            result[i] = inferredType ? instantiateType(inferredType, createTypeMapper(typeParameters!, result)) : baseDefaultType;
+        }
+        result.length = typeParameters!.length;
+        return result;
     }
 
     function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
@@ -28411,10 +28464,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (symbol === undefined) {
                 return type;
             }
-            const classSymbol = symbol.parent!;
+            const classSymbol = getParentOfSymbol(symbol)!;
             const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
                 ? getTypeOfSymbol(classSymbol) as InterfaceType
-                : getDeclaredTypeOfSymbol(classSymbol);
+                : getInstanceTypeOfClassSymbol(classSymbol);
             return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
         }
 

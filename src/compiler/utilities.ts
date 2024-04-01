@@ -9016,6 +9016,12 @@ export const computedOptions = createComputedCompilerOptions({
             return getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
         },
     },
+    strictInstanceOfTypeParameters: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictInstanceOfTypeParameters");
+        },
+    },
 });
 
 /** @internal */
@@ -9092,7 +9098,8 @@ export type StrictOptionName =
     | "strictBindCallApply"
     | "strictPropertyInitialization"
     | "alwaysStrict"
-    | "useUnknownInCatchVariables";
+    | "useUnknownInCatchVariables"
+    | "strictInstanceOfTypeParameters";
 
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
