@@ -1801,13 +1801,30 @@ export class TestState {
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
-    public getSemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
-        const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    public getSemanticDiagnostics(): ts.Diagnostic[] {
+        return this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    }
+
+    public verifySemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
+        const diagnostics = this.getSemanticDiagnostics();
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
     public getSuggestionDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]): void {
         this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+    }
+
+    public getRegionSemanticDiagnostics(
+        ranges: ts.TextRange[],
+        expected: readonly FourSlashInterface.Diagnostic[] | undefined) {
+        const diagnosticsResult = this.languageService.getRegionSemanticDiagnostics(this.activeFile.fileName, ranges);
+        if (diagnosticsResult && expected) {
+            return this.testDiagnostics(expected, diagnosticsResult.diagnostics, "error");
+        }
+        if (diagnosticsResult !== expected) {
+            if (expected) this.raiseError("Expected diagnostics to be defined.");
+            else assert.deepEqual(diagnosticsResult, expected, "Expected diagnostics to be undefined.");
+        }
     }
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {

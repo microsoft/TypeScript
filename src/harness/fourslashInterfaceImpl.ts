@@ -48,6 +48,21 @@ export class Test {
     public setTypesRegistry(map: ts.MapLike<void>): void {
         this.state.setTypesRegistry(map);
     }
+
+    public getSemanticDiagnostics(): Diagnostic[] {
+        return this.state.getSemanticDiagnostics().map<Diagnostic>(tsDiag =>
+            ({
+                message: ts.flattenDiagnosticMessageText(tsDiag.messageText, "\n"),
+                range: tsDiag.start ? {
+                    fileName: this.state.activeFile.fileName,
+                    pos: tsDiag.start,
+                    end: tsDiag.start + tsDiag.length!,
+                } : undefined,
+                code: tsDiag.code,
+                reportsUnnecessary: tsDiag.reportsUnnecessary ? true : undefined,
+                reportsDeprecated: !!tsDiag.reportsDeprecated ? true : undefined,
+            }));
+    }
 }
 
 export class Config {
@@ -586,7 +601,11 @@ export class Verify extends VerifyNegatable {
     }
 
     public getSemanticDiagnostics(expected: readonly Diagnostic[]) {
-        this.state.getSemanticDiagnostics(expected);
+        this.state.verifySemanticDiagnostics(expected);
+    }
+
+    public getRegionSemanticDiagnostics(ranges: ts.TextRange[], expected: readonly Diagnostic[]) {
+        this.state.getRegionSemanticDiagnostics(ranges, expected);
     }
 
     public getSuggestionDiagnostics(expected: readonly Diagnostic[]) {
