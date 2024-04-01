@@ -3,25 +3,33 @@
 === propertyAndFunctionWithSameName.ts ===
 class C {
 >C : C
+>  : ^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     x() { // error
 >x : () => number
+>  : ^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 
 class D {
 >D : D
+>  : ^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     x(v) { } // error
 >x : (v: any) => void
+>  : ^^^^^^^^^^^^^^^^
 >v : any
+>  : ^^^
 }

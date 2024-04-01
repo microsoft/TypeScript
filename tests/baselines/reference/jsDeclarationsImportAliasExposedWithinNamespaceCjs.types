@@ -3,9 +3,12 @@
 === file2.js ===
 const {myTypes} = require('./file.js');
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >require('./file.js') : typeof import("file")
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./file.js' : "./file.js"
+>            : ^^^^^^^^^^^
 
 /**
  * @namespace testFnTypes
@@ -14,7 +17,9 @@ const {myTypes} = require('./file.js');
  */
 const testFnTypes = {
 >testFnTypes : { [x: string]: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >{    // SOME PROPS HERE} : {}
+>                         : ^^
 
     // SOME PROPS HERE
 };
@@ -29,18 +34,27 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
+>       : ^^^^^^^^                 ^^^^^             
 >input : boolean | myTypes.typeC
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
+>                          : ^^^^^^^
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : boolean | myTypes.typeC
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >'number' : "number"
+>         : ^^^^^^^^
 
         return 2 * input;
 >2 * input : number
+>          : ^^^^^^
 >2 : 2
+>  : ^
 >input : never
+>      : ^^^^^
 
     } else {
         return null;
@@ -49,12 +63,19 @@ function testFn(input) {
 
 module.exports = {testFn, testFnTypes};
 >module.exports = {testFn, testFnTypes} : typeof module.exports
+>                                       : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFn : (input: testFnTypes.input) => number
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFnTypes : { [x: string]: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
 
 === file.js ===
 /**
@@ -64,7 +85,9 @@ module.exports = {testFn, testFnTypes};
  */
 const myTypes = {
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{    // SOME PROPS HERE} : {}
+>                         : ^^
 
     // SOME PROPS HERE
 };
@@ -81,8 +104,13 @@ const myTypes = {
 
 exports.myTypes = myTypes;
 >exports.myTypes = myTypes : { [x: string]: any; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^
 >exports.myTypes : { [x: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("file")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >myTypes : { [x: string]: any; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
 

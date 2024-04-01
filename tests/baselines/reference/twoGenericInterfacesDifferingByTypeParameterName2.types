@@ -6,22 +6,26 @@
 interface B<T, U> {
     x: U;
 >x : U
+>  : ^
 }
 
 interface B<U, T> { // error
     y: V;
 >y : V
+>  : ^
 }
 
 module M {
     interface B<T, U> {
         x: U;
 >x : U
+>  : ^
     }
 
     interface B<U, T> { // error
         y: T;
 >y : T
+>  : ^
     }
 }
 
@@ -29,6 +33,7 @@ module M2 {
     interface B<T, U> {
         x: U;
 >x : U
+>  : ^
     }
 }
 
@@ -36,6 +41,7 @@ module M2 {
     interface B<U, T> { // ok, different declaration space than other M2
         y: T;
 >y : T
+>  : ^
     }
 }
 
@@ -43,6 +49,7 @@ module M3 {
     export interface B<T, U> {
         x: U;
 >x : U
+>  : ^
     }
 }
 
@@ -50,6 +57,7 @@ module M3 {
     export interface B<U, T> { // error
         y: T;
 >y : T
+>  : ^
     }
 }
 

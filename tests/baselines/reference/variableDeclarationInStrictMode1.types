@@ -9,7 +9,9 @@ Symbol count: 29,000 / 29,000 (nearest 500)
 === variableDeclarationInStrictMode1.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 var eval;
 >eval : any
+>     : ^^^
 

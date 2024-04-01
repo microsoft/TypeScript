@@ -3,28 +3,38 @@
 === ThingA.ts ===
 export class ThingA { } 
 >ThingA : ThingA
+>       : ^^^^^^
 
 === ThingB.ts ===
 export class ThingB { }
 >ThingB : ThingB
+>       : ^^^^^^
 
 === Things.ts ===
 export {ThingA} from "./ThingA";
 >ThingA : typeof import("ThingA").ThingA
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export {ThingB} from "./ThingB";
 >ThingB : typeof import("ThingB").ThingB
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === Test.ts ===
 import * as things from "./Things";
 >things : typeof things
+>       : ^^^^^^^^^^^^^
 
 export class Test {
 >Test : Test
+>     : ^^^^
 
     public method = (input: things.ThingA)  => { };
 >method : (input: things.ThingA) => void
+>       : ^^^^^^^^             ^^^^^^^^^
 >(input: things.ThingA)  => { } : (input: things.ThingA) => void
+>                               : ^^^^^^^^             ^^^^^^^^^
 >input : things.ThingA
+>      : ^^^^^^^^^^^^^
 >things : any
+>       : ^^^
 }

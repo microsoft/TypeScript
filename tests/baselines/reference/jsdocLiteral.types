@@ -10,23 +10,40 @@
  */
 function f(p1, p2, p3, p4, p5) {
 >f : (p1: 'literal', p2: "literal", p3: 'literal' | 'other', p4: 'literal' | number, p5: 12 | true | 'str') => string
+>  : ^^^^^         ^^^^^^         ^^^^^^                   ^^^^^^                  ^^^^^^                 ^^^^^^^^^^^
 >p1 : "literal"
+>   : ^^^^^^^^^
 >p2 : "literal"
+>   : ^^^^^^^^^
 >p3 : "literal" | "other"
+>   : ^^^^^^^^^^^^^^^^^^^
 >p4 : number | "literal"
+>   : ^^^^^^^^^^^^^^^^^^
 >p5 : true | 12 | "str"
+>   : ^^^^^^^^^^^^^^^^^
 
     return p1 + p2 + p3 + p4 + p5 + '.';
 >p1 + p2 + p3 + p4 + p5 + '.' : string
+>                             : ^^^^^^
 >p1 + p2 + p3 + p4 + p5 : string
+>                       : ^^^^^^
 >p1 + p2 + p3 + p4 : string
+>                  : ^^^^^^
 >p1 + p2 + p3 : string
+>             : ^^^^^^
 >p1 + p2 : string
+>        : ^^^^^^
 >p1 : "literal"
+>   : ^^^^^^^^^
 >p2 : "literal"
+>   : ^^^^^^^^^
 >p3 : "literal" | "other"
+>   : ^^^^^^^^^^^^^^^^^^^
 >p4 : number | "literal"
+>   : ^^^^^^^^^^^^^^^^^^
 >p5 : true | 12 | "str"
+>   : ^^^^^^^^^^^^^^^^^
 >'.' : "."
+>    : ^^^
 }
 

@@ -51,9 +51,9 @@ createSomeObject().message;
 /a/lib/tsc.js -b -w App
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -222,7 +222,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -313,7 +313,7 @@ Output::
     [7m [0m [96m    ~~~~~~~~[0m
     'message2' is declared here.
 
-[[90m12:01:00 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -388,7 +388,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -469,7 +469,7 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

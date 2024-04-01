@@ -3,4 +3,5 @@
 === parser512084.ts ===
 class foo {
 >foo : foo
+>    : ^^^
 

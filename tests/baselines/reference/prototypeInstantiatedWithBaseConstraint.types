@@ -3,17 +3,25 @@
 === prototypeInstantiatedWithBaseConstraint.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 }
 
 C.prototype.x.boo; // No error, prototype is instantiated to any
 >C.prototype.x.boo : any
 >C.prototype.x : any
+>              : ^^^
 >C.prototype : C<any>
+>            : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C<any>
+>          : ^^^^^^
 >x : any
+>  : ^^^
 >boo : any
+>    : ^^^
 

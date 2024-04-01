@@ -22,6 +22,5 @@ var Src = /** @class */ (function () {
 
 
 //// [index.d.ts]
-/// <reference types="dep" />
 declare class Src implements NS.Dep {
 }

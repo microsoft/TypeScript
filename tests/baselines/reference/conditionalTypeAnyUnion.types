@@ -8,6 +8,7 @@ type Spec = any extends object ? any : string;
 
 type WithSpec<T extends number> = T
 >WithSpec : T
+>         : ^
 
 type R = WithSpec<Spec> // should not error
 >R : any

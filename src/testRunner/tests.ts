@@ -65,6 +65,7 @@ import "./unittests/services/preProcessFile";
 import "./unittests/services/textChanges";
 import "./unittests/services/transpile";
 import "./unittests/services/utilities";
+import "./unittests/sys/symlinkWatching";
 import "./unittests/tsbuild/amdModulesWithOut";
 import "./unittests/tsbuild/clean";
 import "./unittests/tsbuild/commandLine";
