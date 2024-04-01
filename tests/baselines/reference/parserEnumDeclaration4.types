@@ -3,6 +3,9 @@
 === parserEnumDeclaration4.ts ===
 enum void {
 > : (Missing)
+> : ^^^^^^^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 }

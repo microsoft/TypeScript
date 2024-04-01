@@ -8,3669 +8,5502 @@
 // of code, this is still representative of a common pattern.
 function build() {
 >build : () => any[]
+>      : ^^^^^^^^^^^
 
     let i = 0;
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     const arr = [];
 >arr : any[]
+>    : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     arr[i++] = arr[i] + 1;
 >arr[i++] = arr[i] + 1 : any
 >arr[i++] : any
 >arr : any[]
+>    : ^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >arr[i] + 1 : any
 >arr[i] : any
 >arr : any[]
+>    : ^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     return arr;
 >arr : any[]
+>    : ^^^^^
 }
 
 const a = build();
 >a : any[]
+>  : ^^^^^
 >build() : any[]
+>        : ^^^^^
 >build : () => any[]
+>      : ^^^^^^^^^^^
 

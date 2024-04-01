@@ -6,17 +6,23 @@
 
 let x: $;
 >x : $
+>  : ^
 
 let y = () => x
 >y : () => $
+>  : ^^^^^^^
 >() => x : () => $
+>        : ^^^^^^^
 >x : $
+>  : ^
 
 
 === /ref.d.ts ===
 declare let $: { x: number }
 >$ : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
     
 === /types/lib/index.d.ts ===
 interface $ { x }

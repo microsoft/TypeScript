@@ -856,8 +856,12 @@ export namespace Compiler {
                     }
                     lastIndexWritten = result.line;
                     const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
-                    const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
+                    const lineText = result.sourceText.replace(/\r?\n/g, "");
+                    const formattedLine = lineText + " : " + typeOrSymbolString;
                     typeLines += ">" + formattedLine + "\r\n";
+                    if (result.underline) {
+                        typeLines += ">" + " ".repeat(lineText.length) + " : " + result.underline + "\r\n";
+                    }
                 }
 
                 lastIndexWritten ??= -1;

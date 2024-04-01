@@ -3,19 +3,24 @@
 === a.ts ===
 export class A { }
 >A : A
+>  : ^
 
 === b.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 export { a };
 >a : typeof a
+>  : ^^^^^^^^
 
 === tslib.d.ts ===
 declare module "tslib" {
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     function __importStar(m: any): void;
 >__importStar : (m: any) => void
+>             : ^^^^   ^^^^^    
 >m : any
 }

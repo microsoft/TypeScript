@@ -72,6 +72,7 @@ import {
     isImportEqualsDeclaration,
     isInJSFile,
     isIntrinsicJsxName,
+    isJSDocImportTag,
     isJsxClosingElement,
     isJsxOpeningFragment,
     isJsxOpeningLikeElement,
@@ -694,6 +695,7 @@ function getNamespaceLikeImportText(declaration: AnyImportOrRequire) {
             return tryCast(declaration.name, isIdentifier)?.text;
         case SyntaxKind.ImportEqualsDeclaration:
             return declaration.name.text;
+        case SyntaxKind.JSDocImportTag:
         case SyntaxKind.ImportDeclaration:
             return tryCast(declaration.importClause?.namedBindings, isNamespaceImport)?.name.text;
         default:
@@ -806,7 +808,7 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
                 (importMap ||= createMultiMap()).add(getSymbolId(moduleSymbol), i.parent);
             }
         }
-        else if (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration) {
+        else if (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration || i.kind === SyntaxKind.JSDocImportTag) {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
             if (moduleSymbol) {
                 (importMap ||= createMultiMap()).add(getSymbolId(moduleSymbol), i);
@@ -816,10 +818,16 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
 
     return {
         getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo): readonly FixAddToExistingImportInfo[] => {
-            // Can't use an es6 import for a type in JS.
-            if (!(targetFlags & SymbolFlags.Value) && isSourceFileJS(importingFile)) return emptyArray;
             const matchingDeclarations = importMap?.get(getSymbolId(moduleSymbol));
             if (!matchingDeclarations) return emptyArray;
+
+            // Can't use an es6 import for a type in JS.
+            if (
+                isSourceFileJS(importingFile)
+                && !(targetFlags & SymbolFlags.Value)
+                && !every(matchingDeclarations, isJSDocImportTag)
+            ) return emptyArray;
+
             const importKind = getImportKind(importingFile, exportKind, compilerOptions);
             return matchingDeclarations.map(declaration => ({ declaration, importKind, symbol, targetFlags }));
         },

@@ -13,31 +13,50 @@ Symbol count: 88,000 / 88,000 (nearest 500)
 
 import React, { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >ComponentPropsWithRef : any
+>                      : ^^^
 >ElementType : any
+>            : ^^^
 >ReactNode : any
+>          : ^^^
 
 type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
 >ButtonBaseProps : ButtonBaseProps<T>
+>                : ^^^^^^^^^^^^^^^^^^
 >children : React.ReactNode
+>         : ^^^^^^^^^^^^^^^
 
 function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
 >props : ButtonBaseProps<T>
+>      : ^^^^^^^^^^^^^^^^^^
 
     return <></>;
 ><></> : JSX.Element
+>      : ^^^^^^^^^^^
 }
 
 const v1 = <Component onClick={e => e.preventDefault()} />;
 >v1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Component onClick={e => e.preventDefault()} /> : JSX.Element
+>                                                : ^^^^^^^^^^^
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : (e: React.MouseEvent<HTMLSpanElement>) => void
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e => e.preventDefault() : (e: React.MouseEvent<HTMLSpanElement>) => void
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<HTMLSpanElement>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e.preventDefault() : void
+>                   : ^^^^
 >e.preventDefault : () => void
+>                 : ^^^^^^^^^^
 >e : React.MouseEvent<HTMLSpanElement>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >preventDefault : () => void
+>               : ^^^^^^^^^^
 

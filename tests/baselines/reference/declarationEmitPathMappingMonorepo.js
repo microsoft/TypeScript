@@ -26,5 +26,4 @@ function b(text) {
 
 
 //// [index.d.ts]
-/// <reference types="@ts-bug/a" />
 export declare function b(text: string): import("@ts-bug/a").AText;

@@ -42,7 +42,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -w -p src --extendedDiagnostics
 Output::
-[[90m12:00:43 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /users/user/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src/tsconfig.json 2000 undefined Config file
@@ -58,7 +58,7 @@ DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/node_module
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/@types 1 undefined Type roots
-[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src 1 undefined Wild card directory

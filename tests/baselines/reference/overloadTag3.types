@@ -6,6 +6,7 @@
  */
 export class Foo {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     /**
      * @constructor
@@ -18,16 +19,23 @@ export class Foo {
      */
     bar(value) { }
 >bar : (value: T) => void
+>    : ^^^^^^^^ ^^^^^^^^^
 >value : T
+>      : ^
 }
 
 /** @type {Foo<number>} */
 let foo;
 >foo : Foo<number>
+>    : ^^^^^^^^^^^
 
 foo = new Foo();
 >foo = new Foo() : Foo<number>
+>                : ^^^^^^^^^^^
 >foo : Foo<number>
+>    : ^^^^^^^^^^^
 >new Foo() : Foo<number>
+>          : ^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

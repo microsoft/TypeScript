@@ -7,27 +7,34 @@ export * from './eventList';
 === test.ts ===
 import { EventList } from "./eventList";
 >EventList : any
+>          : ^^^
 
 declare const p012: "p0" | "p1" | "p2"
 >p012 : "p0" | "p1" | "p2"
+>     : ^^^^^^^^^^^^^^^^^^
 
 const t: keyof EventList = p012
 >t : keyof EventList
+>  : ^^^^^^^^^^^^^^^
 >p012 : "p0" | "p1" | "p2"
+>     : ^^^^^^^^^^^^^^^^^^
 
 === eventList.ts ===
 export interface EventList {
     p0: [];
 >p0 : []
+>   : ^^
 }
 
 === foo.ts ===
 declare module './index' {
 >'./index' : typeof import("index")
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     interface EventList {
         p1: []
 >p1 : []
+>   : ^^
     }
 }
 export {};
@@ -36,10 +43,12 @@ export {};
 === bar.ts ===
 declare module './index' {
 >'./index' : typeof import("index")
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     interface EventList {
         p2: []
 >p2 : []
+>   : ^^
     }
 }
 export {};

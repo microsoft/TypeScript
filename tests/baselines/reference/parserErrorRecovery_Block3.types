@@ -3,11 +3,14 @@
 === parserErrorRecovery_Block3.ts ===
 class C  {
 >C : C
+>  : ^
 
     private a(): boolean {
 >a : () => boolean
+>  : ^^^^^^       
 
     private b(): boolean {
 >b : () => boolean
+>  : ^^^^^^       
     }
 }

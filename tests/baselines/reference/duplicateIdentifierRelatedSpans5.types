@@ -3,16 +3,20 @@
 === file1.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     interface TopLevel {
         duplicate1: () => string;
 >duplicate1 : () => string
+>           : ^^^^^^      
 
         duplicate2: () => string;
 >duplicate2 : () => string
+>           : ^^^^^^      
 
         duplicate3: () => string;
 >duplicate3 : () => string
+>           : ^^^^^^      
     }
 }
 export {}
@@ -20,16 +24,20 @@ export {}
 import "./file1";
 declare global {
 >global : any
+>       : ^^^
 
     interface TopLevel {
         duplicate1(): number;
 >duplicate1 : () => number
+>           : ^^^^^^      
 
         duplicate2(): number;
 >duplicate2 : () => number
+>           : ^^^^^^      
 
         duplicate3(): number;
 >duplicate3 : () => number
+>           : ^^^^^^      
     }
 }
 export {}

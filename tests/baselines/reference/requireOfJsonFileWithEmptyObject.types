@@ -3,24 +3,33 @@
 === file1.ts ===
 import b1 = require('./b.json');
 >b1 : {}
+>   : ^^
 
 let x = b1;
 >x : {}
+>  : ^^
 >b1 : {}
+>   : ^^
 
 import b2 = require('./b.json');
 >b2 : {}
+>   : ^^
 
 if (x) {
 >x : {}
+>  : ^^
 
     x = b2;
 >x = b2 : {}
+>       : ^^
 >x : {}
+>  : ^^
 >b2 : {}
+>   : ^^
 }
 
 === b.json ===
 {
 >{} : {}
+>   : ^^
 }

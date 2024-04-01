@@ -3,12 +3,15 @@
 === parameterPropertyInConstructor1.ts ===
 declare module mod {
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
   class Customers {
 >Customers : Customers
+>          : ^^^^^^^^^
 
     constructor(public names: string);
 >names : string
+>      : ^^^^^^
   }
 }
 

@@ -3,17 +3,24 @@
 === declFileForTypeParameters.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 
     foo(a: T): T {
 >foo : (a: T) => T
+>    : ^^^^ ^^^^^ 
 >a : T
+>  : ^
 
         return this.x;
 >this.x : T
+>       : ^
 >this : this
+>     : ^^^^
 >x : T
+>  : ^
     }
 }
