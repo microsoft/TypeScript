@@ -9913,21 +9913,13 @@ export interface PragmaMap extends Map<string, PragmaPseudoMap[keyof PragmaPseud
     forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey, map: PragmaMap) => void): void;
 }
 
-type IntoCompilerOptionsValue<T extends CommandLineOption> =
-    T["type"] extends "string"
-        ? string
-    : T["type"] extends "number"
-        ? number
-    : T["type"] extends "boolean"
-        ? boolean
-    : T["type"] extends "object"
-       ? Record<string, any>
-    : T["type"] extends "list"
-        ? IntoCompilerOptionsValue<Extract<T, CommandLineOptionOfListType>["element"]>[]
-    : T["type"] extends "listOrElement"
-        ? IntoCompilerOptionsValue<Extract<T, CommandLineOptionOfListType>["element"]>[] | IntoCompilerOptionsValue<Extract<T, CommandLineOptionOfListType>["element"]>
-    : T["type"] extends Map<infer InputKeyTypes, infer _EnumType>
-        ? InputKeyTypes
+type IntoCompilerOptionsValue<T extends CommandLineOption> = T["type"] extends "string" ? string
+    : T["type"] extends "number" ? number
+    : T["type"] extends "boolean" ? boolean
+    : T["type"] extends "object" ? Record<string, any>
+    : T["type"] extends "list" ? IntoCompilerOptionsValue<Extract<T, CommandLineOptionOfListType>["element"]>[]
+    : T["type"] extends "listOrElement" ? IntoCompilerOptionsValue<Extract<T, CommandLineOptionOfListType>["element"]>[] | IntoCompilerOptionsValue<Extract<T, CommandLineOptionOfListType>["element"]>
+    : T["type"] extends Map<infer InputKeyTypes, infer _EnumType> ? InputKeyTypes
     : never;
 
 type IntoCompilerOptionsNameValuePair<T extends CommandLineOption> = {
@@ -9938,7 +9930,7 @@ type IntoCompilerOptionsNameValuePairs<T extends CommandLineOption> = T extends 
 
 type IntoCompilerOptionsDefinitionWorker<T extends CommandLineOption[]> = UnionToIntersection<IntoCompilerOptionsNameValuePairs<T[number]>>;
 
-type IntoCompilerOptionsDefinition<T extends CommandLineOption[]> = IntoCompilerOptionsDefinitionWorker<T> extends infer U ? {[K in keyof U]: U[K]} : never;
+type IntoCompilerOptionsDefinition<T extends CommandLineOption[]> = IntoCompilerOptionsDefinitionWorker<T> extends infer U ? { [K in keyof U]: U[K]; } : never;
 
 export const _optionsType = [undefined! as IntoCompilerOptionsDefinition<typeof optionDeclarations> | undefined][0];
 
@@ -9948,7 +9940,7 @@ export const _optionsType = [undefined! as IntoCompilerOptionsDefinition<typeof 
 export interface RawTSConfig {
     extends?: string | string[];
     compilerOptions?: NonNullable<typeof _optionsType>;
-    references?: { path: string }[];
+    references?: { path: string; }[];
     files?: string[];
     include?: string[];
     exclude?: string[];

@@ -2120,7 +2120,7 @@ export function getParsedCommandLineOfConfigFile(
 /** @internal */
 export function loadConfigFromDefaultType(
     configFileName: string,
-): { configText: string, errors: Diagnostic[] } | undefined {
+): { configText: string; errors: Diagnostic[]; } | undefined {
     const program = createProgram({
         rootNames: [configFileName],
         options: {
@@ -2150,7 +2150,7 @@ export function loadConfigFromDefaultType(
     // And to save on API work, just serialize the raw value into a string and send it through the usual path
     return {
         errors: program.getSemanticDiagnostics(file).slice(),
-        configText: JSON.stringify(raw)
+        configText: JSON.stringify(raw),
     };
 }
 
