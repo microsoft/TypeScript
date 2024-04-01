@@ -3,12 +3,12 @@ import {
 } from "chai";
 
 import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import {
     createHasErrorMessageLogger,
     nullLogger,
 } from "../../../harness/tsserverLogger";
+import {
+    incrementalVerifier,
+} from "../../../incrementalVerifier/verifier";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 

@@ -1,3 +1,6 @@
+import {
+    incrementalVerifier,
+} from "../incrementalVerifier/verifier";
 import * as collections from "./_namespaces/collections";
 import * as fakes from "./_namespaces/fakes";
 import {
@@ -11,9 +14,6 @@ import {
 } from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import {
-    incrementalVerifier,
-} from "./incrementalUtils";
 import {
     patchServiceForStateBaseline,
 } from "./projectServiceStateLogger";
