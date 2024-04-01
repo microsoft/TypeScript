@@ -382,10 +382,11 @@ CompilerOptions::
   "allowJs": true,
   "noImplicitAny": true,
   "strictNullChecks": true,
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/dev/tsconfig.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts
+/dev/main.ts
+/dev/supplemental.ts
 Errors::
 
 
@@ -396,10 +397,11 @@ CompilerOptions::
   "allowJs": true,
   "noImplicitAny": true,
   "strictNullChecks": false,
-  "configFilePath": "tsconfig.nostrictnull.json"
+  "configFilePath": "/dev/tsconfig.nostrictnull.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts
+/dev/main.ts
+/dev/supplemental.ts
 Errors::
 
 
@@ -408,10 +410,14 @@ configFileName:: circular.json
 CompilerOptions::
 {
   "module": 2,
-  "configFilePath": "circular.json"
+  "configFilePath": "/dev/circular.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [91merror[0m[90m TS18000: [0mCircularity detected while resolving configuration: /dev/circular.json -> /dev/circular2.json -> /dev/circular.json
 
@@ -421,10 +427,14 @@ configFileName:: missing.json
 CompilerOptions::
 {
   "types": [],
-  "configFilePath": "missing.json"
+  "configFilePath": "/dev/missing.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mmissing.json[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS6053: [0mFile './missing2' not found.
 
@@ -437,10 +447,14 @@ configFileName:: failure.json
 CompilerOptions::
 {
   "typeRoots": [],
-  "configFilePath": "failure.json"
+  "configFilePath": "/dev/failure.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mfailure2.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS6114: [0mUnknown option 'excludes'. Did you mean 'exclude'?
 
@@ -452,10 +466,14 @@ can error when 'extends' is not a string or Array
 configFileName:: extends.json
 CompilerOptions::
 {
-  "configFilePath": "extends.json"
+  "configFilePath": "/dev/extends.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mextends.json[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS5024: [0mCompiler option 'extends' requires a value of type string or Array.
 
@@ -467,10 +485,14 @@ can error when 'extends' is given an empty string
 configFileName:: extends3.json
 CompilerOptions::
 {
-  "configFilePath": "extends3.json"
+  "configFilePath": "/dev/extends3.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mextends3.json[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS18051: [0mCompiler option 'extends' cannot be given an empty string.
 
@@ -482,10 +504,14 @@ can error when 'extends' is given an empty string in an array
 configFileName:: extends4.json
 CompilerOptions::
 {
-  "configFilePath": "extends4.json"
+  "configFilePath": "/dev/extends4.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mextends4.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS18051: [0mCompiler option 'extends' cannot be given an empty string.
 
@@ -500,7 +526,7 @@ CompilerOptions::
   "allowJs": true,
   "noImplicitAny": true,
   "strictNullChecks": true,
-  "configFilePath": "configs/third.json"
+  "configFilePath": "/dev/configs/third.json"
 }
 FileNames::
 /dev/supplemental.ts
@@ -515,10 +541,11 @@ CompilerOptions::
   "noImplicitAny": true,
   "strictNullChecks": true,
   "module": 4,
-  "configFilePath": "configs/fourth.json"
+  "configFilePath": "/dev/configs/fourth.json"
 }
 FileNames::
 /dev/main.ts
+/dev/supplemental.ts
 Errors::
 
 
@@ -530,7 +557,7 @@ CompilerOptions::
   "noImplicitAny": true,
   "strictNullChecks": true,
   "module": 4,
-  "configFilePath": "configs/fifth.json"
+  "configFilePath": "/dev/configs/fifth.json"
 }
 FileNames::
 /dev/tests/utils.ts
@@ -542,7 +569,7 @@ configFileName:: tsconfig.extendsBox.json
 CompilerOptions::
 {
   "strict": true,
-  "configFilePath": "tsconfig.extendsBox.json"
+  "configFilePath": "/dev/tsconfig.extendsBox.json"
 }
 FileNames::
 /dev/main.ts
@@ -554,7 +581,7 @@ configFileName:: tsconfig.extendsStrict.json
 CompilerOptions::
 {
   "strict": true,
-  "configFilePath": "tsconfig.extendsStrict.json"
+  "configFilePath": "/dev/tsconfig.extendsStrict.json"
 }
 FileNames::
 /dev/main.ts
@@ -566,7 +593,7 @@ configFileName:: tsconfig.extendsUnStrict.json
 CompilerOptions::
 {
   "strict": false,
-  "configFilePath": "tsconfig.extendsUnStrict.json"
+  "configFilePath": "/dev/tsconfig.extendsUnStrict.json"
 }
 FileNames::
 /dev/main.ts
@@ -578,7 +605,7 @@ configFileName:: tsconfig.extendsStrictExtension.json
 CompilerOptions::
 {
   "strict": true,
-  "configFilePath": "tsconfig.extendsStrictExtension.json"
+  "configFilePath": "/dev/tsconfig.extendsStrictExtension.json"
 }
 FileNames::
 /dev/main.ts
@@ -590,7 +617,7 @@ configFileName:: tsconfig.extendsBoxImplied.json
 CompilerOptions::
 {
   "strict": true,
-  "configFilePath": "tsconfig.extendsBoxImplied.json"
+  "configFilePath": "/dev/tsconfig.extendsBoxImplied.json"
 }
 FileNames::
 /dev/main.ts
@@ -602,7 +629,7 @@ configFileName:: tsconfig.extendsBoxImpliedUnstrict.json
 CompilerOptions::
 {
   "strict": false,
-  "configFilePath": "tsconfig.extendsBoxImpliedUnstrict.json"
+  "configFilePath": "/dev/tsconfig.extendsBoxImpliedUnstrict.json"
 }
 FileNames::
 /dev/main.ts
@@ -614,7 +641,7 @@ configFileName:: tsconfig.extendsBoxImpliedUnstrictExtension.json
 CompilerOptions::
 {
   "strict": false,
-  "configFilePath": "tsconfig.extendsBoxImpliedUnstrictExtension.json"
+  "configFilePath": "/dev/tsconfig.extendsBoxImpliedUnstrictExtension.json"
 }
 FileNames::
 /dev/main.ts
@@ -626,7 +653,7 @@ configFileName:: tsconfig.extendsBoxImpliedPath.json
 CompilerOptions::
 {
   "strict": true,
-  "configFilePath": "tsconfig.extendsBoxImpliedPath.json"
+  "configFilePath": "/dev/tsconfig.extendsBoxImpliedPath.json"
 }
 FileNames::
 /dev/main.ts
@@ -638,7 +665,7 @@ configFileName:: tsconfig.extendsFoo.json
 CompilerOptions::
 {
   "strict": true,
-  "configFilePath": "tsconfig.extendsFoo.json"
+  "configFilePath": "/dev/tsconfig.extendsFoo.json"
 }
 FileNames::
 /dev/main.ts
@@ -653,10 +680,10 @@ CompilerOptions::
   "noImplicitAny": false,
   "strictNullChecks": false,
   "module": 4,
-  "configFilePath": "configs/extendsArrayFifth.json"
+  "configFilePath": "/dev/configs/extendsArrayFifth.json"
 }
 FileNames::
-
+/dev/supplemental.ts
 Errors::
 
 
@@ -665,10 +692,14 @@ configFileName:: extendsArrayFails.json
 CompilerOptions::
 {
   "types": [],
-  "configFilePath": "extendsArrayFails.json"
+  "configFilePath": "/dev/extendsArrayFails.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mextendsArrayFails.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile './missingFile' not found.
 
@@ -680,10 +711,14 @@ can error when 'extends' is not a string or Array2
 configFileName:: extendsArrayFails2.json
 CompilerOptions::
 {
-  "configFilePath": "extendsArrayFails2.json"
+  "configFilePath": "/dev/extendsArrayFails2.json"
 }
 FileNames::
-/dev/main.ts,/dev/supplemental.ts,/dev/tests/utils.ts,/dev/tests/baselines/first/output.ts,/dev/tests/unit/spec.ts
+/dev/main.ts
+/dev/supplemental.ts
+/dev/tests/utils.ts
+/dev/tests/baselines/first/output.ts
+/dev/tests/unit/spec.ts
 Errors::
 [96mextendsArrayFails2.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5024: [0mCompiler option 'extends' requires a value of type string.
 
