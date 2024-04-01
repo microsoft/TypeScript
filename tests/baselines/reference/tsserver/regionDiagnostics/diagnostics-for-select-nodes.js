@@ -141,8 +141,8 @@ Info seq  [hh:mm:ss:mss] event:
         "spans": [
           {
             "start": {
-              "line": 7,
-              "offset": 1
+              "line": 3,
+              "offset": 2
             },
             "end": {
               "line": 7,
