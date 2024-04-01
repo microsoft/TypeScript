@@ -13,7 +13,6 @@ import {
     isValidTypeOnlyAliasUseSite,
     Program,
     sameMap,
-    skipAlias,
     some,
     SourceFile,
     SymbolFlags,
@@ -106,11 +105,8 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
     const checker = program.getTypeChecker();
     for (const specifier of nonTypeOnlySpecifiers) {
         const isUsedAsValue = FindAllReferences.Core.eachSymbolReferenceInFile(specifier.name, checker, sourceFile, usage => {
-            if (isValidTypeOnlyAliasUseSite(usage)) {
-                return true;
-            }
             const symbol = checker.getSymbolAtLocation(usage);
-            return !!(symbol && skipAlias(symbol, checker).flags & SymbolFlags.Value);
+            return !isValidTypeOnlyAliasUseSite(usage) || !!symbol && !checker.getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
         });
         if (isUsedAsValue) {
             return false;
