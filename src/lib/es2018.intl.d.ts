@@ -18,8 +18,8 @@ declare namespace Intl {
         pluralCategories: LDMLPluralRule[];
         type: PluralRuleType;
         minimumIntegerDigits: number;
-        minimumFractionDigits: number;
-        maximumFractionDigits: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
     }
@@ -32,7 +32,7 @@ declare namespace Intl {
     interface PluralRulesConstructor {
         new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
+        supportedLocalesOf(locales: string | readonly string[], options?: PluralRulesOptions): string[];
     }
 
     const PluralRules: PluralRulesConstructor;

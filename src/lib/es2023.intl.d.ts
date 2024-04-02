@@ -9,18 +9,26 @@ declare namespace Intl {
         negative: never;
     }
 
+    type NumberFormatOptionsRoundingPriority = "auto" | "morePrecision" | "lessPrecision";
+
+    type NumberFormatOptionsRoundingIncrement = 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000;
+
+    type NumberFormatOptionsRoundingMode = "ceil" | "floor" | "expand" | "trunc" | "halfCeil" | "halfFloor" | "halfExpand" | "halfTrunc" | "halfEven";
+
+    type NumberFormatOptionsTrailingZeroDisplay = "auto" | "stripIfInteger";
+
     interface NumberFormatOptions {
-        roundingPriority?: "auto" | "morePrecision" | "lessPrecision" | undefined;
-        roundingIncrement?: 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000 | undefined;
-        roundingMode?: "ceil" | "floor" | "expand" | "trunc" | "halfCeil" | "halfFloor" | "halfExpand" | "halfTrunc" | "halfEven" | undefined;
-        trailingZeroDisplay?: "auto" | "stripIfInteger" | undefined;
+        roundingPriority?: NumberFormatOptionsRoundingPriority | undefined;
+        roundingIncrement?: NumberFormatOptionsRoundingIncrement | undefined;
+        roundingMode?: NumberFormatOptionsRoundingMode | undefined;
+        trailingZeroDisplay?: NumberFormatOptionsTrailingZeroDisplay | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
-        roundingPriority: "auto" | "morePrecision" | "lessPrecision";
-        roundingMode: "ceil" | "floor" | "expand" | "trunc" | "halfCeil" | "halfFloor" | "halfExpand" | "halfTrunc" | "halfEven";
-        roundingIncrement: 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000;
-        trailingZeroDisplay: "auto" | "stripIfInteger";
+        roundingPriority: NumberFormatOptionsRoundingPriority;
+        roundingIncrement: NumberFormatOptionsRoundingIncrement;
+        roundingMode: NumberFormatOptionsRoundingMode;
+        trailingZeroDisplay: NumberFormatOptionsTrailingZeroDisplay;
     }
 
     interface NumberRangeFormatPart extends NumberFormatPart {
@@ -30,5 +38,19 @@ declare namespace Intl {
     interface NumberFormat {
         formatRange(start: number | bigint, end: number | bigint): string;
         formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+    }
+
+    interface PluralRulesOptions {
+        roundingPriority?: NumberFormatOptionsRoundingPriority | undefined;
+        roundingIncrement?: NumberFormatOptionsRoundingIncrement | undefined;
+        roundingMode?: NumberFormatOptionsRoundingMode | undefined;
+        trailingZeroDisplay?: NumberFormatOptionsTrailingZeroDisplay | undefined;
+    }
+
+    interface ResolvedPluralRulesOptions {
+        roundingPriority: NumberFormatOptionsRoundingPriority;
+        roundingIncrement: NumberFormatOptionsRoundingIncrement;
+        roundingMode: NumberFormatOptionsRoundingMode;
+        trailingZeroDisplay: NumberFormatOptionsTrailingZeroDisplay;
     }
 }
