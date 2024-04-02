@@ -4070,6 +4070,7 @@ export interface JSDocImportTag extends JSDocTag {
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
 // dprint-ignore
+/** @internal */
 export const enum FlowFlags {
     Unreachable    = 1 << 0,  // Unreachable code
     Start          = 1 << 1,  // Start of flow graph
@@ -4089,6 +4090,7 @@ export const enum FlowFlags {
     Condition = TrueCondition | FalseCondition,
 }
 
+/** @internal */
 export type FlowNode =
     | FlowStart
     | FlowLabel
@@ -4099,6 +4101,7 @@ export type FlowNode =
     | FlowCall
     | FlowReduceLabel;
 
+/** @internal */
 export interface FlowNodeBase {
     flags: FlowFlags;
     id?: number; // Node id used by flow type cache in checker
@@ -4107,22 +4110,26 @@ export interface FlowNodeBase {
 // FlowStart represents the start of a control flow. For a function expression or arrow
 // function, the node property references the function (which in turn has a flowNode
 // property for the containing control flow).
+/** @internal */
 export interface FlowStart extends FlowNodeBase {
     node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
 }
 
 // FlowLabel represents a junction with multiple possible preceding control flows.
+/** @internal */
 export interface FlowLabel extends FlowNodeBase {
     antecedents: FlowNode[] | undefined;
 }
 
 // FlowAssignment represents a node that assigns a value to a narrowable reference,
 // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
+/** @internal */
 export interface FlowAssignment extends FlowNodeBase {
     node: Expression | VariableDeclaration | BindingElement;
     antecedent: FlowNode;
 }
 
+/** @internal */
 export interface FlowCall extends FlowNodeBase {
     node: CallExpression;
     antecedent: FlowNode;
@@ -4130,12 +4137,14 @@ export interface FlowCall extends FlowNodeBase {
 
 // FlowCondition represents a condition that is known to be true or false at the
 // node's location in the control flow.
+/** @internal */
 export interface FlowCondition extends FlowNodeBase {
     node: Expression;
     antecedent: FlowNode;
 }
 
 // dprint-ignore
+/** @internal */
 export interface FlowSwitchClause extends FlowNodeBase {
     switchStatement: SwitchStatement;
     clauseStart: number;   // Start index of case/default clause range
@@ -4145,11 +4154,13 @@ export interface FlowSwitchClause extends FlowNodeBase {
 
 // FlowArrayMutation represents a node potentially mutates an array, i.e. an
 // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
+/** @internal */
 export interface FlowArrayMutation extends FlowNodeBase {
     node: CallExpression | BinaryExpression;
     antecedent: FlowNode;
 }
 
+/** @internal */
 export interface FlowReduceLabel extends FlowNodeBase {
     target: FlowLabel;
     antecedents: FlowNode[];
