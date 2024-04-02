@@ -1646,9 +1646,8 @@
         "code": 1498
     },
     "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.": {
-        "category": "Suggestion",
-        "code": 1499,
-        "reportsDeprecated": true
+        "category": "Error",
+        "code": 1499
     },
 
     "The types of '{0}' are incompatible between these types.": {
