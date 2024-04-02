@@ -1510,12 +1510,13 @@ declare namespace ts {
             }
             interface WatchChangeRequest extends Request {
                 command: CommandTypes.WatchChange;
-                arguments: WatchChangeRequestArgs;
+                arguments: WatchChangeRequestArgs | readonly WatchChangeRequestArgs[];
             }
             interface WatchChangeRequestArgs {
                 id: number;
-                path: string;
-                eventType: "create" | "delete" | "update";
+                created?: string[];
+                deleted?: string[];
+                updated?: string[];
             }
             /**
              * Request to obtain the list of files that should be regenerated if target file is recompiled.
@@ -2452,6 +2453,7 @@ declare namespace ts {
                 readonly id: number;
                 readonly path: string;
                 readonly recursive: boolean;
+                readonly ignoreUpdate?: boolean;
             }
             type CloseFileWatcherEventName = "closeFileWatcher";
             interface CloseFileWatcherEvent extends Event {
