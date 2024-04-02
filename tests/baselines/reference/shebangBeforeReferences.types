@@ -7,21 +7,29 @@
 
 declare function use(f: number): void;
 >use : (f: number) => void
+>    : ^^^^      ^^^^^    
 >f : number
+>  : ^^^^^^
 
 import {x} from "test";
 >x : number
+>  : ^^^^^^
 
 use(x);
 >use(x) : void
+>       : ^^^^
 >use : (f: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 === f.d.ts ===
 declare module "test" {
 >"test" : typeof import("test")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     let x: number;
 >x : number
+>  : ^^^^^^
 }
 

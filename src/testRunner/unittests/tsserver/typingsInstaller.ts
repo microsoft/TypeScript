@@ -29,12 +29,8 @@ import {
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
-import {
-    stringifyIndented,
-} from "../../_namespaces/ts.server";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { stringifyIndented } from "../../_namespaces/ts.server";
+import { jsonToReadableText } from "../helpers";
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {

@@ -1,40 +1,37 @@
 useBeforeDeclaration_classDecorators.2.ts(7,6): error TS2449: Class 'C2' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(10,13): error TS2449: Class 'C3' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(16,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
-useBeforeDeclaration_classDecorators.2.ts(22,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+useBeforeDeclaration_classDecorators.2.ts(26,17): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(27,20): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(28,13): error TS1206: Decorators are not valid here.
 useBeforeDeclaration_classDecorators.2.ts(33,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(34,10): error TS2449: Class 'C5' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(35,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
 useBeforeDeclaration_classDecorators.2.ts(35,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(36,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(37,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(39,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(40,10): error TS2449: Class 'C5' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(41,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
 useBeforeDeclaration_classDecorators.2.ts(41,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(42,10): error TS2449: Class 'C5' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(43,10): error TS2449: Class 'C5' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(46,22): error TS2449: Class 'C5' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(47,25): error TS2449: Class 'C5' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(48,18): error TS2449: Class 'C5' used before its declaration.
+useBeforeDeclaration_classDecorators.2.ts(46,17): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(47,20): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(48,13): error TS1206: Decorators are not valid here.
 useBeforeDeclaration_classDecorators.2.ts(53,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(54,17): error TS2449: Class 'C6' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(55,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
 useBeforeDeclaration_classDecorators.2.ts(55,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(56,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(57,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(59,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(60,17): error TS2449: Class 'C6' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(61,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
 useBeforeDeclaration_classDecorators.2.ts(61,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(62,17): error TS2449: Class 'C6' used before its declaration.
 useBeforeDeclaration_classDecorators.2.ts(63,17): error TS2449: Class 'C6' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(66,29): error TS2449: Class 'C6' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(67,32): error TS2449: Class 'C6' used before its declaration.
-useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used before its declaration.
+useBeforeDeclaration_classDecorators.2.ts(66,17): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(67,20): error TS1206: Decorators are not valid here.
+useBeforeDeclaration_classDecorators.2.ts(68,13): error TS1206: Decorators are not valid here.
 
 
-==== useBeforeDeclaration_classDecorators.2.ts (34 errors) ====
+==== useBeforeDeclaration_classDecorators.2.ts (31 errors) ====
     declare const dec: any;
     
     // ok
@@ -55,24 +52,26 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
     // ok
     class C4 {
         @dec(() => C4) static method() {}
-        @dec(() => C4) static get x() { return this.y; }
-        @dec(() => C4) static set x(v) {}
-        ~
-!!! error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+        @dec(() => C4) static get w() { return this.y; }
+        @dec(() => C4) static set x(v: any) {}
         @dec(() => C4) static y: any;
         @dec(() => C4) static accessor z: any;
     
         @dec(() => C4) method() {}
-        @dec(() => C4) get x() { return this.y; }
-        @dec(() => C4) set x(v) {}
-        ~
-!!! error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+        @dec(() => C4) get w() { return this.y; }
+        @dec(() => C4) set x(v: any) {}
         @dec(() => C4) y: any;
         @dec(() => C4) accessor z: any;
     
         constructor(@dec(() => C4) a: any) {}
+                    ~
+!!! error TS1206: Decorators are not valid here.
         static method2(@dec(() => C4) a: any) {}
+                       ~
+!!! error TS1206: Decorators are not valid here.
         method2(@dec(() => C4) a: any) {}
+                ~
+!!! error TS1206: Decorators are not valid here.
     }
     
     // error
@@ -81,13 +80,11 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
              ~~
 !!! error TS2449: Class 'C5' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
-        @dec(C5) static get x() { return this.y; }
+        @dec(C5) static get w() { return this.y; }
              ~~
 !!! error TS2449: Class 'C5' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
-        @dec(C5) static set x(v) {}
-        ~
-!!! error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+        @dec(C5) static set x(v: any) {}
              ~~
 !!! error TS2449: Class 'C5' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
@@ -104,13 +101,11 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
              ~~
 !!! error TS2449: Class 'C5' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
-        @dec(C5) get x() { return this.y; }
+        @dec(C5) get w() { return this.y; }
              ~~
 !!! error TS2449: Class 'C5' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
-        @dec(C5) set x(v) {}
-        ~
-!!! error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+        @dec(C5) set x(v: any) {}
              ~~
 !!! error TS2449: Class 'C5' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
@@ -125,17 +120,14 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
     
     
         constructor(@dec(C5) a: any) {}
-                         ~~
-!!! error TS2449: Class 'C5' used before its declaration.
-!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
+                    ~
+!!! error TS1206: Decorators are not valid here.
         static method2(@dec(C5) a: any) {}
-                            ~~
-!!! error TS2449: Class 'C5' used before its declaration.
-!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
+                       ~
+!!! error TS1206: Decorators are not valid here.
         method2(@dec(C5) a: any) {}
-                     ~~
-!!! error TS2449: Class 'C5' used before its declaration.
-!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:32:7: 'C5' is declared here.
+                ~
+!!! error TS1206: Decorators are not valid here.
     }
     
     // error
@@ -144,13 +136,11 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
                     ~~
 !!! error TS2449: Class 'C6' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
-        @dec((() => C6)()) static get x() { return this.y; }
+        @dec((() => C6)()) static get w() { return this.y; }
                     ~~
 !!! error TS2449: Class 'C6' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
-        @dec((() => C6)()) static set x(v) {}
-        ~
-!!! error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+        @dec((() => C6)()) static set x(v: any) {}
                     ~~
 !!! error TS2449: Class 'C6' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
@@ -167,13 +157,11 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
                     ~~
 !!! error TS2449: Class 'C6' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
-        @dec((() => C6)()) get x() { return this.y; }
+        @dec((() => C6)()) get w() { return this.y; }
                     ~~
 !!! error TS2449: Class 'C6' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
-        @dec((() => C6)()) set x(v) {}
-        ~
-!!! error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+        @dec((() => C6)()) set x(v: any) {}
                     ~~
 !!! error TS2449: Class 'C6' used before its declaration.
 !!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
@@ -188,16 +176,13 @@ useBeforeDeclaration_classDecorators.2.ts(68,25): error TS2449: Class 'C6' used 
     
     
         constructor(@dec((() => C6)()) a: any) {}
-                                ~~
-!!! error TS2449: Class 'C6' used before its declaration.
-!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
+                    ~
+!!! error TS1206: Decorators are not valid here.
         static method2(@dec((() => C6)()) a: any) {}
-                                   ~~
-!!! error TS2449: Class 'C6' used before its declaration.
-!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
+                       ~
+!!! error TS1206: Decorators are not valid here.
         method2(@dec((() => C6)()) a: any) {}
-                            ~~
-!!! error TS2449: Class 'C6' used before its declaration.
-!!! related TS2728 useBeforeDeclaration_classDecorators.2.ts:52:7: 'C6' is declared here.
+                ~
+!!! error TS1206: Decorators are not valid here.
     }
     

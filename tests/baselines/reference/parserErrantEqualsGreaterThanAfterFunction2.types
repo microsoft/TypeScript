@@ -3,6 +3,9 @@
 === parserErrantEqualsGreaterThanAfterFunction2.ts ===
 function f(p: A) => p;
 >f : (p: A) => any
+>  : ^^^^^^^^^^^^^
 >p : A
+>  : ^
 >p : any
+>  : ^^^
 

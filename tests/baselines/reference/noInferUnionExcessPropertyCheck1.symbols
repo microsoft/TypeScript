@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/noInferUnionExcessPropertyCheck1.ts] ////
+
+=== noInferUnionExcessPropertyCheck1.ts ===
+declare function test1<T extends { x: string }>(
+>test1 : Symbol(test1, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 0))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 23))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 34))
+
+  a: T,
+>a : Symbol(a, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 48))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 23))
+
+  b: NoInfer<T> | (() => NoInfer<T>),
+>b : Symbol(b, Decl(noInferUnionExcessPropertyCheck1.ts, 1, 7))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 23))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 23))
+
+): void;
+
+test1({ x: "foo" }, { x: "bar" }); // no error
+>test1 : Symbol(test1, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 0))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 5, 7))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 5, 21))
+
+test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
+>test1 : Symbol(test1, Decl(noInferUnionExcessPropertyCheck1.ts, 0, 0))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 6, 7))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 6, 21))
+>y : Symbol(y, Decl(noInferUnionExcessPropertyCheck1.ts, 6, 31))
+
+declare function test2<T extends { x: string }>(
+>test2 : Symbol(test2, Decl(noInferUnionExcessPropertyCheck1.ts, 6, 41))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 8, 23))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 8, 34))
+
+  a: T,
+>a : Symbol(a, Decl(noInferUnionExcessPropertyCheck1.ts, 8, 48))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 8, 23))
+
+  b: NoInfer<T> | NoInfer<() => T>,
+>b : Symbol(b, Decl(noInferUnionExcessPropertyCheck1.ts, 9, 7))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 8, 23))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 8, 23))
+
+): void;
+
+test2({ x: "foo" }, { x: "bar" }); // no error
+>test2 : Symbol(test2, Decl(noInferUnionExcessPropertyCheck1.ts, 6, 41))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 13, 7))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 13, 21))
+
+test2({ x: "foo" }, { x: "bar", y: 42 }); // epc error
+>test2 : Symbol(test2, Decl(noInferUnionExcessPropertyCheck1.ts, 6, 41))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 14, 7))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 14, 21))
+>y : Symbol(y, Decl(noInferUnionExcessPropertyCheck1.ts, 14, 31))
+
+declare function test3<T extends { x: string }>(
+>test3 : Symbol(test3, Decl(noInferUnionExcessPropertyCheck1.ts, 14, 41))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 16, 23))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 16, 34))
+
+  a: T,
+>a : Symbol(a, Decl(noInferUnionExcessPropertyCheck1.ts, 16, 48))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 16, 23))
+
+  b: NoInfer<T | (() => T)>,
+>b : Symbol(b, Decl(noInferUnionExcessPropertyCheck1.ts, 17, 7))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 16, 23))
+>T : Symbol(T, Decl(noInferUnionExcessPropertyCheck1.ts, 16, 23))
+
+): void;
+
+test3({ x: "foo" }, { x: "bar" }); // no error
+>test3 : Symbol(test3, Decl(noInferUnionExcessPropertyCheck1.ts, 14, 41))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 21, 7))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 21, 21))
+
+test3({ x: "foo" }, { x: "bar", y: 42 }); // epc error
+>test3 : Symbol(test3, Decl(noInferUnionExcessPropertyCheck1.ts, 14, 41))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 22, 7))
+>x : Symbol(x, Decl(noInferUnionExcessPropertyCheck1.ts, 22, 21))
+>y : Symbol(y, Decl(noInferUnionExcessPropertyCheck1.ts, 22, 31))
+

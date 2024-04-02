@@ -7,5 +7,7 @@
 // this is a useful edge-case test.
 var x = /\u{DC00}/g;
 >x : RegExp
+>  : ^^^^^^
 >/\u{DC00}/g : RegExp
+>            : ^^^^^^
 

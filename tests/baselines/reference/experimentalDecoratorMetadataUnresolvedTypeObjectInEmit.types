@@ -13,14 +13,22 @@ declare namespace A {
 === usage.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     f(@decorate user: A.B.C.D.E): void {}
 >f : (user: A.B.C.D.E) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^    
 >decorate : any
+>         : ^^^
 >user : A.B.C.D.E
+>     : ^^^^^^^^^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 >C : any
+>  : ^^^
 >D : any
+>  : ^^^
 }
 

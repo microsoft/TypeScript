@@ -1,10 +1,6 @@
 import chalk from "chalk";
-import {
-    readFileSync,
-} from "fs";
-import {
-    join,
-} from "path";
+import { readFileSync } from "fs";
+import { join } from "path";
 import playwright from "playwright";
 
 // Turning this on will leave the Chromium browser open, giving you the

@@ -3,14 +3,21 @@
 === decoratorOnClassProperty7.ts ===
 declare function dec(target: Function, propertyKey: string | symbol, paramIndex: number): void;
 >dec : (target: Function, propertyKey: string | symbol, paramIndex: number) => void
+>    : ^^^^^^^^^        ^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^      ^^^^^    
 >target : Function
+>       : ^^^^^^^^
 >propertyKey : string | symbol
+>            : ^^^^^^^^^^^^^^^
 >paramIndex : number
+>           : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     @dec prop;
 >dec : (target: Function, propertyKey: string | symbol, paramIndex: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : any
+>     : ^^^
 }
