@@ -231,6 +231,10 @@ declare namespace Intl {
         narrowSymbol: never;
     }
 
+    type NumberFormatOptionsCompactDisplay = "short" | "long";
+
+    type NumberFormatOptionsNotation = "standard" | "scientific" | "engineering" | "compact";
+
     interface NumberFormatOptionsSignDisplayRegistry {
         auto: never;
         never: never;
@@ -240,23 +244,27 @@ declare namespace Intl {
 
     type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
 
+    type NumberFormatOptionsUnitDisplay = "short" | "long" | "narrow";
+
+    type NumberFormatOptionsCurrencySign = "standard" | "accounting";
+
     interface NumberFormatOptions {
         numberingSystem?: string | undefined;
-        compactDisplay?: "short" | "long" | undefined;
-        notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
+        compactDisplay?: NumberFormatOptionsCompactDisplay | undefined;
+        notation?: NumberFormatOptionsNotation | undefined;
         signDisplay?: NumberFormatOptionsSignDisplay | undefined;
         unit?: string | undefined;
-        unitDisplay?: "short" | "long" | "narrow" | undefined;
-        currencySign?: "standard" | "accounting" | undefined;
+        unitDisplay?: NumberFormatOptionsUnitDisplay | undefined;
+        currencySign?: NumberFormatOptionsCurrencySign | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
-        compactDisplay?: "short" | "long";
-        notation: "standard" | "scientific" | "engineering" | "compact";
+        compactDisplay?: NumberFormatOptionsCompactDisplay;
+        notation: NumberFormatOptionsNotation;
         signDisplay: NumberFormatOptionsSignDisplay;
         unit?: string;
-        unitDisplay?: "short" | "long" | "narrow";
-        currencySign?: "standard" | "accounting";
+        unitDisplay?: NumberFormatOptionsUnitDisplay;
+        currencySign?: NumberFormatOptionsCurrencySign;
     }
 
     interface NumberFormatPartTypeRegistry {
