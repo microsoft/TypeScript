@@ -3,11 +3,17 @@
 === functionWithDefaultParameterWithNoStatements3.ts ===
 function foo(a = "") { }
 >foo : (a?: string) => void
+>    : ^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 function bar(a = "") {
 >bar : (a?: string) => void
+>    : ^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 }

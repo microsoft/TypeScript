@@ -3,24 +3,36 @@
 === b.d.ts ===
 export function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 
 export function bar();
 >bar : () => any
+>    : ^^^^^^^^^
 
 === a.ts ===
 import { default as Foo } from "./b";
 >default : any
+>        : ^^^
 >Foo : any
+>    : ^^^
 
 Foo.bar();
 >Foo.bar() : any
+>          : ^^^
 >Foo.bar : any
+>        : ^^^
 >Foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 
 Foo.foo();
 >Foo.foo() : any
+>          : ^^^
 >Foo.foo : any
+>        : ^^^
 >Foo : any
+>    : ^^^
 >foo : any
+>    : ^^^
 

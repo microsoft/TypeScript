@@ -1,9 +1,5 @@
-import {
-    getFsForLibResolution,
-} from "../helpers/libraryResolution";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
+import { getFsForLibResolution } from "../helpers/libraryResolution";
+import { verifyTsc } from "../helpers/tsc";
 
 describe("unittests:: tsbuild:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true) {

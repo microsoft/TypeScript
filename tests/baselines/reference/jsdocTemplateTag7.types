@@ -11,6 +11,7 @@
  */
 class C { }
 >C : C<T>
+>  : ^^^^
 
 /**
  * @template private T
@@ -19,9 +20,12 @@ class C { }
  */
 function f(x) {
 >f : <T>(x: T) => T
+>  : ^ ^^^^^ ^^^^^ 
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 

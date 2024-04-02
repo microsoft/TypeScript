@@ -3,14 +3,18 @@
 === unusedTypeParameters5.ts ===
 class A<Dummy> {
 >A : A<Dummy>
+>  : ^^^^^^^^
 
     public x: Dummy;
 >x : Dummy
+>  : ^^^^^
 }
 
 var x: {
 >x : new <T, U, K>(a: T) => A<U>
+>  : ^^^^^ ^^ ^^^^^^^^ ^^^^^    
 
     new <T, U, K>(a: T): A<U>;
 >a : T
+>  : ^
 }

@@ -1,7 +1,5 @@
 import * as vfs from "../../_namespaces/vfs";
-import {
-    getFsForNoEmitOnError,
-} from "../helpers/noEmitOnError";
+import { getFsForNoEmitOnError } from "../helpers/noEmitOnError";
 import {
     noChangeRun,
     verifyTsc,

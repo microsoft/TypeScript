@@ -1,15 +1,7 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { verifyTsc } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: roots::", () => {
     verifyTsc({

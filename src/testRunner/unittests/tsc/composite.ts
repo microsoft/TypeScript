@@ -1,10 +1,6 @@
 import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
+import { jsonToReadableText } from "../helpers";
+import { verifyTsc } from "../helpers/tsc";
 import {
     loadProjectFromFiles,
     replaceText,

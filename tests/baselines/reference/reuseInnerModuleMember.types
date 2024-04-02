@@ -8,12 +8,15 @@ declare module bar {
 
 import f = require('./reuseInnerModuleMember_0');
 >f : typeof f
+>  : ^^^^^^^^
 
 module bar {
 >bar : typeof bar
+>    : ^^^^^^^^^^
 
     var x: alpha;
 >x : alpha
+>  : ^^^^^
 }
 
 === reuseInnerModuleMember_0.ts ===

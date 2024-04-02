@@ -3,5 +3,7 @@
 === hello.ts ===
 var hello = "yo!";
 >hello : string
+>      : ^^^^^^
 >"yo!" : "yo!"
+>      : ^^^^^
 

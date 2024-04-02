@@ -7,22 +7,31 @@
 
 class Conn {
 >Conn : Conn
+>     : ^^^^
 
     constructor() {}
     item = 3;
 >item : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
     method() {}
 >method : () => void
+>       : ^^^^^^^^^^
 }
 
 module.exports = Conn;
 >module.exports = Conn : typeof Conn
+>                      : ^^^^^^^^^^^
 >module.exports : typeof Conn
+>               : ^^^^^^^^^^^
 >module : { exports: typeof Conn; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof Conn
+>        : ^^^^^^^^^^^
 >Conn : typeof Conn
+>     : ^^^^^^^^^^^
 
 === usage.js ===
 /**
@@ -31,41 +40,60 @@ module.exports = Conn;
 
 class Wrap {
 >Wrap : Wrap
+>     : ^^^^
 
     /**
      * @param {Conn} c
      */
     constructor(c) {
 >c : import("conn")
+>  : ^^^^^^^^^^^^^^
 
         this.connItem = c.item;
 >this.connItem = c.item : number
+>                       : ^^^^^^
 >this.connItem : any
 >this : this
+>     : ^^^^
 >connItem : any
+>         : ^^^
 >c.item : number
+>       : ^^^^^^
 >c : import("conn")
+>  : ^^^^^^^^^^^^^^
 >item : number
+>     : ^^^^^^
 
         /** @type {import("./conn").Whatever} */
         this.another = "";
 >this.another = "" : ""
+>                  : ^^
 >this.another : import("conn").Whatever
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >another : import("conn").Whatever
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
     }
 }
 
 module.exports = {
 >module.exports = {    Wrap} : typeof module.exports
+>                            : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{    Wrap} : { Wrap: typeof Wrap; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^
 
     Wrap
 >Wrap : typeof Wrap
+>     : ^^^^^^^^^^^
 
 };
 

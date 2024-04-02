@@ -205,6 +205,34 @@ describe("unittests:: JSDocParsing", () => {
             );
 
             parsesCorrectly(
+                "importTag1",
+                `/**
+  * @import foo from 'foo'
+  */`,
+            );
+
+            parsesCorrectly(
+                "importTag2",
+                `/**
+  * @import { foo } from 'foo'
+  */`,
+            );
+
+            parsesCorrectly(
+                "importTag3",
+                `/**
+  * @import * as types from 'foo'
+  */`,
+            );
+
+            parsesCorrectly(
+                "importTag4",
+                `/**
+  * @import * as types from 'foo' comment part
+  */`,
+            );
+
+            parsesCorrectly(
                 "returnTag1",
                 `/**
   * @return {number}
