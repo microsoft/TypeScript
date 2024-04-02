@@ -1,13 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commonFile1,
-} from "../helpers/tscWatch";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { commonFile1 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,

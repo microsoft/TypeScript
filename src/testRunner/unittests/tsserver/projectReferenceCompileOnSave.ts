@@ -1,10 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    ensureErrorFreeBuild,
-} from "../helpers/solutionBuilder";
+import { jsonToReadableText } from "../helpers";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     openFilesForSession,
