@@ -1,215 +1,62 @@
 /// <reference lib="es2018.intl" />
 declare namespace Intl {
     /**
-     * Unit to use in the relative time internationalized message.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/format#Parameters).
-     */
-    type RelativeTimeFormatUnit =
-        | "year"
-        | "years"
-        | "quarter"
-        | "quarters"
-        | "month"
-        | "months"
-        | "week"
-        | "weeks"
-        | "day"
-        | "days"
-        | "hour"
-        | "hours"
-        | "minute"
-        | "minutes"
-        | "second"
-        | "seconds";
-
-    /**
-     * Value of the `unit` property in objects returned by
-     * `Intl.RelativeTimeFormat.prototype.formatToParts()`. `formatToParts` and
-     * `format` methods accept either singular or plural unit names as input,
-     * but `formatToParts` only outputs singular (e.g. "day") not plural (e.g.
-     * "days").
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts#Using_formatToParts).
-     */
-    type RelativeTimeFormatUnitSingular =
-        | "year"
-        | "quarter"
-        | "month"
-        | "week"
-        | "day"
-        | "hour"
-        | "minute"
-        | "second";
-
-    /**
-     * The locale matching algorithm to use.
-     *
-     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
-     */
-    type RelativeTimeFormatLocaleMatcher = "lookup" | "best fit";
-
-    /**
-     * The format of output message.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters).
-     */
-    type RelativeTimeFormatNumeric = "always" | "auto";
-
-    /**
-     * The length of the internationalized message.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters).
-     */
-    type RelativeTimeFormatStyle = "long" | "short" | "narrow";
-
-    /**
      * The locale or locales to use
      *
      * See [MDN - Intl - locales argument](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      */
     type LocalesArgument = string | Locale | readonly (string | Locale)[] | undefined;
 
-    /**
-     * An object with some or all of properties of `options` parameter
-     * of `Intl.RelativeTimeFormat` constructor.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters).
-     */
+    type RelativeTimeFormatOptionsStyle = "long" | "short" | "narrow";
+
+    type RelativeTimeFormatOptionsNumeric = "always" | "auto";
+
     interface RelativeTimeFormatOptions {
-        /** The locale matching algorithm to use. For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation). */
-        localeMatcher?: RelativeTimeFormatLocaleMatcher;
-        /** The format of output message. */
-        numeric?: RelativeTimeFormatNumeric;
-        /** The length of the internationalized message. */
-        style?: RelativeTimeFormatStyle;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        numberingSystem?: string | undefined;
+        style?: RelativeTimeFormatOptionsStyle | undefined;
+        numeric?: RelativeTimeFormatOptionsNumeric | undefined;
     }
 
-    /**
-     * An object with properties reflecting the locale
-     * and formatting options computed during initialization
-     * of the `Intl.RelativeTimeFormat` object
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/resolvedOptions#Description).
-     */
     interface ResolvedRelativeTimeFormatOptions {
         locale: string;
-        style: RelativeTimeFormatStyle;
-        numeric: RelativeTimeFormatNumeric;
+        style: RelativeTimeFormatOptionsStyle;
+        numeric: RelativeTimeFormatOptionsNumeric;
         numberingSystem: string;
     }
 
-    /**
-     * An object representing the relative time format in parts
-     * that can be used for custom locale-aware formatting.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts#Using_formatToParts).
-     */
-    type RelativeTimeFormatPart =
-        | {
-            type: "literal";
-            value: string;
-        }
-        | {
-            type: Exclude<NumberFormatPartTypes, "literal">;
-            value: string;
-            unit: RelativeTimeFormatUnitSingular;
-        };
+    type RelativeTimeFormatUnitSingular = "year" | "quarter" | "month" | "week" | "day" | "hour" | "minute" | "second";
+
+    type RelativeTimeFormatUnitPlural = "years" | "quarters" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds";
+
+    type RelativeTimeFormatUnit = RelativeTimeFormatUnitSingular | RelativeTimeFormatUnitPlural;
+
+    interface RelativeTimeFormatPartLiteral {
+        type: "literal";
+        value: string;
+    }
+
+    interface RelativeTimeFormatPartUnit {
+        type: Exclude<NumberFormatPartTypes, "literal">;
+        value: string;
+        unit: RelativeTimeFormatUnitSingular;
+    }
+
+    type RelativeTimeFormatPart = RelativeTimeFormatPartLiteral | RelativeTimeFormatPartUnit;
 
     interface RelativeTimeFormat {
-        /**
-         * Formats a value and a unit according to the locale
-         * and formatting options of the given
-         * [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat)
-         * object.
-         *
-         * While this method automatically provides the correct plural forms,
-         * the grammatical form is otherwise as neutral as possible.
-         *
-         * It is the caller's responsibility to handle cut-off logic
-         * such as deciding between displaying "in 7 days" or "in 1 week".
-         * This API does not support relative dates involving compound units.
-         * e.g "in 5 days and 4 hours".
-         *
-         * @param value -  Numeric value to use in the internationalized relative time message
-         *
-         * @param unit - [Unit](https://tc39.es/ecma402/#sec-singularrelativetimeunit) to use in the relative time internationalized message.
-         *
-         * @throws `RangeError` if `unit` was given something other than `unit` possible values
-         *
-         * @returns {string} Internationalized relative time message as string
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/format).
-         */
         format(value: number, unit: RelativeTimeFormatUnit): string;
-
-        /**
-         *  Returns an array of objects representing the relative time format in parts that can be used for custom locale-aware formatting.
-         *
-         *  @param value - Numeric value to use in the internationalized relative time message
-         *
-         *  @param unit - [Unit](https://tc39.es/ecma402/#sec-singularrelativetimeunit) to use in the relative time internationalized message.
-         *
-         *  @throws `RangeError` if `unit` was given something other than `unit` possible values
-         *
-         *  [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/formatToParts).
-         */
         formatToParts(value: number, unit: RelativeTimeFormatUnit): RelativeTimeFormatPart[];
-
-        /**
-         * Provides access to the locale and options computed during initialization of this `Intl.RelativeTimeFormat` object.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/resolvedOptions).
-         */
         resolvedOptions(): ResolvedRelativeTimeFormatOptions;
     }
 
-    /**
-     * The [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat)
-     * object is a constructor for objects that enable language-sensitive relative time formatting.
-     *
-     * [Compatibility](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat#Browser_compatibility).
-     */
-    const RelativeTimeFormat: {
-        /**
-         * Creates [Intl.RelativeTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat) objects
-         *
-         * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
-         *  For the general form and interpretation of the locales argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
-         *
-         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters)
-         *  with some or all of options of `RelativeTimeFormatOptions`.
-         *
-         * @returns [Intl.RelativeTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat) object.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat).
-         */
-        new (
-            locales?: LocalesArgument,
-            options?: RelativeTimeFormatOptions,
-        ): RelativeTimeFormat;
-
-        /**
-         * Returns an array containing those of the provided locales
-         * that are supported in date and time formatting
-         * without having to fall back to the runtime's default locale.
-         *
-         * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
-         *  For the general form and interpretation of the locales argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
-         *
-         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters)
-         *  with some or all of options of the formatting.
-         *
-         * @returns An array containing those of the provided locales
-         *  that are supported in date and time formatting
-         *  without having to fall back to the runtime's default locale.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/supportedLocalesOf).
-         */
+    interface RelativeTimeFormatConstructor {
+        new (locales?: LocalesArgument, options?: RelativeTimeFormatOptions): RelativeTimeFormat;
         supportedLocalesOf(locales?: LocalesArgument, options?: RelativeTimeFormatOptions): string[];
-    };
+        readonly prototype: RelativeTimeFormat;
+    }
+
+    const RelativeTimeFormat: RelativeTimeFormatConstructor;
 
     interface NumberFormatOptionsStyleRegistry {
         unit: never;
