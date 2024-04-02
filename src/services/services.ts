@@ -58,6 +58,7 @@ import {
     EditorOptions,
     EditorSettings,
     ElementAccessExpression,
+    EmitNode,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
@@ -288,7 +289,9 @@ import {
     SymbolDisplay,
     SymbolDisplayPart,
     SymbolFlags,
+    SymbolLinks,
     symbolName,
+    SymbolTable,
     SyntaxKind,
     SyntaxList,
     sys,
@@ -333,7 +336,7 @@ import * as classifier2020 from "./classifier2020";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
+function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject<TKind> | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
     const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
         kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
         kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
@@ -343,8 +346,8 @@ function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: num
     return node;
 }
 
-class NodeObject implements Node {
-    public kind: SyntaxKind;
+class NodeObject<TKind extends SyntaxKind> implements Node {
+    public kind: TKind;
     public pos: number;
     public end: number;
     public flags: NodeFlags;
@@ -355,15 +358,21 @@ class NodeObject implements Node {
     public jsDoc?: JSDoc[];
     public original?: Node;
     private _children: Node[] | undefined;
+    public id?: number;
+    public emitNode?: EmitNode;
 
-    constructor(kind: SyntaxKind, pos: number, end: number) {
+    constructor(kind: TKind, pos: number, end: number) {
+        // Note: if modifying this, be sure to update Node in src/compiler/utilities.ts
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
-        this.kind = kind;
+        this.original = undefined;
+        this.emitNode = undefined;
     }
 
     private assertHasRealPosition(message?: string) {
@@ -534,25 +543,29 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     return list;
 }
 
-class TokenOrIdentifierObject implements Node {
-    public kind!: SyntaxKind;
+class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
+    public kind: TKind;
     public pos: number;
     public end: number;
     public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
+    public modifierFlagsCache!: ModifierFlags;
     public transformFlags: TransformFlags;
     public parent: Node;
     public symbol!: Symbol;
     public jsDocComments?: JSDoc[];
+    public id?: number;
+    public emitNode?: EmitNode | undefined;
 
-    constructor(pos: number, end: number) {
-        // Set properties in same order as NodeObject
+    constructor(kind: TKind, pos: number, end: number) {
+        // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
+        this.emitNode = undefined;
     }
 
     public getSourceFile(): SourceFile {
@@ -622,11 +635,18 @@ class TokenOrIdentifierObject implements Node {
 class SymbolObject implements Symbol {
     flags: SymbolFlags;
     escapedName: __String;
-    declarations!: Declaration[];
-    valueDeclaration!: Declaration;
-    id = 0;
-    mergeId = 0;
+    declarations?: Declaration[];
+    valueDeclaration?: Declaration;
+    members?: SymbolTable;
+    exports?: SymbolTable;
+    id: number;
+    mergeId: number;
+    parent?: Symbol;
+    exportSymbol?: Symbol;
     constEnumOnlyModule: boolean | undefined;
+    isReferenced?: SymbolFlags;
+    lastAssignmentPos?: number;
+    links?: SymbolLinks;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -640,8 +660,21 @@ class SymbolObject implements Symbol {
     contextualSetAccessorTags?: JSDocTagInfo[];
 
     constructor(flags: SymbolFlags, name: __String) {
+        // Note: if modifying this, be sure to update Symbol in src/compiler/types.ts
         this.flags = flags;
         this.escapedName = name;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = 0;
+        this.mergeId = 0;
+        this.parent = undefined;
+        this.members = undefined;
+        this.exports = undefined;
+        this.exportSymbol = undefined;
+        this.constEnumOnlyModule = undefined;
+        this.isReferenced = undefined;
+        this.lastAssignmentPos = undefined;
+        this.links = undefined; // used by TransientSymbol
     }
 
     getFlags(): SymbolFlags {
@@ -732,17 +765,13 @@ class SymbolObject implements Symbol {
     }
 }
 
-class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public override kind: TKind;
-
+class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject<TKind> implements Token<TKind> {
     constructor(kind: TKind, pos: number, end: number) {
-        super(pos, end);
-        this.kind = kind;
+        super(kind, pos, end);
     }
 }
 
-class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public override kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
+class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> implements Identifier {
     public escapedText!: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
@@ -754,17 +783,16 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
     /** @internal */ typeArguments!: NodeArray<TypeNode>;
-    constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
-        super(pos, end);
+    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
+        super(kind, pos, end);
     }
 
     get text(): string {
         return idText(this);
     }
 }
-IdentifierObject.prototype.kind = SyntaxKind.Identifier;
-class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
+
+class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.PrivateIdentifier> implements PrivateIdentifier {
     public escapedText!: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
@@ -772,15 +800,14 @@ class PrivateIdentifierObject extends TokenOrIdentifierObject implements Private
     declare _updateExpressionBrand: any;
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
-    constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
-        super(pos, end);
+    constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
+        super(kind, pos, end);
     }
 
     get text(): string {
         return idText(this);
     }
 }
-PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier;
 
 class TypeObject implements Type {
     checker: TypeChecker;
@@ -789,8 +816,9 @@ class TypeObject implements Type {
     id!: number;
     symbol!: Symbol;
     constructor(checker: TypeChecker, flags: TypeFlags) {
-        this.checker = checker;
+        // Note: if modifying this, be sure to update Type in src/compiler/types.ts
         this.flags = flags;
+        this.checker = checker;
     }
     getFlags(): TypeFlags {
         return this.flags;
@@ -897,8 +925,9 @@ class SignatureObject implements Signature {
     jsDocTags?: JSDocTagInfo[]; // same
 
     constructor(checker: TypeChecker, flags: SignatureFlags) {
-        this.checker = checker;
+        // Note: if modifying this, be sure to update Signature in src/compiler/types.ts
         this.flags = flags;
+        this.checker = checker;
     }
 
     getDeclaration(): SignatureDeclaration {
@@ -1002,8 +1031,7 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
     });
 }
 
-class SourceFileObject extends NodeObject implements SourceFile {
-    public override kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
+class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
     public fileName!: string;
@@ -1053,7 +1081,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public localJsxFactory: EntityName | undefined;
     public localJsxNamespace: __String | undefined;
 
-    constructor(kind: SyntaxKind, pos: number, end: number) {
+    constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
         super(kind, pos, end);
     }
 
@@ -1248,8 +1276,17 @@ class SourceFileObject extends NodeObject implements SourceFile {
 }
 
 class SourceMapSourceObject implements SourceMapSource {
+    fileName: string;
+    text: string;
+    skipTrivia?: ((pos: number) => number) | undefined;
     lineMap!: number[];
-    constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+
+    constructor(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+        // Note: if modifying this, be sure to update SourceMapSource in src/compiler/types.ts
+        this.fileName = fileName;
+        this.text = text;
+        this.skipTrivia = skipTrivia || (pos => pos);
+    }
 
     public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
         return getLineAndCharacterOfPosition(this, pos);
