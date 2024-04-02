@@ -167,7 +167,7 @@ import {
     equateValues,
     escapeLeadingUnderscores,
     escapeString,
-    type EvaluatorResult,
+    EvaluatorResult,
     evaluatorResult,
     every,
     EvolvingArrayType,

@@ -120,7 +120,7 @@ import {
     equateValues,
     escapeLeadingUnderscores,
     EvaluationResolver,
-    type EvaluatorResult,
+    EvaluatorResult,
     every,
     ExportAssignment,
     ExportDeclaration,
