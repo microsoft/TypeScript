@@ -4418,6 +4418,7 @@ declare namespace Intl {
         new (locales?: string | string[], options?: CollatorOptions): Collator;
         (locales?: string | string[], options?: CollatorOptions): Collator;
         supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
+        readonly prototype: Collator;
     }
 
     var Collator: CollatorConstructor;

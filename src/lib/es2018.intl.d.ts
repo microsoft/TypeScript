@@ -33,6 +33,7 @@ declare namespace Intl {
         new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
         supportedLocalesOf(locales: string | readonly string[], options?: PluralRulesOptions): string[];
+        readonly prototype: PluralRules;
     }
 
     const PluralRules: PluralRulesConstructor;

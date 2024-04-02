@@ -318,6 +318,7 @@ declare namespace Intl {
 
     interface LocaleConstructor {
         new (tag: string | Locale, options?: LocaleOptions): Locale;
+        readonly prototype: Locale;
     }
 
     const Locale: LocaleConstructor;
