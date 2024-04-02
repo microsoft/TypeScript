@@ -78,7 +78,7 @@ declare namespace Intl {
         readonly prototype: DisplayNames;
     }
 
-    const DisplayNames: DisplayNamesConstructor;
+    var DisplayNames: DisplayNamesConstructor;
 
     type ListFormatOptionsType = "conjunction" | "disjunction" | "unit";
 
@@ -113,5 +113,5 @@ declare namespace Intl {
         readonly prototype: ListFormat;
     }
 
-    const ListFormat: ListFormatConstructor;
+    var ListFormat: ListFormatConstructor;
 }

@@ -56,5 +56,5 @@ declare namespace Intl {
         readonly prototype: Segmenter;
     }
 
-    const Segmenter: SegmenterConstructor;
+    var Segmenter: SegmenterConstructor;
 }

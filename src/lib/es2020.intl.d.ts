@@ -53,7 +53,7 @@ declare namespace Intl {
         readonly prototype: RelativeTimeFormat;
     }
 
-    const RelativeTimeFormat: RelativeTimeFormatConstructor;
+    var RelativeTimeFormat: RelativeTimeFormatConstructor;
 
     interface NumberFormatOptionsStyleRegistry {
         unit: never;
@@ -165,7 +165,7 @@ declare namespace Intl {
         readonly prototype: Locale;
     }
 
-    const Locale: LocaleConstructor;
+    var Locale: LocaleConstructor;
 
     interface CollatorConstructor {
         new (locales?: LocalesArgument, options?: CollatorOptions): Collator;

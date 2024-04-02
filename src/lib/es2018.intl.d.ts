@@ -36,7 +36,7 @@ declare namespace Intl {
         readonly prototype: PluralRules;
     }
 
-    const PluralRules: PluralRulesConstructor;
+    var PluralRules: PluralRulesConstructor;
 
     interface NumberFormatPartTypeRegistry {
         literal: never;
