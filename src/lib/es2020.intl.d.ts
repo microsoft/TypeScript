@@ -170,24 +170,24 @@ declare namespace Intl {
     interface CollatorConstructor {
         new (locales?: LocalesArgument, options?: CollatorOptions): Collator;
         (locales?: LocalesArgument, options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: LocalesArgument, options?: CollatorOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: CollatorOptions): string[];
     }
 
     interface DateTimeFormatConstructor {
         new (locales?: LocalesArgument, options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: LocalesArgument, options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: LocalesArgument, options?: DateTimeFormatOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: DateTimeFormatOptions): string[];
     }
 
     interface NumberFormatConstructor {
         new (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
         (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: LocalesArgument, options?: NumberFormatOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: NumberFormatOptions): string[];
     }
 
     interface PluralRulesConstructor {
         new (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
         (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(locales: LocalesArgument, options?: PluralRulesOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: PluralRulesOptions): string[];
     }
 }

@@ -109,7 +109,7 @@ declare namespace Intl {
 
     interface ListFormatConstructor {
         new (locales?: LocalesArgument, options?: ListFormatOptions): ListFormat;
-        supportedLocalesOf(locales: LocalesArgument, options?: ListFormatOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: ListFormatOptions): string[];
         readonly prototype: ListFormat;
     }
 

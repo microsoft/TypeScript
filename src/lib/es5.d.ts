@@ -4415,9 +4415,9 @@ declare namespace Intl {
     }
 
     interface CollatorConstructor {
-        new (locales?: string | string[], options?: CollatorOptions): Collator;
-        (locales?: string | string[], options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
+        new (locales?: string | readonly string[], options?: CollatorOptions): Collator;
+        (locales?: string | readonly string[], options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales?: string | readonly string[], options?: CollatorOptions): string[];
         readonly prototype: Collator;
     }
 
@@ -4477,9 +4477,9 @@ declare namespace Intl {
     }
 
     interface NumberFormatConstructor {
-        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
-        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
+        new (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales?: string | readonly string[], options?: NumberFormatOptions): string[];
         readonly prototype: NumberFormat;
     }
 
@@ -4547,9 +4547,9 @@ declare namespace Intl {
     }
 
     interface DateTimeFormatConstructor {
-        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
+        new (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales?: string | readonly string[], options?: DateTimeFormatOptions): string[];
         readonly prototype: DateTimeFormat;
     }
 
@@ -4563,7 +4563,7 @@ interface String {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the comparison. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.Collator` constructor.
      */
-    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
+    localeCompare(that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
@@ -4572,7 +4572,7 @@ interface Number {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
@@ -4581,18 +4581,18 @@ interface Date {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
     /**
      * Converts a date to a string, according to the specified locale.
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
-    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
      * Converts a time to a string, according to the specified locale.
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
-    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleTimeString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
 }

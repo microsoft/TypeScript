@@ -32,7 +32,7 @@ declare namespace Intl {
     interface PluralRulesConstructor {
         new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(locales: string | readonly string[], options?: PluralRulesOptions): string[];
+        supportedLocalesOf(locales?: string | readonly string[], options?: PluralRulesOptions): string[];
         readonly prototype: PluralRules;
     }
 

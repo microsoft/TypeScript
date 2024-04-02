@@ -49,7 +49,7 @@ interface Array<T> {
      * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
      * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
      */
-    toLocaleString(locales?: string | string[], options?: object): string;
+    toLocaleString(locales?: string | readonly string[], options?: object): string;
 }
 
 interface ArrayConstructor {
@@ -357,7 +357,7 @@ interface ReadonlyArray<T> {
      * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
      * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
      */
-    toLocaleString(locales?: string | string[], options?: object): string;
+    toLocaleString(locales?: string | readonly string[], options?: object): string;
 }
 
 interface RegExp {
@@ -455,7 +455,7 @@ interface String {
      * This method does not perform locale matching; instead, it always selects the first supported locale.
      * If omitted, the default locale is used.
      */
-    toLocaleLowerCase(locales?: string | string[]): string;
+    toLocaleLowerCase(locales?: string | readonly string[]): string;
 
     /**
      * Converts all alphabetic characters to uppercase, using locale-sensitive case mappings.
@@ -463,7 +463,7 @@ interface String {
      * This method does not perform locale matching; instead, it always selects the first supported locale.
      * If omitted, the default locale is used.
     */
-    toLocaleUpperCase(locales?: string | string[]): string;
+    toLocaleUpperCase(locales?: string | readonly string[]): string;
 
     /**
      * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
@@ -577,7 +577,7 @@ interface Int8Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint8Array {
@@ -587,7 +587,7 @@ interface Uint8Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint8ClampedArray {
@@ -597,7 +597,7 @@ interface Uint8ClampedArray {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Int16Array {
@@ -607,7 +607,7 @@ interface Int16Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint16Array {
@@ -617,7 +617,7 @@ interface Uint16Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Int32Array {
@@ -627,7 +627,7 @@ interface Int32Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint32Array {
@@ -637,7 +637,7 @@ interface Uint32Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Float32Array {
@@ -647,7 +647,7 @@ interface Float32Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Float64Array {
@@ -657,5 +657,5 @@ interface Float64Array {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
