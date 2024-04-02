@@ -1,4 +1,6 @@
 declare namespace Intl {
+    function supportedValuesOf(key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"): string[];
+
     interface NumberFormatOptionsUseGroupingRegistry {
         min2: never;
         auto: never;
