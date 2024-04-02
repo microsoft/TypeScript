@@ -6,6 +6,21 @@ declare namespace Intl {
         longGeneric: never;
     }
 
+    interface DisplayNamesOptionsTypeRegistry {
+        calendar: never;
+        dateTimeField: never;
+    }
+
+    type DisplayNamesOptionsLanguageDisplay = "dialect" | "standard";
+
+    interface DisplayNamesOptions {
+        languageDisplay?: DisplayNamesOptionsLanguageDisplay | undefined;
+    }
+
+    interface ResolvedDisplayNamesOptions {
+        languageDisplay?: DisplayNamesOptionsLanguageDisplay;
+    }
+
     /**
      * An object with some or all properties of the `Intl.Segmenter` constructor `options` parameter.
      *

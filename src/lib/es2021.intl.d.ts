@@ -38,6 +38,48 @@ declare namespace Intl {
         formatRangeToParts(startDate: Date | number, endDate: Date | number): DateTimeRangeFormatPart[];
     }
 
+    type DisplayNamesOptionsStyle = "narrow" | "short" | "long";
+
+    interface DisplayNamesOptionsTypeRegistry {
+        language: never;
+        region: never;
+        script: never;
+        currency: never;
+    }
+
+    type DisplayNamesOptionsType = keyof DisplayNamesOptionsTypeRegistry;
+
+    type DisplayNamesOptionsFallback = "code" | "none";
+
+    type DisplayNamesOptionsLanguageDisplay = "dialect" | "standard";
+
+    interface DisplayNamesOptions {
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        style?: DisplayNamesOptionsStyle | undefined;
+        type: DisplayNamesOptionsType;
+        fallback?: DisplayNamesOptionsFallback | undefined;
+    }
+
+    interface ResolvedDisplayNamesOptions {
+        locale: string;
+        style: DisplayNamesOptionsStyle;
+        type: DisplayNamesOptionsType;
+        fallback: DisplayNamesOptionsFallback;
+    }
+
+    interface DisplayNames {
+        of(code: string): string | undefined;
+        resolvedOptions(): ResolvedDisplayNamesOptions;
+    }
+
+    interface DisplayNamesConstructor {
+        new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames;
+        supportedLocalesOf(locales?: LocalesArgument, options?: DisplayNamesOptions): string[];
+        readonly prototype: DisplayNames;
+    }
+
+    const DisplayNames: DisplayNamesConstructor;
+
     /**
      * The locale matching algorithm to use.
      *
