@@ -953,8 +953,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return !!(f.flags & FlowFlags.SwitchClause);
         }
 
-        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedents: FlowNode[]; } {
-            return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedents;
+        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedent: FlowNode[] } {
+            return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedent;
         }
 
         function hasAntecedent(f: FlowNode): f is Extract<FlowNode, { antecedent: FlowNode; }> {
@@ -1008,7 +1008,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
                 nodes.push(graphNode);
                 if (hasAntecedents(flowNode)) {
-                    for (const antecedent of flowNode.antecedents) {
+                    for (const antecedent of flowNode.antecedent) {
                         buildGraphEdge(graphNode, antecedent, seen);
                     }
                 }
@@ -1099,8 +1099,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             if (isFlowSwitchClause(flowNode)) {
                 const clauses: string[] = [];
-                for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
-                    const clause = flowNode.node.caseBlock.clauses[i];
+                const { switchStatement, clauseStart, clauseEnd } = flowNode.node;
+                for (let i = clauseStart; i < clauseEnd; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
                     if (isDefaultClause(clause)) {
                         clauses.push("default");
                     }
