@@ -87,6 +87,21 @@ Fs::
   "files": []
 }
 
+//// [/dev/configs/first/templateextends.json]
+{
+  "extends": "../second/templateextends.json",
+  "include": [
+    "${configDir}/../supplemental.*"
+  ],
+  "compilerOptions": {
+    "rootDirs": [
+      "root1",
+      "${configDir}/root2",
+      "root3"
+    ]
+  }
+}
+
 //// [/dev/configs/first.json]
 {
   "extends": "./base",
@@ -110,6 +125,28 @@ Fs::
   ]
 }
 
+//// [/dev/configs/second/templateextends.json]
+{
+  "files": [
+    "${configDir}/main.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./insecond",
+    "declarationDir": "${configDir}/decls",
+    "paths": {
+      "something": [
+        "${configDir}/something"
+      ],
+      "something/*": [
+        "${configDir}/something/*"
+      ],
+      "other/*": [
+        "./other/*"
+      ]
+    }
+  }
+}
+
 //// [/dev/configs/second.json]
 {
   "extends": "./base",
@@ -119,6 +156,44 @@ Fs::
   "include": [
     "../supplemental.*"
   ]
+}
+
+//// [/dev/configs/template.json]
+{
+  "include": [
+    "${configDir}/../supplemental.*"
+  ],
+  "files": [
+    "${configDir}/main.ts"
+  ],
+  "compilerOptions": {
+    "declarationDir": "${configDir}/decls",
+    "rootDirs": [
+      "root1",
+      "${configDir}/root2",
+      "root3"
+    ],
+    "paths": {
+      "something": [
+        "${configDir}/something"
+      ],
+      "something/*": [
+        "${configDir}/something/*"
+      ],
+      "other/*": [
+        "./other/*"
+      ]
+    }
+  }
+}
+
+//// [/dev/configs/templateandextends.json]
+{
+  "extends": "./first/templateextends.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./src"
+  }
 }
 
 //// [/dev/configs/tests.json]
@@ -724,4 +799,67 @@ Errors::
 
 [7m3[0m     42
 [7m [0m [91m    ~~[0m
+
+
+handle configDir template
+configFileName:: configs/template.json
+CompilerOptions::
+{
+  "declarationDir": "/dev/configs/decls",
+  "rootDirs": [
+    "/dev/configs/root1",
+    "/dev/configs/root2",
+    "/dev/configs/root3"
+  ],
+  "paths": {
+    "something": [
+      "/dev/configs/something"
+    ],
+    "something/*": [
+      "/dev/configs/something/*"
+    ],
+    "other/*": [
+      "./other/*"
+    ]
+  },
+  "pathsBasePath": "/dev/configs",
+  "configFilePath": "/dev/configs/template.json"
+}
+FileNames::
+/dev/configs/main.ts
+/dev/supplemental.ts
+Errors::
+
+
+handle configDir template
+configFileName:: configs/templateandextends.json
+CompilerOptions::
+{
+  "outDir": "/dev/configs/second/insecond",
+  "declarationDir": "/dev/configs/decls",
+  "paths": {
+    "something": [
+      "/dev/configs/something"
+    ],
+    "something/*": [
+      "/dev/configs/something/*"
+    ],
+    "other/*": [
+      "./other/*"
+    ]
+  },
+  "pathsBasePath": "/dev/configs/second",
+  "rootDirs": [
+    "/dev/configs/first/root1",
+    "/dev/configs/root2",
+    "/dev/configs/first/root3"
+  ],
+  "strict": true,
+  "baseUrl": "/dev/configs/src",
+  "configFilePath": "/dev/configs/templateandextends.json"
+}
+FileNames::
+/dev/configs/main.ts
+/dev/supplemental.ts
+Errors::
 
