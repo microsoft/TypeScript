@@ -7,18 +7,26 @@ declare namespace Intl {
         fractionalSecond: never;
     }
 
+    type DateTimeFormatOptionsDateStyle = "full" | "long" | "medium" | "short";
+
+    type DateTimeFormatOptionsTimeStyle = "full" | "long" | "medium" | "short";
+
+    type DateTimeFormatOptionsDayPeriod = "narrow" | "short" | "long";
+
+    type DateTimeFormatOptionsFractionalSecondDigits = 1 | 2 | 3;
+
     interface DateTimeFormatOptions {
-        dateStyle?: "full" | "long" | "medium" | "short" | undefined;
-        timeStyle?: "full" | "long" | "medium" | "short" | undefined;
-        dayPeriod?: "narrow" | "short" | "long" | undefined;
-        fractionalSecondDigits?: 1 | 2 | 3 | undefined;
+        dateStyle?: DateTimeFormatOptionsDateStyle | undefined;
+        timeStyle?: DateTimeFormatOptionsTimeStyle | undefined;
+        dayPeriod?: DateTimeFormatOptionsDayPeriod | undefined;
+        fractionalSecondDigits?: DateTimeFormatOptionsFractionalSecondDigits | undefined;
     }
 
     interface ResolvedDateTimeFormatOptions {
-        dateStyle?: "full" | "long" | "medium" | "short";
-        timeStyle?: "full" | "long" | "medium" | "short";
-        dayPeriod?: "narrow" | "short" | "long";
-        fractionalSecondDigits?: 1 | 2 | 3;
+        dateStyle?: DateTimeFormatOptionsDateStyle;
+        timeStyle?: DateTimeFormatOptionsTimeStyle;
+        dayPeriod?: DateTimeFormatOptionsDayPeriod;
+        fractionalSecondDigits?: DateTimeFormatOptionsFractionalSecondDigits;
     }
 
     interface DateTimeRangeFormatPart extends DateTimeFormatPart {

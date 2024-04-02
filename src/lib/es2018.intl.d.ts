@@ -63,11 +63,13 @@ declare namespace Intl {
         formatToParts(number?: number | bigint): NumberFormatPart[];
     }
 
+    type DateTimeFormatOptionsHourCycle = "h11" | "h12" | "h23" | "h24";
+
     interface DateTimeFormatOptions {
-        hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
+        hourCycle?: DateTimeFormatOptionsHourCycle | undefined;
     }
 
     interface ResolvedDateTimeFormatOptions {
-        hourCycle?: "h11" | "h12" | "h23" | "h24";
+        hourCycle?: DateTimeFormatOptionsHourCycle;
     }
 }

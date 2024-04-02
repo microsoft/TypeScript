@@ -4478,6 +4478,22 @@ declare namespace Intl {
 
     var NumberFormat: NumberFormatConstructor;
 
+    type DateTimeFormatOptionsWeekday = "narrow" | "short" | "long";
+
+    type DateTimeFormatOptionsEra = "narrow" | "short" | "long";
+
+    type DateTimeFormatOptionsYear = "2-digit" | "numeric";
+
+    type DateTimeFormatOptionsMonth = "2-digit" | "numeric" | "narrow" | "short" | "long";
+
+    type DateTimeFormatOptionsDay = "2-digit" | "numeric";
+
+    type DateTimeFormatOptionsHour = "2-digit" | "numeric";
+
+    type DateTimeFormatOptionsMinute = "2-digit" | "numeric";
+
+    type DateTimeFormatOptionsSecond = "2-digit" | "numeric";
+
     interface DateTimeFormatOptionsTimeZoneNameRegistry {
         short: never;
         long: never;
@@ -4487,14 +4503,14 @@ declare namespace Intl {
 
     interface DateTimeFormatOptions {
         localeMatcher?: "lookup" | "best fit" | undefined;
-        weekday?: "narrow" | "short" | "long" | undefined;
-        era?: "narrow" | "short" | "long" | undefined;
-        year?: "2-digit" | "numeric" | undefined;
-        month?: "2-digit" | "numeric" | "narrow" | "short" | "long" | undefined;
-        day?: "2-digit" | "numeric" | undefined;
-        hour?: "2-digit" | "numeric" | undefined;
-        minute?: "2-digit" | "numeric" | undefined;
-        second?: "2-digit" | "numeric" | undefined;
+        weekday?: DateTimeFormatOptionsWeekday | undefined;
+        era?: DateTimeFormatOptionsEra | undefined;
+        year?: DateTimeFormatOptionsYear | undefined;
+        month?: DateTimeFormatOptionsMonth | undefined;
+        day?: DateTimeFormatOptionsDay | undefined;
+        hour?: DateTimeFormatOptionsHour | undefined;
+        minute?: DateTimeFormatOptionsMinute | undefined;
+        second?: DateTimeFormatOptionsSecond | undefined;
         timeZoneName?: DateTimeFormatOptionsTimeZoneName | undefined;
         formatMatcher?: "basic" | "best fit" | undefined;
         hour12?: boolean | undefined;
@@ -4507,14 +4523,14 @@ declare namespace Intl {
         numberingSystem: string;
         timeZone: string;
         hour12?: boolean;
-        weekday?: "narrow" | "short" | "long";
-        era?: "narrow" | "short" | "long";
-        year?: "2-digit" | "numeric";
-        month?: "2-digit" | "numeric" | "narrow" | "short" | "long";
-        day?: "2-digit" | "numeric";
-        hour?: "2-digit" | "numeric";
-        minute?: "2-digit" | "numeric";
-        second?: "2-digit" | "numeric";
+        weekday?: DateTimeFormatOptionsWeekday;
+        era?: DateTimeFormatOptionsEra;
+        year?: DateTimeFormatOptionsYear;
+        month?: DateTimeFormatOptionsMonth;
+        day?: DateTimeFormatOptionsDay;
+        hour?: DateTimeFormatOptionsHour;
+        minute?: DateTimeFormatOptionsMinute;
+        second?: DateTimeFormatOptionsSecond;
         timeZoneName?: DateTimeFormatOptionsTimeZoneName;
     }
 
