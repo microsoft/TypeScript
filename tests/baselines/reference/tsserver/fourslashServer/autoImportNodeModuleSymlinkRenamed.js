@@ -237,6 +237,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 	../utils/src/index.ts
 	  Root file specified for compilation
+	  File is CommonJS module because '../utils/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
