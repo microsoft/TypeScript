@@ -1,12 +1,12 @@
-spreadObjectOrFalsy.ts(2,14): error TS2698: Spread types may only be created from object types.
-spreadObjectOrFalsy.ts(10,14): error TS2698: Spread types may only be created from object types.
+spreadObjectOrFalsy.ts(2,14): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadObjectOrFalsy.ts(10,14): error TS2698: Spread appears unintentional because this value is not possibly an object.
 
 
 ==== spreadObjectOrFalsy.ts (2 errors) ====
     function f1<T>(a: T & undefined) {
         return { ...a };  // Error
                  ~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     }
     
     function f2<T>(a: T | T & undefined) {
@@ -16,7 +16,7 @@ spreadObjectOrFalsy.ts(10,14): error TS2698: Spread types may only be created fr
     function f3<T extends undefined>(a: T) {
         return { ...a };  // Error
                  ~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     }
     
     function f4<T extends undefined>(a: object | T) {

@@ -3115,7 +3115,7 @@
         "category": "Error",
         "code": 2697
     },
-    "Spread types may only be created from object types.": {
+    "Spread appears unintentional because this value is not possibly an object.": {
         "category": "Error",
         "code": 2698
     },

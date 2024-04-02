@@ -1,4 +1,4 @@
-0.tsx(6,21): error TS2698: Spread types may only be created from object types.
+0.tsx(6,21): error TS2698: Spread appears unintentional because this value is not possibly an object.
 
 
 ==== 0.tsx (1 errors) ====
@@ -9,7 +9,7 @@
     let buttonProps;
     let k = <button {...buttonProps}>
                         ~~~~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
                 <span className={cx('class1', { class2: true })} />
             </button>;
     

@@ -1,6 +1,6 @@
 objectSpreadNegativeParse.ts(1,15): error TS2304: Cannot find name 'o'.
 objectSpreadNegativeParse.ts(1,18): error TS1109: Expression expected.
-objectSpreadNegativeParse.ts(2,12): error TS2698: Spread types may only be created from object types.
+objectSpreadNegativeParse.ts(2,12): error TS2698: Spread appears unintentional because this value is not possibly an object.
 objectSpreadNegativeParse.ts(2,15): error TS1109: Expression expected.
 objectSpreadNegativeParse.ts(2,16): error TS2304: Cannot find name 'o'.
 objectSpreadNegativeParse.ts(3,15): error TS2304: Cannot find name 'matchMedia'.
@@ -18,7 +18,7 @@ objectSpreadNegativeParse.ts(4,20): error TS1005: ',' expected.
 !!! error TS1109: Expression expected.
     let o8 = { ...*o };
                ~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
                   ~
 !!! error TS1109: Expression expected.
                    ~

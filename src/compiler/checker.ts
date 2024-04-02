@@ -3581,7 +3581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))
                 ) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
-                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
+                    if (exportOrLocalSymbol && (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum)) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                     }
                 }
@@ -31930,7 +31930,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     spread = getSpreadType(spread, mergedType, node.symbol, objectFlags, inConstContext);
                 }
                 else {
-                    error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
+                    error(memberDecl, Diagnostics.Spread_appears_unintentional_because_this_value_is_not_possibly_an_object);
                     spread = errorType;
                 }
                 continue;
@@ -32180,7 +32180,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
-                    error(attributeDecl.expression, Diagnostics.Spread_types_may_only_be_created_from_object_types);
+                    error(attributeDecl.expression, Diagnostics.Spread_appears_unintentional_because_this_value_is_not_possibly_an_object);
                     typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
                 }
             }

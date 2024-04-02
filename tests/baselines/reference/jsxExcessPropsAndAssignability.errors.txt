@@ -1,7 +1,7 @@
-jsxExcessPropsAndAssignability.tsx(13,27): error TS2698: Spread types may only be created from object types.
+jsxExcessPropsAndAssignability.tsx(13,27): error TS2698: Spread appears unintentional because this value is not possibly an object.
 jsxExcessPropsAndAssignability.tsx(14,6): error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
   Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
-jsxExcessPropsAndAssignability.tsx(14,27): error TS2698: Spread types may only be created from object types.
+jsxExcessPropsAndAssignability.tsx(14,27): error TS2698: Spread appears unintentional because this value is not possibly an object.
 
 
 ==== jsxExcessPropsAndAssignability.tsx (3 errors) ====
@@ -19,12 +19,12 @@ jsxExcessPropsAndAssignability.tsx(14,27): error TS2698: Spread types may only b
     
         <WrapperComponent {...props} myProp={'1000000'} />;
                               ~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
         <WrapperComponent {...props} myProp={1000000} />;
          ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
 !!! error TS2322:   Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
                               ~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     };
     

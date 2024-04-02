@@ -14,11 +14,11 @@ objectSpreadNegative.ts(39,14): error TS2783: 'b' is specified more than once, s
 objectSpreadNegative.ts(41,53): error TS2783: 'd' is specified more than once, so this usage will be overwritten.
 objectSpreadNegative.ts(43,7): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
 objectSpreadNegative.ts(45,37): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-objectSpreadNegative.ts(48,19): error TS2698: Spread types may only be created from object types.
-objectSpreadNegative.ts(49,19): error TS2698: Spread types may only be created from object types.
-objectSpreadNegative.ts(50,20): error TS2698: Spread types may only be created from object types.
-objectSpreadNegative.ts(52,20): error TS2698: Spread types may only be created from object types.
-objectSpreadNegative.ts(54,19): error TS2698: Spread types may only be created from object types.
+objectSpreadNegative.ts(48,19): error TS2698: Spread appears unintentional because this value is not possibly an object.
+objectSpreadNegative.ts(49,19): error TS2698: Spread appears unintentional because this value is not possibly an object.
+objectSpreadNegative.ts(50,20): error TS2698: Spread appears unintentional because this value is not possibly an object.
+objectSpreadNegative.ts(52,20): error TS2698: Spread appears unintentional because this value is not possibly an object.
+objectSpreadNegative.ts(54,19): error TS2698: Spread appears unintentional because this value is not possibly an object.
 objectSpreadNegative.ts(59,1): error TS2349: This expression is not callable.
   Type '{}' has no call signatures.
 objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
@@ -114,21 +114,21 @@ objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on typ
     // primitives are not allowed, except for falsy ones
     let spreadNum = { ...12 };
                       ~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     let spreadSum = { ...1 + 1 };
                       ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     let spreadZero = { ...0 };
                        ~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     spreadZero.toFixed(); // error, no methods even from a falsy number
     let spreadBool = { ...true };
                        ~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     spreadBool.valueOf();
     let spreadStr = { ...'foo' };
                       ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     spreadStr.length; // error, no 'length'
     spreadStr.charAt(1); // error, no methods either
     // functions are skipped

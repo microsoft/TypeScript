@@ -17,7 +17,7 @@ jsxNamespacePrefixInNameReact.tsx(13,73): error TS1005: ',' expected.
 jsxNamespacePrefixInNameReact.tsx(13,74): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(23,27): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(23,29): error TS1005: '...' expected.
-jsxNamespacePrefixInNameReact.tsx(23,29): error TS2698: Spread types may only be created from object types.
+jsxNamespacePrefixInNameReact.tsx(23,29): error TS2698: Spread appears unintentional because this value is not possibly an object.
 jsxNamespacePrefixInNameReact.tsx(24,27): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(26,21): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(26,22): error TS1109: Expression expected.
@@ -28,7 +28,7 @@ jsxNamespacePrefixInNameReact.tsx(26,41): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(26,42): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(27,29): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(27,31): error TS1005: '...' expected.
-jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be created from object types.
+jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread appears unintentional because this value is not possibly an object.
 
 
 ==== jsxNamespacePrefixInNameReact.tsx (31 errors) ====
@@ -94,7 +94,7 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                 ~~~~~~~
 !!! error TS1005: '...' expected.
                                 ~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     var endOfIdent2 = <a attr:={"value"} />;
                               ~
 !!! error TS1003: Identifier expected.
@@ -120,7 +120,7 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                   ~~~~~~~
 !!! error TS1005: '...' expected.
                                   ~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     
     var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
     var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic

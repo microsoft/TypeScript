@@ -18,8 +18,8 @@ unknownType1.ts(120,9): error TS2322: Type 'T' is not assignable to type 'object
 unknownType1.ts(128,5): error TS2322: Type 'number[]' is not assignable to type '{ [x: string]: unknown; }'.
   Index signature for type 'string' is missing in type 'number[]'.
 unknownType1.ts(129,5): error TS2322: Type 'number' is not assignable to type '{ [x: string]: unknown; }'.
-unknownType1.ts(143,29): error TS2698: Spread types may only be created from object types.
-unknownType1.ts(144,29): error TS2698: Spread types may only be created from object types.
+unknownType1.ts(143,29): error TS2698: Spread appears unintentional because this value is not possibly an object.
+unknownType1.ts(144,29): error TS2698: Spread appears unintentional because this value is not possibly an object.
 unknownType1.ts(150,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 unknownType1.ts(156,14): error TS2700: Rest types may only be created from object types.
 unknownType1.ts(162,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
@@ -212,10 +212,10 @@ unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
         let o1 = { a: 42, ...x };  // { a: number }
         let o2 = { a: 42, ...x, ...y };  // unknown
                                 ~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
         let o3 = { a: 42, ...x, ...y, ...z };  // any
                                 ~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
         let o4 = { a: 42, ...z }; // any
     }
     

@@ -1,6 +1,6 @@
-a.tsx(9,21): error TS2698: Spread types may only be created from object types.
-a.tsx(10,21): error TS2698: Spread types may only be created from object types.
-a.tsx(11,21): error TS2698: Spread types may only be created from object types.
+a.tsx(9,21): error TS2698: Spread appears unintentional because this value is not possibly an object.
+a.tsx(10,21): error TS2698: Spread appears unintentional because this value is not possibly an object.
+a.tsx(11,21): error TS2698: Spread appears unintentional because this value is not possibly an object.
 
 
 ==== a.tsx (3 errors) ====
@@ -14,11 +14,11 @@ a.tsx(11,21): error TS2698: Spread types may only be created from object types.
     
     const d = <div { ...a } />
                         ~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     const e = <div { ...b } />
                         ~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     const f = <div { ...c } />
                         ~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2698: Spread appears unintentional because this value is not possibly an object.
     
