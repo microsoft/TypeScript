@@ -286,62 +286,61 @@ declare namespace Intl {
         numberingSystem?: string | undefined;
     }
 
-    type LocaleHourCycleKey = "h12" | "h23" | "h11" | "h24";
-    type LocaleCollationCaseFirst = "upper" | "lower" | "false";
-
     interface LocaleOptions {
-        /** A string containing the language, and the script and region if available. */
-        baseName?: string;
         /** The part of the Locale that indicates the locale's calendar era. */
-        calendar?: string;
+        calendar?: string | undefined;
         /** Flag that defines whether case is taken into account for the locale's collation rules. */
-        caseFirst?: LocaleCollationCaseFirst;
+        caseFirst?: CollatorOptionsCaseFirst | undefined;
         /** The collation type used for sorting */
-        collation?: string;
+        collation?: string | undefined;
         /** The time keeping format convention used by the locale. */
-        hourCycle?: LocaleHourCycleKey;
+        hourCycle?: DateTimeFormatOptionsHourCycle | undefined;
         /** The primary language subtag associated with the locale. */
-        language?: string;
+        language?: string | undefined;
         /** The numeral system used by the locale. */
-        numberingSystem?: string;
+        numberingSystem?: string | undefined;
         /** Flag that defines whether the locale has special collation handling for numeric characters. */
-        numeric?: boolean;
+        numeric?: boolean | undefined;
         /** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. */
-        region?: string;
+        region?: string | undefined;
         /** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. */
-        script?: string;
+        script?: string | undefined;
     }
 
-    interface Locale extends LocaleOptions {
-        /** A string containing the language, and the script and region if available. */
-        baseName: string;
-        /** The primary language subtag associated with the locale. */
-        language: string;
+    interface Locale {
         /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
         maximize(): Locale;
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
         minimize(): Locale;
         /** Returns the locale's full locale identifier string. */
         toString(): UnicodeBCP47LocaleIdentifier;
+        /** A string containing the language, and the script and region if available. */
+        baseName: string;
+        /** The primary language subtag associated with the locale. */
+        calendar: string | undefined;
+        /** Flag that defines whether case is taken into account for the locale's collation rules. */
+        caseFirst: CollatorOptionsCaseFirst | undefined;
+        /** The collation type used for sorting */
+        collation: string | undefined;
+        /** The time keeping format convention used by the locale. */
+        hourCycle: DateTimeFormatOptionsHourCycle | undefined;
+        /** The primary language subtag associated with the locale. */
+        language: string | undefined;
+        /** The numeral system used by the locale. */
+        numberingSystem: string | undefined;
+        /** Flag that defines whether the locale has special collation handling for numeric characters. */
+        numeric: boolean | undefined;
+        /** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. */
+        region: string | undefined;
+        /** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. */
+        script: string | undefined;
     }
 
-    /**
-     * Constructor creates [Intl.Locale](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale)
-     * objects
-     *
-     * @param tag - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646).
-     *  For the general form and interpretation of the locales argument,
-     *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
-     *
-     * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/Locale#Parameters) with some or all of options of the locale.
-     *
-     * @returns [Intl.Locale](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale) object.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
-     */
-    const Locale: {
+    interface LocaleConstructor {
         new (tag: UnicodeBCP47LocaleIdentifier | Locale, options?: LocaleOptions): Locale;
-    };
+    }
+
+    const Locale: LocaleConstructor;
 
     type DisplayNamesFallback =
         | "code"
