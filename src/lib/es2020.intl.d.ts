@@ -1,15 +1,6 @@
 /// <reference lib="es2018.intl" />
 declare namespace Intl {
     /**
-     * A string that is a valid [Unicode BCP 47 Locale Identifier](https://unicode.org/reports/tr35/#Unicode_locale_identifier).
-     *
-     * For example: "fa", "es-MX", "zh-Hant-TW".
-     *
-     * See [MDN - Intl - locales argument](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
-     */
-    type UnicodeBCP47LocaleIdentifier = string;
-
-    /**
      * Unit to use in the relative time internationalized message.
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/format#Parameters).
@@ -77,7 +68,7 @@ declare namespace Intl {
      *
      * See [MDN - Intl - locales argument](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      */
-    type LocalesArgument = UnicodeBCP47LocaleIdentifier | Locale | readonly (UnicodeBCP47LocaleIdentifier | Locale)[] | undefined;
+    type LocalesArgument = string | Locale | readonly (string | Locale)[] | undefined;
 
     /**
      * An object with some or all of properties of `options` parameter
@@ -102,7 +93,7 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/resolvedOptions#Description).
      */
     interface ResolvedRelativeTimeFormatOptions {
-        locale: UnicodeBCP47LocaleIdentifier;
+        locale: string;
         style: RelativeTimeFormatStyle;
         numeric: RelativeTimeFormatNumeric;
         numberingSystem: string;
@@ -217,10 +208,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/supportedLocalesOf).
          */
-        supportedLocalesOf(
-            locales?: LocalesArgument,
-            options?: RelativeTimeFormatOptions,
-        ): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: RelativeTimeFormatOptions): string[];
     };
 
     interface NumberFormatOptionsStyleRegistry {
@@ -304,7 +292,7 @@ declare namespace Intl {
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
         minimize(): Locale;
         /** Returns the locale's full locale identifier string. */
-        toString(): UnicodeBCP47LocaleIdentifier;
+        toString(): string;
 
         /** The Unicode Language Identifier associated with the locale. */
         baseName: string;
@@ -329,7 +317,7 @@ declare namespace Intl {
     }
 
     interface LocaleConstructor {
-        new (tag: UnicodeBCP47LocaleIdentifier | Locale, options?: LocaleOptions): Locale;
+        new (tag: string | Locale, options?: LocaleOptions): Locale;
     }
 
     const Locale: LocaleConstructor;
@@ -359,7 +347,7 @@ declare namespace Intl {
     }
 
     interface ResolvedDisplayNamesOptions {
-        locale: UnicodeBCP47LocaleIdentifier;
+        locale: string;
         style: RelativeTimeFormatStyle;
         type: DisplayNamesType;
         fallback: DisplayNamesFallback;
@@ -425,7 +413,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
          */
-        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }): string[];
     };
 
     interface CollatorConstructor {
