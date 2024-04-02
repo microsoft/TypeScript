@@ -8,6 +8,7 @@
  */
 class Hello {
 >Hello : Hello
+>      : ^^^^^
 
 }
 
@@ -19,6 +20,7 @@ class Hello {
  */
 class Hi {
 >Hi : Hi
+>   : ^^
 
 }
 
@@ -30,6 +32,7 @@ class Hi {
  */
 class Hola {
 >Hola : Hola
+>     : ^^^^
 
 }
 

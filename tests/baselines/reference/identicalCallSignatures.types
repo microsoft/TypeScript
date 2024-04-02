@@ -12,21 +12,26 @@ interface I {
 
     <T>(x: T): T;
 >x : T
+>  : ^
 
     <U>(x: U): U; // error
 >x : U
+>  : ^
 }
 
 interface I2<T> {
     (x: T): T;
 >x : T
+>  : ^
 
     (x: T): T; // error
 >x : T
+>  : ^
 }
 
 var a: {
 >a : { (x: any): number; (x: any): number; <T>(x: T): T; <T_1>(x: T_1): T_1; }
+>  : ^^^^^^^^^^^^      ^^^^^^   ^^^      ^^^ ^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^
 
     (x): number;
 >x : any
@@ -36,7 +41,9 @@ var a: {
 
     <T>(x: T): T;
 >x : T
+>  : ^
 
     <T>(x: T): T; // error
 >x : T
+>  : ^
 }

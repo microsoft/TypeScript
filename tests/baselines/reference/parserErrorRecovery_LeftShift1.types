@@ -3,10 +3,17 @@
 === parserErrorRecovery_LeftShift1.ts ===
 retValue = bfs.VARIABLES >> );
 >retValue = bfs.VARIABLES >> : number
+>                            : ^^^^^^
 >retValue : any
+>         : ^^^
 >bfs.VARIABLES >> : number
+>                 : ^^^^^^
 >bfs.VARIABLES : any
+>              : ^^^
 >bfs : any
+>    : ^^^
 >VARIABLES : any
+>          : ^^^
 > : any
+> : ^^^
 

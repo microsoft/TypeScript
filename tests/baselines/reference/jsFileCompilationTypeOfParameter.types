@@ -3,5 +3,7 @@
 === a.js ===
 function F(a: number) { }
 >F : (a: number) => void
+>  : ^^^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 

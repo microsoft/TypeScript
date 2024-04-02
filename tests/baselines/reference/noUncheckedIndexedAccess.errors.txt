@@ -33,8 +33,7 @@ noUncheckedIndexedAccess.ts(90,7): error TS2322: Type 'string | undefined' is no
   Type 'undefined' is not assignable to type 'string'.
 noUncheckedIndexedAccess.ts(98,5): error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
   Type 'undefined' is not assignable to type 'string'.
-noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
+noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'undefined' is not assignable to type 'string'.
 
 
 ==== noUncheckedIndexedAccess.ts (31 errors) ====
@@ -203,8 +202,7 @@ noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'string | undefined' is n
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
         const v: string = myRecord2[key]; // Should error
               ~
-!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     };
     
     

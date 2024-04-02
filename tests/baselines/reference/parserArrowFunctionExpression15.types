@@ -3,16 +3,26 @@
 === fileJs.js ===
 false ? (param): string => param : null // Not legal JS; "Unexpected token ':'" at last colon
 >false ? (param): string => param : null : (param: any) => string
+>                                        : ^^^^^^^^^^^^^^^^      
 >false : false
+>      : ^^^^^
 >(param): string => param : (param: any) => string
+>                         : ^^^^^^^^^^^^^^^^      
 >param : any
+>      : ^^^
 >param : any
+>      : ^^^
 
 === fileTs.ts ===
 false ? (param): string => param : null
 >false ? (param): string => param : null : (param: any) => string
+>                                        : ^^^^^^^^^^^^^^^^      
 >false : false
+>      : ^^^^^
 >(param): string => param : (param: any) => string
+>                         : ^^^^^^^^^^^^^^^^      
 >param : any
+>      : ^^^
 >param : any
+>      : ^^^
 

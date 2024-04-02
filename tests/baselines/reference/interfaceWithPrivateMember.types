@@ -6,16 +6,20 @@
 interface I {
     private x: string;
 >x : string
+>  : ^^^^^^
 }
 
 interface I2<T> {
     private y: T;
 >y : T
+>  : ^
 }
 
 var x: {
 >x : { y: string; }
+>  : ^^^^^      ^^^
 
     private y: string;
 >y : string
+>  : ^^^^^^
 }

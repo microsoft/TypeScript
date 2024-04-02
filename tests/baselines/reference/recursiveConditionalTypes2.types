@@ -5,12 +5,15 @@
 
 type UnionToIntersection<U> = (
 >UnionToIntersection : UnionToIntersection<U>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 
   U extends any ? (k: U) => unknown : never
 >k : U
+>  : ^
 
 ) extends (k: infer I) => unknown
 >k : I
+>  : ^
 
   ? I
   : never;
@@ -18,42 +21,52 @@ type UnionToIntersection<U> = (
 interface ClassSpec {
   public?: object;
 >public : object | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
   private?: object;
 >private : object | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
   publicExtends?: Record<string, ClassSpec>;
 >publicExtends : Record<string, ClassSpec> | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   privateExtends?: Record<string, ClassSpec>;
 >privateExtends : Record<string, ClassSpec> | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type MaybeMergePrivateSuperSpec<T> = T extends Record<string, ClassSpec>
 >MaybeMergePrivateSuperSpec : MaybeMergePrivateSuperSpec<T>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ? MergePrivateSuperSpec<T>
   : {};
 
 type MaybeMergePrivateSpecs<T extends ClassSpec, U> = U extends ClassSpec
 >MaybeMergePrivateSpecs : MaybeMergePrivateSpecs<T, U>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ? MergePrivateSpecs<U, T>
   : T;
 
 type MergePrivateSpecs<T extends ClassSpec, U extends ClassSpec> = {
 >MergePrivateSpecs : MergePrivateSpecs<T, U>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 
   public: T["public"] & U["public"];
 >public : T["public"] & U["public"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   private: T["private"] & U["private"];
 >private : T["private"] & U["private"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 type MergePrivateSuperSpec<T extends Record<string, ClassSpec>> =
 >MergePrivateSuperSpec : MergePrivateSuperSpec<T>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   UnionToIntersection<
     {
@@ -63,6 +76,7 @@ type MergePrivateSuperSpec<T extends Record<string, ClassSpec>> =
 
 export type SimplifyPrivateSpec<T extends ClassSpec> = MaybeMergePrivateSpecs<
 >SimplifyPrivateSpec : SimplifyPrivateSpec<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 
   MaybeMergePrivateSpecs<T, MaybeMergePrivateSuperSpec<T["publicExtends"]>>,
   MaybeMergePrivateSuperSpec<T["privateExtends"]>
@@ -72,12 +86,14 @@ export type SimplifyPrivateSpec<T extends ClassSpec> = MaybeMergePrivateSpecs<
 
 type Converted<T> = {
 >Converted : Converted<T>
+>          : ^^^^^^^^^^^^
 
   [P in keyof T]: null extends T[P] ? T[P] : T[P];
 };
 
 type DefaultsDeep<T, U extends T> = {
 >DefaultsDeep : DefaultsDeep<T, U>
+>             : ^^^^^^^^^^^^^^^^^^
 
   [P in keyof T]-?: U[P] extends T[P]
     ? null extends U[P]
@@ -89,20 +105,32 @@ type DefaultsDeep<T, U extends T> = {
 interface _Array<T> {
   find<S extends T>(predicate: (value: T) => boolean): void;
 >find : <S extends T>(predicate: (value: T) => boolean) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^    
 >predicate : (value: T) => boolean
+>          : ^^^^^^^^ ^^^^^       
 >value : T
+>      : ^
 }
 
 const z: _Array<DefaultsDeep<{}, {}>> = [];
 >z : _Array<DefaultsDeep<{}, {}>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 z.find((_) => true);
 >z.find((_) => true) : void
+>                    : ^^^^
 >z.find : <S extends DefaultsDeep<{}, {}>>(predicate: (value: DefaultsDeep<{}, {}>) => boolean) => void
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : _Array<DefaultsDeep<{}, {}>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >find : <S extends DefaultsDeep<{}, {}>>(predicate: (value: DefaultsDeep<{}, {}>) => boolean) => void
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(_) => true : (_: DefaultsDeep<{}, {}>) => true
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : DefaultsDeep<{}, {}>
+>  : ^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 

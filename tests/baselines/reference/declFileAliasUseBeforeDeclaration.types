@@ -3,13 +3,18 @@
 === declFileAliasUseBeforeDeclaration_test.ts ===
 export function bar(a: foo.Foo) { }
 >bar : (a: foo.Foo) => void
+>    : ^^^^       ^^^^^^^^^
 >a : foo.Foo
+>  : ^^^^^^^
 >foo : any
+>    : ^^^
 
 import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 === declFileAliasUseBeforeDeclaration_foo.ts ===
 export class Foo { }
 >Foo : Foo
+>    : ^^^
 

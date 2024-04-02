@@ -1,6 +1,4 @@
-import {
-    getModuleSpecifierPreferences,
-} from "../compiler/moduleSpecifiers";
+import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers";
 import {
     addToSeen,
     altDirectorySeparator,
@@ -420,6 +418,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
         case SyntaxKind.ExternalModuleReference:
+        case SyntaxKind.JSDocImportTag:
             // Get all known external module names or complete a path to a module
             // i.e. import * as ns from "/*completion position*/";
             //      var y = import("/*completion position*/");

@@ -11,17 +11,27 @@ Symbol count: 31,000 / 31,000 (nearest 500)
 
 declare const foo: unknown[];
 >foo : unknown[]
+>    : ^^^^^^^^^
 
 const bar = foo.flatMap(bar => bar as Foo);
 >bar : string[]
+>    : ^^^^^^^^
 >foo.flatMap(bar => bar as Foo) : string[]
+>                               : ^^^^^^^^
 >foo.flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : unknown[]
+>    : ^^^^^^^^^
 >flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar => bar as Foo : (this: undefined, bar: unknown) => Foo
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >bar : unknown
+>    : ^^^^^^^
 >bar as Foo : Foo
+>           : ^^^
 >bar : unknown
+>    : ^^^^^^^
 
 interface Foo extends Array<string> {}
 
@@ -29,50 +39,80 @@ interface Foo extends Array<string> {}
 
 const repro_43249 = (value: unknown) => {
 >repro_43249 : (value: unknown) => void
+>            : ^^^^^^^^       ^^^^^^^^^
 >(value: unknown) => {    if (typeof value !== "string") {        throw new Error("No");    }    const match = value.match(/anything/) || [];    const [, extracted] = match;} : (value: unknown) => void
+>                                                                                                                                                                              : ^^^^^^^^       ^^^^^^^^^
 >value : unknown
+>      : ^^^^^^^
 
     if (typeof value !== "string") {
 >typeof value !== "string" : boolean
+>                          : ^^^^^^^
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : unknown
+>      : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         throw new Error("No");
 >new Error("No") : Error
+>                : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"No" : "No"
+>     : ^^^^
     }
     const match = value.match(/anything/) || [];
 >match : [] | RegExpMatchArray
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >value.match(/anything/) || [] : RegExpMatchArray | []
+>                              : ^^^^^^^^^^^^^^^^^^^^^
 >value.match(/anything/) : RegExpMatchArray | null
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/anything/ : RegExp
+>           : ^^^^^^
 >[] : []
+>   : ^^
 
     const [, extracted] = match;
 > : undefined
+> : ^^^^^^^^^
 >extracted : string
+>          : ^^^^^^
 >match : [] | RegExpMatchArray
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
 >f : <Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) => void
+>  : ^   ^^ ^^^^^^^^^^^^^^^^^^^^                   ^^^^^                 ^^^^^^^^^
 >x : FlatArray<Arr, any>
+>  : ^^^^^^^^^^^^^^^^^^^
 >y : FlatArray<Arr, D>
+>  : ^^^^^^^^^^^^^^^^^
 
     x = y;
 >x = y : FlatArray<Arr, D>
+>      : ^^^^^^^^^^^^^^^^^
 >x : FlatArray<Arr, any>
+>  : ^^^^^^^^^^^^^^^^^^^
 >y : FlatArray<Arr, D>
+>  : ^^^^^^^^^^^^^^^^^
 
     y = x;  // Error
 >y = x : FlatArray<Arr, any>
+>      : ^^^^^^^^^^^^^^^^^^^
 >y : FlatArray<Arr, D>
+>  : ^^^^^^^^^^^^^^^^^
 >x : FlatArray<Arr, any>
+>  : ^^^^^^^^^^^^^^^^^^^
 }
 

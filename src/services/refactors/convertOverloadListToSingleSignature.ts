@@ -40,9 +40,7 @@ import {
     textChanges,
     TupleTypeNode,
 } from "../_namespaces/ts";
-import {
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+import { registerRefactor } from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_overload_list_to_single_signature);

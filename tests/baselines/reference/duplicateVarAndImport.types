@@ -9,5 +9,6 @@ var a;
 module M { }
 import a = M;
 >a : any
+>  : ^^^
 >M : error
 

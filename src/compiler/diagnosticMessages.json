@@ -1836,10 +1836,6 @@
         "category": "Error",
         "code": 2332
     },
-    "'this' cannot be referenced in constructor arguments.": {
-        "category": "Error",
-        "code": 2333
-    },
     "'this' cannot be referenced in a static property initializer.": {
         "category": "Error",
         "code": 2334
@@ -5458,6 +5454,18 @@
     "There are types at '{0}', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.": {
         "category": "Message",
         "code": 6280
+    },
+    "'package.json' has a 'peerDependencies' field.": {
+        "category": "Message",
+        "code": 6281
+    },
+    "Found peerDependency '{0}' with '{1}' version.": {
+        "category": "Message",
+        "code": 6282
+    },
+    "Failed to find peerDependency '{0}'.": {
+        "category": "Message",
+        "code": 6283
     },
 
     "Enable project compilation": {

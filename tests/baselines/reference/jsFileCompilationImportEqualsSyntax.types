@@ -3,5 +3,7 @@
 === a.js ===
 import a = b;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
