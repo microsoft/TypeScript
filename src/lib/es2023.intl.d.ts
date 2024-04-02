@@ -53,4 +53,8 @@ declare namespace Intl {
         roundingMode: NumberFormatOptionsRoundingMode;
         trailingZeroDisplay: NumberFormatOptionsTrailingZeroDisplay;
     }
+
+    interface PluralRules {
+        selectRange(start: number, end: number): LDMLPluralRule;
+    }
 }
