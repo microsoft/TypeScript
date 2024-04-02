@@ -953,7 +953,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return !!(f.flags & FlowFlags.SwitchClause);
         }
 
-        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedent: FlowNode[] } {
+        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedent: FlowNode[]; } {
             return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedent;
         }
 

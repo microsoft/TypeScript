@@ -4152,8 +4152,8 @@ export interface FlowSwitchClause extends FlowNodeBase {
 
 export interface FlowSwitchClauseData {
     switchStatement: SwitchStatement;
-    clauseStart: number;   // Start index of case/default clause range
-    clauseEnd: number;     // End index of case/default clause range
+    clauseStart: number; // Start index of case/default clause range
+    clauseEnd: number; // End index of case/default clause range
 }
 
 // FlowArrayMutation represents a node potentially mutates an array, i.e. an
