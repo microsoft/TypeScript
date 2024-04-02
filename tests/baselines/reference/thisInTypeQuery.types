@@ -5,7 +5,7 @@
 
 function assert(condition: unknown): asserts condition {
 >assert : (condition: unknown) => asserts condition
->       : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^       ^^^^^                 
 >condition : unknown
 >          : ^^^^^^^
 

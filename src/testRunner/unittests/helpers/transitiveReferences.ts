@@ -6,6 +6,7 @@ import {
 } from "../helpers";
 import {
     FsContents,
+    getProjectConfigWithNodeNext,
     libContent,
 } from "./contents";
 import {
@@ -19,9 +20,10 @@ export function getFsContentsForTransitiveReferencesRefsAdts() {
     `;
 }
 
-export function getFsContentsForTransitiveReferencesBConfig() {
+export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean) {
     return jsonToReadableText({
         compilerOptions: {
+            ...getProjectConfigWithNodeNext(withNodeNext),
             composite: true,
             baseUrl: "./",
             paths: {
@@ -33,14 +35,17 @@ export function getFsContentsForTransitiveReferencesBConfig() {
     });
 }
 
-export function getFsContentsForTransitiveReferencesAConfig() {
+export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean) {
     return jsonToReadableText({
-        compilerOptions: { composite: true },
+        compilerOptions: {
+            ...getProjectConfigWithNodeNext(withNodeNext),
+            composite: true,
+        },
         files: ["a.ts"],
     });
 }
 
-export function getFsContentsForTransitiveReferences(): FsContents {
+export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): FsContents {
     return {
         "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
         "/user/username/projects/transitiveReferences/a.ts": dedent`
@@ -56,11 +61,12 @@ export function getFsContentsForTransitiveReferences(): FsContents {
             b;
             X;
         `,
-        "/user/username/projects/transitiveReferences/tsconfig.a.json": getFsContentsForTransitiveReferencesAConfig(),
-        "/user/username/projects/transitiveReferences/tsconfig.b.json": getFsContentsForTransitiveReferencesBConfig(),
+        "/user/username/projects/transitiveReferences/tsconfig.a.json": getFsContentsForTransitiveReferencesAConfig(!!withNodeNext),
+        "/user/username/projects/transitiveReferences/tsconfig.b.json": getFsContentsForTransitiveReferencesBConfig(!!withNodeNext),
         "/user/username/projects/transitiveReferences/tsconfig.c.json": jsonToReadableText({
             files: ["c.ts"],
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 baseUrl: "./",
                 paths: {
                     "@ref/*": ["./refs/*"],

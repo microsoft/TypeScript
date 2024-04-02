@@ -21,17 +21,17 @@ interface Z {
 
 declare function isX(obj: any): obj is X;
 >isX : (obj: any) => obj is X
->    : ^^^^^^   ^^^^^^^^^^^^^
+>    : ^^^^^^   ^^^^^        
 >obj : any
 
 declare function isY(obj: any): obj is Y;
 >isY : (obj: any) => obj is Y
->    : ^^^^^^   ^^^^^^^^^^^^^
+>    : ^^^^^^   ^^^^^        
 >obj : any
 
 declare function isZ(obj: any): obj is Z;
 >isZ : (obj: any) => obj is Z
->    : ^^^^^^   ^^^^^^^^^^^^^
+>    : ^^^^^^   ^^^^^        
 >obj : any
 
 function f1(obj: Object) {
@@ -116,7 +116,7 @@ interface B {
 // a type guard for B
 function isB(toTest: any): toTest is B {
 >isB : (toTest: any) => toTest is B
->    : ^^^^^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^   ^^^^^           
 >toTest : any
 
   return toTest && toTest.b;
@@ -179,7 +179,7 @@ interface Winged    { wings: boolean; }
 // Beast feature detection via user-defined type guards
 function hasLegs(x: Beast): x is Legged { return x && typeof x.legs === 'number'; }
 >hasLegs : (x: Beast) => x is Legged
->        : ^^^^     ^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^           
 >x : Beast
 >  : ^^^^^
 >x && typeof x.legs === 'number' : boolean
@@ -201,7 +201,7 @@ function hasLegs(x: Beast): x is Legged { return x && typeof x.legs === 'number'
 
 function hasWings(x: Beast): x is Winged { return x && !!x.wings; }
 >hasWings : (x: Beast) => x is Winged
->         : ^^^^     ^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^           
 >x : Beast
 >  : ^^^^^
 >x && !!x.wings : boolean

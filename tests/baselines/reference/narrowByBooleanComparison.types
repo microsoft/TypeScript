@@ -25,9 +25,9 @@ type MyUnion = A | B | C;
 
 const isA = (x: MyUnion): x is A => x.type === "A";
 >isA : (x: MyUnion) => x is A
->    : ^^^^       ^^^^^^^^^^^
+>    : ^^^^       ^^^^^      
 >(x: MyUnion): x is A => x.type === "A" : (x: MyUnion) => x is A
->                                       : ^^^^       ^^^^^^^^^^^
+>                                       : ^^^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >x.type === "A" : boolean
@@ -337,7 +337,7 @@ interface Actor extends Entity {
 }
 function isActor(entity: Entity): entity is Actor {
 >isActor : (entity: Entity) => entity is Actor
->        : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^               
 >entity : Entity
 >       : ^^^^^^
 
@@ -413,7 +413,7 @@ function test6(bin: Entity) {
 // https://github.com/microsoft/TypeScript/issues/53005
 function isFunction(x: unknown): x is Function {
 >isFunction : (x: unknown) => x is Function
->           : ^^^^       ^^^^^^^^^^^^^^^^^^
+>           : ^^^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 

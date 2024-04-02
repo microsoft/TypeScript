@@ -178,19 +178,19 @@ declare module Immutable {
 
   export function isImmutable(maybeImmutable: any): maybeImmutable is Collection<any, any>;
 >isImmutable : (maybeImmutable: any) => maybeImmutable is Collection<any, any>
->            : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^   ^^^^^                                      
 >maybeImmutable : any
 >               : ^^^
 
   export function isCollection(maybeCollection: any): maybeCollection is Collection<any, any>;
 >isCollection : (maybeCollection: any) => maybeCollection is Collection<any, any>
->             : ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^   ^^^^^                                       
 >maybeCollection : any
 >                : ^^^
 
   export function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
 >isKeyed : (maybeKeyed: any) => maybeKeyed is Collection.Keyed<any, any>
->        : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^   ^^^^^                                        
 >maybeKeyed : any
 >           : ^^^
 >Collection : any
@@ -198,15 +198,15 @@ declare module Immutable {
 
   export function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
 >isIndexed : (maybeIndexed: any) => maybeIndexed is Collection.Indexed<any>
->          : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^   ^^^^^                                       
 >maybeIndexed : any
 >             : ^^^
 >Collection : any
 >           : ^^^
 
   export function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
->isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Indexed<any> | Collection.Keyed<any, any>
->              : ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
+>              : ^^^^^^^^^^^^^^^^^^^   ^^^^^                                                                        
 >maybeAssociative : any
 >                 : ^^^
 >Collection : any
@@ -222,7 +222,7 @@ declare module Immutable {
 
   export function isValueObject(maybeValue: any): maybeValue is ValueObject;
 >isValueObject : (maybeValue: any) => maybeValue is ValueObject
->              : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^   ^^^^^                         
 >maybeValue : any
 >           : ^^^
 
@@ -243,7 +243,7 @@ declare module Immutable {
 
     function isList(maybeList: any): maybeList is List<any>;
 >isList : (maybeList: any) => maybeList is List<any>
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^   ^^^^^                      
 >maybeList : any
 >          : ^^^
 
@@ -523,7 +523,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >index : number
@@ -553,7 +553,7 @@ declare module Immutable {
 
     function isMap(maybeMap: any): maybeMap is Map<any, any>;
 >isMap : (maybeMap: any) => maybeMap is Map<any, any>
->      : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^   ^^^^^                         
 >maybeMap : any
 >         : ^^^
 
@@ -861,7 +861,7 @@ declare module Immutable {
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^^^^   ^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^          
 >value : V
 >      : ^
 >key : K
@@ -891,7 +891,7 @@ declare module Immutable {
 
     function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
 >isOrderedMap : (maybeOrderedMap: any) => maybeOrderedMap is OrderedMap<any, any>
->             : ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^   ^^^^^                                       
 >maybeOrderedMap : any
 >                : ^^^
   }
@@ -999,7 +999,7 @@ declare module Immutable {
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^^^^   ^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^          
 >value : V
 >      : ^
 >key : K
@@ -1029,7 +1029,7 @@ declare module Immutable {
 
     function isSet(maybeSet: any): maybeSet is Set<any>;
 >isSet : (maybeSet: any) => maybeSet is Set<any>
->      : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^   ^^^^^                    
 >maybeSet : any
 >         : ^^^
 
@@ -1186,7 +1186,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >key : never
@@ -1294,7 +1294,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >key : never
@@ -1368,7 +1368,7 @@ declare module Immutable {
 
     function isStack(maybeStack: any): maybeStack is Stack<any>;
 >isStack : (maybeStack: any) => maybeStack is Stack<any>
->        : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^   ^^^^^                        
 >maybeStack : any
 >           : ^^^
 
@@ -1494,7 +1494,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >index : number
@@ -1545,8 +1545,8 @@ declare module Immutable {
 >       : ^^^^^^^^^^^^^
 
     export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
->isRecord : (maybeRecord: any) => maybeRecord is Instance<any>
->         : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isRecord : (maybeRecord: any) => maybeRecord is Record.Instance<any>
+>         : ^^^^^^^^^^^^^^   ^^^^^                                   
 >maybeRecord : any
 >            : ^^^
 >Record : any
@@ -1794,8 +1794,8 @@ declare module Immutable {
 >    : ^^^^^^^^^^
 
     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
->isSeq : (maybeSeq: any) => maybeSeq is Indexed<any> | Keyed<any, any>
->      : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isSeq : (maybeSeq: any) => maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>
+>      : ^^^^^^^^^^^   ^^^^^                                                  
 >maybeSeq : any
 >         : ^^^
 >Seq : any
@@ -1946,7 +1946,7 @@ declare module Immutable {
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^^^^   ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^          
 >value : V
 >      : ^
 >key : K
@@ -2064,7 +2064,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^   ^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >index : number
@@ -2182,7 +2182,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >key : never
@@ -2310,7 +2310,7 @@ declare module Immutable {
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^^^^   ^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^          
 >value : V
 >      : ^
 >key : K
@@ -2339,24 +2339,24 @@ declare module Immutable {
 >           : ^^^^^^^^^^^^^^^^^
 
     function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
->isKeyed : (maybeKeyed: any) => maybeKeyed is Keyed<any, any>
->        : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isKeyed : (maybeKeyed: any) => maybeKeyed is Collection.Keyed<any, any>
+>        : ^^^^^^^^^^^^^   ^^^^^                                        
 >maybeKeyed : any
 >           : ^^^
 >Collection : any
 >           : ^^^
 
     function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
->isIndexed : (maybeIndexed: any) => maybeIndexed is Indexed<any>
->          : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isIndexed : (maybeIndexed: any) => maybeIndexed is Collection.Indexed<any>
+>          : ^^^^^^^^^^^^^^^   ^^^^^                                       
 >maybeIndexed : any
 >             : ^^^
 >Collection : any
 >           : ^^^
 
     function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
->isAssociative : (maybeAssociative: any) => maybeAssociative is Indexed<any> | Keyed<any, any>
->              : ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
+>              : ^^^^^^^^^^^^^^^^^^^   ^^^^^                                                                        
 >maybeAssociative : any
 >                 : ^^^
 >Collection : any
@@ -2497,7 +2497,7 @@ declare module Immutable {
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^^^^   ^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^          
 >value : V
 >      : ^
 >key : K
@@ -2740,7 +2740,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                   ^^^^^^^^^^^^   ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >index : number
@@ -2845,7 +2845,7 @@ declare module Immutable {
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                                ^^^^^^^^^^^^   ^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^     ^^^^^^^^    ^^^^^          
 >value : T
 >      : ^
 >key : never
@@ -3105,7 +3105,7 @@ declare module Immutable {
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^^^^   ^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
->          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^^^          
 >value : V
 >      : ^
 >key : K

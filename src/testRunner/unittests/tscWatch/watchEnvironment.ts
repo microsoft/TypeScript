@@ -14,6 +14,7 @@ import {
     libFile,
     SymLink,
     TestServerHost,
+    TestServerHostOsFlavor,
     Tsc_WatchDirectory,
     Tsc_WatchFile,
 } from "../helpers/virtualFileSystemWithWatch";
@@ -162,7 +163,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     const files = [file, configFile, libFile];
                     const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-                    return createWatchedSystem(files, { environmentVariables });
+                    return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
                 },
                 edits: [
                     {
@@ -230,7 +231,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
                 const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-                return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables, currentDirectory: cwd });
             },
         });
 
@@ -252,7 +253,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     content: `export const x = 10;`,
                 };
                 const files = [libFile, file1, file2, configFile];
-                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
             },
             edits: [
                 {
@@ -330,7 +331,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     content: `export const x = 10;`,
                 };
                 const files = [libFile, file1, file2, configFile];
-                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
             },
             edits: [
                 noopChange,
@@ -371,7 +372,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     content: `export const x = 10;`,
                 };
                 const files = [libFile, file1, file2, configFile];
-                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
             },
             edits: [
                 noopChange,
@@ -427,7 +428,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     }),
                 };
                 const files = [libFile, commonFile1, commonFile2, configFile];
-                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
             },
         });
 
@@ -445,7 +446,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     }),
                 };
                 const files = [libFile, commonFile1, commonFile2, configFile];
-                return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
             },
         });
 
@@ -464,7 +465,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         });
 
         describe("exclude options", () => {
-            function sys(watchOptions: ts.WatchOptions, runWithoutRecursiveWatches?: boolean): TestServerHost {
+            function sys(watchOptions: ts.WatchOptions, osFlavor?: TestServerHostOsFlavor.Linux): TestServerHost {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({ exclude: ["node_modules"], watchOptions }),
@@ -490,7 +491,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     content: "export function temp(): string;",
                 };
                 const files = [libFile, main, bar, foo, fooBar, temp, configFile];
-                return createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject", runWithoutRecursiveWatches });
+                return createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject", osFlavor });
             }
 
             function verifyWorker(...additionalFlags: string[]) {
@@ -526,7 +527,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     scenario,
                     subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
-                    sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
+                    sys: () => sys({ excludeDirectories: ["**/temp"] }, TestServerHostOsFlavor.Linux),
                     edits: [
                         {
                             caption: "Directory watch updates because of main.js creation",
@@ -599,7 +600,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
-                        inodeWatching: true,
+                        osFlavor: TestServerHostOsFlavor.MacOs,
                     },
                 ),
             edits: [
@@ -630,7 +631,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
-                        inodeWatching: true,
+                        osFlavor: TestServerHostOsFlavor.MacOs,
                     },
                 ),
             edits: [
@@ -664,7 +665,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
-                        inodeWatching: true,
+                        osFlavor: TestServerHostOsFlavor.MacOs,
                     },
                 ),
             edits: [
@@ -690,10 +691,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
     });
 
     describe("with fsWatch with fsWatchWithTimestamp", () => {
-        function verify(fsWatchWithTimestamp: boolean, watchFile?: "useFsEventsOnParentDirectory") {
+        function verify(osFlavor: TestServerHostOsFlavor, watchFile?: "useFsEventsOnParentDirectory") {
             verifyTscWatch({
                 scenario,
-                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}${watchFile ? ` ${watchFile}` : ""}`,
+                subScenario: `fsWatch/fsWatchWithTimestamp ${osFlavor === TestServerHostOsFlavor.MacOs}${watchFile ? ` ${watchFile}` : ""}`,
                 commandLineArgs: ["-w", "--extendedDiagnostics", ...(watchFile ? ["--watchFile", watchFile] : [])],
                 sys: () =>
                     createWatchedSystem(
@@ -704,13 +705,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         },
                         {
                             currentDirectory: "/user/username/projects/myproject",
-                            fsWatchWithTimestamp,
+                            osFlavor,
                         },
                     ),
                 edits: [
                     {
                         caption: "emulate access",
-                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", "/user/username/projects/myproject/main.ts", /*useTildeSuffix*/ undefined),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
@@ -721,10 +722,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 ],
             });
         }
-        verify(/*fsWatchWithTimestamp*/ true);
-        verify(/*fsWatchWithTimestamp*/ false);
-        verify(/*fsWatchWithTimestamp*/ true, "useFsEventsOnParentDirectory");
-        verify(/*fsWatchWithTimestamp*/ false, "useFsEventsOnParentDirectory");
+        verify(TestServerHostOsFlavor.MacOs);
+        verify(TestServerHostOsFlavor.Windows);
+        verify(TestServerHostOsFlavor.MacOs, "useFsEventsOnParentDirectory");
+        verify(TestServerHostOsFlavor.Windows, "useFsEventsOnParentDirectory");
     });
 
     verifyTscWatch({
@@ -744,7 +745,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", "/user/username/projects/project/main.ts", /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -754,7 +755,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", "/user/username/projects/project/main.ts", /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

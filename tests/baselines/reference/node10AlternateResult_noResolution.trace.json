@@ -34,6 +34,7 @@
     "File '/node_modules/pkg/definitely-not-index.ts' does not exist.",
     "File '/node_modules/pkg/definitely-not-index.tsx' does not exist.",
     "File '/node_modules/pkg/definitely-not-index.d.ts' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "======== Module name 'pkg' was not resolved. ========",
     "File '/.ts/package.json' does not exist.",
     "File '/package.json' does not exist according to earlier cached lookups.",

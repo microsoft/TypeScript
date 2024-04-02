@@ -1,20 +1,20 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/username/project/src/index.ts]
+//// [/a/username/project/src/index.ts] Inode:: 5
 import {} from "./"
 
-//// [/a/username/project/src/file1.ts]
+//// [/a/username/project/src/file1.ts] Inode:: 6
 
 
-//// [/a/username/project/tsconfig.json]
+//// [/a/username/project/tsconfig.json] Inode:: 7
 {
   "watchOptions": {
     "synchronousWatchDirectory": true
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 9
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -175,11 +175,11 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":9}
 /a/username/project/src/file1.ts: *new*
-  {}
+  {"inode":6}
 /a/username/project/tsconfig.json: *new*
-  {}
+  {"inode":7}
 
 Timeout callback:: count: 1
 1: pollPollingIntervalQueue *new*
@@ -237,7 +237,7 @@ After request
 
 Before running Timeout callback:: count: 1
 1: pollPollingIntervalQueue
-//// [/a/username/project/src/file2.ts]
+//// [/a/username/project/src/file2.ts] Inode:: 10
 
 
 
@@ -332,13 +332,13 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":9}
 /a/username/project/src/file1.ts:
-  {}
+  {"inode":6}
 /a/username/project/src/file2.ts: *new*
-  {}
+  {"inode":10}
 /a/username/project/tsconfig.json:
-  {}
+  {"inode":7}
 
 Timeout callback:: count: 4
 3: *ensureProjectForOpenFiles* *deleted*

@@ -3,8 +3,8 @@
 === intersectionOfTypeVariableHasApparentSignatures.ts ===
 interface Component<P> {
     props: Readonly<P> & Readonly<{ children?: {} }>;
->props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : Readonly<P> & Readonly<{ children?: {}; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^
 >children : {} | undefined
 >         : ^^^^^^^^^^^^^^
 }

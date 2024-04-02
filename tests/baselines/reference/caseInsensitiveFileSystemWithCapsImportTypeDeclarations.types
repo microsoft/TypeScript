@@ -11,7 +11,7 @@ export class Broken {
 
     method () {
 >method : () => TypeB
->       : ^^^^^^^^^^^
+>       : ^^^^^^     
 
         return { } as TypeB;
 >{ } as TypeB : TypeB

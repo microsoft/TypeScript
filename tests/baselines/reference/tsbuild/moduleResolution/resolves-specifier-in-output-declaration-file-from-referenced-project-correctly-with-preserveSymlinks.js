@@ -106,6 +106,7 @@ File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' h
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 File '/user/username/projects/myproject/node_modules/pkg2/build/package.json' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/package.json' exists according to earlier cached lookups.

@@ -2,8 +2,8 @@
 
 === logicalAssignment8.ts ===
 declare const bar: { value?: number[] } | undefined
->bar : { value?: number[] | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { value?: number[]; } | undefined
+>    : ^^^^^^^^^^        ^^^^^^^^^^^^^^^
 >value : number[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 

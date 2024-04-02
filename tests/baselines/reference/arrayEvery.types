@@ -11,9 +11,9 @@ const foo: (number | string)[] = ['aaa'];
 
 const isString = (x: unknown): x is string => typeof x === 'string';
 >isString : (x: unknown) => x is string
->         : ^^^^       ^^^^^^^^^^^^^^^^
+>         : ^^^^       ^^^^^           
 >(x: unknown): x is string => typeof x === 'string' : (x: unknown) => x is string
->                                                   : ^^^^       ^^^^^^^^^^^^^^^^
+>                                                   : ^^^^       ^^^^^           
 >x : unknown
 >  : ^^^^^^^
 >typeof x === 'string' : boolean

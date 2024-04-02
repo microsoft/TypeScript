@@ -21,9 +21,9 @@ type AorB = A | B;
 
 const isA = (x: AorB): x is A => x.type === "A";
 >isA : (x: AorB) => x is A
->    : ^^^^    ^^^^^^^^^^^
+>    : ^^^^    ^^^^^      
 >(x: AorB): x is A => x.type === "A" : (x: AorB) => x is A
->                                    : ^^^^    ^^^^^^^^^^^
+>                                    : ^^^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 >x.type === "A" : boolean
@@ -39,9 +39,9 @@ const isA = (x: AorB): x is A => x.type === "A";
 
 const isB = (x: AorB): x is B => x.type === "B";
 >isB : (x: AorB) => x is B
->    : ^^^^    ^^^^^^^^^^^
+>    : ^^^^    ^^^^^      
 >(x: AorB): x is B => x.type === "B" : (x: AorB) => x is B
->                                    : ^^^^    ^^^^^^^^^^^
+>                                    : ^^^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 >x.type === "B" : boolean
@@ -170,7 +170,7 @@ type SomeType = { type: "SomeType" };
 
 declare function isSomeType(x: unknown): x is SomeType;
 >isSomeType : (x: unknown) => x is SomeType
->           : ^^^^       ^^^^^^^^^^^^^^^^^^
+>           : ^^^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 

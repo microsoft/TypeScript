@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,13 +13,13 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/commonFile1.ts]
+//// [/a/b/commonFile1.ts] Inode:: 5
 let x = 1
 
-//// [/a/b/commonFile2.ts]
+//// [/a/b/commonFile2.ts] Inode:: 6
 let y = 1
 
-//// [/a/b/tsconfig.json]
+//// [/a/b/tsconfig.json] Inode:: 7
 {
   "watchOptions": {
     "watchDirectory": "UseFsEvents"
@@ -36,26 +36,26 @@ Output::
 
 
 
-//// [/a/b/commonFile1.js]
+//// [/a/b/commonFile1.js] Inode:: 8
 var x = 1;
 
 
-//// [/a/b/commonFile2.js]
+//// [/a/b/commonFile2.js] Inode:: 9
 var y = 1;
 
 
 
 FsWatches::
 /a/b: *new*
-  {}
+  {"inode":4}
 /a/b/commonFile1.ts: *new*
-  {}
+  {"inode":5}
 /a/b/commonFile2.ts: *new*
-  {}
+  {"inode":6}
 /a/b/tsconfig.json: *new*
-  {}
+  {"inode":7}
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 
 Program root files: [
   "/a/b/commonFile1.ts",

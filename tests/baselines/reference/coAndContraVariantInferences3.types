@@ -185,31 +185,31 @@ interface AssertClause extends Node { kind: SyntaxKind.AssertClause; }
 
 declare function isExpression(node: Node): node is Expression;
 >isExpression : (node: Node) => node is Expression
->             : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^    ^^^^^                  
 >node : Node
 >     : ^^^^
 
 declare function isAssertClause(node: Node): node is AssertClause;
 >isAssertClause : (node: Node) => node is AssertClause
->               : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^    ^^^^^                    
 >node : Node
 >     : ^^^^
 
 declare function isImportClause(node: Node): node is ImportClause;
 >isImportClause : (node: Node) => node is ImportClause
->               : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^    ^^^^^                    
 >node : Node
 >     : ^^^^
 
 declare function isModifier(node: Node): node is Modifier;
 >isModifier : (node: Node) => node is Modifier
->           : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^    ^^^^^                
 >node : Node
 >     : ^^^^
 
 declare function isDecorator(node: Node): node is Decorator;
 >isDecorator : (node: Node) => node is Decorator
->            : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^    ^^^^^                 
 >node : Node
 >     : ^^^^
 
@@ -246,11 +246,11 @@ declare const updateImportDeclaration: {
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T_1, U_1 extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[] | undefined; <T_2>(array: readonly T_2[] | undefined, callback: (element: T_2, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^                                           ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array : readonly T[]
 >      : ^^^^^^^^^^^^
 >callback : (element: T, index: number) => element is U
->         : ^^^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^ ^^^^^^^^^      ^^^^^            
 >element : T
 >        : ^
 >index : number
@@ -258,11 +258,11 @@ declare function every<T, U extends T>(array: readonly T[], callback: (element: 
 
 declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
 >every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_2>(array: readonly T_2[] | undefined, callback: (element: T_2, index: number) => boolean): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^                                           ^^^                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array : readonly T[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >callback : (element: T, index: number) => element is U
->         : ^^^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^ ^^^^^^^^^      ^^^^^            
 >element : T
 >        : ^
 >index : number
@@ -282,7 +282,7 @@ declare function every<T>(array: readonly T[] | undefined, callback: (element: T
 
 declare function isArray(value: any): value is readonly unknown[];
 >isArray : (value: any) => value is readonly unknown[]
->        : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^   ^^^^^                           
 >value : any
 
 declare const DISALLOW_DECORATORS: DeprecationOptions;

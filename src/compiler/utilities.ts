@@ -809,7 +809,7 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
-    return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
+    return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
 
 /** @internal */
@@ -819,7 +819,7 @@ export function packageIdToPackageName({ name, subModuleName }: PackageId): stri
 
 /** @internal */
 export function packageIdToString(packageId: PackageId): string {
-    return `${packageIdToPackageName(packageId)}@${packageId.version}`;
+    return `${packageIdToPackageName(packageId)}@${packageId.version}${packageId.peerDependencies ?? ""}`;
 }
 
 /** @internal */

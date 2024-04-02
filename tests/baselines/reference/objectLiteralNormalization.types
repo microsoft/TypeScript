@@ -262,8 +262,8 @@ let b3 = { ...b2 };
 // Before widening {} acts like { [x: string]: undefined }, which is a
 // subtype of types with all optional properties
 declare let opts: { foo?: string, bar?: string, baz?: boolean };
->opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opts : { foo?: string; bar?: string; baz?: boolean; }
+>     : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >bar : string | undefined

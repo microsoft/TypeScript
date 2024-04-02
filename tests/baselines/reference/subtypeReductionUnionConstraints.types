@@ -46,13 +46,13 @@ type Document = {
 
 declare function isNode(node: unknown): node is Node;
 >isNode : (node: unknown) => node is Node
->       : ^^^^^^^       ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^       ^^^^^            
 >node : unknown
 >     : ^^^^^^^
 
 declare function isBar(node: Node): node is BarNode;
 >isBar : (node: Node) => node is BarNode
->      : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^    ^^^^^               
 >node : Node
 >     : ^^^^
 
@@ -62,7 +62,7 @@ export function visitNodes<T extends Node>(node: Document | Node, predicate: (te
 >node : Node | Document
 >     : ^^^^^^^^^^^^^^^
 >predicate : (testNode: Node) => testNode is T
->          : ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^    ^^^^^             
 >testNode : Node
 >         : ^^^^
 

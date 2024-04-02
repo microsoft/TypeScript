@@ -103,7 +103,7 @@ type Shapes = Shape | Array<Shape>;
 
 function isShape(s : Shapes): s is Shape {
 >isShape : (s: Shapes) => s is Shape
->        : ^^^^      ^^^^^^^^^^^^^^^
+>        : ^^^^      ^^^^^          
 >s : Shapes
 >  : ^^^^^^
 

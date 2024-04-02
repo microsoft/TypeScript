@@ -5,7 +5,7 @@ declare function f<T>(predicate: (x: {}) => x is T): T;
 >f : <T>(predicate: (x: {}) => x is T) => T
 >  : ^ ^^^^^^^^^^^^^                 ^^^^^ 
 >predicate : (x: {}) => x is T
->          : ^^^^  ^^^^^^^^^^^
+>          : ^^^^  ^^^^^      
 >x : {}
 >  : ^^
 
@@ -18,7 +18,7 @@ const res = f((n): n is number => true);
 >f : <T>(predicate: (x: {}) => x is T) => T
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(n): n is number => true : (n: {}) => n is number
->                         : ^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^           
 >n : {}
 >  : ^^
 >true : true

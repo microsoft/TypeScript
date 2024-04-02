@@ -10,8 +10,8 @@ declare var ab: { a: number, b: number };
 >  : ^^^^^^
 
 declare var abq: { a: number, b?: number };
->abq : { a: number; b?: number | undefined; }
->    : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>abq : { a: number; b?: number; }
+>    : ^^^^^      ^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined

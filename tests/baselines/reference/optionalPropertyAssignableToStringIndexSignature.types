@@ -2,8 +2,8 @@
 
 === optionalPropertyAssignableToStringIndexSignature.ts ===
 declare let optionalProperties: { k1?: string };
->optionalProperties : { k1?: string | undefined; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalProperties : { k1?: string; }
+>                   : ^^^^^^^      ^^^
 >k1 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -42,8 +42,8 @@ declare let probablyArray: { [key: number]: string };
 >    : ^^^^^^
 
 declare let numberLiteralKeys: { 1?: string };
->numberLiteralKeys : { 1?: string | undefined; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberLiteralKeys : { 1?: string; }
+>                  : ^^^^^^      ^^^
 >1 : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -74,8 +74,8 @@ function f<T>() {
 >  : ^^^^^^^^^^^^^
 
 	let optional: { k1?: T } = undefined!;
->optional : { k1?: T | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>optional : { k1?: T; }
+>         : ^^^^^^^ ^^^
 >k1 : T | undefined
 >   : ^^^^^^^^^^^^^
 >undefined! : never
