@@ -9,21 +9,21 @@ const arr = [1, 2, 3];
 
 str = arr.toLocaleString(); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
 str = arr.toLocaleString('en-US'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
 str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 4, 35))
 >currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 4, 54))
 
@@ -59,21 +59,21 @@ const mixed = [1, new Date(), 59782, new Date()];
 
 str = mixed.toLocaleString(); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
->mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
 str = mixed.toLocaleString('fr'); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
->mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
 str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
->mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 14, 34))
 >currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 14, 53))
 

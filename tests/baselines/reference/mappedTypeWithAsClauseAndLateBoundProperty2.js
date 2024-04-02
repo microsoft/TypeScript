@@ -14,7 +14,6 @@ export declare const thing: {
     toString: () => string;
     toLocaleString: {
         (): string;
-        (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
         (locales?: string | string[], options?: object): string;
         (locales?: Intl.LocalesArgument, options?: object): string;
     };
@@ -114,7 +113,7 @@ export declare const thing: {
 //// [DtsFileErrors]
 
 
-mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(29,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(28,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
 ==== mappedTypeWithAsClauseAndLateBoundProperty2.d.ts (1 errors) ====
@@ -123,7 +122,6 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(29,118): error TS2526: A 'this'
         toString: () => string;
         toLocaleString: {
             (): string;
-            (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
             (locales?: string | string[], options?: object): string;
             (locales?: Intl.LocalesArgument, options?: object): string;
         };

@@ -43,7 +43,13 @@ interface Array<T> {
      */
     copyWithin(target: number, start: number, end?: number): this;
 
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
+    /**
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
+     * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
+     */
+    toLocaleString(locales?: string | string[], options?: object): string;
 }
 
 interface ArrayConstructor {
@@ -345,7 +351,13 @@ interface ReadonlyArray<T> {
      */
     findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
 
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
+    /**
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
+     * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
+     */
+    toLocaleString(locales?: string | string[], options?: object): string;
 }
 
 interface RegExp {
@@ -436,6 +448,22 @@ interface String {
      * position. Otherwise returns false.
      */
     startsWith(searchString: string, position?: number): boolean;
+
+    /**
+     * Converts all alphabetic characters to lowercase, using locale-sensitive case mappings.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion.
+     * This method does not perform locale matching; instead, it always selects the first supported locale.
+     * If omitted, the default locale is used.
+     */
+    toLocaleLowerCase(locales?: string | string[]): string;
+
+    /**
+     * Converts all alphabetic characters to uppercase, using locale-sensitive case mappings.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion.
+     * This method does not perform locale matching; instead, it always selects the first supported locale.
+     * If omitted, the default locale is used.
+    */
+    toLocaleUpperCase(locales?: string | string[]): string;
 
     /**
      * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
@@ -543,37 +571,91 @@ interface StringConstructor {
 }
 
 interface Int8Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint8Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint8ClampedArray {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Int16Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint16Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Int32Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Uint32Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Float32Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Float64Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }

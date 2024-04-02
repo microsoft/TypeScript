@@ -3,7 +3,7 @@
 === node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.d.ts ===
 type QueryKey = ReadonlyArray<unknown>;
 >QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 4 more)
 
 interface Register {}
 >Register : Symbol(Register, Decl(useQuery-CPqkvEsh.d.ts, 0, 39))

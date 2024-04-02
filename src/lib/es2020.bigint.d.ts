@@ -9,7 +9,7 @@ interface BigInt {
 
     /**
      * Converts a BigInt to a string, using the specified locale.
-     * @param locales The preferred locale, or list of preferred locales, to use for the conversation; see `Intl.LocalesArgument`. If omitted, the default locale is used.
+     * @param locales The preferred locale, or list of preferred locales, to use for the conversation. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
@@ -268,8 +268,13 @@ interface BigInt64Array {
      */
     subarray(begin?: number, end?: number): BigInt64Array;
 
-    /** Converts the array to a string by using the current locale. */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales The preferred locale, or list of preferred locales, to use for the comparison. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
 
     /** Returns a string representation of the array. */
     toString(): string;
@@ -540,8 +545,13 @@ interface BigUint64Array {
      */
     subarray(begin?: number, end?: number): BigUint64Array;
 
-    /** Converts the array to a string by using the current locale. */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    /**
+     * Returns a string representation of a TypedArray.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
+     * @param locales The preferred locale, or list of preferred locales, to use for the comparison. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
+     */
+    toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
 
     /** Returns a string representation of the array. */
     toString(): string;
