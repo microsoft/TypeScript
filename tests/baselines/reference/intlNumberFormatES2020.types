@@ -3,8 +3,8 @@
 === intlNumberFormatES2020.ts ===
 // New/updated resolved options in ES2020
 const { notation, style, signDisplay } = new Intl.NumberFormat('en-NZ').resolvedOptions();
->notation : "standard" | "scientific" | "engineering" | "compact"
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>notation : Intl.NumberFormatOptionsNotation
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >style : keyof Intl.NumberFormatOptionsStyleRegistry
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
@@ -64,8 +64,8 @@ new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' });
 const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
 >currency : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->currencySign : "standard" | "accounting" | undefined
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>currencySign : Intl.NumberFormatOptionsCurrencySign | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -101,8 +101,8 @@ const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'curr
 const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
 >unit : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->unitDisplay : "short" | "long" | "narrow" | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unitDisplay : Intl.NumberFormatOptionsUnitDisplay | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -136,8 +136,8 @@ const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', un
 
 // Compact
 const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
->compactDisplay : "short" | "long" | undefined
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>compactDisplay : Intl.NumberFormatOptionsCompactDisplay | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
