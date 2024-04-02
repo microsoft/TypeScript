@@ -287,23 +287,14 @@ declare namespace Intl {
     }
 
     interface LocaleOptions {
-        /** The part of the Locale that indicates the locale's calendar era. */
         calendar?: string | undefined;
-        /** Flag that defines whether case is taken into account for the locale's collation rules. */
         caseFirst?: CollatorOptionsCaseFirst | undefined;
-        /** The collation type used for sorting */
         collation?: string | undefined;
-        /** The time keeping format convention used by the locale. */
         hourCycle?: DateTimeFormatOptionsHourCycle | undefined;
-        /** The primary language subtag associated with the locale. */
         language?: string | undefined;
-        /** The numeral system used by the locale. */
         numberingSystem?: string | undefined;
-        /** Flag that defines whether the locale has special collation handling for numeric characters. */
         numeric?: boolean | undefined;
-        /** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. */
         region?: string | undefined;
-        /** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. */
         script?: string | undefined;
     }
 
@@ -314,25 +305,26 @@ declare namespace Intl {
         minimize(): Locale;
         /** Returns the locale's full locale identifier string. */
         toString(): UnicodeBCP47LocaleIdentifier;
-        /** A string containing the language, and the script and region if available. */
+
+        /** The Unicode Language Identifier associated with the locale. */
         baseName: string;
-        /** The primary language subtag associated with the locale. */
+        /** The calendar system associated with the locale. */
         calendar: string | undefined;
-        /** Flag that defines whether case is taken into account for the locale's collation rules. */
+        /** The case sorting rule associated with the locale. */
         caseFirst: CollatorOptionsCaseFirst | undefined;
-        /** The collation type used for sorting */
+        /** The character collation associated with the locale. */
         collation: string | undefined;
-        /** The time keeping format convention used by the locale. */
+        /** The hour cycle type associated with the locale. */
         hourCycle: DateTimeFormatOptionsHourCycle | undefined;
         /** The primary language subtag associated with the locale. */
         language: string | undefined;
-        /** The numeral system used by the locale. */
+        /** The number system used by the locale. */
         numberingSystem: string | undefined;
-        /** Flag that defines whether the locale has special collation handling for numeric characters. */
+        /** The numeric sorting rule associated with the locale. */
         numeric: boolean | undefined;
-        /** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. */
+        /** The region code associated with the locale. */
         region: string | undefined;
-        /** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. */
+        /** The language script associated with the locale. */
         script: string | undefined;
     }
 
