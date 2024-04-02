@@ -8,11 +8,18 @@
 // @filename: /a.ts
 ////export function f() {}
 
-// @Filename: /b.ts
+// @filename: /b.ts
 ////import { f } from "./a";
 ////export interface I {}
 ////type f = number;
 ////export { f };
 
-goTo.file("/b.ts");
-verify.codeFixAvailable([ ]);
+// @filename: /c.ts
+////import { I, f } from "./b";
+////export { type I, f };
+
+goTo.file("/c.ts");
+verify.codeFixAvailable([
+    { description: "Use 'import type'" },
+    { description: "Use 'type I'" },
+]);
