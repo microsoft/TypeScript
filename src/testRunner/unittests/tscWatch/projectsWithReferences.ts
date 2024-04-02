@@ -1,15 +1,7 @@
-import {
-    noop,
-} from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    getProjectConfigWithNodeNext,
-} from "../helpers/contents";
-import {
-    getSysForSampleProjectReferences,
-} from "../helpers/sampleProjectReferences";
+import { noop } from "../../_namespaces/ts";
+import { jsonToReadableText } from "../helpers";
+import { getProjectConfigWithNodeNext } from "../helpers/contents";
+import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences";
 import {
     createSolutionBuilder,
     solutionBuildWithBaseline,
@@ -20,9 +12,7 @@ import {
     getFsContentsForTransitiveReferencesBConfig,
     getFsContentsForTransitiveReferencesRefsAdts,
 } from "../helpers/transitiveReferences";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,

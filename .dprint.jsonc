@@ -19,7 +19,7 @@
         "arrowFunction.useParentheses": "preferNone",
         "conditionalExpression.linePerExpression": false, // Keep our "match/case"-ish conditionals.
         "functionExpression.spaceAfterFunctionKeyword": true,
-        "importDeclaration.forceMultiLine": "always",
+        "importDeclaration.forceMultiLine": "whenMultiple",
         "constructorType.spaceAfterNewKeyword": true,
         "constructSignature.spaceAfterNewKeyword": true,
 

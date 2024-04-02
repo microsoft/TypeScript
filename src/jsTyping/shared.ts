@@ -1,6 +1,4 @@
-import {
-    sys,
-} from "./_namespaces/ts";
+import { sys } from "./_namespaces/ts";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";

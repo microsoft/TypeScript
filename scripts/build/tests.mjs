@@ -1,6 +1,4 @@
-import {
-    CancelError,
-} from "@esfx/canceltoken";
+import { CancelError } from "@esfx/canceltoken";
 import chalk from "chalk";
 import fs from "fs";
 import os from "os";
