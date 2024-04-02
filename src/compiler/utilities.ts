@@ -8197,32 +8197,6 @@ function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
     this.emitNode = undefined;
 }
 
-function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
-function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     this.fileName = fileName;
     this.text = text;
@@ -8232,8 +8206,8 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
     getNodeConstructor: () => Node as any,
-    getTokenConstructor: () => Token as any,
-    getIdentifierConstructor: () => Identifier as any,
+    getTokenConstructor: () => Node as any,
+    getIdentifierConstructor: () => Node as any,
     getPrivateIdentifierConstructor: () => Node as any,
     getSourceFileConstructor: () => Node as any,
     getSymbolConstructor: () => Symbol as any,
