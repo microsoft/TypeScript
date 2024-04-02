@@ -1,22 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
 } from "../helpers/alternateResult";
-import {
-    libContent,
-} from "../helpers/contents";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import { libContent } from "../helpers/contents";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     openFilesForSession,

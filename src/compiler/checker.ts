@@ -37690,8 +37690,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             { flags: FlowFlags.Start };
         const trueCondition: FlowCondition = {
             flags: FlowFlags.TrueCondition,
-            node: expr,
             antecedent,
+            node: expr,
         };
 
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
@@ -37700,10 +37700,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
         const falseCondition: FlowCondition = {
-            ...trueCondition,
             flags: FlowFlags.FalseCondition,
+            antecedent,
+            node: expr,
         };
-        const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
+        const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
         return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }
 

@@ -6,25 +6,17 @@ import {
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
-import {
-    getNewLineCharacter,
-} from "./_namespaces/ts";
+import { getNewLineCharacter } from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import {
-    incrementalVerifier,
-} from "./incrementalUtils";
-import {
-    patchServiceForStateBaseline,
-} from "./projectServiceStateLogger";
+import { incrementalVerifier } from "./incrementalUtils";
+import { patchServiceForStateBaseline } from "./projectServiceStateLogger";
 import {
     createLoggerWithInMemoryLogs,
     HarnessLSCouldNotResolveModule,
     LoggerWithInMemoryLogs,
 } from "./tsserverLogger";
-import {
-    createWatchUtils,
-} from "./watchUtils";
+import { createWatchUtils } from "./watchUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null

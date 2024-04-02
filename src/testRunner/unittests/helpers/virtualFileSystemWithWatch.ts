@@ -44,12 +44,8 @@ import {
     sys,
     toPath,
 } from "../../_namespaces/ts";
-import {
-    typingsInstaller,
-} from "../../_namespaces/ts.server";
-import {
-    timeIncrements,
-} from "../../_namespaces/vfs";
+import { typingsInstaller } from "../../_namespaces/ts.server";
+import { timeIncrements } from "../../_namespaces/vfs";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",

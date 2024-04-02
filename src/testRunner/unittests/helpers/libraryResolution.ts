@@ -1,16 +1,10 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     FsContents,
     libContent,
 } from "./contents";
-import {
-    loadProjectFromFiles,
-} from "./vfs";
+import { loadProjectFromFiles } from "./vfs";
 import {
     createServerHost,
     createWatchedSystem,
