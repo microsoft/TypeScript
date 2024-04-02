@@ -8206,6 +8206,7 @@ function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) 
     this.modifierFlagsCache = ModifierFlags.None;
     this.transformFlags = TransformFlags.None;
     this.parent = undefined!;
+    this.original = undefined;
     this.emitNode = undefined;
 }
 
