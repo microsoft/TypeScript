@@ -353,7 +353,7 @@ export function explainFiles(program: Program, write: (s: string) => void) {
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptions(), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
 

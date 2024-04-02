@@ -1969,6 +1969,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         forEachResolvedProjectReference,
         isSourceOfProjectReferenceRedirect,
         getRedirectReferenceForResolutionFromSourceOfProject,
+        getCompilerOptionsForFile,
         emitBuildInfo,
         fileExists,
         readFile,
@@ -3907,7 +3908,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const resolutions = resolvedTypeReferenceDirectiveNamesProcessing?.get(file.path) ||
             resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectives, file);
         const resolutionsInFile = createModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
-        const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
+        const optionsForFile = getCompilerOptionsForFile(file);
         (resolvedTypeReferenceDirectiveNames ??= new Map()).set(file.path, resolutionsInFile);
         for (let index = 0; index < typeDirectives.length; index++) {
             const ref = file.typeReferenceDirectives[index];
@@ -3918,6 +3919,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file, optionsForFile);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
+    }
+
+    function getCompilerOptionsForFile(file: SourceFile): CompilerOptions {
+        return getRedirectReferenceForResolution(file)?.commandLine.options || options;
     }
 
     function processTypeReferenceDirective(
@@ -4077,7 +4082,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutions = resolvedModulesProcessing?.get(file.path) ||
                 resolveModuleNamesReusingOldState(moduleNames, file);
             Debug.assert(resolutions.length === moduleNames.length);
-            const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
+            const optionsForFile = getCompilerOptionsForFile(file);
             const resolutionsInFile = createModeAwareCache<ResolutionWithFailedLookupLocations>();
             (resolvedModules ??= new Map()).set(file.path, resolutionsInFile);
             for (let index = 0; index < moduleNames.length; index++) {
@@ -4648,7 +4653,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
         const location = locationReason && getReferencedFileLocation(program, locationReason);
         const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-        const optionsForFile = file && getRedirectReferenceForResolution(file)?.commandLine.options || options;
+        const optionsForFile = file && getCompilerOptionsForFile(file) || options;
         const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, optionsForFile);
         const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
         return location && isReferenceFileLocation(location) ?
@@ -4979,13 +4984,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode {
-        const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
-        return getModeForUsageLocationWorker(file, usage, optionsForFile);
+        return getModeForUsageLocationWorker(file, usage, getCompilerOptionsForFile(file));
     }
 
     function getEmitSyntaxForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode {
-        const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
-        return getEmitSyntaxForUsageLocationWorker(file, usage, optionsForFile);
+        return getEmitSyntaxForUsageLocationWorker(file, usage, getCompilerOptionsForFile(file));
     }
 
     function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode {
