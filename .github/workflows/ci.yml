@@ -37,7 +37,7 @@ jobs:
         bundle:
           - true
         include:
-          - { os: linux, runtime: { name: node, version: 20 }, bundle: false }
+          - { os: ubuntu-latest, runtime: { name: node, version: 20 }, bundle: false }
         exclude:
           # No Node 14 on ARM macOS
           - { os: macos-14, runtime: { name: node, version: 14 }, bundle: true }
