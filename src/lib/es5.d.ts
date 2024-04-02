@@ -4384,22 +4384,28 @@ declare var Float64Array: Float64ArrayConstructor;
 /////////////////////////////
 
 declare namespace Intl {
+    type CollatorOptionsUsage = "sort" | "search";
+
+    type CollatorOptionsCaseFirst = "upper" | "lower" | "false";
+
+    type CollatorOptionsSensitivity = "base" | "accent" | "case" | "variant";
+
     interface CollatorOptions {
-        usage?: "sort" | "search" | undefined;
+        usage?: CollatorOptionsUsage | undefined;
         localeMatcher?: "lookup" | "best fit" | undefined;
         numeric?: boolean | undefined;
-        caseFirst?: "upper" | "lower" | "false" | undefined;
-        sensitivity?: "base" | "accent" | "case" | "variant" | undefined;
+        caseFirst?: CollatorOptionsCaseFirst | undefined;
+        sensitivity?: CollatorOptionsSensitivity | undefined;
         ignorePunctuation?: boolean | undefined;
     }
 
     interface ResolvedCollatorOptions {
         locale: string;
-        usage: string;
-        sensitivity: string;
+        usage: CollatorOptionsUsage;
+        sensitivity: CollatorOptionsSensitivity;
         ignorePunctuation: boolean;
         collation: string;
-        caseFirst?: string;
+        caseFirst?: CollatorOptionsCaseFirst;
         numeric?: boolean;
     }
 
