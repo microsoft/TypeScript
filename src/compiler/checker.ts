@@ -8678,15 +8678,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     context.tracker.trackSymbol(sym, context.enclosingDeclaration, meaning);
                 }
-                if (isIdentifier(node)) {
-                    const type = getDeclaredTypeOfSymbol(sym);
-                    const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(type, context) : factory.cloneNode(node);
-                    name.symbol = sym; // for quickinfo, which uses identifier symbol information
-                    return { introducesError, node: setTextRange(setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping), node) };
-                }
+                return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
             }
 
             return { introducesError, node };
+
+            /**
+             * Attaches a `.symbol` member to an identifier, cloning it to do so, so symbol information
+             * is smuggled out for symbol display information.
+             */
+            function attachSymbolToLeftmostIdentifier(node: Node): Node {
+                if (node === leftmost) {
+                    const type = getDeclaredTypeOfSymbol(sym!);
+                    const name = sym!.flags & SymbolFlags.TypeParameter ? typeParameterToName(type, context) : factory.cloneNode(node as Identifier);
+                    name.symbol = sym!; // for quickinfo, which uses identifier symbol information
+                    return setTextRange(setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping), node);
+                }
+                const updated = visitEachChild(node, c => attachSymbolToLeftmostIdentifier(c), /*context*/ undefined);
+                if (updated !== node) {
+                    setTextRange(updated, node);
+                }
+                return updated;
+            }
         }
 
         /**
@@ -8855,11 +8868,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 if (isEntityName(node) || isEntityNameExpression(node)) {
+                    if (isDeclarationName(node)) {
+                        return node;
+                    }
                     const { introducesError, node: result } = trackExistingEntityName(node, context);
                     hadError = hadError || introducesError;
-                    if (result !== node) {
-                        return result;
-                    }
+                    // We should not go to child nodes of the entity name, they will not be acesible
+                    return result;
                 }
 
                 if (isTupleTypeNode(node) || isTypeLiteralNode(node) || isMappedTypeNode(node)) {
