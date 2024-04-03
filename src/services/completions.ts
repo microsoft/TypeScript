@@ -389,9 +389,7 @@ import {
     VariableDeclaration,
     walkUpParenthesizedExpressions,
 } from "./_namespaces/ts";
-import {
-    StringCompletions,
-} from "./_namespaces/ts.Completions";
+import { StringCompletions } from "./_namespaces/ts.Completions";
 
 // Exported only for tests
 /** @internal */

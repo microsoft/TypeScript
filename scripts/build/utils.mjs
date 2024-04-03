@@ -1,11 +1,7 @@
-import {
-    CancelError,
-} from "@esfx/canceltoken";
+import { CancelError } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
-import {
-    spawn,
-} from "child_process";
+import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
 import which from "which";

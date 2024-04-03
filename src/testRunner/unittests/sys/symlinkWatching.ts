@@ -1,8 +1,6 @@
 import * as fs from "fs";
 
-import {
-    IO,
-} from "../../_namespaces/Harness";
+import { IO } from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
     defer,

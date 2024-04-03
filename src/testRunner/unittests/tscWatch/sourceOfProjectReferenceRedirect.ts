@@ -1,16 +1,8 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-} from "../helpers/contents";
-import {
-    getFsContentsForDemoProjectReferences,
-} from "../helpers/demoProjectReferences";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import { jsonToReadableText } from "../helpers";
+import { FsContents } from "../helpers/contents";
+import { getFsContentsForDemoProjectReferences } from "../helpers/demoProjectReferences";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,

@@ -1595,3 +1595,57 @@ function inferWithRest(x: string | null, ...f: ["a", "b"]) {
 >         : ^^^^^^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/57947
+declare const foobar:
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+
+  | { type: "foo"; foo: number }
+>type : "foo"
+>     : ^^^^^
+>foo : number
+>    : ^^^^^^
+
+  | { type: "bar"; bar: string };
+>type : "bar"
+>     : ^^^^^
+>bar : string
+>    : ^^^^^^
+
+const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+>foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>           : ^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(fb: typeof foobar) => fb.type === "foo" : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>                                         : ^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fb.type === "foo" : boolean
+>                  : ^^^^^^^
+>fb.type : "bar" | "foo"
+>        : ^^^^^^^^^^^^^
+>fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "bar" | "foo"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+if (foobarPred(foobar)) {
+>foobarPred(foobar) : boolean
+>                   : ^^^^^^^
+>foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  foobar.foo;
+>foobar.foo : number
+>           : ^^^^^^
+>foobar : { type: "foo"; foo: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+}
+

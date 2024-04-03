@@ -23971,6 +23971,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 && resolved.indexInfos.length === 0 &&
                 resolved.properties.length > 0 && every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
         }
+        if (type.flags & TypeFlags.Substitution) {
+            return isWeakType((type as SubstitutionType).baseType);
+        }
         if (type.flags & TypeFlags.Intersection) {
             return every((type as IntersectionType).types, isWeakType);
         }
@@ -32717,7 +32720,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return true;
             }
         }
-        else if (targetType.flags & TypeFlags.UnionOrIntersection && isExcessPropertyCheckTarget(targetType)) {
+        if (targetType.flags & TypeFlags.Substitution) {
+            return isKnownProperty((targetType as SubstitutionType).baseType, name, isComparingJsxAttributes);
+        }
+        if (targetType.flags & TypeFlags.UnionOrIntersection && isExcessPropertyCheckTarget(targetType)) {
             for (const t of (targetType as UnionOrIntersectionType).types) {
                 if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                     return true;
@@ -32730,6 +32736,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isExcessPropertyCheckTarget(type: Type): boolean {
         return !!(type.flags & TypeFlags.Object && !(getObjectFlags(type) & ObjectFlags.ObjectLiteralPatternWithComputedProperties) ||
             type.flags & TypeFlags.NonPrimitive ||
+            type.flags & TypeFlags.Substitution && isExcessPropertyCheckTarget((type as SubstitutionType).baseType) ||
             type.flags & TypeFlags.Union && some((type as UnionType).types, isExcessPropertyCheckTarget) ||
             type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, isExcessPropertyCheckTarget));
     }
@@ -37683,8 +37690,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             { flags: FlowFlags.Start };
         const trueCondition: FlowCondition = {
             flags: FlowFlags.TrueCondition,
-            node: expr,
             antecedent,
+            node: expr,
         };
 
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
@@ -37693,10 +37700,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
         const falseCondition: FlowCondition = {
-            ...trueCondition,
             flags: FlowFlags.FalseCondition,
+            antecedent,
+            node: expr,
         };
-        const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
+        const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
         return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }
 
