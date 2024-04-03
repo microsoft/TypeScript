@@ -2268,6 +2268,12 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
             const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
+        case SyntaxKind.Constructor: {
+            const constructorDeclaration = node as ConstructorDeclaration;
+            const start = skipTrivia(sourceFile.text, constructorDeclaration.pos);
+            const end = constructorDeclaration.body ? constructorDeclaration.body.pos : constructorDeclaration.end;
+            return createTextSpanFromBounds(start, end);
+        }
     }
 
     if (errorNode === undefined) {
