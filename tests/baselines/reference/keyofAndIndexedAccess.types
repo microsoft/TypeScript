@@ -1214,7 +1214,7 @@ function f60<T>(source: T, target: T) {
 
 function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 >f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
->    : ^^^^^^^^ ^^ ^^^^^^             ^^^^^^             ^^^^^    ^^^^^^^^^
+>    : ^^^^^^^                                                    ^^^^^^^^^
 >func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
 >     : ^ ^^ ^^^^^^             ^^^^^^             ^^^^^    
 >k1 : keyof T & keyof U
@@ -1279,7 +1279,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
 function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >f71 : (func: <T, U>(x: T, y: U) => Partial<T & U>) => void
->    : ^^^^^^^^ ^^ ^^^^^ ^^^^^ ^^^^^              ^^^^^^^^^
+>    : ^^^^^^^                                    ^^^^^^^^^
 >func : <T, U>(x: T, y: U) => Partial<T & U>
 >     : ^ ^^ ^^^^^ ^^^^^ ^^^^^              
 >x : T
@@ -1338,7 +1338,7 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 
 function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
 >f72 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
->    : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          ^^^^^^^^^
+>    : ^^^^^^^                                                                   ^^^^^^^^^
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
 >x : T
@@ -1428,8 +1428,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 }
 
 function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
->f73 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
->    : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          ^^^^^^^^^
+>f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
+>    : ^^^^^^^                                                               ^^^^^^^^^
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
 >x : T
@@ -1519,8 +1519,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 }
 
 function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
->f74 : (func: <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]) => void
->    : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          ^^^^^^^^^
+>f74 : (func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) => void
+>    : ^^^^^^^                                                               ^^^^^^^^^
 >func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
 >x : T

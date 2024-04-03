@@ -37,7 +37,7 @@ type Field<Source, Key extends string> = {
 
 declare const object: <Source>() => <
 >object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
->       : ^      ^^^^^^^^      ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                  ^^^^^                  
+>       : ^      ^^^^^^^                                                                                                                                                          
 
   Fields extends {
     [Key in keyof Fields]: Field<Source, Key & string>;

@@ -84,13 +84,13 @@ export const dropPrivateProps2 = <Obj>(obj: Obj) => excludePrivateKeys2(obj);
 === internal.ts ===
 export declare function excludePrivateKeys1<Obj>(obj: Obj): {[K in PublicKeys1<keyof Obj>]: Obj[K]};
 >excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in PublicKeys1<keyof Obj>]: Obj[K]; }
->                    : ^   ^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^   ^^^^^^^   ^^^^^                                          
 >obj : Obj
 >    : ^^^
 
 export declare function excludePrivateKeys2<Obj>(obj: Obj): {[K in PublicKeys2<keyof Obj>]: Obj[K]};
 >excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in PublicKeys2<keyof Obj>]: Obj[K]; }
->                    : ^   ^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^   ^^^^^^^   ^^^^^                                          
 >obj : Obj
 >    : ^^^
 

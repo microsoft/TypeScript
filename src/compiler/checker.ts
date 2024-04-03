@@ -8541,6 +8541,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (initial.typeParameterSymbolList) {
                 initial.typeParameterSymbolList = new Set(initial.typeParameterSymbolList);
             }
+            if (initial.typeParameterNamesByTextNextNameCount) {
+                initial.typeParameterNamesByTextNextNameCount = new Map(initial.typeParameterNamesByTextNextNameCount);
+            }
             initial.tracker = new SymbolTrackerImpl(initial, initial.tracker.inner, initial.tracker.moduleResolverHost);
             return initial;
         }
@@ -8685,6 +8688,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return transformed === existing ? setTextRange(factory.cloneNode(existing), existing) : transformed;
 
             function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
+                let cleanup: (() => void) | undefined;
+                const oldContex = context;
+                const newScope = isNewScopeNode(node);
+                if (newScope) {
+                    onEnterNewScope(node);
+                }
+                const result = visitExistingNodeTreeSymbolsWorker(node);
+                if (newScope) {
+                    onExitNewScope(node);
+                }
+                return result;
+
+                function onEnterNewScope(node: IntroducesNewScopeNode) {
+                    context = cloneNodeBuilderContext(context);
+                    cleanup = enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
+                }
+
+                function onExitNewScope(_node: IntroducesNewScopeNode) {
+                    cleanup?.();
+                    context = oldContex;
+                }
+            }
+
+            function visitExistingNodeTreeSymbolsWorker(node: Node): Node | undefined {
                 // We don't _actually_ support jsdoc namepath types, emit `any` instead
                 if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                     return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);

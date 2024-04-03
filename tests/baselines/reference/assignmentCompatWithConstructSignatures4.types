@@ -155,8 +155,8 @@ module Errors {
                 }): boolean[];
             };
         var a17: {
->a17 : { new (x: { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }): any[]; new (x: { new <T_2 extends Derived2>(a: T_2): T_2; new <T_3 extends Base>(a: T_3): T_3; }): any[]; }
->    : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>    : ^^^^^^^^^^                                                                    ^^^     ^^^^^^^^^^                                                                     ^^^     ^^^
 
                 new (x: {
 >x : { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
