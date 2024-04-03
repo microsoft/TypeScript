@@ -33,19 +33,19 @@ new Intl.ListFormat([deDE, jaJP]);
 >jaJP : Symbol(jaJP, Decl(es2021LocalesObjectArgument.ts, 2, 5))
 
 Intl.ListFormat.supportedLocalesOf(enUS);
->Intl.ListFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat.supportedLocalesOf : Symbol(Intl.ListFormatConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
 >Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
 >ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
->supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.ListFormatConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
 >enUS : Symbol(enUS, Decl(es2021LocalesObjectArgument.ts, 0, 5))
 
 Intl.ListFormat.supportedLocalesOf([deDE, jaJP]);
->Intl.ListFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat.supportedLocalesOf : Symbol(Intl.ListFormatConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
 >Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
 >ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
->supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.ListFormatConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
 >deDE : Symbol(deDE, Decl(es2021LocalesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(es2021LocalesObjectArgument.ts, 2, 5))
 

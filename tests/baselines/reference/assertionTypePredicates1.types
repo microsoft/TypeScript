@@ -138,12 +138,12 @@ function f01(x: unknown) {
 >         : ^^^^^^^^
 
         x.toLocaleString;
->x.toLocaleString : ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string) | (() => string)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.toLocaleString : ((locales?: string | readonly string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string) | (() => string)
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
->toLocaleString : ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string) | (() => string)
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : ((locales?: string | readonly string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string) | (() => string)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (!!true) {
 >!!true : true

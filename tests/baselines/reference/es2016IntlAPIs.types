@@ -14,12 +14,12 @@ console.log(Intl.getCanonicalLocales('EN-US'));
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.getCanonicalLocales('EN-US') : string[]
 >                                  : ^^^^^^^^
->Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.getCanonicalLocales : (locales?: string | readonly string[]) => string[]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->getCanonicalLocales : (locale?: string | readonly string[]) => string[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getCanonicalLocales : (locales?: string | readonly string[]) => string[]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'EN-US' : "EN-US"
 >        : ^^^^^^^
 
@@ -36,12 +36,12 @@ console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.getCanonicalLocales(['EN-US', 'Fr']) : string[]
 >                                          : ^^^^^^^^
->Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.getCanonicalLocales : (locales?: string | readonly string[]) => string[]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->getCanonicalLocales : (locale?: string | readonly string[]) => string[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getCanonicalLocales : (locales?: string | readonly string[]) => string[]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['EN-US', 'Fr'] : string[]
 >                : ^^^^^^^^
 >'EN-US' : "EN-US"
@@ -55,12 +55,12 @@ try {
   Intl.getCanonicalLocales('EN_US');
 >Intl.getCanonicalLocales('EN_US') : string[]
 >                                  : ^^^^^^^^
->Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.getCanonicalLocales : (locales?: string | readonly string[]) => string[]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->getCanonicalLocales : (locale?: string | readonly string[]) => string[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getCanonicalLocales : (locales?: string | readonly string[]) => string[]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'EN_US' : "EN_US"
 >        : ^^^^^^^
 

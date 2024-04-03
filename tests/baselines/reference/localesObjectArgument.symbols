@@ -206,28 +206,28 @@ new Intl.RelativeTimeFormat(readonlyLocales);
 >readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
 
 Intl.RelativeTimeFormat.supportedLocalesOf(enUS);
->Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(Intl.RelativeTimeFormatConstructor.supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
->supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.RelativeTimeFormatConstructor.supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
 >enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
 
 Intl.RelativeTimeFormat.supportedLocalesOf([deDE, jaJP]);
->Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(Intl.RelativeTimeFormatConstructor.supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
->supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.RelativeTimeFormatConstructor.supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
 Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales);
->Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.RelativeTimeFormat.supportedLocalesOf : Symbol(Intl.RelativeTimeFormatConstructor.supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
 >Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
->supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.RelativeTimeFormatConstructor.supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
 >readonlyLocales : Symbol(readonlyLocales, Decl(localesObjectArgument.ts, 9, 5))
 
 new Intl.Collator(enUS);

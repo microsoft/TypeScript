@@ -51,8 +51,6 @@ declare namespace Intl {
 
     type DisplayNamesOptionsFallback = "code" | "none";
 
-    type DisplayNamesOptionsLanguageDisplay = "dialect" | "standard";
-
     interface DisplayNamesOptions {
         localeMatcher?: "lookup" | "best fit" | undefined;
         style?: DisplayNamesOptionsStyle | undefined;
