@@ -13,12 +13,13 @@ import {
     isValidTypeOnlyAliasUseSite,
     Program,
     sameMap,
-    skipAlias,
     some,
     SourceFile,
+    Symbol,
     SymbolFlags,
     SyntaxKind,
     textChanges,
+    TypeChecker,
 } from "../_namespaces/ts";
 import {
     codeFixAll,
@@ -110,7 +111,7 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
             if (symbol === undefined) {
                 return !isValidTypeOnlyAliasUseSite(usage);
             }
-            return (skipAlias(symbol, checker).flags & SymbolFlags.Value) && !checker.getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
+            return (skipAlias(checker, symbol).flags & SymbolFlags.Value) && !checker.getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
         });
         if (isUsedAsValue) {
             return false;
@@ -153,4 +154,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }
+}
+
+function skipAlias(checker: TypeChecker, symbol: Symbol) {
+    while (symbol.flags & SymbolFlags.Alias) {
+        symbol = checker.getAliasedSymbol(symbol);
+    }
+    return symbol;
 }

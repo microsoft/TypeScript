@@ -20,6 +20,5 @@
 
 goTo.file("/c.ts");
 verify.codeFixAvailable([
-    { description: "Use 'import type'" },
     { description: "Use 'type I'" },
 ]);
