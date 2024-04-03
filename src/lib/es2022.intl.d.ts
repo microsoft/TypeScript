@@ -52,7 +52,7 @@ declare namespace Intl {
 
     interface SegmenterConstructor {
         new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter;
-        supportedLocalesOf(locales?: LocalesArgument, options?: SegmenterOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
         readonly prototype: Segmenter;
     }
 

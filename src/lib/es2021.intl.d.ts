@@ -72,7 +72,7 @@ declare namespace Intl {
 
     interface DisplayNamesConstructor {
         new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames;
-        supportedLocalesOf(locales?: LocalesArgument, options?: DisplayNamesOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
         readonly prototype: DisplayNames;
     }
 
@@ -107,7 +107,7 @@ declare namespace Intl {
 
     interface ListFormatConstructor {
         new (locales?: LocalesArgument, options?: ListFormatOptions): ListFormat;
-        supportedLocalesOf(locales?: LocalesArgument, options?: ListFormatOptions): string[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
         readonly prototype: ListFormat;
     }
 

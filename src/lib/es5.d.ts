@@ -4384,6 +4384,10 @@ declare var Float64Array: Float64ArrayConstructor;
 /////////////////////////////
 
 declare namespace Intl {
+    interface SupportedLocalesOptions {
+        localeMatcher?: "lookup" | "best fit" | undefined;
+    }
+
     type CollatorOptionsUsage = "sort" | "search";
 
     type CollatorOptionsCaseFirst = "upper" | "lower" | "false";
@@ -4417,7 +4421,7 @@ declare namespace Intl {
     interface CollatorConstructor {
         new (locales?: string | readonly string[], options?: CollatorOptions): Collator;
         (locales?: string | readonly string[], options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales?: string | readonly string[], options?: CollatorOptions): string[];
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: Collator;
     }
 
@@ -4479,7 +4483,7 @@ declare namespace Intl {
     interface NumberFormatConstructor {
         new (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales?: string | readonly string[], options?: NumberFormatOptions): string[];
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: NumberFormat;
     }
 
@@ -4549,7 +4553,7 @@ declare namespace Intl {
     interface DateTimeFormatConstructor {
         new (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales?: string | readonly string[], options?: DateTimeFormatOptions): string[];
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: DateTimeFormat;
     }
 

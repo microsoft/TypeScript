@@ -74,32 +74,32 @@ new Intl.Segmenter([deDE, jaJP]);
 Intl.Segmenter.supportedLocalesOf(enUS);
 >Intl.Segmenter.supportedLocalesOf(enUS) : string[]
 >                                        : ^^^^^^^^
->Intl.Segmenter.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions) => string[]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Segmenter.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.Segmenter : Intl.SegmenterConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >Segmenter : Intl.SegmenterConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.Segmenter.supportedLocalesOf([deDE, jaJP]);
 >Intl.Segmenter.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                : ^^^^^^^^
->Intl.Segmenter.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions) => string[]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Segmenter.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.Segmenter : Intl.SegmenterConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >Segmenter : Intl.SegmenterConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale

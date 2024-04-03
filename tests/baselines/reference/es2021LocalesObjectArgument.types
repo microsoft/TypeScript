@@ -74,32 +74,32 @@ new Intl.ListFormat([deDE, jaJP]);
 Intl.ListFormat.supportedLocalesOf(enUS);
 >Intl.ListFormat.supportedLocalesOf(enUS) : string[]
 >                                         : ^^^^^^^^
->Intl.ListFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions) => string[]
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.ListFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.ListFormat : Intl.ListFormatConstructor
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >ListFormat : Intl.ListFormatConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.ListFormat.supportedLocalesOf([deDE, jaJP]);
 >Intl.ListFormat.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                 : ^^^^^^^^
->Intl.ListFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions) => string[]
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.ListFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.ListFormat : Intl.ListFormatConstructor
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >ListFormat : Intl.ListFormatConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale

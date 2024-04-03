@@ -140,16 +140,16 @@ console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames.supportedLocalesOf(localesArg) : string[]
 >                                                 : ^^^^^^^^
->Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.DisplayNamesOptions) => string[]
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.DisplayNamesOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >localesArg : (string | Intl.Locale)[]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -164,16 +164,16 @@ console.log(Intl.DisplayNames.supportedLocalesOf()); // []
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames.supportedLocalesOf() : string[]
 >                                       : ^^^^^^^^
->Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.DisplayNamesOptions) => string[]
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.DisplayNamesOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]
 >console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})) : void
@@ -186,16 +186,16 @@ console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", 
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames.supportedLocalesOf(localesArg, {}) : string[]
 >                                                     : ^^^^^^^^
->Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.DisplayNamesOptions) => string[]
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.DisplayNamesOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >localesArg : (string | Intl.Locale)[]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}

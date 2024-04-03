@@ -350,32 +350,32 @@ new Intl.PluralRules(readonlyLocales);
 Intl.PluralRules.supportedLocalesOf(enUS);
 >Intl.PluralRules.supportedLocalesOf(enUS) : string[]
 >                                          : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.PluralRulesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.PluralRulesOptions): string[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.PluralRulesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.PluralRulesOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.PluralRules.supportedLocalesOf([deDE, jaJP]);
 >Intl.PluralRules.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                  : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.PluralRulesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.PluralRulesOptions): string[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.PluralRulesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.PluralRulesOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -386,16 +386,16 @@ Intl.PluralRules.supportedLocalesOf([deDE, jaJP]);
 Intl.PluralRules.supportedLocalesOf(readonlyLocales);
 >Intl.PluralRules.supportedLocalesOf(readonlyLocales) : string[]
 >                                                     : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.PluralRulesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.PluralRulesOptions): string[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.PluralRulesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.PluralRulesOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyLocales : readonly string[]
 >                : ^^^^^^^^^^^^^^^^^
 
@@ -442,32 +442,32 @@ new Intl.RelativeTimeFormat(readonlyLocales);
 Intl.RelativeTimeFormat.supportedLocalesOf(enUS);
 >Intl.RelativeTimeFormat.supportedLocalesOf(enUS) : string[]
 >                                                 : ^^^^^^^^
->Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.RelativeTimeFormat.supportedLocalesOf([deDE, jaJP]);
 >Intl.RelativeTimeFormat.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                         : ^^^^^^^^
->Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -478,16 +478,16 @@ Intl.RelativeTimeFormat.supportedLocalesOf([deDE, jaJP]);
 Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales);
 >Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales) : string[]
 >                                                            : ^^^^^^^^
->Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyLocales : readonly string[]
 >                : ^^^^^^^^^^^^^^^^^
 
@@ -534,32 +534,32 @@ new Intl.Collator(readonlyLocales);
 Intl.Collator.supportedLocalesOf(enUS);
 >Intl.Collator.supportedLocalesOf(enUS) : string[]
 >                                       : ^^^^^^^^
->Intl.Collator.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.CollatorOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): string[]; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Collator.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.Collator : Intl.CollatorConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >Collator : Intl.CollatorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.CollatorOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.Collator.supportedLocalesOf([deDE, jaJP]);
 >Intl.Collator.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                               : ^^^^^^^^
->Intl.Collator.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.CollatorOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): string[]; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Collator.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.Collator : Intl.CollatorConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >Collator : Intl.CollatorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.CollatorOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -610,32 +610,32 @@ new Intl.DateTimeFormat(readonlyLocales);
 Intl.DateTimeFormat.supportedLocalesOf(enUS);
 >Intl.DateTimeFormat.supportedLocalesOf(enUS) : string[]
 >                                             : ^^^^^^^^
->Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.DateTimeFormat.supportedLocalesOf([deDE, jaJP]);
 >Intl.DateTimeFormat.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                     : ^^^^^^^^
->Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -646,16 +646,16 @@ Intl.DateTimeFormat.supportedLocalesOf([deDE, jaJP]);
 Intl.DateTimeFormat.supportedLocalesOf(readonlyLocales);
 >Intl.DateTimeFormat.supportedLocalesOf(readonlyLocales) : string[]
 >                                                        : ^^^^^^^^
->Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyLocales : readonly string[]
 >                : ^^^^^^^^^^^^^^^^^
 
@@ -702,32 +702,32 @@ new Intl.NumberFormat(readonlyLocales);
 Intl.NumberFormat.supportedLocalesOf(enUS);
 >Intl.NumberFormat.supportedLocalesOf(enUS) : string[]
 >                                           : ^^^^^^^^
->Intl.NumberFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >NumberFormat : Intl.NumberFormatConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.NumberFormat.supportedLocalesOf(readonlyLocales);
 >Intl.NumberFormat.supportedLocalesOf(readonlyLocales) : string[]
 >                                                      : ^^^^^^^^
->Intl.NumberFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >NumberFormat : Intl.NumberFormatConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyLocales : readonly string[]
 >                : ^^^^^^^^^^^^^^^^^
 
