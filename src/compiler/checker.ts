@@ -38875,7 +38875,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
                     checkNaNEquality(errorNode, operator, left, right);
-                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                    const hasReported = reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                    if (!hasReported && isNullableType(leftType) && isNullableType(rightType)) {
+                        reportOperatorErrorUnless((left, right) => {
+                            left = getNonNullableType(left);
+                            right = getNonNullableType(right);
+                            return isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left)
+                        })
+                    }
                 }
                 return booleanType;
             case SyntaxKind.InstanceOfKeyword:
