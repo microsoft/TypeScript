@@ -373,6 +373,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         this.parent = undefined!;
         this.original = undefined;
         this.emitNode = undefined;
+        this._children = undefined;
     }
 
     private assertHasRealPosition(message?: string) {
