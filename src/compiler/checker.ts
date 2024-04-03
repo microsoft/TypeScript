@@ -8873,7 +8873,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     const { introducesError, node: result } = trackExistingEntityName(node, context);
                     hadError = hadError || introducesError;
-                    // We should not go to child nodes of the entity name, they will not be acesible
+                    // We should not go to child nodes of the entity name, they will not be accessible
                     return result;
                 }
 
