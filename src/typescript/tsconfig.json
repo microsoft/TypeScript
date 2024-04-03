@@ -6,8 +6,7 @@
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
-        { "path": "../server" },
-        { "path": "../executeCommandLine" }
+        { "path": "../server" }
     ],
     "include": ["**/*"]
 }

@@ -1,4 +1,3 @@
-import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -88,6 +87,7 @@ import {
     WatchOfConfigFile,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as performance from "./performance";
 
 interface Statistic {
     name: string;
