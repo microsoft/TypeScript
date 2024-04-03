@@ -23,13 +23,15 @@
         "organizeImportsCollation": "unicode",
         "organizeImportsCaseFirst": "upper",
         "organizeImportsIgnoreCase": false,
-        "organizeImportsNumericCollation": true
+        "organizeImportsNumericCollation": true,
+        "organizeImportsTypeOrder": "inline"
     },
     "javascript.unstable": {
         "organizeImportsCollation": "unicode",
         "organizeImportsCaseFirst": "upper",
         "organizeImportsIgnoreCase": false,
-        "organizeImportsNumericCollation": true
+        "organizeImportsNumericCollation": true,
+        "organizeImportsTypeOrder": "inline"
     },
 
     // These options search the repo recursively and slow down
