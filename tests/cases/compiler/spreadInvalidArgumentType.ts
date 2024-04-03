@@ -10,13 +10,13 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var mapped: {[P in "b"]: T[P]};
 
     var union_generic: T | { a: number };
-    var union_primitive: { a: number } | number;
+    var union_primitive: number | { a: number };
 
     var intersection_generic: T & { a: number };
-    var intersection_primitive: { a: number } | string;
+    var intersection_primitive: number & { a: number };
 
     var num: number;
-    var str: number;
+    var str: string;
     var literal_string: "string";
     var literal_number: 42;
 
@@ -24,12 +24,11 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var n: null;
     var a: any;
 
-
     var e: E;
 
-    var o1 = { ...p1 };  // OK, generic type paramterre
+    var o1 = { ...p1 };  // OK, generic type parameter
     var o2 = { ...p2 };  // OK
-    var o3 = { ...t };   // OK, generic type paramter
+    var o3 = { ...t };   // OK, generic type parameter
     var o4 = { ...i };   // Error, index access
     var o5 = { ...k };   // Error, index
     var o6 = { ...mapped_generic }; // OK, generic mapped object type

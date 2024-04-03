@@ -1,14 +1,14 @@
+spreadInvalidArgumentType.ts(32,16): error TS2698: Spread appears unintentional because this value is not possibly an object.
 spreadInvalidArgumentType.ts(33,16): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(34,16): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(39,16): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(42,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadInvalidArgumentType.ts(38,16): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadInvalidArgumentType.ts(41,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadInvalidArgumentType.ts(43,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
 spreadInvalidArgumentType.ts(44,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(45,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadInvalidArgumentType.ts(46,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
 spreadInvalidArgumentType.ts(47,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(48,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadInvalidArgumentType.ts(51,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
 spreadInvalidArgumentType.ts(52,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(53,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
-spreadInvalidArgumentType.ts(55,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
+spreadInvalidArgumentType.ts(54,17): error TS2698: Spread appears unintentional because this value is not possibly an object.
 
 
 ==== spreadInvalidArgumentType.ts (11 errors) ====
@@ -24,13 +24,13 @@ spreadInvalidArgumentType.ts(55,17): error TS2698: Spread appears unintentional 
         var mapped: {[P in "b"]: T[P]};
     
         var union_generic: T | { a: number };
-        var union_primitive: { a: number } | number;
+        var union_primitive: number | { a: number };
     
         var intersection_generic: T & { a: number };
-        var intersection_primitive: { a: number } | string;
+        var intersection_primitive: number & { a: number };
     
         var num: number;
-        var str: number;
+        var str: string;
         var literal_string: "string";
         var literal_number: 42;
     
@@ -38,12 +38,11 @@ spreadInvalidArgumentType.ts(55,17): error TS2698: Spread appears unintentional 
         var n: null;
         var a: any;
     
-    
         var e: E;
     
-        var o1 = { ...p1 };  // OK, generic type paramterre
+        var o1 = { ...p1 };  // OK, generic type parameter
         var o2 = { ...p2 };  // OK
-        var o3 = { ...t };   // OK, generic type paramter
+        var o3 = { ...t };   // OK, generic type parameter
         var o4 = { ...i };   // Error, index access
                    ~~~~
 !!! error TS2698: Spread appears unintentional because this value is not possibly an object.

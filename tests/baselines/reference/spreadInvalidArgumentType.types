@@ -45,7 +45,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : number
 >  : ^^^^^^
 
-    var union_primitive: { a: number } | number;
+    var union_primitive: number | { a: number };
 >union_primitive : number | { a: number; }
 >                : ^^^^^^^^^^^^^^      ^^^
 >a : number
@@ -57,8 +57,8 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : number
 >  : ^^^^^^
 
-    var intersection_primitive: { a: number } | string;
->intersection_primitive : string | { a: number; }
+    var intersection_primitive: number & { a: number };
+>intersection_primitive : number & { a: number; }
 >                       : ^^^^^^^^^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
@@ -67,8 +67,8 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >num : number
 >    : ^^^^^^
 
-    var str: number;
->str : number
+    var str: string;
+>str : string
 >    : ^^^^^^
 
     var literal_string: "string";
@@ -91,12 +91,11 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 >  : ^^^
 
-
     var e: E;
 >e : E
 >  : ^
 
-    var o1 = { ...p1 };  // OK, generic type paramterre
+    var o1 = { ...p1 };  // OK, generic type parameter
 >o1 : T
 >   : ^
 >{ ...p1 } : T
@@ -112,7 +111,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 >   : ^^^
 
-    var o3 = { ...t };   // OK, generic type paramter
+    var o3 = { ...t };   // OK, generic type parameter
 >o3 : T
 >   : ^
 >{ ...t } : T
@@ -181,7 +180,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >    : ^^^
 >{ ...intersection_primitive } : any
 >                              : ^^^
->intersection_primitive : string | { a: number; }
+>intersection_primitive : number & { a: number; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^
 
     var o12 = { ...num };  // Error
@@ -197,7 +196,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >    : ^^^
 >{ ...str } : any
 >           : ^^^
->str : number
+>str : string
 >    : ^^^^^^
 
     var o14 = { ...u };  // error, undefined-only not allowed
