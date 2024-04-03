@@ -12,7 +12,6 @@ declare namespace Intl {
         weekday: never;
         year: never;
     }
-
     type DateTimeFormatPartTypes = keyof DateTimeFormatPartTypesRegistry;
 
     interface DateTimeFormatPart {

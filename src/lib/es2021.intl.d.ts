@@ -8,11 +8,8 @@ declare namespace Intl {
     }
 
     type DateTimeFormatOptionsDateStyle = "full" | "long" | "medium" | "short";
-
     type DateTimeFormatOptionsTimeStyle = "full" | "long" | "medium" | "short";
-
     type DateTimeFormatOptionsDayPeriod = "narrow" | "short" | "long";
-
     type DateTimeFormatOptionsFractionalSecondDigits = 1 | 2 | 3;
 
     interface DateTimeFormatOptions {
@@ -58,7 +55,6 @@ declare namespace Intl {
         script: never;
         currency: never;
     }
-
     type DisplayNamesOptionsType = keyof DisplayNamesOptionsTypeRegistry;
 
     type DisplayNamesOptionsFallback = "code" | "none";
@@ -104,7 +100,6 @@ declare namespace Intl {
     var DisplayNames: DisplayNamesConstructor;
 
     type ListFormatOptionsType = "conjunction" | "disjunction" | "unit";
-
     type ListFormatOptionsStyle = "long" | "short" | "narrow";
 
     interface ListFormatOptions {

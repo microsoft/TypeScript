@@ -64,7 +64,6 @@ declare namespace Intl {
         percentSign: never;
         currency: never;
     }
-
     type NumberFormatPartTypes = keyof NumberFormatPartTypeRegistry;
 
     interface NumberFormatPart {

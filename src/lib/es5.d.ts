@@ -4389,9 +4389,7 @@ declare namespace Intl {
     }
 
     type CollatorOptionsUsage = "sort" | "search";
-
     type CollatorOptionsCaseFirst = "upper" | "lower" | "false";
-
     type CollatorOptionsSensitivity = "base" | "accent" | "case" | "variant";
 
     interface CollatorOptions {
@@ -4447,7 +4445,6 @@ declare namespace Intl {
         percent: never;
         currency: never;
     }
-
     type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
 
     interface NumberFormatOptionsCurrencyDisplayRegistry {
@@ -4455,11 +4452,9 @@ declare namespace Intl {
         symbol: never;
         name: never;
     }
-
     type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
 
     interface NumberFormatOptionsUseGroupingRegistry {}
-
     type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
     type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
 
@@ -4518,26 +4513,18 @@ declare namespace Intl {
     var NumberFormat: NumberFormatConstructor;
 
     type DateTimeFormatOptionsWeekday = "narrow" | "short" | "long";
-
     type DateTimeFormatOptionsEra = "narrow" | "short" | "long";
-
     type DateTimeFormatOptionsYear = "2-digit" | "numeric";
-
     type DateTimeFormatOptionsMonth = "2-digit" | "numeric" | "narrow" | "short" | "long";
-
     type DateTimeFormatOptionsDay = "2-digit" | "numeric";
-
     type DateTimeFormatOptionsHour = "2-digit" | "numeric";
-
     type DateTimeFormatOptionsMinute = "2-digit" | "numeric";
-
     type DateTimeFormatOptionsSecond = "2-digit" | "numeric";
 
     interface DateTimeFormatOptionsTimeZoneNameRegistry {
         short: never;
         long: never;
     }
-
     type DateTimeFormatOptionsTimeZoneName = keyof DateTimeFormatOptionsTimeZoneNameRegistry;
 
     interface DateTimeFormatOptions {

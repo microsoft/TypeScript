@@ -52,7 +52,6 @@ declare namespace Intl {
     type LocalesArgument = string | Locale | readonly (string | Locale)[] | undefined;
 
     type RelativeTimeFormatOptionsStyle = "long" | "short" | "narrow";
-
     type RelativeTimeFormatOptionsNumeric = "always" | "auto";
 
     interface RelativeTimeFormatOptions {
@@ -70,7 +69,6 @@ declare namespace Intl {
     }
 
     type RelativeTimeFormatUnitSingular = "year" | "quarter" | "month" | "week" | "day" | "hour" | "minute" | "second";
-
     type RelativeTimeFormatUnitPlural = "years" | "quarters" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds";
 
     type RelativeTimeFormatUnit = RelativeTimeFormatUnitSingular | RelativeTimeFormatUnitPlural;
@@ -131,21 +129,17 @@ declare namespace Intl {
         narrowSymbol: never;
     }
 
-    type NumberFormatOptionsCompactDisplay = "short" | "long";
-
-    type NumberFormatOptionsNotation = "standard" | "scientific" | "engineering" | "compact";
-
     interface NumberFormatOptionsSignDisplayRegistry {
         auto: never;
         never: never;
         always: never;
         exceptZero: never;
     }
-
     type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
 
+    type NumberFormatOptionsCompactDisplay = "short" | "long";
+    type NumberFormatOptionsNotation = "standard" | "scientific" | "engineering" | "compact";
     type NumberFormatOptionsUnitDisplay = "short" | "long" | "narrow";
-
     type NumberFormatOptionsCurrencySign = "standard" | "accounting";
 
     interface NumberFormatOptions {
