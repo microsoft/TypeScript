@@ -1,5 +1,6 @@
 import {
     __String,
+    append,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
     AssignmentDeclarationKind,
@@ -466,26 +467,26 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
         return emptyArray;
     }
 
-    const children: Node[] = [];
+    let children: Node[] | undefined;
 
     if (isJSDocCommentContainingNode(node)) {
         /** Don't add trivia for "tokens" since this is in a comment. */
         node.forEachChild(child => {
-            children.push(child);
+            children = append(children, child);
         });
-        return children;
+        return children ?? emptyArray;
     }
 
     scanner.setText((sourceFile || node.getSourceFile()).text);
     let pos = node.pos;
     const processNode = (child: Node) => {
-        addSyntheticNodes(children, pos, child.pos, node);
-        children.push(child);
+        children = addSyntheticNodes(children, pos, child.pos, node);
+        children = append(children, child);
         pos = child.end;
     };
     const processNodes = (nodes: NodeArray<Node>) => {
-        addSyntheticNodes(children, pos, nodes.pos, node);
-        children.push(createSyntaxList(nodes, node));
+        children = addSyntheticNodes(children, pos, nodes.pos, node);
+        children = append(children, createSyntaxList(nodes, node));
         pos = nodes.end;
     };
     // jsDocComments need to be the first children
@@ -495,12 +496,12 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
     // Restoring the scanner position ensures that.
     pos = node.pos;
     node.forEachChild(processNode, processNodes);
-    addSyntheticNodes(children, pos, node.end, node);
+    children = addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
-    return children;
+    return children ?? emptyArray;
 }
 
-function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
+function addSyntheticNodes(nodes: Node[] | undefined, pos: number, end: number, parent: Node): Node[] | undefined {
     scanner.resetTokenState(pos);
     while (pos < end) {
         const token = scanner.scan();
@@ -512,13 +513,14 @@ function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node
                 }
                 Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
             }
-            nodes.push(createNode(token, pos, textPos, parent));
+            nodes = append(nodes, createNode(token, pos, textPos, parent));
         }
         pos = textPos;
         if (token === SyntaxKind.EndOfFileToken) {
             break;
         }
     }
+    return nodes;
 }
 
 function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
