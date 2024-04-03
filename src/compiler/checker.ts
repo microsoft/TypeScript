@@ -7658,7 +7658,69 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
+            const cleanup = enterNewScope(context, signature.declaration, expandedParams, signature.typeParameters);
 
+            // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
+            const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
+            const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
+            if (thisParameter) {
+                parameters.unshift(thisParameter);
+            }
+            context.flags = flags;
+
+            const returnTypeNode = serializeReturnTypeForSignature(context, signature);
+
+            let modifiers = options?.modifiers;
+            if ((kind === SyntaxKind.ConstructorType) && signature.flags & SignatureFlags.Abstract) {
+                const flags = modifiersToFlags(modifiers);
+                modifiers = factory.createModifiersFromModifierFlags(flags | ModifierFlags.Abstract);
+            }
+
+            const node = kind === SyntaxKind.CallSignature ? factory.createCallSignature(typeParameters, parameters, returnTypeNode) :
+                kind === SyntaxKind.ConstructSignature ? factory.createConstructSignature(typeParameters, parameters, returnTypeNode) :
+                kind === SyntaxKind.MethodSignature ? factory.createMethodSignature(modifiers, options?.name ?? factory.createIdentifier(""), options?.questionToken, typeParameters, parameters, returnTypeNode) :
+                kind === SyntaxKind.MethodDeclaration ? factory.createMethodDeclaration(modifiers, /*asteriskToken*/ undefined, options?.name ?? factory.createIdentifier(""), /*questionToken*/ undefined, typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
+                kind === SyntaxKind.Constructor ? factory.createConstructorDeclaration(modifiers, parameters, /*body*/ undefined) :
+                kind === SyntaxKind.GetAccessor ? factory.createGetAccessorDeclaration(modifiers, options?.name ?? factory.createIdentifier(""), parameters, returnTypeNode, /*body*/ undefined) :
+                kind === SyntaxKind.SetAccessor ? factory.createSetAccessorDeclaration(modifiers, options?.name ?? factory.createIdentifier(""), parameters, /*body*/ undefined) :
+                kind === SyntaxKind.IndexSignature ? factory.createIndexSignature(modifiers, parameters, returnTypeNode) :
+                kind === SyntaxKind.JSDocFunctionType ? factory.createJSDocFunctionType(parameters, returnTypeNode) :
+                kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
+                kind === SyntaxKind.ConstructorType ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
+                kind === SyntaxKind.FunctionDeclaration ? factory.createFunctionDeclaration(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
+                kind === SyntaxKind.FunctionExpression ? factory.createFunctionExpression(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, factory.createBlock([])) :
+                kind === SyntaxKind.ArrowFunction ? factory.createArrowFunction(modifiers, typeParameters, parameters, returnTypeNode, /*equalsGreaterThanToken*/ undefined, factory.createBlock([])) :
+                Debug.assertNever(kind);
+
+            if (typeArguments) {
+                node.typeArguments = factory.createNodeArray(typeArguments);
+            }
+            if (signature.declaration?.kind === SyntaxKind.JSDocSignature && signature.declaration.parent.kind === SyntaxKind.JSDocOverloadTag) {
+                const comment = getTextOfNode(signature.declaration.parent.parent, /*includeTrivia*/ true).slice(2, -2).split(/\r\n|\n|\r/).map(line => line.replace(/^\s+/, " ")).join("\n");
+                addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, comment, /*hasTrailingNewLine*/ true);
+            }
+
+            cleanup?.();
+            return node;
+        }
+
+        type IntroducesNewScopeNode = SignatureDeclaration | JSDocSignature | MappedTypeNode;
+
+        function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
+            return isFunctionLike(node)
+                || isJSDocSignature(node)
+                || isMappedTypeNode(node);
+        }
+
+        function getTypeParametersInScope(node: IntroducesNewScopeNode) {
+            return isFunctionLike(node) || isJSDocSignature(node) ? getSignatureFromDeclaration(node).typeParameters : [getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(node.typeParameter))];
+        }
+
+        function getParametersInScope(node: IntroducesNewScopeNode) {
+            return isFunctionLike(node) || isJSDocSignature(node) ? getExpandedParameters(getSignatureFromDeclaration(node), /*skipUnionExpanding*/ true)[0] : undefined;
+        }
+
+        function enterNewScope(context: NodeBuilderContext, declaration: IntroducesNewScopeNode | undefined, expandedParams: readonly Symbol[] | undefined, typeParameters: readonly TypeParameter[] | undefined) {
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
             // so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
             // the declaration that the arrow function / function expression is assigned to.
@@ -7677,10 +7739,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let cleanup: (() => void) | undefined;
             if (
                 context.enclosingDeclaration
-                && signature.declaration
-                && signature.declaration !== context.enclosingDeclaration
-                && !isInJSFile(signature.declaration)
-                && (some(expandedParams) || some(signature.typeParameters))
+                && declaration
+                && declaration !== context.enclosingDeclaration
+                && !isInJSFile(declaration)
+                && (some(expandedParams) || some(typeParameters))
             ) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7701,10 +7763,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 pushFakeScope(
                     "params",
                     add => {
-                        for (const param of expandedParams) {
-                            add(param.escapedName, param);
+                        for (const param of expandedParams ?? emptyArray) {
+                            if (!forEach(param.declarations, d => {
+                                if (isParameter(d) && isBindingPattern(d.name)) {
+                                    bindPattern(d.name);
+                                    return true;
+                                }
+                                return undefined;
+                                function bindPattern(p: BindingPattern): void {
+                                    forEach(p.elements, e => {
+                                        switch (e.kind) {
+                                            case SyntaxKind.OmittedExpression: return;
+                                            case SyntaxKind.BindingElement: return bindElement(e);
+                                            default: return Debug.assertNever(e);
+                                        }
+                                    });
+                                }
+                                function bindElement(e: BindingElement): void {
+                                    if (isBindingPattern(e.name)) {
+                                        return bindPattern(e.name);
+                                    }
+                                    const symbol = getSymbolOfDeclaration(e);
+                                    add(symbol.escapedName, symbol);
+                                }
+                            })) {
+                                add(param.escapedName, param);
+                            }
                         }
-                    },
+                    }
                 );
 
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
@@ -7712,13 +7798,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     pushFakeScope(
                         "typeParams",
                         add => {
-                            for (const typeParam of signature.typeParameters ?? emptyArray) {
+                            for (const typeParam of typeParameters ?? emptyArray) {
                                 const typeParamName = typeParameterToName(typeParam, context).escapedText;
                                 add(typeParamName, typeParam.symbol);
                             }
                         },
                     );
                 }
+
+                return cleanup;
 
                 function pushFakeScope(kind: "params" | "typeParams", addAll: (addSymbol: (name: __String, symbol: Symbol) => void) => void) {
                     // We only ever need to look two declarations upward.
@@ -7769,49 +7857,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-
-            // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
-            const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
-            const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
-            if (thisParameter) {
-                parameters.unshift(thisParameter);
-            }
-            context.flags = flags;
-
-            const returnTypeNode = serializeReturnTypeForSignature(context, signature);
-
-            let modifiers = options?.modifiers;
-            if ((kind === SyntaxKind.ConstructorType) && signature.flags & SignatureFlags.Abstract) {
-                const flags = modifiersToFlags(modifiers);
-                modifiers = factory.createModifiersFromModifierFlags(flags | ModifierFlags.Abstract);
-            }
-
-            const node = kind === SyntaxKind.CallSignature ? factory.createCallSignature(typeParameters, parameters, returnTypeNode) :
-                kind === SyntaxKind.ConstructSignature ? factory.createConstructSignature(typeParameters, parameters, returnTypeNode) :
-                kind === SyntaxKind.MethodSignature ? factory.createMethodSignature(modifiers, options?.name ?? factory.createIdentifier(""), options?.questionToken, typeParameters, parameters, returnTypeNode) :
-                kind === SyntaxKind.MethodDeclaration ? factory.createMethodDeclaration(modifiers, /*asteriskToken*/ undefined, options?.name ?? factory.createIdentifier(""), /*questionToken*/ undefined, typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
-                kind === SyntaxKind.Constructor ? factory.createConstructorDeclaration(modifiers, parameters, /*body*/ undefined) :
-                kind === SyntaxKind.GetAccessor ? factory.createGetAccessorDeclaration(modifiers, options?.name ?? factory.createIdentifier(""), parameters, returnTypeNode, /*body*/ undefined) :
-                kind === SyntaxKind.SetAccessor ? factory.createSetAccessorDeclaration(modifiers, options?.name ?? factory.createIdentifier(""), parameters, /*body*/ undefined) :
-                kind === SyntaxKind.IndexSignature ? factory.createIndexSignature(modifiers, parameters, returnTypeNode) :
-                kind === SyntaxKind.JSDocFunctionType ? factory.createJSDocFunctionType(parameters, returnTypeNode) :
-                kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
-                kind === SyntaxKind.ConstructorType ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
-                kind === SyntaxKind.FunctionDeclaration ? factory.createFunctionDeclaration(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
-                kind === SyntaxKind.FunctionExpression ? factory.createFunctionExpression(modifiers, /*asteriskToken*/ undefined, options?.name ? cast(options.name, isIdentifier) : factory.createIdentifier(""), typeParameters, parameters, returnTypeNode, factory.createBlock([])) :
-                kind === SyntaxKind.ArrowFunction ? factory.createArrowFunction(modifiers, typeParameters, parameters, returnTypeNode, /*equalsGreaterThanToken*/ undefined, factory.createBlock([])) :
-                Debug.assertNever(kind);
-
-            if (typeArguments) {
-                node.typeArguments = factory.createNodeArray(typeArguments);
-            }
-            if (signature.declaration?.kind === SyntaxKind.JSDocSignature && signature.declaration.parent.kind === SyntaxKind.JSDocOverloadTag) {
-                const comment = getTextOfNode(signature.declaration.parent.parent, /*includeTrivia*/ true).slice(2, -2).split(/\r\n|\n|\r/).map(line => line.replace(/^\s+/, " ")).join("\n");
-                addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, comment, /*hasTrailingNewLine*/ true);
-            }
-
-            cleanup?.();
-            return node;
         }
 
         function tryGetThisParameterDeclaration(signature: Signature, context: NodeBuilderContext) {
