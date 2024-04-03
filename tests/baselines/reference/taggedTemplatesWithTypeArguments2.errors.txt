@@ -49,7 +49,7 @@ taggedTemplatesWithTypeArguments2.ts(36,34): error TS1034: 'super' must be follo
     
     class SomeDerived<T> extends SomeBase<number, string, T> {
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
             super<number, string, T> `hello world`;
             ~~~~~

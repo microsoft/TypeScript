@@ -10,7 +10,7 @@ superCallInsideClassExpression.ts(8,5): error TS2377: Constructors for derived c
     
     class B extends A {
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
     
             var D = class extends C {

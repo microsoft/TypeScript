@@ -66,7 +66,7 @@ derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called 
         a = 1;
         b: number;
         constructor(y: string) {
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             this.a = 3;
             ~~~~
@@ -95,7 +95,7 @@ derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called 
         a = 1;
         b: number;
         constructor(y: string) {
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             this.a = 3;
             ~~~~

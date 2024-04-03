@@ -58,7 +58,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class Derived1 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything();
             ~~~~~
@@ -70,7 +70,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class Derived2 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything(this);
             ~~~~~
@@ -84,7 +84,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class Derived3 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything();
             ~~~~~
@@ -98,7 +98,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class Derived4 extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             super.receivesAnything(this);
             ~~~~~
@@ -166,7 +166,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithDecoratorOnClass extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             @decorate(this)
                       ~~~~
@@ -180,7 +180,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithDecoratorOnClassMethod extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             class InnerClass {
                 @decorate(this)
@@ -247,7 +247,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithParenthesisAfterStatement extends Base {
         prop = true;
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             this.prop;
             ~~~~
@@ -284,7 +284,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithClassDeclarationExtendingMember extends Base {
         memberClass = class { };
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             class InnerClass extends this.memberClass {
                                      ~~~~
@@ -323,7 +323,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithClassExpressionExtendingMember extends Base {
         memberClass = class { };
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             console.log(class extends this.memberClass { });
                                       ~~~~
@@ -378,7 +378,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
         propName = "prop";
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             const obj = {
                 _prop: "prop",
@@ -416,7 +416,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithObjectComputedPropertyBody extends Base {
         propName = "prop";
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             const obj = {
                 prop: this.propName,
@@ -430,7 +430,7 @@ derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a r
     class DerivedWithObjectComputedPropertyName extends Base {
         propName = "prop";
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
             const obj = {
                 [this.propName]: true,

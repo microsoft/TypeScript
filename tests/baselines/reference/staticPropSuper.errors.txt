@@ -20,7 +20,7 @@ staticPropSuper.ts(32,5): error TS2377: Constructors for derived classes must co
         public p: number = 10;
     
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
             var x = 1; // should error
         }
@@ -30,7 +30,7 @@ staticPropSuper.ts(32,5): error TS2377: Constructors for derived classes must co
         private p: number = 11;
     
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
             var x = 1; // should error
         }
@@ -40,7 +40,7 @@ staticPropSuper.ts(32,5): error TS2377: Constructors for derived classes must co
         p: number = 12;
     
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
             var x = 1; // should error
         }

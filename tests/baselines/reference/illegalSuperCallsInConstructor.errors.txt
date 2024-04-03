@@ -13,7 +13,7 @@ illegalSuperCallsInConstructor.ts(16,17): error TS2337: Super calls are not perm
      
     class Derived extends Base {
         constructor() {
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
             var r2 = () => super();
                            ~~~~~
