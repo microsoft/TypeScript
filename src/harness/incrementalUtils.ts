@@ -222,6 +222,12 @@ export function verifyResolutionCache(
             getResolvedModuleFileName,
             /*deferWatchingNonRelativeResolution*/ true,
             expected.resolvedModuleNames,
+            resolution =>
+                ts.canWatchFailedLookupsOfResolvedModule(
+                    resolution,
+                    actualProgram.getRedirectReferenceForResolution(actualProgram.getSourceFile(path)!)?.commandLine.options ?? actualProgram.getCompilerOptions(),
+                    actualProgram.getSourceFile(path)!,
+                ),
         )
     );
     actual.resolvedTypeReferenceDirectives.forEach((resolutions, path) =>
@@ -232,6 +238,7 @@ export function verifyResolutionCache(
             getResolvedTypeRefFileName,
             /*deferWatchingNonRelativeResolution*/ false,
             expected.resolvedTypeReferenceDirectives,
+            ts.canWatchFailedLookupsOfTypeReferencedDirective,
         )
     );
     actual.resolvedLibraries.forEach((resolved, libFileName) => {
@@ -245,6 +252,7 @@ export function verifyResolutionCache(
             ts.getLibraryNameFromLibFileName(libFileName),
             /*mode*/ undefined,
             /*deferWatchingNonRelativeResolution*/ false,
+            ts.canWatchFailedLookupsOfResolvedLibrary,
         );
         expected.resolvedLibraries.set(libFileName, expectedResolution);
     });
@@ -295,6 +303,7 @@ export function verifyResolutionCache(
         getResolvedFileName: (resolution: T) => string | undefined,
         deferWatchingNonRelativeResolution: boolean,
         storeExpcted: Map<ts.Path, ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations>>,
+        canWatchFailedLookups: (resolution: T) => boolean,
     ) {
         ts.Debug.assert(
             actualProgram.getSourceFileByPath(fileName) || ts.endsWith(fileName, ts.inferredTypesContainingFile),
@@ -303,7 +312,16 @@ export function verifyResolutionCache(
         let expectedCache: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined;
         cache?.forEach((resolved, name, mode) => {
             const resolvedFileName = getResolvedFileName(resolved);
-            const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode, deferWatchingNonRelativeResolution);
+            const expected = collectResolution(
+                cacheType,
+                fileName,
+                resolved,
+                resolvedFileName,
+                name,
+                mode,
+                deferWatchingNonRelativeResolution,
+                canWatchFailedLookups,
+            );
             if (!expectedCache) storeExpcted.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
         });
@@ -317,6 +335,7 @@ export function verifyResolutionCache(
         name: string,
         mode: ts.ResolutionMode,
         deferWatchingNonRelativeResolution: boolean,
+        canWatchFailedLookups: (resolution: T) => boolean,
     ): ExpectedResolution {
         const existing = resolutionToRefs.get(resolved);
         let expectedResolution: ExpectedResolution;
@@ -336,7 +355,14 @@ export function verifyResolutionCache(
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        expected.watchFailedLookupLocationsOfExternalModuleResolutions(
+            name,
+            expectedResolution,
+            fileName,
+            () => ({ resolvedFileName }),
+            deferWatchingNonRelativeResolution,
+            () => canWatchFailedLookups(resolved),
+        );
         return expectedResolution;
     }
 
