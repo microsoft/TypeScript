@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts] ////
+
+=== narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts ===
+let foo = [];
+>foo : any[]
+>    : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+switch (foo?.length) {
+>foo?.length : number
+>            : ^^^^^^
+>foo : any[]
+>    : ^^^^^
+>length : number
+>       : ^^^^^^
+
+  case 1:
+>1 : 1
+>  : ^
+
+    foo[0];
+>foo[0] : any
+>       : ^^^
+>foo : any[]
+>    : ^^^^^
+>0 : 0
+>  : ^
+}
+
