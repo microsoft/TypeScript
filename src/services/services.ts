@@ -33,6 +33,7 @@ import {
     computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
     containsParseError,
+    createCreateSourceFileOptions,
     createDocumentRegistry,
     createGetCanonicalFileName,
     createMultiMap,
@@ -1350,18 +1351,18 @@ class SyntaxTreeCache {
 
         if (this.currentFileName !== fileName) {
             // This is a new file, just parse it
-            const options: CreateSourceFileOptions = {
-                languageVersion: ScriptTarget.Latest,
-                impliedNodeFormat: getImpliedNodeFormatForFile(
+            const options = createCreateSourceFileOptions(
+                ScriptTarget.Latest,
+                getImpliedNodeFormatForFile(
                     toPath(fileName, this.host.getCurrentDirectory(), this.host.getCompilerHost?.()?.getCanonicalFileName || hostGetCanonicalFileName(this.host)),
                     this.host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(),
                     this.host,
                     this.host.getCompilationSettings(),
                 ),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
+                getSetExternalModuleIndicator(this.host.getCompilationSettings()),
                 // These files are used to produce syntax-based highlighting, which reads JSDoc, so we must use ParseAll.
-                jsDocParsingMode: JSDocParsingMode.ParseAll,
-            };
+                JSDocParsingMode.ParseAll,
+            );
             sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind);
         }
         else if (this.currentFileVersion !== version) {
@@ -1451,12 +1452,12 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
         }
     }
 
-    const options: CreateSourceFileOptions = {
-        languageVersion: sourceFile.languageVersion,
-        impliedNodeFormat: sourceFile.impliedNodeFormat,
-        setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
-        jsDocParsingMode: sourceFile.jsDocParsingMode,
-    };
+    const options = createCreateSourceFileOptions(
+        sourceFile.languageVersion,
+        sourceFile.impliedNodeFormat,
+        sourceFile.setExternalModuleIndicator,
+        sourceFile.jsDocParsingMode,
+    );
     // Otherwise, just create a new source file.
     return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
 }

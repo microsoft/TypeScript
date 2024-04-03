@@ -2802,17 +2802,17 @@ export class TestState {
         // Check syntactic structure
         const content = this.getFileContent(this.activeFile.fileName);
 
-        const options: ts.CreateSourceFileOptions = {
-            languageVersion: ts.ScriptTarget.Latest,
-            impliedNodeFormat: ts.getImpliedNodeFormatForFile(
+        const options = ts.createCreateSourceFileOptions(
+            ts.ScriptTarget.Latest,
+            ts.getImpliedNodeFormatForFile(
                 ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
                 /*packageJsonInfoCache*/ undefined,
                 this.languageServiceAdapterHost,
                 this.languageService.getProgram()?.getCompilerOptions() || {},
             ),
-            setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
-            jsDocParsingMode: this.languageServiceAdapterHost.jsDocParsingMode,
-        };
+            ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
+            this.languageServiceAdapterHost.jsDocParsingMode,
+        );
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
             this.activeFile.fileName,
             createScriptSnapShot(content),

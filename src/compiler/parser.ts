@@ -1327,9 +1327,32 @@ export interface CreateSourceFileOptions {
      * check specified by `isFileProbablyExternalModule` will be used to set the field.
      */
     setExternalModuleIndicator?: (file: SourceFile) => void;
+    jsDocParsingMode?: JSDocParsingMode;
     /** @internal */ packageJsonLocations?: readonly string[];
     /** @internal */ packageJsonScope?: PackageJsonInfo;
-    jsDocParsingMode?: JSDocParsingMode;
+}
+
+/**
+ * Creates a CreateSourceFileOptions with a consistent shape.
+ *
+ * @internal
+ */
+export function createCreateSourceFileOptions(
+    languageVersion: ScriptTarget,
+    impliedNodeFormat?: ResolutionMode,
+    setExternalModuleIndicator?: (file: SourceFile) => void,
+    jsDocParsingMode?: JSDocParsingMode,
+    packageJsonLocations?: readonly string[],
+    packageJsonScope?: PackageJsonInfo,
+): CreateSourceFileOptions {
+    return {
+        languageVersion,
+        impliedNodeFormat,
+        setExternalModuleIndicator,
+        jsDocParsingMode,
+        packageJsonLocations,
+        packageJsonScope,
+    };
 }
 
 function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -1347,7 +1370,7 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
         setExternalModuleIndicator: overrideSetExternalModuleIndicator,
         impliedNodeFormat: format,
         jsDocParsingMode,
-    } = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : ({ languageVersion: languageVersionOrOptions } as CreateSourceFileOptions);
+    } = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : createCreateSourceFileOptions(languageVersionOrOptions);
     if (languageVersion === ScriptTarget.JSON) {
         result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop, jsDocParsingMode);
     }

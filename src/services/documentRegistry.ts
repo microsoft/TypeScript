@@ -1,6 +1,7 @@
 import {
     arrayFrom,
     CompilerOptions,
+    createCreateSourceFileOptions,
     createGetCanonicalFileName,
     createLanguageServiceSourceFile,
     CreateSourceFileOptions,
@@ -267,13 +268,12 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined : compilationSettingsOrHost as MinimalResolutionCacheHost;
         const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
         const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object" ?
-            languageVersionOrOptions :
-            {
-                languageVersion: scriptTarget,
-                impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
+            languageVersionOrOptions : createCreateSourceFileOptions(
+                scriptTarget,
+                host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
+                getSetExternalModuleIndicator(compilationSettings),
                 jsDocParsingMode,
-            };
+            );
         sourceFileOptions.languageVersion = scriptTarget;
         Debug.assertEqual(jsDocParsingMode, sourceFileOptions.jsDocParsingMode);
         const oldBucketCount = buckets.size;

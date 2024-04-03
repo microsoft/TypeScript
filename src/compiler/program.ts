@@ -32,6 +32,7 @@ import {
     createCommentDirectivesMap,
     createCompilerDiagnostic,
     createCompilerDiagnosticFromMessageChain,
+    createCreateSourceFileOptions,
     createDiagnosticCollection,
     createDiagnosticForNodeFromMessageChain,
     createDiagnosticForNodeInSourceFile,
@@ -3570,9 +3571,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
-        return typeof result === "object" ?
-            { ...result, languageVersion, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode } :
-            { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode };
+        if (typeof result === "object") {
+            return createCreateSourceFileOptions(languageVersion, result.impliedNodeFormat, setExternalModuleIndicator, host.jsDocParsingMode, result.packageJsonLocations, result.packageJsonScope);
+        }
+        return createCreateSourceFileOptions(languageVersion, result, setExternalModuleIndicator, host.jsDocParsingMode);
     }
 
     function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {

@@ -5,6 +5,7 @@ import {
     CompilerHost,
     CompilerOptions,
     createCompilerDiagnosticForInvalidCustomType,
+    createCreateSourceFileOptions,
     createProgram,
     createSourceFile,
     CustomTransformers,
@@ -116,12 +117,12 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     const sourceFile = createSourceFile(
         inputFileName,
         input,
-        {
-            languageVersion: getEmitScriptTarget(options),
-            impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
-            setExternalModuleIndicator: getSetExternalModuleIndicator(options),
-            jsDocParsingMode: transpileOptions.jsDocParsingMode ?? JSDocParsingMode.ParseAll,
-        },
+        createCreateSourceFileOptions(
+            getEmitScriptTarget(options),
+            getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
+            getSetExternalModuleIndicator(options),
+            transpileOptions.jsDocParsingMode ?? JSDocParsingMode.ParseAll,
+        ),
     );
     if (transpileOptions.moduleName) {
         sourceFile.moduleName = transpileOptions.moduleName;
