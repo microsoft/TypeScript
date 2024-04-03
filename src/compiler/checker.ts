@@ -8856,13 +8856,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return clone;
                 }
                 if (isConditionalTypeNode(node)) {
-                    const checkType = visitNode(node.checkType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+                    const checkType = visitNode(node.checkType, visitExistingNodeTreeSymbols, isTypeNode)!;
 
                     const disposeScope = onEnterNewScope(node);
-                    const extendType = visitNode(node.extendsType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
-                    const trueType = visitNode(node.trueType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+                    const extendType = visitNode(node.extendsType, visitExistingNodeTreeSymbols, isTypeNode)!;
+                    const trueType = visitNode(node.trueType, visitExistingNodeTreeSymbols, isTypeNode)!;
                     disposeScope();
-                    const falseType = visitNode(node.falseType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+                    const falseType = visitNode(node.falseType, visitExistingNodeTreeSymbols, isTypeNode)!;
                     return factory.updateConditionalTypeNode(
                         node,
                         checkType,
