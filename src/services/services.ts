@@ -109,6 +109,7 @@ import {
     getNonAssignedNameOfDeclaration,
     getNormalizedAbsolutePath,
     getObjectFlags,
+    getOrSetNodeChildren,
     getQuotePreference,
     getScriptKind,
     getSetExternalModuleIndicator,
@@ -266,6 +267,7 @@ import {
     ScriptTarget,
     SelectionRange,
     SemanticClassificationFormat,
+    setNodeChildren,
     setObjectAllocator,
     Signature,
     SignatureDeclaration,
@@ -357,7 +359,6 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
     public jsDoc?: JSDoc[];
     public original?: Node;
-    private _children: Node[] | undefined;
     public id?: number;
     public emitNode?: EmitNode;
 
@@ -373,7 +374,6 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         this.parent = undefined!;
         this.original = undefined;
         this.emitNode = undefined;
-        this._children = undefined;
     }
 
     private assertHasRealPosition(message?: string) {
@@ -438,7 +438,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
 
     public getChildren(sourceFile?: SourceFileLike): Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return this._children || (this._children = createChildren(this, sourceFile));
+        return getOrSetNodeChildren(this, () => createChildren(this, sourceFile));
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -533,14 +533,15 @@ function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node
 
 function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as any as SyntaxList;
-    list._children = [];
+    const children: Node[] = [];
     let pos = nodes.pos;
     for (const node of nodes) {
-        addSyntheticNodes(list._children, pos, node.pos, parent);
-        list._children.push(node);
+        addSyntheticNodes(children, pos, node.pos, parent);
+        children.push(node);
         pos = node.end;
     }
-    addSyntheticNodes(list._children, pos, nodes.end, parent);
+    addSyntheticNodes(children, pos, nodes.end, parent);
+    setNodeChildren(list, children);
     return list;
 }
 

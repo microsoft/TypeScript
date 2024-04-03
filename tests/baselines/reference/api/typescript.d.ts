@@ -7985,7 +7985,6 @@ declare namespace ts {
     }
     interface SyntaxList extends Node {
         kind: SyntaxKind.SyntaxList;
-        _children: Node[];
     }
     enum ListFormat {
         None = 0,
