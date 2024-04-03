@@ -14,3 +14,12 @@ narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts(5,5): error TS7005:
 !!! error TS7005: Variable 'foo' implicitly has an 'any[]' type.
     }
     
+    let bar = [];
+    
+    switch (bar?.length) {
+      case 1: {
+        bar.push("baz");
+        const arr: string[] = bar;
+      }
+    }
+    

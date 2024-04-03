@@ -28,3 +28,41 @@ switch (foo?.length) {
 >  : ^
 }
 
+let bar = [];
+>bar : any[]
+>    : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+switch (bar?.length) {
+>bar?.length : number
+>            : ^^^^^^
+>bar : any[]
+>    : ^^^^^
+>length : number
+>       : ^^^^^^
+
+  case 1: {
+>1 : 1
+>  : ^
+
+    bar.push("baz");
+>bar.push("baz") : number
+>                : ^^^^^^
+>bar.push : (...items: any[]) => number
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : any[]
+>    : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"baz" : "baz"
+>      : ^^^^^
+
+    const arr: string[] = bar;
+>arr : string[]
+>    : ^^^^^^^^
+>bar : string[]
+>    : ^^^^^^^^
+  }
+}
+
