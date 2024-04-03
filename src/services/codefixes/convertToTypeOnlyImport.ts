@@ -15,11 +15,8 @@ import {
     sameMap,
     some,
     SourceFile,
-    Symbol,
-    SymbolFlags,
     SyntaxKind,
     textChanges,
-    TypeChecker,
 } from "../_namespaces/ts";
 import {
     codeFixAll,
@@ -108,10 +105,7 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
     for (const specifier of nonTypeOnlySpecifiers) {
         const isUsedAsValue = FindAllReferences.Core.eachSymbolReferenceInFile(specifier.name, checker, sourceFile, usage => {
             const symbol = checker.getSymbolAtLocation(usage);
-            if (symbol === undefined) {
-                return !isValidTypeOnlyAliasUseSite(usage);
-            }
-            return (skipAlias(checker, symbol).flags & SymbolFlags.Value) && !checker.getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
+            return !!symbol && checker.symbolIsValue(symbol) || !isValidTypeOnlyAliasUseSite(usage);
         });
         if (isUsedAsValue) {
             return false;
@@ -154,11 +148,4 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }
-}
-
-function skipAlias(checker: TypeChecker, symbol: Symbol) {
-    while (symbol.flags & SymbolFlags.Alias) {
-        symbol = checker.getAliasedSymbol(symbol);
-    }
-    return symbol;
 }
