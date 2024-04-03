@@ -18,7 +18,7 @@
         ".git-blame-ignore-revs"
     ],
 
-    // Match eslint-plugin-simple-import-sort in organize/auto-imports.
+    // Match dprint in organize/auto-imports.
     "typescript.unstable": {
         "organizeImportsCollation": "unicode",
         "organizeImportsCaseFirst": "upper",
