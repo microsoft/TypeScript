@@ -23,7 +23,7 @@ declare function str(x: string): void;
 
 declare function f1(...args: Funcs): void;
 >f1 : (...args: Funcs) => void
->   : ^^^^^^^^^^^^^^^^^^^^    
+>   : ^^^^^^^^^^     ^^^^^    
 >args : Funcs
 >     : ^^^^^
 
