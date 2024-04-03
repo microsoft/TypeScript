@@ -9,7 +9,7 @@ declare function testD(): "d";
 
 declare function forceMatch<T>(matched: {
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
->           : ^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>           : ^ ^^^^^^^^^^^                          ^^^^^    
 >matched : { [key in keyof T]: key; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -38,7 +38,7 @@ forceMatch({
 
 declare function forceMatch2<T>(matched: {
 >forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
->            : ^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^    
+>            : ^ ^^^^^^^^^^^                                                       ^^^^^    
 >matched : { [key in keyof T]: ({ key }: { key: key; }) => void; }
 >        : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 

@@ -212,10 +212,10 @@ module Errors {
 >a2 : any
 
     declare function foo17(a2: {
->foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }; (a2: any): any; }
->      : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^
->a2 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
->   : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
+>      : ^^^^^^^                                                                                                                                                        ^^^^^^^^^                                                            ^^^     ^^^^^^                                                             ^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>a2 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>   : ^^^^^^                                                            ^^^     ^^^^^^                                                             ^^^     ^^^
 
         (x: {
 >x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
@@ -749,7 +749,7 @@ module WithGenericSignaturesInBaseType {
 
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;
 >foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }
->     : ^^^^^^^^ ^^^^^ ^^^^^   ^^^^ ^^^^^ ^^^^^   ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                ^^^^ ^^^^^ ^^^^^   ^^^^^^^^^^^^^^^^^^^
 >a2 : <T>(x: T) => T[]
 >   : ^ ^^^^^ ^^^^^   
 >x : T
@@ -784,7 +784,7 @@ module WithGenericSignaturesInBaseType {
 
     declare function foo3(a2: <T>(x: T) => string[]): typeof a2;
 >foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }
->     : ^^^^^^^^ ^^^^^ ^^^^^        ^^^^ ^^^^^ ^^^^^        ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                     ^^^^ ^^^^^ ^^^^^        ^^^^^^^^^^^^^^^^^^^
 >a2 : <T>(x: T) => string[]
 >   : ^ ^^^^^ ^^^^^        
 >x : T

@@ -73,7 +73,7 @@ declare function pipe<A, B>(a: A, ab: (a: A) => B): B;
 
 declare function exists<A>(predicate: Predicate<A>): <E>(ma: Either<E, A>) => boolean;
 >exists : <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>) => boolean
->       : ^ ^^^^^^^^^^^^^            ^^^^^^ ^^^^^^            ^^^^^       
+>       : ^ ^^^^^^^^^^^^^            ^^^^^                                
 >predicate : Predicate<A>
 >          : ^^^^^^^^^^^^
 >ma : Either<E, A>

@@ -38,8 +38,8 @@ foo(a);
 // Repro for #25498
 
 function test(): {[A in "foo"]: A} {
->test : () => { foo: "foo"; }
->     : ^^^^^^^^^^^^^^^^^^^^^
+>test : () => { [A in "foo"]: A; }
+>     : ^^^^^^                    
 
   return {foo: "bar"};
 >{foo: "bar"} : { foo: "bar"; }

@@ -5,7 +5,7 @@
 
 declare function test1<T>(arg: {
 >test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
->      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>      : ^ ^^^^^^^                         ^^^^^ 
 >arg : { [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -27,7 +27,7 @@ const result1 = test1(["foo", 42]);
 
 declare function test2<T extends readonly unknown[]>(arg: {
 >test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^ 
 >arg : { [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -134,7 +134,7 @@ type KeepLiteralStrings<T extends string[]> = {
 };
 declare function test4<T extends Record<string, string[]>>(obj: {
 >test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                        ^^^^^ 
 >obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
 >    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -332,8 +332,8 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 }
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
->f3b : <K extends string>(a: { [P in K]: number; }, b: { [P_1 in string]: number; }, k: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^                     ^^^^^                            ^^^^^ ^^^^^^^^^
+>f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^                     ^^^^^                          ^^^^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
