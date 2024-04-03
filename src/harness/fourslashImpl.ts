@@ -1816,14 +1816,26 @@ export class TestState {
 
     public getRegionSemanticDiagnostics(
         ranges: ts.TextRange[],
-        expected: readonly FourSlashInterface.Diagnostic[] | undefined) {
+        expectedDiagnostics: readonly FourSlashInterface.Diagnostic[] | undefined,
+        expectedRanges: ts.TextRange[] | undefined) {
         const diagnosticsResult = this.languageService.getRegionSemanticDiagnostics(this.activeFile.fileName, ranges);
-        if (diagnosticsResult && expected) {
-            return this.testDiagnostics(expected, diagnosticsResult.diagnostics, "error");
+        if (diagnosticsResult && expectedDiagnostics) {
+            this.testDiagnostics(expectedDiagnostics, diagnosticsResult.diagnostics, "error");
         }
-        if (diagnosticsResult !== expected) {
-            if (expected) this.raiseError("Expected diagnostics to be defined.");
-            else assert.deepEqual(diagnosticsResult, expected, "Expected diagnostics to be undefined.");
+        else if (diagnosticsResult !== expectedDiagnostics) {
+            if (expectedDiagnostics) this.raiseError("Expected diagnostics to be defined.");
+            else assert.deepEqual(
+                diagnosticsResult!.diagnostics,
+                expectedDiagnostics,
+                "Expected diagnostics to be undefined.");
+        }
+
+        if (expectedRanges && diagnosticsResult) {
+            const spans = expectedRanges.map(range => ({ start: range.pos, length: range.end - range.pos }));
+            assert.deepEqual(diagnosticsResult.spans, spans);
+        }
+        else if (expectedRanges && !diagnosticsResult) {
+            this.raiseError("Expected spans to be defined.");
         }
     }
 

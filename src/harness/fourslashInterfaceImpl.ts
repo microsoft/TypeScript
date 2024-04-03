@@ -604,8 +604,11 @@ export class Verify extends VerifyNegatable {
         this.state.verifySemanticDiagnostics(expected);
     }
 
-    public getRegionSemanticDiagnostics(ranges: ts.TextRange[], expected: readonly Diagnostic[]) {
-        this.state.getRegionSemanticDiagnostics(ranges, expected);
+    public getRegionSemanticDiagnostics(
+        ranges: ts.TextRange[],
+        expectedDiagnostics: readonly Diagnostic[],
+        expectedRanges: ts.TextRange[] | undefined) {
+        this.state.getRegionSemanticDiagnostics(ranges, expectedDiagnostics, expectedRanges);
     }
 
     public getSuggestionDiagnostics(expected: readonly Diagnostic[]) {

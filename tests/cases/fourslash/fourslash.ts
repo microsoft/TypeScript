@@ -427,7 +427,10 @@ declare namespace FourSlashInterface {
         baselineInlayHints(span?: { start: number; length: number; }, preferences?: InlayHintsOptions): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
-        getRegionSemanticDiagnostics(ranges: ts.TextRange[], expected: ReadonlyArray<Diagnostic> | undefined): void;
+        getRegionSemanticDiagnostics(
+            ranges: ts.TextRange[],
+            expectedDiagnostics: ReadonlyArray<Diagnostic> | undefined,
+            expectedRanges?: ReadonlyArray<TextRange>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         getEditsForFileRename(options: {

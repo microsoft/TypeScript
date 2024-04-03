@@ -329,6 +329,9 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
+    ClassLikeDeclaration,
+    BlockLike,
+    isClassLike,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2058,8 +2061,8 @@ export function createLanguageService(
         const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
         const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
 
-        const nodes = [];
-        includeNodes(enclosingNode);
+        const nodes: Node[] = [];
+        chooseOverlappingNodes(span, enclosingNode, nodes);
 
         if (file.end === span.start + span.length) {
             nodes.push(file.endOfFileToken);
@@ -2070,41 +2073,79 @@ export function createLanguageService(
             return undefined;
         }
 
-        return nodes;
+        return nodes;   
+    }
 
-        // The algorithm is the following:
-        // Starting from a node that contains the whole input span, we consider its children.
-        // If a child node is completely contained in the input span, then it or its source element ancestor should be included.
-        // If a child node does not overlap the input span, it should not be included.
-        // The interesting case is for nodes that overlap but are not contained by the span, i.e. nodes in the span boundary.
-        // For those boundary nodes, if it is a block-like node (i.e. it contains statements),
-        // we try to filter out the child statements that do not overlap the span.
-        // For boundary nodes that are not block-like, we simply include them (or their source element ancestor).
-        function includeNodes(node: Node): true | undefined {
-            if (!textRangeIntersectsWithTextSpan(node, span)) {
-                if (node.pos >= span.start + span.length) {
-                    return true;
-                }
-                return;
-            }
-            if (textSpanContainsTextRange(span, node) || !isBlockLike(node)) {
-                includeNode(node);
-                return;
-            }
-            const stmts = node.statements.filter(node => textRangeIntersectsWithTextSpan(node, span));
-            if (stmts.length === node.statements.length) {
-                includeNode(node);
-                return;
-            }
-            stmts.forEach(includeNodes);
+    // The algorithm is the following:
+    // Starting from a node that contains the whole input span, we consider its children.
+    // If a child node is completely contained in the input span, then it or its source element ancestor should be included.
+    // If a child node does not overlap the input span, it should not be included.
+    // The interesting case is for nodes that overlap but are not contained by the span, i.e. nodes in the span boundary.
+    // For those boundary nodes, if it is a block-like node (i.e. it contains statements),
+    // we try to filter out the child statements that do not overlap the span.
+    // For boundary nodes that are not block-like or class-like,
+    // we simply include them (or their source element ancestor).
+    /** @returns whether the argument node was included in the result */
+    function chooseOverlappingNodes(span: TextSpan, node: Node, result: Node[]): boolean {
+        if (!nodeOverlapsWithSpan(node, span)) {
+            return false;
         }
+        if (textSpanContainsTextRange(span, node)) {
+            addSourceElement(node, result);
+            return true;
+        }
+        if (isBlockLike(node)) {
+            return chooseOverlappingBlockLike(span, node, result);
+        }
+        if (isClassLike(node)) {
+            return chooseOverlappingClassLike(span, node, result);
+        }
+        addSourceElement(node, result);
+        return true;
+    }
 
-        function includeNode(node: Node): void {
-            while (node.parent && !isSourceElement(node)) {
-                node = node.parent;
-            }
-            nodes.push(node);
+    /** Similar to {@link textRangeIntersectsWithTextSpan}, but treats ends as actually exclusive. */
+    function nodeOverlapsWithSpan(node: Node, span: TextSpan): boolean {
+        const spanEnd = span.start + span.length;
+        return node.pos < spanEnd && node.end > span.start;
+    }
+
+    function addSourceElement(node: Node, result: Node[]): void {
+        while (node.parent && !isSourceElement(node)) {
+            node = node.parent;
         }
+        result.push(node);
+    }
+
+    function chooseOverlappingBlockLike(span: TextSpan, node: BlockLike, result: Node[]): boolean {
+        const childResult: Node[] = [];
+        const stmts = node.statements.filter(stmt => chooseOverlappingNodes(span, stmt, childResult));
+        if (stmts.length === node.statements.length) {
+            addSourceElement(node, result);
+            return true;
+        }
+        result.push(...childResult);
+        return false;
+    }
+
+    function chooseOverlappingClassLike(span: TextSpan, node: ClassLikeDeclaration, result: Node[]): boolean {
+        const overlaps = (n: Node) => textRangeIntersectsWithTextSpan(n, span);
+        if (node.modifiers?.some(overlaps)
+            || node.name && overlaps(node.name)
+            || node.typeParameters?.some(overlaps)
+            || node.heritageClauses?.some(overlaps)) {
+            addSourceElement(node, result);
+            return true;
+        }
+        const childResult: Node[] = [];
+        const members = node.members.filter(member => chooseOverlappingNodes(span, member, childResult));
+        if (members.length === node.members.length) {
+            addSourceElement(node, result);
+            return true;
+        }
+        result.push(...childResult);
+        return false;
+
     }
 
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
