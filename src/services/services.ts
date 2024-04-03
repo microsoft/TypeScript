@@ -464,7 +464,7 @@ class NodeObject implements Node {
 
 function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
     if (!isNodeKind(node.kind)) {
-        return emptyArray;
+        return [];
     }
 
     let children: Node[] | undefined;
@@ -474,7 +474,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
         node.forEachChild(child => {
             children = append(children, child);
         });
-        return children ?? emptyArray;
+        return children ?? [];
     }
 
     scanner.setText((sourceFile || node.getSourceFile()).text);
@@ -498,7 +498,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
     node.forEachChild(processNode, processNodes);
     children = addSyntheticNodes(children, pos, node.end, node);
     scanner.setText(undefined);
-    return children ?? emptyArray;
+    return children ?? [];
 }
 
 function addSyntheticNodes(nodes: Node[] | undefined, pos: number, end: number, parent: Node): Node[] | undefined {
