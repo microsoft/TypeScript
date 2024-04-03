@@ -21,6 +21,11 @@ declare namespace Intl {
     }
 
     interface DateTimeFormat {
+        /**
+         * Formats a date as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param date A `Date` object or timestamp.
+         */
         formatToParts(date?: Date | number): DateTimeFormatPart[];
     }
 }

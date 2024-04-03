@@ -1,8 +1,55 @@
 /// <reference lib="es2018.intl" />
 declare namespace Intl {
-    type LocalesArgument = string | Locale | readonly (string | Locale)[] | undefined;
+    interface LocaleOptions {
+        calendar?: string | undefined;
+        caseFirst?: CollatorOptionsCaseFirst | undefined;
+        collation?: string | undefined;
+        hourCycle?: DateTimeFormatOptionsHourCycle | undefined;
+        language?: string | undefined;
+        numberingSystem?: string | undefined;
+        numeric?: boolean | undefined;
+        region?: string | undefined;
+        script?: string | undefined;
+    }
 
-    function getCanonicalLocales(locales?: LocalesArgument): string[];
+    interface Locale {
+        /** Returns a new `Locale` object, adding any missing language, script, and region tags based on their most likely values. */
+        maximize(): Locale;
+        /** Returns a new `Locale` object, removing any redundant language, script, and region tags. */
+        minimize(): Locale;
+        /** Returns the locale's full identifier string. */
+        toString(): string;
+
+        /** The Unicode Language Identifier associated with the locale. */
+        baseName: string;
+        /** The calendar system associated with the locale. */
+        calendar: string | undefined;
+        /** The case sorting rule associated with the locale. */
+        caseFirst: CollatorOptionsCaseFirst | undefined;
+        /** The character collation associated with the locale. */
+        collation: string | undefined;
+        /** The hour cycle type associated with the locale. */
+        hourCycle: DateTimeFormatOptionsHourCycle | undefined;
+        /** The primary language subtag associated with the locale. */
+        language: string | undefined;
+        /** The number system used by the locale. */
+        numberingSystem: string | undefined;
+        /** The numeric sorting rule associated with the locale. */
+        numeric: boolean | undefined;
+        /** The region code associated with the locale. */
+        region: string | undefined;
+        /** The language script associated with the locale. */
+        script: string | undefined;
+    }
+
+    interface LocaleConstructor {
+        new (tag: string | Locale, options?: LocaleOptions): Locale;
+        readonly prototype: Locale;
+    }
+
+    var Locale: LocaleConstructor;
+
+    type LocalesArgument = string | Locale | readonly (string | Locale)[] | undefined;
 
     type RelativeTimeFormatOptionsStyle = "long" | "short" | "narrow";
 
@@ -42,15 +89,36 @@ declare namespace Intl {
     type RelativeTimeFormatPart = RelativeTimeFormatPartLiteral | RelativeTimeFormatPartUnit;
 
     interface RelativeTimeFormat {
+        /**
+         * Formats a relative time interval as a string, according to the selected locale and formatting options.
+         * @param value The numeric element of the relative time interval.
+         * @param unit The unit element of the relative time interval.
+         */
         format(value: number, unit: RelativeTimeFormatUnit): string;
+
+        /**
+         * Formats a relative time interval as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param value The numeric element of the relative time interval.
+         * @param unit The unit element of the relative time interval.
+         */
         formatToParts(value: number, unit: RelativeTimeFormatUnit): RelativeTimeFormatPart[];
+
+        /** Returns the locale and options computed during initialization of this `RelativeTimeFormat` instance. */
         resolvedOptions(): ResolvedRelativeTimeFormatOptions;
     }
 
     interface RelativeTimeFormatConstructor {
         new (locales?: LocalesArgument, options?: RelativeTimeFormatOptions): RelativeTimeFormat;
-        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
         readonly prototype: RelativeTimeFormat;
+
+        /**
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `RelativeTimeFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
     }
 
     var RelativeTimeFormat: RelativeTimeFormatConstructor;
@@ -118,76 +186,62 @@ declare namespace Intl {
         numberingSystem?: string | undefined;
     }
 
-    interface LocaleOptions {
-        calendar?: string | undefined;
-        caseFirst?: CollatorOptionsCaseFirst | undefined;
-        collation?: string | undefined;
-        hourCycle?: DateTimeFormatOptionsHourCycle | undefined;
-        language?: string | undefined;
-        numberingSystem?: string | undefined;
-        numeric?: boolean | undefined;
-        region?: string | undefined;
-        script?: string | undefined;
-    }
-
-    interface Locale {
-        /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
-        maximize(): Locale;
-        /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
-        minimize(): Locale;
-        /** Returns the locale's full locale identifier string. */
-        toString(): string;
-
-        /** The Unicode Language Identifier associated with the locale. */
-        baseName: string;
-        /** The calendar system associated with the locale. */
-        calendar: string | undefined;
-        /** The case sorting rule associated with the locale. */
-        caseFirst: CollatorOptionsCaseFirst | undefined;
-        /** The character collation associated with the locale. */
-        collation: string | undefined;
-        /** The hour cycle type associated with the locale. */
-        hourCycle: DateTimeFormatOptionsHourCycle | undefined;
-        /** The primary language subtag associated with the locale. */
-        language: string | undefined;
-        /** The number system used by the locale. */
-        numberingSystem: string | undefined;
-        /** The numeric sorting rule associated with the locale. */
-        numeric: boolean | undefined;
-        /** The region code associated with the locale. */
-        region: string | undefined;
-        /** The language script associated with the locale. */
-        script: string | undefined;
-    }
-
-    interface LocaleConstructor {
-        new (tag: string | Locale, options?: LocaleOptions): Locale;
-        readonly prototype: Locale;
-    }
-
-    var Locale: LocaleConstructor;
-
     interface CollatorConstructor {
         new (locales?: LocalesArgument, options?: CollatorOptions): Collator;
         (locales?: LocalesArgument, options?: CollatorOptions): Collator;
+
+        /**
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `Collator`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
+         */
         supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
     }
 
     interface DateTimeFormatConstructor {
         new (locales?: LocalesArgument, options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: LocalesArgument, options?: DateTimeFormatOptions): DateTimeFormat;
+
+        /**
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `DateTimeFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
+         */
         supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
     }
 
     interface NumberFormatConstructor {
         new (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
         (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
+
+        /**
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `NumberFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
+         */
         supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
     }
 
     interface PluralRulesConstructor {
         new (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
         (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
+
+        /**
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `PluralRules`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
+         */
         supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
     }
+
+    /**
+     * Takes a list of locale identifiers, and returns a deduplicated list of their canonical names.
+     * Structurally invalid identifiers will cause an error to be thrown.
+     * @param locales A locale, or list of locales.
+     */
+    function getCanonicalLocales(locales?: LocalesArgument): string[];
 }

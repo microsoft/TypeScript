@@ -4414,15 +4414,30 @@ declare namespace Intl {
     }
 
     interface Collator {
+        /**
+         * Returns the sort order of two strings, according to the selected locale.
+         * This function is bound to its `Collator` instance, so it can be passed directly as an argument to `Array.prototype.sort`.
+         * @param x The first string to compare.
+         * @param y The second string to compare.
+         */
         compare(x: string, y: string): number;
+
+        /** Returns the locale and options computed during initialization of the `Collator`. */
         resolvedOptions(): ResolvedCollatorOptions;
     }
 
     interface CollatorConstructor {
         new (locales?: string | readonly string[], options?: CollatorOptions): Collator;
         (locales?: string | readonly string[], options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: Collator;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `Collator`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A BCP 47 language tag, or list of tags.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var Collator: CollatorConstructor;
@@ -4476,15 +4491,28 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options.
+         * @param number The value to be formatted.
+         */
         format(value: number): string;
+
+        /** Returns the locale and options computed during initialization of this `NumberFormat` instance. */
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
 
     interface NumberFormatConstructor {
         new (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: NumberFormat;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `NumberFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A BCP 47 language tag, or list of tags.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var NumberFormat: NumberFormatConstructor;
@@ -4546,15 +4574,29 @@ declare namespace Intl {
     }
 
     interface DateTimeFormat {
+        /**
+         * Formats a date as a string, according to the selected locale and formatting options.
+         * This function is bound to its `DateTimeFormat` instance, so it can be passed directly as an argument to functions like `Array.prototype.map`.
+         * @param date A `Date` object or timestamp.
+         */
         format(date?: Date | number): string;
+
+        /** Returns the locale and options computed during initialization of this `DateTimeFormat` instance. */
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
 
     interface DateTimeFormatConstructor {
         new (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: DateTimeFormat;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `DateTimeFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A BCP 47 language tag, or list of tags.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var DateTimeFormat: DateTimeFormatConstructor;

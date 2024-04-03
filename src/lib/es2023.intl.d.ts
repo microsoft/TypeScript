@@ -1,6 +1,4 @@
 declare namespace Intl {
-    function supportedValuesOf(key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"): string[];
-
     interface NumberFormatOptionsUseGroupingRegistry {
         min2: never;
         auto: never;
@@ -38,7 +36,19 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
+        /**
+         * Formats a number range as a string, according to the selected locale and formatting options.
+         * @param start The value at the start of the range.
+         * @param end The value at the end of the range.
+         */
         formatRange(start: number | bigint, end: number | bigint): string;
+
+        /**
+         * Formats a number range as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param start The value at the start of the range.
+         * @param end The value at the end of the range.
+         */
         formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
     }
 
@@ -57,6 +67,17 @@ declare namespace Intl {
     }
 
     interface PluralRules {
+        /**
+         * Returns the plural rule identifier for the given number range, according to the selected locale and parsing options.
+         * @param start The number at the start of the range.
+         * @param end The number at the end of the range.
+         */
         selectRange(start: number, end: number): LDMLPluralRule;
     }
+
+    /**
+     * Returns a list of all values of the given type that are supported by the current implementation.
+     * @param key The category to select.
+     */
+    function supportedValuesOf(key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"): string[];
 }

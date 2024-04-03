@@ -1,5 +1,4 @@
 declare namespace Intl {
-    // http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
     type LDMLPluralRule = "zero" | "one" | "two" | "few" | "many" | "other";
     type PluralRuleType = "cardinal" | "ordinal";
 
@@ -25,15 +24,28 @@ declare namespace Intl {
     }
 
     interface PluralRules {
-        resolvedOptions(): ResolvedPluralRulesOptions;
+        /**
+         * Returns the plural rule identifier for the given number, according to the selected locale and parsing options.
+         * @param n The number to parse.
+         */
         select(n: number): LDMLPluralRule;
+
+        /** Returns the locale and options computed during initialization of this `PluralRules` instance. */
+        resolvedOptions(): ResolvedPluralRulesOptions;
     }
 
     interface PluralRulesConstructor {
         new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
         readonly prototype: PluralRules;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `PluralRules`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A BCP 47 language tag, or list of tags.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var PluralRules: PluralRulesConstructor;
@@ -61,6 +73,11 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param number The value to be formatted.
+         */
         formatToParts(number?: number | bigint): NumberFormatPart[];
     }
 
