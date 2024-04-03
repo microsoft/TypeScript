@@ -84,7 +84,7 @@ type JsonArray = ReadonlyArray<Json>;
 type JsonRecord = {
     readonly [key: string]: Json;
 };
-type Json = boolean | number | string | null | JsonRecord | readonly Json[] | readonly [];
+type Json = boolean | number | string | null | JsonRecord | JsonArray | readonly [];
 /**
  * <T>
  */

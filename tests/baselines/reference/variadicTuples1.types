@@ -685,8 +685,8 @@ type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;  // [strin
 // Reverse mapping through mapped type applied to variadic tuple type
 
 declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
->fm1 : <T extends unknown[]>(t: [string[], number[], ...Arrayify<T>]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>fm1 : <T extends unknown[]>(t: Arrayify<[string, number, ...T]>) => T
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^                                ^^^^^ 
 >t : [string[], number[], ...Arrayify<T>]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

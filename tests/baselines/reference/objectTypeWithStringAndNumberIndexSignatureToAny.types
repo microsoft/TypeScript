@@ -272,7 +272,7 @@ interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
 
 function f3(sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) {
 >f3 : (sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) => void
->   : ^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^   ^^^^^^^^^
+>   : ^^^^^^^^^             ^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^   ^^^^^^^^^
 >sToAny : StringTo<any>
 >       : ^^^^^^^^^^^^^
 >nToNumber : NumberToNumber
