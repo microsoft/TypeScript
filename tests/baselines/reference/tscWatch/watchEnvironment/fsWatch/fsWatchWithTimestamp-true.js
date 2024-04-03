@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,10 +13,10 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 9
 {
   "files": [
     "main.ts"
@@ -44,7 +44,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -60,11 +60,11 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 /user/username/projects/myproject/main.ts: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":9}
 
 Program root files: [
   "/user/username/projects/myproject/main.ts"
@@ -103,7 +103,7 @@ exitCode:: ExitStatus.undefined
 Change:: modify file contents
 
 Input::
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;export const y = 10;
 
 
@@ -131,7 +131,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;

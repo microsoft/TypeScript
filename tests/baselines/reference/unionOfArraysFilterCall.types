@@ -99,7 +99,7 @@ interface Buzz {
 
 declare function isFizz(x: unknown): x is Fizz;
 >isFizz : (x: unknown) => x is Fizz
->       : ^^^^       ^^^^^^^^^^^^^^
+>       : ^^^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 
@@ -121,7 +121,7 @@ declare function isFizz(x: unknown): x is Fizz;
 
 declare function isBuzz(x: unknown): x is Buzz;
 >isBuzz : (x: unknown) => x is Buzz
->       : ^^^^       ^^^^^^^^^^^^^^
+>       : ^^^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 

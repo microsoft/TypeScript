@@ -74,8 +74,8 @@ export function appendToOptionalArray<
 
 // e.g.
 const foo: {x?: number[]; y?: string[]; } = {};
->foo : { x?: number[] | undefined; y?: string[] | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { x?: number[]; y?: string[]; }
+>    : ^^^^^^        ^^^^^^        ^^^
 >x : number[] | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^
 >y : string[] | undefined

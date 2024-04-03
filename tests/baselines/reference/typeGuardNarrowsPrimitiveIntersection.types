@@ -7,8 +7,8 @@ type Tag = {__tag: any};
 >__tag : any
 
 declare function isNonBlank(value: string) : value is (string & Tag);
->isNonBlank : (value: string) => value is string & Tag
->           : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isNonBlank : (value: string) => value is (string & Tag)
+>           : ^^^^^^^^      ^^^^^                       
 >value : string
 >      : ^^^^^^
 
@@ -60,8 +60,8 @@ const enum Tag2 {}
 >     : ^^^^
 
 declare function isNonBlank2(value: string) : value is (string & Tag2);
->isNonBlank2 : (value: string) => value is never
->            : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
+>isNonBlank2 : (value: string) => value is (string & Tag2)
+>            : ^^^^^^^^      ^^^^^                        
 >value : string
 >      : ^^^^^^
 

@@ -142,7 +142,7 @@ class Type1 {
 
     predicate(): this is HasAttribute<Type1> {
 >predicate : () => this is HasAttribute<Type1>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^                           
 
         return true;
 >true : true

@@ -304,9 +304,9 @@ function isNonNullGeneric<T>(x: T) {
 // Type guards can flow between functions
 const myGuard = (o: string | undefined): o is string => !!o;
 >myGuard : (o: string | undefined) => o is string
->        : ^^^^                  ^^^^^^^^^^^^^^^^
+>        : ^^^^                  ^^^^^           
 >(o: string | undefined): o is string => !!o : (o: string | undefined) => o is string
->                                            : ^^^^                  ^^^^^^^^^^^^^^^^
+>                                            : ^^^^                  ^^^^^           
 >o : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >!!o : boolean
@@ -738,7 +738,7 @@ a.push(10);
 // Defer to explicit type guards, even when they're incorrect.
 function backwardsGuard(x: number|string): x is number {
 >backwardsGuard : (x: number | string) => x is number
->               : ^^^^               ^^^^^^^^^^^^^^^^
+>               : ^^^^               ^^^^^           
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -1158,7 +1158,7 @@ const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 interface NumberInferrer {
   isNumber(x: number | string): x is number;
 >isNumber : (x: number | string) => x is number
->         : ^^^^               ^^^^^^^^^^^^^^^^
+>         : ^^^^               ^^^^^           
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 }
@@ -1593,5 +1593,59 @@ function inferWithRest(x: string | null, ...f: ["a", "b"]) {
 >  : ^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/57947
+declare const foobar:
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+
+  | { type: "foo"; foo: number }
+>type : "foo"
+>     : ^^^^^
+>foo : number
+>    : ^^^^^^
+
+  | { type: "bar"; bar: string };
+>type : "bar"
+>     : ^^^^^
+>bar : string
+>    : ^^^^^^
+
+const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+>foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>           : ^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(fb: typeof foobar) => fb.type === "foo" : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>                                         : ^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fb.type === "foo" : boolean
+>                  : ^^^^^^^
+>fb.type : "bar" | "foo"
+>        : ^^^^^^^^^^^^^
+>fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "bar" | "foo"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+if (foobarPred(foobar)) {
+>foobarPred(foobar) : boolean
+>                   : ^^^^^^^
+>foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  foobar.foo;
+>foobar.foo : number
+>           : ^^^^^^
+>foobar : { type: "foo"; foo: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
 }
 

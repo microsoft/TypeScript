@@ -7,7 +7,7 @@ export class C {
 
     m(): this is D {
 >m : () => this is D
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^         
 
         return this instanceof D;
 >this instanceof D : boolean

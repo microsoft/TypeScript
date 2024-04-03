@@ -61,14 +61,14 @@ let sn: number = o2.x; // error, x is private
 >  : ^^^
 
 declare let optionalString: { sn?: string };
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
 >sn : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 
 declare let optionalNumber: { sn?: number };
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 >sn : number | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 

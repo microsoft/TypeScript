@@ -4,7 +4,7 @@
 interface PromiseConstructor {
     [Symbol.hasInstance](value: any): value is Promise<any>;
 >[Symbol.hasInstance] : (value: any) => value is Promise<any>
->                     : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^   ^^^^^                     
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -17,7 +17,7 @@ interface PromiseConstructor {
 interface SetConstructor {
     [Symbol.hasInstance](value: any): value is Set<any>;
 >[Symbol.hasInstance] : (value: any) => value is Set<any>
->                     : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^   ^^^^^                 
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

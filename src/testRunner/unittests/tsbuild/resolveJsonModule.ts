@@ -1,12 +1,6 @@
-import {
-    CompilerOptions,
-} from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { CompilerOptions } from "../../_namespaces/ts";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     noChangeOnlyRuns,
     verifyTsc,

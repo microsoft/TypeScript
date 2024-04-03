@@ -1,16 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/a/username/project/src/file1.ts]
+//// [/a/username/project/src/file1.ts] Inode:: 5
 
 
-//// [/a/username/project/tsconfig.json]
+//// [/a/username/project/tsconfig.json] Inode:: 6
 {
   "watchOptions": {
     "synchronousWatchDirectory": true
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 8
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -33,17 +33,17 @@ Output::
 
 
 
-//// [/a/username/project/src/file1.js]
+//// [/a/username/project/src/file1.js] Inode:: 9
 
 
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":8}
 /a/username/project/src/file1.ts: *new*
-  {}
+  {"inode":5}
 /a/username/project/tsconfig.json: *new*
-  {}
+  {"inode":6}
 
 Timeout callback:: count: 1
 1: pollPollingIntervalQueue *new*
@@ -74,10 +74,28 @@ exitCode:: ExitStatus.undefined
 Change:: Rename file1 to file2
 
 Input::
-//// [/a/username/project/src/file2.ts]
+//// [/a/username/project/src/file2.ts] Inode:: 10
 
 
 //// [/a/username/project/src/file1.ts] deleted
+
+Output::
+sysLog:: /a/username/project/src/file1.ts:: Changing watcher to MissingFileSystemEntryWatcher
+
+
+PolledWatches::
+/a/username/project/src/file1.ts: *new*
+  {"pollingInterval":250}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {"inode":8}
+/a/username/project/tsconfig.json:
+  {"inode":6}
+
+FsWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {"inode":5}
 
 Timeout callback:: count: 2
 1: pollPollingIntervalQueue
@@ -109,21 +127,21 @@ Output::
 
 
 
-//// [/a/username/project/src/file2.js]
+//// [/a/username/project/src/file2.js] Inode:: 11
 
 
+
+PolledWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {"pollingInterval":250}
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":8}
 /a/username/project/src/file2.ts: *new*
-  {}
+  {"inode":10}
 /a/username/project/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a/username/project/src/file1.ts:
-  {}
+  {"inode":6}
 
 Timeout callback:: count: 3
 6: timerToUpdateProgram *new*

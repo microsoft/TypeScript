@@ -149,7 +149,7 @@ const a42 = [x41, x42];
 
 declare function isFunction<T>(x: unknown): x is T;
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^^^^       ^^^^^^^^^^^
+>           : ^ ^^^^^       ^^^^^      
 >x : unknown
 >  : ^^^^^^^
 
@@ -410,12 +410,12 @@ function checkD(f: FnTypes) {
 function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 >fx10 : (obj1: { x?: number; }, obj2: { x?: number; y?: number; }) => void
 >     : ^^^^^^^               ^^^^^^^^                           ^^^^^^^^^
->obj1 : { x?: number | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj1 : { x?: number; }
+>     : ^^^^^^      ^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->obj2 : { x?: number | undefined; y?: number | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj2 : { x?: number; y?: number; }
+>     : ^^^^^^      ^^^^^^      ^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : number | undefined
@@ -469,8 +469,8 @@ function fx11(): { x?: number } {
 >  : ^^^^^^^^^^^^^^^^^^
 
     let obj: { x?: number, y?: number };
->obj : { x?: number | undefined; y?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { x?: number; y?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : number | undefined
@@ -497,7 +497,7 @@ function fx11(): { x?: number } {
 
 declare function isArrayLike(value: any): value is { length: number };
 >isArrayLike : (value: any) => value is { length: number; }
->            : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>            : ^^^^^^^^   ^^^^^                            
 >value : any
 >      : ^^^
 >length : number
@@ -634,7 +634,7 @@ type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
 
 declare function doesValueAtDeepPathSatisfy<
 >doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^    ^^^^^^^^^^^^         ^^^^^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^    ^^^^^^^^^^^^         ^^^^^^^^^^^^^                               ^^^^^                                                 
 
     ObjT extends object,
     const DeepPathT extends ReadonlyArray<number | string>,
@@ -650,7 +650,7 @@ declare function doesValueAtDeepPathSatisfy<
 
     predicate: (arg: unknown) => arg is ValueT,
 >predicate : (arg: unknown) => arg is ValueT
->          : ^^^^^^       ^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^       ^^^^^             
 >arg : unknown
 >    : ^^^^^^^
 
@@ -674,20 +674,20 @@ type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare function isA(arg: unknown): arg is 'A';
->isA : (arg: unknown) => arg is "A"
->    : ^^^^^^       ^^^^^^^^^^^^^^^
+>isA : (arg: unknown) => arg is 'A'
+>    : ^^^^^^       ^^^^^          
 >arg : unknown
 >    : ^^^^^^^
 
 declare function isB(arg: unknown): arg is 'B';
->isB : (arg: unknown) => arg is "B"
->    : ^^^^^^       ^^^^^^^^^^^^^^^
+>isB : (arg: unknown) => arg is 'B'
+>    : ^^^^^^       ^^^^^          
 >arg : unknown
 >    : ^^^^^^^
 
 declare function assert(condition: boolean): asserts condition;
 >assert : (condition: boolean) => asserts condition
->       : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^       ^^^^^                 
 >condition : boolean
 >          : ^^^^^^^
 
@@ -798,8 +798,8 @@ type Union = { premium: false } | { premium: true };
 >     : ^^^^
 
 declare const checkIsPremium: (a: Union) => a is Union & Premium;
->checkIsPremium : (a: Union) => a is { premium: true; } & Premium
->               : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkIsPremium : (a: Union) => a is Union & Premium
+>               : ^^^^     ^^^^^                    
 >a : Union
 >  : ^^^^^
 

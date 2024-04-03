@@ -12,7 +12,7 @@ type Foo<T> = {
 };
 function bar() {
 >bar : () => Foo<number>
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^           
 
     return {} as Foo<number>;
 >{} as Foo<number> : Foo<number>

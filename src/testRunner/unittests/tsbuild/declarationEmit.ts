@@ -1,22 +1,12 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    FileSet,
-} from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import { dedent } from "../../_namespaces/Utils";
+import { FileSet } from "../../_namespaces/vfs";
+import { jsonToReadableText } from "../helpers";
+import { libContent } from "../helpers/contents";
 import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): FileSet {

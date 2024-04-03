@@ -85,12 +85,12 @@ function init(properties: IProperties) {
 
 interface DeepOptional {
     a?: {
->a : { b?: { c?: string | undefined; } | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: { c?: string; }; } | undefined
+>  : ^^^^^^               ^^^^^^^^^^^^^^^
 
         b?: {
->b : { c?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { c?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
             c?: string
 >c : string | undefined

@@ -721,7 +721,8 @@ export namespace SmartIndenter {
                 return childKind !== SyntaxKind.JsxClosingFragment;
             case SyntaxKind.IntersectionType:
             case SyntaxKind.UnionType:
-                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
+            case SyntaxKind.SatisfiesExpression:
+                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType || childKind === SyntaxKind.MappedType) {
                     return false;
                 }
                 break;

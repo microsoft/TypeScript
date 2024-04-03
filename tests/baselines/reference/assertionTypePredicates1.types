@@ -3,19 +3,19 @@
 === assertionTypePredicates1.ts ===
 declare function isString(value: unknown): value is string;
 >isString : (value: unknown) => value is string
->         : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^       ^^^^^               
 >value : unknown
 >      : ^^^^^^^
 
 declare function isArrayOfStrings(value: unknown): value is string[];
 >isArrayOfStrings : (value: unknown) => value is string[]
->                 : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^       ^^^^^                 
 >value : unknown
 >      : ^^^^^^^
 
 const assert: (value: unknown) => asserts value = value => {}
 >assert : (value: unknown) => asserts value
->       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^       ^^^^^             
 >value : unknown
 >      : ^^^^^^^
 >value => {} : (value: unknown) => void
@@ -25,19 +25,19 @@ const assert: (value: unknown) => asserts value = value => {}
 
 declare function assertIsString(value: unknown): asserts value is string;
 >assertIsString : (value: unknown) => asserts value is string
->               : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^       ^^^^^                       
 >value : unknown
 >      : ^^^^^^^
 
 declare function assertIsArrayOfStrings(value: unknown): asserts value is string[];
 >assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
->                       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^       ^^^^^                         
 >value : unknown
 >      : ^^^^^^^
 
 declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^ ^^^^^                               
 >value : T
 >      : ^
 
@@ -411,7 +411,7 @@ function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >assert : (value: unknown) => asserts value
->       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^       ^^^^^             
 >value : unknown
 >      : ^^^^^^^
 
@@ -438,7 +438,7 @@ namespace Debug {
 
     export declare function assert(value: unknown, message?: string): asserts value;
 >assert : (value: unknown, message?: string) => asserts value
->       : ^^^^^^^^       ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^       ^^^^^^^^^^^^      ^^^^^             
 >value : unknown
 >      : ^^^^^^^
 >message : string | undefined
@@ -446,7 +446,7 @@ namespace Debug {
 
     export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^ ^^^^^                               
 >value : T
 >      : ^
 }
@@ -577,7 +577,7 @@ class Test {
 
     assert(value: unknown): asserts value {
 >assert : (value: unknown) => asserts value
->       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^       ^^^^^             
 >value : unknown
 >      : ^^^^^^^
 
@@ -593,7 +593,7 @@ class Test {
     }
     isTest2(): this is Test2 {
 >isTest2 : () => this is Test2
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             
 
         return this instanceof Test2;
 >this instanceof Test2 : boolean
@@ -605,7 +605,7 @@ class Test {
     }
     assertIsTest2(): asserts this is Test2 {
 >assertIsTest2 : () => asserts this is Test2
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^                     
 
         if (this instanceof Test2) return;
 >this instanceof Test2 : boolean
@@ -623,7 +623,7 @@ class Test {
     }
     assertThis(): asserts this {
 >assertThis : () => asserts this
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
         if (!this) return;
 >!this : false
@@ -876,19 +876,19 @@ function f11(items: Test[]) {
 
 declare let Q1: new (x: unknown) => x is string;
 >Q1 : new (x: unknown) => x is string
->   : ^^^^^^^^       ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^       ^^^^^           
 >x : unknown
 >  : ^^^^^^^
 
 declare let Q2: new (x: boolean) => asserts x;
 >Q2 : new (x: boolean) => asserts x
->   : ^^^^^^^^       ^^^^^^^^^^^^^^
+>   : ^^^^^^^^       ^^^^^         
 >x : boolean
 >  : ^^^^^^^
 
 declare let Q3: new (x: unknown) => asserts x is string;
 >Q3 : new (x: unknown) => asserts x is string
->   : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^       ^^^^^                   
 >x : unknown
 >  : ^^^^^^^
 
@@ -925,9 +925,9 @@ function f20(x: unknown) {
 
     const assert = (value: unknown): asserts value => {}
 >assert : (value: unknown) => asserts value
->       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^       ^^^^^             
 >(value: unknown): asserts value => {} : (value: unknown) => asserts value
->                                      : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^^^       ^^^^^             
 >value : unknown
 >      : ^^^^^^^
 
@@ -1033,7 +1033,7 @@ interface Thing {
 
     isGood(): asserts this is GoodThing;
 >isGood : () => asserts this is GoodThing
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                         
 }
 
 interface GoodThing {

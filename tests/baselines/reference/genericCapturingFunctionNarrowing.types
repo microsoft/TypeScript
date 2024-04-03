@@ -58,7 +58,7 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 
     function hasAFoo(value: First | Second): value is First {
 >hasAFoo : (value: First | Second) => value is First
->        : ^^^^^^^^              ^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^              ^^^^^              
 >value : First | Second
 >      : ^^^^^^^^^^^^^^
 
