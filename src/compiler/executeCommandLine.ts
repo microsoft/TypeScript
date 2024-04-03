@@ -741,18 +741,9 @@ export function isBuild(commandLineArgs: readonly string[]) {
     return false;
 }
 
+/** @internal */
 export type ExecuteCommandLineCallbacks = (program: Program | BuilderProgram | ParsedCommandLine) => void;
 /** @internal */
-export function executeCommandLine(
-    system: System,
-    cb: ExecuteCommandLineCallbacks,
-    commandLineArgs: readonly string[],
-): void | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram>;
-export function executeCommandLine(
-    system: System,
-    cb: ExecuteCommandLineCallbacks,
-    commandLineArgs: readonly string[],
-): void;
 export function executeCommandLine(
     system: System,
     cb: ExecuteCommandLineCallbacks,
