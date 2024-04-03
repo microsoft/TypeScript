@@ -7767,33 +7767,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     "params",
                     add => {
                         for (const param of expandedParams ?? emptyArray) {
-                            if (!forEach(param.declarations, d => {
-                                if (isParameter(d) && isBindingPattern(d.name)) {
-                                    bindPattern(d.name);
-                                    return true;
-                                }
-                                return undefined;
-                                function bindPattern(p: BindingPattern): void {
-                                    forEach(p.elements, e => {
-                                        switch (e.kind) {
-                                            case SyntaxKind.OmittedExpression: return;
-                                            case SyntaxKind.BindingElement: return bindElement(e);
-                                            default: return Debug.assertNever(e);
-                                        }
-                                    });
-                                }
-                                function bindElement(e: BindingElement): void {
-                                    if (isBindingPattern(e.name)) {
-                                        return bindPattern(e.name);
+                            if (
+                                !forEach(param.declarations, d => {
+                                    if (isParameter(d) && isBindingPattern(d.name)) {
+                                        bindPattern(d.name);
+                                        return true;
                                     }
-                                    const symbol = getSymbolOfDeclaration(e);
-                                    add(symbol.escapedName, symbol);
-                                }
-                            })) {
+                                    return undefined;
+                                    function bindPattern(p: BindingPattern): void {
+                                        forEach(p.elements, e => {
+                                            switch (e.kind) {
+                                                case SyntaxKind.OmittedExpression:
+                                                    return;
+                                                case SyntaxKind.BindingElement:
+                                                    return bindElement(e);
+                                                default:
+                                                    return Debug.assertNever(e);
+                                            }
+                                        });
+                                    }
+                                    function bindElement(e: BindingElement): void {
+                                        if (isBindingPattern(e.name)) {
+                                            return bindPattern(e.name);
+                                        }
+                                        const symbol = getSymbolOfDeclaration(e);
+                                        add(symbol.escapedName, symbol);
+                                    }
+                                })
+                            ) {
                                 add(param.escapedName, param);
                             }
                         }
-                    }
+                    },
                 );
 
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
