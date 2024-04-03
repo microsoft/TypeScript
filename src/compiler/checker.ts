@@ -491,6 +491,7 @@ import {
     isCompoundAssignment,
     isComputedNonLiteralName,
     isComputedPropertyName,
+    isConditionalTypeNode,
     isConstructorDeclaration,
     isConstructorTypeNode,
     isConstructSignatureDeclaration,
@@ -7712,15 +7713,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 || isMappedTypeNode(node);
         }
 
-        function getTypeParametersInScope(node: IntroducesNewScopeNode) {
-            return isFunctionLike(node) || isJSDocSignature(node) ? getSignatureFromDeclaration(node).typeParameters : [getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(node.typeParameter))];
+        function getTypeParametersInScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
+            return isFunctionLike(node) || isJSDocSignature(node) ? getSignatureFromDeclaration(node).typeParameters :
+                isConditionalTypeNode(node) ? getInferTypeParameters(node) :
+                [getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(node.typeParameter))];
         }
 
-        function getParametersInScope(node: IntroducesNewScopeNode) {
+        function getParametersInScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
             return isFunctionLike(node) || isJSDocSignature(node) ? getExpandedParameters(getSignatureFromDeclaration(node), /*skipUnionExpanding*/ true)[0] : undefined;
         }
 
-        function enterNewScope(context: NodeBuilderContext, declaration: IntroducesNewScopeNode | undefined, expandedParams: readonly Symbol[] | undefined, typeParameters: readonly TypeParameter[] | undefined) {
+        function enterNewScope(context: NodeBuilderContext, declaration: IntroducesNewScopeNode | ConditionalTypeNode | undefined, expandedParams: readonly Symbol[] | undefined, typeParameters: readonly TypeParameter[] | undefined) {
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
             // so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
             // the declaration that the arrow function / function expression is assigned to.
@@ -8688,24 +8691,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return transformed === existing ? setTextRange(factory.cloneNode(existing), existing) : transformed;
 
             function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
-                let cleanup: (() => void) | undefined;
-                const oldContex = context;
-                const newScope = isNewScopeNode(node);
-                if (newScope) {
-                    onEnterNewScope(node);
-                }
+                const onExitNewScope = isNewScopeNode(node) ? onEnterNewScope(node) : undefined;
                 const result = visitExistingNodeTreeSymbolsWorker(node);
-                if (newScope) {
-                    onExitNewScope(node);
-                }
+                onExitNewScope?.();
                 return result;
+            }
 
-                function onEnterNewScope(node: IntroducesNewScopeNode) {
-                    context = cloneNodeBuilderContext(context);
-                    cleanup = enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
-                }
+            function onEnterNewScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
+                const oldContex = context;
+                context = cloneNodeBuilderContext(context);
+                const cleanup = enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
 
-                function onExitNewScope(_node: IntroducesNewScopeNode) {
+                return onExitNewScope;
+
+                function onExitNewScope() {
                     cleanup?.();
                     context = oldContex;
                 }
@@ -8855,6 +8854,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const flags = getEmitFlags(clone);
                     setEmitFlags(clone, flags | (context.flags & NodeBuilderFlags.MultilineObjectLiterals && isTypeLiteralNode(node) ? 0 : EmitFlags.SingleLine));
                     return clone;
+                }
+                if (isConditionalTypeNode(node)) {
+                    const checkType = visitNode(node.checkType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+
+                    const disposeScope = onEnterNewScope(node);
+                    const extendType = visitNode(node.extendsType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+                    const trueType = visitNode(node.trueType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+                    disposeScope();
+                    const falseType = visitNode(node.falseType, visitExistingNodeTreeSymbolsWorker, isTypeNode)!;
+                    return factory.updateConditionalTypeNode(
+                        node,
+                        checkType,
+                        extendType,
+                        trueType,
+                        falseType,
+                    );
                 }
 
                 return visitEachChild(node, visitExistingNodeTreeSymbols, /*context*/ undefined);

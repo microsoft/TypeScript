@@ -204,8 +204,8 @@ class A {
 >  : ^^^^^^
 
     static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
->[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is T extends abstract new (...args: any) => infer U ? U : never
->                     : ^ ^^^^^^^^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^
+>[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is (T extends (abstract new (...args: any) => infer U) ? U : never)
+>                     : ^ ^^^^^^^^ ^^^^^^^^^       ^^^^^                                                                         
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
