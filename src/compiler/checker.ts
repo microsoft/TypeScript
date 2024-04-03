@@ -1527,6 +1527,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isArgumentsSymbol: symbol => symbol === argumentsSymbol,
         isUnknownSymbol: symbol => symbol === unknownSymbol,
         getMergedSymbol,
+        symbolIsValue,
         getDiagnostics,
         getGlobalDiagnostics,
         getRecursionIdentity,
