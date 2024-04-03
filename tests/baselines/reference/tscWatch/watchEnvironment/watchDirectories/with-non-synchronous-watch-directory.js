@@ -62,9 +62,6 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {"inode":13}
 
-Timeout callback:: count: 1
-1: timerToUpdateChildWatches *new*
-
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
 ]
@@ -95,8 +92,7 @@ Change:: Directory watch updates because of file1.js creation
 
 Input::
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateChildWatches
+Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
@@ -144,17 +140,15 @@ FsWatches *deleted*::
 /user/username/projects/myproject/node_modules/file2/index.d.ts:
   {"inode":12}
 
-Timeout callback:: count: 3
-7: timerToInvalidateFailedLookupResolutions *new*
-8: timerToUpdateProgram *new*
-9: timerToUpdateChildWatches *new*
+Timeout callback:: count: 2
+5: timerToUpdateProgram *new*
+6: timerToUpdateChildWatches *new*
 
-Before running Timeout callback:: count: 3
-7: timerToInvalidateFailedLookupResolutions
-8: timerToUpdateProgram
-9: timerToUpdateChildWatches
+Before running Timeout callback:: count: 2
+5: timerToUpdateProgram
+6: timerToUpdateChildWatches
 
-Invoking Timeout callback:: timeoutId:: 8:: timerToUpdateProgram
+Invoking Timeout callback:: timeoutId:: 5:: timerToUpdateProgram
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
@@ -197,10 +191,6 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"inode":13}
 
-Timeout callback:: count: 1
-7: timerToInvalidateFailedLookupResolutions *deleted*
-9: timerToUpdateChildWatches
-
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
@@ -228,26 +218,17 @@ Change:: Pending directory watchers and program update
 Input::
 
 Before running Timeout callback:: count: 1
-9: timerToUpdateChildWatches
+6: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-11: timerToInvalidateFailedLookupResolutions *new*
-12: timerToUpdateProgram *new*
+7: timerToUpdateProgram *new*
+9: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-11: timerToInvalidateFailedLookupResolutions
-12: timerToUpdateProgram
-
-After running Timeout callback:: count: 1
-
-Timeout callback:: count: 1
-12: timerToUpdateProgram *deleted*
-13: timerToUpdateProgram *new*
-
-Before running Timeout callback:: count: 1
-13: timerToUpdateProgram
+7: timerToUpdateProgram
+9: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -263,6 +244,13 @@ Output::
 
 
 
+
+Timeout callback:: count: 0
+9: timerToInvalidateFailedLookupResolutions *deleted*
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
 
 
 Program root files: [
@@ -320,7 +308,7 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-16: timerToUpdateChildWatches *new*
+12: timerToUpdateChildWatches *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -330,8 +318,8 @@ Change:: npm install folder creation of file2
 Input::
 
 Timeout callback:: count: 1
-16: timerToUpdateChildWatches *deleted*
-17: timerToUpdateChildWatches *new*
+12: timerToUpdateChildWatches *deleted*
+13: timerToUpdateChildWatches *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -351,7 +339,7 @@ Change:: Updates the program
 Input::
 
 Before running Timeout callback:: count: 1
-17: timerToUpdateChildWatches
+13: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 2
 
@@ -380,8 +368,8 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 2
-18: timerToInvalidateFailedLookupResolutions *new*
-19: timerToUpdateProgram *new*
+14: timerToUpdateProgram *new*
+15: timerToInvalidateFailedLookupResolutions *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -391,24 +379,8 @@ Change:: Invalidates module resolution cache
 Input::
 
 Before running Timeout callback:: count: 2
-18: timerToInvalidateFailedLookupResolutions
-19: timerToUpdateProgram
-
-After running Timeout callback:: count: 1
-
-Timeout callback:: count: 1
-19: timerToUpdateProgram *deleted*
-20: timerToUpdateProgram *new*
-
-
-exitCode:: ExitStatus.undefined
-
-Change:: Pending updates
-
-Input::
-
-Before running Timeout callback:: count: 1
-20: timerToUpdateProgram
+14: timerToUpdateProgram
+15: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -449,6 +421,9 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"inode":13}
 
+Timeout callback:: count: 0
+15: timerToInvalidateFailedLookupResolutions *deleted*
+
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
@@ -471,5 +446,16 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
+Change:: Pending updates
+
+Input::
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
 
 exitCode:: ExitStatus.undefined

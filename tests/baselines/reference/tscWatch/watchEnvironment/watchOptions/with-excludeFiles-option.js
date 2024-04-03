@@ -75,10 +75,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject/node_modules: *new*
-  {}
-/user/username/projects/myproject/src: *new*
-  {}
 
 Program root files: [
   "/user/username/projects/myproject/src/main.ts"

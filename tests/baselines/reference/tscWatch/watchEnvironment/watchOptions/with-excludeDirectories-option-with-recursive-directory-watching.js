@@ -84,9 +84,6 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {"inode":17}
 
-Timeout callback:: count: 1
-1: timerToUpdateChildWatches *new*
-
 Program root files: [
   "/user/username/projects/myproject/src/main.ts"
 ]
@@ -119,8 +116,7 @@ Change:: Directory watch updates because of main.js creation
 
 Input::
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateChildWatches
+Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
