@@ -63,11 +63,7 @@ module11("hello");
 PolledWatches::
 /a/b/projects/myProject/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/myProject/src/node_modules: *new*
-  {"pollingInterval":500}
 /a/b/projects/myProject/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/b/projects/node_modules: *new*
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -85,8 +81,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/a/b/projects/myProject/node_modules: *new*
-  {}
 /a/b/projects/myProject/src: *new*
   {}
 

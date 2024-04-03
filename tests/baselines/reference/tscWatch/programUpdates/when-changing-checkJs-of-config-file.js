@@ -38,17 +38,11 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/b.ts"]
   options: {"checkJs":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -62,8 +56,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/user/username/projects/myproject/a.js: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
@@ -71,8 +63,6 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject: *new*
   {}
 /user/username/projects/myproject/b.ts: *new*
   {}
@@ -153,8 +143,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 //// [/user/username/projects/myproject/b.js] file written with same contents
 
 PolledWatches::
-/user/username/projects/myproject/a.js:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
@@ -162,8 +150,6 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/a.js: *new*
   {}

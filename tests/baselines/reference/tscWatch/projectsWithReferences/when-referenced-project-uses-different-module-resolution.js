@@ -300,10 +300,6 @@ FsWatches::
 /user/username/projects/transitiveReferences/tsconfig.c.json: *new*
   {}
 
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/refs: *new*
-  {}
-
 Program root files: [
   "/user/username/projects/transitiveReferences/c.ts"
 ]

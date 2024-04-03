@@ -85,8 +85,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/mylib/mySubD
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir/myClass2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
@@ -198,8 +196,6 @@ watchedFiles::
 watchedDirectoriesRecursive::
 : *new*
   {}
-/packages/mylib/mySubDir: *new*
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -301,8 +297,6 @@ watchedFiles *deleted*::
 
 watchedDirectoriesRecursive::
 :
-  {}
-/packages/mylib/mySubDir:
   {}
 
 Projects::

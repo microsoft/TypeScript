@@ -158,18 +158,10 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/a/tsconfig.js
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs/a.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
@@ -286,8 +278,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject: *new*
-  {}
 /user/username/projects/myproject/a/index.ts: *new*
   {}
 /user/username/projects/myproject/a/tsconfig.json: *new*
@@ -307,8 +297,6 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b: *new*
   {}
 /user/username/projects/myproject/c: *new*
-  {}
-/user/username/projects/myproject/refs: *new*
   {}
 
 Projects::
@@ -345,19 +333,14 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/a/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 1: /user/username/projects/myproject/c/tsconfig.json
 2: *ensureProjectForOpenFiles*
-3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/a/tsconfig.json] deleted
 
-Timeout callback:: count: 3
+Timeout callback:: count: 2
 1: /user/username/projects/myproject/c/tsconfig.json *new*
 2: *ensureProjectForOpenFiles* *new*
-3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
@@ -418,8 +401,39 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-Timeout callback:: count: 0
-3: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *deleted*
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/c:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/a:
+  {}
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
@@ -431,13 +445,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/my
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/a/tsconfig.json :: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 3
-4: /user/username/projects/myproject/c/tsconfig.json
-5: *ensureProjectForOpenFiles*
-6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 2
+3: /user/username/projects/myproject/c/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
   "compilerOptions": {
@@ -446,10 +456,9 @@ Before running Timeout callback:: count: 3
 }
 
 
-Timeout callback:: count: 3
-4: /user/username/projects/myproject/c/tsconfig.json *new*
-5: *ensureProjectForOpenFiles* *new*
-6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 2
+3: /user/username/projects/myproject/c/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
@@ -511,8 +520,37 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-Timeout callback:: count: 0
-6: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *deleted*
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a: *new*
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/c:
+  {}
 
 Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*

@@ -58,10 +58,6 @@ FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
 
-FsWatchesRecursive::
-/a/b/c: *new*
-  {}
-
 Program root files: [
   "/a/b/c/app.ts"
 ]

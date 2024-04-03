@@ -159,8 +159,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/server/index
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/server/router.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/shared/src/referenced.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/shared/dist 1 undefined Project: /packages/server/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/shared/dist 1 undefined Project: /packages/server/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
@@ -412,8 +410,6 @@ watchedDirectoriesRecursive::
 /packages/server: *new*
   {}
 /packages/shared: *new*
-  {}
-/packages/shared/dist: *new*
   {}
 
 Projects::

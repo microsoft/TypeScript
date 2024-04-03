@@ -394,10 +394,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project2/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/temp/test/project2/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/test/project1/package.json 2000 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
@@ -566,8 +562,6 @@ c:/temp/test/project1/index.d.ts: *new*
   {"pollingInterval":2000}
 c:/temp/test/project1/node_modules/@types:
   {"pollingInterval":500}
-c:/temp/test/project2/node_modules: *new*
-  {"pollingInterval":500}
 c:/temp/test/project2/node_modules/@types: *new*
   {"pollingInterval":500}
 
@@ -586,8 +580,6 @@ c:/temp/test/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-c:/temp/test/node_modules: *new*
-  {}
 c:/temp/test/project1:
   {}
 c:/temp/test/project2: *new*

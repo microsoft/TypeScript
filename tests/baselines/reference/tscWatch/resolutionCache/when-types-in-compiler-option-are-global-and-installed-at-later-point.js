@@ -163,7 +163,7 @@ Output::
 
 //// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
-PolledWatches::
+PolledWatches *deleted*::
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 
@@ -182,6 +182,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/node_modules:
   {}
 

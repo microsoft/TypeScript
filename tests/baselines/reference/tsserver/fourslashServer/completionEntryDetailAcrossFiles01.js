@@ -848,10 +848,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /tests/cases/fourslash/server
 Info seq  [hh:mm:ss:mss] For info: /tests/cases/fourslash/server/b.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/a 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/a 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
@@ -931,17 +927,11 @@ watchedFiles::
 /tests/cases/fourslash/server/tsconfig.json:
   {"pollingInterval":2000}
 
-watchedDirectories::
-/tests/cases/fourslash/server: *new*
-  {}
-
 watchedDirectoriesRecursive::
 /tests/cases/fourslash/node_modules:
   {} *new*
 /tests/cases/fourslash/node_modules/@types:
   {} *new*
-/tests/cases/fourslash/server/a: *new*
-  {}
 /tests/cases/fourslash/server/node_modules:
   {} *new*
 /tests/cases/fourslash/server/node_modules/@types:

@@ -104,10 +104,6 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
 
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
-
 Program root files: [
   "/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts",
   "/user/username/projects/myproject/index.tsx"

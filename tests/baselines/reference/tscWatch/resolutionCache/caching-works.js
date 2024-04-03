@@ -59,10 +59,6 @@ FsWatches::
 /users/username/projects/project/f1.ts: *new*
   {}
 
-FsWatchesRecursive::
-/users/username/projects: *new*
-  {}
-
 Program root files: [
   "/users/username/projects/project/d/f0.ts"
 ]
@@ -201,7 +197,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/users/username/projects:
+/users/username/projects: *new*
   {}
 
 
@@ -267,7 +263,7 @@ FsWatches::
 /users/username/projects/project/f1.ts: *new*
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
 /users/username/projects:
   {}
 

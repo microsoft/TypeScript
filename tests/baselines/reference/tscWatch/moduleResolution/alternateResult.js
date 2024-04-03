@@ -1476,8 +1476,14 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -1596,10 +1602,6 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/home/src/projects:
-  {}
-/home/src/projects/project:
-  {}
 /home/src/projects/project/index.mts:
   {}
 /home/src/projects/project/node_modules/@types/bar/index.d.ts:
@@ -1625,7 +1627,13 @@ FsWatches::
 /home/src/projects/project/tsconfig.json:
   {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/home/src/projects:
+  {}
+/home/src/projects/project:
+  {}
+
+FsWatchesRecursive *deleted*::
 /home/src/projects/project/node_modules:
   {}
 
@@ -1797,8 +1805,14 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/index.d.ts 250 undefined Source file
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -1905,9 +1919,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/home/src/projects:
+/home/src/projects: *new*
   {}
-/home/src/projects/project:
+/home/src/projects/project: *new*
   {}
 /home/src/projects/project/index.mts:
   {}
@@ -1937,7 +1951,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project/node_modules:
+/home/src/projects/project/node_modules: *new*
   {}
 
 

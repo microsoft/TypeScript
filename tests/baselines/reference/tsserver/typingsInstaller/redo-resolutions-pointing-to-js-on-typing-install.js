@@ -27,12 +27,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -60,16 +54,12 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/a/b/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/a/b/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/a/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/a/tsconfig.json: *new*
@@ -220,7 +210,7 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/a/b/node_modules:
+/user/username/projects/a/b/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
   {"pollingInterval":500}
@@ -228,8 +218,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/a/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/a/tsconfig.json:
@@ -362,8 +350,6 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -467,36 +453,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 2
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/a/b/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/a/b/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/b/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/a/b/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/jsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/a/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatchesRecursive::
-/user/username/projects/a/cache/node_modules: *new*
-  {}
-/user/username/projects/node_modules:
-  {}
 
 Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles* *deleted*

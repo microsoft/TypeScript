@@ -140,8 +140,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile: 6: c:/a/lib/lib.d.ts
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -986,19 +984,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with c:/projects/myproject
 Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: c:/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with c:/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
 After request
 
-Timeout callback:: count: 3
+Timeout callback:: count: 2
 7: c:/projects/myproject/tsconfig.json *new*
 8: *ensureProjectForOpenFiles* *new*
-9: c:/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
@@ -1033,15 +1027,13 @@ c:/projects/myproject/node_modules/something/index.d.ts *changed*
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
 
-Before running Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 7: c:/projects/myproject/tsconfig.json
 8: *ensureProjectForOpenFiles*
-9: c:/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: c:/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -1052,17 +1044,40 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	c:/projects/myproject/c.ts Text-2 "export xyx = 10;export const ss = 20;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-After running Timeout callback:: count: 1
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
-Timeout callback:: count: 1
-8: *ensureProjectForOpenFiles* *deleted*
-9: c:/projects/myproject/tsconfig.jsonFailedLookupInvalidation *deleted*
-10: *ensureProjectForOpenFiles* *new*
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "c:/projects/myproject/a.ts"
+        ]
+      }
+    }
+After running Timeout callback:: count: 0
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
-    projectProgramVersion: 3 *changed*
+    projectProgramVersion: 2
     dirty: false *changed*
 
 ScriptInfos::
@@ -1092,37 +1107,8 @@ c:/projects/myproject/node_modules/something/index.d.ts *changed*
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
 
-Before running Timeout callback:: count: 1
-10: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "CustomHandler::projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "c:/projects/myproject/a.ts"
-        ]
-      }
-    }
 After running Timeout callback:: count: 0
 
 Add file: c:/projects/myproject/d.ts
@@ -1195,13 +1181,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 2
-15: c:/projects/myproject/tsconfig.json *new*
-16: *ensureProjectForOpenFiles* *new*
+13: c:/projects/myproject/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 6 *changed*
-    projectProgramVersion: 3
+    projectProgramVersion: 2
     dirty: true *changed*
 
 ScriptInfos::
@@ -1232,8 +1218,8 @@ c:/projects/myproject/node_modules/something/index.d.ts
         c:/projects/myproject/tsconfig.json
 
 Before running Timeout callback:: count: 2
-15: c:/projects/myproject/tsconfig.json
-16: *ensureProjectForOpenFiles*
+13: c:/projects/myproject/tsconfig.json
+14: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/d.ts 500 undefined WatchType: Closed Script info
@@ -1261,7 +1247,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Custom watchFile: 12: c:/projects/myproject/e.ts
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -1351,7 +1337,7 @@ c:/projects/node_modules/@types:
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 6
-    projectProgramVersion: 4 *changed*
+    projectProgramVersion: 3 *changed*
     dirty: false *changed*
 
 ScriptInfos::

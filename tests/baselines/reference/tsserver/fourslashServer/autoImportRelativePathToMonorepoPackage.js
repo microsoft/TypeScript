@@ -78,8 +78,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /script.ts 500 undefin
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/utils/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/app/dist 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/app/dist 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/utils/dist/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/dist/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -189,8 +187,6 @@ watchedFiles::
 watchedDirectoriesRecursive::
 : *new*
   {}
-/packages/app/dist: *new*
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -284,8 +280,6 @@ watchedFiles *deleted*::
 
 watchedDirectoriesRecursive::
 :
-  {}
-/packages/app/dist:
   {}
 
 Projects::
@@ -495,8 +489,6 @@ watchedFiles::
 
 watchedDirectoriesRecursive::
 :
-  {}
-/packages/app/dist:
   {}
 /packages/app/node_modules: *new*
   {}

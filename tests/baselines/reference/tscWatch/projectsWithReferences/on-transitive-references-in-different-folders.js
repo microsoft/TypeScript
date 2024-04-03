@@ -293,8 +293,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/transitiveReferences: *new*
-  {}
 /user/username/projects/transitiveReferences/a/index.d.ts: *new*
   {}
 /user/username/projects/transitiveReferences/a/tsconfig.json: *new*
@@ -308,14 +306,6 @@ FsWatches::
 /user/username/projects/transitiveReferences/c/tsconfig.json: *new*
   {}
 /user/username/projects/transitiveReferences/refs/a.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/a: *new*
-  {}
-/user/username/projects/transitiveReferences/b: *new*
-  {}
-/user/username/projects/transitiveReferences/refs: *new*
   {}
 
 Program root files: [
@@ -582,13 +572,11 @@ export class A {}
 
 
 
-Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions *new*
-3: timerToUpdateProgram *new*
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions
-3: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -648,8 +636,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/index.d.ts:
   {}
 /user/username/projects/transitiveReferences/a/tsconfig.json:
@@ -667,18 +653,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/refs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/a:
-  {}
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/nrefs: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/refs:
   {}
 
 
@@ -762,10 +736,10 @@ Input::
 
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+3: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -825,8 +799,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/index.d.ts:
   {}
 /user/username/projects/transitiveReferences/a/tsconfig.json:
@@ -844,18 +816,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/a:
-  {}
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/refs: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/nrefs:
   {}
 
 
@@ -940,10 +900,10 @@ Input::
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+4: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+4: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -983,8 +943,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/tsconfig.json:
   {}
 /user/username/projects/transitiveReferences/b/index.d.ts:
@@ -1002,18 +960,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/a/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/nrefs: *new*
-  {}
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/a:
   {}
 
 
@@ -1100,10 +1046,10 @@ Input::
 
 
 Timeout callback:: count: 1
-6: timerToUpdateProgram *new*
+5: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-6: timerToUpdateProgram
+5: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1142,8 +1088,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/tsconfig.json:
   {}
 /user/username/projects/transitiveReferences/b/index.d.ts:
@@ -1159,16 +1103,6 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/transitiveReferences/nrefs:
   {}
 
 
@@ -1225,13 +1159,11 @@ Change:: deleting referenced config file
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json] deleted
 
-Timeout callback:: count: 2
-7: timerToUpdateProgram *new*
-8: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-7: timerToUpdateProgram
-8: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1287,8 +1219,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/b/index.ts: *new*
   {}
 /user/username/projects/transitiveReferences/b/tsconfig.json:
@@ -1305,15 +1235,6 @@ FsWatches *deleted*::
   {}
 /user/username/projects/transitiveReferences/b/index.d.ts:
   {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-Timeout callback:: count: 0
-8: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -1391,13 +1312,11 @@ Input::
 }
 
 
-Timeout callback:: count: 2
-9: timerToUpdateProgram *new*
-10: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+7: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-9: timerToUpdateProgram
-10: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+7: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1439,8 +1358,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/index.d.ts: *new*
   {}
 /user/username/projects/transitiveReferences/a/tsconfig.json: *new*
@@ -1459,17 +1376,6 @@ FsWatches::
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/b/index.ts:
   {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/a: *new*
-  {}
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-Timeout callback:: count: 0
-10: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -1534,13 +1440,11 @@ Change:: deleting transitively referenced config file
 Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json] deleted
 
-Timeout callback:: count: 2
-11: timerToUpdateProgram *new*
-12: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+8: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-11: timerToUpdateProgram
-12: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1587,8 +1491,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/index.ts: *new*
   {}
 /user/username/projects/transitiveReferences/a/tsconfig.json:
@@ -1607,17 +1509,6 @@ FsWatches::
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/a/index.d.ts:
   {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/a:
-  {}
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-Timeout callback:: count: 0
-12: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -1691,13 +1582,11 @@ Input::
 }
 
 
-Timeout callback:: count: 2
-13: timerToUpdateProgram *new*
-14: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-13: timerToUpdateProgram
-14: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1735,8 +1624,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitiveReferences:
-  {}
 /user/username/projects/transitiveReferences/a/index.d.ts: *new*
   {}
 /user/username/projects/transitiveReferences/a/tsconfig.json:
@@ -1755,17 +1642,6 @@ FsWatches::
 FsWatches *deleted*::
 /user/username/projects/transitiveReferences/a/index.ts:
   {}
-
-FsWatchesRecursive::
-/user/username/projects/transitiveReferences/a:
-  {}
-/user/username/projects/transitiveReferences/b:
-  {}
-/user/username/projects/transitiveReferences/refs:
-  {}
-
-Timeout callback:: count: 0
-14: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [

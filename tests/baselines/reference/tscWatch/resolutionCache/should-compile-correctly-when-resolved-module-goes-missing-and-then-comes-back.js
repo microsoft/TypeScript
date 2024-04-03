@@ -45,10 +45,6 @@ FsWatches::
 /users/username/projects/project/foo.ts: *new*
   {}
 
-FsWatchesRecursive::
-/users/username/projects: *new*
-  {}
-
 Program root files: [
   "/users/username/projects/project/foo.ts"
 ]
@@ -78,13 +74,11 @@ Change:: Delete imported file
 Input::
 //// [/users/username/projects/project/bar.d.ts] deleted
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
-2: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-2: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -113,11 +107,8 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/users/username/projects:
+/users/username/projects: *new*
   {}
-
-Timeout callback:: count: 0
-2: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -147,18 +138,18 @@ export const y = 1;export const x = 10;
 
 
 Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions *new*
+2: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions
+2: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+3: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -179,7 +170,7 @@ FsWatches::
 /users/username/projects/project/foo.ts:
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
 /users/username/projects:
   {}
 

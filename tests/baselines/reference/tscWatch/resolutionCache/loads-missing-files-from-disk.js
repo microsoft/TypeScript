@@ -107,7 +107,7 @@ FsWatches::
 /users/username/projects/project/foo.ts:
   {}
 
-FsWatchesRecursive::
+FsWatchesRecursive *deleted*::
 /users/username/projects:
   {}
 

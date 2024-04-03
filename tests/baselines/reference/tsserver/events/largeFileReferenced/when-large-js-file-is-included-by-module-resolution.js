@@ -37,10 +37,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/large 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/large 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/large.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /user/username/projects/myproject/src/large.js for info /user/username/projects/myproject/src/large.js: fileSize: 4194305
 Info seq  [hh:mm:ss:mss] event:
@@ -97,8 +93,6 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/large: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/tsconfig.json: *new*
@@ -110,8 +104,6 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/src: *new*
   {}
 /user/username/projects/myproject/src/large.js: *new*
   {}

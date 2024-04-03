@@ -122,23 +122,27 @@ Output::
 //// [/user/username/projects/myproject/a.js] file written with same contents
 
 PolledWatches::
-/user/username/projects/myproject/data.json:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/user/username/projects/myproject/data.json:
+  {"pollingInterval":500}
+
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/a.ts:
   {}
 /user/username/projects/myproject/data.json: *new*
   {}
 /user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::

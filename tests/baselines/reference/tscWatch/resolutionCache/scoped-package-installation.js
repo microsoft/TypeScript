@@ -518,6 +518,10 @@ File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'
 Resolving real path for '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts', result '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'.
 ======== Module name '@myapp/ts-types' was successfully resolved to '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts 250 undefined Source file
+DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -549,6 +553,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/lib:
   {}
 /user/username/projects/myproject/node_modules:

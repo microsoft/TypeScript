@@ -176,8 +176,6 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project: *new*
   {}
-/users/username/projects/project/node_modules: *new*
-  {}
 
 Program root files: [
   "/users/username/projects/project/index.tsx"
@@ -243,8 +241,6 @@ FsWatches *deleted*::
 
 FsWatchesRecursive *deleted*::
 /users/username/projects/project:
-  {}
-/users/username/projects/project/node_modules:
   {}
 
 Output::
@@ -385,8 +381,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules: *new*
   {}
 
 Program root files: [

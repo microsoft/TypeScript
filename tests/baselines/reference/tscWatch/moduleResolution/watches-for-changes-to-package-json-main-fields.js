@@ -98,11 +98,7 @@ exports.theNum = 42;
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -124,11 +120,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
 /user/username/projects/myproject/packages/pkg1: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 Program root files: [
@@ -227,11 +219,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
@@ -257,13 +245,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
 /user/username/projects/myproject/packages/pkg1:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/myproject/packages/pkg2:
   {}
 
 
@@ -361,11 +343,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
@@ -391,11 +369,7 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {}
 /user/username/projects/myproject/packages/pkg1:
-  {}
-/user/username/projects/myproject/packages/pkg2: *new*
   {}
 
 

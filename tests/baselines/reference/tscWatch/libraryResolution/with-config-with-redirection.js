@@ -201,10 +201,6 @@ File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does 
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -248,8 +244,6 @@ File '/home/src/projects/project1/typeroot1/sometype/package.json' does not exis
 File '/home/src/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Failed Lookup Locations
 ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -458,10 +452,6 @@ export declare const x = "type1";
 }
 
 
-PolledWatches::
-/home/src/projects/project1/node_modules: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts: *new*
   {}
@@ -487,8 +477,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/node_modules: *new*
-  {}
 /home/src/projects/project1: *new*
   {}
 /home/src/projects/project1/typeroot1: *new*
@@ -566,18 +554,13 @@ Output::
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
-2: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-2: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -598,7 +581,7 @@ Loading module '@typescript/lib-dom' from 'node_modules' folder, target file typ
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
-File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
@@ -625,6 +608,10 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
 ../lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
@@ -787,7 +774,7 @@ project1/typeroot1/sometype/index.d.ts
 
 
 PolledWatches::
-/home/src/projects/project1/node_modules:
+/home/src/projects/project1/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -819,15 +806,12 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/node_modules:
+/home/src/projects/node_modules: *new*
   {}
 /home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
-
-Timeout callback:: count: 0
-2: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -906,10 +890,10 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/index.ts 
 
 
 Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+2: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1154,10 +1138,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project1/core
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+4: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+4: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1416,10 +1400,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 
 
 Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions *new*
+5: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions
+5: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 1
 Output::
@@ -1428,10 +1412,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-7: timerToUpdateProgram *new*
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-7: timerToUpdateProgram
+6: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1462,6 +1446,10 @@ Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/ind
 Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 node_modules/@typescript/lib-webworker/index.d.ts
   Library referenced via 'webworker' from file 'project1/file2.ts'
 node_modules/@typescript/lib-scripthost/index.d.ts
@@ -1613,7 +1601,7 @@ project1/typeroot1/sometype/index.d.ts
 }
 
 
-PolledWatches::
+PolledWatches *deleted*::
 /home/src/projects/project1/node_modules:
   {"pollingInterval":500}
 
@@ -1644,11 +1632,13 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
 /home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
+  {}
+
+FsWatchesRecursive *deleted*::
+/home/src/projects/node_modules:
   {}
 
 
@@ -1737,10 +1727,10 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.
 
 
 Timeout callback:: count: 1
-8: timerToUpdateProgram *new*
+7: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-8: timerToUpdateProgram
+7: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1790,8 +1780,6 @@ project1/typeroot1/sometype/index.d.ts
 
 
 PolledWatches::
-/home/src/projects/project1/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/project1/typeroot2: *new*
   {"pollingInterval":500}
 
@@ -1818,8 +1806,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
 /home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
@@ -1895,18 +1881,13 @@ Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.
 FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 2:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
-10: timerToUpdateProgram *new*
-11: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-10: timerToUpdateProgram
-11: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -1933,7 +1914,7 @@ Loading module '@typescript/lib-dom' from 'node_modules' folder, target file typ
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
-File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
@@ -1960,6 +1941,10 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-dom' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.dom.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Type roots
@@ -2116,7 +2101,7 @@ project1/typeroot1/sometype/index.d.ts
 
 
 PolledWatches::
-/home/src/projects/project1/node_modules:
+/home/src/projects/project1/node_modules: *new*
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -2150,15 +2135,12 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/node_modules:
+/home/src/projects/node_modules: *new*
   {}
 /home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
-
-Timeout callback:: count: 0
-11: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -2234,12 +2216,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 
 
 Timeout callback:: count: 2
-12: timerToUpdateProgram *new*
-13: timerToInvalidateFailedLookupResolutions *new*
+10: timerToUpdateProgram *new*
+11: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-12: timerToUpdateProgram
-13: timerToInvalidateFailedLookupResolutions
+10: timerToUpdateProgram
+11: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -2478,7 +2460,7 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-13: timerToInvalidateFailedLookupResolutions *deleted*
+11: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -2553,10 +2535,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/
 
 
 Timeout callback:: count: 1
-14: timerToInvalidateFailedLookupResolutions *new*
+12: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-14: timerToInvalidateFailedLookupResolutions
+12: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 1
 Output::
@@ -2565,10 +2547,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-15: timerToUpdateProgram *new*
+13: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-15: timerToUpdateProgram
+13: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::

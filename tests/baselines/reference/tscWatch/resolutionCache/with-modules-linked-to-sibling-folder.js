@@ -61,8 +61,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
-/user/username/projects/myproject/main/@scoped: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -82,12 +80,6 @@ FsWatches::
 /user/username/projects/myproject/main/index.ts: *new*
   {}
 /user/username/projects/myproject/main/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/linked-package: *new*
-  {}
-/user/username/projects/myproject/main/node_modules: *new*
   {}
 
 Program root files: [

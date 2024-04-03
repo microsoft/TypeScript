@@ -322,11 +322,7 @@ Output::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/A/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/A/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -350,8 +346,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
 /user/username/projects/myproject/packages/A/src: *new*
   {}
 /user/username/projects/myproject/packages/B/src: *new*
