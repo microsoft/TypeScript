@@ -6329,7 +6329,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (
             entityName.parent.kind === SyntaxKind.TypeQuery ||
             entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
-            entityName.parent.kind === SyntaxKind.ComputedPropertyName
+            entityName.parent.kind === SyntaxKind.ComputedPropertyName ||
+            entityName.parent.kind === SyntaxKind.TypePredicate && (entityName.parent as TypePredicateNode).parameterName === entityName
         ) {
             // Typeof value
             meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
@@ -8672,6 +8673,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const meaning = getMeaningOfEntityNameReference(node);
             const sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
             if (sym) {
+                // If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accesibility
+                if (
+                    sym.flags & SymbolFlags.FunctionScopedVariable
+                    && sym.valueDeclaration
+                ) {
+                    if (isParameterDeclaration(sym.valueDeclaration)) {
+                        return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
+                    }
+                }
                 if (
                     !(sym.flags & SymbolFlags.TypeParameter) && // Type parameters are visible in the curent context if they are are resolvable
                     !isDeclarationName(node) &&
