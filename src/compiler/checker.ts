@@ -8672,10 +8672,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const meaning = getMeaningOfEntityNameReference(node);
             const sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
             if (sym) {
-                if (isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
-                    if (!isDeclarationName(node)) {
-                        introducesError = true;
-                    }
+                if (
+                    !(sym.flags & SymbolFlags.TypeParameter) && // Type parameters are visible in the curent context if they are are resolvable
+                    !isDeclarationName(node) &&
+                    isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible
+                ) {
+                    introducesError = true;
                 }
                 else {
                     context.tracker.trackSymbol(sym, context.enclosingDeclaration, meaning);

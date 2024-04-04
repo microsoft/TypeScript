@@ -20,7 +20,7 @@ declare function func1<
     T extends Record<PropertyKey, readonly any[]>,
 >(fields: {
 >fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^                        ^^^^^^
 
     [K in keyof T]: {
         label: string;
