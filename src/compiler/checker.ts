@@ -8678,8 +8678,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     sym.flags & SymbolFlags.FunctionScopedVariable
                     && sym.valueDeclaration
                 ) {
-                    const parameter = sym.valueDeclaration && isParameterDeclaration(sym.valueDeclaration);
-                    if (parameter) {
+                    if (isParameterDeclaration(sym.valueDeclaration)) {
                         return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
                     }
                 }
