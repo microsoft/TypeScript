@@ -6329,7 +6329,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (
             entityName.parent.kind === SyntaxKind.TypeQuery ||
             entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
-            entityName.parent.kind === SyntaxKind.ComputedPropertyName
+            entityName.parent.kind === SyntaxKind.ComputedPropertyName ||
+            entityName.parent.kind === SyntaxKind.TypePredicate && (entityName.parent as TypePredicateNode).parameterName === entityName
         ) {
             // Typeof value
             meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
