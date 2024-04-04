@@ -2483,6 +2483,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
         getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
+        getModeForResolutionAtIndex: (file, index) => program.getModeForResolutionAtIndex(file, index),
     };
 }
 

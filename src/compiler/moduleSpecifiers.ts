@@ -37,7 +37,6 @@ import {
     getConditions,
     getDirectoryPath,
     getEmitModuleResolutionKind,
-    getModeForResolutionAtIndex,
     getModuleNameStringLiteralAt,
     getModuleSpecifierEndingPreference,
     getNodeModulePathParts,
@@ -391,7 +390,7 @@ function computeModuleSpecifiers(
                 if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
-                const existingMode = getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions);
+                const existingMode = host.getModeForResolutionAtIndex(importingSourceFile, reason.index);
                 const targetMode = options.overrideImportMode ?? host.getDefaultResolutionModeForFile(importingSourceFile);
                 if (existingMode !== targetMode && existingMode !== undefined && targetMode !== undefined) {
                     return undefined;

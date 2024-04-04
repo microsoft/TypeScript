@@ -9645,6 +9645,7 @@ export interface ModuleSpecifierResolutionHost {
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     getCommonSourceDirectory(): string;
     getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
 }
 
 /** @internal */
