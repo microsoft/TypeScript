@@ -70,6 +70,7 @@ export * from "../watch";
 export * from "../watchPublic";
 export * from "../tsbuild";
 export * from "../tsbuildPublic";
+export * from "../executeCommandLine";
 import * as moduleSpecifiers from "./ts.moduleSpecifiers";
 export { moduleSpecifiers };
 import * as performance from "./ts.performance";
