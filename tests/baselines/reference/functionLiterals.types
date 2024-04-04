@@ -189,8 +189,8 @@ c.func5 = c.func4;
 
 // generic versions
 var b2: {
->b2 : { func1<T>(x: T): number; func2: <T_1>(x: T_1) => number; func3: <T_2>(x: T_2) => number; }
->   : ^^^^^^^^ ^^^^^ ^^^      ^^^^^^^^^^   ^^^^^^^^^^^^^      ^^^^^^^^^^   ^^^^^^^^^^^^^      ^^^
+>b2 : { func1<T>(x: T): number; func2: <T>(x: T_1) => number; func3: { <T>(x: T_1): number; }; }
+>   : ^^^^^^^^ ^^^^^ ^^^      ^^^^^^^^^                     ^^^^^^^^^                        ^^^
 
     func1<T>(x: T): number;         // Method signature
 >func1 : <T>(x: T) => number
@@ -309,8 +309,8 @@ b2.func3 = b2.func2;
 >      : ^^^^^^^^^^^^^^^^^^^
 
 var c2: {
->c2 : { func4<T>(x: T): number; func4<T_1>(s: T_1): string; func5: { <T_2>(x: T_2): number; <T_3>(s: T_3): string; }; }
->   : ^^^^^^^^ ^^^^^ ^^^      ^^^^^^^^   ^^^^^^^^^^^      ^^^^^^^^^^^^   ^^^^^^^^^^^      ^^^   ^^^^^^^^^^^      ^^^^^^
+>c2 : { func4<T>(x: T): number; func4<T_1>(s: T_1): string; func5: { <T>(x: T_2): number; <T>(s: T_2): string; }; }
+>   : ^^^^^^^^ ^^^^^ ^^^      ^^^^^^^^   ^^^^^   ^^^      ^^^^^^^^^                                             ^^^
 
     func4<T>(x: T): number;
 >func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
@@ -326,7 +326,7 @@ var c2: {
 
     func5: {
 >func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
->      : ^^^ ^^^^^ ^^^      ^^^   ^^^^^^^^^^^      ^^^
+>      : ^^^ ^^^^^ ^^^      ^^^   ^^^^^   ^^^      ^^^
 
         <T>(x: T): number;
 >x : T

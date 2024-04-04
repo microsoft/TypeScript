@@ -57,7 +57,7 @@ var r = foo4(a); // T is {} (candidates boolean and string), U is {} (candidates
 
 var b: {
 >b : { new <T>(x: boolean): T; new <T_1>(x: T_1): any; }
->  : ^^^^^^^ ^^^^^       ^^^ ^^^^^^^   ^^^^^^^^^^^   ^^^
+>  : ^^^^^^^ ^^^^^       ^^^ ^^^^^^^   ^^^^^   ^^^   ^^^
 
     new<T>(x: boolean): T;
 >x : boolean

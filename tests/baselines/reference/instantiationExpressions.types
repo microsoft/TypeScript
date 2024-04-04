@@ -754,7 +754,7 @@ type T32<B> = InstanceType<T30<B>>;  // { b: B }
 
 declare const g2: {
 >g2 : { <T extends string>(a: T): T; new <T_1 extends number>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^
 
     <T extends string>(a: T): T;
 >a : T
@@ -779,7 +779,7 @@ type T41<U extends number> = typeof g2<U>;  // Error
 
 declare const g3: {
 >g3 : { <T extends string>(a: T): T; new <T_1 extends number, Q>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^
 
     <T extends string>(a: T): T;
 >a : T
