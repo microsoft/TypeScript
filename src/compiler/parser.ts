@@ -10022,7 +10022,6 @@ namespace IncrementalParser {
         }
 
         function visitArray(array: IncrementalNodeArray) {
-            array._children = undefined;
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
             for (const node of array) {
@@ -10194,7 +10193,6 @@ namespace IncrementalParser {
             const fullEnd = array.end;
             if (fullEnd >= changeStart) {
                 array.intersectsChange = true;
-                array._children = undefined;
 
                 // Adjust the pos or end (or both) of the intersecting array accordingly.
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10347,11 +10345,11 @@ namespace IncrementalParser {
         readonly parent: Node;
         intersectsChange: boolean;
         length?: number;
-        _children: Node[] | undefined;
     }
 
     export interface IncrementalNode extends Node, IncrementalElement {
         hasBeenIncrementallyParsed: boolean;
+        _children: Node[] | undefined;
     }
 
     interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
