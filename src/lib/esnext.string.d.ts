@@ -1,6 +1,6 @@
 interface String {
     /**
-     * Returns true if the string does not contain any lone UTF-16 surrogates.
+     * Returns true if all leading surrogates and trailing surrogates appear paired and in order.
      */
     isWellFormed(): boolean;
 
