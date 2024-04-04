@@ -23,7 +23,7 @@ declare namespace Intl {
         /**
          * Formats a date as a string, according to the selected locale and formatting options,
          * and returns the result as a list of locale-specific string tokens.
-         * @param date A `Date` object or timestamp.
+         * @param date A `Date` object or timestamp. If undefined, defaults to the value of `Date.now()`.
          */
         formatToParts(date?: Date | number): DateTimeFormatPart[];
     }

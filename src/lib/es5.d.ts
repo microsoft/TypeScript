@@ -4564,7 +4564,7 @@ declare namespace Intl {
         /**
          * Formats a date as a string, according to the selected locale and formatting options.
          * This function is bound to its `DateTimeFormat` instance, so it can be passed directly as an argument to functions like `Array.prototype.map`.
-         * @param date A `Date` object or timestamp.
+         * @param date A `Date` object or timestamp. If undefined, defaults to the value of `Date.now()`.
          */
         format(date?: Date | number): string;
 
