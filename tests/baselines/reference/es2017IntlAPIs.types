@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/es2017/es2017IntlAPIs.ts] ////
+
+=== es2017IntlAPIs.ts ===
+Intl.DateTimeFormat('en').formatToParts()[0];
+>Intl.DateTimeFormat('en').formatToParts()[0] : Intl.DateTimeFormatPart
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts() : Intl.DateTimeFormatPart[]
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en') : Intl.DateTimeFormat
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+Intl.DateTimeFormat('en').formatToParts(new Date())[0];
+>Intl.DateTimeFormat('en').formatToParts(new Date())[0] : Intl.DateTimeFormatPart
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts(new Date()) : Intl.DateTimeFormatPart[]
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en') : Intl.DateTimeFormat
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+Intl.DateTimeFormat('en').formatToParts(Date.now())[0];
+>Intl.DateTimeFormat('en').formatToParts(Date.now())[0] : Intl.DateTimeFormatPart
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts(Date.now()) : Intl.DateTimeFormatPart[]
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en') : Intl.DateTimeFormat
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.now() : number
+>           : ^^^^^^
+>Date.now : () => number
+>         : ^^^^^^^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>now : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+

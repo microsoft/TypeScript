@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/es2023/es2023IntlAPIs.ts] ////
+
+=== es2023IntlAPIs.ts ===
+const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, useGrouping } = new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions();
+>roundingPriority : Symbol(roundingPriority, Decl(es2023IntlAPIs.ts, 0, 7))
+>roundingMode : Symbol(roundingMode, Decl(es2023IntlAPIs.ts, 0, 25))
+>roundingIncrement : Symbol(roundingIncrement, Decl(es2023IntlAPIs.ts, 0, 39))
+>trailingZeroDisplay : Symbol(trailingZeroDisplay, Decl(es2023IntlAPIs.ts, 0, 58))
+>useGrouping : Symbol(useGrouping, Decl(es2023IntlAPIs.ts, 0, 79))
+>new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>roundingPriority : Symbol(roundingPriority, Decl(es2023IntlAPIs.ts, 0, 125))
+>roundingIncrement : Symbol(roundingIncrement, Decl(es2023IntlAPIs.ts, 0, 160))
+>roundingMode : Symbol(roundingMode, Decl(es2023IntlAPIs.ts, 0, 184))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+
+new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay = 'negative';
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay : Symbol(Intl.ResolvedNumberFormatOptions.signDisplay, Decl(lib.es2020.intl.d.ts, --, --))
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>signDisplay : Symbol(signDisplay, Decl(es2023IntlAPIs.ts, 1, 29))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>signDisplay : Symbol(Intl.ResolvedNumberFormatOptions.signDisplay, Decl(lib.es2020.intl.d.ts, --, --))
+
+for (const useGrouping of [ 'min2', 'auto', 'always' ] as const) {
+>useGrouping : Symbol(useGrouping, Decl(es2023IntlAPIs.ts, 2, 10))
+>const : Symbol(const)
+
+	new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping = useGrouping;
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping : Symbol(Intl.ResolvedNumberFormatOptions.useGrouping, Decl(lib.es5.d.ts, --, --))
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>useGrouping : Symbol(useGrouping, Decl(es2023IntlAPIs.ts, 3, 30))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>useGrouping : Symbol(Intl.ResolvedNumberFormatOptions.useGrouping, Decl(lib.es5.d.ts, --, --))
+>useGrouping : Symbol(useGrouping, Decl(es2023IntlAPIs.ts, 2, 10))
+}
+new Intl.NumberFormat().formatRange(10, 1000);
+>new Intl.NumberFormat().formatRange : Symbol(Intl.NumberFormat.formatRange, Decl(lib.es2023.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>formatRange : Symbol(Intl.NumberFormat.formatRange, Decl(lib.es2023.intl.d.ts, --, --))
+
+new Intl.NumberFormat().formatRange(10n, 1000n);
+>new Intl.NumberFormat().formatRange : Symbol(Intl.NumberFormat.formatRange, Decl(lib.es2023.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>formatRange : Symbol(Intl.NumberFormat.formatRange, Decl(lib.es2023.intl.d.ts, --, --))
+
+new Intl.NumberFormat().formatRangeToParts(10, 1000)[0];
+>new Intl.NumberFormat().formatRangeToParts : Symbol(Intl.NumberFormat.formatRangeToParts, Decl(lib.es2023.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>formatRangeToParts : Symbol(Intl.NumberFormat.formatRangeToParts, Decl(lib.es2023.intl.d.ts, --, --))
+
+new Intl.NumberFormat().formatRangeToParts(10n, 1000n)[0];
+>new Intl.NumberFormat().formatRangeToParts : Symbol(Intl.NumberFormat.formatRangeToParts, Decl(lib.es2023.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>formatRangeToParts : Symbol(Intl.NumberFormat.formatRangeToParts, Decl(lib.es2023.intl.d.ts, --, --))
+
+for (const key of [ 'calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit' ] as const) {
+>key : Symbol(key, Decl(es2023IntlAPIs.ts, 10, 10))
+>const : Symbol(const)
+
+  Intl.supportedValuesOf(key);
+>Intl.supportedValuesOf : Symbol(Intl.supportedValuesOf, Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>supportedValuesOf : Symbol(Intl.supportedValuesOf, Decl(lib.es2023.intl.d.ts, --, --))
+>key : Symbol(key, Decl(es2023IntlAPIs.ts, 10, 10))
+}
+

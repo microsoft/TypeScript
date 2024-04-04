@@ -1,0 +1,197 @@
+//// [tests/cases/conformance/es2021/es2021IntlAPIs.ts] ////
+
+=== es2021IntlAPIs.ts ===
+const locale = new Intl.Locale('en');
+>locale : Symbol(locale, Decl(es2021IntlAPIs.ts, 0, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const mixed = [ 'en', locale ] as const;
+>mixed : Symbol(mixed, Decl(es2021IntlAPIs.ts, 1, 5))
+>locale : Symbol(locale, Decl(es2021IntlAPIs.ts, 0, 5))
+>const : Symbol(const)
+
+Intl.DisplayNames(); // expect error
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.DisplayNames(); // expect error
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.DisplayNames('en'); // expect error
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.DisplayNames('en', {}); // expect error
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.DisplayNames('en', { type: 'region' });
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 7, 29))
+
+new Intl.DisplayNames(locale, { type: 'region' });
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2021IntlAPIs.ts, 0, 5))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 8, 31))
+
+new Intl.DisplayNames(mixed, { type: 'region' });
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(es2021IntlAPIs.ts, 1, 5))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 9, 30))
+
+const { style, type } = new Intl.DisplayNames('en', { style: 'long', type: 'language' }).resolvedOptions();
+>style : Symbol(style, Decl(es2021IntlAPIs.ts, 10, 7))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 10, 14))
+>new Intl.DisplayNames('en', { style: 'long', type: 'language' }).resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>style : Symbol(style, Decl(es2021IntlAPIs.ts, 10, 53))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 10, 68))
+>resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of('EUR');
+>new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of : Symbol(Intl.DisplayNames.of, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 11, 29))
+>fallback : Symbol(fallback, Decl(es2021IntlAPIs.ts, 11, 47))
+>of : Symbol(Intl.DisplayNames.of, Decl(lib.es2021.intl.d.ts, --, --))
+
+Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
+>Intl.DisplayNames.supportedLocalesOf : Symbol(Intl.DisplayNamesConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.DisplayNamesConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2021IntlAPIs.ts, 0, 5))
+>localeMatcher : Symbol(localeMatcher, Decl(es2021IntlAPIs.ts, 12, 46))
+
+Intl.ListFormat(); // expect error
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.ListFormat();
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.ListFormat('en');
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.ListFormat(locale);
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2021IntlAPIs.ts, 0, 5))
+
+new Intl.ListFormat(mixed);
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(es2021IntlAPIs.ts, 1, 5))
+
+const { style: style2, type: type2 } = new Intl.ListFormat('en', { style: 'short', type: 'disjunction' }).resolvedOptions();
+>style : Symbol(Intl.ResolvedListFormatOptions.style, Decl(lib.es2021.intl.d.ts, --, --))
+>style2 : Symbol(style2, Decl(es2021IntlAPIs.ts, 19, 7))
+>type : Symbol(Intl.ResolvedListFormatOptions.type, Decl(lib.es2021.intl.d.ts, --, --))
+>type2 : Symbol(type2, Decl(es2021IntlAPIs.ts, 19, 22))
+>new Intl.ListFormat('en', { style: 'short', type: 'disjunction' }).resolvedOptions : Symbol(Intl.ListFormat.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>style : Symbol(style, Decl(es2021IntlAPIs.ts, 19, 66))
+>type : Symbol(type, Decl(es2021IntlAPIs.ts, 19, 82))
+>resolvedOptions : Symbol(Intl.ListFormat.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.ListFormat('en').format([ 'foo', 'bar' ]);
+>new Intl.ListFormat('en').format : Symbol(Intl.ListFormat.format, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>format : Symbol(Intl.ListFormat.format, Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.ListFormat('en').formatToParts(new Set<string>().values())[0];
+>new Intl.ListFormat('en').formatToParts : Symbol(Intl.ListFormat.formatToParts, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.ListFormat.formatToParts, Decl(lib.es2021.intl.d.ts, --, --))
+>new Set<string>().values : Symbol(Set.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>values : Symbol(Set.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'lookup' });
+>Intl.DisplayNames.supportedLocalesOf : Symbol(Intl.DisplayNamesConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.DisplayNamesConstructor.supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2021IntlAPIs.ts, 0, 5))
+>localeMatcher : Symbol(localeMatcher, Decl(es2021IntlAPIs.ts, 22, 46))
+
+const { dateStyle, timeStyle, dayPeriod, fractionalSecondDigits } = new Intl.DateTimeFormat('en', { dateStyle: 'full', timeStyle: 'long', dayPeriod: 'narrow', fractionalSecondDigits: 3 }).resolvedOptions();
+>dateStyle : Symbol(dateStyle, Decl(es2021IntlAPIs.ts, 24, 7))
+>timeStyle : Symbol(timeStyle, Decl(es2021IntlAPIs.ts, 24, 18))
+>dayPeriod : Symbol(dayPeriod, Decl(es2021IntlAPIs.ts, 24, 29))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(es2021IntlAPIs.ts, 24, 40))
+>new Intl.DateTimeFormat('en', { dateStyle: 'full', timeStyle: 'long', dayPeriod: 'narrow', fractionalSecondDigits: 3 }).resolvedOptions : Symbol(Intl.DateTimeFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>dateStyle : Symbol(dateStyle, Decl(es2021IntlAPIs.ts, 24, 99))
+>timeStyle : Symbol(timeStyle, Decl(es2021IntlAPIs.ts, 24, 118))
+>dayPeriod : Symbol(dayPeriod, Decl(es2021IntlAPIs.ts, 24, 137))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(es2021IntlAPIs.ts, 24, 158))
+>resolvedOptions : Symbol(Intl.DateTimeFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+
+new Intl.DateTimeFormat().formatToParts(10)[0].type = 'fractionalSecond';
+>new Intl.DateTimeFormat().formatToParts(10)[0].type : Symbol(Intl.DateTimeFormatPart.type, Decl(lib.es2017.intl.d.ts, --, --))
+>new Intl.DateTimeFormat().formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>type : Symbol(Intl.DateTimeFormatPart.type, Decl(lib.es2017.intl.d.ts, --, --))
+
+new Intl.DateTimeFormat().formatRange(new Date(0), new Date());
+>new Intl.DateTimeFormat().formatRange : Symbol(Intl.DateTimeFormat.formatRange, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>formatRange : Symbol(Intl.DateTimeFormat.formatRange, Decl(lib.es2021.intl.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+
+new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000)[0].source;
+>new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000)[0].source : Symbol(Intl.DateTimeRangeFormatPart.source, Decl(lib.es2021.intl.d.ts, --, --))
+>new Intl.DateTimeFormat().formatRangeToParts : Symbol(Intl.DateTimeFormat.formatRangeToParts, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>formatRangeToParts : Symbol(Intl.DateTimeFormat.formatRangeToParts, Decl(lib.es2021.intl.d.ts, --, --))
+>source : Symbol(Intl.DateTimeRangeFormatPart.source, Decl(lib.es2021.intl.d.ts, --, --))
+
+new Intl.Collator('en', { collation: 'emoji' });
+>Intl.Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>Collator : Symbol(Intl.Collator, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>collation : Symbol(collation, Decl(es2021IntlAPIs.ts, 29, 25))
+

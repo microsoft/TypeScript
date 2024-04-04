@@ -1,59 +1,150 @@
 //// [tests/cases/conformance/es2020/es2020IntlAPIs.ts] ////
 
 //// [es2020IntlAPIs.ts]
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
-const count = 26254.39;
-const date = new Date("2012-05-24");
+const locale = new Intl.Locale('en');
+const mixed = [ 'en', locale ] as const;
 
-function log(locale: string) {
-  console.log(
-    `${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`
-  );
+Intl.Locale(); // expect error
+new Intl.Locale(); // expect error
+new Intl.Locale(locale, { caseFirst: 'upper', hourCycle: 'h23' });
+
+Intl.RelativeTimeFormat('en'); // expect error
+new Intl.RelativeTimeFormat('en');
+new Intl.RelativeTimeFormat(locale);
+new Intl.RelativeTimeFormat(mixed);
+new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'narrow' }).resolvedOptions();
+new Intl.RelativeTimeFormat().format(123, 'days');
+new Intl.RelativeTimeFormat().formatToParts(456, 'month')[0];
+
+const { notation, style } = new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions();
+const { currency, currencySign } = Intl.NumberFormat('en', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+const { unit, unitDisplay } = Intl.NumberFormat('en', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
+const { compactDisplay } = Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
+const { signDisplay } = Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions();
+for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown' ] as const) {
+  Intl.NumberFormat().formatToParts(123)[0].type = type;
 }
 
-log("en-US");
-// expected output: 5/24/2012 26,254.39
+Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
+for (const type of [ 'relatedYear', 'yearName' ] as const) {
+  Intl.DateTimeFormat().formatToParts()[0].type = type;
+}
 
-log("de-DE");
-// expected output: 24.5.2012 26.254,39
+Intl.Collator(locale);
+Intl.Collator(mixed);
+new Intl.Collator(locale);
+new Intl.Collator(mixed);
+Intl.DateTimeFormat(locale);
+Intl.DateTimeFormat(mixed);
+new Intl.DateTimeFormat(locale);
+new Intl.DateTimeFormat(mixed);
+Intl.NumberFormat(locale);
+Intl.NumberFormat(mixed);
+new Intl.NumberFormat(locale);
+new Intl.NumberFormat(mixed);
+Intl.PluralRules(locale);
+Intl.PluralRules(mixed);
+new Intl.PluralRules(locale);
+new Intl.PluralRules(mixed);
 
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
-const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
+Intl.Collator.supportedLocalesOf(locale);
+Intl.Collator.supportedLocalesOf(mixed);
+Intl.DateTimeFormat.supportedLocalesOf(locale);
+Intl.DateTimeFormat.supportedLocalesOf(mixed);
+Intl.NumberFormat.supportedLocalesOf(locale);
+Intl.NumberFormat.supportedLocalesOf(mixed);
+Intl.PluralRules.supportedLocalesOf(locale);
+Intl.PluralRules.supportedLocalesOf(mixed);
 
-console.log(rtf1.format(3, 'quarter'));
-//expected output: "in 3 qtrs."
+Intl.getCanonicalLocales(locale);
+Intl.getCanonicalLocales(mixed);
 
-console.log(rtf1.format(-1, 'day'));
-//expected output: "1 day ago"
+Array.prototype.toLocaleString(locale);
+Array.prototype.toLocaleString(mixed);
 
-const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
+BigInt.prototype.toLocaleString(locale);
+BigInt.prototype.toLocaleString(mixed);
 
-console.log(rtf2.format(2, 'day'));
-//expected output: "pasado mañana"
+Date.prototype.toLocaleString(locale);
+Date.prototype.toLocaleString(mixed);
+Date.prototype.toLocaleDateString(locale);
+Date.prototype.toLocaleDateString(mixed);
+Date.prototype.toLocaleTimeString(locale);
+Date.prototype.toLocaleTimeString(mixed);
 
-new Intl.Locale(); // should error
-new Intl.Locale(new Intl.Locale('en-US'));
+Number.prototype.toLocaleString(locale);
+Number.prototype.toLocaleString(mixed);
+
+String.prototype.toLocaleLowerCase(locale);
+String.prototype.toLocaleUpperCase(mixed);
+String.prototype.localeCompare('', locale);
+String.prototype.localeCompare('', mixed);
 
 
 //// [es2020IntlAPIs.js]
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
-const count = 26254.39;
-const date = new Date("2012-05-24");
-function log(locale) {
-    console.log(`${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`);
+const locale = new Intl.Locale('en');
+const mixed = ['en', locale];
+Intl.Locale(); // expect error
+new Intl.Locale(); // expect error
+new Intl.Locale(locale, { caseFirst: 'upper', hourCycle: 'h23' });
+Intl.RelativeTimeFormat('en'); // expect error
+new Intl.RelativeTimeFormat('en');
+new Intl.RelativeTimeFormat(locale);
+new Intl.RelativeTimeFormat(mixed);
+new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'narrow' }).resolvedOptions();
+new Intl.RelativeTimeFormat().format(123, 'days');
+new Intl.RelativeTimeFormat().formatToParts(456, 'month')[0];
+const { notation, style } = new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions();
+const { currency, currencySign } = Intl.NumberFormat('en', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+const { unit, unitDisplay } = Intl.NumberFormat('en', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
+const { compactDisplay } = Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
+const { signDisplay } = Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions();
+for (const type of ['compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown']) {
+    Intl.NumberFormat().formatToParts(123)[0].type = type;
 }
-log("en-US");
-// expected output: 5/24/2012 26,254.39
-log("de-DE");
-// expected output: 24.5.2012 26.254,39
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
-const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
-console.log(rtf1.format(3, 'quarter'));
-//expected output: "in 3 qtrs."
-console.log(rtf1.format(-1, 'day'));
-//expected output: "1 day ago"
-const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
-console.log(rtf2.format(2, 'day'));
-//expected output: "pasado mañana"
-new Intl.Locale(); // should error
-new Intl.Locale(new Intl.Locale('en-US'));
+Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
+for (const type of ['relatedYear', 'yearName']) {
+    Intl.DateTimeFormat().formatToParts()[0].type = type;
+}
+Intl.Collator(locale);
+Intl.Collator(mixed);
+new Intl.Collator(locale);
+new Intl.Collator(mixed);
+Intl.DateTimeFormat(locale);
+Intl.DateTimeFormat(mixed);
+new Intl.DateTimeFormat(locale);
+new Intl.DateTimeFormat(mixed);
+Intl.NumberFormat(locale);
+Intl.NumberFormat(mixed);
+new Intl.NumberFormat(locale);
+new Intl.NumberFormat(mixed);
+Intl.PluralRules(locale);
+Intl.PluralRules(mixed);
+new Intl.PluralRules(locale);
+new Intl.PluralRules(mixed);
+Intl.Collator.supportedLocalesOf(locale);
+Intl.Collator.supportedLocalesOf(mixed);
+Intl.DateTimeFormat.supportedLocalesOf(locale);
+Intl.DateTimeFormat.supportedLocalesOf(mixed);
+Intl.NumberFormat.supportedLocalesOf(locale);
+Intl.NumberFormat.supportedLocalesOf(mixed);
+Intl.PluralRules.supportedLocalesOf(locale);
+Intl.PluralRules.supportedLocalesOf(mixed);
+Intl.getCanonicalLocales(locale);
+Intl.getCanonicalLocales(mixed);
+Array.prototype.toLocaleString(locale);
+Array.prototype.toLocaleString(mixed);
+BigInt.prototype.toLocaleString(locale);
+BigInt.prototype.toLocaleString(mixed);
+Date.prototype.toLocaleString(locale);
+Date.prototype.toLocaleString(mixed);
+Date.prototype.toLocaleDateString(locale);
+Date.prototype.toLocaleDateString(mixed);
+Date.prototype.toLocaleTimeString(locale);
+Date.prototype.toLocaleTimeString(mixed);
+Number.prototype.toLocaleString(locale);
+Number.prototype.toLocaleString(mixed);
+String.prototype.toLocaleLowerCase(locale);
+String.prototype.toLocaleUpperCase(mixed);
+String.prototype.localeCompare('', locale);
+String.prototype.localeCompare('', mixed);

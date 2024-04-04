@@ -1,18 +1,193 @@
 //// [tests/cases/conformance/es2022/es2022IntlAPIs.ts] ////
 
 === es2022IntlAPIs.ts ===
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#using_timezonename
-const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const;
->timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
->                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
->                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'short' : "short"
->        : ^^^^^^^
->'long' : "long"
->       : ^^^^^^
+const locale = new Intl.Locale('en');
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+>new Intl.Locale('en') : Intl.Locale
+>                      : ^^^^^^^^^^^
+>Intl.Locale : Intl.LocaleConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Locale : Intl.LocaleConstructor
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+
+const mixed = [ 'en', locale ] as const;
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'en', locale ] as const : readonly ["en", Intl.Locale]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'en', locale ] : readonly ["en", Intl.Locale]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.Segmenter(); // expect error
+>Intl.Segmenter() : any
+>                 : ^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.Segmenter();
+>new Intl.Segmenter() : Intl.Segmenter
+>                     : ^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.Segmenter('en');
+>new Intl.Segmenter('en') : Intl.Segmenter
+>                         : ^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+
+new Intl.Segmenter(locale);
+>new Intl.Segmenter(locale) : Intl.Segmenter
+>                           : ^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+new Intl.Segmenter(mixed);
+>new Intl.Segmenter(mixed) : Intl.Segmenter
+>                          : ^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const { granularity } = new Intl.Segmenter('en', { granularity: 'grapheme' }).resolvedOptions();
+>granularity : Intl.SegmenterOptionsGranularity
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.Segmenter('en', { granularity: 'grapheme' }).resolvedOptions() : Intl.ResolvedSegmenterOptions
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.Segmenter('en', { granularity: 'grapheme' }).resolvedOptions : () => Intl.ResolvedSegmenterOptions
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.Segmenter('en', { granularity: 'grapheme' }) : Intl.Segmenter
+>                                                      : ^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ granularity: 'grapheme' } : { granularity: "grapheme"; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>granularity : "grapheme"
+>            : ^^^^^^^^^^
+>'grapheme' : "grapheme"
+>           : ^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedSegmenterOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const segments = new Intl.Segmenter().segment('foo');
+>segments : Intl.Segments
+>         : ^^^^^^^^^^^^^
+>new Intl.Segmenter().segment('foo') : Intl.Segments
+>                                    : ^^^^^^^^^^^^^
+>new Intl.Segmenter().segment : (input: string) => Intl.Segments
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.Segmenter() : Intl.Segmenter
+>                     : ^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>segment : (input: string) => Intl.Segments
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+segments.containing();
+>segments.containing() : Intl.SegmentData
+>                      : ^^^^^^^^^^^^^^^^
+>segments.containing : (codeUnitIndex?: number) => Intl.SegmentData
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>segments : Intl.Segments
+>         : ^^^^^^^^^^^^^
+>containing : (codeUnitIndex?: number) => Intl.SegmentData
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+segments.containing(0);
+>segments.containing(0) : Intl.SegmentData
+>                       : ^^^^^^^^^^^^^^^^
+>segments.containing : (codeUnitIndex?: number) => Intl.SegmentData
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>segments : Intl.Segments
+>         : ^^^^^^^^^^^^^
+>containing : (codeUnitIndex?: number) => Intl.SegmentData
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+[ ...segments ];
+>[ ...segments ] : Intl.SegmentData[]
+>                : ^^^^^^^^^^^^^^^^^^
+>...segments : Intl.SegmentData
+>            : ^^^^^^^^^^^^^^^^
+>segments : Intl.Segments
+>         : ^^^^^^^^^^^^^
+
+Intl.Segmenter.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
+>Intl.Segmenter.supportedLocalesOf(locale, { localeMatcher: 'best fit' }) : string[]
+>                                                                         : ^^^^^^^^
+>Intl.Segmenter.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Segmenter : Intl.SegmenterConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Segmenter : Intl.SegmenterConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+>{ localeMatcher: 'best fit' } : { localeMatcher: "best fit"; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>localeMatcher : "best fit"
+>              : ^^^^^^^^^^
+>'best fit' : "best fit"
+>           : ^^^^^^^^^^
+
+for (const timeZoneName of [ 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric' ] as const) {
+>timeZoneName : "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric' ] as const : readonly ["shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric' ] : readonly ["shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'shortOffset' : "shortOffset"
 >              : ^^^^^^^^^^^^^
 >'longOffset' : "longOffset"
@@ -22,41 +197,107 @@ const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGener
 >'longGeneric' : "longGeneric"
 >              : ^^^^^^^^^^^^^
 
-for (const zoneName of timezoneNames) {
->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  var formatter = new Intl.DateTimeFormat('en-US', {
->formatter : Intl.DateTimeFormat
->          : ^^^^^^^^^^^^^^^^^^^
->new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : Intl.DateTimeFormat
->                                                                                                      : ^^^^^^^^^^^^^^^^^^^
+  new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName = timeZoneName;
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName = timeZoneName : "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName : keyof Intl.DateTimeFormatOptionsTimeZoneNameRegistry
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions() : Intl.ResolvedDateTimeFormatOptions
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions : () => Intl.ResolvedDateTimeFormatOptions
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat('en', { timeZoneName }) : Intl.DateTimeFormat
+>                                                : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'en-US' : "en-US"
->        : ^^^^^^^
->{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
->                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    timeZone: 'America/Los_Angeles',
->timeZone : string
->         : ^^^^^^
->'America/Los_Angeles' : "America/Los_Angeles"
->                      : ^^^^^^^^^^^^^^^^^^^^^
-
-    timeZoneName: zoneName,
->timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  });
+>'en' : "en"
+>     : ^^^^
+>{ timeZoneName } : { timeZoneName: "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>timeZoneName : "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedDateTimeFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>timeZoneName : keyof Intl.DateTimeFormatOptionsTimeZoneNameRegistry
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>timeZoneName : "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
+const { languageDisplay } = new Intl.DisplayNames('en', { type: 'region', languageDisplay: 'dialect' }).resolvedOptions();
+>languageDisplay : Intl.DisplayNamesOptionsLanguageDisplay
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type: 'region', languageDisplay: 'dialect' }).resolvedOptions() : Intl.ResolvedDisplayNamesOptions
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type: 'region', languageDisplay: 'dialect' }).resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type: 'region', languageDisplay: 'dialect' }) : Intl.DisplayNames
+>                                                                            : ^^^^^^^^^^^^^^^^^
+>Intl.DisplayNames : Intl.DisplayNamesConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DisplayNames : Intl.DisplayNamesConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ type: 'region', languageDisplay: 'dialect' } : { type: "region"; languageDisplay: "dialect"; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "region"
+>     : ^^^^^^^^
+>'region' : "region"
+>         : ^^^^^^^^
+>languageDisplay : "dialect"
+>                : ^^^^^^^^^
+>'dialect' : "dialect"
+>          : ^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+for (const type of [ 'calendar', 'dateTimeField' ] as const) {
+>type : "calendar" | "dateTimeField"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'calendar', 'dateTimeField' ] as const : readonly ["calendar", "dateTimeField"]
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'calendar', 'dateTimeField' ] : readonly ["calendar", "dateTimeField"]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'calendar' : "calendar"
+>           : ^^^^^^^^^^
+>'dateTimeField' : "dateTimeField"
+>                : ^^^^^^^^^^^^^^^
+
+  new Intl.DisplayNames('en', { type }).resolvedOptions().type = type;
+>new Intl.DisplayNames('en', { type }).resolvedOptions().type = type : "calendar" | "dateTimeField"
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type }).resolvedOptions().type : keyof Intl.DisplayNamesOptionsTypeRegistry
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type }).resolvedOptions() : Intl.ResolvedDisplayNamesOptions
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type }).resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type }) : Intl.DisplayNames
+>                                      : ^^^^^^^^^^^^^^^^^
+>Intl.DisplayNames : Intl.DisplayNamesConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DisplayNames : Intl.DisplayNamesConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ type } : { type: "calendar" | "dateTimeField"; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "calendar" | "dateTimeField"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : keyof Intl.DisplayNamesOptionsTypeRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "calendar" | "dateTimeField"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
 

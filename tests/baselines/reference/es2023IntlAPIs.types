@@ -1,0 +1,242 @@
+//// [tests/cases/conformance/es2023/es2023IntlAPIs.ts] ////
+
+=== es2023IntlAPIs.ts ===
+const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, useGrouping } = new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions();
+>roundingPriority : Intl.NumberFormatOptionsRoundingPriority
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>roundingMode : Intl.NumberFormatOptionsRoundingMode
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>roundingIncrement : Intl.NumberFormatOptionsRoundingIncrement
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>trailingZeroDisplay : Intl.NumberFormatOptionsTrailingZeroDisplay
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }) : Intl.NumberFormat
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' } : { roundingPriority: "lessPrecision"; roundingIncrement: 100; roundingMode: "trunc"; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>roundingPriority : "lessPrecision"
+>                 : ^^^^^^^^^^^^^^^
+>'lessPrecision' : "lessPrecision"
+>                : ^^^^^^^^^^^^^^^
+>roundingIncrement : 100
+>                  : ^^^
+>100 : 100
+>    : ^^^
+>roundingMode : "trunc"
+>             : ^^^^^^^
+>'trunc' : "trunc"
+>        : ^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay = 'negative';
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay = 'negative' : "negative"
+>                                                                                                    : ^^^^^^^^^^
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }) : Intl.NumberFormat
+>                                                         : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ signDisplay: 'negative' } : { signDisplay: "negative"; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>signDisplay : "negative"
+>            : ^^^^^^^^^^
+>'negative' : "negative"
+>           : ^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'negative' : "negative"
+>           : ^^^^^^^^^^
+
+for (const useGrouping of [ 'min2', 'auto', 'always' ] as const) {
+>useGrouping : "auto" | "min2" | "always"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'min2', 'auto', 'always' ] as const : readonly ["min2", "auto", "always"]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'min2', 'auto', 'always' ] : readonly ["min2", "auto", "always"]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'min2' : "min2"
+>       : ^^^^^^
+>'auto' : "auto"
+>       : ^^^^^^
+>'always' : "always"
+>         : ^^^^^^^^
+
+	new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping = useGrouping;
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping = useGrouping : "auto" | "min2" | "always"
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { useGrouping }) : Intl.NumberFormat
+>                                             : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ useGrouping } : { useGrouping: "auto" | "min2" | "always"; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : "auto" | "min2" | "always"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : "auto" | "min2" | "always"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+new Intl.NumberFormat().formatRange(10, 1000);
+>new Intl.NumberFormat().formatRange(10, 1000) : string
+>                                              : ^^^^^^
+>new Intl.NumberFormat().formatRange : (start: number | bigint, end: number | bigint) => string
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat() : Intl.NumberFormat
+>                        : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRange : (start: number | bigint, end: number | bigint) => string
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>1000 : 1000
+>     : ^^^^
+
+new Intl.NumberFormat().formatRange(10n, 1000n);
+>new Intl.NumberFormat().formatRange(10n, 1000n) : string
+>                                                : ^^^^^^
+>new Intl.NumberFormat().formatRange : (start: number | bigint, end: number | bigint) => string
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat() : Intl.NumberFormat
+>                        : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRange : (start: number | bigint, end: number | bigint) => string
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>10n : 10n
+>    : ^^^
+>1000n : 1000n
+>      : ^^^^^
+
+new Intl.NumberFormat().formatRangeToParts(10, 1000)[0];
+>new Intl.NumberFormat().formatRangeToParts(10, 1000)[0] : Intl.NumberRangeFormatPart
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat().formatRangeToParts(10, 1000) : Intl.NumberRangeFormatPart[]
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat().formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat() : Intl.NumberFormat
+>                        : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+>1000 : 1000
+>     : ^^^^
+>0 : 0
+>  : ^
+
+new Intl.NumberFormat().formatRangeToParts(10n, 1000n)[0];
+>new Intl.NumberFormat().formatRangeToParts(10n, 1000n)[0] : Intl.NumberRangeFormatPart
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat().formatRangeToParts(10n, 1000n) : Intl.NumberRangeFormatPart[]
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat().formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat() : Intl.NumberFormat
+>                        : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>10n : 10n
+>    : ^^^
+>1000n : 1000n
+>      : ^^^^^
+>0 : 0
+>  : ^
+
+for (const key of [ 'calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit' ] as const) {
+>key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit' ] as const : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit' ] : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'calendar' : "calendar"
+>           : ^^^^^^^^^^
+>'collation' : "collation"
+>            : ^^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>'numberingSystem' : "numberingSystem"
+>                  : ^^^^^^^^^^^^^^^^^
+>'timeZone' : "timeZone"
+>           : ^^^^^^^^^^
+>'unit' : "unit"
+>       : ^^^^^^
+
+  Intl.supportedValuesOf(key);
+>Intl.supportedValuesOf(key) : string[]
+>                            : ^^^^^^^^
+>Intl.supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

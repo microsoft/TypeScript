@@ -1,218 +1,43 @@
 //// [tests/cases/conformance/es2020/es2020IntlAPIs.ts] ////
 
 === es2020IntlAPIs.ts ===
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
-const count = 26254.39;
->count : 26254.39
->      : ^^^^^^^^
->26254.39 : 26254.39
->         : ^^^^^^^^
-
-const date = new Date("2012-05-24");
->date : Date
->     : ^^^^
->new Date("2012-05-24") : Date
->                       : ^^^^
->Date : DateConstructor
->     : ^^^^^^^^^^^^^^^
->"2012-05-24" : "2012-05-24"
->             : ^^^^^^^^^^^^
-
-function log(locale: string) {
->log : (locale: string) => void
->    : ^^^^^^^^^      ^^^^^^^^^
->locale : string
->       : ^^^^^^
-
-  console.log(
->console.log(    `${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`  ) : void
->                                                                                                                    : ^^^^
->console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
->console : Console
->        : ^^^^^^^
->log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
-
-    `${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`
->`${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}` : string
->                                                                                                 : ^^^^^^
->new Intl.DateTimeFormat(locale).format(date) : string
->                                             : ^^^^^^
->new Intl.DateTimeFormat(locale).format : (date?: number | Date) => string
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.DateTimeFormat(locale) : Intl.DateTimeFormat
->                                : ^^^^^^^^^^^^^^^^^^^
->Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+const locale = new Intl.Locale('en');
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+>new Intl.Locale('en') : Intl.Locale
+>                      : ^^^^^^^^^^^
+>Intl.Locale : Intl.LocaleConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->DateTimeFormat : Intl.DateTimeFormatConstructor
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->locale : string
->       : ^^^^^^
->format : (date?: number | Date) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->date : Date
->     : ^^^^
->new Intl.NumberFormat(locale).format(count) : string
->                                            : ^^^^^^
->new Intl.NumberFormat(locale).format : { (value: number): string; (value: number | bigint): string; }
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.NumberFormat(locale) : Intl.NumberFormat
->                              : ^^^^^^^^^^^^^^^^^
->Intl.NumberFormat : Intl.NumberFormatConstructor
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl : typeof Intl
->     : ^^^^^^^^^^^
->NumberFormat : Intl.NumberFormatConstructor
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->locale : string
->       : ^^^^^^
->format : { (value: number): string; (value: number | bigint): string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->count : 26254.39
->      : ^^^^^^^^
-
-  );
-}
-
-log("en-US");
->log("en-US") : void
->             : ^^^^
->log : (locale: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
->"en-US" : "en-US"
->        : ^^^^^^^
-
-// expected output: 5/24/2012 26,254.39
-
-log("de-DE");
->log("de-DE") : void
->             : ^^^^
->log : (locale: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
->"de-DE" : "de-DE"
->        : ^^^^^^^
-
-// expected output: 24.5.2012 26.254,39
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
-const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
->rtf1 : Intl.RelativeTimeFormat
->     : ^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.RelativeTimeFormat('en', { style: 'narrow' }) : Intl.RelativeTimeFormat
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
->Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl : typeof Intl
->     : ^^^^^^^^^^^
->RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Locale : Intl.LocaleConstructor
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >'en' : "en"
 >     : ^^^^
->{ style: 'narrow' } : { style: "narrow"; }
->                    : ^^^^^^^^^^^^^^^^^^^^
->style : "narrow"
->      : ^^^^^^^^
->'narrow' : "narrow"
->         : ^^^^^^^^
 
-console.log(rtf1.format(3, 'quarter'));
->console.log(rtf1.format(3, 'quarter')) : void
->                                       : ^^^^
->console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
->console : Console
->        : ^^^^^^^
->log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
->rtf1.format(3, 'quarter') : string
->                          : ^^^^^^
->rtf1.format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->rtf1 : Intl.RelativeTimeFormat
->     : ^^^^^^^^^^^^^^^^^^^^^^^
->format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
->'quarter' : "quarter"
->          : ^^^^^^^^^
+const mixed = [ 'en', locale ] as const;
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'en', locale ] as const : readonly ["en", Intl.Locale]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'en', locale ] : readonly ["en", Intl.Locale]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
 
-//expected output: "in 3 qtrs."
-
-console.log(rtf1.format(-1, 'day'));
->console.log(rtf1.format(-1, 'day')) : void
->                                    : ^^^^
->console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
->console : Console
->        : ^^^^^^^
->log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
->rtf1.format(-1, 'day') : string
->                       : ^^^^^^
->rtf1.format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->rtf1 : Intl.RelativeTimeFormat
->     : ^^^^^^^^^^^^^^^^^^^^^^^
->format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->-1 : -1
->   : ^^
->1 : 1
->  : ^
->'day' : "day"
->      : ^^^^^
-
-//expected output: "1 day ago"
-
-const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
->rtf2 : Intl.RelativeTimeFormat
->     : ^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.RelativeTimeFormat('es', { numeric: 'auto' }) : Intl.RelativeTimeFormat
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
->Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Intl.Locale(); // expect error
+>Intl.Locale() : any
+>              : ^^^
+>Intl.Locale : Intl.LocaleConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'es' : "es"
->     : ^^^^
->{ numeric: 'auto' } : { numeric: "auto"; }
->                    : ^^^^^^^^^^^^^^^^^^^^
->numeric : "auto"
->        : ^^^^^^
->'auto' : "auto"
->       : ^^^^^^
+>Locale : Intl.LocaleConstructor
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 
-console.log(rtf2.format(2, 'day'));
->console.log(rtf2.format(2, 'day')) : void
->                                   : ^^^^
->console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
->console : Console
->        : ^^^^^^^
->log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
->rtf2.format(2, 'day') : string
->                      : ^^^^^^
->rtf2.format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->rtf2 : Intl.RelativeTimeFormat
->     : ^^^^^^^^^^^^^^^^^^^^^^^
->format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->'day' : "day"
->      : ^^^^^
-
-//expected output: "pasado mañana"
-
-new Intl.Locale(); // should error
+new Intl.Locale(); // expect error
 >new Intl.Locale() : Intl.Locale
 >                  : ^^^^^^^^^^^
 >Intl.Locale : Intl.LocaleConstructor
@@ -222,23 +47,1019 @@ new Intl.Locale(); // should error
 >Locale : Intl.LocaleConstructor
 >       : ^^^^^^^^^^^^^^^^^^^^^^
 
-new Intl.Locale(new Intl.Locale('en-US'));
->new Intl.Locale(new Intl.Locale('en-US')) : Intl.Locale
->                                          : ^^^^^^^^^^^
+new Intl.Locale(locale, { caseFirst: 'upper', hourCycle: 'h23' });
+>new Intl.Locale(locale, { caseFirst: 'upper', hourCycle: 'h23' }) : Intl.Locale
+>                                                                  : ^^^^^^^^^^^
 >Intl.Locale : Intl.LocaleConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >Locale : Intl.LocaleConstructor
 >       : ^^^^^^^^^^^^^^^^^^^^^^
->new Intl.Locale('en-US') : Intl.Locale
->                         : ^^^^^^^^^^^
->Intl.Locale : Intl.LocaleConstructor
->            : ^^^^^^^^^^^^^^^^^^^^^^
->Intl : typeof Intl
->     : ^^^^^^^^^^^
->Locale : Intl.LocaleConstructor
->       : ^^^^^^^^^^^^^^^^^^^^^^
->'en-US' : "en-US"
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+>{ caseFirst: 'upper', hourCycle: 'h23' } : { caseFirst: "upper"; hourCycle: "h23"; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>caseFirst : "upper"
+>          : ^^^^^^^
+>'upper' : "upper"
 >        : ^^^^^^^
+>hourCycle : "h23"
+>          : ^^^^^
+>'h23' : "h23"
+>      : ^^^^^
+
+Intl.RelativeTimeFormat('en'); // expect error
+>Intl.RelativeTimeFormat('en') : any
+>                              : ^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+
+new Intl.RelativeTimeFormat('en');
+>new Intl.RelativeTimeFormat('en') : Intl.RelativeTimeFormat
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+
+new Intl.RelativeTimeFormat(locale);
+>new Intl.RelativeTimeFormat(locale) : Intl.RelativeTimeFormat
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+new Intl.RelativeTimeFormat(mixed);
+>new Intl.RelativeTimeFormat(mixed) : Intl.RelativeTimeFormat
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'narrow' }).resolvedOptions();
+>new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'narrow' }).resolvedOptions() : Intl.ResolvedRelativeTimeFormatOptions
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'narrow' }).resolvedOptions : () => Intl.ResolvedRelativeTimeFormatOptions
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.RelativeTimeFormat('en', { numeric: 'always', style: 'narrow' }) : Intl.RelativeTimeFormat
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ numeric: 'always', style: 'narrow' } : { numeric: "always"; style: "narrow"; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numeric : "always"
+>        : ^^^^^^^^
+>'always' : "always"
+>         : ^^^^^^^^
+>style : "narrow"
+>      : ^^^^^^^^
+>'narrow' : "narrow"
+>         : ^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedRelativeTimeFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.RelativeTimeFormat().format(123, 'days');
+>new Intl.RelativeTimeFormat().format(123, 'days') : string
+>                                                  : ^^^^^^
+>new Intl.RelativeTimeFormat().format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.RelativeTimeFormat() : Intl.RelativeTimeFormat
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+>'days' : "days"
+>       : ^^^^^^
+
+new Intl.RelativeTimeFormat().formatToParts(456, 'month')[0];
+>new Intl.RelativeTimeFormat().formatToParts(456, 'month')[0] : Intl.RelativeTimeFormatPart
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.RelativeTimeFormat().formatToParts(456, 'month') : Intl.RelativeTimeFormatPart[]
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.RelativeTimeFormat().formatToParts : (value: number, unit: Intl.RelativeTimeFormatUnit) => Intl.RelativeTimeFormatPart[]
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.RelativeTimeFormat() : Intl.RelativeTimeFormat
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>RelativeTimeFormat : Intl.RelativeTimeFormatConstructor
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (value: number, unit: Intl.RelativeTimeFormatUnit) => Intl.RelativeTimeFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>456 : 456
+>    : ^^^
+>'month' : "month"
+>        : ^^^^^^^
+>0 : 0
+>  : ^
+
+const { notation, style } = new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions();
+>notation : Intl.NumberFormatOptionsNotation
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : keyof Intl.NumberFormatOptionsStyleRegistry
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { numberingSystem: 'arab' }) : Intl.NumberFormat
+>                                                         : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ numberingSystem: 'arab' } : { numberingSystem: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numberingSystem : string
+>                : ^^^^^^
+>'arab' : "arab"
+>       : ^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const { currency, currencySign } = Intl.NumberFormat('en', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+>currency : string
+>         : ^^^^^^
+>currencySign : Intl.NumberFormatOptionsCurrencySign
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
+>                                                                                            : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: "currency"; currency: string; currencySign: "accounting"; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'NZD' : "NZD"
+>      : ^^^^^
+>currencySign : "accounting"
+>             : ^^^^^^^^^^^^
+>'accounting' : "accounting"
+>             : ^^^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const { unit, unitDisplay } = Intl.NumberFormat('en', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
+>unit : string
+>     : ^^^^^^
+>unitDisplay : Intl.NumberFormatOptionsUnitDisplay
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }) : Intl.NumberFormat
+>                                                                                    : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' } : { style: "unit"; unit: string; unitDisplay: "narrow"; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "unit"
+>      : ^^^^^^
+>'unit' : "unit"
+>       : ^^^^^^
+>unit : string
+>     : ^^^^^^
+>'kilogram' : "kilogram"
+>           : ^^^^^^^^^^
+>unitDisplay : "narrow"
+>            : ^^^^^^^^
+>'narrow' : "narrow"
+>         : ^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const { compactDisplay } = Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
+>compactDisplay : Intl.NumberFormatOptionsCompactDisplay
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'long' }) : Intl.NumberFormat
+>                                                                         : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ notation: 'compact', compactDisplay: 'long' } : { notation: "compact"; compactDisplay: "long"; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>notation : "compact"
+>         : ^^^^^^^^^
+>'compact' : "compact"
+>          : ^^^^^^^^^
+>compactDisplay : "long"
+>               : ^^^^^^
+>'long' : "long"
+>       : ^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const { signDisplay } = Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions();
+>signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat('en', { signDisplay: 'always' }) : Intl.NumberFormat
+>                                                   : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ signDisplay: 'always' } : { signDisplay: "always"; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>signDisplay : "always"
+>            : ^^^^^^^^
+>'always' : "always"
+>         : ^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown' ] as const) {
+>type : "compact" | "unit" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unknown"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown' ] as const : readonly ["compact", "exponentInteger", "exponentMinusSign", "exponentSeparator", "unit", "unknown"]
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown' ] : readonly ["compact", "exponentInteger", "exponentMinusSign", "exponentSeparator", "unit", "unknown"]
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'compact' : "compact"
+>          : ^^^^^^^^^
+>'exponentInteger' : "exponentInteger"
+>                  : ^^^^^^^^^^^^^^^^^
+>'exponentMinusSign' : "exponentMinusSign"
+>                    : ^^^^^^^^^^^^^^^^^^^
+>'exponentSeparator' : "exponentSeparator"
+>                    : ^^^^^^^^^^^^^^^^^^^
+>'unit' : "unit"
+>       : ^^^^^^
+>'unknown' : "unknown"
+>          : ^^^^^^^^^
+
+  Intl.NumberFormat().formatToParts(123)[0].type = type;
+>Intl.NumberFormat().formatToParts(123)[0].type = type : "compact" | "unit" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unknown"
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat().formatToParts(123)[0].type : keyof Intl.NumberFormatPartTypeRegistry
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat().formatToParts(123)[0] : Intl.NumberFormatPart
+>                                          : ^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat().formatToParts(123) : Intl.NumberFormatPart[]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat().formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat() : Intl.NumberFormat
+>                    : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+>0 : 0
+>  : ^
+>type : keyof Intl.NumberFormatPartTypeRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "compact" | "unit" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unknown"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
+>Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' }) : Intl.DateTimeFormat
+>                                                                            : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ calendar: 'gregory', numberingSystem: 'latn' } : { calendar: string; numberingSystem: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>calendar : string
+>         : ^^^^^^
+>'gregory' : "gregory"
+>          : ^^^^^^^^^
+>numberingSystem : string
+>                : ^^^^^^
+>'latn' : "latn"
+>       : ^^^^^^
+
+for (const type of [ 'relatedYear', 'yearName' ] as const) {
+>type : "relatedYear" | "yearName"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'relatedYear', 'yearName' ] as const : readonly ["relatedYear", "yearName"]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'relatedYear', 'yearName' ] : readonly ["relatedYear", "yearName"]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'relatedYear' : "relatedYear"
+>              : ^^^^^^^^^^^^^
+>'yearName' : "yearName"
+>           : ^^^^^^^^^^
+
+  Intl.DateTimeFormat().formatToParts()[0].type = type;
+>Intl.DateTimeFormat().formatToParts()[0].type = type : "relatedYear" | "yearName"
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts()[0].type : keyof Intl.DateTimeFormatPartTypesRegistry
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts()[0] : Intl.DateTimeFormatPart
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts() : Intl.DateTimeFormatPart[]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat() : Intl.DateTimeFormat
+>                      : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>type : keyof Intl.DateTimeFormatPartTypesRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "relatedYear" | "yearName"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+Intl.Collator(locale);
+>Intl.Collator(locale) : Intl.Collator
+>                      : ^^^^^^^^^^^^^
+>Intl.Collator : Intl.CollatorConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : Intl.CollatorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.Collator(mixed);
+>Intl.Collator(mixed) : Intl.Collator
+>                     : ^^^^^^^^^^^^^
+>Intl.Collator : Intl.CollatorConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : Intl.CollatorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.Collator(locale);
+>new Intl.Collator(locale) : Intl.Collator
+>                          : ^^^^^^^^^^^^^
+>Intl.Collator : Intl.CollatorConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : Intl.CollatorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+new Intl.Collator(mixed);
+>new Intl.Collator(mixed) : Intl.Collator
+>                         : ^^^^^^^^^^^^^
+>Intl.Collator : Intl.CollatorConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : Intl.CollatorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.DateTimeFormat(locale);
+>Intl.DateTimeFormat(locale) : Intl.DateTimeFormat
+>                            : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.DateTimeFormat(mixed);
+>Intl.DateTimeFormat(mixed) : Intl.DateTimeFormat
+>                           : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.DateTimeFormat(locale);
+>new Intl.DateTimeFormat(locale) : Intl.DateTimeFormat
+>                                : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+new Intl.DateTimeFormat(mixed);
+>new Intl.DateTimeFormat(mixed) : Intl.DateTimeFormat
+>                               : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.NumberFormat(locale);
+>Intl.NumberFormat(locale) : Intl.NumberFormat
+>                          : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.NumberFormat(mixed);
+>Intl.NumberFormat(mixed) : Intl.NumberFormat
+>                         : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.NumberFormat(locale);
+>new Intl.NumberFormat(locale) : Intl.NumberFormat
+>                              : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+new Intl.NumberFormat(mixed);
+>new Intl.NumberFormat(mixed) : Intl.NumberFormat
+>                             : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.PluralRules(locale);
+>Intl.PluralRules(locale) : Intl.PluralRules
+>                         : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.PluralRules(mixed);
+>Intl.PluralRules(mixed) : Intl.PluralRules
+>                        : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.PluralRules(locale);
+>new Intl.PluralRules(locale) : Intl.PluralRules
+>                             : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+new Intl.PluralRules(mixed);
+>new Intl.PluralRules(mixed) : Intl.PluralRules
+>                            : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.Collator.supportedLocalesOf(locale);
+>Intl.Collator.supportedLocalesOf(locale) : string[]
+>                                         : ^^^^^^^^
+>Intl.Collator.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Collator : Intl.CollatorConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : Intl.CollatorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.Collator.supportedLocalesOf(mixed);
+>Intl.Collator.supportedLocalesOf(mixed) : string[]
+>                                        : ^^^^^^^^
+>Intl.Collator.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.Collator : Intl.CollatorConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>Collator : Intl.CollatorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.DateTimeFormat.supportedLocalesOf(locale);
+>Intl.DateTimeFormat.supportedLocalesOf(locale) : string[]
+>                                               : ^^^^^^^^
+>Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.DateTimeFormat.supportedLocalesOf(mixed);
+>Intl.DateTimeFormat.supportedLocalesOf(mixed) : string[]
+>                                              : ^^^^^^^^
+>Intl.DateTimeFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.NumberFormat.supportedLocalesOf(locale);
+>Intl.NumberFormat.supportedLocalesOf(locale) : string[]
+>                                             : ^^^^^^^^
+>Intl.NumberFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.NumberFormat.supportedLocalesOf(mixed);
+>Intl.NumberFormat.supportedLocalesOf(mixed) : string[]
+>                                            : ^^^^^^^^
+>Intl.NumberFormat.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.PluralRules.supportedLocalesOf(locale);
+>Intl.PluralRules.supportedLocalesOf(locale) : string[]
+>                                            : ^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.PluralRules.supportedLocalesOf(mixed);
+>Intl.PluralRules.supportedLocalesOf(mixed) : string[]
+>                                           : ^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : { (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions): string[]; (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions): string[]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Intl.getCanonicalLocales(locale);
+>Intl.getCanonicalLocales(locale) : string[]
+>                                 : ^^^^^^^^
+>Intl.getCanonicalLocales : { (locales?: string | readonly string[]): string[]; (locales?: Intl.LocalesArgument): string[]; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>getCanonicalLocales : { (locales?: string | readonly string[]): string[]; (locales?: Intl.LocalesArgument): string[]; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Intl.getCanonicalLocales(mixed);
+>Intl.getCanonicalLocales(mixed) : string[]
+>                                : ^^^^^^^^
+>Intl.getCanonicalLocales : { (locales?: string | readonly string[]): string[]; (locales?: Intl.LocalesArgument): string[]; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>getCanonicalLocales : { (locales?: string | readonly string[]): string[]; (locales?: Intl.LocalesArgument): string[]; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Array.prototype.toLocaleString(locale);
+>Array.prototype.toLocaleString(locale) : string
+>                                       : ^^^^^^
+>Array.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Array.prototype : any[]
+>                : ^^^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>prototype : any[]
+>          : ^^^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Array.prototype.toLocaleString(mixed);
+>Array.prototype.toLocaleString(mixed) : string
+>                                      : ^^^^^^
+>Array.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Array.prototype : any[]
+>                : ^^^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>prototype : any[]
+>          : ^^^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+BigInt.prototype.toLocaleString(locale);
+>BigInt.prototype.toLocaleString(locale) : string
+>                                        : ^^^^^^
+>BigInt.prototype.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BigInt.prototype : BigInt
+>                 : ^^^^^^
+>BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : BigInt
+>          : ^^^^^^
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+BigInt.prototype.toLocaleString(mixed);
+>BigInt.prototype.toLocaleString(mixed) : string
+>                                       : ^^^^^^
+>BigInt.prototype.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BigInt.prototype : BigInt
+>                 : ^^^^^^
+>BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : BigInt
+>          : ^^^^^^
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date.prototype.toLocaleString(locale);
+>Date.prototype.toLocaleString(locale) : string
+>                                      : ^^^^^^
+>Date.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.prototype : Date
+>               : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>prototype : Date
+>          : ^^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Date.prototype.toLocaleString(mixed);
+>Date.prototype.toLocaleString(mixed) : string
+>                                     : ^^^^^^
+>Date.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.prototype : Date
+>               : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>prototype : Date
+>          : ^^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date.prototype.toLocaleDateString(locale);
+>Date.prototype.toLocaleDateString(locale) : string
+>                                          : ^^^^^^
+>Date.prototype.toLocaleDateString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.prototype : Date
+>               : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>prototype : Date
+>          : ^^^^
+>toLocaleDateString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Date.prototype.toLocaleDateString(mixed);
+>Date.prototype.toLocaleDateString(mixed) : string
+>                                         : ^^^^^^
+>Date.prototype.toLocaleDateString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.prototype : Date
+>               : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>prototype : Date
+>          : ^^^^
+>toLocaleDateString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Date.prototype.toLocaleTimeString(locale);
+>Date.prototype.toLocaleTimeString(locale) : string
+>                                          : ^^^^^^
+>Date.prototype.toLocaleTimeString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.prototype : Date
+>               : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>prototype : Date
+>          : ^^^^
+>toLocaleTimeString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Date.prototype.toLocaleTimeString(mixed);
+>Date.prototype.toLocaleTimeString(mixed) : string
+>                                         : ^^^^^^
+>Date.prototype.toLocaleTimeString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date.prototype : Date
+>               : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>prototype : Date
+>          : ^^^^
+>toLocaleTimeString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Number.prototype.toLocaleString(locale);
+>Number.prototype.toLocaleString(locale) : string
+>                                        : ^^^^^^
+>Number.prototype.toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Number.prototype : Number
+>                 : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : Number
+>          : ^^^^^^
+>toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+Number.prototype.toLocaleString(mixed);
+>Number.prototype.toLocaleString(mixed) : string
+>                                       : ^^^^^^
+>Number.prototype.toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Number.prototype : Number
+>                 : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : Number
+>          : ^^^^^^
+>toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+String.prototype.toLocaleLowerCase(locale);
+>String.prototype.toLocaleLowerCase(locale) : string
+>                                           : ^^^^^^
+>String.prototype.toLocaleLowerCase : { (): string; (locales?: string | readonly string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>String.prototype : String
+>                 : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : String
+>          : ^^^^^^
+>toLocaleLowerCase : { (): string; (locales?: string | readonly string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+String.prototype.toLocaleUpperCase(mixed);
+>String.prototype.toLocaleUpperCase(mixed) : string
+>                                          : ^^^^^^
+>String.prototype.toLocaleUpperCase : { (): string; (locales?: string | readonly string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>String.prototype : String
+>                 : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : String
+>          : ^^^^^^
+>toLocaleUpperCase : { (): string; (locales?: string | readonly string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+String.prototype.localeCompare('', locale);
+>String.prototype.localeCompare('', locale) : number
+>                                           : ^^^^^^
+>String.prototype.localeCompare : { (that: string): number; (that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>String.prototype : String
+>                 : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : String
+>          : ^^^^^^
+>localeCompare : { (that: string): number; (that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+>locale : Intl.Locale
+>       : ^^^^^^^^^^^
+
+String.prototype.localeCompare('', mixed);
+>String.prototype.localeCompare('', mixed) : number
+>                                          : ^^^^^^
+>String.prototype.localeCompare : { (that: string): number; (that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>String.prototype : String
+>                 : ^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>prototype : String
+>          : ^^^^^^
+>localeCompare : { (that: string): number; (that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+>mixed : readonly ["en", Intl.Locale]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

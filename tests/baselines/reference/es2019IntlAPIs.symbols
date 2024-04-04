@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/es2019/es2019IntlAPIs.ts] ////
+
+=== es2019IntlAPIs.ts ===
+Intl.DateTimeFormat().formatToParts()[0].type = 'unknown';
+>Intl.DateTimeFormat().formatToParts()[0].type : Symbol(Intl.DateTimeFormatPart.type, Decl(lib.es2017.intl.d.ts, --, --))
+>Intl.DateTimeFormat().formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --))
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>type : Symbol(Intl.DateTimeFormatPart.type, Decl(lib.es2017.intl.d.ts, --, --))
+
