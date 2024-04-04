@@ -26,7 +26,7 @@ type validateDefinition<def> = def extends MorphTuple
 
 declare function type<def>(def: validateDefinition<def>): def
 >type : <def>(def: validateDefinition<def>) => def
->     : ^^^^^^^^^^^                       ^^^^^   
+>     : ^   ^^^^^^^                       ^^^^^   
 >def : validateDefinition<def>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 

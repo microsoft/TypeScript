@@ -8680,7 +8680,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const parameter = sym.valueDeclaration.kind === SyntaxKind.Parameter ? sym.valueDeclaration :
                         findAncestor(sym.valueDeclaration, n => n.kind === SyntaxKind.Parameter || context.enclosingDeclaration === n.parent);
                     if (parameter) {
-                        return { introducesError, node };
+                        return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
                     }
                 }
                 if (isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
