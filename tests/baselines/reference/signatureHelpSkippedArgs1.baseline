@@ -1,40 +1,33 @@
 // === SignatureHelp ===
-=== /tests/cases/fourslash/signatureHelpRestArgs.ts ===
+=== /tests/cases/fourslash/signatureHelpSkippedArgs1.ts ===
 // function fn(a: number, b: number, c: number) {}
-// const a = [1, 2] as const;
-// const b = [1] as const;
-// 
-// fn(...a, );
-//          ^
-// | ----------------------------------------------------------------------
-// | fn(a: number, b: number, **c: number**): void
-// | ----------------------------------------------------------------------
-// fn(, ...a);
+// fn(, , , , );
 //    ^
 // | ----------------------------------------------------------------------
 // | fn(**a: number**, b: number, c: number): void
 // | ----------------------------------------------------------------------
-// 
-// fn(...b, );
-//          ^
+//      ^
 // | ----------------------------------------------------------------------
 // | fn(a: number, **b: number**, c: number): void
 // | ----------------------------------------------------------------------
-// fn(, ...b, );
-//    ^
+//        ^
 // | ----------------------------------------------------------------------
-// | fn(**a: number**, b: number, c: number): void
+// | fn(a: number, b: number, **c: number**): void
+// | ----------------------------------------------------------------------
+//          ^
+// | ----------------------------------------------------------------------
+// | fn(a: number, b: number, c: number): void
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | fn(a: number, b: number, **c: number**): void
+// | fn(a: number, b: number, c: number): void
 // | ----------------------------------------------------------------------
 
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs.ts",
-      "position": 109,
+      "fileName": "/tests/cases/fourslash/signatureHelpSkippedArgs1.ts",
+      "position": 51,
       "name": "1"
     },
     "item": {
@@ -158,18 +151,18 @@
         }
       ],
       "applicableSpan": {
-        "start": 103,
-        "length": 6
+        "start": 51,
+        "length": 8
       },
       "selectedItemIndex": 0,
-      "argumentIndex": 2,
-      "argumentCount": 4
+      "argumentIndex": 0,
+      "argumentCount": 5
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs.ts",
-      "position": 115,
+      "fileName": "/tests/cases/fourslash/signatureHelpSkippedArgs1.ts",
+      "position": 53,
       "name": "2"
     },
     "item": {
@@ -293,18 +286,18 @@
         }
       ],
       "applicableSpan": {
-        "start": 115,
-        "length": 6
+        "start": 51,
+        "length": 8
       },
       "selectedItemIndex": 0,
-      "argumentIndex": 0,
-      "argumentCount": 3
+      "argumentIndex": 1,
+      "argumentCount": 5
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs.ts",
-      "position": 134,
+      "fileName": "/tests/cases/fourslash/signatureHelpSkippedArgs1.ts",
+      "position": 55,
       "name": "3"
     },
     "item": {
@@ -428,18 +421,18 @@
         }
       ],
       "applicableSpan": {
-        "start": 128,
-        "length": 6
+        "start": 51,
+        "length": 8
       },
       "selectedItemIndex": 0,
-      "argumentIndex": 1,
-      "argumentCount": 3
+      "argumentIndex": 2,
+      "argumentCount": 5
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs.ts",
-      "position": 140,
+      "fileName": "/tests/cases/fourslash/signatureHelpSkippedArgs1.ts",
+      "position": 57,
       "name": "4"
     },
     "item": {
@@ -563,18 +556,18 @@
         }
       ],
       "applicableSpan": {
-        "start": 140,
+        "start": 51,
         "length": 8
       },
       "selectedItemIndex": 0,
-      "argumentIndex": 0,
-      "argumentCount": 3
+      "argumentIndex": 3,
+      "argumentCount": 5
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/signatureHelpRestArgs.ts",
-      "position": 148,
+      "fileName": "/tests/cases/fourslash/signatureHelpSkippedArgs1.ts",
+      "position": 59,
       "name": "5"
     },
     "item": {
@@ -698,12 +691,12 @@
         }
       ],
       "applicableSpan": {
-        "start": 140,
+        "start": 51,
         "length": 8
       },
       "selectedItemIndex": 0,
-      "argumentIndex": 2,
-      "argumentCount": 3
+      "argumentIndex": 4,
+      "argumentCount": 5
     }
   }
 ]

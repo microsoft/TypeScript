@@ -6,8 +6,8 @@
 function bar(props: { x?: string; y?: string }) {
 >bar : (props: { x?: string; y?: string; }) => { [x: string]: number; }
 >    : ^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->props : { x?: string | undefined; y?: string | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : { x?: string; y?: string; }
+>      : ^^^^^^      ^^^^^^      ^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined

@@ -120,6 +120,7 @@ import {
     equateValues,
     escapeLeadingUnderscores,
     EvaluationResolver,
+    EvaluatorResult,
     every,
     ExportAssignment,
     ExportDeclaration,
@@ -809,7 +810,7 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
-    return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
+    return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
 
 /** @internal */
@@ -819,7 +820,7 @@ export function packageIdToPackageName({ name, subModuleName }: PackageId): stri
 
 /** @internal */
 export function packageIdToString(packageId: PackageId): string {
-    return `${packageIdToPackageName(packageId)}@${packageId.version}`;
+    return `${packageIdToPackageName(packageId)}@${packageId.version}${packageId.peerDependencies ?? ""}`;
 }
 
 /** @internal */
@@ -10649,91 +10650,99 @@ export function getNameFromImportAttribute(node: ImportAttribute) {
 }
 
 /** @internal */
-export function isSyntacticallyString(expr: Expression): boolean {
-    expr = skipOuterExpressions(expr);
-    switch (expr.kind) {
-        case SyntaxKind.BinaryExpression:
-            const left = (expr as BinaryExpression).left;
-            const right = (expr as BinaryExpression).right;
-            return (
-                (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken &&
-                (isSyntacticallyString(left) || isSyntacticallyString(right))
-            );
-        case SyntaxKind.TemplateExpression:
-        case SyntaxKind.StringLiteral:
-        case SyntaxKind.NoSubstitutionTemplateLiteral:
-            return true;
-    }
-    return false;
+export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false): EvaluatorResult<T> {
+    return { value, isSyntacticallyString, resolvedOtherFiles };
 }
 
 /** @internal */
 export function createEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression }: EvaluationResolver) {
-    function evaluate(expr: TemplateExpression, location?: Declaration): string;
-    function evaluate(expr: Expression, location?: Declaration): string | number | undefined;
-    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
+    function evaluate(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined>;
+    function evaluate(expr: Expression, location?: Declaration): EvaluatorResult;
+    function evaluate(expr: Expression, location?: Declaration): EvaluatorResult {
+        let isSyntacticallyString = false;
+        let resolvedOtherFiles = false;
+        // It's unclear when/whether we should consider skipping other kinds of outer expressions.
+        // Type assertions intentionally break evaluation when evaluating literal types, such as:
+        //     type T = `one ${"two" as any} three`; // string
+        // But it's less clear whether such an assertion should break enum member evaluation:
+        //     enum E {
+        //       A = "one" as any
+        //     }
+        // SatisfiesExpressions and non-null assertions seem to have even less reason to break
+        // emitting enum members as literals. However, these expressions also break Babel's
+        // evaluation (but not esbuild's), and the isolatedModules errors we give depend on
+        // our evaluation results, so we're currently being conservative so as to issue errors
+        // on code that might break Babel.
+        expr = skipParentheses(expr);
         switch (expr.kind) {
             case SyntaxKind.PrefixUnaryExpression:
-                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
-                if (typeof value === "number") {
+                const result = evaluate((expr as PrefixUnaryExpression).operand, location);
+                resolvedOtherFiles = result.resolvedOtherFiles;
+                if (typeof result.value === "number") {
                     switch ((expr as PrefixUnaryExpression).operator) {
                         case SyntaxKind.PlusToken:
-                            return value;
+                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.MinusToken:
-                            return -value;
+                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.TildeToken:
-                            return ~value;
+                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles);
                     }
                 }
                 break;
-            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.BinaryExpression: {
                 const left = evaluate((expr as BinaryExpression).left, location);
                 const right = evaluate((expr as BinaryExpression).right, location);
-                if (typeof left === "number" && typeof right === "number") {
+                isSyntacticallyString = (left.isSyntacticallyString || right.isSyntacticallyString) && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken;
+                resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles;
+                if (typeof left.value === "number" && typeof right.value === "number") {
                     switch ((expr as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.BarToken:
-                            return left | right;
+                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.AmpersandToken:
-                            return left & right;
+                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.GreaterThanGreaterThanToken:
-                            return left >> right;
+                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            return left >>> right;
+                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.LessThanLessThanToken:
-                            return left << right;
+                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.CaretToken:
-                            return left ^ right;
+                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.AsteriskToken:
-                            return left * right;
+                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.SlashToken:
-                            return left / right;
+                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.PlusToken:
-                            return left + right;
+                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.MinusToken:
-                            return left - right;
+                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.PercentToken:
-                            return left % right;
+                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles);
                         case SyntaxKind.AsteriskAsteriskToken:
-                            return left ** right;
+                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles);
                     }
                 }
                 else if (
-                    (typeof left === "string" || typeof left === "number") &&
-                    (typeof right === "string" || typeof right === "number") &&
+                    (typeof left.value === "string" || typeof left.value === "number") &&
+                    (typeof right.value === "string" || typeof right.value === "number") &&
                     (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
                 ) {
-                    return "" + left + right;
+                    return evaluatorResult(
+                        "" + left.value + right.value,
+                        isSyntacticallyString,
+                        resolvedOtherFiles,
+                    );
                 }
+
                 break;
+            }
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return (expr as StringLiteralLike).text;
+                return evaluatorResult((expr as StringLiteralLike).text, /*isSyntacticallyString*/ true);
             case SyntaxKind.TemplateExpression:
                 return evaluateTemplateExpression(expr as TemplateExpression, location);
             case SyntaxKind.NumericLiteral:
-                return +(expr as NumericLiteral).text;
-            case SyntaxKind.ParenthesizedExpression:
-                return evaluate((expr as ParenthesizedExpression).expression, location);
+                return evaluatorResult(+(expr as NumericLiteral).text);
             case SyntaxKind.Identifier:
                 return evaluateEntityNameExpression(expr as Identifier, location);
             case SyntaxKind.PropertyAccessExpression:
@@ -10744,20 +10753,26 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             case SyntaxKind.ElementAccessExpression:
                 return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
         }
-        return undefined;
+        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles);
     }
 
-    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
+    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined> {
         let result = expr.head.text;
+        let resolvedOtherFiles = false;
         for (const span of expr.templateSpans) {
-            const value = evaluate(span.expression, location);
-            if (value === undefined) {
-                return undefined;
+            const spanResult = evaluate(span.expression, location);
+            if (spanResult.value === undefined) {
+                return evaluatorResult(/*value*/ undefined, /*isSyntacticallyString*/ true);
             }
-            result += value;
+            result += spanResult.value;
             result += span.literal.text;
+            resolvedOtherFiles ||= spanResult.resolvedOtherFiles;
         }
-        return result;
+        return evaluatorResult(
+            result,
+            /*isSyntacticallyString*/ true,
+            resolvedOtherFiles,
+        );
     }
     return evaluate;
 }

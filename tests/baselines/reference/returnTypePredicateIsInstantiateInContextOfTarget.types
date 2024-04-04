@@ -16,13 +16,13 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 >TestComponent : TestComponent
 >              : ^^^^^^^^^^^^^
 >React.Component : React.Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 >isAny : <T>(obj: any) => obj is T
->      : ^^^^^^^^^   ^^^^^^^^^^^^^
+>      : ^ ^^^^^^^   ^^^^^        
 >obj : any
 
     static defaultProps = {
@@ -45,7 +45,7 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
     // Type guard is defined as a static class property
     static isAny<T>(obj: any): obj is T {
 >isAny : <T>(obj: any) => obj is T
->      : ^^^^^^^^^   ^^^^^^^^^^^^^
+>      : ^ ^^^^^^^   ^^^^^        
 >obj : any
 
         return true;

@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,13 +13,13 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/src/file1.ts]
+//// [/user/username/projects/myproject/src/file1.ts] Inode:: 9
 import { x } from "file2";
 
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts]
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 12
 export const x = 10;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 13
 {
   "compilerOptions": {
     "outDir": "dist",
@@ -37,12 +37,12 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js]
+//// [/user/username/projects/myproject/dist/file1.js] Inode:: 15
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/projects/myproject/dist/file1.d.ts]
+//// [/user/username/projects/myproject/dist/file1.d.ts] Inode:: 16
 export {};
 
 
@@ -55,23 +55,23 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 /user/username/projects/myproject: *new*
-  {}
+  {"inode":7}
 /user/username/projects/myproject/dist: *new*
-  {}
+  {"inode":14}
 /user/username/projects/myproject/node_modules: *new*
-  {}
+  {"inode":10}
 /user/username/projects/myproject/node_modules/file2: *new*
-  {}
+  {"inode":11}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
-  {}
+  {"inode":12}
 /user/username/projects/myproject/src: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/src/file1.ts: *new*
-  {}
+  {"inode":9}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":13}
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts"
@@ -111,7 +111,7 @@ exitCode:: ExitStatus.undefined
 Change:: Add new file, should schedule and run timeout to update directory watcher
 
 Input::
-//// [/user/username/projects/myproject/src/file3.ts]
+//// [/user/username/projects/myproject/src/file3.ts] Inode:: 17
 export const y = 10;
 
 
@@ -147,14 +147,14 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/file3.js]
+//// [/user/username/projects/myproject/dist/file3.js] Inode:: 18
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
-//// [/user/username/projects/myproject/dist/file3.d.ts]
+//// [/user/username/projects/myproject/dist/file3.d.ts] Inode:: 19
 export declare const y = 10;
 
 
@@ -167,25 +167,25 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":3}
 /user/username/projects/myproject:
-  {}
+  {"inode":7}
 /user/username/projects/myproject/dist:
-  {}
+  {"inode":14}
 /user/username/projects/myproject/node_modules:
-  {}
+  {"inode":10}
 /user/username/projects/myproject/node_modules/file2:
-  {}
+  {"inode":11}
 /user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {}
+  {"inode":12}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":8}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":9}
 /user/username/projects/myproject/src/file3.ts: *new*
-  {}
+  {"inode":17}
 /user/username/projects/myproject/tsconfig.json:
-  {}
+  {"inode":13}
 
 Timeout callback:: count: 1
 5: timerToUpdateChildWatches *new*

@@ -26,8 +26,8 @@ declare const x2: { a: string, b: number | undefined };
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare const x3: { a: string, b?: number };
->x3 : { a: string; b?: number | undefined; }
->   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x3 : { a: string; b?: number; }
+>   : ^^^^^      ^^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 >b : number | undefined

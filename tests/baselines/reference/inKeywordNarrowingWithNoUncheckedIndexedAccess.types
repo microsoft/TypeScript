@@ -3,7 +3,7 @@
 === inKeywordNarrowingWithNoUncheckedIndexedAccess.ts ===
 declare function invariant(condition: boolean): asserts condition;
 >invariant : (condition: boolean) => asserts condition
->          : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^       ^^^^^                 
 >condition : boolean
 >          : ^^^^^^^
 

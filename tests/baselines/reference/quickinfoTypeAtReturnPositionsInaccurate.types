@@ -53,9 +53,9 @@ class StrClass<T extends string> {
 
 const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^                                    
 ><Item extends NumClass<number> | StrClass<string>> (        item: Item    ): item is Extract<Item, NumClass<any>> => {        return (item instanceof NumClass);    } : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->                                                                                                                                                                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^                                    
 
         item: Item
 >item : Item
@@ -319,7 +319,7 @@ interface Program {
 }
 declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
 >isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
->                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^            
 >program : Program | T
 >        : ^^^^^^^^^^^
 

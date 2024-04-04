@@ -2,8 +2,8 @@
 
 === typeGuardNarrowsIndexedAccessOfKnownProperty2.ts ===
 const foo: { key?: number } = {};
->foo : { key?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { key?: number; }
+>    : ^^^^^^^^      ^^^
 >key : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >{} : {}

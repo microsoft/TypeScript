@@ -3,7 +3,7 @@
 === reverseMappedTypePrimitiveConstraintProperty.ts ===
 declare function test<
 >test : <T extends { prop: string; nested: { nestedProp: string; }; }>(obj: { [K in keyof T]: T[K]; }) => T
->     : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^                       ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>     : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^                       ^^^^^^^^^^                         ^^^^^ 
 
   T extends { prop: string; nested: { nestedProp: string } },
 >prop : string

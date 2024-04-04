@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,22 +13,22 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/src/main.ts]
+//// [/user/username/projects/myproject/src/main.ts] Inode:: 9
 import { foo } from "bar"; foo();
 
-//// [/user/username/projects/myproject/node_modules/bar/index.d.ts]
+//// [/user/username/projects/myproject/node_modules/bar/index.d.ts] Inode:: 12
 export { foo } from "./foo";
 
-//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts]
+//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts] Inode:: 13
 export function foo(): string;
 
-//// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts]
+//// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] Inode:: 14
 export function fooBar(): string;
 
-//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts]
+//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts] Inode:: 16
 export function temp(): string;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 17
 {
   "exclude": [
     "node_modules"
@@ -69,7 +69,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excl
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Wild card directory
 
 
-//// [/user/username/projects/myproject/src/main.js]
+//// [/user/username/projects/myproject/src/main.js] Inode:: 18
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -85,23 +85,23 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 /user/username/projects/myproject: *new*
-  {}
+  {"inode":7}
 /user/username/projects/myproject/node_modules: *new*
-  {}
+  {"inode":10}
 /user/username/projects/myproject/node_modules/bar: *new*
-  {}
+  {"inode":11}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
-  {}
+  {"inode":13}
 /user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
-  {}
+  {"inode":12}
 /user/username/projects/myproject/src: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/src/main.ts: *new*
-  {}
+  {"inode":9}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":17}
 
 Timeout callback:: count: 1
 1: timerToUpdateChildWatches *new*
@@ -161,7 +161,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts]
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 20
 export function temp(): string;
 
 

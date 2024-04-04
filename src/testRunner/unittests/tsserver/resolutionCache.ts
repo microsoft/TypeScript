@@ -1,11 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,

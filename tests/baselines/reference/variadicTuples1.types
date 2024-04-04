@@ -685,8 +685,8 @@ type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;  // [strin
 // Reverse mapping through mapped type applied to variadic tuple type
 
 declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
->fm1 : <T extends unknown[]>(t: [string[], number[], ...Arrayify<T>]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>fm1 : <T extends unknown[]>(t: Arrayify<[string, number, ...T]>) => T
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^                                ^^^^^ 
 >t : [string[], number[], ...Arrayify<T>]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2200,8 +2200,8 @@ declare function getUser(id: string, options?: { x?: string }): string;
 >        : ^^^^^      ^^^^^^^^^^^^               ^^^^^      
 >id : string
 >   : ^^^^^^
->options : { x?: string | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : { x?: string; } | undefined
+>        : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -2212,8 +2212,8 @@ declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z
 >   : ^^^^^^
 >orgId : number
 >      : ^^^^^^
->options : { y?: number | undefined; z?: boolean | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : { y?: number; z?: boolean; } | undefined
+>        : ^^^^^^      ^^^^^^       ^^^^^^^^^^^^^^^
 >y : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >z : boolean | undefined

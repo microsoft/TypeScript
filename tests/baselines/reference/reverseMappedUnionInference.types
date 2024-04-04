@@ -16,7 +16,7 @@ interface AnyExtractor<Result> {
 interface Extractor<T, Result> {
   matches: (node: unknown) => node is T;
 >matches : (node: unknown) => node is T
->        : ^^^^^^^       ^^^^^^^^^^^^^^
+>        : ^^^^^^^       ^^^^^         
 >node : unknown
 >     : ^^^^^^^
 
@@ -35,7 +35,7 @@ declare function createExtractor<T, Result>(params: {
 
   matcher: (node: unknown) => node is T;
 >matcher : (node: unknown) => node is T
->        : ^^^^^^^       ^^^^^^^^^^^^^^
+>        : ^^^^^^^       ^^^^^         
 >node : unknown
 >     : ^^^^^^^
 
@@ -59,7 +59,7 @@ interface Identifier {
 
 declare function isIdentifier(node: unknown): node is Identifier;
 >isIdentifier : (node: unknown) => node is Identifier
->             : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^       ^^^^^                  
 >node : unknown
 >     : ^^^^^^^
 
@@ -129,7 +129,7 @@ interface StringLiteral {
 
 declare function isStringLiteral(node: unknown): node is StringLiteral;
 >isStringLiteral : (node: unknown) => node is StringLiteral
->                : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^       ^^^^^                     
 >node : unknown
 >     : ^^^^^^^
 
@@ -189,7 +189,7 @@ const stringExtractor = createExtractor({
 
 declare function unionType<Result extends readonly unknown[]>(parsers: {
 >unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]>; }) => AnyExtractor<Result[number]>
->          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            
+>          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                 ^^^^^                            
 >parsers : { [K in keyof Result]: AnyExtractor<Result[K]>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

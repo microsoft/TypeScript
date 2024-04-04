@@ -13,7 +13,7 @@ declare type Callback<Args extends any[], Out, R> = (...args: Args) => (data: Ou
 
 declare function factory<Out>(): <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R;
 >factory : <Out>() => <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R
->        : ^   ^^^^^^^^    ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^                      ^^^^^                    
+>        : ^   ^^^^^^^                                                                                 
 >callback : Callback<Args, Out, R>
 >         : ^^^^^^^^^^^^^^^^^^^^^^
 >args : Args

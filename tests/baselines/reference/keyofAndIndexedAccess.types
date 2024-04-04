@@ -1214,7 +1214,7 @@ function f60<T>(source: T, target: T) {
 
 function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 >f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
->    : ^^^^^^^^ ^^ ^^^^^^             ^^^^^^             ^^^^^    ^^^^^^^^^
+>    : ^^^^^^^                                                    ^^^^^^^^^
 >func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
 >     : ^ ^^ ^^^^^^             ^^^^^^             ^^^^^    
 >k1 : keyof T & keyof U
@@ -1279,7 +1279,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
 function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >f71 : (func: <T, U>(x: T, y: U) => Partial<T & U>) => void
->    : ^^^^^^^^ ^^ ^^^^^ ^^^^^ ^^^^^              ^^^^^^^^^
+>    : ^^^^^^^                                    ^^^^^^^^^
 >func : <T, U>(x: T, y: U) => Partial<T & U>
 >     : ^ ^^ ^^^^^ ^^^^^ ^^^^^              
 >x : T
@@ -1338,7 +1338,7 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 
 function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
 >f72 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
->    : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          ^^^^^^^^^
+>    : ^^^^^^^                                                                   ^^^^^^^^^
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
 >x : T
@@ -1428,8 +1428,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 }
 
 function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
->f73 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
->    : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          ^^^^^^^^^
+>f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
+>    : ^^^^^^^                                                               ^^^^^^^^^
 >func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
 >     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
 >x : T
@@ -1519,8 +1519,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 }
 
 function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
->f74 : (func: <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]) => void
->    : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          ^^^^^^^^^
+>f74 : (func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) => void
+>    : ^^^^^^^                                                               ^^^^^^^^^
 >func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
 >x : T
@@ -1679,8 +1679,8 @@ function f80<T extends { a: { x: any } }>(obj: T) {
 }
 
 function f81<T extends { a: { x: any } }>(obj: T) {
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
->    : ^ ^^^^^^^^^^^^^^           ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T['a']['x']
+>    : ^ ^^^^^^^^^^^^^^           ^^^^^^^^^^ ^^^^^           
 >a : { x: any; }
 >  : ^^^^^   ^^^
 >x : any
@@ -1712,8 +1712,8 @@ function f82() {
 >   : ^^^^^^
 >f81({ a: { x: "hello" } }) : string
 >                           : ^^^^^^
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T['a']['x']
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >{ a: { x: "hello" } } : { a: { x: string; }; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
@@ -1730,8 +1730,8 @@ function f82() {
 >   : ^^^^^^
 >f81({ a: { x: 42 } }) : number
 >                      : ^^^^^^
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T['a']['x']
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >{ a: { x: 42 } } : { a: { x: number; }; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; }
@@ -1745,8 +1745,8 @@ function f82() {
 }
 
 function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]['x']
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^         
 >x : string
 >  : ^^^^^^
 >x : any
@@ -1780,8 +1780,8 @@ function f84() {
 >   : ^^^^^^
 >f83({ foo: { x: "hello" } }, "foo") : string
 >                                    : ^^^^^^
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]['x']
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         
 >{ foo: { x: "hello" } } : { foo: { x: string; }; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { x: string; }
@@ -1800,8 +1800,8 @@ function f84() {
 >   : ^^^^^^
 >f83({ bar: { x: 42 } }, "bar") : number
 >                               : ^^^^^^
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]['x']
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         
 >{ bar: { x: 42 } } : { bar: { x: number; }; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : { x: number; }
@@ -2929,7 +2929,7 @@ class Form<T> {
 
     private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
 >childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
->                   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^ ^^^^^^^^^^^^^^^^^^    ^^^^^          ^^^
 >v : T[K]
 >  : ^^^^
 

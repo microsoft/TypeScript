@@ -1284,8 +1284,8 @@ class C11 {
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
 >f40 : (obj: { kind: 'foo'; foo?: string; } | { kind: 'bar'; bar?: number; }) => void
 >    : ^^^^^^                                                               ^^^^^^^^^
->obj : { kind: 'foo'; foo?: string | undefined; } | { kind: 'bar'; bar?: number | undefined; }
->    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { kind: 'foo'; foo?: string; } | { kind: 'bar'; bar?: number; }
+>    : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
 >kind : "foo"
 >     : ^^^^^
 >foo : string | undefined
@@ -1462,7 +1462,7 @@ class Utils {
 
   static isDefined<T>(value: T): value is NonNullable<T> {
 >isDefined : <T>(value: T) => value is NonNullable<T>
->          : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^ ^^^^^                       
 >value : T
 >      : ^
 

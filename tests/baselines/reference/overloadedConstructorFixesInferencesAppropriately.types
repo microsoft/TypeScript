@@ -63,7 +63,7 @@ new AsyncLoader({
 >AsyncLoader : typeof AsyncLoader
 >            : ^^^^^^^^^^^^^^^^^^
 >{    asyncLoad: load,    children: result => result.success as any,} : { asyncLoad: () => Box<ErrorResult | { success: true; }>; children: (result: { success: true; }) => any; }
->                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
     asyncLoad: load,
 >asyncLoad : () => Box<ErrorResult | { success: true; }>
@@ -73,9 +73,9 @@ new AsyncLoader({
 
     children: result => result.success as any,
 >children : (result: { success: true; }) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >result => result.success as any : (result: { success: true; }) => any
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >result : { success: true; }
 >       : ^^^^^^^^^^^^^^^^^^
 >result.success as any : any

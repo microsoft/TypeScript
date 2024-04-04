@@ -1,7 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    defer,
-} from "../../_namespaces/Utils";
+import { defer } from "../../_namespaces/Utils";
 import {
     baselineTsserverLogs,
     closeFilesForSession,

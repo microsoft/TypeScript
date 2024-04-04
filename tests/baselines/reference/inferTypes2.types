@@ -5,7 +5,7 @@
 
 export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
 >foo : <T>(obj: T) => T extends () => infer P ? P : never
->    : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^                                   
 >obj : T
 >    : ^
 
@@ -31,8 +31,8 @@ export type BadNested<T> = { x: T extends number ? T : string };
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export declare function foo2<T>(obj: T): T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K] } ? P : never;
->foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
->     : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo2 : <T>(obj: T) => T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K]; } ? P : never
+>     : ^ ^^^^^^^ ^^^^^                                                                                 
 >obj : T
 >    : ^
 

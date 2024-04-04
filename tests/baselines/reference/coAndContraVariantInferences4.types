@@ -34,23 +34,23 @@ interface Decorator extends Node { kind: SyntaxKind.Decorator; }
 
 declare function isModifier(node: Node): node is Modifier;
 >isModifier : (node: Node) => node is Modifier
->           : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^    ^^^^^                
 >node : Node
 >     : ^^^^
 
 declare function isDecorator(node: Node): node is Decorator;
 >isDecorator : (node: Node) => node is Decorator
->            : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^    ^^^^^                 
 >node : Node
 >     : ^^^^
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T) => element is U): array is readonly U[];
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
->      : ^ ^^ ^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^                            ^^^^^                     
 >array : readonly T[]
 >      : ^^^^^^^^^^^^
 >callback : (element: T) => element is U
->         : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^ ^^^^^            
 >element : T
 >        : ^
 

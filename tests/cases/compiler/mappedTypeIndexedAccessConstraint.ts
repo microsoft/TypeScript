@@ -57,3 +57,35 @@ const resolveMapper1 = <K extends keyof typeof mapper>(
 
 const resolveMapper2 = <K extends keyof typeof mapper>(
     key: K, o: MapperArgs<K>) => mapper[key]?.(o)
+
+// Repro from #57860
+
+type Obj1 = {
+    a: string;
+    b: number;
+};
+
+type Obj2 = {
+    b: number;
+    c: boolean;
+};
+
+declare const mapIntersection: {
+    [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
+};
+
+const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
+
+declare const resolved: { a?: number | undefined; b: number; c: number };
+
+const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
+
+// Additional repro from #57860
+
+type Foo = {
+    prop: string;
+}
+
+function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
+    obj[key].length;
+}

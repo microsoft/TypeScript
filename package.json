@@ -64,7 +64,6 @@
         "eslint-formatter-autolinkable-stylish": "^1.3.0",
         "eslint-plugin-local": "^4.2.1",
         "eslint-plugin-no-null": "^1.0.2",
-        "eslint-plugin-simple-import-sort": "^12.0.0",
         "fast-xml-parser": "^4.3.6",
         "glob": "^10.3.10",
         "hereby": "^1.8.9",
