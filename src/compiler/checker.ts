@@ -8671,14 +8671,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return { introducesError, node };
             }
             const meaning = getMeaningOfEntityNameReference(node);
+            let sym: Symbol | undefined;
             if (isThisIdentifier(leftmost)) {
-                if (isSymbolAccessible(getSymbolOfDeclaration(getThisContainer(leftmost, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false)), leftmost, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                // `this` isn't a bindable identifier - skip resolution, find a relevant `this` symbol directly and avoid exhaustive scope traversal
+                sym = getSymbolOfDeclaration(getThisContainer(leftmost, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false));
+                if (isSymbolAccessible(sym, leftmost, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                     introducesError = true;
                     context.tracker.reportInaccessibleThisError();
                 }
-                return { introducesError, node };
+                return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
             }
-            const sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
+            sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
             if (sym) {
                 // If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accesibility
                 if (
