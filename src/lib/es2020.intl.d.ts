@@ -25,7 +25,7 @@ declare namespace Intl {
         /** The calendar system associated with the locale. */
         calendar: string | undefined;
         /** The case sorting rule associated with the locale. */
-        caseFirst: CollatorOptionsCaseFirst | undefined;
+        caseFirst?: CollatorOptionsCaseFirst | undefined;
         /** The character collation associated with the locale. */
         collation: string | undefined;
         /** The hour cycle type associated with the locale. */
@@ -35,7 +35,7 @@ declare namespace Intl {
         /** The number system used by the locale. */
         numberingSystem: string | undefined;
         /** The numeric sorting rule associated with the locale. */
-        numeric: boolean | undefined;
+        numeric?: boolean | undefined;
         /** The region code associated with the locale. */
         region: string | undefined;
         /** The language script associated with the locale. */
