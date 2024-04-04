@@ -106,10 +106,10 @@ import {
     getNameFromPropertyName,
     getNewLineCharacter,
     getNewLineOrDefaultFromHost,
+    getNodeChildren,
     getNonAssignedNameOfDeclaration,
     getNormalizedAbsolutePath,
     getObjectFlags,
-    getOrSetNodeChildren,
     getQuotePreference,
     getScriptKind,
     getSetExternalModuleIndicator,
@@ -438,7 +438,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
 
     public getChildren(sourceFile?: SourceFileLike): Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return getOrSetNodeChildren(this, () => createChildren(this, sourceFile));
+        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {

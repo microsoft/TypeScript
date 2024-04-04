@@ -8,20 +8,12 @@ export function getNodeChildren(node: Node): Node[] | undefined {
 }
 
 /** @internal */
-export function setNodeChildren(node: Node, children: Node[]) {
+export function setNodeChildren(node: Node, children: Node[]): Node[] {
     nodeChildren.set(node, children);
+    return children;
 }
 
 /** @internal */
 export function unsetNodeChildren(node: Node) {
     nodeChildren.delete(node);
-}
-
-/** @internal */
-export function getOrSetNodeChildren(node: Node, fn: () => Node[]): Node[] {
-    let children = getNodeChildren(node);
-    if (children === undefined) {
-        setNodeChildren(node, children = fn());
-    }
-    return children;
 }
