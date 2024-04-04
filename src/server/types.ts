@@ -6,12 +6,6 @@ import {
     WatchOptions,
 } from "./_namespaces/ts";
 
-export interface CompressedData {
-    length: number;
-    compressionKind: string;
-    data: any;
-}
-
 export type ModuleImportResult = { module: {}; error: undefined; } | { module: undefined; error: { stack?: string; message?: string; }; };
 
 /** @deprecated Use {@link ModuleImportResult} instead. */

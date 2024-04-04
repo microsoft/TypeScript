@@ -100,6 +100,7 @@ export function getNpmCommandForInstallation(npmPath: string, tsVersion: string,
 
 export type RequestCompletedAction = (success: boolean) => void;
 
+/** @internal */
 export interface PendingRequest {
     requestId: number;
     packageNames: string[];

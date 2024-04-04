@@ -293,6 +293,7 @@ export const enum PackageJsonAutoImportPreference {
     Auto,
 }
 
+/** @internal */
 export interface PerformanceEvent {
     kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
     durationMs: number;
@@ -304,6 +305,7 @@ export enum LanguageServiceMode {
     Syntactic,
 }
 
+/** @internal */
 export interface IncompleteCompletionsCache {
     get(): CompletionInfo | undefined;
     set(response: CompletionInfo): void;
@@ -1236,6 +1238,7 @@ export interface ReferencedSymbolEntry extends ReferenceEntry {
     isDefinition?: boolean;
 }
 
+/** @internal */
 export enum SymbolDisplayPartKind {
     aliasName,
     className,
@@ -1275,6 +1278,7 @@ export interface SymbolDisplayPart {
     kind: string;
 }
 
+/** @internal */
 export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
     target: DocumentSpan;
 }
@@ -1585,12 +1589,6 @@ export const enum OutliningSpanKind {
     Imports = "imports",
 }
 
-export const enum OutputFileType {
-    JavaScript,
-    SourceMap,
-    Declaration,
-}
-
 export const enum EndOfLineState {
     None,
     InMultiLineCommentTrivia,
@@ -1771,6 +1769,7 @@ export const enum ScriptElementKind {
     linkText = "link text",
 }
 
+/** @internal */
 export const enum ScriptElementKindModifier {
     none = "",
     publicMemberModifier = "public",
@@ -1907,6 +1906,7 @@ export interface RefactorContext extends textChanges.TextChangesContext {
     kind?: string;
 }
 
+/** @internal */
 export interface InlayHintsContext {
     file: SourceFile;
     program: Program;

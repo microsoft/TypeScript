@@ -2427,12 +2427,6 @@ declare namespace ts {
                 writeLine(text: string): void;
             }
             type RequestCompletedAction = (success: boolean) => void;
-            interface PendingRequest {
-                requestId: number;
-                packageNames: string[];
-                cwd: string;
-                onRequestCompleted: RequestCompletedAction;
-            }
             abstract class TypingsInstaller {
                 protected readonly installTypingHost: InstallTypingHost;
                 private readonly globalCachePath;
@@ -2550,11 +2544,6 @@ declare namespace ts {
             /** if files is undefined, retain same set of watchers */
             readonly files: readonly string[] | undefined;
             readonly kind: ActionWatchTypingLocations;
-        }
-        interface CompressedData {
-            length: number;
-            compressionKind: string;
-            data: any;
         }
         type ModuleImportResult = {
             module: {};
@@ -3056,13 +3045,6 @@ declare namespace ts {
                 [libName: string]: string;
             };
         }
-        interface HostConfiguration {
-            formatCodeOptions: FormatCodeSettings;
-            preferences: protocol.UserPreferences;
-            hostInfo: string;
-            extraFileExtensions?: FileExtensionInfo[];
-            watchOptions?: WatchOptions;
-        }
         interface OpenConfiguredProjectResult {
             configFileName?: NormalizedPath;
             configFileErrors?: readonly Diagnostic[];
@@ -3330,10 +3312,6 @@ declare namespace ts {
             resetRequest(requestId: number): void;
         }
         const nullCancellationToken: ServerCancellationToken;
-        interface PendingErrorCheck {
-            fileName: NormalizedPath;
-            project: Project;
-        }
         /** @deprecated use ts.server.protocol.CommandTypes */
         type CommandNames = protocol.CommandTypes;
         /** @deprecated use ts.server.protocol.CommandTypes */
@@ -4197,14 +4175,6 @@ declare namespace ts {
         ExportDefault = 2080,
         All = 131071,
         Modifier = 98303,
-    }
-    enum JsxFlags {
-        None = 0,
-        /** An element from a named property of the JSX.IntrinsicElements interface */
-        IntrinsicNamedElement = 1,
-        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
-        IntrinsicIndexedElement = 2,
-        IntrinsicElement = 3,
     }
     interface Node extends ReadonlyTextRange {
         readonly kind: SyntaxKind;
@@ -5570,9 +5540,6 @@ declare namespace ts {
         resolutionMode?: ResolutionMode;
         preserve?: boolean;
     }
-    interface CheckJsDirective extends TextRange {
-        enabled: boolean;
-    }
     type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
@@ -5793,7 +5760,6 @@ declare namespace ts {
         readonly moduleSpecifier: Expression;
         readonly attributes?: ImportAttributes;
     }
-    type FlowType = Type | IncompleteType;
     interface IncompleteType {
         flags: TypeFlags | 0;
         type: Type;
@@ -5996,20 +5962,6 @@ declare namespace ts {
         after?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
         afterDeclarations?: (TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory)[];
-    }
-    interface SourceMapSpan {
-        /** Line number in the .js file. */
-        emittedLine: number;
-        /** Column number in the .js file. */
-        emittedColumn: number;
-        /** Line number in the .ts file. */
-        sourceLine: number;
-        /** Column number in the .ts file. */
-        sourceColumn: number;
-        /** Optional name (index into names array) associated with this span. */
-        nameIndex?: number;
-        /** .ts file (index into sources array) associated with this span */
-        sourceIndex: number;
     }
     /** Return code used by getEmitOutput function to indicate status of the function */
     enum ExitStatus {
@@ -6696,23 +6648,6 @@ declare namespace ts {
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
-    }
-    enum InferencePriority {
-        None = 0,
-        NakedTypeVariable = 1,
-        SpeculativeTuple = 2,
-        SubstituteSource = 4,
-        HomomorphicMappedType = 8,
-        PartialHomomorphicMappedType = 16,
-        MappedTypeConstraint = 32,
-        ContravariantConditional = 64,
-        ReturnType = 128,
-        LiteralKeyof = 256,
-        NoConstraints = 512,
-        AlwaysStrict = 1024,
-        MaxValue = 2048,
-        PriorityImpliesCombination = 416,
-        Circularity = -1,
     }
     interface FileExtensionInfo {
         extension: string;
@@ -9806,19 +9741,10 @@ declare namespace ts {
         fileName: Path;
         packageName: string;
     }
-    interface PerformanceEvent {
-        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
-        durationMs: number;
-    }
     enum LanguageServiceMode {
         Semantic = 0,
         PartialSemantic = 1,
         Syntactic = 2,
-    }
-    interface IncompleteCompletionsCache {
-        get(): CompletionInfo | undefined;
-        set(response: CompletionInfo): void;
-        clear(): void;
     }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
         getCompilationSettings(): CompilerOptions;
@@ -10485,33 +10411,6 @@ declare namespace ts {
     interface ReferencedSymbolEntry extends ReferenceEntry {
         isDefinition?: boolean;
     }
-    enum SymbolDisplayPartKind {
-        aliasName = 0,
-        className = 1,
-        enumName = 2,
-        fieldName = 3,
-        interfaceName = 4,
-        keyword = 5,
-        lineBreak = 6,
-        numericLiteral = 7,
-        stringLiteral = 8,
-        localName = 9,
-        methodName = 10,
-        moduleName = 11,
-        operator = 12,
-        parameterName = 13,
-        propertyName = 14,
-        punctuation = 15,
-        space = 16,
-        text = 17,
-        typeParameterName = 18,
-        enumMemberName = 19,
-        functionName = 20,
-        regularExpressionLiteral = 21,
-        link = 22,
-        linkName = 23,
-        linkText = 24,
-    }
     interface SymbolDisplayPart {
         /**
          * Text of an item describing the symbol.
@@ -10521,9 +10420,6 @@ declare namespace ts {
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
         kind: string;
-    }
-    interface JSDocLinkDisplayPart extends SymbolDisplayPart {
-        target: DocumentSpan;
     }
     interface JSDocTagInfo {
         name: string;
@@ -10801,11 +10697,6 @@ declare namespace ts {
         /** Contiguous blocks of import declarations */
         Imports = "imports",
     }
-    enum OutputFileType {
-        JavaScript = 0,
-        SourceMap = 1,
-        Declaration = 2,
-    }
     enum EndOfLineState {
         None = 0,
         InMultiLineCommentTrivia = 1,
@@ -10944,30 +10835,6 @@ declare namespace ts {
         /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
         linkText = "link text",
     }
-    enum ScriptElementKindModifier {
-        none = "",
-        publicMemberModifier = "public",
-        privateMemberModifier = "private",
-        protectedMemberModifier = "protected",
-        exportedModifier = "export",
-        ambientModifier = "declare",
-        staticModifier = "static",
-        abstractModifier = "abstract",
-        optionalModifier = "optional",
-        deprecatedModifier = "deprecated",
-        dtsModifier = ".d.ts",
-        tsModifier = ".ts",
-        tsxModifier = ".tsx",
-        jsModifier = ".js",
-        jsxModifier = ".jsx",
-        jsonModifier = ".json",
-        dmtsModifier = ".d.mts",
-        mtsModifier = ".mts",
-        mjsModifier = ".mjs",
-        dctsModifier = ".d.cts",
-        ctsModifier = ".cts",
-        cjsModifier = ".cjs",
-    }
     enum ClassificationTypeNames {
         comment = "comment",
         identifier = "identifier",
@@ -11020,14 +10887,6 @@ declare namespace ts {
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25,
-    }
-    interface InlayHintsContext {
-        file: SourceFile;
-        program: Program;
-        cancellationToken: CancellationToken;
-        host: LanguageServiceHost;
-        span: TextSpan;
-        preferences: UserPreferences;
     }
     type ExportMapInfoKey = string & {
         __exportInfoKey: void;

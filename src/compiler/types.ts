@@ -896,6 +896,7 @@ export const enum ModifierFlags {
     Modifier = All & ~Decorator,
 }
 
+/** @internal */
 export const enum JsxFlags {
     None = 0,
     /** An element from a named property of the JSX.IntrinsicElements interface */
@@ -3787,6 +3788,7 @@ export interface FileReference extends TextRange {
     preserve?: boolean;
 }
 
+/** @internal */
 export interface CheckJsDirective extends TextRange {
     enabled: boolean;
 }
@@ -4167,6 +4169,7 @@ export interface FlowReduceLabel extends FlowNodeBase {
     antecedent: FlowNode;
 }
 
+/** @internal */
 export type FlowType = Type | IncompleteType;
 
 // Incomplete types occur during control flow analysis of loops. An IncompleteType
@@ -4810,21 +4813,6 @@ export interface CustomTransformers {
 export interface EmitTransformers {
     scriptTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
     declarationTransformers: readonly TransformerFactory<SourceFile | Bundle>[];
-}
-
-export interface SourceMapSpan {
-    /** Line number in the .js file. */
-    emittedLine: number;
-    /** Column number in the .js file. */
-    emittedColumn: number;
-    /** Line number in the .ts file. */
-    sourceLine: number;
-    /** Column number in the .ts file. */
-    sourceColumn: number;
-    /** Optional name (index into names array) associated with this span. */
-    nameIndex?: number;
-    /** .ts file (index into sources array) associated with this span */
-    sourceIndex: number;
 }
 
 /** @internal */
@@ -6774,6 +6762,7 @@ export type TypeMapper =
     | { kind: TypeMapKind.Function; func: (t: Type) => Type; debugInfo?: () => string; }
     | { kind: TypeMapKind.Composite | TypeMapKind.Merged; mapper1: TypeMapper; mapper2: TypeMapper; };
 
+/** @internal */
 // dprint-ignore
 export const enum InferencePriority {
     None                         = 0,

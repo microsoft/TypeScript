@@ -509,7 +509,7 @@ export function convertUserPreferences(preferences: protocol.UserPreferences): U
     return userPreferences;
 }
 
-export interface HostConfiguration {
+interface HostConfiguration {
     formatCodeOptions: FormatCodeSettings;
     preferences: protocol.UserPreferences;
     hostInfo: string;
