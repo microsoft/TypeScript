@@ -5,7 +5,7 @@ interface String {
     isWellFormed(): boolean;
 
     /**
-     * Returns a string where all lone UTF-16 surrogates of this string have been replaced by the Unicode replacement character (U+FFFD).
+     * Returns a string where all lone or out-of-order surrogates have been replaced by the Unicode replacement character (U+FFFD).
      */
     toWellFormed(): string;
 }
