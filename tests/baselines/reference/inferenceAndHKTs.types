@@ -45,7 +45,7 @@ export interface TTypeLambda extends TypeLambda {
 
 export declare const map: <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>;
 >map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^                                                     
 >F : TypeClass<F>
 >  : ^^^^^^^^^^^^
 >a : Apply<F, A>

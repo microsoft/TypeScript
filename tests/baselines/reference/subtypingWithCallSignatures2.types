@@ -310,7 +310,7 @@ declare function foo15(a: any): any;
 
 declare function foo16(a: {
 >foo16 : { (a: { <T extends Derived>(x: T): number[]; <U extends Base>(x: U): number[]; }): typeof a; (a: any): any; }
->      : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^        ^^^ ^^^^^^^^^^^^^^^^^^ ^^^        ^^^^^^        ^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                                                                          ^^^        ^^^^^^^^^^^^^^^^^^
 >a : { <T extends Derived>(x: T): number[]; <U extends Base>(x: U): number[]; }
 >  : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^        ^^^ ^^^^^^^^^^^^^^^^^^ ^^^        ^^^
 

@@ -264,7 +264,7 @@ type StringAndBoolean = [string, boolean]
 
 declare function f16(s: StringAndBoolean): string;
 >f16 : (s: StringAndBoolean) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>    : ^^^^                ^^^^^      
 >s : StringAndBoolean
 >  : ^^^^^^^^^^^^^^^^
 

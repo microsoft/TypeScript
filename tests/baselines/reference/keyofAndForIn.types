@@ -61,7 +61,7 @@ function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
 
 function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
 >f2 : <T>(obj: { [P in keyof T]: T[P]; }, k: keyof T) => void
->   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>   : ^ ^^^^^^^                         ^^^^^       ^^^^^^^^^
 >obj : { [P in keyof T]: T[P]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : keyof T
@@ -117,7 +117,7 @@ function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
 
 function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
 >f3 : <T, K extends keyof T>(obj: { [P in K]: T[P]; }, k: K) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^ ^^^^^^^^^
 >obj : { [P in K]: T[P]; }
 >    : ^^^^^^^^^^^^^^^^^^^
 >k : K
