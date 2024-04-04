@@ -8677,8 +8677,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     sym.flags & SymbolFlags.FunctionScopedVariable
                     && sym.valueDeclaration
                 ) {
-                    const parameter = sym.valueDeclaration.kind === SyntaxKind.Parameter ? sym.valueDeclaration :
-                        findAncestor(sym.valueDeclaration, n => n.kind === SyntaxKind.Parameter || context.enclosingDeclaration === n.parent);
+                    const parameter = sym.valueDeclaration && isParameterDeclaration(sym.valueDeclaration);
                     if (parameter) {
                         return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
                     }
