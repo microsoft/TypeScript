@@ -146,7 +146,6 @@ import {
     isDeclarationStatement,
     isDestructuringAssignment,
     isDottedName,
-    isElementAccessExpression,
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
@@ -188,7 +187,6 @@ import {
     isModuleExportsAccessExpression,
     isNamedDeclaration,
     isNamespaceExport,
-    isNonNullExpression,
     isNullishCoalesce,
     isObjectLiteralExpression,
     isObjectLiteralMethod,
@@ -540,6 +538,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var hasFlowEffects: boolean;
 
     // state used for emit helpers
     var emitFlags: NodeFlags;
@@ -618,6 +617,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
@@ -1223,8 +1223,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function isNarrowingExpression(expr: Expression): boolean {
         switch (expr.kind) {
             case SyntaxKind.Identifier:
-            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.ThisKeyword:
+                return true;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return containsNarrowableReference(expr);
@@ -1248,11 +1248,24 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function isNarrowableReference(expr: Expression): boolean {
-        return isDottedName(expr)
-            || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
-            || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
-            || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) && isNarrowableReference(expr.expression)
-            || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
+        switch (expr.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.MetaProperty:
+                return true;
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.NonNullExpression:
+                return isNarrowableReference((expr as PropertyAccessExpression | ParenthesizedExpression | NonNullExpression).expression);
+            case SyntaxKind.ElementAccessExpression:
+                return (isStringOrNumericLiteralLike((expr as ElementAccessExpression).argumentExpression) || isEntityNameExpression((expr as ElementAccessExpression).argumentExpression)) &&
+                    isNarrowableReference((expr as ElementAccessExpression).expression);
+            case SyntaxKind.BinaryExpression:
+                return (expr as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference((expr as BinaryExpression).right) ||
+                    isAssignmentOperator((expr as BinaryExpression).operatorToken.kind) && isLeftHandSideExpression((expr as BinaryExpression).left);
+        }
+        return false;
     }
 
     function containsNarrowableReference(expr: Expression): boolean {
@@ -1371,6 +1384,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function createFlowMutation(flags: FlowFlags, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement): FlowNode {
         setFlowNodeReferenced(antecedent);
+        hasFlowEffects = true;
         const result = initFlowNode({ flags, antecedent, node });
         if (currentExceptionTarget) {
             addAntecedent(currentExceptionTarget, result);
@@ -1380,6 +1394,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function createFlowCall(antecedent: FlowNode, node: CallExpression): FlowNode {
         setFlowNodeReferenced(antecedent);
+        hasFlowEffects = true;
         return initFlowNode({ flags: FlowFlags.Call, antecedent, node });
     }
 
@@ -1559,6 +1574,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         currentFlow = unreachableFlow;
+        hasFlowEffects = true;
     }
 
     function findActiveLabel(name: __String) {
@@ -1575,6 +1591,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (flowLabel) {
             addAntecedent(flowLabel, currentFlow);
             currentFlow = unreachableFlow;
+            hasFlowEffects = true;
         }
     }
 
@@ -1904,8 +1921,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (isLogicalOrCoalescingBinaryOperator(operator) || isLogicalOrCoalescingAssignmentOperator(operator)) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
+                    const saveCurrentFlow = currentFlow;
+                    const saveHasFlowEffects = hasFlowEffects;
+                    hasFlowEffects = false;
                     bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
-                    currentFlow = finishFlowLabel(postExpressionLabel);
+                    currentFlow = hasFlowEffects ? finishFlowLabel(postExpressionLabel) : saveCurrentFlow;
+                    hasFlowEffects ||= saveHasFlowEffects;
                 }
                 else {
                     bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
@@ -1985,6 +2006,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const trueLabel = createBranchLabel();
         const falseLabel = createBranchLabel();
         const postExpressionLabel = createBranchLabel();
+        const saveCurrentFlow = currentFlow;
+        const saveHasFlowEffects = hasFlowEffects;
+        hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
         bind(node.questionToken);
@@ -1994,7 +2018,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);
-        currentFlow = finishFlowLabel(postExpressionLabel);
+        currentFlow = hasFlowEffects ? finishFlowLabel(postExpressionLabel) : saveCurrentFlow;
+        hasFlowEffects ||= saveHasFlowEffects;
     }
 
     function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {
@@ -2134,8 +2159,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindOptionalChainFlow(node: OptionalChain) {
         if (isTopLevelLogicalExpression(node)) {
             const postExpressionLabel = createBranchLabel();
+            const saveCurrentFlow = currentFlow;
+            const saveHasFlowEffects = hasFlowEffects;
             bindOptionalChain(node, postExpressionLabel, postExpressionLabel);
-            currentFlow = finishFlowLabel(postExpressionLabel);
+            currentFlow = hasFlowEffects ? finishFlowLabel(postExpressionLabel) : saveCurrentFlow;
+            hasFlowEffects ||= saveHasFlowEffects;
         }
         else {
             bindOptionalChain(node, currentTrueTarget!, currentFalseTarget!);
