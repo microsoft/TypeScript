@@ -501,6 +501,7 @@ export const enum ContainerFlags {
     IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
 }
 
+/** @internal */
 export function createFlowNode(flags: FlowFlags, node: unknown, antecedent: FlowNode | FlowNode[] | undefined): FlowNode {
     return Debug.attachFlowNodeDebugInfo({ flags, id: 0, node, antecedent } as FlowNode);
 }
