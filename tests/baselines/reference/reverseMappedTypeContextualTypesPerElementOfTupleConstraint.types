@@ -18,7 +18,7 @@ declare function bindAll<
 
   bindings: {
 >bindings : { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }
->         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^^^^^^    ^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^                                                                                 ^^^^^^
 
     [K in keyof TTypes]: {
       type: TTypes[K];
