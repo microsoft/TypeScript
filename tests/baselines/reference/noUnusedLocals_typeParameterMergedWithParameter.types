@@ -20,13 +20,13 @@ function useParam<T>(T: number) {
 
 function useTypeParam<T>(T: T) {}
 >useTypeParam : <T>(T: T) => void
->             : ^ ^^^^^ ^^^^^^^^^
+>             : ^^^^^^^ ^^^^^^^^^
 >T : T
 >  : ^
 
 function useBoth<T>(T: T) {
 >useBoth : <T>(T: T) => T
->        : ^ ^^^^^ ^^^^^^
+>        : ^^^^^^^ ^^^^^^
 >T : T
 >  : ^
 
