@@ -676,7 +676,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(5) : 0
 >          : ^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >5 : 5
 >  : ^
 
@@ -684,7 +684,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf("hello") : ""
 >                : ^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -692,7 +692,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(true) : false
 >             : ^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >true : true
 >     : ^^^^
 
@@ -700,7 +700,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(n) : 0
 >          : ^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >n : number
 >  : ^^^^^^
 
@@ -708,7 +708,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(b) : false
 >          : ^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >b : boolean
 >  : ^^^^^^^
 
@@ -716,7 +716,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(x) : false | 0
 >          : ^^^^^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
 
@@ -724,7 +724,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(y) : ZeroOf<T>
 >          : ^^^^^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           
 >y : T
 >  : ^
 }

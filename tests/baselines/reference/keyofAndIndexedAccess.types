@@ -2929,7 +2929,7 @@ class Form<T> {
 
     private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
 >childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
->                   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^ ^^^^^^^^^^^^^^^^^^    ^^^^^          ^^^
 >v : T[K]
 >  : ^^^^
 

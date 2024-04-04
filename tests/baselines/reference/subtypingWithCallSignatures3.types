@@ -39,8 +39,8 @@ module Errors {
 >     : ^^^^^^
 
     declare function foo2(a2: (x: number) => string[]): typeof a2;
->foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }
->     : ^^^^^^^                       ^^^^^^^      ^^^^^        ^^^^^^^^^^^^^^^^^^^
+>foo2 : { (a2: (x: number) => string[]): typeof a2; (a2: any): any; }
+>     : ^^^^^^^                       ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (x: number) => string[]
 >   : ^^^^      ^^^^^        
 >x : number
@@ -54,8 +54,8 @@ module Errors {
 >a2 : any
 
     declare function foo7(a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): typeof a2;
->foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }
->     : ^^^^^^^                                                    ^^^^^^^                      ^^^^^                     ^^^^^^^^^^^^^^^^^^^
+>foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): typeof a2; (a2: any): any; }
+>     : ^^^^^^^                                                    ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >   : ^^^^                      ^^^^^                     
 >x : (arg: Base) => Derived
@@ -73,8 +73,8 @@ module Errors {
 >a2 : any
 
     declare function foo8(a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a2;
->foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }
->     : ^^^^^^^                                                                               ^^^^^^^                      ^^^^^                       ^^^^^                    ^^^^^^^^^^^^^^^^^^^
+>foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a2; (a2: any): any; }
+>     : ^^^^^^^                                                                               ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >   : ^^^^                      ^^^^^                       ^^^^^                    
 >x : (arg: Base) => Derived
@@ -96,8 +96,8 @@ module Errors {
 >a2 : any
 
     declare function foo10(a2: (...x: Base[]) => Base): typeof a2;
->foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }
->      : ^^^^^^^                      ^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^
+>foo10 : { (a2: (...x: Base[]) => Base): typeof a2; (a2: any): any; }
+>      : ^^^^^^^                      ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (...x: Base[]) => Base
 >   : ^^^^^^^      ^^^^^    
 >x : Base[]
@@ -111,8 +111,8 @@ module Errors {
 >a2 : any
 
     declare function foo11(a2: (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a2;
->foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
->      : ^^^^^^^                                                               ^^^^^^^                ^^^^^                             ^^^^^    ^^^^^^^^^^^^^^^^^^^
+>foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): typeof a2; (a2: any): any; }
+>      : ^^^^^^^                                                               ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >   : ^^^^                ^^^^^                             ^^^^^    
 >x : { foo: string; }
@@ -134,8 +134,8 @@ module Errors {
 >a2 : any
 
     declare function foo12(a2: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a2;
->foo12 : { (a2: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): (x: Array<Base>, y: Array<Derived2>) => Array<Derived>; (a2: any): any; }
->      : ^^^^^^^                                                      ^^^^^^^           ^^^^^               ^^^^^              ^^^^^^^^^^^^^^^^^^^
+>foo12 : { (a2: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a2; (a2: any): any; }
+>      : ^^^^^^^                                                      ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >   : ^^^^           ^^^^^               ^^^^^              
 >x : Base[]
@@ -151,8 +151,8 @@ module Errors {
 >a2 : any
 
     declare function foo15(a2: (x: { a: string; b: number }) => number): typeof a2;
->foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }
->      : ^^^^^^^                                        ^^^^^^^                         ^^^^^      ^^^^^^^^^^^^^^^^^^^
+>foo15 : { (a2: (x: { a: string; b: number; }) => number): typeof a2; (a2: any): any; }
+>      : ^^^^^^^                                        ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : (x: { a: string; b: number; }) => number
 >   : ^^^^                         ^^^^^      
 >x : { a: string; b: number; }
@@ -170,8 +170,8 @@ module Errors {
 >a2 : any
 
     declare function foo16(a2: {
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
->      : ^^^^^^^                                                                                                                                      ^^^^^^^^^                                              ^^^        ^^^^^^                                                  ^^^         ^^^^^^^^^^^^^^^^^^^^^^
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): typeof a2; (a2: any): any; }
+>      : ^^^^^^^                                                                                                                                      ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
 >   : ^^^^^^                                              ^^^        ^^^^^^                                                  ^^^         ^^^
 
@@ -212,14 +212,14 @@ module Errors {
 >a2 : any
 
     declare function foo17(a2: {
->foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
->      : ^^^^^^^                                                                                                                                                        ^^^^^^^^^                                                            ^^^     ^^^^^^                                                             ^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): typeof a2; (a2: any): any; }
+>      : ^^^^^^^                                                                                                                                                        ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
 >   : ^^^^^^                                                            ^^^     ^^^^^^                                                             ^^^     ^^^
 
         (x: {
 >x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^   ^^^   ^^^
 
             <T extends Derived>(a: T): T;
 >a : T
@@ -232,7 +232,7 @@ module Errors {
         }): any[];
         (x: {
 >x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^   ^^^   ^^^
 
             <T extends Derived2>(a: T): T;
 >a : T
@@ -748,8 +748,8 @@ module WithGenericSignaturesInBaseType {
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;
->foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }
->     : ^^^^^^^                ^^^^ ^^^^^ ^^^^^   ^^^^^^^^^^^^^^^^^^^
+>foo2 : { (a2: <T>(x: T) => T[]): typeof a2; (a2: any): any; }
+>     : ^^^^^^^                ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : <T>(x: T) => T[]
 >   : ^ ^^^^^ ^^^^^   
 >x : T
@@ -783,8 +783,8 @@ module WithGenericSignaturesInBaseType {
 >       : ^^^^^^^^^^^^^^^^^^^^^
 
     declare function foo3(a2: <T>(x: T) => string[]): typeof a2;
->foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }
->     : ^^^^^^^                     ^^^^ ^^^^^ ^^^^^        ^^^^^^^^^^^^^^^^^^^
+>foo3 : { (a2: <T>(x: T) => string[]): typeof a2; (a2: any): any; }
+>     : ^^^^^^^                     ^^^         ^^^^^^^^^^^^^^^^^^^
 >a2 : <T>(x: T) => string[]
 >   : ^ ^^^^^ ^^^^^        
 >x : T

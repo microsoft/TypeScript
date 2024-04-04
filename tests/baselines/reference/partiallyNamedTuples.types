@@ -123,7 +123,7 @@ declare function test<T extends readonly unknown[]>(
 
   arg: [
 >arg : [...{ [K in keyof T]: { type: T[K]; }; }]
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 
     ...{
       [K in keyof T]: {

@@ -136,7 +136,7 @@ declare function test4<T extends Record<string, string[]>>(obj: {
 >test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                        ^^^^^ 
 >obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^
 
   [K in keyof T & keyof CompilerOptions]: {
     dependencies: KeepLiteralStrings<T[K]>;
