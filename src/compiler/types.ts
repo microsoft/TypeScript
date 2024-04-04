@@ -5011,6 +5011,7 @@ export interface TypeChecker {
     isArgumentsSymbol(symbol: Symbol): boolean;
     isUnknownSymbol(symbol: Symbol): boolean;
     getMergedSymbol(symbol: Symbol): Symbol;
+    /** @internal */ symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean;
 
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
@@ -5637,6 +5638,7 @@ export interface EmitResolver {
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
+    getEnumMemberValue(node: EnumMember): EvaluatorResult | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
@@ -5968,6 +5970,13 @@ export const enum NodeCheckFlags {
     InCheckIdentifier                        = 1 << 22,
 }
 
+/** @internal */
+export interface EvaluatorResult<T extends string | number | undefined = string | number | undefined> {
+    value: T;
+    isSyntacticallyString: boolean;
+    resolvedOtherFiles: boolean;
+}
+
 // dprint-ignore
 /** @internal */
 export interface NodeLinks {
@@ -5978,7 +5987,7 @@ export interface NodeLinks {
     resolvedSymbol?: Symbol;            // Cached name resolution result
     resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
     effectsSignature?: Signature;       // Signature with possible control flow effects
-    enumMemberValue?: string | number;  // Constant value of enum member
+    enumMemberValue?: EvaluatorResult;  // Constant value of enum member
     isVisible?: boolean;                // Is this node visible
     containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
     hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
@@ -10085,6 +10094,6 @@ export interface Queue<T> {
 
 /** @internal */
 export interface EvaluationResolver {
-    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
-    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
+    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
+    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
 }
