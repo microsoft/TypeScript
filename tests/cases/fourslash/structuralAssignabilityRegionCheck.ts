@@ -26,7 +26,6 @@
 const [r0, r1] = test.ranges();
 // Baseline
 const expected = test.getSemanticDiagnostics();
-console.log(JSON.stringify(expected));
 
 // Reset checker
 goTo.marker("e");
