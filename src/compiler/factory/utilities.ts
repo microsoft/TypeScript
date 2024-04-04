@@ -53,12 +53,12 @@ import {
     getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
-    getEmitModuleFormatOfFile,
+    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getESModuleInterop,
     getExternalModuleName,
     getExternalModuleNameFromPath,
-    getImpliedNodeFormatForEmit,
+    getImpliedNodeFormatForEmitWorker,
     getJSDocType,
     getJSDocTypeTag,
     getModifiers,
@@ -714,7 +714,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmit(sourceFile, compilerOptions) === ModuleKind.ESNext) {
+        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions) === ModuleKind.ESNext) {
             // use named imports
             const helpers = getEmitHelpers(sourceFile);
             if (helpers) {
@@ -772,7 +772,7 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactor
         }
 
         let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && getEmitModuleFormatOfFile(node, compilerOptions) < ModuleKind.System;
+            && getEmitModuleFormatOfFileWorker(node, compilerOptions) < ModuleKind.System;
         if (!create) {
             const helpers = getEmitHelpers(node);
             if (helpers) {

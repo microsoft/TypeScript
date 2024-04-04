@@ -26,7 +26,6 @@ import {
     FunctionLikeDeclaration,
     getAssignmentDeclarationKind,
     getContainingObjectLiteralElement,
-    getDefaultResolutionModeForFile,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getInvokedExpression,
@@ -345,7 +344,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || getDefaultResolutionModeForFile(sourceFile, program.getCompilerOptions()))?.resolvedTypeReferenceDirective;
+        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || program.getDefaultResolutionModeForFile(sourceFile))?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }

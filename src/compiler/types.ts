@@ -4737,6 +4737,16 @@ export interface Program extends ScriptReferenceHost {
      * ```
      */
     getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    /**
+     * @internal
+     * The resolution mode to use for module resolution or module specifier resolution
+     * outside the context of an existing module reference, where
+     * `program.getModeForUsageLocation` should be used instead.
+     */
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    /** @internal */ getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
+    /** @internal */ getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
+    /** @internal */ shouldTransformImportCall(sourceFile: SourceFile): boolean;
 
     // For testing purposes only.
     // This is set on created program to let us know how the program was created using old program
@@ -4910,6 +4920,9 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getEmitSyntaxForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
     getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
+    getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -8253,6 +8266,8 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     getCanonicalFileName(fileName: string): string;
 
     isEmitBlocked(emitFileName: string): boolean;
+    shouldTransformImportCall(sourceFile: SourceFile): boolean;
+    getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     writeFile: WriteFileCallback;
     getBuildInfo(): BuildInfo | undefined;
@@ -9629,6 +9644,7 @@ export interface ModuleSpecifierResolutionHost {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     getCommonSourceDirectory(): string;
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
 }
 
 /** @internal */

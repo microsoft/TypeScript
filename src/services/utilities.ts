@@ -96,7 +96,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
-    getImpliedNodeFormatForEmit,
+    getImpliedNodeFormatForEmitWorker,
     getImpliedNodeFormatForFile,
     getIndentString,
     getJSDocEnumTag,
@@ -2482,6 +2482,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
+        getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
     };
 }
 
@@ -4246,13 +4247,13 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     if (!hasJSFileExtension(fileName)) {
         return false;
     }
-    const compilerOptions = program.getCompilerOptions();
+    const compilerOptions = typeof file === "string" ? program.getCompilerOptions() : program.getCompilerOptionsForFile(file);
     const moduleKind = getEmitModuleKind(compilerOptions);
     const sourceFileLike = typeof file === "string" ? {
         fileName: file,
         impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
     } : file;
-    const impliedNodeFormat = getImpliedNodeFormatForEmit(sourceFileLike, compilerOptions);
+    const impliedNodeFormat = getImpliedNodeFormatForEmitWorker(sourceFileLike, compilerOptions);
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

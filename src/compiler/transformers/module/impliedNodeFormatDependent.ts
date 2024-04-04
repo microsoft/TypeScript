@@ -2,7 +2,6 @@ import {
     Bundle,
     Debug,
     EmitHint,
-    getEmitModuleFormatOfFile,
     isSourceFile,
     map,
     ModuleKind,
@@ -31,7 +30,7 @@ export function transformImpliedNodeFormatDependentModule(context: Transformatio
 
     const cjsOnSubstituteNode = context.onSubstituteNode;
     const cjsOnEmitNode = context.onEmitNode;
-    const compilerOptions = context.getEmitHost().getCompilerOptions();
+    const getEmitModuleFormatOfFile = (file: SourceFile) => context.getEmitHost().getEmitModuleFormatOfFile(file);
 
     context.onSubstituteNode = onSubstituteNode;
     context.onEmitNode = onEmitNode;
@@ -53,7 +52,7 @@ export function transformImpliedNodeFormatDependentModule(context: Transformatio
             if (!currentSourceFile) {
                 return previousOnSubstituteNode(hint, node);
             }
-            if (getEmitModuleFormatOfFile(currentSourceFile, compilerOptions) >= ModuleKind.ES2015) {
+            if (getEmitModuleFormatOfFile(currentSourceFile) >= ModuleKind.ES2015) {
                 return esmOnSubstituteNode(hint, node);
             }
             return cjsOnSubstituteNode(hint, node);
@@ -67,14 +66,14 @@ export function transformImpliedNodeFormatDependentModule(context: Transformatio
         if (!currentSourceFile) {
             return previousOnEmitNode(hint, node, emitCallback);
         }
-        if (getEmitModuleFormatOfFile(currentSourceFile, compilerOptions) >= ModuleKind.ES2015) {
+        if (getEmitModuleFormatOfFile(currentSourceFile) >= ModuleKind.ES2015) {
             return esmOnEmitNode(hint, node, emitCallback);
         }
         return cjsOnEmitNode(hint, node, emitCallback);
     }
 
     function getModuleTransformForFile(file: SourceFile): typeof esmTransform {
-        return getEmitModuleFormatOfFile(file, compilerOptions) >= ModuleKind.ES2015 ? esmTransform : cjsTransform;
+        return getEmitModuleFormatOfFile(file) >= ModuleKind.ES2015 ? esmTransform : cjsTransform;
     }
 
     function transformSourceFile(node: SourceFile) {

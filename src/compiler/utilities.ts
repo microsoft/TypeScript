@@ -164,6 +164,7 @@ import {
     getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
+    getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
@@ -8574,7 +8575,7 @@ function isFileForcedToBeModuleByFormat(file: SourceFile, options: CompilerOptio
     // that aren't esm-mode (meaning not in a `type: module` scope).
     //
     // TODO: extension check never considered compilerOptions; should impliedNodeFormat?
-    return (getImpliedNodeFormatForEmit(file, options) === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
+    return (getImpliedNodeFormatForEmitWorker(file, options) === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
 }
 
 /** @internal */
@@ -8616,53 +8617,6 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions) {
     return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
         || getResolvePackageJsonExports(options)
         || getResolvePackageJsonImports(options);
-}
-
-/**
- * @internal
- * The resolution mode to use for module resolution or module specifier resolution
- * outside the context of an existing module reference, where
- * `program.getModeForUsageLocation` should be used instead.
- */
-export function getDefaultResolutionModeForFile(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
-    return importSyntaxAffectsModuleResolution(options) ? getImpliedNodeFormatForEmit(sourceFile, options) : undefined;
-}
-
-/** @internal */
-export function getImpliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
-    const moduleKind = getEmitModuleKind(options);
-    if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
-        return sourceFile.impliedNodeFormat;
-    }
-    if (
-        sourceFile.impliedNodeFormat === ModuleKind.CommonJS
-        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "commonjs"
-            || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cjs, Extension.Cts]))
-    ) {
-        return ModuleKind.CommonJS;
-    }
-    if (
-        sourceFile.impliedNodeFormat === ModuleKind.ESNext
-        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "module"
-            || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Mjs, Extension.Mts]))
-    ) {
-        return ModuleKind.ESNext;
-    }
-    return undefined;
-}
-
-/** @internal */
-export function shouldTransformImportCall(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): boolean {
-    const moduleKind = getEmitModuleKind(options);
-    if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext || moduleKind === ModuleKind.Preserve) {
-        return false;
-    }
-    return getEmitModuleFormatOfFile(sourceFile, options) < ModuleKind.ES2015;
-}
-
-/** @internal */
-export function getEmitModuleFormatOfFile(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ModuleKind {
-    return getImpliedNodeFormatForEmit(sourceFile, options) ?? getEmitModuleKind(options);
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };

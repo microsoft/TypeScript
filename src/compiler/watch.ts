@@ -56,7 +56,7 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitScriptTarget,
-    getImpliedNodeFormatForEmit,
+    getImpliedNodeFormatForEmitWorker,
     getLineAndCharacterOfPosition,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
@@ -379,7 +379,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
-        switch (getImpliedNodeFormatForEmit(file, options)) {
+        switch (getImpliedNodeFormatForEmitWorker(file, options)) {
             case ModuleKind.ESNext:
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
