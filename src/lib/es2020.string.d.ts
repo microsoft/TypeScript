@@ -21,7 +21,7 @@ interface String {
      * @param locales The preferred locale, or list of preferred locales, to use for the conversation.
      * This method does not perform locale matching; instead, it always selects the first supported locale.
      * If omitted, the default locale is used.
-    */
+     */
     toLocaleUpperCase(locales?: Intl.LocalesArgument): string;
 
     /**

@@ -462,7 +462,7 @@ interface String {
      * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion.
      * This method does not perform locale matching; instead, it always selects the first supported locale.
      * If omitted, the default locale is used.
-    */
+     */
     toLocaleUpperCase(locales?: string | readonly string[]): string;
 
     /**
