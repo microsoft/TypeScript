@@ -77,6 +77,7 @@ import {
     TypeNode,
     TypeReference,
     UnionReduction,
+    unsafelyGetOriginalNode,
 } from "../_namespaces/ts";
 import {
     codeFixAll,
@@ -882,7 +883,7 @@ function getArgBindingName(funcNode: Expression, transformer: Transformer): Synt
     }
 
     function getOriginalNode(node: Node): Node {
-        return node.original ? node.original : node;
+        return unsafelyGetOriginalNode(node) ?? node;
     }
 }
 
@@ -934,5 +935,6 @@ function isSynthBindingPattern(bindingName: SynthBindingName): bindingName is Sy
 }
 
 function shouldReturn(expression: Expression, transformer: Transformer): boolean {
-    return !!expression.original && transformer.setOfExpressionsToReturn.has(getNodeId(expression.original));
+    const original = unsafelyGetOriginalNode(expression);
+    return !!original && transformer.setOfExpressionsToReturn.has(getNodeId(original));
 }

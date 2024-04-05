@@ -1378,7 +1378,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             `generated@${getNodeId(node)}`;
         if (prefix || suffix) flags |= GeneratedIdentifierFlags.Optimistic;
         const name = createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Node | flags, prefix, suffix);
-        name.original = node;
+        unsafelySetOriginalNode(name, node);
         return name;
     }
 
@@ -1422,7 +1422,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             `#generated@${getNodeId(node)}`;
         const flags = prefix || suffix ? GeneratedIdentifierFlags.Optimistic : GeneratedIdentifierFlags.None;
         const name = createBaseGeneratedPrivateIdentifier(text, GeneratedIdentifierFlags.Node | flags, prefix, suffix);
-        name.original = node;
+        unsafelySetOriginalNode(name, node);
         return name;
     }
 
@@ -6228,7 +6228,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNotEmittedStatement(original: Node) {
         const node = createBaseNode<NotEmittedStatement>(SyntaxKind.NotEmittedStatement);
-        node.original = original;
+        unsafelySetOriginalNode(node, original);
         setTextRange(node, original);
         return node;
     }
@@ -6244,7 +6244,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createPartiallyEmittedExpression(expression: Expression, original?: Node) {
         const node = createBaseNode<PartiallyEmittedExpression>(SyntaxKind.PartiallyEmittedExpression);
         node.expression = expression;
-        node.original = original;
+        unsafelySetOriginalNode(node, original);
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsTypeScript;
         setTextRange(node, original);
@@ -6254,12 +6254,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression) {
         return node.expression !== expression
-            ? update(createPartiallyEmittedExpression(expression, node.original), node)
+            ? update(createPartiallyEmittedExpression(expression, unsafelyGetOriginalNode(node)), node)
             : node;
     }
 
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
-        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
+        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !unsafelyGetOriginalNode(node) && !node.emitNode && !node.id) {
             if (isCommaListExpression(node)) {
                 return node.elements;
             }
@@ -7397,9 +7397,21 @@ export function createSourceMapSource(fileName: string, text: string, skipTrivia
 
 // Utilities
 
+const originalNodes = new WeakMap<Node, Node | undefined>();
+
+/** @internal */
+export function unsafelySetOriginalNode(node: Node, original: Node | undefined) {
+    originalNodes.set(node, original);
+}
+
+/** @internal */
+export function unsafelyGetOriginalNode(node: Node) {
+    return originalNodes.get(node);
+}
+
 export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
-    if (node.original !== original) {
-        node.original = original;
+    if (unsafelyGetOriginalNode(node) !== original) {
+        unsafelySetOriginalNode(node, original);
         if (original) {
             const emitNode = original.emitNode;
             if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);

@@ -57,6 +57,7 @@ import {
     TransformationContext,
     TransformFlags,
     tryGetPropertyNameOfBindingOrAssignmentElement,
+    unsafelySetOriginalNode,
     VariableDeclaration,
     visitNode,
     VisitResult,
@@ -188,7 +189,7 @@ export function flattenDestructuringAssignment(
                 context.factory.createAssignment(Debug.checkDefined(visitNode(target as Expression, visitor, isExpression)), value),
                 location,
             );
-        expression.original = original;
+        unsafelySetOriginalNode(expression, original);
         emitExpression(expression);
     }
 }
@@ -304,7 +305,7 @@ export function flattenDestructuringBinding(
             /*type*/ undefined,
             pendingExpressions ? context.factory.inlineExpressions(append(pendingExpressions, value)) : value,
         );
-        variable.original = original;
+        unsafelySetOriginalNode(variable, original);
         setTextRange(variable, location);
         declarations.push(variable);
     }

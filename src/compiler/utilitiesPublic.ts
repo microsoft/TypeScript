@@ -293,6 +293,7 @@ import {
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
+    unsafelyGetOriginalNode,
     VariableDeclaration,
 } from "./_namespaces/ts";
 
@@ -709,8 +710,9 @@ export function getOriginalNode(node: Node | undefined): Node | undefined;
 export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
 export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined {
     if (node) {
-        while (node.original !== undefined) {
-            node = node.original;
+        let next: Node | undefined;
+        while (next = unsafelyGetOriginalNode(node)) {
+            node = next;
         }
     }
 
@@ -773,12 +775,12 @@ export function getParseTreeNode(node: Node | undefined, nodeTest?: (node: Node)
         return node;
     }
 
-    node = node.original;
+    node = unsafelyGetOriginalNode(node);
     while (node) {
         if (isParseTreeNode(node)) {
             return !nodeTest || nodeTest(node) ? node : undefined;
         }
-        node = node.original;
+        node = unsafelyGetOriginalNode(node);
     }
 }
 

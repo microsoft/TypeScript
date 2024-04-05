@@ -66,6 +66,7 @@ import {
     TypeReferenceNode,
     TypeReferenceSerializationKind,
     UnionOrIntersectionTypeNode,
+    unsafelySetOriginalNode,
     VoidExpression,
 } from "../_namespaces/ts";
 
@@ -598,7 +599,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 // Create a clone of the name with a new parent, and treat it as if it were
                 // a source tree node for the purposes of the checker.
                 const name = setParent(setTextRange(parseNodeFactory.cloneNode(node), node), node.parent);
-                name.original = undefined;
+                unsafelySetOriginalNode(name, /*original*/ undefined);
                 setParent(name, getParseTreeNode(currentLexicalScope)); // ensure the parent is set to a parse tree node.
                 return name;
 

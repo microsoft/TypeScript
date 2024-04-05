@@ -177,6 +177,7 @@ import {
     Token,
     TransformFlags,
     TypeNode,
+    unsafelyGetOriginalNode,
     WrappedExpression,
 } from "../_namespaces/ts";
 
@@ -1548,7 +1549,7 @@ export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPri
     if (autoGenerate.flags & GeneratedIdentifierFlags.Node) {
         const autoGenerateId = autoGenerate.id;
         let node = name as Node;
-        let original = node.original;
+        let original = unsafelyGetOriginalNode(node);
         while (original) {
             node = original;
             const autoGenerate = node.emitNode?.autoGenerate;
@@ -1563,7 +1564,7 @@ export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPri
                 break;
             }
 
-            original = node.original;
+            original = unsafelyGetOriginalNode(node);
         }
         // otherwise, return the original node for the source
         return node;
