@@ -17,6 +17,7 @@
     "File '/.src/node_modules/ext/ts3.1/index.ts' does not exist.",
     "File '/.src/node_modules/ext/ts3.1/index.tsx' does not exist.",
     "File '/.src/node_modules/ext/ts3.1/index.d.ts' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "Resolving real path for '/.src/node_modules/ext/ts3.1/index.d.ts', result '/.src/node_modules/ext/ts3.1/index.d.ts'.",
     "======== Module name 'ext' was successfully resolved to '/.src/node_modules/ext/ts3.1/index.d.ts' with Package ID 'ext/ts3.1/index.d.ts@1.0.0'. ========",
     "======== Resolving module 'ext/other' from '/.src/main.ts'. ========",

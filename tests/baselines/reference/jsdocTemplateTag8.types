@@ -62,11 +62,11 @@ let super_contravariant = { f: (x) => {} };
 >super_contravariant : Contravariant<unknown>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^
 >{ f: (x) => {} } : { f: (x: unknown) => void; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >f : (x: unknown) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >(x) => {} : (x: unknown) => void
->          : ^^^^^^^^^^^^^^^^^^^^
+>          :                     
 >x : unknown
 >  : ^^^^^^^
 
@@ -77,11 +77,11 @@ let sub_contravariant = { f: (x) => {} };
 >sub_contravariant : Contravariant<string>
 >                  : ^^^^^^^^^^^^^^^^^^^^^
 >{ f: (x) => {} } : { f: (x: string) => void; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >f : (x: string) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >(x) => {} : (x: string) => void
->          : ^^^^^^^^^^^^^^^^^^^
+>          :                    
 >x : string
 >  : ^^^^^^
 
@@ -114,11 +114,11 @@ let super_invariant = { f: (x) => {} };
 >super_invariant : Invariant<unknown>
 >                : ^^^^^^^^^^^^^^^^^^
 >{ f: (x) => {} } : { f: (x: unknown) => void; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >f : (x: unknown) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >(x) => {} : (x: unknown) => void
->          : ^^^^^^^^^^^^^^^^^^^^
+>          :                     
 >x : unknown
 >  : ^^^^^^^
 
@@ -129,11 +129,11 @@ let sub_invariant = { f: (x) => { return "" } };
 >sub_invariant : Invariant<string>
 >              : ^^^^^^^^^^^^^^^^^
 >{ f: (x) => { return "" } } : { f: (x: string) => string; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => { return "" } : (x: string) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^
+>                     :                      
 >x : string
 >  : ^^^^^^
 >"" : ""
@@ -161,7 +161,7 @@ sub_invariant = super_invariant;  // Error
  */
 function f(x) {}
 >f : <in T>(x: T) => void
->  : ^^^^ ^^^^^ ^^^^^^^^^
+>  : ^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

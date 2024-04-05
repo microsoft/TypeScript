@@ -8,8 +8,8 @@ declare const a: { x: string | number };
 >  : ^^^^^^^^^^^^^^^
 
 declare const b: { x?: string | number };
->b : { x?: string | number | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

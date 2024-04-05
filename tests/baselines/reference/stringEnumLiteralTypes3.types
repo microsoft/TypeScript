@@ -51,7 +51,7 @@ type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
 
 function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f1 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -96,7 +96,7 @@ function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f2 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -141,7 +141,7 @@ function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f3 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -186,7 +186,7 @@ function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f4 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -231,7 +231,7 @@ function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f5 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -388,7 +388,7 @@ function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f6 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -545,7 +545,7 @@ function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f7 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
->   : ^^^^   ^^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >b : YesNo
@@ -686,7 +686,7 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
 function f10(x: Yes): Yes {
 >f10 : (x: Yes) => Yes
->    : ^^^^   ^^^^^   
+>    : ^ ^^   ^^^^^   
 >x : Choice.Yes
 >  : ^^^^^^^^^^
 
@@ -731,7 +731,7 @@ function f10(x: Yes): Yes {
 
 function f11(x: YesNo): YesNo {
 >f11 : (x: YesNo) => YesNo
->    : ^^^^     ^^^^^     
+>    : ^ ^^     ^^^^^     
 >x : YesNo
 >  : ^^^^^
 
@@ -776,7 +776,7 @@ function f11(x: YesNo): YesNo {
 
 function f12(x: UnknownYesNo): UnknownYesNo {
 >f12 : (x: UnknownYesNo) => UnknownYesNo
->    : ^^^^            ^^^^^            
+>    : ^ ^^            ^^^^^            
 >x : UnknownYesNo
 >  : ^^^^^^^^^^^^
 
@@ -821,7 +821,7 @@ function f12(x: UnknownYesNo): UnknownYesNo {
 
 function f13(x: Choice): Choice {
 >f13 : (x: Choice) => Choice
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : Choice
 >  : ^^^^^^
 

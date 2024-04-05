@@ -16,7 +16,7 @@ type SubFoo<R, S> = Foo<S, R>;
 
 function foo() {
 >foo : () => SubFoo<number, string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                      
 
     return {} as SubFoo<number, string>;
 >{} as SubFoo<number, string> : SubFoo<number, string>

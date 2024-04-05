@@ -4,13 +4,13 @@
 interface IPromise<T> {
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 >then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
->     : ^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^                    ^^^^^             
+>     : ^               ^^                        ^^             ^^^                    ^^^^^             
 >successCallback : (promiseValue: T) => any
->                : ^^^^^^^^^^^^^^^ ^^^^^   
+>                : ^            ^^ ^^^^^   
 >promiseValue : T
 >             : ^
 >errorCallback : (reason: any) => any
->              : ^^^^^^^^^   ^^^^^   
+>              : ^      ^^   ^^^^^   
 >reason : any
 }
 

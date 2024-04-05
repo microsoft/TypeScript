@@ -18,20 +18,20 @@ declare function fn1();
 // Ambient function with type annotations
 declare function fn2(n: string): number;
 >fn2 : (n: string) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >n : string
 >  : ^^^^^^
 
 // Ambient function with valid overloads
 declare function fn3(n: string): number;
 >fn3 : (n: string) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >n : string
 >  : ^^^^^^
 
 declare function fn4(n: number, y: number): string;
 >fn4 : (n: number, y: number) => string
->    : ^^^^      ^^^^^      ^^^^^      
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >y : number
@@ -40,18 +40,18 @@ declare function fn4(n: number, y: number): string;
 // Ambient function with optional parameters
 declare function fn5(x, y?);
 >fn5 : (x: any, y?: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >y : any
 
 declare function fn6(e?);
 >fn6 : (e?: any) => any
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >e : any
 
 declare function fn7(x, y?, ...z);
 >fn7 : (x: any, y?: any, ...z: any[]) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >x : any
 >y : any
 >z : any[]
@@ -59,20 +59,20 @@ declare function fn7(x, y?, ...z);
 
 declare function fn8(y?, ...z: number[]);
 >fn8 : (y?: any, ...z: number[]) => any
->    : ^^^^^^^^^^^^^^^^        ^^^^^^^^
+>    : ^ ^^^^^^^^^^^ ^^        ^^^^^^^^
 >y : any
 >z : number[]
 >  : ^^^^^^^^
 
 declare function fn9(...q: {}[]);
 >fn9 : (...q: {}[]) => any
->    : ^^^^^^^    ^^^^^^^^
+>    : ^^^^ ^^    ^^^^^^^^
 >q : {}[]
 >  : ^^^^
 
 declare function fn10<T>(...q: T[]);
 >fn10 : <T>(...q: T[]) => any
->     : ^ ^^^^^^^^   ^^^^^^^^
+>     : ^ ^^^^^ ^^   ^^^^^^^^
 >q : T[]
 >  : ^^^
 
@@ -88,7 +88,7 @@ declare class cls {
 
     static static(p): number;
 >static : (p: any) => number
->       : ^^^^^^^^^^^^      
+>       : ^ ^^^^^^^^^^      
 >p : any
 
     static q;

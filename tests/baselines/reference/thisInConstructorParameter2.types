@@ -27,9 +27,9 @@ class P {
 >this : this
 >     : ^^^^
 >zzz : (p?: this) => this
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^
 >(p = this) => this : (p?: this) => this
->                   : ^^^^^^^^^^^^^^^^^^
+>                   :   ^               
 >p : this
 >  : ^^^^
 >this : this
@@ -39,11 +39,11 @@ class P {
 
         zzz = (p = this) => this;
 >zzz = (p = this) => this : (p?: this) => this
->                         : ^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^^^^^^
 >zzz : (p?: this) => this
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^
 >(p = this) => this : (p?: this) => this
->                   : ^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^
 >p : this
 >  : ^^^^
 >this : this
@@ -54,7 +54,7 @@ class P {
 
     foo(zz = this) { zz.x; }
 >foo : (zz?: this) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^^^
 >zz : this
 >   : ^^^^
 >this : this
@@ -68,7 +68,7 @@ class P {
 
     static bar(zz = this) { zz.y; }
 >bar : (zz?: typeof P) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^^^^^^^
 >zz : typeof P
 >   : ^^^^^^^^
 >this : typeof P

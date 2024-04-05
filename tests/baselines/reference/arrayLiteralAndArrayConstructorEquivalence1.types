@@ -13,7 +13,7 @@ var myCars3 = new Array({});
 >myCars3 : {}[]
 >        : ^^^^
 >new Array({}) : {}[]
->              : ^^^^
+>              :   ^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >{} : {}

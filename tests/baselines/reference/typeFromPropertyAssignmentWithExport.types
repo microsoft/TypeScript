@@ -32,5 +32,5 @@ Adapter.asyncMethod = function() {}
 >asyncMethod : () => void
 >            : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 

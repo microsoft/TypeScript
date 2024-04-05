@@ -5455,6 +5455,18 @@
         "category": "Message",
         "code": 6280
     },
+    "'package.json' has a 'peerDependencies' field.": {
+        "category": "Message",
+        "code": 6281
+    },
+    "Found peerDependency '{0}' with '{1}' version.": {
+        "category": "Message",
+        "code": 6282
+    },
+    "Failed to find peerDependency '{0}'.": {
+        "category": "Message",
+        "code": 6283
+    },
 
     "Enable project compilation": {
         "category": "Message",

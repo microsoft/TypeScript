@@ -111,7 +111,7 @@ module m1 {
 >m1_im1_private_v3_public : () => m1_im1_private.c1
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >m1_im1_private.f1 : () => m1_im1_private.c1
->                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                  :                        
 >m1_im1_private : typeof m1_M1_public
 >               : ^^^^^^^^^^^^^^^^^^^
 >f1 : () => m1_im1_private.c1
@@ -155,7 +155,7 @@ module m1 {
 >m1_im1_private_v3_private : () => m1_im1_private.c1
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >m1_im1_private.f1 : () => m1_im1_private.c1
->                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                  :                        
 >m1_im1_private : typeof m1_M1_public
 >               : ^^^^^^^^^^^^^^^^^^^
 >f1 : () => m1_im1_private.c1
@@ -206,7 +206,7 @@ module m1 {
 >m1_im2_private_v3_public : () => m1_im2_private.c1
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >m1_im2_private.f1 : () => m1_im2_private.c1
->                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                  :                        
 >m1_im2_private : typeof m1_M2_private
 >               : ^^^^^^^^^^^^^^^^^^^^
 >f1 : () => m1_im2_private.c1
@@ -250,7 +250,7 @@ module m1 {
 >m1_im2_private_v3_private : () => m1_im2_private.c1
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >m1_im2_private.f1 : () => m1_im2_private.c1
->                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                  :                        
 >m1_im2_private : typeof m1_M2_private
 >               : ^^^^^^^^^^^^^^^^^^^^
 >f1 : () => m1_im2_private.c1

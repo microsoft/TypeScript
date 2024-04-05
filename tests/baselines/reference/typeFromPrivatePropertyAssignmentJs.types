@@ -25,7 +25,7 @@ class C {
 >a : { foo?: string; }
 >  : ^^^^^^^^^^^^^^^^^
 >this.#a || {} : { foo?: string; }
->              : ^^^^^^^^^^^^^^^^^
+>              :      ^           
 >this.#a : { foo?: string; }
 >        : ^^^^^^^^^^^^^^^^^
 >this : this
@@ -41,7 +41,7 @@ class C {
 >this : this
 >     : ^^^^
 >this.#b || {} : { foo?: string; }
->              : ^^^^^^^^^^^^^^^^^
+>              :      ^           
 >this.#b : { foo?: string; }
 >        : ^^^^^^^^^^^^^^^^^
 >this : this

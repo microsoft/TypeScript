@@ -32,7 +32,7 @@ function Multimap() {
  */
 Multimap.prototype.get = function (key) {
 >Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                                          : ^^^^^^^^^^^^^
+>                                                                          : ^   ^^ ^^^^^ 
 >Multimap.prototype.get : any
 >Multimap.prototype : any
 >                   : ^^^
@@ -43,7 +43,7 @@ Multimap.prototype.get = function (key) {
 >get : any
 >    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                 : ^^^^^^^^^^^^^
+>                                                 : ^   ^^ ^^^^^^
 >key : K
 >    : ^
 
@@ -97,7 +97,7 @@ var Multimap2 = function() {
  */
 Multimap2.prototype.get = function (key) {
 >Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                                           : ^^^^^^^^^^^^^
+>                                                                           : ^   ^^ ^^^^^ 
 >Multimap2.prototype.get : any
 >Multimap2.prototype : any
 >                    : ^^^
@@ -108,7 +108,7 @@ Multimap2.prototype.get = function (key) {
 >get : any
 >    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                 : ^^^^^^^^^^^^^
+>                                                 : ^   ^^ ^^^^^^
 >key : K
 >    : ^
 
@@ -174,7 +174,7 @@ Ns.Multimap3 = function() {
  */
 Ns.Multimap3.prototype.get = function (key) {
 >Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                                              : ^^^^^^^^^^^^^
+>                                                                              : ^   ^^ ^^^^^ 
 >Ns.Multimap3.prototype.get : any
 >Ns.Multimap3.prototype : any
 >                       : ^^^
@@ -189,7 +189,7 @@ Ns.Multimap3.prototype.get = function (key) {
 >get : any
 >    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                 : ^^^^^^^^^^^^^
+>                                                 : ^   ^^ ^^^^^^
 >key : K
 >    : ^
 

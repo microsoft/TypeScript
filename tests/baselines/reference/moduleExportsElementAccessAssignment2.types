@@ -19,7 +19,7 @@ var GlobalThing = { x: 12 };
  */
 function f(type, ctor, exports) {
 >f : (type: any, ctor: any, exports: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^^^^^    ^^^^^^^       ^^^^^^^^^^^^^^
 >type : any
 >ctor : any
 >exports : any

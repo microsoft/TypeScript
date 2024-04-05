@@ -6,7 +6,7 @@
 
 function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
 >f1 : <T, K extends string>(x: { [key: string]: T; }, y: Record<K, T>) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^                     ^^^^^            ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^            ^^^^^^^^^
 >x : { [key: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -33,7 +33,7 @@ function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
 
 function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
 >f2 : <T>(x: { [key: string]: T; }, y: Record<string, T>) => void
->   : ^ ^^^^^                     ^^^^^                 ^^^^^^^^^
+>   : ^ ^^ ^^                     ^^ ^^                 ^^^^^^^^^
 >x : { [key: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -60,7 +60,7 @@ function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
 
 function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
 >f3 : <T, U, K extends string>(x: { [key: string]: T; }, y: Record<K, U>) => void
->   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^                     ^^^^^            ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^            ^^^^^^^^^
 >x : { [key: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string

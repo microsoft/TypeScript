@@ -1,10 +1,6 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import {
     createHasErrorMessageLogger,
     nullLogger,

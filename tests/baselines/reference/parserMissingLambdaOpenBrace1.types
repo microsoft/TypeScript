@@ -7,7 +7,7 @@ class C {
 
     where(filter: Iterator<T, boolean>): Query<T> {
 >where : (filter: Iterator<T, boolean>) => Query<T>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >filter : Iterator<T, boolean>
 >       : ^^^^^^^^^^^^^^^^^^^^
 
@@ -17,7 +17,7 @@ class C {
 >fromDoWhile : any
 >            : ^^^
 >test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        } : (test: any) => any
->                                                                                                                                      : ^^^^^^^^^^^^^^^^^^
+>                                                                                                                                      : ^    ^^^^^^^^^^^^^
 >test : any
 >     : ^^^
 
@@ -37,7 +37,7 @@ class C {
 >doWhile : any
 >        : ^^^
 >(item, i) => filter(item, i) ? test(item, index++) : true : (item: any, i: any) => any
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^    ^^^^^^^ ^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >i : any

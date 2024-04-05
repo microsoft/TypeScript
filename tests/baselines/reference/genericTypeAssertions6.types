@@ -28,7 +28,7 @@ class A<T,U> {
 
     f(x: T, y: U) {
 >f : (x: T, y: U) => void
->  : ^^^^ ^^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -64,7 +64,7 @@ class B<T extends Date, U extends Date> extends A<T, U> {
 
     g(x: T) {
 >g : (x: T) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

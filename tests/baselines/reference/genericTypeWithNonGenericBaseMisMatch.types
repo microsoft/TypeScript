@@ -4,7 +4,7 @@
 interface I {
 	f: (a: { a: number }) => void
 >f : (a: { a: number; }) => void
->  : ^^^^              ^^^^^    
+>  : ^ ^^              ^^^^^    
 >a : { a: number; }
 >  : ^^^^^      ^^^
 >a : number
@@ -18,7 +18,7 @@ class X<T extends { a: string }> implements I {
 
 	f(a: T): void { }
 >f : (a: T) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >a : T
 >  : ^
 }
@@ -26,7 +26,7 @@ var x = new X<{ a: string }>();
 >x : X<{ a: string; }>
 >  : ^^^^^^^      ^^^^
 >new X<{ a: string }>() : X<{ a: string; }>
->                       : ^^^^^^^      ^^^^
+>                       : ^^              ^
 >X : typeof X
 >  : ^^^^^^^^
 >a : string

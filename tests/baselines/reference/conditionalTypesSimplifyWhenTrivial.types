@@ -3,9 +3,9 @@
 === conditionalTypesSimplifyWhenTrivial.ts ===
 const fn1 = <Params>(
 >fn1 : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
->    : ^      ^^^^^^^^^^                                          ^^^^^      
+>    : ^      ^^      ^^                                          ^^^^^      
 ><Params>(    params: Pick<Params, Exclude<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
->                                                                                    : ^      ^^^^^^^^^^                                          ^^^^^      
+>                                                                                    :                                                                       
 
     params: Pick<Params, Exclude<keyof Params, never>>,
 >params : Pick<Params, Exclude<keyof Params, never>>
@@ -17,7 +17,7 @@ const fn1 = <Params>(
 
 function fn2<T>(x: Exclude<T, never>) {
 >fn2 : <T>(x: Exclude<T, never>) => void
->    : ^ ^^^^^                 ^^^^^^^^^
+>    : ^ ^^ ^^                 ^^^^^^^^^
 >x : Exclude<T, never>
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -38,9 +38,9 @@ function fn2<T>(x: Exclude<T, never>) {
 
 const fn3 = <Params>(
 >fn3 : <Params>(params: Pick<Params, Extract<keyof Params, keyof Params>>) => Params
->    : ^      ^^^^^^^^^^                                                 ^^^^^      
+>    : ^      ^^      ^^                                                 ^^^^^      
 ><Params>(    params: Pick<Params, Extract<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, Extract<keyof Params, keyof Params>>) => Params
->                                                                                           : ^      ^^^^^^^^^^                                                 ^^^^^      
+>                                                                                           :                                                                              
 
     params: Pick<Params, Extract<keyof Params, keyof Params>>,
 >params : Pick<Params, Extract<keyof Params, keyof Params>>
@@ -52,7 +52,7 @@ const fn3 = <Params>(
 
 function fn4<T>(x: Extract<T, T>) {
 >fn4 : <T>(x: Extract<T, T>) => void
->    : ^ ^^^^^             ^^^^^^^^^
+>    : ^ ^^ ^^             ^^^^^^^^^
 >x : Extract<T, T>
 >  : ^^^^^^^^^^^^^
 
@@ -85,9 +85,9 @@ type ExcludeWithDefault<T, U, D = never> = T extends U ? D : T;
 
 const fn5 = <Params>(
 >fn5 : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never>>) => Params
->    : ^      ^^^^^^^^^^                                                     ^^^^^      
+>    : ^      ^^      ^^                                                     ^^^^^      
 ><Params>(    params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never>>) => Params
->                                                                                               : ^      ^^^^^^^^^^                                                     ^^^^^      
+>                                                                                               :                                                                                  
 
     params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,
 >params : Pick<Params, ExcludeWithDefault<keyof Params, never, never>>
@@ -99,7 +99,7 @@ const fn5 = <Params>(
 
 function fn6<T>(x: ExcludeWithDefault<T, never>) {
 >fn6 : <T>(x: ExcludeWithDefault<T, never>) => void
->    : ^ ^^^^^                            ^^^^^^^^^
+>    : ^ ^^ ^^                            ^^^^^^^^^
 >x : ExcludeWithDefault<T, never, never>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -120,9 +120,9 @@ function fn6<T>(x: ExcludeWithDefault<T, never>) {
 
 const fn7 = <Params>(
 >fn7 : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>) => Params
->    : ^      ^^^^^^^^^^                                                            ^^^^^      
+>    : ^      ^^      ^^                                                            ^^^^^      
 ><Params>(    params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>) => Params
->                                                                                                      : ^      ^^^^^^^^^^                                                            ^^^^^      
+>                                                                                                      :                                                                                         
 
     params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,
 >params : Pick<Params, ExtractWithDefault<keyof Params, keyof Params, never>>
@@ -134,7 +134,7 @@ const fn7 = <Params>(
 
 function fn8<T>(x: ExtractWithDefault<T, T>) {
 >fn8 : <T>(x: ExtractWithDefault<T, T>) => void
->    : ^ ^^^^^                        ^^^^^^^^^
+>    : ^ ^^ ^^                        ^^^^^^^^^
 >x : ExtractWithDefault<T, T, never>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -159,9 +159,9 @@ type TemplatedConditional<TCheck, TExtends, TTrue, TFalse> = TCheck extends TExt
 
 const fn9 = <Params>(
 >fn9 : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>) => Params
->    : ^      ^^^^^^^^^^                                                                            ^^^^^      
+>    : ^      ^^      ^^                                                                            ^^^^^      
 ><Params>(    params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,): Params => params : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>) => Params
->                                                                                                                      : ^      ^^^^^^^^^^                                                                            ^^^^^      
+>                                                                                                                      :                                                                                                         
 
     params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,
 >params : Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>
@@ -173,7 +173,7 @@ const fn9 = <Params>(
 
 function fn10<T>(x: TemplatedConditional<T, never, never, T>) {
 >fn10 : <T>(x: TemplatedConditional<T, never, never, T>) => void
->     : ^ ^^^^^                                        ^^^^^^^^^
+>     : ^ ^^ ^^                                        ^^^^^^^^^
 >x : TemplatedConditional<T, never, never, T>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -194,9 +194,9 @@ function fn10<T>(x: TemplatedConditional<T, never, never, T>) {
 
 const fn11 = <Params>(
 >fn11 : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>) => Params
->     : ^      ^^^^^^^^^^                                                                                   ^^^^^      
+>     : ^      ^^      ^^                                                                                   ^^^^^      
 ><Params>(    params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>) => Params
->                                                                                                                             : ^      ^^^^^^^^^^                                                                                   ^^^^^      
+>                                                                                                                             :                                                                                                                
 
     params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,
 >params : Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>
@@ -208,7 +208,7 @@ const fn11 = <Params>(
 
 function fn12<T>(x: TemplatedConditional<T, T, T, never>) {
 >fn12 : <T>(x: TemplatedConditional<T, T, T, never>) => void
->     : ^ ^^^^^                                    ^^^^^^^^^
+>     : ^ ^^ ^^                                    ^^^^^^^^^
 >x : TemplatedConditional<T, T, T, never>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

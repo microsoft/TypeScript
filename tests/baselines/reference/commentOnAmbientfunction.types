@@ -4,7 +4,7 @@
 ///<reference path="a.ts"/>
 declare function foobar(a: typeof foo): typeof bar;
 >foobar : (a: typeof foo) => typeof bar
->       : ^^^^          ^^^^^          
+>       : ^ ^^          ^^^^^          
 >a : () => any
 >  : ^^^^^^^^^
 >foo : () => any

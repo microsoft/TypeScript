@@ -1,11 +1,7 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "./baseline";
+import { jsonToReadableText } from "../helpers";
+import { commandLineCallbacks } from "./baseline";
 import {
     makeSystemReadyForBaseline,
     TscCompileSystem,

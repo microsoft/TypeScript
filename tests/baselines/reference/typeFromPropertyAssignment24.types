@@ -16,7 +16,7 @@ Outer.Inner.Message = function() {
 >Message : () => void
 >        : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 
 };
 

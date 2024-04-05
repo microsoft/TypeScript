@@ -4,7 +4,7 @@
 interface int<T, U, V> {
     f1(a: T): string;
 >f1 : (a: T) => string
->   : ^^^^ ^^^^^      
+>   : ^ ^^ ^^^^^      
 >a : T
 >  : ^
 

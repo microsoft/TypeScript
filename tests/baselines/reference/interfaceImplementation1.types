@@ -22,7 +22,7 @@ interface I1 {
 interface I2 {
 	iFn(n:number, s:string):void;
 >iFn : (n: number, s: string) => void
->    : ^^^^      ^^^^^      ^^^^^    
+>    : ^ ^^      ^^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string

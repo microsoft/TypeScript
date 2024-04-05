@@ -7,7 +7,7 @@ class Dummy {
 
     public greeter(person: string) {
 >greeter : (person: string) => void
->        : ^^^^^^^^^      ^^^^^^^^^
+>        : ^      ^^      ^^^^^^^^^
 >person : string
 >       : ^^^^^^
 

@@ -103,7 +103,7 @@ class C {
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >(x: C) => x.#a : (x: C) => number
->               : ^^^^ ^^^^^^^^^^^
+>               : ^ ^^ ^^^^^^^^^^^
 >x : C
 >  : ^
 >x.#a : number

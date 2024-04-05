@@ -15,7 +15,27 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  test:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+      - name: Test insiders
+        run: |
+          npm ci
+          npx hereby configure-insiders
+          npm test
+
+  publish:
+    needs: test
+
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
 
@@ -36,8 +56,6 @@ jobs:
           npm ci
           npx hereby configure-insiders
           npx hereby LKG
-          npx hereby runtests-parallel
-          npx hereby clean
           npm publish --tag insiders
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

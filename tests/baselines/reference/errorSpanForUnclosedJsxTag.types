@@ -20,7 +20,7 @@ let Baz = () => {}
 >Baz : () => void
 >    : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
 let x = <    Foo.Bar >Hello
 >x : any

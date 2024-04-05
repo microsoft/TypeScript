@@ -25,7 +25,6 @@
                     "pos": 10,
                     "end": 11,
                     "flags": "JSDoc",
-                    "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "escapedText": "a"
                 }

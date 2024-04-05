@@ -34,7 +34,7 @@ for (var x in {}) {
 >fn : () => void
 >   : ^^^^^^^^^^
 >() => {        break TWO;    } : () => void
->                               : ^^^^^^^^^^
+>                               :           
 
         break TWO;
 >TWO : any

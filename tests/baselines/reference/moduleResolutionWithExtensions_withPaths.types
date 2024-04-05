@@ -15,7 +15,7 @@ import { test as test2 } from "foo/test";
 >test : () => void
 >     : ^^^^^^^^^^
 >test2 : () => void
->      : ^^^^^^^^^^
+>      :           
 
 import { relative } from "./relative.js";
 >relative : () => void
@@ -25,7 +25,7 @@ import { relative as relative2 } from "./relative";
 >relative : () => void
 >         : ^^^^^^^^^^
 >relative2 : () => void
->          : ^^^^^^^^^^
+>          :           
 
 
 

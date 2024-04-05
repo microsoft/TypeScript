@@ -3,7 +3,7 @@
 === regexpExecAndMatchTypeUsages.ts ===
 export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
 >foo : (matchResult: RegExpMatchArray, execResult: RegExpExecArray) => void
->    : ^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^               ^^^^^^^^^
+>    : ^           ^^                ^^          ^^               ^^^^^^^^^
 >matchResult : RegExpMatchArray
 >            : ^^^^^^^^^^^^^^^^
 >execResult : RegExpExecArray

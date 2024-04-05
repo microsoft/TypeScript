@@ -5,7 +5,7 @@ var v = function * yield() { }
 >v : () => Generator<never, void, unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function * yield() { } : () => Generator<never, void, unknown>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       :                                      
 >yield : () => Generator<never, void, unknown>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

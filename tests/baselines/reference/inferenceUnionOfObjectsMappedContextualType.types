@@ -25,7 +25,7 @@ type RowRendererMeta<TInput extends {}> = {
 >caption : string
 >        : ^^^^^^
 >formatter : ((value: TInput[key]) => string) | undefined
->          : ^^^^^^^^^           ^^^^^      ^^^^^^^^^^^^^
+>          : ^^     ^^           ^^^^^      ^^^^^^^^^^^^^
 >value : TInput[key]
 >      : ^^^^^^^^^^^
 }
@@ -38,7 +38,7 @@ const test: RowRenderer<Entity> = {
 >test : RowRenderer<Entity>
 >     : ^^^^^^^^^^^^^^^^^^^
 >{    key: 'someDate',    caption: 'My Date',    formatter: (value) => value ? value.toString() : '-' // value: any} : { key: "someDate"; caption: string; formatter: (value: Date | null) => string; }
->                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: 'someDate',
 >key : "someDate"
@@ -54,9 +54,9 @@ const test: RowRenderer<Entity> = {
 
     formatter: (value) => value ? value.toString() : '-' // value: any
 >formatter : (value: Date | null) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >(value) => value ? value.toString() : '-' : (value: Date | null) => string
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          :                               
 >value : Date | null
 >      : ^^^^^^^^^^^
 >value ? value.toString() : '-' : string

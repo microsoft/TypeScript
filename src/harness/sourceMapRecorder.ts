@@ -1,7 +1,5 @@
 import * as documents from "./_namespaces/documents";
-import {
-    Compiler,
-} from "./_namespaces/Harness";
+import { Compiler } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 

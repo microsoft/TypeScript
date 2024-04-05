@@ -1,13 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
