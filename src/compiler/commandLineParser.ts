@@ -2378,7 +2378,7 @@ export function convertToJson(
                 return false;
 
             case SyntaxKind.NullKeyword:
-                return null; // eslint-disable-line no-null/no-null
+                return null; // eslint-disable-line no-restricted-syntax
 
             case SyntaxKind.StringLiteral:
                 if (!isDoubleQuotedString(valueExpression)) {
@@ -2851,7 +2851,7 @@ export function setConfigFileInOptions(options: CompilerOptions, configFile: TsC
 }
 
 function isNullOrUndefined(x: any): x is null | undefined {
-    return x === undefined || x === null; // eslint-disable-line no-null/no-null
+    return x === undefined || x === null; // eslint-disable-line no-restricted-syntax
 }
 
 function directoryOfCombinedPath(fileName: string, basePath: string) {

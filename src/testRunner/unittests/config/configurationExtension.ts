@@ -186,7 +186,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 "dev/configs/third.json": jsonToReadableText({
                     extends: "./second",
                     compilerOptions: {
-                        module: null, // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-restricted-syntax
                     },
                     include: ["../supplemental.*"],
                 }),
@@ -195,7 +195,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     compilerOptions: {
                         module: "system",
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null, // eslint-disable-line no-restricted-syntax
                     files: ["../main.ts"],
                 }),
                 "dev/configs/fifth.json": jsonToReadableText({
@@ -228,7 +228,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 }),
                 "dev/configs/extendsArrayThird.json": jsonToReadableText({
                     compilerOptions: {
-                        module: null, // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-restricted-syntax
                         noImplicitAny: false,
                     },
                     extends: "./extendsArrayFirst",
@@ -239,7 +239,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                         module: "system",
                         strictNullChecks: false,
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null, // eslint-disable-line no-restricted-syntax
                     files: ["../main.ts"],
                 }),
                 "dev/configs/extendsArrayFifth.json": jsonToReadableText({

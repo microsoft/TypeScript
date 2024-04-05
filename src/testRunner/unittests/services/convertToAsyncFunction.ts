@@ -381,7 +381,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             outputText = data.join(newLineCharacter);
         }
         else {
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             outputText = null;
         }
 

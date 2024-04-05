@@ -9880,7 +9880,7 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
 
 /** @internal */
 export function isJsonEqual(a: unknown, b: unknown): boolean {
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
 }
 

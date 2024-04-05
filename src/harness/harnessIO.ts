@@ -703,7 +703,7 @@ export namespace Compiler {
     }
 
     export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
-        Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
+        Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-restricted-syntax
     }
 
     export function doTypeAndSymbolBaseline(baselinePath: string, header: string, program: ts.Program, allFiles: { unitName: string; content: string; }[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
@@ -808,7 +808,7 @@ export namespace Compiler {
                 }
             }
 
-            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join("\n")}${result}`) : null; // eslint-disable-line no-null/no-null
+            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join("\n")}${result}`) : null; // eslint-disable-line no-restricted-syntax
         }
 
         function valueToString(value: number, rounding: number) {
@@ -894,7 +894,7 @@ export namespace Compiler {
             if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                 // We need to return null here or the runBaseLine will actually create a empty file.
                 // Baselining isn't required here because there is no output.
-                sourceMapCode = null; // eslint-disable-line no-null/no-null
+                sourceMapCode = null; // eslint-disable-line no-restricted-syntax
             }
             else {
                 sourceMapCode = "";
@@ -976,7 +976,7 @@ export namespace Compiler {
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
     }
 
@@ -1216,7 +1216,7 @@ export namespace TestCaseParser {
         const opts: CompilerSettings = {};
 
         let match: RegExpExecArray | null;
-        while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-null/no-null
+        while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-restricted-syntax
             opts[match[1]] = match[2].trim();
         }
 
@@ -1416,7 +1416,7 @@ export namespace Baseline {
 
         const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (actual === null) {
             actual = noContent;
         }
@@ -1498,7 +1498,7 @@ export namespace Baseline {
         const writtenFiles = new Map<string, true>();
         const errors: Error[] = [];
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (gen !== null) {
             for (const value of gen) {
                 const [name, content, count] = value as [string, string, number | undefined];

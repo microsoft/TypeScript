@@ -1386,7 +1386,7 @@ export function getRangeOfEnclosingComment(
         return undefined;
     }
 
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     precedingToken = precedingToken === null ? undefined : precedingToken === undefined ? findPrecedingToken(position, sourceFile) : precedingToken;
 
     // Between two consecutive tokens, all comments are either trailing on the former
