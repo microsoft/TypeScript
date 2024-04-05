@@ -3,7 +3,6 @@ import {
     AmdDependency,
     append,
     AssignmentDeclarationKind,
-    AutoGenerateInfo,
     BinaryExpression,
     canHaveJSDoc,
     CheckJsDirective,
@@ -41,7 +40,6 @@ import {
     Identifier,
     idText,
     ImportDeclaration,
-    ImportSpecifier,
     isBindingPattern,
     isComputedPropertyName,
     IScriptSnapshot,
@@ -52,7 +50,6 @@ import {
     isPropertyName,
     isTokenKind,
     JSDoc,
-    JSDocTag,
     LanguageVariant,
     lastOrUndefined,
     LineAndCharacter,
@@ -71,9 +68,9 @@ import {
     ResolutionMode,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    Scanner,
     ScriptKind,
     ScriptTarget,
-    ServicesOnlyType,
     setNodeChildren,
     SourceFile,
     SourceFileLike,
@@ -87,8 +84,6 @@ import {
     TextChangeRange,
     Token,
     TransformFlags,
-    TypeNode,
-    TypeParameterDeclaration,
     UnderscoreEscapedMap,
     updateSourceFile,
     VariableDeclaration,
@@ -101,9 +96,9 @@ export abstract class BaseSyntaxObject implements Node {
     }
     declare kind: SyntaxKind;
 
-    pos: number = -1;
-    end: number = -1;
-    id: number = 0;
+    pos = -1;
+    end = -1;
+    id = 0;
     flags: NodeFlags = NodeFlags.None;
     modifierFlagsCache: ModifierFlags = ModifierFlags.None; // TODO: move this off `Node`
     transformFlags: TransformFlags = TransformFlags.None;
@@ -579,7 +574,7 @@ export class SourceFileObject extends BaseNodeObject implements SourceFile {
     }
 }
 
-const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+let scanner: Scanner | undefined;
 
 function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
     if (!isNodeKind(node.kind)) {
@@ -596,6 +591,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
         return children ?? emptyArray;
     }
 
+    scanner ??= createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
     scanner.setText((sourceFile || getSourceFileOfNode(node)).text);
 
     let pos = node.pos;
@@ -626,6 +622,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
 }
 
 function addSyntheticNodes(nodes: Node[] | undefined, pos: number, end: number, parent: Node): Node[] | undefined {
+    Debug.assertIsDefined(scanner);
     scanner.resetTokenState(pos);
     while (pos < end) {
         const kind = scanner.scan();
