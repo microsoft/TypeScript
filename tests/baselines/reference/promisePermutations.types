@@ -242,7 +242,7 @@ declare function testFunction5P(x: number, cb: (a: string) => string): Promise<s
 
 declare function testFunction6(x: number, cb: <T>(a: T) => T): IPromise<string>;
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
->              : ^^^^      ^^^^^^^ ^^^^^ ^^^^^ ^^^^^                
+>              : ^^^^      ^^^^^^              ^^^^^                
 >x : number
 >  : ^^^^^^
 >cb : <T>(a: T) => T
@@ -252,7 +252,7 @@ declare function testFunction6(x: number, cb: <T>(a: T) => T): IPromise<string>;
 
 declare function testFunction6P(x: number, cb: <T>(a: T) => T): Promise<string>;
 >testFunction6P : (x: number, cb: <T>(a: T) => T) => Promise<string>
->               : ^^^^      ^^^^^^^ ^^^^^ ^^^^^ ^^^^^               
+>               : ^^^^      ^^^^^^              ^^^^^               
 >x : number
 >  : ^^^^^^
 >cb : <T>(a: T) => T
@@ -262,7 +262,7 @@ declare function testFunction6P(x: number, cb: <T>(a: T) => T): Promise<string>;
 
 declare function testFunction7(cb: <T>(a: T) => T): IPromise<string>;
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
->              : ^^^^^^ ^^^^^ ^^^^^ ^^^^^                
+>              : ^^^^^              ^^^^^                
 >cb : <T>(a: T) => T
 >   : ^ ^^^^^ ^^^^^ 
 >a : T
@@ -270,7 +270,7 @@ declare function testFunction7(cb: <T>(a: T) => T): IPromise<string>;
 
 declare function testFunction7P(cb: <T>(a: T) => T): Promise<string>;
 >testFunction7P : (cb: <T>(a: T) => T) => Promise<string>
->               : ^^^^^^ ^^^^^ ^^^^^ ^^^^^               
+>               : ^^^^^              ^^^^^               
 >cb : <T>(a: T) => T
 >   : ^ ^^^^^ ^^^^^ 
 >a : T
@@ -298,7 +298,7 @@ declare function testFunction8P<T>(x: T, cb: (a: T) => T): Promise<T>;
 
 declare function testFunction9<T>(x: T, cb: <U>(a: U) => U): IPromise<T>;
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
->              : ^ ^^^^^ ^^^^^^^ ^^^^^ ^^^^^ ^^^^^           
+>              : ^ ^^^^^ ^^^^^^              ^^^^^           
 >x : T
 >  : ^
 >cb : <U>(a: U) => U
@@ -308,7 +308,7 @@ declare function testFunction9<T>(x: T, cb: <U>(a: U) => U): IPromise<T>;
 
 declare function testFunction9P<T>(x: T, cb: <U>(a: U) => U): Promise<T>;
 >testFunction9P : <T>(x: T, cb: <U>(a: U) => U) => Promise<T>
->               : ^ ^^^^^ ^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
+>               : ^ ^^^^^ ^^^^^^              ^^^^^          
 >x : T
 >  : ^
 >cb : <U>(a: U) => U
@@ -318,7 +318,7 @@ declare function testFunction9P<T>(x: T, cb: <U>(a: U) => U): Promise<T>;
 
 declare function testFunction10<T>(cb: <U>(a: U) => U): IPromise<T>;
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
->               : ^ ^^^^^^^ ^^^^^ ^^^^^ ^^^^^           
+>               : ^ ^^^^^^              ^^^^^           
 >cb : <U>(a: U) => U
 >   : ^ ^^^^^ ^^^^^ 
 >a : U
@@ -326,7 +326,7 @@ declare function testFunction10<T>(cb: <U>(a: U) => U): IPromise<T>;
 
 declare function testFunction10P<T>(cb: <U>(a: U) => U): Promise<T>;
 >testFunction10P : <T>(cb: <U>(a: U) => U) => Promise<T>
->                : ^ ^^^^^^^ ^^^^^ ^^^^^ ^^^^^          
+>                : ^ ^^^^^^              ^^^^^          
 >cb : <U>(a: U) => U
 >   : ^ ^^^^^ ^^^^^ 
 >a : U

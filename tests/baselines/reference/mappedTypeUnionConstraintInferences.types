@@ -33,7 +33,7 @@ export function doSomething_Actual<T extends {
 }
 export declare function doSomething_Expected<T extends {
 >doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
->                     : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^^^                                                                               
 
     prop: string;
 >prop : string

@@ -83,7 +83,7 @@ type T4N = T4[number];  // string | number | boolean
 
 function f1(t1: T1, t2: T2, t3: T3, t4: T4, x: number) {
 >f1 : (t1: T1, t2: T2, t3: T3, t4: T4, x: number) => void
->   : ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^      ^^^^^^^^^
+>   : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^  ^^^^^      ^^^^^^^^^
 >t1 : T1
 >   : ^^
 >t2 : T2

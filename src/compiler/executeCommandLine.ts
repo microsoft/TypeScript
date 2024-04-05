@@ -1,4 +1,3 @@
-import * as performance from "../compiler/performance";
 import {
     arrayFrom,
     BuilderProgram,
@@ -85,8 +84,10 @@ import {
     validateLocaleAndSetLanguage,
     version,
     WatchCompilerHost,
+    WatchOfConfigFile,
     WatchOptions,
 } from "./_namespaces/ts";
+import * as performance from "./performance";
 
 interface Statistic {
     name: string;
@@ -94,6 +95,7 @@ interface Statistic {
     type: StatisticType;
 }
 
+/** @internal */
 export enum StatisticType {
     time,
     count,
@@ -730,6 +732,7 @@ function executeCommandLineWorker(
     }
 }
 
+/** @internal */
 export function isBuild(commandLineArgs: readonly string[]) {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
         const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
@@ -738,12 +741,14 @@ export function isBuild(commandLineArgs: readonly string[]) {
     return false;
 }
 
+/** @internal */
 export type ExecuteCommandLineCallbacks = (program: Program | BuilderProgram | ParsedCommandLine) => void;
+/** @internal */
 export function executeCommandLine(
     system: System,
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
-) {
+): void | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> {
     if (isBuild(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {

@@ -189,7 +189,7 @@ const stringExtractor = createExtractor({
 
 declare function unionType<Result extends readonly unknown[]>(parsers: {
 >unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]>; }) => AnyExtractor<Result[number]>
->          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            
+>          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                 ^^^^^                            
 >parsers : { [K in keyof Result]: AnyExtractor<Result[K]>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

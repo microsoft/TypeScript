@@ -30,7 +30,7 @@ var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 
 function foo1([, skillA]: Robot) {
 >foo1 : ([, skillA]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^     ^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >skillA : [string, string]
@@ -51,7 +51,7 @@ function foo1([, skillA]: Robot) {
 
 function foo2([nameMB]: Robot) {
 >foo2 : ([nameMB]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^     ^^^^^^^^^
 >nameMB : string
 >       : ^^^^^^
 
@@ -70,7 +70,7 @@ function foo2([nameMB]: Robot) {
 
 function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >nameMA : string
 >       : ^^^^^^
 >primarySkillA : string
@@ -93,7 +93,7 @@ function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 
 function foo4([...multiRobotAInfo]: Robot) {
 >foo4 : ([...multiRobotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >multiRobotAInfo : [string, [string, string]]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

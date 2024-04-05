@@ -3,7 +3,7 @@
 === typeParameterConstModifiersReverseMappedTypes.ts ===
 declare function test1<const T>(obj: {
 >test1 : <const T>(obj: { [K in keyof T]: T[K]; }) => [T, typeof obj]
->      : ^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^               
+>      : ^^^^^^^ ^^^^^^^                         ^^^^^               
 >obj : { [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ const result1 = test1({
 
 declare function test2<const T>(obj: {
 >test2 : <const T>(obj: { readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^               
+>      : ^^^^^^^ ^^^^^^^                                  ^^^^^               
 >obj : { readonly [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -87,7 +87,7 @@ const result2 = test2({
 
 declare function test3<const T>(obj: {
 >test3 : <const T>(obj: { -readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^               
+>      : ^^^^^^^ ^^^^^^^                                   ^^^^^               
 >obj : { -readonly [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -129,7 +129,7 @@ const result3 = test3({
 
 declare function test4<const T extends readonly unknown[]>(arr: {
 >test4 : <const T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^ 
 >arr : { [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -152,7 +152,7 @@ const result4 = test4(["1", 2]);
 
 declare function test5<const T extends readonly unknown[]>(
 >test5 : <const T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^ 
 
   ...args: {
 >args : { [K in keyof T]: T[K]; }
