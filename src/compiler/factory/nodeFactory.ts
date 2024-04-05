@@ -6224,7 +6224,7 @@ export function createNodeFactory(flags: NodeFactoryFlags): NodeFactory {
     }
 
     // @api
-    function createSyntaxList(children: Node[]) {
+    function createSyntaxList(children: readonly Node[]) {
         const node = createBaseNode<SyntaxList>(SyntaxKind.SyntaxList);
         setNodeChildren(node, children);
         return node;

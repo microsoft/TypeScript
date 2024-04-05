@@ -3,8 +3,8 @@
     "pos": 1,
     "end": 24,
     "flags": "JSDoc",
-    "modifierFlagsCache": 0,
     "transformFlags": 1,
+    "modifierFlagsCache": 0,
     "elements": {
         "0": {
             "kind": "NumberKeyword",

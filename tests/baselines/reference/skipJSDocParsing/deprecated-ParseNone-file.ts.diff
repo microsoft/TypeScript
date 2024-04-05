@@ -7,8 +7,8 @@
              "pos": 0,
              "end": 46,
 -            "flags": "Deprecated",
-             "modifierFlagsCache": 0,
              "transformFlags": 4194304,
+             "modifierFlagsCache": 0,
              "name": {
                  "kind": "Identifier",
 @@ -39,42 +38,9 @@
@@ -23,16 +23,16 @@
 -                    "pos": 1,
 -                    "end": 19,
 -                    "flags": "JSDoc",
--                    "modifierFlagsCache": 0,
 -                    "transformFlags": 0,
+-                    "modifierFlagsCache": 0,
 -                    "tags": {
 -                        "0": {
 -                            "kind": "JSDocDeprecatedTag",
 -                            "pos": 5,
 -                            "end": 17,
 -                            "flags": "JSDoc",
--                            "modifierFlagsCache": 0,
 -                            "transformFlags": 0,
+-                            "modifierFlagsCache": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 6,
@@ -61,8 +61,8 @@
              "pos": 61,
              "end": 135,
 -            "flags": "Deprecated",
-             "modifierFlagsCache": 0,
              "transformFlags": 4194304,
+             "modifierFlagsCache": 0,
              "name": {
                  "kind": "Identifier",
 @@ -137,43 +102,9 @@
@@ -77,8 +77,8 @@
 -                    "pos": 62,
 -                    "end": 107,
 -                    "flags": "JSDoc",
--                    "modifierFlagsCache": 0,
 -                    "transformFlags": 0,
+-                    "modifierFlagsCache": 0,
 -                    "comment": "{@see imDeprecated}",
 -                    "tags": {
 -                        "0": {
@@ -86,8 +86,8 @@
 -                            "pos": 92,
 -                            "end": 105,
 -                            "flags": "JSDoc",
--                            "modifierFlagsCache": 0,
 -                            "transformFlags": 0,
+-                            "modifierFlagsCache": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 93,

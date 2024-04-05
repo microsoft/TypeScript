@@ -13,16 +13,16 @@
 -                    "pos": 32,
 -                    "end": 48,
 -                    "flags": "JSDoc",
--                    "modifierFlagsCache": 0,
 -                    "transformFlags": 0,
+-                    "modifierFlagsCache": 0,
 -                    "comment": {
 -                        "0": {
 -                            "kind": "JSDocText",
 -                            "pos": 32,
 -                            "end": 36,
 -                            "flags": "JSDoc",
--                            "modifierFlagsCache": 0,
 -                            "transformFlags": 0,
+-                            "modifierFlagsCache": 0,
 -                            "text": ""
 -                        },
 -                        "1": {
@@ -30,8 +30,8 @@
 -                            "pos": 36,
 -                            "end": 45,
 -                            "flags": "JSDoc",
--                            "modifierFlagsCache": 0,
 -                            "transformFlags": 0,
+-                            "modifierFlagsCache": 0,
 -                            "name": {
 -                                "kind": "Identifier",
 -                                "pos": 43,

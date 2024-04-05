@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 39,
     "flags": "JSDoc",
-    "modifierFlagsCache": 0,
     "transformFlags": 0,
+    "modifierFlagsCache": 0,
     "tags": {
         "0": {
             "kind": "JSDocImportTag",
             "pos": 8,
             "end": 34,
-            "modifierFlagsCache": 0,
             "transformFlags": 0,
+            "modifierFlagsCache": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -23,22 +23,22 @@
                 "kind": "ImportClause",
                 "pos": 16,
                 "end": 23,
-                "modifierFlagsCache": 0,
                 "transformFlags": 1,
+                "modifierFlagsCache": 0,
                 "isTypeOnly": true,
                 "namedBindings": {
                     "kind": "NamedImports",
                     "pos": 16,
                     "end": 23,
-                    "modifierFlagsCache": 0,
                     "transformFlags": 0,
+                    "modifierFlagsCache": 0,
                     "elements": {
                         "0": {
                             "kind": "ImportSpecifier",
                             "pos": 17,
                             "end": 21,
-                            "modifierFlagsCache": 0,
                             "transformFlags": 0,
+                            "modifierFlagsCache": 0,
                             "isTypeOnly": false,
                             "name": {
                                 "kind": "Identifier",
@@ -60,8 +60,8 @@
                 "kind": "StringLiteral",
                 "pos": 28,
                 "end": 34,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
+                "modifierFlagsCache": 0,
                 "text": "foo"
             }
         },

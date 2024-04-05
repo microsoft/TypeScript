@@ -3,23 +3,23 @@
     "pos": 1,
     "end": 13,
     "flags": "JSDoc",
-    "modifierFlagsCache": 0,
     "transformFlags": 1,
+    "modifierFlagsCache": 0,
     "parameters": {
         "0": {
             "kind": "Parameter",
             "pos": 10,
             "end": 11,
             "flags": "JSDoc",
-            "modifierFlagsCache": 0,
             "transformFlags": 1,
+            "modifierFlagsCache": 0,
             "type": {
                 "kind": "TypeReference",
                 "pos": 10,
                 "end": 11,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 1,
+                "modifierFlagsCache": 0,
                 "typeName": {
                     "kind": "Identifier",
                     "pos": 10,

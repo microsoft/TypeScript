@@ -21,7 +21,6 @@ import {
     factory,
     FileReference,
     find,
-    findLast,
     FlowNode,
     forEach,
     forEachChild,
@@ -100,11 +99,11 @@ export abstract class BaseSyntaxObject implements Node {
     end = -1;
     id = 0;
     flags: NodeFlags = NodeFlags.None;
-    modifierFlagsCache: ModifierFlags = ModifierFlags.None; // TODO: move this off `Node`
     transformFlags: TransformFlags = TransformFlags.None;
     parent: Node = undefined!;
     original: Node | undefined = undefined;
 
+    abstract modifierFlagsCache: ModifierFlags; // TODO: move this off `Node`
     abstract emitNode: EmitNode | undefined;
 
     getSourceFile(): SourceFile {
@@ -168,9 +167,11 @@ export abstract class BaseSyntaxObject implements Node {
 
 /** @internal */
 export abstract class BaseTokenObject extends BaseSyntaxObject {
-    // NOTE: Tokens generally do not have or need emitNode entries, so they are declared and not defined to reduce
+    // NOTE: Tokens generally do not have or need emitNode entries, so they are declared but not defined to reduce
     // memory footprint.
     declare emitNode: EmitNode | undefined;
+    // NOTE: Tokens cannot have modifiers, so they are declared but not defined to reduce memory footprint
+    declare modifierFlagsCache: ModifierFlags;
 
     override forEachChild<T>(_cbNode: (node: Node) => T, _cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
         // Tokens cannot have source element children
@@ -224,8 +225,8 @@ export class IdentifierObject extends BaseTokenObject implements Identifier {
 
     escapedText: __String = "" as __String;
     symbol: Symbol = undefined!; // initialized by checker
-    jsDoc: JSDoc[] | undefined = undefined; // initialized by parser (JsDocContainer)
-    flowNode: FlowNode | undefined = undefined; // initialized by binder (FlowContainer)
+    jsDoc?: JSDoc[] = undefined; // initialized by parser (JsDocContainer)
+    flowNode?: FlowNode = undefined; // initialized by binder (FlowContainer)
 
     get text(): string {
         return idText(this);
@@ -260,6 +261,8 @@ export class PrivateIdentifierObject extends BaseTokenObject implements PrivateI
 export abstract class BaseNodeObject extends BaseSyntaxObject {
     // NOTE: Non-token nodes often need emitNode entries, so they are defined to reduce polymorphism.
     override emitNode: EmitNode | undefined = undefined;
+    // NOTE: Non-token nodes may have modifiers, so they are defined to reduce polymorphism
+    override modifierFlagsCache: ModifierFlags = ModifierFlags.None; // TODO: move this off `Node`
 
     override forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
         return forEachChild(this, cbNode, cbNodeArray);
@@ -292,7 +295,7 @@ export abstract class BaseNodeObject extends BaseSyntaxObject {
             return undefined;
         }
 
-        const child = findLast(children, child => child.kind < SyntaxKind.FirstJSDocNode || child.kind > SyntaxKind.LastJSDocNode);
+        const child = lastOrUndefined(children);
         if (!child) {
             return undefined;
         }
@@ -328,57 +331,57 @@ export class SourceFileObject extends BaseNodeObject implements SourceFile {
     declare text: string;
     declare resolvedPath: Path;
     declare originalFileName: string;
-    declare redirectInfo?: RedirectInfo | undefined;
+    declare redirectInfo?: RedirectInfo;
     declare amdDependencies: readonly AmdDependency[];
-    declare moduleName?: string | undefined;
+    declare moduleName?: string;
     declare referencedFiles: readonly FileReference[];
     declare typeReferenceDirectives: readonly FileReference[];
     declare libReferenceDirectives: readonly FileReference[];
     declare languageVariant: LanguageVariant;
     declare isDeclarationFile: boolean;
-    declare renamedDependencies?: ReadonlyMap<string, string> | undefined;
+    declare renamedDependencies?: ReadonlyMap<string, string>;
     declare hasNoDefaultLib: boolean;
     declare languageVersion: ScriptTarget;
     declare impliedNodeFormat?: ResolutionMode;
-    declare packageJsonLocations?: readonly string[] | undefined;
-    declare packageJsonScope?: PackageJsonInfo | undefined;
+    declare packageJsonLocations?: readonly string[];
+    declare packageJsonScope?: PackageJsonInfo;
     declare scriptKind: ScriptKind;
-    declare externalModuleIndicator?: true | Node | undefined;
-    declare setExternalModuleIndicator?: ((file: SourceFile) => void) | undefined;
-    declare commonJsModuleIndicator?: Node | undefined;
-    declare jsGlobalAugmentations?: SymbolTable | undefined;
+    declare externalModuleIndicator?: true | Node;
+    declare setExternalModuleIndicator?: (file: SourceFile) => void;
+    declare commonJsModuleIndicator?: Node;
+    declare jsGlobalAugmentations?: SymbolTable;
     declare identifiers: ReadonlyMap<string, string>;
     declare nodeCount: number;
     declare identifierCount: number;
     declare symbolCount: number;
     declare parseDiagnostics: DiagnosticWithLocation[];
     declare bindDiagnostics: DiagnosticWithLocation[];
-    declare bindSuggestionDiagnostics?: DiagnosticWithLocation[] | undefined;
-    declare jsDocDiagnostics?: DiagnosticWithLocation[] | undefined;
-    declare additionalSyntacticDiagnostics?: readonly DiagnosticWithLocation[] | undefined;
+    declare bindSuggestionDiagnostics?: DiagnosticWithLocation[];
+    declare jsDocDiagnostics?: DiagnosticWithLocation[];
+    declare additionalSyntacticDiagnostics?: readonly DiagnosticWithLocation[];
     declare lineMap: readonly number[];
-    declare classifiableNames?: ReadonlySet<__String> | undefined;
-    declare commentDirectives?: CommentDirective[] | undefined;
-    declare resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
-    declare resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
+    declare classifiableNames?: ReadonlySet<__String>;
+    declare commentDirectives?: CommentDirective[];
+    declare resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations>;
+    declare resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     declare imports: readonly StringLiteralLike[];
     declare moduleAugmentations: readonly (Identifier | StringLiteral)[];
-    declare patternAmbientModules?: PatternAmbientModule[] | undefined;
+    declare patternAmbientModules?: PatternAmbientModule[];
     declare ambientModuleNames: readonly string[];
-    declare checkJsDirective?: CheckJsDirective | undefined;
+    declare checkJsDirective?: CheckJsDirective;
     declare version: string;
     declare pragmas: ReadonlyPragmaMap;
-    declare localJsxNamespace?: __String | undefined;
-    declare localJsxFragmentNamespace?: __String | undefined;
-    declare localJsxFactory?: EntityName | undefined;
-    declare localJsxFragmentFactory?: EntityName | undefined;
-    declare endFlowNode?: FlowNode | undefined;
+    declare localJsxNamespace?: __String;
+    declare localJsxFragmentNamespace?: __String;
+    declare localJsxFactory?: EntityName;
+    declare localJsxFragmentFactory?: EntityName;
+    declare endFlowNode?: FlowNode;
     declare symbol: Symbol;
-    declare localSymbol?: Symbol | undefined;
+    declare localSymbol?: Symbol;
     declare modifierFlagsCache: ModifierFlags;
     declare transformFlags: TransformFlags;
-    declare locals?: SymbolTable | undefined;
-    declare nextContainer?: HasLocals | undefined;
+    declare locals?: SymbolTable;
+    declare nextContainer?: HasLocals;
     declare scriptSnapshot: IScriptSnapshot;
     declare nameTable: UnderscoreEscapedMap<number> | undefined;
 
@@ -655,6 +658,7 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     let pos = nodes.pos;
     for (const node of nodes) {
         children = addSyntheticNodes(children, pos, node.pos, parent);
+        children = append(children, node);
         pos = node.end;
     }
     children = addSyntheticNodes(children, pos, nodes.end, parent);

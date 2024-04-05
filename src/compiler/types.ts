@@ -928,8 +928,8 @@ export interface Node extends ReadonlyTextRange {
     /** @internal */ readonly transformFlags: TransformFlags; // Flags for transforms
     /** @internal */ id?: NodeId; // Unique id (used to look up NodeLinks)
     readonly parent: Node; // Parent node (initialized by binding)
-    /** @internal */ original?: Node; // The original node if this is an updated node.
-    /** @internal */ emitNode?: EmitNode; // Associated EmitNode (initialized by transforms)
+    /** @internal */ original?: Node | undefined; // The original node if this is an updated node.
+    /** @internal */ emitNode?: EmitNode | undefined; // Associated EmitNode (initialized by transforms)
     // NOTE: `symbol` and `localSymbol` have been moved to `Declaration`
     //       `locals` and `nextContainer` have been moved to `LocalsContainer`
     //       `flowNode` has been moved to `FlowContainer`
@@ -8940,7 +8940,7 @@ export interface NodeFactory {
     // Synthetic Nodes
     //
     /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
-    /** @internal */ createSyntaxList(children: Node[]): SyntaxList;
+    /** @internal */ createSyntaxList(children: readonly Node[]): SyntaxList;
 
     //
     // Transformation nodes

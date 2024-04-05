@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 60,
     "flags": "JSDoc",
-    "modifierFlagsCache": 0,
     "transformFlags": 0,
+    "modifierFlagsCache": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 58,
-            "modifierFlagsCache": 0,
             "transformFlags": 0,
+            "modifierFlagsCache": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -25,8 +25,8 @@
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "modifierFlagsCache": 0,
                     "transformFlags": 1,
+                    "modifierFlagsCache": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
@@ -39,8 +39,8 @@
                     "kind": "TypeParameter",
                     "pos": 22,
                     "end": 23,
-                    "modifierFlagsCache": 0,
                     "transformFlags": 1,
+                    "modifierFlagsCache": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 22,

@@ -46,23 +46,23 @@ import {
 export class SymbolObject implements Symbol {
     flags: SymbolFlags = 0;
     escapedName: __String = "" as __String;
-    declarations: Declaration[] | undefined = undefined;
-    valueDeclaration: Declaration | undefined = undefined;
+    declarations?: Declaration[] = undefined;
+    valueDeclaration?: Declaration = undefined;
     id = 0;
     mergeId = 0;
-    parent: Symbol | undefined = undefined;
-    members: SymbolTable | undefined = undefined;
-    exports: SymbolTable | undefined = undefined;
-    exportSymbol: Symbol | undefined = undefined;
+    parent?: Symbol = undefined;
+    members?: SymbolTable = undefined;
+    exports?: SymbolTable = undefined;
+    exportSymbol?: Symbol = undefined;
     constEnumOnlyModule: boolean | undefined = undefined;
-    isReferenced: SymbolFlags | undefined = undefined;
-    lastAssignmentPos: number | undefined = undefined;
-    links: SymbolLinks | undefined = undefined; // used by TransientSymbol
+    isReferenced?: SymbolFlags = undefined;
+    lastAssignmentPos?: number = undefined;
+    links?: SymbolLinks = undefined; // used by TransientSymbol
 
     // TODO: Review these for polymorphism:
-    declare isReplaceableByMethod?: boolean | undefined;
-    declare assignmentDeclarationMembers?: Map<number, Declaration> | undefined;
-    declare globalExports?: SymbolTable | undefined;
+    declare isReplaceableByMethod?: boolean;
+    declare assignmentDeclarationMembers?: Map<number, Declaration>;
+    declare globalExports?: SymbolTable;
 
     // TODO: Added by services, review for migration/polymorphism:
     // documentationComment?: SymbolDisplayPart[];
@@ -122,14 +122,14 @@ export class TypeObject implements Type {
     // TODO: Review for polymorphism
     declare id: number;
     declare symbol: Symbol;
-    declare pattern?: DestructuringPattern | undefined;
-    declare aliasSymbol?: Symbol | undefined;
-    declare aliasTypeArguments?: readonly Type[] | undefined;
-    declare permissiveInstantiation?: Type | undefined;
-    declare restrictiveInstantiation?: Type | undefined;
-    declare uniqueLiteralFilledInstantiation?: Type | undefined;
-    declare immediateBaseConstraint?: Type | undefined;
-    declare widened?: Type | undefined;
+    declare pattern?: DestructuringPattern;
+    declare aliasSymbol?: Symbol;
+    declare aliasTypeArguments?: readonly Type[];
+    declare permissiveInstantiation?: Type;
+    declare restrictiveInstantiation?: Type;
+    declare uniqueLiteralFilledInstantiation?: Type;
+    declare immediateBaseConstraint?: Type;
+    declare widened?: Type;
 
     constructor(checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
@@ -253,31 +253,30 @@ export class SignatureObject implements Signature {
     checker: TypeChecker;
 
     // TODO: Review for polymorphism:
-    declare declaration?: JSDocSignature | SignatureDeclaration | undefined;
-    declare typeParameters?: readonly TypeParameter[] | undefined;
+    declare declaration?: JSDocSignature | SignatureDeclaration;
+    declare typeParameters?: readonly TypeParameter[];
     declare parameters: readonly Symbol[];
-    declare thisParameter?: Symbol | undefined;
-    declare resolvedReturnType?: Type | undefined;
-    declare resolvedTypePredicate?: TypePredicate | undefined;
+    declare thisParameter?: Symbol;
+    declare resolvedReturnType?: Type;
+    declare resolvedTypePredicate?: TypePredicate;
     declare minArgumentCount: number;
-    declare resolvedMinArgumentCount?: number | undefined;
-    declare target?: Signature | undefined;
-    declare mapper?: TypeMapper | undefined;
-    declare compositeSignatures?: Signature[] | undefined;
-    declare compositeKind?: TypeFlags | undefined;
-    declare erasedSignatureCache?: Signature | undefined;
-    declare canonicalSignatureCache?: Signature | undefined;
-    declare baseSignatureCache?: Signature | undefined;
-    declare optionalCallSignatureCache?: { inner?: Signature | undefined; outer?: Signature | undefined; } | undefined;
-    declare isolatedSignatureType?: ObjectType | undefined;
-    declare instantiations?: Map<string, Signature> | undefined;
+    declare resolvedMinArgumentCount?: number;
+    declare target?: Signature;
+    declare mapper?: TypeMapper;
+    declare compositeSignatures?: Signature[];
+    declare compositeKind?: TypeFlags;
+    declare erasedSignatureCache?: Signature;
+    declare canonicalSignatureCache?: Signature;
+    declare baseSignatureCache?: Signature;
+    declare optionalCallSignatureCache?: { inner?: Signature; outer?: Signature; };
+    declare isolatedSignatureType?: ObjectType;
+    declare instantiations?: Map<string, Signature>;
 
     // TODO: Added by services, review for migration/polymorhpism:
     // documentationComment?: SymbolDisplayPart[];
     // jsDocTags?: JSDocTagInfo[]; // same
 
     constructor(checker: TypeChecker, flags: SignatureFlags) {
-        // TODO: stabilize map
         this.flags = flags;
         this.checker = checker;
     }

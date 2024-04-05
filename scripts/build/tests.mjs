@@ -41,6 +41,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
     const coverage = cmdLineOptions.coverage;
+    const bail = cmdLineOptions.bail;
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
@@ -84,12 +85,15 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     /** @type {string[]} */
     const args = [];
 
-    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // timeout normally isn't necessary but Travis-CI has been timing out on compiler  selines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
         args.push(mochaJs);
         args.push("-R", findUpFile("scripts/failed-tests.cjs"));
         args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
+        if (bail) {
+            args.push("--bail");
+        }
         if (tests) {
             args.push("-g", `"${tests}"`);
         }
