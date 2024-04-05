@@ -182,8 +182,8 @@ function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<
 }
 
 declare function f23<T>(t: TupleOf<T, 3>): T;
->f23 : <T>(t: [T, T, T]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ 
+>f23 : <T>(t: TupleOf<T, 3>) => T
+>    : ^ ^^^^^             ^^^^^ 
 >t : [T, T, T]
 >  : ^^^^^^^^^
 

@@ -3,7 +3,7 @@
 === genericFunctionParameters.ts ===
 declare function f1<T>(cb: <S>(x: S) => T): T;
 >f1 : <T>(cb: <S>(x: S) => T) => T
->   : ^ ^^^^^^^ ^^^^^ ^^^^^ ^^^^^ 
+>   : ^ ^^^^^^              ^^^^^ 
 >cb : <S>(x: S) => T
 >   : ^ ^^^^^ ^^^^^ 
 >x : S
@@ -11,15 +11,15 @@ declare function f1<T>(cb: <S>(x: S) => T): T;
 
 declare function f2<T>(cb: <S extends number>(x: S) => T): T;
 >f2 : <T>(cb: <S extends number>(x: S) => T) => T
->   : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ 
+>   : ^ ^^^^^^                             ^^^^^ 
 >cb : <S extends number>(x: S) => T
 >   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : S
 >  : ^
 
 declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
->f3 : <T>(cb: <S extends S[]>(x: S) => T) => T
->   : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ 
+>f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
+>   : ^ ^^^^^^                               ^^^^^ 
 >cb : <S extends S[]>(x: S) => T
 >   : ^ ^^^^^^^^^^^^^^^^^ ^^^^^ 
 >x : S
@@ -71,7 +71,7 @@ let x3 = f3(x => x);  // Array<any>
 
 declare const s: <R>(go: <S>(ops: { init(): S; }) => R) => R;
 >s : <R>(go: <S>(ops: { init(): S; }) => R) => R
->  : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>  : ^ ^^^^^^                             ^^^^^ 
 >go : <S>(ops: { init(): S; }) => R
 >   : ^ ^^^^^^^              ^^^^^ 
 >ops : { init(): S; }

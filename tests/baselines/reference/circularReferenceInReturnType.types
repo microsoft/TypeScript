@@ -44,7 +44,7 @@ const res2 = fn2()(() => res2);
 
 declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
 >fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
->    : ^ ^^^^^^^^  ^^^^^^                ^^^^^              
+>    : ^ ^^^^^^^                                            
 >cb : (arg: T2) => any
 >   : ^^^^^^  ^^^^^   
 >arg : T2

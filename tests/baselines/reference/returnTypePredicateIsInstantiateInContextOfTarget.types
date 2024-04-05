@@ -16,7 +16,7 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 >TestComponent : TestComponent
 >              : ^^^^^^^^^^^^^
 >React.Component : React.Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^   ^^^^^        ^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

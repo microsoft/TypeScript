@@ -129,8 +129,8 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
->fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P_1 in keyof T & string as `p_${P_1}`]: T[P_1]; }) => void
->    : ^ ^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P in keyof T & string as `p_${P}`]: T[P]; }) => void
+>    : ^ ^^^^^ ^^^^^                         ^^^^^                                              ^^^^^^^^^
 >x : T
 >  : ^
 >y : { [P in keyof T]: T[P]; }
@@ -157,7 +157,7 @@ function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string a
 
 function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {
 >fa2 : <T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T; }, y: { [Q in A as `p_${Q}`]: U; }) => void
->    : ^ ^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^                            ^^^^^                            ^^^^^^^^^
 >x : { [P in B as `p_${P}`]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { [Q in A as `p_${Q}`]: U; }

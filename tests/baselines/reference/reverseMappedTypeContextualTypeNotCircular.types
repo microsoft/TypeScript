@@ -9,7 +9,7 @@ type Selector<S, R> = (state: S) => R;
 
 declare function createStructuredSelector<S, T>(
 >createStructuredSelector : <S, T>(selectors: { [K in keyof T]: Selector<S, T[K]>; }) => Selector<S, T>
->                         : ^ ^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              
+>                         : ^ ^^ ^^^^^^^^^^^^^                                      ^^^^^              
 
   selectors: {[K in keyof T]: Selector<S, T[K]>},
 >selectors : { [K in keyof T]: Selector<S, T[K]>; }

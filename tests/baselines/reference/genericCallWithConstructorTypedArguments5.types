@@ -26,7 +26,7 @@ function foo<T, U>(arg: { cb: new(t: T) => U }) {
 
 var arg: { cb: new<T>(x: T) => string };
 >arg : { cb: new <T>(x: T) => string; }
->    : ^^^^^^^^^^^ ^^^^^ ^^^^^      ^^^
+>    : ^^^^^^                       ^^^
 >cb : new <T>(x: T) => string
 >   : ^^^^^ ^^^^^ ^^^^^      
 >x : T
@@ -45,7 +45,7 @@ var r = foo(arg); // {}
 // more args not allowed
 var arg2: { cb: new <T>(x: T, y: T) => string };
 >arg2 : { cb: new <T>(x: T, y: T) => string; }
->     : ^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^      ^^^
+>     : ^^^^^^                             ^^^
 >cb : new <T>(x: T, y: T) => string
 >   : ^^^^^ ^^^^^ ^^^^^ ^^^^^      
 >x : T

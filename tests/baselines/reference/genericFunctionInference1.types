@@ -520,7 +520,7 @@ const g09: <T>(x: T) => number = pipe(list, x => x.length);
 
 const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
 >g10 : <T extends { value: T; }>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 >x : T
@@ -534,7 +534,7 @@ const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
 
 const g12: <T extends { value: T }>(x: T) => T = pipe(foo, foo);
 >g12 : <T extends { value: T; }>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^ 
 >value : T
 >      : ^
 >x : T

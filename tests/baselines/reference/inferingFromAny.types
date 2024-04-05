@@ -130,7 +130,7 @@ declare function f17<T, K>(x: {[P in keyof T]: K}): T;
 
 declare function f18<T, K extends keyof T>(x: {[P in K]: T[P]}): T;
 >f18 : <T, K extends keyof T>(x: { [P in K]: T[P]; }) => T
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ 
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^                   ^^^^^ 
 >x : { [P in K]: T[P]; }
 >  : ^^^^^^^^^^^^^^^^^^^
 
