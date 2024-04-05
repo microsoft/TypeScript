@@ -774,7 +774,7 @@ export namespace Compiler {
             }
         }
 
-        function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {// eslint-disable-line no-restricted-syntax
+        function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null { // eslint-disable-line no-restricted-syntax
             let result = "";
             const perfLines: string[] = [];
             const prePerformanceValues = getPerformanceBaselineValues();
@@ -890,7 +890,7 @@ export namespace Compiler {
                 throw new Error("Number of sourcemap files should be same as js files.");
             }
 
-            let sourceMapCode: string | null;// eslint-disable-line no-restricted-syntax
+            let sourceMapCode: string | null; // eslint-disable-line no-restricted-syntax
             if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                 // We need to return null here or the runBaseLine will actually create a empty file.
                 // Baselining isn't required here because there is no output.
@@ -1215,7 +1215,7 @@ export namespace TestCaseParser {
     export function extractCompilerSettings(content: string): CompilerSettings {
         const opts: CompilerSettings = {};
 
-        let match: RegExpExecArray | null;// eslint-disable-line no-restricted-syntax
+        let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-restricted-syntax
             opts[match[1]] = match[2].trim();
         }
@@ -1246,7 +1246,7 @@ export namespace TestCaseParser {
         let symlinks: vfs.FileSet | undefined;
 
         for (const line of lines) {
-            let testMetaData: RegExpExecArray | null;// eslint-disable-line no-restricted-syntax
+            let testMetaData: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;
@@ -1406,7 +1406,7 @@ export namespace Baseline {
 
     const fileCache: { [idx: string]: boolean; } = {};
 
-    function compareToBaseline(actual: string | null, relativeFileName: string, opts: BaselineOptions | undefined) {// eslint-disable-line no-restricted-syntax
+    function compareToBaseline(actual: string | null, relativeFileName: string, opts: BaselineOptions | undefined) { // eslint-disable-line no-restricted-syntax
         // actual is now either undefined (the generator had an error), null (no file requested),
         // or some real output of the function
         if (actual === undefined) {
@@ -1484,7 +1484,7 @@ export namespace Baseline {
         return `The baseline file ${relativeFileName} has changed. (Run "hereby baseline-accept" if the new baseline is correct.)`;
     }
 
-    export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void {// eslint-disable-line no-restricted-syntax
+    export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void { // eslint-disable-line no-restricted-syntax
         const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
         if (actual === undefined) {
             throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
@@ -1493,7 +1493,7 @@ export namespace Baseline {
         writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, opts);
     }
 
-    export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {// eslint-disable-line no-restricted-syntax
+    export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void { // eslint-disable-line no-restricted-syntax
         const gen = generateContent();
         const writtenFiles = new Map<string, true>();
         const errors: Error[] = [];

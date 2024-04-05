@@ -1237,7 +1237,7 @@ export function createSystemWatchFunctions({
             }
         }
 
-        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) {// eslint-disable-line no-restricted-syntax
+        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) { // eslint-disable-line no-restricted-syntax
             // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
             // To ensure we see the file going missing and coming back up (file delete and then recreated)
             // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
