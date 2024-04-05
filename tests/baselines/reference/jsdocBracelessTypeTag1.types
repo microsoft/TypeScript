@@ -24,7 +24,7 @@ function fn2() {
 /** @type (arg: string) => string */
 function fn3(arg) {
 >fn3 : (arg: string) => string
->    : ^^^^^^      ^^^^^      
+>    : ^   ^^      ^^^^^      
 >arg : string
 >    : ^^^^^^
 
