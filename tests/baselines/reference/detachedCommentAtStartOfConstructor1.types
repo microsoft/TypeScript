@@ -22,7 +22,7 @@ class TestFile {
 >getMessage : () => string
 >           : ^^^^^^^^^^^^
 >() => message + this.name : () => string
->                          : ^^^^^^^^^^^^
+>                          :             
 >message + this.name : string
 >                    : ^^^^^^
 >message : string

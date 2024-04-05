@@ -5,7 +5,7 @@ class foo { public bar: { (): number; (i: number): number; } = function() { retu
 >foo : foo
 >    : ^^^
 >bar : { (): number; (i: number): number; }
->    : ^^^^^^      ^^^^^^      ^^^      ^^^
+>    : ^^^^^^      ^^^ ^^      ^^^      ^^^
 >i : number
 >  : ^^^^^^
 >function() { return 1 } : () => number

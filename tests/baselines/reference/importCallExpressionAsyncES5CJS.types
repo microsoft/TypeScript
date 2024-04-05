@@ -40,13 +40,13 @@ export const obj = {
 >obj : { m: () => Promise<void>; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    m: async () => {        const req = await import('./test') // THREE    }} : { m: () => Promise<void>; }
->                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                               : ^^^^^                   ^^^
 
     m: async () => {
 >m : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async () => {        const req = await import('./test') // THREE    } : () => Promise<void>
->                                                                      : ^^^^^^^^^^^^^^^^^^^
+>                                                                      :                    
 
         const req = await import('./test') // THREE
 >req : typeof import("test")
@@ -68,13 +68,13 @@ export class cl2 {
 >p : { m: () => Promise<void>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        m: async () => {            const req = await import('./test') // FOUR        }    } : { m: () => Promise<void>; }
->                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                              : ^^^^^                   ^^^
 
         m: async () => {
 >m : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async () => {            const req = await import('./test') // FOUR        } : () => Promise<void>
->                                                                             : ^^^^^^^^^^^^^^^^^^^
+>                                                                             :                    
 
             const req = await import('./test') // FOUR
 >req : typeof import("test")
@@ -93,7 +93,7 @@ export const l = async () => {
 >l : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async () => {    const req = await import('./test') // FIVE} : () => Promise<void>
->                                                             : ^^^^^^^^^^^^^^^^^^^
+>                                                             :                    
 
     const req = await import('./test') // FIVE
 >req : typeof import("test")

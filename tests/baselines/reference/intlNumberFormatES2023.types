@@ -159,7 +159,7 @@ new Intl.NumberFormat('en-GB').formatRange(10, 100);
 >new Intl.NumberFormat('en-GB').formatRange(10, 100) : string
 >                                                    : ^^^^^^
 >new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint, end: number | bigint) => string
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -171,7 +171,7 @@ new Intl.NumberFormat('en-GB').formatRange(10, 100);
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
 >formatRange : (start: number | bigint, end: number | bigint) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >100 : 100
@@ -181,7 +181,7 @@ new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
 >new Intl.NumberFormat('en-GB').formatRange(10n, 1000n) : string
 >                                                       : ^^^^^^
 >new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint, end: number | bigint) => string
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -193,7 +193,7 @@ new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
 >formatRange : (start: number | bigint, end: number | bigint) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10n : 10n
 >    : ^^^
 >1000n : 1000n
@@ -205,7 +205,7 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
 >new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000) : Intl.NumberRangeFormatPart[]
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -217,7 +217,7 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
 >formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >1000 : 1000
@@ -231,7 +231,7 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
 >new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n) : Intl.NumberRangeFormatPart[]
 >                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -243,7 +243,7 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
 >formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10n : 10n
 >    : ^^^
 >1000n : 1000n

@@ -3,9 +3,9 @@
 === thisReferencedInFunctionInsideArrowFunction1.ts ===
 var foo = (dummy) => { };
 >foo : (dummy: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^
 >(dummy) => { } : (dummy: any) => void
->               : ^^^^^^^^^^^^^^^^^^^^
+>               :                     
 >dummy : any
 
 function test()
@@ -16,7 +16,7 @@ function test()
 >foo(() =>        function () { return this; }    ) : void
 >                                                   : ^^^^
 >foo : (dummy: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^
 >() =>        function () { return this; } : () => () => any
 >                                          : ^^^^^^^^^^^^^^^
 

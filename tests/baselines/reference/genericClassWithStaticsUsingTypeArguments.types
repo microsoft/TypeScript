@@ -8,9 +8,9 @@ class Foo<T> {
 
     static a = (n: T) => { };
 >a : (n: T) => void
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^
 >(n: T) => { } : (n: T) => void
->              : ^^^^^^^^^^^^^^
+>              :               
 >n : T
 >  : ^
 
@@ -34,9 +34,9 @@ class Foo<T> {
 >((x: T) => x || undefined)(null) : any
 >                                 : ^^^
 >((x: T) => x || undefined) : (x: T) => any
->                           : ^^^^^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^
 >(x: T) => x || undefined : (x: T) => any
->                         : ^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^
 >x : T
 >  : ^
 >x || undefined : any
@@ -48,15 +48,15 @@ class Foo<T> {
 
     static e = function (x: T) { return null; }
 >e : (x: T) => any
->  : ^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^
 >function (x: T) { return null; } : (x: T) => any
->                                 : ^^^^^^^^^^^^^
+>                                 :              
 >x : T
 >  : ^
 
     static f(xs: T[]): T[] {
 >f : (xs: T[]) => T[]
->  : ^^^^^   ^^^^^   
+>  : ^  ^^   ^^^^^   
 >xs : T[]
 >   : ^^^
 

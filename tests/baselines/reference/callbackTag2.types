@@ -17,7 +17,7 @@ var one_twenty = s => "120";
 >one_twenty : Id<string>
 >           : ^^^^^^^^^^
 >s => "120" : (s: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >"120" : "120"
@@ -48,7 +48,7 @@ var outside = n => n + 1;
 >outside : SharedId<number>
 >        : ^^^^^^^^^^^^^^^^
 >n => n + 1 : (n: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n + 1 : number
@@ -63,7 +63,7 @@ var noreturn = (barts, tidus, noctis) => "cecil"
 >noreturn : Final<{ fantasy: any; }, { heroes: any; }>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(barts, tidus, noctis) => "cecil" : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil" | "zidane"
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^     ^^                 ^^     ^^                ^^      ^^                ^^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 >barts : { fantasy: any; }
 >      : ^^^^^^^^^^^^^^^^^
 >tidus : { heroes: any; }

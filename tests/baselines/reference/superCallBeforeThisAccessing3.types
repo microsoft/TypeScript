@@ -24,7 +24,7 @@ class D extends Base {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => { this._t } : () => void
->                  : ^^^^^^^^^^
+>                  :           
 >this._t : any
 >        : ^^^
 >this : this

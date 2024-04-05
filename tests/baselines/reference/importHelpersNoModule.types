@@ -25,7 +25,7 @@ class C {
 
     method(@dec x: number) {
 >method : (x: number) => void
->       : ^^^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >dec : any
 >    : ^^^
 >x : number
@@ -58,7 +58,7 @@ class C {
 
     method(@dec x: number) {
 >method : (x: number) => void
->       : ^^^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >dec : any
 >    : ^^^
 >x : number

@@ -47,7 +47,7 @@ interface Obj {
 
 function f1(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNumberTo<any>, someObj: Obj) {
 >f1 : (sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNumberTo<any>, someObj: Obj) => void
->   : ^^^^^^^^^             ^^^^^^^^^^             ^^^^^^^^^^^^^                      ^^^^^^^^^^^   ^^^^^^^^^
+>   : ^      ^^             ^^      ^^             ^^         ^^                      ^^       ^^   ^^^^^^^^^
 >sToAny : StringTo<any>
 >       : ^^^^^^^^^^^^^
 >nToAny : NumberTo<any>
@@ -156,7 +156,7 @@ function f1(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNu
 
 function f2(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<any> & NumberTo<any>, someObj: Obj) {
 >f2 : (sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<any> & NumberTo<any>, someObj: Obj) => void
->   : ^^^^^^^^^             ^^^^^^^^^^             ^^^^^^^^^^^^^                             ^^^^^^^^^^^   ^^^^^^^^^
+>   : ^      ^^             ^^      ^^             ^^         ^^                             ^^       ^^   ^^^^^^^^^
 >sToAny : StringTo<any>
 >       : ^^^^^^^^^^^^^
 >nToAny : NumberTo<any>
@@ -272,7 +272,7 @@ interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
 
 function f3(sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) {
 >f3 : (sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) => void
->   : ^^^^^^^^^             ^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^   ^^^^^^^^^
+>   : ^      ^^             ^^         ^^              ^^                ^^                         ^^       ^^   ^^^^^^^^^
 >sToAny : StringTo<any>
 >       : ^^^^^^^^^^^^^
 >nToNumber : NumberToNumber

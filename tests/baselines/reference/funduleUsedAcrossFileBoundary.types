@@ -24,7 +24,7 @@ declare module Q {
 === funduleUsedAcrossFileBoundary_file2.ts ===
 function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >promiseWithCancellation : <T>(promise: Q.Promise<T>) => void
->                        : ^ ^^^^^^^^^^^            ^^^^^^^^^
+>                        : ^ ^^       ^^            ^^^^^^^^^
 >promise : Q.Promise<T>
 >        : ^^^^^^^^^^^^
 >Q : any

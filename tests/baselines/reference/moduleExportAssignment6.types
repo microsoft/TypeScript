@@ -37,7 +37,7 @@ class C {
     /** @param {number} y */
     m(y) {
 >m : (y: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 

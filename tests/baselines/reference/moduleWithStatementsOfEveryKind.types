@@ -66,7 +66,7 @@ module A {
 
     function F(s: string): number {
 >F : (s: string) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 
@@ -80,9 +80,9 @@ module A {
 
     var fn = (s: string) => {
 >fn : (s: string) => string
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => {        return 'hello ' + s;    } : (s: string) => string
->                                                  : ^^^^      ^^^^^^^^^^^
+>                                                  :                      
 >s : string
 >  : ^^^^^^
 
@@ -187,7 +187,7 @@ module Y {
 
     export function F(s: string): number {
 >F : (s: string) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 
@@ -201,9 +201,9 @@ module Y {
 
     export var fn = (s: string) => {
 >fn : (s: string) => string
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => {        return 'hello ' + s;    } : (s: string) => string
->                                                  : ^^^^      ^^^^^^^^^^^
+>                                                  :                      
 >s : string
 >  : ^^^^^^
 

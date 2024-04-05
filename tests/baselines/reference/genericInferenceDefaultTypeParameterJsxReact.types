@@ -29,7 +29,7 @@ type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { child
 
 function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                  ^^^^^^^^^^^^^^^^
 >props : ButtonBaseProps<T>
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -44,11 +44,11 @@ const v1 = <Component onClick={e => e.preventDefault()} />;
 ><Component onClick={e => e.preventDefault()} /> : JSX.Element
 >                                                : ^^^^^^^^^^^
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : (e: React.MouseEvent<HTMLSpanElement>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e => e.preventDefault() : (e: React.MouseEvent<HTMLSpanElement>) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<HTMLSpanElement>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e.preventDefault() : void

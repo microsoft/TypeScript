@@ -9,7 +9,7 @@ namespace Validation {
 >function1 : () => void
 >          : ^^^^^^^^^^
 >function() {    } : () => void
->                  : ^^^^^^^^^^
+>                  :           
     }
 
     export function function2() {
@@ -39,5 +39,5 @@ namespace Validation {
 >a : () => void
 >  : ^^^^^^^^^^
 >function3 : () => void
->          : ^^^^^^^^^^
+>          :           
 }

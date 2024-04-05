@@ -9,7 +9,7 @@ module ObjectLiteral {
 >ThisInObjectLiteral : { _foo: string; foo: string; test: () => any; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        _foo: '1',        get foo(): string {            return this._foo;        },        set foo(value: string) {            this._foo = value;        },        test: function () {            return this._foo;        }    } : { _foo: string; foo: string; test: () => any; }
->                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^
 
         _foo: '1',
 >_foo : string
@@ -51,7 +51,7 @@ module ObjectLiteral {
 >test : () => any
 >     : ^^^^^^^^^
 >function () {            return this._foo;        } : () => any
->                                                    : ^^^^^^^^^
+>                                                    :          
 
             return this._foo;
 >this._foo : any

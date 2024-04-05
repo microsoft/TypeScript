@@ -30,7 +30,7 @@ class b extends a {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => super.foo() : () => void
->                  : ^^^^^^^^^^
+>                  :           
 >super.foo() : void
 >            : ^^^^
 >super.foo : () => void
@@ -55,7 +55,7 @@ class b2 extends a {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {            var _this = 10;            return super.foo()        } : () => void
->                                                                          : ^^^^^^^^^^
+>                                                                          :           
 
             var _this = 10;
 >_this : number

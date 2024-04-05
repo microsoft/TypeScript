@@ -33,7 +33,7 @@ export interface Foo<T> {
 
 function f<T extends Foo<number>>(x: T) {
 >f : <T extends Foo<number>>(x: T) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

@@ -62,17 +62,17 @@ export class B extends A {
 export interface I1 {
     register(inputClass: new(...params: any[]) => A);
 >register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
->         : ^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^          ^^                           ^^^^^^^^^          ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >inputClass : new (...params: any[]) => A
->           : ^^^^^^^^^^^^^^^^     ^^^^^ 
+>           : ^^^^^^^^      ^^     ^^^^^ 
 >params : any[]
 >       : ^^^^^
 
     register(inputClass: { new (...params: any[]): A; }[]);
 >register : { (inputClass: new (...params: any[]) => A): any; (inputClass: { new (...params: any[]): A; }[]): any; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                ^^^^^^^^^
+>         : ^^^          ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^          ^^                                ^^^^^^^^^
 >inputClass : (new (...params: any[]) => A)[]
->           : ^^^^^^^^^^^^^^^^^     ^^^^^ ^^^
+>           : ^^^^^^^^^      ^^     ^^^^^ ^^^
 >params : any[]
 >       : ^^^^^
 }
@@ -85,11 +85,11 @@ var reg: I1;
 reg.register(B);
 >reg.register(B) : any
 >reg.register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^          ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >reg : I1
 >    : ^^
 >register : { (inputClass: new (...params: any[]) => A): any; (inputClass: (new (...params: any[]) => A)[]): any; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^          ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 

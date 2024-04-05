@@ -64,7 +64,7 @@ var r = true ? a : b; // ok
 >r : { Foo: Base; } | { Foo?: Derived; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? a : b : { Foo: Base; } | { Foo?: Derived; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             :               ^^^     ^            
 >true : true
 >     : ^^^^
 >a : { Foo: Base; }

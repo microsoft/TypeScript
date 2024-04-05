@@ -35,7 +35,7 @@ var anyCtor: {
 
 var anyCtor1: {
 >anyCtor1 : new (n: any) => any
->         : ^^^^^^^^^^^^^^^^   
+>         : ^^^^^ ^^^^^^^^^^   
 
     new (n): any;
 >n : any
@@ -91,14 +91,14 @@ var d = new anyCtor1(undefined);
 >d : any
 >new anyCtor1(undefined) : any
 >anyCtor1 : new (n: any) => any
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^ ^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 // Construct expression of type where apparent type has a construct signature with 0 arguments
 function newFn1<T extends { new (): number }>(s: T) {
 >newFn1 : <T extends new () => number>(s: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >s : T
 >  : ^
 
@@ -118,7 +118,7 @@ function newFn1<T extends { new (): number }>(s: T) {
 // Construct expression of type where apparent type has a construct signature with 1 arguments
 function newFn2<T extends { new (s: number): string}>(s: T) {
 >newFn2 : <T extends new (s: number) => string>(s: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^ ^^      ^^^^^      ^^ ^^ ^^^^^^^^^
 >s : number
 >  : ^^^^^^
 >s : T

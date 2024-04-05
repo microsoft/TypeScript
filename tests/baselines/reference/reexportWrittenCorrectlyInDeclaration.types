@@ -30,9 +30,9 @@ export class Test {
 
     public method = (input: things.ThingA)  => { };
 >method : (input: things.ThingA) => void
->       : ^^^^^^^^             ^^^^^^^^^
+>       : ^     ^^             ^^^^^^^^^
 >(input: things.ThingA)  => { } : (input: things.ThingA) => void
->                               : ^^^^^^^^             ^^^^^^^^^
+>                               :                               
 >input : things.ThingA
 >      : ^^^^^^^^^^^^^
 >things : any

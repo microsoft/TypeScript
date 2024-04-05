@@ -16,11 +16,11 @@ const result = apply.toFixed()
 >apply.toFixed() : string
 >                : ^^^^^^
 >apply.toFixed : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : number
 >      : ^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === moduleExportAliasDuplicateAlias.js ===
 exports.apply = undefined;
@@ -61,7 +61,7 @@ exports.apply = a;
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : () => void
->  : ^^^^^^^^^^
+>  :           
 
 exports.apply()
 >exports.apply() : void

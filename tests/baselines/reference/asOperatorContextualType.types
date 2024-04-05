@@ -4,13 +4,13 @@
 // should error
 var x = (v => v) as (x: number) => string;
 >x : (x: number) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >(v => v) as (x: number) => string : (x: number) => string
->                                  : ^^^^      ^^^^^      
+>                                  :                      
 >(v => v) : (v: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v : (v: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >v : number

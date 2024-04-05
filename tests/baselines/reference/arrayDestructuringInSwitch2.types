@@ -15,7 +15,7 @@ type X = { kind: "a", a: [1] } | { kind: "b", a: [] }
 
 function foo(x: X): 1 {
 >foo : (x: X) => 1
->    : ^^^^ ^^^^^ 
+>    : ^ ^^ ^^^^^ 
 >x : X
 >  : ^
 

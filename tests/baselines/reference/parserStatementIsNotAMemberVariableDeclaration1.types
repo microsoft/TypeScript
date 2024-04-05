@@ -3,13 +3,13 @@
 === parserStatementIsNotAMemberVariableDeclaration1.ts ===
 return {
 >{  "set": function (key, value) {    // 'private' should not be considered a member variable here.    private[key] = value;  }} : { set: (key: any, value: any) => void; }
->                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                : ^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^^^^^
 
   "set": function (key, value) {
 >"set" : (key: any, value: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^^^^^^     ^^^^^^^^^^^^^^
 >function (key, value) {    // 'private' should not be considered a member variable here.    private[key] = value;  } : (key: any, value: any) => void
->                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                     :                               
 >key : any
 >    : ^^^
 >value : any

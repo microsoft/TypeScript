@@ -116,7 +116,7 @@ module E {
 
     export function xDist(x: a.Point) {
 >xDist : (x: a.Point) => number
->      : ^^^^       ^^^^^^^^^^^
+>      : ^ ^^       ^^^^^^^^^^^
 >x : a.Point
 >  : ^^^^^^^
 >a : any

@@ -82,7 +82,7 @@ var r4 = true ? a : b; // typeof a
 >r4 : { x: number; y?: number; } | { x: number; z?: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? a : b : { x: number; y?: number; } | { x: number; z?: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             :               ^           ^^^              ^           
 >true : true
 >     : ^^^^
 >a : { x: number; y?: number; }
@@ -94,7 +94,7 @@ var r5 = true ? b : a; // typeof b
 >r5 : { x: number; y?: number; } | { x: number; z?: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? b : a : { x: number; y?: number; } | { x: number; z?: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             :               ^           ^^^              ^           
 >true : true
 >     : ^^^^
 >b : { x: number; z?: number; }
@@ -104,51 +104,51 @@ var r5 = true ? b : a; // typeof b
 
 var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
 >r6 : ((x: number) => void) | ((x: Object) => void)
->   : ^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
->                                               : ^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                               : ^                   ^^^^^                   ^
 >true : true
 >     : ^^^^
 >(x: number) => { } : (x: number) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >(x: Object) => { } : (x: Object) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : Object
 >  : ^^^^^^
 
 var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { }; 
 >r7 : (x: Object) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >x : Object
 >  : ^^^^^^
 >true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
->                                               : ^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                               : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >true : true
 >     : ^^^^
 >(x: number) => { } : (x: number) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >(x: Object) => { } : (x: Object) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : Object
 >  : ^^^^^^
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
 >r8 : ((x: Object) => void) | ((x: number) => void)
->   : ^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >true ? (x: Object) => { } : (x: number) => { } : ((x: Object) => void) | ((x: number) => void)
->                                               : ^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                               : ^                   ^^^^^                   ^
 >true : true
 >     : ^^^^
 >(x: Object) => { } : (x: Object) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : Object
 >  : ^^^^^^
 >(x: number) => { } : (x: number) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -178,7 +178,7 @@ var r11 = true ? base : derived2;
 
 function foo5<T, U>(t: T, u: U): Object {
 >foo5 : <T, U>(t: T, u: U) => Object
->     : ^ ^^ ^^^^^ ^^^^^ ^^^^^      
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >t : T
 >  : ^
 >u : U

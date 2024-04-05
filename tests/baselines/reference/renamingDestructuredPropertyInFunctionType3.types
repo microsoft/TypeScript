@@ -31,9 +31,9 @@ type G14 = new ({ [sym]: string }: O) => void; // Error
 
 const f13 =  ({ [sym]: string }: O) => { };
 >f13 : ({ [sym]: string }: O) => void
->    : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^                 ^^ ^^^^^^^^^
 >({ [sym]: string }: O) => { } : ({ [sym]: string }: O) => void
->                              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                              :                               
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
 >string : unknown
@@ -41,7 +41,7 @@ const f13 =  ({ [sym]: string }: O) => { };
 
 function f14 ({ [sym]: string }: O) { };
 >f14 : ({ [sym]: string }: O) => void
->    : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^                 ^^ ^^^^^^^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
 >string : unknown

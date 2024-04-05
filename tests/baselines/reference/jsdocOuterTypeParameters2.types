@@ -4,9 +4,9 @@
 /** @return {T} */
 const dedupingMixin = function(mixin) {};
 >dedupingMixin : (mixin: any) => T
->              : ^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^
 >function(mixin) {} : (mixin: any) => T
->                   : ^^^^^^^^^^^^^^^^^
+>                   :                  
 >mixin : any
 >      : ^^^
 
@@ -17,7 +17,7 @@ const PropertyAccessors = dedupingMixin(() => {
 >dedupingMixin(() => {  class Bar {    static bar() { this.prototype.foo(); }  }}) : T
 >                                                                                  : ^
 >dedupingMixin : (mixin: any) => T
->              : ^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^
 >() => {  class Bar {    static bar() { this.prototype.foo(); }  }} : () => void
 >                                                                   : ^^^^^^^^^^
 

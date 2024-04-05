@@ -5,7 +5,7 @@
 interface Settable<T, V> {
     set(value: V): T;
 >set : (value: V) => T
->    : ^^^^^^^^ ^^^^^ 
+>    : ^     ^^ ^^^^^ 
 >value : V
 >      : ^
 }
@@ -37,7 +37,7 @@ class Identity<V> implements Settable<Identity<V>, V> {
     }
     public set(value: V): Identity<V> {
 >set : (value: V) => Identity<V>
->    : ^^^^^^^^ ^^^^^           
+>    : ^     ^^ ^^^^^           
 >value : V
 >      : ^
 

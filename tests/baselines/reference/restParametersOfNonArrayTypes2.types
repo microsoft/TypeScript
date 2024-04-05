@@ -9,25 +9,25 @@ interface MyThing2<T> extends Array<T> { }
 
 function foo(...x: MyThing) { }
 >foo : (...x: MyThing) => void
->    : ^^^^^^^       ^^^^^^^^^
+>    : ^^^^ ^^       ^^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 
 var f = function foo(...x: MyThing) { }
 >f : (...x: MyThing) => void
->  : ^^^^^^^       ^^^^^^^^^
+>  : ^^^^ ^^       ^^^^^^^^^
 >function foo(...x: MyThing) { } : (...x: MyThing) => void
->                                : ^^^^^^^       ^^^^^^^^^
+>                                :  ^^^                   
 >foo : (...x: MyThing) => void
->    : ^^^^^^^       ^^^^^^^^^
+>    : ^^^^ ^^       ^^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 
 var f2 = (...x: MyThing, ...y: MyThing) => { }
 >f2 : (...x: MyThing, ...y: MyThing) => void
->   : ^^^^^^^       ^^^^^^^^       ^^^^^^^^^
+>   : ^^^^ ^^       ^^^^^ ^^       ^^^^^^^^^
 >(...x: MyThing, ...y: MyThing) => { } : (...x: MyThing, ...y: MyThing) => void
->                                      : ^^^^^^^       ^^^^^^^^       ^^^^^^^^^
+>                                      :  ^^^            ^^^                   
 >x : MyThing
 >  : ^^^^^^^
 >y : MyThing
@@ -39,7 +39,7 @@ class C {
 
     foo(...x: MyThing) { }
 >foo : (...x: MyThing) => void
->    : ^^^^^^^       ^^^^^^^^^
+>    : ^^^^ ^^       ^^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 }
@@ -51,7 +51,7 @@ interface I {
 
     foo(...x: MyThing, ...y: MyThing);
 >foo : (...x: MyThing, ...y: MyThing) => any
->    : ^^^^^^^       ^^^^^^^^       ^^^^^^^^
+>    : ^^^^ ^^       ^^^^^ ^^       ^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 >y : MyThing
@@ -60,7 +60,7 @@ interface I {
 
 var a: {
 >a : { (...x: MyThing): any; foo(...x: MyThing): any; }
->  : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>  : ^^^^^^ ^^       ^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^
 
     (...x: MyThing);
 >x : MyThing
@@ -68,30 +68,30 @@ var a: {
 
     foo(...x: MyThing);
 >foo : (...x: MyThing) => any
->    : ^^^^^^^       ^^^^^^^^
+>    : ^^^^ ^^       ^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 }
 
 var b = {
 >b : { foo(...x: MyThing): void; a: (...x: MyThing, ...y: MyThing) => void; b: (...x: MyThing) => void; }
->  : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^ ^^       ^^^^^ ^^       ^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^
 >{    foo(...x: MyThing) { },    a: function foo(...x: MyThing, ...y: MyThing) { },    b: (...x: MyThing) => { }} : { foo(...x: MyThing): void; a: (...x: MyThing, ...y: MyThing) => void; b: (...x: MyThing) => void; }
->                                                                                                                 : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^
+>                                                                                                                 : ^^^^^^^^^ ^^       ^^^^^^^^^^^^ ^^^            ^^^                   ^^^^^ ^^^                   ^^^
 
     foo(...x: MyThing) { },
 >foo : (...x: MyThing) => void
->    : ^^^^^^^       ^^^^^^^^^
+>    : ^^^^ ^^       ^^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 
     a: function foo(...x: MyThing, ...y: MyThing) { },
 >a : (...x: MyThing, ...y: MyThing) => void
->  : ^^^^^^^       ^^^^^^^^       ^^^^^^^^^
+>  : ^^^^ ^^       ^^^^^ ^^       ^^^^^^^^^
 >function foo(...x: MyThing, ...y: MyThing) { } : (...x: MyThing, ...y: MyThing) => void
->                                               : ^^^^^^^       ^^^^^^^^       ^^^^^^^^^
+>                                               :  ^^^            ^^^                   
 >foo : (...x: MyThing, ...y: MyThing) => void
->    : ^^^^^^^       ^^^^^^^^       ^^^^^^^^^
+>    : ^^^^ ^^       ^^^^^ ^^       ^^^^^^^^^
 >x : MyThing
 >  : ^^^^^^^
 >y : MyThing
@@ -99,9 +99,9 @@ var b = {
 
     b: (...x: MyThing) => { }
 >b : (...x: MyThing) => void
->  : ^^^^^^^       ^^^^^^^^^
+>  : ^^^^ ^^       ^^^^^^^^^
 >(...x: MyThing) => { } : (...x: MyThing) => void
->                       : ^^^^^^^       ^^^^^^^^^
+>                       :  ^^^                   
 >x : MyThing
 >  : ^^^^^^^
 }
@@ -111,25 +111,25 @@ var b = {
 
 function foo2(...x: MyThing2<string>) { }
 >foo2 : (...x: MyThing2<string>) => void
->     : ^^^^^^^                ^^^^^^^^^
+>     : ^^^^ ^^                ^^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 
 var f3 = function foo(...x: MyThing2<string>) { }
 >f3 : (...x: MyThing2<string>) => void
->   : ^^^^^^^                ^^^^^^^^^
+>   : ^^^^ ^^                ^^^^^^^^^
 >function foo(...x: MyThing2<string>) { } : (...x: MyThing2<string>) => void
->                                         : ^^^^^^^                ^^^^^^^^^
+>                                         :  ^^^                            
 >foo : (...x: MyThing2<string>) => void
->    : ^^^^^^^                ^^^^^^^^^
+>    : ^^^^ ^^                ^^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 
 var f4 = (...x: MyThing2<string>, ...y: MyThing2<string>) => { }
 >f4 : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
->   : ^^^^^^^                ^^^^^^^^                ^^^^^^^^^
+>   : ^^^^ ^^                ^^^^^ ^^                ^^^^^^^^^
 >(...x: MyThing2<string>, ...y: MyThing2<string>) => { } : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
->                                                        : ^^^^^^^                ^^^^^^^^                ^^^^^^^^^
+>                                                        :  ^^^                     ^^^                            
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 >y : MyThing2<string>
@@ -141,7 +141,7 @@ class C2 {
 
     foo(...x: MyThing2<string>) { }
 >foo : (...x: MyThing2<string>) => void
->    : ^^^^^^^                ^^^^^^^^^
+>    : ^^^^ ^^                ^^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 }
@@ -153,7 +153,7 @@ interface I2 {
 
     foo(...x: MyThing2<string>, ...y: MyThing2<string>);
 >foo : (...x: MyThing2<string>, ...y: MyThing2<string>) => any
->    : ^^^^^^^                ^^^^^^^^                ^^^^^^^^
+>    : ^^^^ ^^                ^^^^^ ^^                ^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 >y : MyThing2<string>
@@ -162,7 +162,7 @@ interface I2 {
 
 var a2: {
 >a2 : { (...x: MyThing2<string>): any; foo(...x: MyThing2<string>): any; }
->   : ^^^^^^^^^                ^^^^^^^^^^^^^^^^^^                ^^^^^^^^^
+>   : ^^^^^^ ^^                ^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^
 
     (...x: MyThing2<string>);
 >x : MyThing2<string>
@@ -170,30 +170,30 @@ var a2: {
 
     foo(...x: MyThing2<string>);
 >foo : (...x: MyThing2<string>) => any
->    : ^^^^^^^                ^^^^^^^^
+>    : ^^^^ ^^                ^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 }
 
 var b2 = {
 >b2 : { foo(...x: MyThing2<string>): void; a: (...x: MyThing2<string>, ...y: MyThing2<string>) => void; b: (...x: MyThing2<string>) => void; }
->   : ^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^
+>   : ^^^^^^^^^ ^^                ^^^^^^^^^^^^^^^^ ^^                ^^^^^ ^^                ^^^^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^^^
 >{    foo(...x: MyThing2<string>) { },    a: function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { },    b: (...x: MyThing2<string>) => { }} : { foo(...x: MyThing2<string>): void; a: (...x: MyThing2<string>, ...y: MyThing2<string>) => void; b: (...x: MyThing2<string>) => void; }
->                                                                                                                                                     : ^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^                ^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^
+>                                                                                                                                                     : ^^^^^^^^^ ^^                ^^^^^^^^^^^^ ^^^                     ^^^                            ^^^^^ ^^^                            ^^^
 
     foo(...x: MyThing2<string>) { },
 >foo : (...x: MyThing2<string>) => void
->    : ^^^^^^^                ^^^^^^^^^
+>    : ^^^^ ^^                ^^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 
     a: function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { },
 >a : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
->  : ^^^^^^^                ^^^^^^^^                ^^^^^^^^^
+>  : ^^^^ ^^                ^^^^^ ^^                ^^^^^^^^^
 >function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { } : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
->                                                                 : ^^^^^^^                ^^^^^^^^                ^^^^^^^^^
+>                                                                 :  ^^^                     ^^^                            
 >foo : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
->    : ^^^^^^^                ^^^^^^^^                ^^^^^^^^^
+>    : ^^^^ ^^                ^^^^^ ^^                ^^^^^^^^^
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 >y : MyThing2<string>
@@ -201,9 +201,9 @@ var b2 = {
 
     b: (...x: MyThing2<string>) => { }
 >b : (...x: MyThing2<string>) => void
->  : ^^^^^^^                ^^^^^^^^^
+>  : ^^^^ ^^                ^^^^^^^^^
 >(...x: MyThing2<string>) => { } : (...x: MyThing2<string>) => void
->                                : ^^^^^^^                ^^^^^^^^^
+>                                :  ^^^                            
 >x : MyThing2<string>
 >  : ^^^^^^^^^^^^^^^^
 }

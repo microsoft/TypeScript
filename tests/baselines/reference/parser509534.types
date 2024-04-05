@@ -17,7 +17,7 @@ var config = require("../config");
 
 module.exports.route = function (server) {
 >module.exports.route = function (server) {  // General Login Page server.get(config.env.siteRoot + "/auth/login", function (req, res, next) {    // TODO Should render login page that shows auth options  req.redirect("/auth/live"); });} : (server: any) => void
->                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                            : ^      ^^^^^^^^^^^^^^
 >module.exports.route : any
 >                     : ^^^
 >module.exports : any
@@ -29,7 +29,7 @@ module.exports.route = function (server) {
 >route : any
 >      : ^^^
 >function (server) {  // General Login Page server.get(config.env.siteRoot + "/auth/login", function (req, res, next) {    // TODO Should render login page that shows auth options  req.redirect("/auth/live"); });} : (server: any) => void
->                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                     : ^      ^^^^^^^^^^^^^^
 >server : any
 >       : ^^^
  
@@ -58,7 +58,7 @@ module.exports.route = function (server) {
 >"/auth/login" : "/auth/login"
 >              : ^^^^^^^^^^^^^
 >function (req, res, next) {    // TODO Should render login page that shows auth options  req.redirect("/auth/live"); } : (req: any, res: any, next: any) => void
->                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                       : ^   ^^^^^^^   ^^^^^^^    ^^^^^^^^^^^^^^
 >req : any
 >    : ^^^
 >res : any
