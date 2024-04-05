@@ -4309,12 +4309,7 @@ export function isBlockLike(node: Node): node is BlockLike {
 }
 
 /** @internal */
-export function createFutureSourceFile(fileName: string, syntaxModuleIndicator: ModuleKind.ESNext | ModuleKind.CommonJS | undefined, program: Program): FutureSourceFile {
-    // TODO: ???
-    const moduleResolutionHost: ModuleResolutionHost = {
-        ...program,
-        readFile: fileName => Debug.checkDefined(program.readFile)(fileName),
-    };
+export function createFutureSourceFile(fileName: string, syntaxModuleIndicator: ModuleKind.ESNext | ModuleKind.CommonJS | undefined, program: Program, moduleResolutionHost: ModuleResolutionHost): FutureSourceFile {
     const result = getImpliedNodeFormatForFileWorker(fileName, program.getPackageJsonInfoCache?.(), moduleResolutionHost, program.getCompilerOptions());
     let impliedNodeFormat, packageJsonScope;
     if (typeof result === "object") {

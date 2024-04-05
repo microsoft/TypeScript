@@ -37,6 +37,7 @@ import {
     forEachExternalModuleToImportFrom,
     formatting,
     type FutureSourceFile,
+    FutureSymbolExportInfo,
     getAllowSyntheticDefaultImports,
     getBaseFileName,
     getDefaultExportInfoWorker,
@@ -290,7 +291,6 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                     moduleFileName: exportingFileName,
                     moduleSymbol: exportingSourceFile.symbol,
                     targetFlags: exportedMeanings,
-                    symbol: undefined!,
                 }],
                 /*usagePosition*/ undefined,
                 isImportUsageValidAsTypeOnly,
@@ -306,7 +306,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         }
         else {
             // File does not exist yet or has no exports, so all imports added will be "new"
-            const futureExportingSourceFile = createFutureSourceFile(exportingFileName, ModuleKind.ESNext, program);
+            const futureExportingSourceFile = createFutureSourceFile(exportingFileName, ModuleKind.ESNext, program, host);
             const moduleSpecifier = moduleSpecifiers.getLocalModuleSpecifierBetweenFileNames(
                 sourceFile,
                 exportingFileName,
@@ -658,7 +658,7 @@ export interface ImportSpecifierResolver {
         position: number,
         isValidTypeOnlyUseSite: boolean,
         fromCacheOnly?: boolean,
-    ): { exportInfo?: SymbolExportInfo; moduleSpecifier: string; computedWithoutCacheCount: number; } | undefined;
+    ): { exportInfo?: SymbolExportInfo | FutureSymbolExportInfo; moduleSpecifier: string; computedWithoutCacheCount: number; } | undefined;
 }
 
 /** @internal */
@@ -672,7 +672,7 @@ export function createImportSpecifierResolver(importingFile: SourceFile, program
         position: number,
         isValidTypeOnlyUseSite: boolean,
         fromCacheOnly?: boolean,
-    ): { exportInfo?: SymbolExportInfo; moduleSpecifier: string; computedWithoutCacheCount: number; } | undefined {
+    ): { exportInfo?: SymbolExportInfo | FutureSymbolExportInfo; moduleSpecifier: string; computedWithoutCacheCount: number; } | undefined {
         const { fixes, computedWithoutCacheCount } = getImportFixes(
             exportInfo,
             position,
@@ -713,7 +713,7 @@ type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImpor
 // Properties are be undefined if fix is derived from an existing import
 interface ImportFixBase {
     readonly isReExport?: boolean;
-    readonly exportInfo?: SymbolExportInfo;
+    readonly exportInfo?: SymbolExportInfo | FutureSymbolExportInfo;
     readonly moduleSpecifier: string;
 }
 interface Qualification {
@@ -727,7 +727,7 @@ interface FixAddJsdocTypeImport extends ImportFixBase {
     readonly kind: ImportFixKind.JsdocTypeImport;
     readonly usagePosition: number;
     readonly isReExport: boolean;
-    readonly exportInfo: SymbolExportInfo;
+    readonly exportInfo: SymbolExportInfo | FutureSymbolExportInfo;
 }
 interface FixAddToExistingImport extends ImportFixBase {
     readonly kind: ImportFixKind.AddToExisting;
@@ -860,8 +860,12 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     }
 }
 
+function isFutureSymbolExportInfoArray(info: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[]): info is readonly FutureSymbolExportInfo[] {
+    return info[0].symbol === undefined;
+}
+
 function getImportFixes(
-    exportInfos: readonly SymbolExportInfo[],
+    exportInfos: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[],
     usagePosition: number | undefined,
     isValidTypeOnlyUseSite: boolean,
     useRequire: boolean,
@@ -873,7 +877,7 @@ function getImportFixes(
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number; fixes: readonly ImportFixWithModuleSpecifier[]; } {
     const checker = program.getTypeChecker();
-    const existingImports = importMap ? flatMap(exportInfos, importMap.getImportsForExportInfo) : emptyArray;
+    const existingImports = importMap && !isFutureSymbolExportInfoArray(exportInfos) ? flatMap(exportInfos, importMap.getImportsForExportInfo) : emptyArray;
     const useNamespace = usagePosition !== undefined && tryUseExistingNamespaceImport(existingImports, usagePosition);
     const addToExisting = tryAddToExistingImport(existingImports, isValidTypeOnlyUseSite, checker, program.getCompilerOptions());
     if (addToExisting) {
@@ -1106,7 +1110,7 @@ function getNewImportFixes(
     usagePosition: number | undefined,
     isValidTypeOnlyUseSite: boolean,
     useRequire: boolean,
-    exportInfo: readonly SymbolExportInfo[],
+    exportInfo: readonly (SymbolExportInfo | FutureSymbolExportInfo)[],
     host: LanguageServiceHost,
     preferences: UserPreferences,
     fromCacheOnly?: boolean,
@@ -1118,8 +1122,8 @@ function getNewImportFixes(
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
     const getModuleSpecifiers = fromCacheOnly
-        ? (exportInfo: SymbolExportInfo) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(exportInfo.moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
-        : (exportInfo: SymbolExportInfo, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(exportInfo.moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
+        ? (exportInfo: SymbolExportInfo | FutureSymbolExportInfo) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(exportInfo.moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
+        : (exportInfo: SymbolExportInfo | FutureSymbolExportInfo, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(exportInfo.moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
 
     let computedWithoutCacheCount = 0;
     const fixes = flatMap(exportInfo, (exportInfo, i) => {
@@ -1174,7 +1178,7 @@ function getNewImportFixes(
 }
 
 function getFixesForAddImport(
-    exportInfos: readonly SymbolExportInfo[],
+    exportInfos: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[],
     existingImports: readonly FixAddToExistingImportInfo[],
     program: Program,
     sourceFile: SourceFile | FutureSourceFile,

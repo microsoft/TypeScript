@@ -91,6 +91,12 @@ export interface SymbolExportInfo {
     isFromPackageJson: boolean;
 }
 
+/**
+ * @internal
+ * ExportInfo for an export that does not exist yet, so does not have a symbol.
+ */
+export type FutureSymbolExportInfo = Omit<SymbolExportInfo, "symbol"> & { readonly symbol?: undefined; };
+
 interface CachedSymbolExportInfo {
     // Used to rehydrate `symbol` and `moduleSymbol` when transient
     id: number;
