@@ -1,24 +1,32 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType2.ts] ////
+
+=== interfaceWithPropertyThatIsPrivateInBaseType2.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     private x() {}
 >x : () => void
+>  : ^^^^^^^^^^
 }
 
 interface Foo extends Base { // error
     x(): any;
 >x : () => any
+>  : ^^^^^^   
 }
 
 class Base2<T> {
 >Base2 : Base2<T>
+>      : ^^^^^^^^
 
     private x() { }
 >x : () => void
+>  : ^^^^^^^^^^
 }
 
 interface Foo2<T> extends Base2<T> { // error
     x(): any;
 >x : () => any
+>  : ^^^^^^   
 }

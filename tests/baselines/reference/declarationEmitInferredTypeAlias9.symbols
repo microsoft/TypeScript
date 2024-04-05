@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitInferredTypeAlias9.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias9.ts] ////
+
+=== declarationEmitInferredTypeAlias9.ts ===
 type Foo<T> = T | { x: Foo<T> };
 >Foo : Symbol(Foo, Decl(declarationEmitInferredTypeAlias9.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitInferredTypeAlias9.ts, 0, 9))

@@ -1,0 +1,73 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// class ConstructorOverload {
+//     [|constructor();|]
+//     constructor(foo: string);
+//     constructor(foo: any)  { }
+// }
+// 
+// var constructorOverload = new /*GOTO DEF*/ConstructorOverload();
+// var constructorOverload = new ConstructorOverload("foo");
+
+  // === Details ===
+  [
+   {
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "ConstructorOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// class ConstructorOverload {
+//     constructor();
+//     [|constructor(foo: string);|]
+//     constructor(foo: any)  { }
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// var constructorOverload = new /*GOTO DEF*/ConstructorOverload("foo");
+
+  // === Details ===
+  [
+   {
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "ConstructorOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// class ConstructorOverload {
+//     /*GOTO DEF*/constructor();
+//     constructor(foo: string);
+//     [|constructor(foo: any)  { }|]
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// var constructorOverload = new ConstructorOverload("foo");
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "ConstructorOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

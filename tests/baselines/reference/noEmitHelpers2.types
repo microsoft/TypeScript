@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noEmitHelpers2.ts ===
+//// [tests/cases/compiler/noEmitHelpers2.ts] ////
+
+=== noEmitHelpers2.ts ===
 declare var decorator: any;
 >decorator : any
 
@@ -7,10 +9,13 @@ declare var decorator: any;
 
 class A {
 >A : A
+>  : ^
 
     constructor(a: number, @decorator b: string) {
 >a : number
+>  : ^^^^^^
 >decorator : any
 >b : string
+>  : ^^^^^^
     }
 }

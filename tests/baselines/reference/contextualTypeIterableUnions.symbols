@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeIterableUnions.ts ===
+//// [tests/cases/compiler/contextualTypeIterableUnions.ts] ////
+
+=== contextualTypeIterableUnions.ts ===
 declare class DMap<K, V>  {
 >DMap : Symbol(DMap, Decl(contextualTypeIterableUnions.ts, 0, 0))
 >K : Symbol(K, Decl(contextualTypeIterableUnions.ts, 0, 19))

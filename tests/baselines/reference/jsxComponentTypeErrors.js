@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxComponentTypeErrors.tsx] ////
+
 //// [jsxComponentTypeErrors.tsx]
 namespace JSX {
   export interface Element {

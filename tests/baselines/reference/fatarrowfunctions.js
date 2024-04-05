@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctions.ts] ////
+
 //// [fatarrowfunctions.ts]
 function foo(x:any) {
 	return x();

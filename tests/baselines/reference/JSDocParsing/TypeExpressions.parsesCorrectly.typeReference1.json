@@ -11,8 +11,7 @@
         "end": 2,
         "flags": "JSDoc",
         "transformFlags": 0,
-        "escapedText": "a",
-        "jsdocDotPos": 2
+        "escapedText": "a"
     },
     "typeArguments": {
         "0": {

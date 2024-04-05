@@ -1,17 +1,27 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES5.ts] ////
+
+=== computedPropertyNames21_ES5.ts ===
 class C {
 >C : C
+>  : ^
 
     bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     [this.bar()]() { }
 >[this.bar()] : () => void
+>             : ^^^^^^^^^^
 >this.bar() : number
+>           : ^^^^^^
 >this.bar : () => number
+>         : ^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 }

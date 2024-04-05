@@ -1,12 +1,17 @@
-=== tests/cases/compiler/generatorES6_2.ts ===
+//// [tests/cases/compiler/generatorES6_2.ts] ////
+
+=== generatorES6_2.ts ===
 class C {
 >C : C
+>  : ^
 
     public * foo() {
 >foo : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield 1
 >yield 1 : any
 >1 : 1
+>  : ^
     }
 }

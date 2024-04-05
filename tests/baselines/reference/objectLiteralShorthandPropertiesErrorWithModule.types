@@ -1,41 +1,62 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts] ////
+
+=== objectLiteralShorthandPropertiesErrorWithModule.ts ===
 // module export
 var x = "Foo";
 >x : string
+>  : ^^^^^^
 >"Foo" : "Foo"
+>      : ^^^^^
 
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export var x;
 >x : any
+>  : ^^^
 }
 
 module n {
 >n : typeof n
+>  : ^^^^^^^^
 
     var z = 10000;
 >z : number
+>  : ^^^^^^
 >10000 : 10000
+>      : ^^^^^
 
     export var y = {
 >y : { m: typeof m; "": any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        m.x  // error    } : { m: typeof m; "": any; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         m.x  // error
 >m : typeof m
+>  : ^^^^^^^^
 > : any
+> : ^^^
 >.x : any
+>   : ^^^
 > : any
+> : ^^^
 >x : any
+>  : ^^^
 
     };
 }
 
 m.y.x;
 >m.y.x : any
+>      : ^^^
 >m.y : any
+>    : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 

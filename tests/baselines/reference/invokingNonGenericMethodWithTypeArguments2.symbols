@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts ===
+//// [tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts] ////
+
+=== invokingNonGenericMethodWithTypeArguments2.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(invokingNonGenericMethodWithTypeArguments2.ts, 0, 0))
 

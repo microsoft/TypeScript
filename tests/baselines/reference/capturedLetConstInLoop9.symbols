@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop9.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop9.ts] ////
+
+=== capturedLetConstInLoop9.ts ===
 for (let x = 0; x < 1; ++x) {
 >x : Symbol(x, Decl(capturedLetConstInLoop9.ts, 0, 8))
 >x : Symbol(x, Decl(capturedLetConstInLoop9.ts, 0, 8))

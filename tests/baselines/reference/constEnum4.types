@@ -1,17 +1,24 @@
-=== tests/cases/conformance/constEnums/constEnum4.ts ===
+//// [tests/cases/conformance/constEnums/constEnum4.ts] ////
+
+=== constEnum4.ts ===
 if (1)
 >1 : 1
+>  : ^
 
     const enum A { }
 >A : A
+>  : ^
 
 else if (2)
 >2 : 2
+>  : ^
 
     const enum B { }
 >B : B
+>  : ^
 
 else
     const enum C { }
 >C : C
+>  : ^
 

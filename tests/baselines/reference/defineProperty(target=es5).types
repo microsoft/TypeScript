@@ -1,16 +1,25 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts] ////
+
+=== defineProperty.ts ===
 var x: "p" = "p"
 >x : "p"
+>  : ^^^
 >"p" : "p"
+>    : ^^^
 
 class A {
 >A : A
+>  : ^
 
     a = this.y
 >a : number
+>  : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 
     b
 >b : any
@@ -20,59 +29,85 @@ class A {
 
     ["computed"] = 13
 >["computed"] : number
+>             : ^^^^^^
 >"computed" : "computed"
+>           : ^^^^^^^^^^
 >13 : 13
+>   : ^^
 
     ;[x] = 14
 >[x] : number
+>    : ^^^^^^
 >x : "p"
+>  : ^^^
 >14 : 14
+>   : ^^
 
     m() { }
 >m : () => void
+>  : ^^^^^^^^^^
 
     constructor(public readonly y: number) { }
 >y : number
+>  : ^^^^^^
 
     z = this.y
 >z : number
+>  : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 
     declare notEmitted;
 >notEmitted : any
 }
 class B {
 >B : B
+>  : ^
 
     public a;
 >a : any
 }
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     declare public a;
 >a : any
 
     z = this.ka
 >z : number
+>  : ^^^^^^
 >this.ka : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >ka : number
+>   : ^^^^^^
 
     constructor(public ka: number) {
 >ka : number
+>   : ^^^^^^
 
         super()
 >super() : void
+>        : ^^^^
 >super : typeof B
+>      : ^^^^^^^^
     }
     ki = this.ka
 >ki : number
+>   : ^^^^^^
 >this.ka : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >ka : number
+>   : ^^^^^^
 }
 

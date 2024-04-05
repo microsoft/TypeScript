@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofTypeAliasToGenericClass.ts] ////
+
 //// [instanceofTypeAliasToGenericClass.ts]
 declare class TableClass<S = any> {
     _field: S;

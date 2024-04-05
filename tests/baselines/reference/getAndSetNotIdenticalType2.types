@@ -1,50 +1,79 @@
-=== tests/cases/compiler/getAndSetNotIdenticalType2.ts ===
+//// [tests/cases/compiler/getAndSetNotIdenticalType2.ts] ////
+
+=== getAndSetNotIdenticalType2.ts ===
 class A<T> { foo: T; }
 >A : A<T>
+>  : ^^^^
 >foo : T
+>    : ^
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     data: A<T>;
 >data : A<T>
+>     : ^^^^
 
     get x(): A<T> {
 >x : A<T>
+>  : ^^^^
 
         return this.data;
 >this.data : A<T>
+>          : ^^^^
 >this : this
+>     : ^^^^
 >data : A<T>
+>     : ^^^^
     }
     set x(v: A<string>) {
 >x : A<T>
+>  : ^^^^
 >v : A<string>
+>  : ^^^^^^^^^
 
         this.data = v;
 >this.data = v : A<string>
+>              : ^^^^^^^^^
 >this.data : A<T>
+>          : ^^^^
 >this : this
+>     : ^^^^
 >data : A<T>
+>     : ^^^^
 >v : A<string>
+>  : ^^^^^^^^^
     }
 }
 
 var x = new C();
 >x : C<unknown>
+>  : ^^^^^^^^^^
 >new C() : C<unknown>
+>        : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r = x.x;
 >r : A<unknown>
+>  : ^^^^^^^^^^
 >x.x : A<unknown>
+>    : ^^^^^^^^^^
 >x : C<unknown>
+>  : ^^^^^^^^^^
 >x : A<unknown>
+>  : ^^^^^^^^^^
 
 x.x = r;
 >x.x = r : A<unknown>
+>        : ^^^^^^^^^^
 >x.x : A<string>
+>    : ^^^^^^^^^
 >x : C<unknown>
+>  : ^^^^^^^^^^
 >x : A<string>
+>  : ^^^^^^^^^
 >r : A<unknown>
+>  : ^^^^^^^^^^
 

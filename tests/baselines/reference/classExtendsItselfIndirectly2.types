@@ -1,59 +1,92 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts] ////
+
+=== classExtendsItselfIndirectly2.ts ===
 class C extends N.E { foo: string; } // error
 >C : C
+>  : ^
 >N.E : typeof N.E
+>    : ^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >E : typeof N.E
+>  : ^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class D extends C { bar: string; }
 >D : D
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 >bar : string
+>    : ^^^^^^
 
 }
 
 module N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export class E extends M.D { baz: number; }
 >E : E
+>  : ^
 >M.D : typeof M.D
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >D : typeof M.D
+>  : ^^^^^^^^^^
 >baz : number
+>    : ^^^^^^
 }
 
 module O {
 >O : typeof O
+>  : ^^^^^^^^
 
     class C2<T> extends Q.E2<T> { foo: T; } // error
 >C2 : C2<T>
+>   : ^^^^^
 >Q.E2 : typeof Q.E2
+>     : ^^^^^^^^^^^
 >Q : typeof Q
+>  : ^^^^^^^^
 >E2 : typeof Q.E2
+>   : ^^^^^^^^^^^
 >foo : T
+>    : ^
 
     module P {
 >P : typeof P
+>  : ^^^^^^^^
 
         export class D2<T> extends C2<T> { bar: T; }
 >D2 : D2<T>
+>   : ^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >bar : T
+>    : ^
     }
 
     module Q {
 >Q : typeof Q
+>  : ^^^^^^^^
 
         export class E2<T> extends P.D2<T> { baz: T; }
 >E2 : E2<T>
+>   : ^^^^^
 >P.D2 : typeof P.D2
+>     : ^^^^^^^^^^^
 >P : typeof P
+>  : ^^^^^^^^
 >D2 : typeof P.D2
+>   : ^^^^^^^^^^^
 >baz : T
+>    : ^
     }
 }

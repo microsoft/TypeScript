@@ -1,271 +1,454 @@
-=== tests/cases/conformance/jsx/1.tsx ===
+//// [tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx] ////
+
+=== 1.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 </>;
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/2.tsx ===
+=== 2.tsx ===
 <a: />;
 ><a: /> : any
+>       : ^^^
 >a : any
+>  : ^^^
+> : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/3.tsx ===
+=== 3.tsx ===
 <:a />;
 >< : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 >a /> : boolean
+>     : ^^^^^^^
 >a / : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/4.tsx ===
+=== 4.tsx ===
 <a b=d />;
 ><a b=d /> : any
+>          : ^^^
 >a : any
+>  : ^^^
 >b : true
+>  : ^^^^
 >d : true
+>  : ^^^^
 
-=== tests/cases/conformance/jsx/5.tsx ===
+=== 5.tsx ===
 <a>;
 ><a>; : any
+>     : ^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/6.tsx ===
+=== 6.tsx ===
 <a></b>;
 ><a></b> : any
+>        : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/7.tsx ===
+=== 7.tsx ===
 <a foo="bar;
 ><a foo="bar; : any
+>             : ^^^
 >a : any
+>  : ^^^
 >foo : string
+>    : ^^^^^^
 
-=== tests/cases/conformance/jsx/8.tsx ===
+=== 8.tsx ===
 <a:b></b>;
 ><a:b></b> : any
->a:b : any
+>          : ^^^
+>a : any
+>  : ^^^
 >b : any
+>  : ^^^
+>b : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/9.tsx ===
+=== 9.tsx ===
 <a:b.c></a:b.c>;
-><a:b.c></a:b.c> : any
->a:b.c : any
->a:b : any
+><a:b.c></a:b : any
+>             : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : true
+>  : ^^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c> : boolean
+>   : ^^^^^^^
 >c : any
->a:b.c : any
->a:b : any
->c : any
+>  : ^^^
+> : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/10.tsx ===
+=== 10.tsx ===
 <a.b:c></a.b:c>;
 ><a.b:c></a.b : any
+>             : ^^^
 >a.b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : true
+>  : ^^^^
 >a.b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c> : boolean
+>   : ^^^^^^^
 >c : any
+>  : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/11.tsx ===
+=== 11.tsx ===
 <a.b.c></a>;
 ><a.b.c></a> : any
+>            : ^^^
 >a.b.c : any
+>      : ^^^
 >a.b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/12.tsx ===
+=== 12.tsx ===
 <.a></.a>;
 ><.a> : boolean
+>     : ^^^^^^^
 ><.a : boolean
+>    : ^^^^^^^
 > : any
+> : ^^^
 >.a : any
+>   : ^^^
 > : any
+> : ^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 >a> : boolean
+>   : ^^^^^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/13.tsx ===
+=== 13.tsx ===
 <a.></a.>;
 ><a.></a.> : any
+>          : ^^^
 >a. : any
+>   : ^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 >a. : any
+>   : ^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/14.tsx ===
+=== 14.tsx ===
 <a[foo]></a[foo]>;
 ><a : any
+>   : ^^^
 >a : any
+>  : ^^^
 >[foo]> : boolean
+>       : ^^^^^^^
 >[foo] : any[]
+>      : ^^^^^
 >foo : any
+>    : ^^^
 > : any
+> : ^^^
 >a[foo]> : boolean
+>        : ^^^^^^^
 >a[foo] : any
+>       : ^^^
 >a : any
+>  : ^^^
 >foo : any
+>    : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/15.tsx ===
+=== 15.tsx ===
 <a['foo']></a['foo']>;
 ><a : any
+>   : ^^^
 >a : any
+>  : ^^^
 >['foo']> : boolean
+>         : ^^^^^^^
 >['foo'] : string[]
+>        : ^^^^^^^^
 >'foo' : "foo"
+>      : ^^^^^
 > : any
+> : ^^^
 >a['foo']> : boolean
+>          : ^^^^^^^
 >a['foo'] : any
+>         : ^^^
 >a : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/16.tsx ===
+=== 16.tsx ===
 <a><a />;
 ><a><a />; : any
+>          : ^^^
 >a : any
+>  : ^^^
 ><a /> : any
+>      : ^^^
 >a : any
+>  : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/17.tsx ===
+=== 17.tsx ===
 <a b={}>;
 ><a b={}>; : any
+>          : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/18.tsx ===
+=== 18.tsx ===
 var x = /* Leading trivia */ <div>one</div><div>two</div>;;
 >x : any
+>  : ^^^
 ><div>one</div><div>two</div> : any
+>                             : ^^^
 ><div>one</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 ><div>two</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/19.tsx ===
+=== 19.tsx ===
 var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 >x : any
+>  : ^^^
 ><div>one</div> /* intervening comment */ <div>two</div> : any
+>                                                        : ^^^
 ><div>one</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 ><div>two</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/conformance/jsx/20.tsx ===
+=== 20.tsx ===
 <a>{"str";}</a>;
 ><a>{"str";}</a> : any
+>                : ^^^
 >a : any
+>  : ^^^
 >"str" : "str"
+>      : ^^^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/21.tsx ===
+=== 21.tsx ===
 <span className="a", id="b" />;
 ><span className="a", id="b" /> : any
+>                               : ^^^
 >span : any
+>     : ^^^
 >className : string
+>          : ^^^^^^
 >id : string
+>   : ^^^^^^
 
-=== tests/cases/conformance/jsx/22.tsx ===
+=== 22.tsx ===
 <div className"app">;
 ><div className : any
+>               : ^^^
 >div : any
+>    : ^^^
 >className : true
+>          : ^^^^
 >"app"> : boolean
+>       : ^^^^^^^
 >"app" : "app"
+>      : ^^^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/23.tsx ===
+=== 23.tsx ===
 <div {props} />;
 ><div {props} /> : any
+>                : ^^^
 >div : any
+>    : ^^^
 >props : any
+>      : ^^^
 
-=== tests/cases/conformance/jsx/24.tsx ===
+=== 24.tsx ===
 <div>stuff</div {...props}>;
 ><div>stuff</div : any
+>                : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 >props : any
+>      : ^^^
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/25.tsx ===
+=== 25.tsx ===
 <div {...props}>stuff</div {...props}>;
 ><div {...props}>stuff</div : any
+>                           : ^^^
 >div : any
+>    : ^^^
 >props : any
+>      : ^^^
 >div : any
+>    : ^^^
 >props : any
+>      : ^^^
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 
-=== tests/cases/conformance/jsx/26.tsx ===
+=== 26.tsx ===
 <a>></a>;
 ><a>></a> : any
+>         : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/27.tsx ===
+=== 27.tsx ===
 <a> ></a>;
 ><a> ></a> : any
+>          : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/28.tsx ===
+=== 28.tsx ===
 <a b=}>;
 ><a b=}>; : any
+>         : ^^^
 >a : any
+>  : ^^^
 >b : true
+>  : ^^^^
 
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/29.tsx ===
+=== 29.tsx ===
 <a b=<}>;
 ><a b=<}>; : any
+>          : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 ><}>; : any
+>     : ^^^
 > : any
+> : ^^^
 
 > : any
+> : ^^^
 
-=== tests/cases/conformance/jsx/30.tsx ===
+=== 30.tsx ===
 <a>}</a>;
 ><a>}</a> : any
+>         : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/31.tsx ===
+=== 31.tsx ===
 <a .../*hai*/asdf/>;
 ><a .../*hai*/asdf/> : any
+>                    : ^^^
 >a : any
+>  : ^^^
 >asdf : true
+>     : ^^^^
 

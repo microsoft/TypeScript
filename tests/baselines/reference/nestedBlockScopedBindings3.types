@@ -1,17 +1,27 @@
-=== tests/cases/compiler/nestedBlockScopedBindings3.ts ===
+//// [tests/cases/compiler/nestedBlockScopedBindings3.ts] ////
+
+=== nestedBlockScopedBindings3.ts ===
 function a0() {
 >a0 : () => void
+>   : ^^^^^^^^^^
     {
         for (let x = 0; x < 1; ) {
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             () => x;
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
         }
     }
     {
@@ -20,6 +30,7 @@ function a0() {
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
         }
     }
@@ -27,15 +38,19 @@ function a0() {
 
 function a1() {
 >a1 : () => void
+>   : ^^^^^^^^^^
 
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : any
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
     for (let x;;) {
@@ -43,18 +58,22 @@ function a1() {
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
 }
 
 function a2() {
 >a2 : () => void
+>   : ^^^^^^^^^^
 
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : any
 >1 : 1
+>  : ^
 
         x = x + 1;
 >x = x + 1 : any
@@ -62,6 +81,7 @@ function a2() {
 >x + 1 : any
 >x : any
 >1 : 1
+>  : ^
     }
     for (let x;;) {
 >x : any
@@ -72,18 +92,22 @@ function a2() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
     }
 }
 
 
 function a3() {
 >a3 : () => void
+>   : ^^^^^^^^^^
 
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : any
 >1 : 1
+>  : ^
 
         x = x + 1;
 >x = x + 1 : any
@@ -91,12 +115,15 @@ function a3() {
 >x + 1 : any
 >x : any
 >1 : 1
+>  : ^
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -107,12 +134,15 @@ function a3() {
 
 function a4() {
 >a4 : () => void
+>   : ^^^^^^^^^^
 
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : any
 >1 : 1
+>  : ^
 
         x = x + 1;
 >x = x + 1 : any
@@ -120,16 +150,20 @@ function a4() {
 >x + 1 : any
 >x : any
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -141,12 +175,15 @@ function a4() {
 
 function a5() {
 >a5 : () => void
+>   : ^^^^^^^^^^
 
     for (let x; x < 1;) {
 >x : any
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : any
 >1 : 1
+>  : ^
 
         x = x + 1;
 >x = x + 1 : any
@@ -154,22 +191,27 @@ function a5() {
 >x + 1 : any
 >x : any
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;

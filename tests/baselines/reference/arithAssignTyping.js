@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arithAssignTyping.ts] ////
+
 //// [arithAssignTyping.ts]
 class f { }
 

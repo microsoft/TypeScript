@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsAndObjectSpread.ts ===
+//// [tests/cases/compiler/unusedLocalsAndObjectSpread.ts] ////
+
+=== unusedLocalsAndObjectSpread.ts ===
 declare var console: { log(a: any): void };
 >console : Symbol(console, Decl(unusedLocalsAndObjectSpread.ts, 0, 11))
 >log : Symbol(log, Decl(unusedLocalsAndObjectSpread.ts, 0, 22))

@@ -1,67 +1,88 @@
-=== tests/cases/compiler/file1.ts ===
-// set of tests cases that checks generation of local storage for exported names
+//// [tests/cases/compiler/systemModule11.ts] ////
 
-
+=== file1.ts ===
 export var x;
 >x : any
+>  : ^^^
 
 export function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export * from 'bar';
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 var x;
 >x : any
+>  : ^^^
 
 var y;
 >y : any
+>  : ^^^
 
 export {x};
 >x : any
+>  : ^^^
 
 export {y as y1}
 >y : any
+>  : ^^^
 >y1 : any
+>   : ^^^
 
 export * from 'bar';
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export {x, y as z} from 'a';
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 
 export default function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export * from 'bar';
 
-=== tests/cases/compiler/file4.ts ===
+=== file4.ts ===
 export var x;
 >x : any
+>  : ^^^
 
 export function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export default function (){}
 
 var z, z1;
 >z : any
+>  : ^^^
 >z1 : any
+>   : ^^^
 
 export {z, z1 as z2};
 >z : any
+>  : ^^^
 >z1 : any
+>   : ^^^
 >z2 : any
+>   : ^^^
 
 export {s, s1 as s2} from 'a'
 >s : any
+>  : ^^^
 >s1 : any
+>   : ^^^
 >s2 : any
+>   : ^^^
 
-=== tests/cases/compiler/file5.ts ===
+=== file5.ts ===
 function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export * from 'a';

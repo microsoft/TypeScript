@@ -1,9 +1,12 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnAmbientEnum.ts] ////
+
+=== b.ts ===
 ///<reference path="a.ts"/>
 declare enum E {
 >E : E
+>  : ^
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=========
     Keep this pinned comment
    =========
@@ -12,19 +15,24 @@ declare enum E {
 /*! Don't keep this pinned comment */
 declare enum C {
 >C : C
+>  : ^
 
     a,
 >a : C.a
+>  : ^^^
 
     b,
 >b : C.b
+>  : ^^^
 
     c
 >c : C.c
+>  : ^^^
 }
 
 // Don't keep this comment.
 declare enum D {
 >D : D
+>  : ^
 }
 

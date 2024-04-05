@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceAssignmentCompat.ts] ////
+
 //// [interfaceAssignmentCompat.ts]
 module M {
     export enum Color {

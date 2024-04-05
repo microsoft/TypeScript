@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dottedModuleName2.ts] ////
+
 //// [dottedModuleName2.ts]
 module A.B {
  

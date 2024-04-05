@@ -1,4 +1,6 @@
-=== tests/cases/compiler/differentTypesWithSameName.ts ===
+//// [tests/cases/compiler/differentTypesWithSameName.ts] ////
+
+=== differentTypesWithSameName.ts ===
 module m {
 >m : Symbol(m, Decl(differentTypesWithSameName.ts, 0, 0))
 

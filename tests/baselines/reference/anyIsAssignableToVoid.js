@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyIsAssignableToVoid.ts] ////
+
 //// [anyIsAssignableToVoid.ts]
 interface P {
     p: void;

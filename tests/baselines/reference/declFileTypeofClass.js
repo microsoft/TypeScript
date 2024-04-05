@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofClass.ts] ////
+
 //// [declFileTypeofClass.ts]
 class c {
     static x : string;

@@ -1,34 +1,50 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit4.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 var p: any;
 >p : any
+>  : ^^^
 
 var openClosed1 = <div>
 >openClosed1 : JSX.Element
+>            : ^^^^^^^^^^^
 ><div>   {blah}</div> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
    {blah}
 >blah : any
+>     : ^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 // Should emit React.__spread({}, p, {x: 0})
 var spread1 = <div {...p} x={0} />;
 >spread1 : JSX.Element
+>        : ^^^^^^^^^^^
 ><div {...p} x={0} /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >p : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

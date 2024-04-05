@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts] ////
+
 //// [inOperatorWithValidOperands.ts]
 var x: any;
 

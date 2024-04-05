@@ -1,24 +1,31 @@
+//// [tests/cases/conformance/externalModules/commonJsImportBindingElementNarrowType.ts] ////
+
 === /bar.js ===
 const { a } = require("./foo");
 >a : number | null
+>  : ^^^^^^^^^^^^^
 >require("./foo") : typeof import("/foo")
+>                 : ^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./foo" : "./foo"
+>        : ^^^^^^^
 
 if (a) {
 >a : number | null
+>  : ^^^^^^^^^^^^^
 
   var x = a + 1;
 >x : number
+>  : ^^^^^^
 >a + 1 : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 === /foo.d.ts ===
-// Regresion test for GH#41957
-
-
 export const a: number | null;
 >a : number | null
->null : null
+>  : ^^^^^^^^^^^^^
 

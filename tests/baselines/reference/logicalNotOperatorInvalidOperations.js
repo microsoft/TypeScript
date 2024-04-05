@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorInvalidOperations.ts] ////
+
 //// [logicalNotOperatorInvalidOperations.ts]
 // Unary operator !
 var b: number;

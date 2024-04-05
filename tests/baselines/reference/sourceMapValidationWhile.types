@@ -1,23 +1,37 @@
-=== tests/cases/compiler/sourceMapValidationWhile.ts ===
+//// [tests/cases/compiler/sourceMapValidationWhile.ts] ////
+
+=== sourceMapValidationWhile.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 while (a == 10) {
 >a == 10 : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     a++;
 >a++ : number
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 }
 while (a == 10)
 >a == 10 : boolean
+>        : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 {
     a++;
 >a++ : number
+>    : ^^^^^^
 >a : number
+>  : ^^^^^^
 }

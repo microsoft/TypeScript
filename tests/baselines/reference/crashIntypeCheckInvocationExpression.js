@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashIntypeCheckInvocationExpression.ts] ////
+
 //// [crashIntypeCheckInvocationExpression.ts]
 var nake;
 function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {

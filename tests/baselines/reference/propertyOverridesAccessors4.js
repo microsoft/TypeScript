@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts] ////
+
 //// [propertyOverridesAccessors4.ts]
 declare class Animal {
     get sound(): string

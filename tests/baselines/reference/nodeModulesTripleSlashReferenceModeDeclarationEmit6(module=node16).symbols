@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit6.ts] ////
+
 === /index.ts ===
 import obj from "./uses.js"
 >obj : Symbol(obj, Decl(index.ts, 0, 6))
@@ -19,7 +21,7 @@ declare global {
 >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 1, 16))
 }
 === /uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 >getInterR : Symbol(getInterR, Decl(require.d.ts, 2, 33))
 

@@ -1,54 +1,85 @@
-=== tests/cases/compiler/nativeToBoxedTypes.ts ===
+//// [tests/cases/compiler/nativeToBoxedTypes.ts] ////
+
+=== nativeToBoxedTypes.ts ===
 var N = new Number();
 >N : Number
+>  : ^^^^^^
 >new Number() : Number
+>             : ^^^^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var n = 100;
 >n : number
+>  : ^^^^^^
 >100 : 100
+>    : ^^^
 
 n = N;
 >n = N : Number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >N : Number
+>  : ^^^^^^
 
 var S = new String();
 >S : String
+>  : ^^^^^^
 >new String() : String
+>             : ^^^^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var s = "foge";
 >s : string
+>  : ^^^^^^
 >"foge" : "foge"
+>       : ^^^^^^
 
 s = S;
 >s = S : String
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >S : String
+>  : ^^^^^^
 
 var B = new Boolean();
 >B : Boolean
+>  : ^^^^^^^
 >new Boolean() : Boolean
+>              : ^^^^^^^
 >Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
 var b = true;
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 b = B;
 >b = B : Boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >B : Boolean
+>  : ^^^^^^^
 
 var sym: symbol; 
 >sym : symbol
+>    : ^^^^^^
 
 var Sym: Symbol;
 >Sym : Symbol
+>    : ^^^^^^
 
 sym = Sym;
 >sym = Sym : Symbol
+>          : ^^^^^^
 >sym : symbol
+>    : ^^^^^^
 >Sym : Symbol
+>    : ^^^^^^
 

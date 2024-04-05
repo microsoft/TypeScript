@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
+//// [tests/cases/compiler/constructorArgWithGenericCallSignature.ts] ////
+
+=== constructorArgWithGenericCallSignature.ts ===
 module Test {
 >Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx] ////
+
 //// [jsxJsxsCjsTransformNestedSelfClosingChild.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import type * as React from 'react';

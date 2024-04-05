@@ -1,0 +1,143 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor9.ts] ////
+
+=== autoAccessor9.ts ===
+// Auto-accessors do not use Set semantics themselves, so do not need to be transformed if there are no other
+// initializers that need to be transformed:
+class C1 {
+>C1 : C1
+>   : ^^
+
+    accessor x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+// If there are other field initializers to transform, we must transform auto-accessors so that we can preserve
+// initialization order:
+class C2 {
+>C2 : C2
+>   : ^^
+
+    x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    accessor y = 2;
+>y : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+    z = 3;
+>z : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+}
+
+// Private field initializers also do not use Set semantics, so they do not force an auto-accessor transformation:
+class C3 {
+>C3 : C3
+>   : ^^
+
+    #x = 1;
+>#x : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+
+    accessor y = 2;
+>y : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+// However, we still need to hoist private field initializers to the constructor if we need to preserve initialization
+// order:
+class C4 {
+>C4 : C4
+>   : ^^
+
+    x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    #y = 2;
+>#y : number
+>   : ^^^^^^
+>2 : 2
+>  : ^
+
+    z = 3;
+>z : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+}
+
+class C5 {
+>C5 : C5
+>   : ^^
+
+    #x = 1;
+>#x : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+
+    accessor y = 2;
+>y : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+    z = 3;
+>z : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+}
+
+// Static accessors aren't affected:
+class C6 {
+>C6 : C6
+>   : ^^
+
+    static accessor x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+// Static accessors aren't affected:
+class C7 {
+>C7 : C7
+>   : ^^
+
+    static x = 1;
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    static accessor y = 2;
+>y : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+    static z = 3;
+>z : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+}
+

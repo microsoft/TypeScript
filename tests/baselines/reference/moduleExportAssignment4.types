@@ -1,21 +1,34 @@
-=== tests/cases/conformance/salsa/async.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment4.ts] ////
+
+=== async.js ===
 exports.default = { m: 1, a: 1 }
 >exports.default = { m: 1, a: 1 } : { m: number; a: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports.default : any
 >exports : any
+>        : ^^^
 >default : any
+>        : ^^^
 >{ m: 1, a: 1 } : { m: number; a: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 module.exports = exports['default'];
 >module.exports = exports['default'] : error
 >module.exports : error
 >module : { exports: any; }
+>       : ^^^^^^^^^^^^^^^^^
 >exports : any
+>        : ^^^
 >exports['default'] : any
 >exports : any
 >'default' : "default"
+>          : ^^^^^^^^^
 

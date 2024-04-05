@@ -1,113 +1,178 @@
-=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinClass.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinClass.ts] ////
+
+=== protectedClassPropertyAccessibleWithinClass.ts ===
 // no errors
 
 class C {
 >C : C
+>  : ^
 
     protected x: string;
 >x : string
+>  : ^^^^^^
 
     protected get y() { return this.x; }
 >y : string
+>  : ^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
     protected set y(x) { this.y = this.x; }
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 >this.y = this.x : string
+>                : ^^^^^^
 >this.y : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : string
+>  : ^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
     protected foo() { return this.foo; }
 >foo : () => any
+>    : ^^^^^^^^^
 >this.foo : () => any
+>         : ^^^^^^^^^
 >this : this
+>     : ^^^^
 >foo : () => any
+>    : ^^^^^^^^^
 
     protected static x: string;
 >x : string
+>  : ^^^^^^
 
     protected static get y() { return this.x; }
 >y : string
+>  : ^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     protected static set y(x) { this.y = this.x; }
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 >this.y = this.x : string
+>                : ^^^^^^
 >this.y : string
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >y : string
+>  : ^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     protected static foo() { return this.foo; }
 >foo : () => typeof C.foo
+>    : ^^^^^^^^^^^^^^^^^^
 >this.foo : () => typeof C.foo
+>         : ^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >foo : () => typeof C.foo
+>    : ^^^^^^^^^^^^^^^^^^
 
     protected static bar() { this.foo(); }
 >bar : () => void
+>    : ^^^^^^^^^^
 >this.foo() : () => typeof C.foo
+>           : ^^^^^^^^^^^^^^^^^^
 >this.foo : () => typeof C.foo
+>         : ^^^^^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >foo : () => typeof C.foo
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 // added level of function nesting
 class C2 {
 >C2 : C2
+>   : ^^
 
     protected x: string;
 >x : string
+>  : ^^^^^^
 
     protected get y() { () => this.x; return null; }
 >y : any
 >() => this.x : () => string
+>             : ^^^^^^^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
->null : null
+>  : ^^^^^^
 
     protected set y(x) { () => { this.y = this.x; } }
 >y : any
 >x : any
 >() => { this.y = this.x; } : () => void
+>                           : ^^^^^^^^^^
 >this.y = this.x : string
+>                : ^^^^^^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
     protected foo() { () => this.foo; }
 >foo : () => void
+>    : ^^^^^^^^^^
 >() => this.foo : () => () => void
+>               : ^^^^^^^^^^^^^^^^
 >this.foo : () => void
+>         : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
     protected static x: string;
 >x : string
+>  : ^^^^^^
 
     protected static get y() { () => this.x; return null; }
 >y : any
 >() => this.x : () => string
+>             : ^^^^^^^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 >x : string
->null : null
+>  : ^^^^^^
 
     protected static set y(x) {
 >y : any
@@ -115,27 +180,45 @@ class C2 {
 
         () => { this.y = this.x; }
 >() => { this.y = this.x; } : () => void
+>                           : ^^^^^^^^^^
 >this.y = this.x : string
+>                : ^^^^^^
 >this.y : any
 >this : typeof C2
+>     : ^^^^^^^^^
 >y : any
+>  : ^^^
 >this.x : string
+>       : ^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
      }
     protected static foo() { () => this.foo; }
 >foo : () => void
+>    : ^^^^^^^^^^
 >() => this.foo : () => () => void
+>               : ^^^^^^^^^^^^^^^^
 >this.foo : () => void
+>         : ^^^^^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
     protected static bar() { () => this.foo(); }
 >bar : () => void
+>    : ^^^^^^^^^^
 >() => this.foo() : () => void
+>                 : ^^^^^^^^^^
 >this.foo() : void
+>           : ^^^^
 >this.foo : () => void
+>         : ^^^^^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 

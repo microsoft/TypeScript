@@ -1,24 +1,35 @@
-=== tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts ===
+//// [tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts] ////
+
+=== internalImportInstantiatedModuleNotReferencingInstance.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export interface X { s: string }
 >s : string
+>  : ^^^^^^
 
     export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
     var A = 1;
 >A : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     import Y = A;
 >Y : typeof Y
+>  : ^^^^^^^^
 >A : typeof Y
+>  : ^^^^^^^^
 }
 

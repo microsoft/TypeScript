@@ -1,16 +1,25 @@
-=== tests/cases/conformance/classes/classExpressions/classExpression5.ts ===
+//// [tests/cases/conformance/classes/classExpressions/classExpression5.ts] ////
+
+=== classExpression5.ts ===
 new class {
 >new class {    hi() {        return "Hi!";    }}().hi() : string
+>                                                        : ^^^^^^
 >new class {    hi() {        return "Hi!";    }}().hi : () => string
+>                                                      : ^^^^^^^^^^^^
 >new class {    hi() {        return "Hi!";    }}() : (Anonymous class)
+>                                                   : ^^^^^^^^^^^^^^^^^
 >class {    hi() {        return "Hi!";    }} : typeof (Anonymous class)
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     hi() {
 >hi : () => string
+>   : ^^^^^^^^^^^^
 
         return "Hi!";
 >"Hi!" : "Hi!"
+>      : ^^^^^
     }
 }().hi();
 >hi : () => string
+>   : ^^^^^^^^^^^^
 

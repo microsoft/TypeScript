@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts ===
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParameters2.ts] ////
+
+=== optionalBindingParameters2.ts ===
 function foo({ x, y, z }?: { x: string; y: number; z: boolean }) {
 >foo : Symbol(foo, Decl(optionalBindingParameters2.ts, 0, 0))
 >x : Symbol(x, Decl(optionalBindingParameters2.ts, 0, 14))

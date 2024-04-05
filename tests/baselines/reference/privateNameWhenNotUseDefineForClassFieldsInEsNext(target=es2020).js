@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts] ////
+
 //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.ts]
 class TestWithStatics {
     #prop = 0
@@ -77,7 +79,7 @@ TestWithStatics["X_ z_ zz"] = (_a = class Inner {
             return class {
                 m() {
                     __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
-                    __classPrivateFieldGet(new Inner(), _Inner_foo, "f"); // OK
+                    __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // OK
                 }
             };
         }
@@ -101,7 +103,7 @@ class TestNonStatics {
                     this.C = class InnerInner {
                         m() {
                             __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // Ok
-                            __classPrivateFieldGet(new Inner(), _Inner_foo_1, "f"); // Ok
+                            __classPrivateFieldGet(new _b(), _Inner_foo_1, "f"); // Ok
                         }
                     };
                 }
@@ -112,7 +114,7 @@ class TestNonStatics {
                     return class {
                         m() {
                             __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // OK
-                            __classPrivateFieldGet(new Inner(), _Inner_foo_1, "f"); // OK
+                            __classPrivateFieldGet(new _b(), _Inner_foo_1, "f"); // OK
                         }
                     };
                 }

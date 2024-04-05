@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts ===
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts] ////
+
+=== invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts ===
 // Error
 var binary = 0b21010;
 >binary : Symbol(binary, Decl(invalidBinaryIntegerLiteralAndOctalIntegerLiteral.ts, 1, 3))

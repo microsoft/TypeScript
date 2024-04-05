@@ -1,179 +1,293 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandBooleanType.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandBooleanType.ts] ////
+
+=== commaOperatorWithSecondOperandBooleanType.ts ===
 var ANY: any;
 >ANY : any
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var OBJECT: Object;
 >OBJECT : Object
+>       : ^^^^^^
 
 //The second operand type is boolean
 ANY, BOOLEAN;
 >ANY, BOOLEAN : boolean
+>             : ^^^^^^^
 >ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 BOOLEAN, BOOLEAN;
 >BOOLEAN, BOOLEAN : boolean
+>                 : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 NUMBER, BOOLEAN;
 >NUMBER, BOOLEAN : boolean
+>                : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 STRING, BOOLEAN;
 >STRING, BOOLEAN : boolean
+>                : ^^^^^^^
 >STRING : string
+>       : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 OBJECT, BOOLEAN;
 >OBJECT, BOOLEAN : boolean
+>                : ^^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 //Return type is boolean
 var resultIsBoolean1 = (ANY, BOOLEAN);
 >resultIsBoolean1 : boolean
+>                 : ^^^^^^^
 >(ANY, BOOLEAN) : boolean
+>               : ^^^^^^^
 >ANY, BOOLEAN : boolean
+>             : ^^^^^^^
 >ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var resultIsBoolean2 = (BOOLEAN, BOOLEAN);
 >resultIsBoolean2 : boolean
+>                 : ^^^^^^^
 >(BOOLEAN, BOOLEAN) : boolean
+>                   : ^^^^^^^
 >BOOLEAN, BOOLEAN : boolean
+>                 : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var resultIsBoolean3 = (NUMBER, BOOLEAN);
 >resultIsBoolean3 : boolean
+>                 : ^^^^^^^
 >(NUMBER, BOOLEAN) : boolean
+>                  : ^^^^^^^
 >NUMBER, BOOLEAN : boolean
+>                : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var resultIsBoolean4 = (STRING, BOOLEAN);
 >resultIsBoolean4 : boolean
+>                 : ^^^^^^^
 >(STRING, BOOLEAN) : boolean
+>                  : ^^^^^^^
 >STRING, BOOLEAN : boolean
+>                : ^^^^^^^
 >STRING : string
+>       : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var resultIsBoolean5 = (OBJECT, BOOLEAN);
 >resultIsBoolean5 : boolean
+>                 : ^^^^^^^
 >(OBJECT, BOOLEAN) : boolean
+>                  : ^^^^^^^
 >OBJECT, BOOLEAN : boolean
+>                : ^^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 //Literal and expression
 null, BOOLEAN;
 >null, BOOLEAN : boolean
->null : null
+>              : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 ANY = undefined, BOOLEAN;
 >ANY = undefined, BOOLEAN : boolean
+>                         : ^^^^^^^
 >ANY = undefined : undefined
+>                : ^^^^^^^^^
 >ANY : any
 >undefined : undefined
+>          : ^^^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 1, true;
 >1, true : true
+>        : ^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 
 ++NUMBER, true;
 >++NUMBER, true : true
+>               : ^^^^
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 
 [1, 2, 3], !BOOLEAN;
 >[1, 2, 3], !BOOLEAN : boolean
+>                    : ^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >!BOOLEAN : boolean
+>         : ^^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 OBJECT = [1, 2, 3], BOOLEAN = false;
 >OBJECT = [1, 2, 3], BOOLEAN = false : false
+>                                    : ^^^^^
 >OBJECT = [1, 2, 3] : number[]
+>                   : ^^^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >BOOLEAN = false : false
+>                : ^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var resultIsBoolean6 = (null, BOOLEAN);
 >resultIsBoolean6 : boolean
+>                 : ^^^^^^^
 >(null, BOOLEAN) : false
+>                : ^^^^^
 >null, BOOLEAN : false
->null : null
+>              : ^^^^^
 >BOOLEAN : false
+>        : ^^^^^
 
 var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
 >resultIsBoolean7 : boolean
+>                 : ^^^^^^^
 >(ANY = undefined, BOOLEAN) : false
+>                           : ^^^^^
 >ANY = undefined, BOOLEAN : false
+>                         : ^^^^^
 >ANY = undefined : undefined
+>                : ^^^^^^^^^
 >ANY : any
 >undefined : undefined
+>          : ^^^^^^^^^
 >BOOLEAN : false
+>        : ^^^^^
 
 var resultIsBoolean8 = (1, true);
 >resultIsBoolean8 : boolean
+>                 : ^^^^^^^
 >(1, true) : true
+>          : ^^^^
 >1, true : true
+>        : ^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 
 var resultIsBoolean9 = (++NUMBER, true);
 >resultIsBoolean9 : boolean
+>                 : ^^^^^^^
 >(++NUMBER, true) : true
+>                 : ^^^^
 >++NUMBER, true : true
+>               : ^^^^
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >true : true
+>     : ^^^^
 
 var resultIsBoolean10 = ([1, 2, 3], !BOOLEAN);
 >resultIsBoolean10 : boolean
+>                  : ^^^^^^^
 >([1, 2, 3], !BOOLEAN) : true
+>                      : ^^^^
 >[1, 2, 3], !BOOLEAN : true
+>                    : ^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >!BOOLEAN : true
+>         : ^^^^
 >BOOLEAN : false
+>        : ^^^^^
 
 var resultIsBoolean11 = (OBJECT = [1, 2, 3], BOOLEAN = false);
 >resultIsBoolean11 : boolean
+>                  : ^^^^^^^
 >(OBJECT = [1, 2, 3], BOOLEAN = false) : false
+>                                      : ^^^^^
 >OBJECT = [1, 2, 3], BOOLEAN = false : false
+>                                    : ^^^^^
 >OBJECT = [1, 2, 3] : number[]
+>                   : ^^^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >BOOLEAN = false : false
+>                : ^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 

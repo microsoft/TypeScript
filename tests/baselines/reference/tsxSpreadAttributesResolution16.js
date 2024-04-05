@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution16.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -28,13 +30,13 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Component;
 var React = require("react");
 function Component(props) {
     return (
     // Error: missing property
     <AnotherComponent {...props}/>);
 }
-exports.default = Component;
 function AnotherComponent(_a) {
     var property1 = _a.property1;
     return (<span>{property1}</span>);

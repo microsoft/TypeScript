@@ -1,10 +1,11 @@
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(44,32): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(61,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(62,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
-tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(63,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+constAssertions.ts(44,32): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constAssertions.ts(61,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+constAssertions.ts(62,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+constAssertions.ts(63,10): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+constAssertions.ts(118,3): error TS2322: Type '3' is not assignable to type '2'.
 
 
-==== tests/cases/conformance/expressions/typeAssertions/constAssertions.ts (4 errors) ====
+==== constAssertions.ts (5 errors) ====
     let v1 = 'abc' as const;
     let v2 = `abc` as const;
     let v3 = 10 as const;
@@ -121,3 +122,18 @@ tests/cases/conformance/expressions/typeAssertions/constAssertions.ts(63,10): er
     }
     
     const ns1 = accessorNames('foo');
+    
+    // repro from https://github.com/microsoft/TypeScript/issues/54374
+    interface Foo54374 {
+      a: 1;
+      b: 2;
+    }
+    
+    const fooConst54374: Foo54374 = {
+      a: 1,
+      b: 3
+      ~
+!!! error TS2322: Type '3' is not assignable to type '2'.
+!!! related TS6500 constAssertions.ts:113:3: The expected type comes from property 'b' which is declared here on type 'Foo54374'
+    } as const
+    

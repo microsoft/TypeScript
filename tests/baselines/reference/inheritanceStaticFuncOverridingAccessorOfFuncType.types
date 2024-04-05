@@ -1,23 +1,30 @@
-=== tests/cases/compiler/inheritanceStaticFuncOverridingAccessorOfFuncType.ts ===
+//// [tests/cases/compiler/inheritanceStaticFuncOverridingAccessorOfFuncType.ts] ////
+
+=== inheritanceStaticFuncOverridingAccessorOfFuncType.ts ===
 class a {
 >a : a
+>  : ^
 
     static get x(): () => string {
 >x : () => string
+>  : ^^^^^^      
 
         return null;
->null : null
     }
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 
     static x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "20";
 >"20" : "20"
+>     : ^^^^
     }
 }

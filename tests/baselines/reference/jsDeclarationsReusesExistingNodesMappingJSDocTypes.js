@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReusesExistingNodesMappingJSDocTypes.ts] ////
+
 //// [index.js]
 /** @type {?} */
 export const a = null;

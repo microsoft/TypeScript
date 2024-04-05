@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsPlainCharactersThatArePartsOfEscapes01_ES6.ts] ////
+
 //// [taggedTemplateStringsPlainCharactersThatArePartsOfEscapes01_ES6.ts]
 function f(...x: any[]) {
 

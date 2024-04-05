@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedPrimitiveNarrowing.ts ===
+//// [tests/cases/compiler/taggedPrimitiveNarrowing.ts] ////
+
+=== taggedPrimitiveNarrowing.ts ===
 type Hash = string & { __hash: true };
 >Hash : Symbol(Hash, Decl(taggedPrimitiveNarrowing.ts, 0, 0))
 >__hash : Symbol(__hash, Decl(taggedPrimitiveNarrowing.ts, 0, 22))

@@ -1,14 +1,16 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/es5-importHelpersAsyncFunctions.ts] ////
+
+=== external.ts ===
 export async function foo() {
 >foo : Symbol(foo, Decl(external.ts, 0, 0))
 }
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 async function foo() {
 >foo : Symbol(foo, Decl(script.ts, 0, 0))
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
 >d : Symbol(d, Decl(tslib.d.ts, --, --))

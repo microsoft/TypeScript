@@ -1,0 +1,50 @@
+error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
+
+
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+==== a.ts (0 errors) ====
+    export type A = {};
+    export type { A as default };
+    
+==== b.ts (0 errors) ====
+    class B {};
+    export type { B, B as default };
+    
+==== c.ts (0 errors) ====
+    import DefaultA from "./a";
+    import { A } from "./a";
+    import DefaultB from "./b";
+    import { B } from "./b";
+    
+==== c.fixed.ts (0 errors) ====
+    import type DefaultA from "./a";
+    import type { A } from "./a";
+    import type DefaultB from "./b";
+    import type { B } from "./b";
+    
+==== d.ts (0 errors) ====
+    export { A as AA } from "./a";
+    export { B as BB } from "./b";
+    
+==== d.fixed.ts (0 errors) ====
+    export type { A as AA } from "./a";
+    export type { B as BB } from "./b";
+    
+==== e.ts (0 errors) ====
+    import { AA, BB } from "./d";
+    
+==== e.fixed.ts (0 errors) ====
+    import type { AA, BB } from "./d";
+    
+==== f.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export { A, B as BB };
+    
+==== f.fixed.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export type { A, B as BB };
+    

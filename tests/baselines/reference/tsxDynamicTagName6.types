@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/tsxDynamicTagName6.tsx ===
+//// [tests/cases/conformance/jsx/tsxDynamicTagName6.tsx] ////
+
+=== tsxDynamicTagName6.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -9,14 +11,23 @@ declare module JSX {
 
 const t = {tag:'h1'}
 >t : { tag: string; }
+>  : ^^^^^^^^^^^^^^^^
 >{tag:'h1'} : { tag: string; }
+>           : ^^^^^^^^^^^^^^^^
 >tag : string
+>    : ^^^^^^
 >'h1' : "h1"
+>     : ^^^^
 
 const foo = <t.tag/>  // No error
 >foo : JSX.Element
+>    : ^^^^^^^^^^^
 ><t.tag/> : JSX.Element
+>         : ^^^^^^^^^^^
 >t.tag : string
+>      : ^^^^^^
 >t : { tag: string; }
+>  : ^^^^^^^^^^^^^^^^
 >tag : string
+>    : ^^^^^^
 

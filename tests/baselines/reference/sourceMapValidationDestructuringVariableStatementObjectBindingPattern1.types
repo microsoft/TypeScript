@@ -1,7 +1,13 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts] ////
+
+=== sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts ===
 var {x} = { x: 20 };
 >x : number
+>  : ^^^^^^
 >{ x: 20 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 

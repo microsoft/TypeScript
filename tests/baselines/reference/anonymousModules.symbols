@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anonymousModules.ts ===
+//// [tests/cases/compiler/anonymousModules.ts] ////
+
+=== anonymousModules.ts ===
 module {
 	export var foo = 1;
 >foo : Symbol(foo, Decl(anonymousModules.ts, 1, 11))

@@ -1,92 +1,128 @@
-=== tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts ===
+//// [tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts] ////
+
+=== scopeResolutionIdentifiers.ts ===
 // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
 
 var s: string;
 >s : string
+>  : ^^^^^^
 
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export var s: number;
 >s : number
+>  : ^^^^^^
 
     var n = s;
 >n : number
+>  : ^^^^^^
 >s : number
+>  : ^^^^^^
 
     var n: number;
 >n : number
+>  : ^^^^^^
 }
 
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     var s: number;
 >s : number
+>  : ^^^^^^
 
     var n = s;
 >n : number
+>  : ^^^^^^
 >s : number
+>  : ^^^^^^
 
     var n: number;
 >n : number
+>  : ^^^^^^
 }
 
 function fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
     var s: boolean;
 >s : boolean
+>  : ^^^^^^^
 
     var n = s;
 >n : boolean
+>  : ^^^^^^^
 >s : boolean
+>  : ^^^^^^^
 
     var n: boolean;
 >n : boolean
+>  : ^^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     s: Date;
 >s : Date
+>  : ^^^^
 
     n = this.s;
 >n : Date
+>  : ^^^^
 >this.s : Date
+>       : ^^^^
 >this : this
+>     : ^^^^
 >s : Date
+>  : ^^^^
 
     x() {
 >x : () => void
+>  : ^^^^^^^^^^
 
         var p = this.n;
 >p : Date
+>  : ^^^^
 >this.n : Date
+>       : ^^^^
 >this : this
+>     : ^^^^
 >n : Date
+>  : ^^^^
 
         var p: Date;
 >p : Date
+>  : ^^^^
     }
 }
 
 module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
     var s: any;
 >s : any
+>  : ^^^
 
     module M4 {
 >M4 : typeof M4
+>   : ^^^^^^^^^
 
         var n = s;
 >n : any
+>  : ^^^
 >s : any
+>  : ^^^
 
         var n: any;
 >n : any
+>  : ^^^
     }
 }
 

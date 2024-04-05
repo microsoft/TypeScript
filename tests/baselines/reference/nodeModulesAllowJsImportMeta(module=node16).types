@@ -1,24 +1,38 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportMeta.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 const x = import.meta.url;
 >x : string
+>  : ^^^^^^
 >import.meta.url : string
+>                : ^^^^^^
 >import.meta : ImportMeta
->meta : any
+>            : ^^^^^^^^^^
+>meta : ImportMeta
+>     : ^^^^^^^^^^
 >url : string
+>    : ^^^^^^
 
 export {x};
 >x : string
+>  : ^^^^^^
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 const x = import.meta.url;
 >x : string
+>  : ^^^^^^
 >import.meta.url : string
+>                : ^^^^^^
 >import.meta : ImportMeta
->meta : any
+>            : ^^^^^^^^^^
+>meta : ImportMeta
+>     : ^^^^^^^^^^
 >url : string
+>    : ^^^^^^
 
 export {x};
 >x : string
+>  : ^^^^^^
 

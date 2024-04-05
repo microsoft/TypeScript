@@ -1,32 +1,53 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit5_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit5_ES6.ts] ////
+
+=== computedPropertyNamesDeclarationEmit5_ES6.ts ===
 var v = {
 >v : { [x: string]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >{    ["" + ""]: 0,    ["" + ""]() { },    get ["" + ""]() { return 0; },    set ["" + ""](x) { }} : { [x: string]: any; }
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^
 
     ["" + ""]: 0,
 >["" + ""] : number
+>          : ^^^^^^
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
     ["" + ""]() { },
 >["" + ""] : () => void
+>          : ^^^^^^^^^^
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 
     get ["" + ""]() { return 0; },
 >["" + ""] : number
+>          : ^^^^^^
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
     set ["" + ""](x) { }
 >["" + ""] : any
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >x : any
 }

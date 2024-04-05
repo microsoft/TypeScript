@@ -1,9 +1,11 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/exportStarForValues.ts] ////
+
+=== file1.ts ===
 export interface Foo { x }
 >Foo : Symbol(Foo, Decl(file1.ts, 0, 0))
 >x : Symbol(Foo.x, Decl(file1.ts, 0, 22))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export * from "file1"
 var x;
 >x : Symbol(x, Decl(file2.ts, 1, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitFunctionKeywordProp.ts] ////
+
 //// [declarationEmitFunctionKeywordProp.ts]
 function foo() {}
 foo.null = true;

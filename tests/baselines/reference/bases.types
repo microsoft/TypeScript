@@ -1,44 +1,66 @@
-=== tests/cases/compiler/bases.ts ===
+//// [tests/cases/compiler/bases.ts] ////
+
+=== bases.ts ===
 interface I {
     x;
 >x : any
+>  : ^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     constructor() {
         this.y: any;
 >this.y : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >any : any
+>    : ^^^
     }
 }
 
 class C extends B implements I {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     constructor() {
         this.x: any;
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >any : any
+>    : ^^^
     }
 }
 
 new C().x;
 >new C().x : any
+>          : ^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 new C().y;
 >new C().y : any
+>          : ^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >y : any
+>  : ^^^
 
 

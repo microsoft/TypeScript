@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.ts] ////
+
 //// [jsdocReadonlyDeclarations.js]
 class C {
     /** @readonly */
@@ -23,6 +25,7 @@ function F() {
 class D {
     constructor(/** @readonly */ x) {}
 }
+
 
 //// [foo.js]
 class C {

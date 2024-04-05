@@ -1,75 +1,104 @@
-=== tests/cases/compiler/augmentedTypesFunction.ts ===
+//// [tests/cases/compiler/augmentedTypesFunction.ts] ////
+
+=== augmentedTypesFunction.ts ===
 // function then var
 function y1() { } // error
 >y1 : () => void
+>   : ^^^^^^^^^^
 
 var y1 = 1; // error
 >y1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 // function then function
 function y2() { } // error
 >y2 : () => void
+>   : ^^^^^^^^^^
 
 function y2() { } // error
 >y2 : () => void
+>   : ^^^^^^^^^^
 
 function y2a() { }  // error
 >y2a : () => void
+>    : ^^^^^^^^^^
 
 var y2a = () => { } // error
 >y2a : () => void
+>    : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 // function then class
 function y3() { } // error
 >y3 : typeof y3
+>   : ^^^^^^^^^
 
 class y3 { } // error
 >y3 : y3
+>   : ^^
 
 function y3a() { } // error
 >y3a : typeof y3a
+>    : ^^^^^^^^^^
 
 class y3a { public foo() { } } // error
 >y3a : y3a
+>    : ^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 // function then enum
 function y4() { } // error
 >y4 : () => void
+>   : ^^^^^^^^^^
 
 enum y4 { One } // error
 >y4 : y4
+>   : ^^
 >One : y4.One
+>    : ^^^^^^
 
 // function then internal module
 function y5() { }
 >y5 : () => void
+>   : ^^^^^^^^^^
 
 module y5 { } // ok since module is not instantiated
 
 function y5a() { }
 >y5a : typeof y5a
+>    : ^^^^^^^^^^
 
 module y5a { var y = 2; } // should be an error
 >y5a : typeof y5a
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 function y5b() { }
 >y5b : typeof y5b
+>    : ^^^^^^^^^^
 
 module y5b { export var y = 3; } // should be an error
 >y5b : typeof y5b
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 function y5c() { }
 >y5c : () => void
+>    : ^^^^^^^^^^
 
 module y5c { export interface I { foo(): void } } // should be an error
 >foo : () => void
+>    : ^^^^^^    
 
 // function then import, messes with other errors
 //function y6() { }

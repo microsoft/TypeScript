@@ -1,6 +1,11 @@
-=== tests/cases/compiler/typeCheckReturnExpression.ts ===
+//// [tests/cases/compiler/typeCheckReturnExpression.ts] ////
+
+=== typeCheckReturnExpression.ts ===
 var foo = () => undefined;
 >foo : () => any
+>    : ^^^^^^^^^
 >() => undefined : () => any
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

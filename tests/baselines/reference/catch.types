@@ -1,6 +1,9 @@
-=== tests/cases/compiler/catch.ts ===
+//// [tests/cases/compiler/catch.ts] ////
+
+=== catch.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     try {} catch(e) { }
 >e : any

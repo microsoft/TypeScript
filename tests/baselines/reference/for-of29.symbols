@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of29.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of29.ts] ////
+
+=== for-of29.ts ===
 var iterableWithOptionalIterator: {
 >iterableWithOptionalIterator : Symbol(iterableWithOptionalIterator, Decl(for-of29.ts, 0, 3))
 

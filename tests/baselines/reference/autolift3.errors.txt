@@ -1,7 +1,7 @@
-tests/cases/compiler/autolift3.ts(26,3): error TS2339: Property 'foo' does not exist on type 'B'.
+autolift3.ts(26,3): error TS2339: Property 'foo' does not exist on type 'B'.
 
 
-==== tests/cases/compiler/autolift3.ts (1 errors) ====
+==== autolift3.ts (1 errors) ====
     class B {
     
         constructor() {

@@ -1,40 +1,60 @@
-=== tests/cases/compiler/moduleProperty2.ts ===
+//// [tests/cases/compiler/moduleProperty2.ts] ////
+
+=== moduleProperty2.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         var x;
 >x : any
+>  : ^^^
     }
     var y;
 >y : any
+>  : ^^^
 
     export var z;
 >z : any
+>  : ^^^
 
     var test1=x;
 >test1 : any
+>      : ^^^
 >x : any
+>  : ^^^
 
     var test2=y; // y visible because same module
 >test2 : any
+>      : ^^^
 >y : any
+>  : ^^^
 }
 
 module N {
 >N : typeof N
+>  : ^^^^^^^^
 
     var test3=M.y; // nope y private property of M
 >test3 : any
+>      : ^^^
 >M.y : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >y : any
+>  : ^^^
 
     var test4=M.z; // ok public property of M
 >test4 : any
+>      : ^^^
 >M.z : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >z : any
+>  : ^^^
 }

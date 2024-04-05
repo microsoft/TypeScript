@@ -1,6 +1,7 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts ===
 // class ABCD {
-//     constructor(private x: number, public y: number, /*FIND ALL REFS*/private [|z|]: number) {
+//     constructor(private x: number, public y: number, /*FIND ALL REFS*/<|private [|{| isWriteAccess: true, isDefinition: true |}z|]: number|>) {
 //     }
 // 
 //     func() {
@@ -8,95 +9,73 @@
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-      "kind": "property",
-      "name": "(property) ABCD.z: number",
-      "textSpan": {
-        "start": 74,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "ABCD",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "z",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 66,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 74,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "contextSpan": {
-          "start": 66,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts ===
+  // class ABCD {
+  //     constructor(private x: number, public y: number, /*FIND ALL REFS*/<|private [|z|]: number|>) {
+  //     }
+  // 
+  //     func() {
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) ABCD.z: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "ABCD",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "z",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts ===
 // class ABCD {
-//     constructor(private x: number, public y: number, private /*FIND ALL REFS*/[|z|]: number) {
+//     constructor(private x: number, public y: number, <|private /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}z|]: number|>) {
 //     }
 // 
 //     func() {
@@ -104,95 +83,73 @@
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-      "kind": "property",
-      "name": "(property) ABCD.z: number",
-      "textSpan": {
-        "start": 74,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "ABCD",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "z",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 66,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 74,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "contextSpan": {
-          "start": 66,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts ===
+  // class ABCD {
+  //     constructor(private x: number, public y: number, <|private /*FIND ALL REFS*/[|z|]: number|>) {
+  //     }
+  // 
+  //     func() {
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) ABCD.z: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "ABCD",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "z",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts ===
 // class ABCD {
-//     constructor(private x: number, public y: number, private [|z|]: number) {
+//     constructor(private x: number, public y: number, <|private [|{| isWriteAccess: true |}z|]: number|>) {
 //     }
 // 
 //     func() {
@@ -200,86 +157,65 @@
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-      "kind": "property",
-      "name": "(property) ABCD.z: number",
-      "textSpan": {
-        "start": 74,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "ABCD",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "z",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 66,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 74,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "contextSpan": {
-          "start": 66,
-          "length": 17
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts ===
+  // class ABCD {
+  //     constructor(private x: number, public y: number, <|private [|z|]: number|>) {
+  //     }
+  // 
+  //     func() {
+  //         return this./*FIND ALL REFS*/z;
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) ABCD.z: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "ABCD",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "z",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

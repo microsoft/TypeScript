@@ -1,31 +1,47 @@
-import * as ts from "./_namespaces/ts";
-import {
+import type * as ts from "./_namespaces/ts";
+import type {
+    ApplicableRefactorInfo,
     CompilerOptionsValue,
+    CompletionsTriggerCharacter,
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
-    MapLike,
-    OutliningSpanKind,
+    InteractiveRefactorArguments,
     OutputFile,
-    PluginImport,
-    ProjectReference,
+    RefactorTriggerReason,
+    RenameInfoFailure,
     RenameLocation,
     ScriptElementKind,
     ScriptKind,
+    SignatureHelpTriggerReason,
+    SymbolDisplayPart,
     TextChange,
     TextInsertion,
     TodoComment,
     TodoCommentDescriptor,
     TypeAcquisition,
+    UserPreferences,
+} from "./_namespaces/ts";
+import {
+    ClassificationType,
+    CompletionTriggerKind,
+    OrganizeImportsMode,
+    SemicolonPreference,
 } from "./_namespaces/ts";
 
-/**
- * Declaration module describing the TypeScript Server protocol
- */
+// These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
+export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
 
-// NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
+type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
+type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
+    [K in keyof T]: K extends keyof Substitutions ? Substitutions[K] : T[K];
+};
+
+// Declaration module describing the TypeScript Server protocol
+
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -80,8 +96,6 @@ export const enum CommandTypes {
     NavtoFull = "navto-full",
     NavTree = "navtree",
     NavTreeFull = "navtree-full",
-    /** @deprecated */
-    Occurrences = "occurrences",
     DocumentHighlights = "documentHighlights",
     /** @internal */
     DocumentHighlightsFull = "documentHighlights-full",
@@ -146,6 +160,7 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
+    GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -174,9 +189,8 @@ export const enum CommandTypes {
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-    ProvideInlayHints = "provideInlayHints"
-
-    // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
+    ProvideInlayHints = "provideInlayHints",
+    WatchChange = "watchChange",
 }
 
 /**
@@ -214,7 +228,7 @@ export interface Request extends Message {
 /**
  * Request to reload the project structure for all the opened files
  */
-export interface ReloadProjectsRequest extends Message {
+export interface ReloadProjectsRequest extends Request {
     command: CommandTypes.ReloadProjects;
 }
 
@@ -299,8 +313,8 @@ export interface FileRequestArgs {
     file: string;
 
     /*
-    * Optional name of project that contains file
-    */
+     * Optional name of project that contains file
+     */
     projectFileName?: string;
 }
 
@@ -383,27 +397,7 @@ export interface OutliningSpansRequest extends FileRequest {
     command: CommandTypes.GetOutliningSpans;
 }
 
-export interface OutliningSpan {
-    /** The span of the document to actually collapse. */
-    textSpan: TextSpan;
-
-    /** The span of the document to display when the user hovers over the collapsed span. */
-    hintSpan: TextSpan;
-
-    /** The text to display in the editor for the collapsed region. */
-    bannerText: string;
-
-    /**
-     * Whether or not this region should be automatically collapsed when
-     * the 'Collapse to Definitions' command is invoked.
-     */
-    autoCollapse: boolean;
-
-    /**
-     * Classification of the contents of the span
-     */
-    kind: OutliningSpanKind;
-}
+export type OutliningSpan = ChangePropertyTypes<ts.OutliningSpan, { textSpan: TextSpan; hintSpan: TextSpan; }>;
 
 /**
  * Response to OutliningSpansRequest request.
@@ -592,9 +586,15 @@ export interface GetApplicableRefactorsRequest extends Request {
 export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
     triggerReason?: RefactorTriggerReason;
     kind?: string;
+    /**
+     * Include refactor actions that require additional arguments to be passed when
+     * calling 'GetEditsForRefactor'. When true, clients should inspect the
+     * `isInteractive` property of each returned `RefactorActionInfo`
+     * and ensure they are able to collect the appropriate arguments for any
+     * interactive refactor before offering it.
+     */
+    includeInteractiveActions?: boolean;
 };
-
-export type RefactorTriggerReason = "implicit" | "invoked";
 
 /**
  * Response is a list of available refactorings.
@@ -605,57 +605,24 @@ export interface GetApplicableRefactorsResponse extends Response {
 }
 
 /**
- * A set of one or more available refactoring actions, grouped under a parent refactoring.
+ * Request refactorings at a given position or selection area to move to an existing file.
  */
-export interface ApplicableRefactorInfo {
-    /**
-     * The programmatic name of the refactoring
-     */
-    name: string;
-    /**
-     * A description of this refactoring category to show to the user.
-     * If the refactoring gets inlined (see below), this text will not be visible.
-     */
-    description: string;
-    /**
-     * Inlineable refactorings can have their actions hoisted out to the top level
-     * of a context menu. Non-inlineanable refactorings should always be shown inside
-     * their parent grouping.
-     *
-     * If not specified, this value is assumed to be 'true'
-     */
-    inlineable?: boolean;
-
-    actions: RefactorActionInfo[];
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+    command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+    arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
 }
-
-/**
- * Represents a single refactoring action - for example, the "Extract Method..." refactor might
- * offer several actions, each corresponding to a surround class or closure to extract into.
- */
-export interface RefactorActionInfo {
-    /**
-     * The programmatic name of the refactoring action
-     */
-    name: string;
-
-    /**
-     * A description of this refactoring action to show to the user.
-     * If the parent refactoring is inlined away, this will be the only text shown,
-     * so this description should make sense by itself if the parent is inlineable=true
-     */
-    description: string;
-
-    /**
-     * A message to show to the user if the refactoring cannot be applied in
-     * the current context.
-     */
-    notApplicableReason?: string;
-
-    /**
-     * The hierarchical dotted name of the refactor action.
-     */
+export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
     kind?: string;
+};
+/**
+ * Response is a list of available files.
+ * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+ */
+export interface GetMoveToRefactoringFileSuggestions extends Response {
+    body: {
+        newFileName: string;
+        files: string[];
+    };
 }
 
 export interface GetEditsForRefactorRequest extends Request {
@@ -672,8 +639,9 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     refactor: string;
     /* The 'name' property from the refactoring action */
     action: string;
+    /* Arguments for interactive action */
+    interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
-
 
 export interface GetEditsForRefactorResponse extends Response {
     body?: RefactorEditInfo;
@@ -688,6 +656,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
@@ -702,12 +671,6 @@ export interface OrganizeImportsRequest extends Request {
 }
 
 export type OrganizeImportsScope = GetCombinedCodeFixScope;
-
-export const enum OrganizeImportsMode {
-    All = "All",
-    SortAndCombine = "SortAndCombine",
-    RemoveUnused = "RemoveUnused",
-}
 
 export interface OrganizeImportsRequestArgs {
     scope: OrganizeImportsScope;
@@ -758,7 +721,7 @@ export interface ApplyCodeActionCommandRequest extends Request {
 }
 
 // All we need is the `success` and `message` fields of Response.
-export interface ApplyCodeActionCommandResponse extends Response { }
+export interface ApplyCodeActionCommandResponse extends Response {}
 
 export interface FileRangeRequestArgs extends FileRequestArgs {
     /**
@@ -901,12 +864,12 @@ export interface EncodedSemanticClassificationsRequestArgs extends FileRequestAr
      * Optional parameter for the semantic highlighting response, if absent it
      * defaults to "original".
      */
-    format?: "original" | "2020"
+    format?: "original" | "2020";
 }
 
 /** The response for a EncodedSemanticClassificationsRequest */
 export interface EncodedSemanticClassificationsResponse extends Response {
-    body?: EncodedSemanticClassificationsResponseBody
+    body?: EncodedSemanticClassificationsResponseBody;
 }
 
 /**
@@ -1102,38 +1065,23 @@ export interface JsxClosingTagRequest extends FileLocationRequest {
     readonly arguments: JsxClosingTagRequestArgs;
 }
 
-export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
+export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
 
 export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
-/**
- * @deprecated
- * Get occurrences request; value of command field is
- * "occurrences". Return response giving spans that are relevant
- * in the file at a given line and column.
- */
-export interface OccurrencesRequest extends FileLocationRequest {
-    command: CommandTypes.Occurrences;
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
 }
 
-/** @deprecated */
-export interface OccurrencesResponseItem extends FileSpanWithContext {
-    /**
-     * True if the occurrence is a write location, false otherwise.
-     */
-    isWriteAccess: boolean;
-
-    /**
-     * True if the occurrence is in a string, undefined otherwise;
-     */
-    isInString?: true;
+export interface LinkedEditingRangesBody {
+    ranges: TextSpan[];
+    wordPattern?: string;
 }
 
-/** @deprecated */
-export interface OccurrencesResponse extends Response {
-    body?: OccurrencesResponseItem[];
+export interface LinkedEditingRangeResponse extends Response {
+    readonly body: LinkedEditingRangesBody;
 }
 
 /**
@@ -1299,47 +1247,8 @@ export interface RenameFullResponse extends Response {
  * Information about the item to be renamed.
  */
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
-export interface RenameInfoSuccess {
-    /**
-     * True if item can be renamed.
-     */
-    canRename: true;
-    /**
-     * File or directory to rename.
-     * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
-     */
-    fileToRename?: string;
 
-    /**
-     * Display name of the item to be renamed.
-     */
-    displayName: string;
-
-    /**
-     * Full display name of item to be renamed.
-     */
-    fullDisplayName: string;
-
-    /**
-     * The items's kind (such as 'className' or 'parameterName' or plain 'text').
-     */
-    kind: ScriptElementKind;
-
-    /**
-     * Optional modifiers for the kind (such as 'public').
-     */
-    kindModifiers: string;
-
-    /** Span of text to rename. */
-    triggerSpan: TextSpan;
-}
-export interface RenameInfoFailure {
-    canRename: false;
-    /**
-     * Error message if item can not be renamed.
-     */
-    localizedErrorMessage: string;
-}
+export type RenameInfoSuccess = ChangePropertyTypes<ts.RenameInfoSuccess, { triggerSpan: TextSpan; }>;
 
 /**
  *  A group of text spans, all in 'file'.
@@ -1419,10 +1328,6 @@ export interface ExternalProject {
      * Compiler options for the project
      */
     options: ExternalProjectCompilerOptions;
-    /**
-     * @deprecated typingOptions. Use typeAcquisition instead
-     */
-    typingOptions?: TypeAcquisition;
     /**
      * Explicitly specified type acquisition for the project
      */
@@ -1563,12 +1468,10 @@ export interface ChangedOpenFile {
     changes: TextChange[];
 }
 
-
 /**
  * Information found in a configure request.
  */
 export interface ConfigureRequestArguments {
-
     /**
      * Information about the host, for example 'Emacs 24.4' or
      * 'Sublime Text version 3075'
@@ -1944,6 +1847,17 @@ export interface CloseRequest extends FileRequest {
     command: CommandTypes.Close;
 }
 
+export interface WatchChangeRequest extends Request {
+    command: CommandTypes.WatchChange;
+    arguments: WatchChangeRequestArgs | readonly WatchChangeRequestArgs[];
+}
+export interface WatchChangeRequestArgs {
+    id: number;
+    created?: string[];
+    deleted?: string[];
+    updated?: string[];
+}
+
 /**
  * Request to obtain the list of files that should be regenerated if target file is recompiled.
  * NOTE: this us query-only operation and does not generate any output on disk.
@@ -2198,19 +2112,6 @@ export interface FormatOnKeyRequest extends FileLocationRequest {
     arguments: FormatOnKeyRequestArgs;
 }
 
-export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
-
-export const enum CompletionTriggerKind {
-    /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
-    Invoked = 1,
-
-    /** Completion was triggered by a trigger character. */
-    TriggerCharacter = 2,
-
-    /** Completion was re-triggered as the current completion list is incomplete. */
-    TriggerForIncompleteCompletions = 3,
-}
-
 /**
  * Arguments for completions messages.
  */
@@ -2273,171 +2174,24 @@ export interface CompletionDetailsRequest extends FileLocationRequest {
     arguments: CompletionDetailsRequestArgs;
 }
 
-/**
- * Part of a symbol description.
- */
-export interface SymbolDisplayPart {
-    /**
-     * Text of an item describing the symbol.
-     */
-    text: string;
-
-    /**
-     * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
-     */
-    kind: string;
-}
-
 /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
 export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
     /** The location of the declaration that the @link tag links to. */
     target: FileSpan;
 }
 
-/**
- * An item found in a completion response.
- */
-export interface CompletionEntry {
-    /**
-     * The symbol's name.
-     */
-    name: string;
-    /**
-     * The symbol's kind (such as 'className' or 'parameterName').
-     */
-    kind: ScriptElementKind;
-    /**
-     * Optional modifiers for the kind (such as 'public').
-     */
-    kindModifiers?: string;
-    /**
-     * A string that is used for comparing completion items so that they can be ordered.  This
-     * is often the same as the name but may be different in certain circumstances.
-     */
-    sortText: string;
-    /**
-     * Text to insert instead of `name`.
-     * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,
-     * coupled with `replacementSpan` to replace a dotted access with a bracket access.
-     */
-    insertText?: string;
-    /**
-     * `insertText` should be interpreted as a snippet if true.
-     */
-    isSnippet?: true;
-    /**
-     * An optional span that indicates the text to be replaced by this completion item.
-     * If present, this span should be used instead of the default one.
-     * It will be set if the required span differs from the one generated by the default replacement behavior.
-     */
-    replacementSpan?: TextSpan;
-    /**
-     * Indicates whether commiting this completion entry will require additional code actions to be
-     * made to avoid errors. The CompletionEntryDetails will have these actions.
-     */
-    hasAction?: true;
-    /**
-     * Identifier (not necessarily human-readable) identifying where this completion came from.
-     */
-    source?: string;
-    /**
-     * Human-readable description of the `source`.
-     */
-    sourceDisplay?: SymbolDisplayPart[];
-    /**
-     * Additional details for the label.
-     */
-    labelDetails?: CompletionEntryLabelDetails;
-    /**
-     * If true, this completion should be highlighted as recommended. There will only be one of these.
-     * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
-     * Then either that enum/class or a namespace containing it will be the recommended symbol.
-     */
-    isRecommended?: true;
-    /**
-     * If true, this completion was generated from traversing the name table of an unchecked JS file,
-     * and therefore may not be accurate.
-     */
-    isFromUncheckedFile?: true;
-    /**
-     * If true, this completion was for an auto-import of a module not yet in the program, but listed
-     * in the project package.json. Used for telemetry reporting.
-     */
-    isPackageJsonImport?: true;
-    /**
-     * If true, this completion was an auto-import-style completion of an import statement (i.e., the
-     * module specifier was inserted along with the imported identifier). Used for telemetry reporting.
-     */
-    isImportStatementCompletion?: true;
-    /**
-     * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
-     * that allows TS Server to look up the symbol represented by the completion item, disambiguating
-     * items with the same name.
-     */
-    data?: unknown;
-}
-
-export interface CompletionEntryLabelDetails {
-    /**
-     * An optional string which is rendered less prominently directly after
-     * {@link CompletionEntry.name name}, without any spacing. Should be
-     * used for function signatures or type annotations.
-     */
-    detail?: string;
-    /**
-     * An optional string which is rendered less prominently after
-     * {@link CompletionEntryLabelDetails.detail}. Should be used for fully qualified
-     * names or file path.
-     */
-    description?: string;
-}
+export type CompletionEntry = ChangePropertyTypes<Omit<ts.CompletionEntry, "symbol">, {
+    replacementSpan: TextSpan;
+    data: unknown;
+}>;
 
 /**
  * Additional completion entry details, available on demand
  */
-export interface CompletionEntryDetails {
-    /**
-     * The symbol's name.
-     */
-    name: string;
-    /**
-     * The symbol's kind (such as 'className' or 'parameterName').
-     */
-    kind: ScriptElementKind;
-    /**
-     * Optional modifiers for the kind (such as 'public').
-     */
-    kindModifiers: string;
-    /**
-     * Display parts of the symbol (similar to quick info).
-     */
-    displayParts: SymbolDisplayPart[];
-
-    /**
-     * Documentation strings for the symbol.
-     */
-    documentation?: SymbolDisplayPart[];
-
-    /**
-     * JSDoc tags for the symbol.
-     */
-    tags?: JSDocTagInfo[];
-
-    /**
-     * The associated code actions for this entry
-     */
-    codeActions?: CodeAction[];
-
-    /**
-     * @deprecated Use `sourceDisplay` instead.
-     */
-    source?: SymbolDisplayPart[];
-
-    /**
-     * Human-readable description of the `source` from the CompletionEntry.
-     */
-    sourceDisplay?: SymbolDisplayPart[];
-}
+export type CompletionEntryDetails = ChangePropertyTypes<ts.CompletionEntryDetails, {
+    tags: JSDocTagInfo[];
+    codeActions: CodeAction[];
+}>;
 
 /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
 export interface CompletionsResponse extends Response {
@@ -2448,97 +2202,24 @@ export interface CompletionInfoResponse extends Response {
     body?: CompletionInfo;
 }
 
-export interface CompletionInfo {
-    readonly flags?: number;
-    readonly isGlobalCompletion: boolean;
-    readonly isMemberCompletion: boolean;
-    readonly isNewIdentifierLocation: boolean;
-    /**
-     * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
-     * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
-     * must be used to commit that completion entry.
-     */
-    readonly optionalReplacementSpan?: TextSpan;
-    readonly isIncomplete?: boolean;
-    readonly entries: readonly CompletionEntry[];
-}
+export type CompletionInfo = ChangePropertyTypes<ts.CompletionInfo, {
+    entries: readonly CompletionEntry[];
+    optionalReplacementSpan: TextSpan;
+}>;
 
 export interface CompletionDetailsResponse extends Response {
     body?: CompletionEntryDetails[];
 }
 
 /**
- * Signature help information for a single parameter
- */
-export interface SignatureHelpParameter {
-
-    /**
-     * The parameter's name
-     */
-    name: string;
-
-    /**
-     * Documentation of the parameter.
-     */
-    documentation: SymbolDisplayPart[];
-
-    /**
-     * Display parts of the parameter.
-     */
-    displayParts: SymbolDisplayPart[];
-
-    /**
-     * Whether the parameter is optional or not.
-     */
-    isOptional: boolean;
-}
-
-/**
  * Represents a single signature to show in signature help.
  */
-export interface SignatureHelpItem {
-
-    /**
-     * Whether the signature accepts a variable number of arguments.
-     */
-    isVariadic: boolean;
-
-    /**
-     * The prefix display parts.
-     */
-    prefixDisplayParts: SymbolDisplayPart[];
-
-    /**
-     * The suffix display parts.
-     */
-    suffixDisplayParts: SymbolDisplayPart[];
-
-    /**
-     * The separator display parts.
-     */
-    separatorDisplayParts: SymbolDisplayPart[];
-
-    /**
-     * The signature helps items for the parameters.
-     */
-    parameters: SignatureHelpParameter[];
-
-    /**
-     * The signature's documentation
-     */
-    documentation: SymbolDisplayPart[];
-
-    /**
-     * The signature's JSDoc tags
-     */
-    tags: JSDocTagInfo[];
-}
+export type SignatureHelpItem = ChangePropertyTypes<ts.SignatureHelpItem, { tags: JSDocTagInfo[]; }>;
 
 /**
  * Signature help items found in the response of a signature help request.
  */
 export interface SignatureHelpItems {
-
     /**
      * The signature help items.
      */
@@ -2565,9 +2246,6 @@ export interface SignatureHelpItems {
     argumentCount: number;
 }
 
-export type SignatureHelpTriggerCharacter = "," | "(" | "<";
-export type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
-
 /**
  * Arguments of a signature help request.
  */
@@ -2577,46 +2255,6 @@ export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
      * See each individual possible
      */
     triggerReason?: SignatureHelpTriggerReason;
-}
-
-export type SignatureHelpTriggerReason =
-    | SignatureHelpInvokedReason
-    | SignatureHelpCharacterTypedReason
-    | SignatureHelpRetriggeredReason;
-
-/**
- * Signals that the user manually requested signature help.
- * The language service will unconditionally attempt to provide a result.
- */
-export interface SignatureHelpInvokedReason {
-    kind: "invoked";
-    triggerCharacter?: undefined;
-}
-
-/**
- * Signals that the signature help request came from a user typing a character.
- * Depending on the character and the syntactic context, the request may or may not be served a result.
- */
-export interface SignatureHelpCharacterTypedReason {
-    kind: "characterTyped";
-    /**
-     * Character that was responsible for triggering signature help.
-     */
-    triggerCharacter: SignatureHelpTriggerCharacter;
-}
-
-/**
- * Signals that this signature help request came from typing a character or moving the cursor.
- * This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
- * The language service will unconditionally attempt to provide a result.
- * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
- */
-export interface SignatureHelpRetriggeredReason {
-    kind: "retrigger";
-    /**
-     * Character that was responsible for triggering signature help.
-     */
-    triggerCharacter?: SignatureHelpRetriggerCharacter;
 }
 
 /**
@@ -2636,8 +2274,6 @@ export interface SignatureHelpResponse extends Response {
     body?: SignatureHelpItems;
 }
 
-export type InlayHintKind = "Type" | "Parameter" | "Enum";
-
 export interface InlayHintsRequestArgs extends FileRequestArgs {
     /**
      * Start position of the span.
@@ -2654,12 +2290,14 @@ export interface InlayHintsRequest extends Request {
     arguments: InlayHintsRequestArgs;
 }
 
-export interface InlayHintItem {
-    text: string;
+export type InlayHintItem = ChangePropertyTypes<ts.InlayHint, {
     position: Location;
-    kind: InlayHintKind;
-    whitespaceBefore?: boolean;
-    whitespaceAfter?: boolean;
+    displayParts: InlayHintItemDisplayPart[];
+}>;
+
+export interface InlayHintItemDisplayPart {
+    text: string;
+    span?: FileSpan;
 }
 
 export interface InlayHintsResponse extends Response {
@@ -2997,9 +2635,43 @@ export interface LargeFileReferencedEventBody {
     maxFileSize: number;
 }
 
+export type CreateFileWatcherEventName = "createFileWatcher";
+export interface CreateFileWatcherEvent extends Event {
+    readonly event: CreateFileWatcherEventName;
+    readonly body: CreateFileWatcherEventBody;
+}
+
+export interface CreateFileWatcherEventBody {
+    readonly id: number;
+    readonly path: string;
+}
+
+export type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+export interface CreateDirectoryWatcherEvent extends Event {
+    readonly event: CreateDirectoryWatcherEventName;
+    readonly body: CreateDirectoryWatcherEventBody;
+}
+
+export interface CreateDirectoryWatcherEventBody {
+    readonly id: number;
+    readonly path: string;
+    readonly recursive: boolean;
+    readonly ignoreUpdate?: boolean;
+}
+
+export type CloseFileWatcherEventName = "closeFileWatcher";
+export interface CloseFileWatcherEvent extends Event {
+    readonly event: CloseFileWatcherEventName;
+    readonly body: CloseFileWatcherEventBody;
+}
+
+export interface CloseFileWatcherEventBody {
+    readonly id: number;
+}
+
 /** @internal */
 export type AnyEvent =
-    RequestCompletedEvent
+    | RequestCompletedEvent
     | DiagnosticEvent
     | ConfigFileDiagnosticEvent
     | ProjectLanguageServiceStateEvent
@@ -3008,7 +2680,10 @@ export type AnyEvent =
     | ProjectLoadingStartEvent
     | ProjectLoadingFinishEvent
     | SurveyReadyEvent
-    | LargeFileReferencedEvent;
+    | LargeFileReferencedEvent
+    | CreateFileWatcherEvent
+    | CreateDirectoryWatcherEvent
+    | CloseFileWatcherEvent;
 
 /**
  * Arguments for reload request.
@@ -3358,15 +3033,7 @@ export interface NavTreeResponse extends Response {
     body?: NavigationTree;
 }
 
-export interface CallHierarchyItem {
-    name: string;
-    kind: ScriptElementKind;
-    kindModifiers?: string
-    file: string;
-    span: TextSpan;
-    selectionSpan: TextSpan;
-    containerName?: string;
-}
+export type CallHierarchyItem = ChangePropertyTypes<ts.CallHierarchyItem, { span: TextSpan; selectionSpan: TextSpan; }>;
 
 export interface CallHierarchyIncomingCall {
     from: CallHierarchyItem;
@@ -3408,216 +3075,53 @@ export const enum IndentStyle {
     Smart = "Smart",
 }
 
-export enum SemicolonPreference {
-    Ignore = "ignore",
-    Insert = "insert",
-    Remove = "remove",
-}
+export type EditorSettings = ChangePropertyTypes<ts.EditorSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
 
-export interface EditorSettings {
-    baseIndentSize?: number;
-    indentSize?: number;
-    tabSize?: number;
-    newLineCharacter?: string;
-    convertTabsToSpaces?: boolean;
-    indentStyle?: IndentStyle | ts.IndentStyle;
-    trimTrailingWhitespace?: boolean;
-}
+export type FormatCodeSettings = ChangePropertyTypes<ts.FormatCodeSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
 
-export interface FormatCodeSettings extends EditorSettings {
-    insertSpaceAfterCommaDelimiter?: boolean;
-    insertSpaceAfterSemicolonInForStatements?: boolean;
-    insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-    insertSpaceAfterConstructor?: boolean;
-    insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-    insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-    insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-    insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-    insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
-    insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-    insertSpaceAfterTypeAssertion?: boolean;
-    insertSpaceBeforeFunctionParenthesis?: boolean;
-    placeOpenBraceOnNewLineForFunctions?: boolean;
-    placeOpenBraceOnNewLineForControlBlocks?: boolean;
-    insertSpaceBeforeTypeAnnotation?: boolean;
-    semicolons?: SemicolonPreference;
-}
-
-export interface UserPreferences {
-    readonly disableSuggestions?: boolean;
-    readonly quotePreference?: "auto" | "double" | "single";
-    /**
-     * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-     * This affects lone identifier completions but not completions on the right hand side of `obj.`.
-     */
-    readonly includeCompletionsForModuleExports?: boolean;
-    /**
-     * Enables auto-import-style completions on partially-typed import statements. E.g., allows
-     * `import write|` to be completed to `import { writeFile } from "fs"`.
-     */
-    readonly includeCompletionsForImportStatements?: boolean;
-    /**
-     * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
-     */
-    readonly includeCompletionsWithSnippetText?: boolean;
-    /**
-     * If enabled, the completion list will include completions with invalid identifier names.
-     * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
-     */
-    readonly includeCompletionsWithInsertText?: boolean;
-    /**
-     * Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled,
-     * member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined
-     * values, with insertion text to replace preceding `.` tokens with `?.`.
-     */
-    readonly includeAutomaticOptionalChainCompletions?: boolean;
-    /**
-     * If enabled, completions for class members (e.g. methods and properties) will include
-     * a whole declaration for the member.
-     * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
-     * `class A { foo }`.
-     */
-    readonly includeCompletionsWithClassMemberSnippets?: boolean;
-    /**
-     * If enabled, object literal methods will have a method declaration completion entry in addition
-     * to the regular completion entry containing just the method name.
-     * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
-     * in addition to `const objectLiteral: T = { foo }`.
-     */
-    readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
-    /**
-     * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
-     * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
-     */
-    readonly useLabelDetailsInCompletionEntries?: boolean;
-    readonly allowIncompleteCompletions?: boolean;
-    readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
-    /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
-    readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
-    readonly allowTextChangesInNewFiles?: boolean;
-    readonly lazyConfiguredProjectsFromExternalProject?: boolean;
-    readonly providePrefixAndSuffixTextForRename?: boolean;
-    readonly provideRefactorNotApplicableReason?: boolean;
-    readonly allowRenameOfImportPath?: boolean;
-    readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
-    readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
-
-    readonly displayPartsForJSDoc?: boolean;
-    readonly generateReturnInDocTemplate?: boolean;
-
-    readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-    readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-    readonly includeInlayFunctionParameterTypeHints?: boolean,
-    readonly includeInlayVariableTypeHints?: boolean;
-    readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
-    readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-    readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-    readonly includeInlayEnumMemberValueHints?: boolean;
-    readonly autoImportFileExcludePatterns?: string[];
-    readonly organizeImportsIgnoreCase?: "auto" | boolean;
-
-    /**
-     * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
-     */
-    readonly disableLineTextInReferences?: boolean;
-}
-
-export interface CompilerOptions {
-    allowJs?: boolean;
-    allowSyntheticDefaultImports?: boolean;
-    allowUnreachableCode?: boolean;
-    allowUnusedLabels?: boolean;
-    alwaysStrict?: boolean;
-    baseUrl?: string;
-    charset?: string;
-    checkJs?: boolean;
-    declaration?: boolean;
-    declarationDir?: string;
-    disableSizeLimit?: boolean;
-    downlevelIteration?: boolean;
-    emitBOM?: boolean;
-    emitDecoratorMetadata?: boolean;
-    experimentalDecorators?: boolean;
-    forceConsistentCasingInFileNames?: boolean;
-    importHelpers?: boolean;
-    inlineSourceMap?: boolean;
-    inlineSources?: boolean;
-    isolatedModules?: boolean;
-    jsx?: JsxEmit | ts.JsxEmit;
-    lib?: string[];
-    locale?: string;
-    mapRoot?: string;
-    maxNodeModuleJsDepth?: number;
-    module?: ModuleKind | ts.ModuleKind;
-    moduleResolution?: ModuleResolutionKind | ts.ModuleResolutionKind;
-    newLine?: NewLineKind | ts.NewLineKind;
-    noEmit?: boolean;
-    noEmitHelpers?: boolean;
-    noEmitOnError?: boolean;
-    noErrorTruncation?: boolean;
-    noFallthroughCasesInSwitch?: boolean;
-    noImplicitAny?: boolean;
-    noImplicitReturns?: boolean;
-    noImplicitThis?: boolean;
-    noUnusedLocals?: boolean;
-    noUnusedParameters?: boolean;
-    noImplicitUseStrict?: boolean;
-    noLib?: boolean;
-    noResolve?: boolean;
-    out?: string;
-    outDir?: string;
-    outFile?: string;
-    paths?: MapLike<string[]>;
-    plugins?: PluginImport[];
-    preserveConstEnums?: boolean;
-    preserveSymlinks?: boolean;
-    project?: string;
-    reactNamespace?: string;
-    removeComments?: boolean;
-    references?: ProjectReference[];
-    rootDir?: string;
-    rootDirs?: string[];
-    skipLibCheck?: boolean;
-    skipDefaultLibCheck?: boolean;
-    sourceMap?: boolean;
-    sourceRoot?: string;
-    strict?: boolean;
-    strictNullChecks?: boolean;
-    suppressExcessPropertyErrors?: boolean;
-    suppressImplicitAnyIndexErrors?: boolean;
-    useDefineForClassFields?: boolean;
-    target?: ScriptTarget | ts.ScriptTarget;
-    traceResolution?: boolean;
-    resolveJsonModule?: boolean;
-    types?: string[];
-    /** Paths used to used to compute primary types search locations */
-    typeRoots?: string[];
-    [option: string]: CompilerOptionsValue | undefined;
-}
+export type CompilerOptions = ChangePropertyTypes<ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>, {
+    jsx: JsxEmit | ts.JsxEmit;
+    module: ModuleKind | ts.ModuleKind;
+    moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
+    newLine: NewLineKind | ts.NewLineKind;
+    target: ScriptTarget | ts.ScriptTarget;
+}>;
 
 export const enum JsxEmit {
-    None = "None",
-    Preserve = "Preserve",
-    ReactNative = "ReactNative",
-    React = "React",
+    None = "none",
+    Preserve = "preserve",
+    ReactNative = "react-native",
+    React = "react",
+    ReactJSX = "react-jsx",
+    ReactJSXDev = "react-jsxdev",
 }
 
 export const enum ModuleKind {
-    None = "None",
-    CommonJS = "CommonJS",
-    AMD = "AMD",
-    UMD = "UMD",
-    System = "System",
-    ES6 = "ES6",
-    ES2015 = "ES2015",
-    ESNext = "ESNext"
+    None = "none",
+    CommonJS = "commonjs",
+    AMD = "amd",
+    UMD = "umd",
+    System = "system",
+    ES6 = "es6",
+    ES2015 = "es2015",
+    ES2020 = "es2020",
+    ES2022 = "es2022",
+    ESNext = "esnext",
+    Node16 = "node16",
+    NodeNext = "nodenext",
+    Preserve = "preserve",
 }
 
 export const enum ModuleResolutionKind {
-    Classic = "Classic",
-    Node = "Node",
+    Classic = "classic",
+    /** @deprecated Renamed to `Node10` */
+    Node = "node",
+    /** @deprecated Renamed to `Node10` */
+    NodeJs = "node",
+    Node10 = "node10",
+    Node16 = "node16",
+    NodeNext = "nodenext",
+    Bundler = "bundler",
 }
 
 export const enum NewLineKind {
@@ -3626,44 +3130,31 @@ export const enum NewLineKind {
 }
 
 export const enum ScriptTarget {
-    ES3 = "ES3",
-    ES5 = "ES5",
-    ES6 = "ES6",
-    ES2015 = "ES2015",
-    ES2016 = "ES2016",
-    ES2017 = "ES2017",
-    ES2018 = "ES2018",
-    ES2019 = "ES2019",
-    ES2020 = "ES2020",
-    ES2021 = "ES2021",
-    ES2022 = "ES2022",
-    ESNext = "ESNext"
+    /** @deprecated */
+    ES3 = "es3",
+    ES5 = "es5",
+    ES6 = "es6",
+    ES2015 = "es2015",
+    ES2016 = "es2016",
+    ES2017 = "es2017",
+    ES2018 = "es2018",
+    ES2019 = "es2019",
+    ES2020 = "es2020",
+    ES2021 = "es2021",
+    ES2022 = "es2022",
+    ESNext = "esnext",
+    JSON = "json",
+    Latest = ESNext,
 }
 
-export const enum ClassificationType {
-    comment = 1,
-    identifier = 2,
-    keyword = 3,
-    numericLiteral = 4,
-    operator = 5,
-    stringLiteral = 6,
-    regularExpressionLiteral = 7,
-    whiteSpace = 8,
-    text = 9,
-    punctuation = 10,
-    className = 11,
-    enumName = 12,
-    interfaceName = 13,
-    moduleName = 14,
-    typeParameterName = 15,
-    typeAliasName = 16,
-    parameterName = 17,
-    docCommentTagName = 18,
-    jsxOpenTagName = 19,
-    jsxCloseTagName = 20,
-    jsxSelfClosingTagName = 21,
-    jsxAttribute = 22,
-    jsxText = 23,
-    jsxAttributeStringLiteralValue = 24,
-    bigintLiteral = 25,
+{
+    type AssertKeysComplete<Source extends { [K in keyof Target]: any; }, Target> = Source;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type CopiedTypesComplete = [
+        AssertKeysComplete<typeof ModuleResolutionKind, typeof ts.ModuleResolutionKind>,
+        AssertKeysComplete<typeof ModuleKind, typeof ts.ModuleKind>,
+        AssertKeysComplete<typeof ScriptTarget, typeof ts.ScriptTarget>,
+        AssertKeysComplete<typeof JsxEmit, typeof ts.JsxEmit>,
+        AssertKeysComplete<typeof IndentStyle, typeof ts.IndentStyle>,
+    ];
 }

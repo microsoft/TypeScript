@@ -1,40 +1,67 @@
-=== tests/cases/conformance/salsa/bug39167.js ===
+//// [tests/cases/conformance/salsa/defaultPropertyAssignedClassWithPrototype.ts] ////
+
+=== bug39167.js ===
 var test = {};
 >test : typeof test
+>     : ^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 test.K = test.K ||
 >test.K = test.K ||    function () {} : typeof K
+>                                     : ^^^^^^^^
 >test.K : typeof K
+>       : ^^^^^^^^
 >test : typeof test
+>     : ^^^^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 >test.K ||    function () {} : typeof K
+>                            : ^^^^^^^^
 >test.K : typeof K
+>       : ^^^^^^^^
 >test : typeof test
+>     : ^^^^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 
     function () {}
 >function () {} : typeof K
+>               : ^^^^^^^^
 
 test.K.prototype = {
 >test.K.prototype = {    add() {}} : { add(): void; }
+>                                  : ^^^^^^^^^^^^^^^^
 >test.K.prototype : { add(): void; }
+>                 : ^^^^^^^^^^^^^^^^
 >test.K : typeof K
+>       : ^^^^^^^^
 >test : typeof test
+>     : ^^^^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 >prototype : { add(): void; }
+>          : ^^^^^^^^^^^^^^^^
 >{    add() {}} : { add(): void; }
+>               : ^^^^^^^^^^^^^^^^
 
     add() {}
 >add : () => void
+>    : ^^^^^^^^^^
 
 };
 
 new test.K().add;
 >new test.K().add : () => void
+>                 : ^^^^^^^^^^
 >new test.K() : K
+>             : ^
 >test.K : typeof K
+>       : ^^^^^^^^
 >test : typeof test
+>     : ^^^^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 >add : () => void
+>    : ^^^^^^^^^^
 

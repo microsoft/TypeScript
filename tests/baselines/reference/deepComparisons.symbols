@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deepComparisons.ts ===
+//// [tests/cases/compiler/deepComparisons.ts] ////
+
+=== deepComparisons.ts ===
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 >f1 : Symbol(f1, Decl(deepComparisons.ts, 0, 0))
 >T : Symbol(T, Decl(deepComparisons.ts, 0, 12))

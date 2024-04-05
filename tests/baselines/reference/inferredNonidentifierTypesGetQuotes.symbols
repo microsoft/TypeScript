@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferredNonidentifierTypesGetQuotes.ts ===
+//// [tests/cases/compiler/inferredNonidentifierTypesGetQuotes.ts] ////
+
+=== inferredNonidentifierTypesGetQuotes.ts ===
 var x = [{ "a-b": "string" }, {}];
 >x : Symbol(x, Decl(inferredNonidentifierTypesGetQuotes.ts, 0, 3))
 >"a-b" : Symbol("a-b", Decl(inferredNonidentifierTypesGetQuotes.ts, 0, 10))

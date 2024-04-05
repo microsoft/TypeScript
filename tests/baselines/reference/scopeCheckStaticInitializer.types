@@ -1,47 +1,73 @@
-=== tests/cases/compiler/scopeCheckStaticInitializer.ts ===
+//// [tests/cases/compiler/scopeCheckStaticInitializer.ts] ////
+
+=== scopeCheckStaticInitializer.ts ===
 class X {
 >X : X
+>  : ^
 
     static illegalBeforeProperty = X.data;
 >illegalBeforeProperty : number
+>                      : ^^^^^^
 >X.data : number
+>       : ^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >data : number
+>     : ^^^^^^
 
     static okBeforeMethod = X.method;
 >okBeforeMethod : () => void
+>               : ^^^^^^^^^^
 >X.method : () => void
+>         : ^^^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >method : () => void
+>       : ^^^^^^^^^^
 
     static illegal2 = After.data;
 >illegal2 : number
+>         : ^^^^^^
 >After.data : number
+>           : ^^^^^^
 >After : typeof After
+>      : ^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 
     static illegal3 = After.method;
 >illegal3 : () => void
+>         : ^^^^^^^^^^
 >After.method : () => void
+>             : ^^^^^^^^^^
 >After : typeof After
+>      : ^^^^^^^^^^^^
 >method : () => void
+>       : ^^^^^^^^^^
 
     static data = 13;
 >data : number
+>     : ^^^^^^
 >13 : 13
+>   : ^^
 
     static method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }
 class After {
 >After : After
+>      : ^^^^^
 
     static data = 12;
 >data : number
+>     : ^^^^^^
 >12 : 12
+>   : ^^
 
     static method() { };
 >method : () => void
+>       : ^^^^^^^^^^
 }
 
 

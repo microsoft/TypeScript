@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor2_Js.ts] ////
+
 //// [a.js]
 class A {
 	/**

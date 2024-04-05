@@ -1,8 +1,8 @@
-tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts(1,14): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
-tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts(3,16): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+declarationEmitDestructuringWithOptionalBindingParameters.ts(1,14): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+declarationEmitDestructuringWithOptionalBindingParameters.ts(3,16): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 
 
-==== tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts (2 errors) ====
+==== declarationEmitDestructuringWithOptionalBindingParameters.ts (2 errors) ====
     function foo([x,y,z]?: [string, number, boolean]) {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.

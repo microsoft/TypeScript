@@ -1,21 +1,36 @@
-=== tests/cases/conformance/salsa/bug27099.js ===
+//// [tests/cases/conformance/salsa/globalMergeWithCommonJSAssignmentDeclaration.ts] ////
+
+=== bug27099.js ===
 window.name = 1;
 >window.name = 1 : 1
+>                : ^
 >window.name : string
+>            : ^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 window.console; // should not have error: Property 'console' does not exist on type 'typeof window'.
 >window.console : Console
+>               : ^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
+>        : ^^^^^^^
 
 module.exports = 'anything';
 >module.exports = 'anything' : string
+>                            : ^^^^^^
 >module.exports : string
+>               : ^^^^^^
 >module : { exports: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^
 >exports : string
+>        : ^^^^^^
 >'anything' : "anything"
+>           : ^^^^^^^^^^
 
 

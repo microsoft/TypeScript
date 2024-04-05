@@ -1,18 +1,25 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameHashCharName.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameHashCharName.ts] ////
+
+=== privateNameHashCharName.ts ===
 #
 
 class C {
 >C : C
+>  : ^
 
     #
 ># : any
+>  : ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.#
 >this.# : any
+>       : ^^^
 >this : this
+>     : ^^^^
     }
 }
 

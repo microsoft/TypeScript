@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationRestParamJsDocFunction.ts] ////
+
 //// [_apply.js]
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`
@@ -21,6 +23,7 @@ function apply(func, thisArg, ...args) {
 }
 
 export default apply;
+
 
 //// [apply.js]
 define("_apply", ["require", "exports"], function (require, exports) {

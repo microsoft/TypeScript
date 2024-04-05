@@ -1,34 +1,46 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormExpr1OrExpr2.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormExpr1OrExpr2.ts] ////
+
+=== typeGuardOfFormExpr1OrExpr2.ts ===
 var str: string;
 >str : string
+>    : ^^^^^^
 
 var bool: boolean;
 >bool : boolean
+>     : ^^^^^^^
 
 var num: number;
 >num : number
+>    : ^^^^^^
 
 var strOrNum: string | number;
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 
 var strOrNumOrBool: string | number | boolean;
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var numOrBool: number | boolean;
 >numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 
 class C { private p; }
 >C : C
+>  : ^
 >p : any
 
 var c: C;
 >c : C
+>  : ^
 
 var cOrBool: C| boolean;
 >cOrBool : boolean | C
+>        : ^^^^^^^^^^^
 
 var strOrNumOrBoolOrC: string | number | boolean | C;
 >strOrNumOrBoolOrC : string | number | boolean | C
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // A type guard of the form expr1 || expr2
 //  - when true, narrows the type of x to T1 | T2, where T1 is the type of x narrowed by expr1 when true, 
@@ -38,108 +50,180 @@ var strOrNumOrBoolOrC: string | number | boolean | C;
 // (typeguard1 || typeguard2)
 if (typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number") {
 >typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number" : boolean
+>                                                                         : ^^^^^^^
 >typeof strOrNumOrBool === "string" : boolean
+>                                   : ^^^^^^^
 >typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >typeof strOrNumOrBool === "number" : boolean
+>                                   : ^^^^^^^
 >typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : number | boolean
+>               : ^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     strOrNum = strOrNumOrBool; // string | number
 >strOrNum = strOrNumOrBool : string | number
+>                          : ^^^^^^^^^^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number
+>               : ^^^^^^^^^^^^^^^
 }
 else {
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
+>                      : ^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >strOrNumOrBool : boolean
+>               : ^^^^^^^
 }
 // (typeguard1 || typeguard2 || typeguard3)
 if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" || typeof strOrNumOrBoolOrC === "boolean") {
 >typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" || typeof strOrNumOrBoolOrC === "boolean" : boolean
+>                                                                                                                         : ^^^^^^^
 >typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" : boolean
+>                                                                               : ^^^^^^^
 >typeof strOrNumOrBoolOrC === "string" : boolean
+>                                      : ^^^^^^^
 >typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : string | number | boolean | C
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >typeof strOrNumOrBoolOrC === "number" : boolean
+>                                      : ^^^^^^^
 >typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : number | boolean | C
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 >typeof strOrNumOrBoolOrC === "boolean" : boolean
+>                                       : ^^^^^^^
 >typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : boolean | C
+>                  : ^^^^^^^^^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 
     strOrNumOrBool = strOrNumOrBoolOrC; // string | number | boolean
 >strOrNumOrBool = strOrNumOrBoolOrC : string | number | boolean
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : string | number | boolean
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 else {
     c = strOrNumOrBoolOrC; // C
 >c = strOrNumOrBoolOrC : C
+>                      : ^
 >c : C
+>  : ^
 >strOrNumOrBoolOrC : C
+>                  : ^
 }
 // (typeguard1 || typeguard2 || typeguard11(onAnotherType))
 if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" || typeof strOrNumOrBool !== "boolean") {
 >typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" || typeof strOrNumOrBool !== "boolean" : boolean
+>                                                                                                                      : ^^^^^^^
 >typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "number" : boolean
+>                                                                               : ^^^^^^^
 >typeof strOrNumOrBoolOrC === "string" : boolean
+>                                      : ^^^^^^^
 >typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : string | number | boolean | C
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >typeof strOrNumOrBoolOrC === "number" : boolean
+>                                      : ^^^^^^^
 >typeof strOrNumOrBoolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : number | boolean | C
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 >typeof strOrNumOrBool !== "boolean" : boolean
+>                                    : ^^^^^^^
 >typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 
     var r1: string | number | boolean | C = strOrNumOrBoolOrC; // string | number | boolean | C
 >r1 : string | number | boolean | C
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBoolOrC : string | number | boolean | C
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var r2: string | number | boolean = strOrNumOrBool;
 >r2 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 else {
     cOrBool = strOrNumOrBoolOrC; // C | boolean
 >cOrBool = strOrNumOrBoolOrC : boolean | C
+>                            : ^^^^^^^^^^^
 >cOrBool : boolean | C
+>        : ^^^^^^^^^^^
 >strOrNumOrBoolOrC : boolean | C
+>                  : ^^^^^^^^^^^
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
+>                      : ^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >strOrNumOrBool : boolean
+>               : ^^^^^^^
 }
 // (typeguard1) || simpleExpr
 if (typeof strOrNumOrBool === "string" || numOrBool !== strOrNumOrBool) {
 >typeof strOrNumOrBool === "string" || numOrBool !== strOrNumOrBool : boolean
+>                                                                   : ^^^^^^^
 >typeof strOrNumOrBool === "string" : boolean
+>                                   : ^^^^^^^
 >typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >numOrBool !== strOrNumOrBool : boolean
+>                             : ^^^^^^^
 >numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 >strOrNumOrBool : number | boolean
+>               : ^^^^^^^^^^^^^^^^
 
     var r3: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >r3 : string | number | boolean
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 else {
     numOrBool = strOrNumOrBool; // number | boolean
 >numOrBool = strOrNumOrBool : number | boolean
+>                           : ^^^^^^^^^^^^^^^^
 >numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 >strOrNumOrBool : number | boolean
+>               : ^^^^^^^^^^^^^^^^
 }

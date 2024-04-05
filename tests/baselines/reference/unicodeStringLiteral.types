@@ -1,5 +1,9 @@
-=== tests/cases/compiler/unicodeStringLiteral.ts ===
+//// [tests/cases/compiler/unicodeStringLiteral.ts] ////
+
+=== unicodeStringLiteral.ts ===
 var ੳ = "Ü­ਲĭ";
 >ੳ : string
+>  : ^^^^^^
 >"Ü­ਲĭ" : "Ü­ਲ\u000Eĭ"
+>        : ^^^^^^^^^^^^
 

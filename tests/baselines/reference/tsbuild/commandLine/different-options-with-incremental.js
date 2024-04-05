@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,7 +28,11 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 
 
@@ -41,8 +46,16 @@ Output::
 [[90m12:00:14 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -99,7 +112,7 @@ exports.d = b_1.b;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,15 +159,21 @@ exports.d = b_1.b;
         "signature": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
-    "referencedMap": {
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./d.ts": [
-        "./b.ts"
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
       ]
-    },
-    "exportedModulesMap": {
+    ],
+    "referencedMap": {
       "./c.ts": [
         "./a.ts"
       ],
@@ -171,7 +190,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 960
+  "size": 940
 }
 
 
@@ -190,8 +209,17 @@ Output::
 [[90m12:00:24 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "sourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -250,7 +278,7 @@ exports.d = b_1.b;
 {"version":3,"file":"d.js","sourceRoot":"","sources":["d.ts"],"names":[],"mappings":";;;AAAA,yBAAwB;AAAa,QAAA,CAAC,GAAG,KAAC,CAAC"}
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"sourceMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"sourceMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -297,18 +325,24 @@ exports.d = b_1.b;
         "signature": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "sourceMap": true
     },
     "referencedMap": {
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./d.ts": [
-        "./b.ts"
-      ]
-    },
-    "exportedModulesMap": {
       "./c.ts": [
         "./a.ts"
       ],
@@ -325,7 +359,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 989
+  "size": 969
 }
 
 
@@ -344,8 +378,16 @@ Output::
 [[90m12:00:38 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -392,7 +434,7 @@ exports.d = b_1.b;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -439,15 +481,21 @@ exports.d = b_1.b;
         "signature": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
-    "referencedMap": {
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./d.ts": [
-        "./b.ts"
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
       ]
-    },
-    "exportedModulesMap": {
+    ],
+    "referencedMap": {
       "./c.ts": [
         "./a.ts"
       ],
@@ -464,7 +512,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 960
+  "size": 940
 }
 
 
@@ -483,8 +531,17 @@ Output::
 [[90m12:00:48 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -515,7 +572,7 @@ export declare const d = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -548,36 +605,50 @@ export declare const d = 10;
       "./a.ts": {
         "original": {
           "version": "-18487752940-export const a = 10;const aLocal = 10;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true
     },
@@ -589,7 +660,6 @@ export declare const d = 10;
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -599,7 +669,7 @@ export declare const d = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1264
+  "size": 1247
 }
 
 
@@ -618,8 +688,18 @@ Output::
 [[90m12:00:58 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -662,7 +742,7 @@ export declare const d = 10;
 {"version":3,"file":"d.d.ts","sourceRoot":"","sources":["d.ts"],"names":[],"mappings":"AAAwB,eAAO,MAAM,CAAC,KAAI,CAAC"}
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"declaration":true,"declarationMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-18487752940-export const a = 10;const aLocal = 10;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -695,36 +775,50 @@ export declare const d = 10;
       "./a.ts": {
         "original": {
           "version": "-18487752940-export const a = 10;const aLocal = 10;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true
@@ -737,7 +831,6 @@ export declare const d = 10;
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -747,7 +840,7 @@ export declare const d = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1286
+  "size": 1269
 }
 
 
@@ -785,8 +878,16 @@ Output::
 [[90m12:01:15 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -811,7 +912,7 @@ var aLocal = 100;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -844,36 +945,50 @@ var aLocal = 100;
       "./a.ts": {
         "original": {
           "version": "-17390360476-export const a = 10;const aLocal = 100;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "referencedMap": {
       "./c.ts": [
         "./a.ts"
@@ -882,7 +997,6 @@ var aLocal = 100;
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -892,7 +1006,7 @@ var aLocal = 100;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1234
+  "size": 1217
 }
 
 
@@ -911,8 +1025,18 @@ Output::
 [[90m12:01:22 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -935,7 +1059,7 @@ No shapes updated in the builder::
 //// [/src/project/d.d.ts] file written with same contents
 //// [/src/project/d.d.ts.map] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"declaration":true,"declarationMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -968,36 +1092,50 @@ No shapes updated in the builder::
       "./a.ts": {
         "original": {
           "version": "-17390360476-export const a = 10;const aLocal = 100;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true
@@ -1010,7 +1148,6 @@ No shapes updated in the builder::
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -1020,7 +1157,7 @@ No shapes updated in the builder::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1287
+  "size": 1270
 }
 
 
@@ -1055,8 +1192,17 @@ Output::
 [[90m12:01:38 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"inlineSourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "inlineSourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1103,7 +1249,7 @@ exports.d = b_1.b;
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEseUJBQXdCO0FBQWEsUUFBQSxDQUFDLEdBQUcsS0FBQyxDQUFDIn0=
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"inlineSourceMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"inlineSourceMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1136,36 +1282,50 @@ exports.d = b_1.b;
       "./a.ts": {
         "original": {
           "version": "-17390360476-export const a = 10;const aLocal = 100;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "inlineSourceMap": true
     },
@@ -1177,7 +1337,6 @@ exports.d = b_1.b;
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -1187,7 +1346,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1269
+  "size": 1252
 }
 
 
@@ -1206,8 +1365,17 @@ Output::
 [[90m12:01:48 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "sourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1260,7 +1428,7 @@ exports.d = b_1.b;
 
 //// [/src/project/d.js.map] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"sourceMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"sourceMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1293,36 +1461,50 @@ exports.d = b_1.b;
       "./a.ts": {
         "original": {
           "version": "-17390360476-export const a = 10;const aLocal = 100;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "sourceMap": true
     },
@@ -1334,7 +1516,6 @@ exports.d = b_1.b;
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -1344,7 +1525,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1263
+  "size": 1246
 }
 
 
@@ -1363,8 +1544,16 @@ Output::
 [[90m12:02:02 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1411,7 +1600,7 @@ exports.d = b_1.b;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1444,36 +1633,50 @@ exports.d = b_1.b;
       "./a.ts": {
         "original": {
           "version": "-17390360476-export const a = 10;const aLocal = 100;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "referencedMap": {
       "./c.ts": [
         "./a.ts"
@@ -1482,7 +1685,6 @@ exports.d = b_1.b;
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -1492,7 +1694,7 @@ exports.d = b_1.b;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1234
+  "size": 1217
 }
 
 
@@ -1511,8 +1713,18 @@ Output::
 [[90m12:02:12 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1535,7 +1747,7 @@ No shapes updated in the builder::
 //// [/src/project/d.d.ts] file written with same contents
 //// [/src/project/d.d.ts.map] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3762229137-export declare const a = 10;\r\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-1807916688-export declare const b = 10;\r\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4148571535-export declare const c = 10;\r\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-6489226382-export declare const d = 10;\r\n"}],"options":{"declaration":true,"declarationMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17390360476-export const a = 10;const aLocal = 100;","signature":"-3497920574-export declare const a = 10;\n"},{"version":"-6189287562-export const b = 10;const bLocal = 10;","signature":"-3829150557-export declare const b = 10;\n"},{"version":"3248317647-import { a } from \"./a\";export const c = a;","signature":"-4160380540-export declare const c = 10;\n"},{"version":"-19615769517-import { b } from \"./b\";export const d = b;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true},"fileIdsList":[[2],[3]],"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1568,36 +1780,50 @@ No shapes updated in the builder::
       "./a.ts": {
         "original": {
           "version": "-17390360476-export const a = 10;const aLocal = 100;",
-          "signature": "-3762229137-export declare const a = 10;\r\n"
+          "signature": "-3497920574-export declare const a = 10;\n"
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
-        "signature": "-3762229137-export declare const a = 10;\r\n"
+        "signature": "-3497920574-export declare const a = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-6189287562-export const b = 10;const bLocal = 10;",
-          "signature": "-1807916688-export declare const b = 10;\r\n"
+          "signature": "-3829150557-export declare const b = 10;\n"
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "signature": "-1807916688-export declare const b = 10;\r\n"
+        "signature": "-3829150557-export declare const b = 10;\n"
       },
       "./c.ts": {
         "original": {
           "version": "3248317647-import { a } from \"./a\";export const c = a;",
-          "signature": "-4148571535-export declare const c = 10;\r\n"
+          "signature": "-4160380540-export declare const c = 10;\n"
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "signature": "-4148571535-export declare const c = 10;\r\n"
+        "signature": "-4160380540-export declare const c = 10;\n"
       },
       "./d.ts": {
         "original": {
           "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-          "signature": "-6489226382-export declare const d = 10;\r\n"
+          "signature": "-4491610523-export declare const d = 10;\n"
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "signature": "-6489226382-export declare const d = 10;\r\n"
+        "signature": "-4491610523-export declare const d = 10;\n"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true
@@ -1610,7 +1836,6 @@ No shapes updated in the builder::
         "./b.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./a.ts",
@@ -1620,7 +1845,7 @@ No shapes updated in the builder::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1287
+  "size": 1270
 }
 
 

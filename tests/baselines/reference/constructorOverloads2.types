@@ -1,29 +1,39 @@
-=== tests/cases/compiler/constructorOverloads2.ts ===
+//// [tests/cases/compiler/constructorOverloads2.ts] ////
+
+=== constructorOverloads2.ts ===
 class FooBase {
 >FooBase : FooBase
+>        : ^^^^^^^
 
     constructor(s: string);
 >s : string
+>  : ^^^^^^
 
     constructor(n: number);
 >n : number
+>  : ^^^^^^
 
     constructor(x: any) {
 >x : any
     }
     bar1() {  /*WScript.Echo("base bar1");*/ }
 >bar1 : () => void
+>     : ^^^^^^^^^^
 }
 
 class Foo extends FooBase {
 >Foo : Foo
+>    : ^^^
 >FooBase : FooBase
+>        : ^^^^^^^
 
     constructor(s: string);
 >s : string
+>  : ^^^^^^
 
     constructor(n: number);
 >n : number
+>  : ^^^^^^
 
     constructor(a:any);
 >a : any
@@ -34,43 +44,69 @@ class Foo extends FooBase {
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : typeof FooBase
+>      : ^^^^^^^^^^^^^^
 >x : any
     }
     bar1() {  /*WScript.Echo("bar1");*/ }
 >bar1 : () => void
+>     : ^^^^^^^^^^
 }
 
 var f1 = new Foo("hey");
 >f1 : Foo
+>   : ^^^
 >new Foo("hey") : Foo
+>               : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"hey" : "hey"
+>      : ^^^^^
 
 var f2 = new Foo(0);
 >f2 : Foo
+>   : ^^^
 >new Foo(0) : Foo
+>           : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >0 : 0
+>  : ^
 
 var f3 = new Foo(f1);
 >f3 : Foo
+>   : ^^^
 >new Foo(f1) : Foo
+>            : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >f1 : Foo
+>   : ^^^
 
 var f4 = new Foo([f1,f2,f3]);
 >f4 : Foo
+>   : ^^^
 >new Foo([f1,f2,f3]) : Foo
+>                    : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >[f1,f2,f3] : Foo[]
+>           : ^^^^^
 >f1 : Foo
+>   : ^^^
 >f2 : Foo
+>   : ^^^
 >f3 : Foo
+>   : ^^^
 
 f1.bar1();
 >f1.bar1() : void
+>          : ^^^^
 >f1.bar1 : () => void
+>        : ^^^^^^^^^^
 >f1 : Foo
+>   : ^^^
 >bar1 : () => void
+>     : ^^^^^^^^^^
 

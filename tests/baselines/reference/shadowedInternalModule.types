@@ -1,74 +1,105 @@
-=== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts ===
+//// [tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts] ////
+
+=== shadowedInternalModule.ts ===
 // all errors imported modules conflict with local variables
 
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export var Point = { x: 0, y: 0 }
 >Point : { x: number; y: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 } 
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
     var A = { x: 0, y: 0 };
 >A : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     import Point = A;
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >A : typeof Point
+>  : ^^^^^^^^^^^^
 }
 
 module X {
 >X : typeof X
+>  : ^^^^^^^^
 
     export module Y {
         export interface Point{
             x: number;
 >x : number
+>  : ^^^^^^
 
             y: number
 >y : number
+>  : ^^^^^^
         }
     }
 
     export class Y {
 >Y : Y
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 }
 
 module Z {
 >Z : typeof Z
+>  : ^^^^^^^^
 
     import Y = X.Y;
 >Y : number
+>  : ^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >Y : Y
+>  : ^
 
     var Y = 12;
 >Y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 }
 
 //
@@ -76,15 +107,20 @@ module Z {
 module a {
   export type A = number;
 >A : number
+>  : ^^^^^^
 }
 
 module b {
 >b : typeof b
+>  : ^^^^^^^^
 
   export import A = a.A;
 >A : any
+>  : ^^^
 >a : any
+>  : ^^^
 >A : number
+>  : ^^^^^^
 
   export module A {}
 }
@@ -92,42 +128,59 @@ module b {
 module c {
   import any = b.A;
 >any : any
+>    : ^^^
 >b : typeof b
+>  : ^^^^^^^^
 >A : number
+>  : ^^^^^^
 }
 
 //
 
 module q {
 >q : typeof q
+>  : ^^^^^^^^
 
   export const Q = {};
 >Q : {}
+>  : ^^
 >{} : {}
+>   : ^^
 }
 
 module r {
 >r : typeof r
+>  : ^^^^^^^^
 
   export import Q = q.Q;
 >Q : {}
+>  : ^^
 >q : typeof q
+>  : ^^^^^^^^
 >Q : {}
+>  : ^^
 
   export type Q = number;
 >Q : number
+>  : ^^^^^^
 }
 
 module s {
 >s : typeof s
+>  : ^^^^^^^^
 
   import Q = r.Q;
 >Q : 0
+>  : ^
 >r : typeof r
+>  : ^^^^^^^^
 >Q : number
+>  : ^^^^^^
 
   const Q = 0;
 >Q : 0
+>  : ^
 >0 : 0
+>  : ^
 }
 

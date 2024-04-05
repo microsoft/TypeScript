@@ -1,62 +1,83 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifiersAcrossFileBoundaries.ts] ////
+
+=== file1.ts ===
 interface I { }
 class C1 { }
 >C1 : C1
+>   : ^^
 
 class C2 { }
 >C2 : C2
+>   : ^^
 
 function f() { }
 >f : typeof f
+>  : ^^^^^^^^
 
 var v = 3;
 >v : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     static x: number;
 >x : number
+>  : ^^^^^^
 }
 
 module N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export module F {
 >F : typeof F
+>  : ^^^^^^^^
 
         var t;
 >t : any
+>  : ^^^
     }
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 class I { } // error -- cannot merge interface with non-ambient class
 >I : I
+>  : ^
 
 interface C1 { } // error -- cannot merge interface with non-ambient class
 function C2() { } // error -- cannot merge function with non-ambient class
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 class f { } // error -- cannot merge function with non-ambient class
 >f : f
+>  : ^
 
 var v = 3;
 >v : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     export var x: number; // error for redeclaring var in a different parent
 >x : number
+>  : ^^^^^^
 }
 
 declare module N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export function F(); // no error because function is ambient
 >F : typeof F
+>  : ^^^^^^^^
 }
 

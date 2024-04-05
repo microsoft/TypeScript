@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfUnion.ts] ////
+
 //// [metadataOfUnion.ts]
 function PropDeco(target: Object, propKey: string | symbol) { }
 

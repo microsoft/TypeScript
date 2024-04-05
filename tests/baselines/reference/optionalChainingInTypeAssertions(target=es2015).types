@@ -1,82 +1,121 @@
-=== tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts] ////
+
+=== optionalChainingInTypeAssertions.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     m() {}
 >m : () => void
+>  : ^^^^^^^^^^
 }
 
 const foo = new Foo();
 >foo : Foo
+>    : ^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 (foo.m as any)?.();
 >(foo.m as any)?.() : any
 >(foo.m as any) : any
 >foo.m as any : any
 >foo.m : () => void
+>      : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 (<any>foo.m)?.();
 >(<any>foo.m)?.() : any
 >(<any>foo.m) : any
 ><any>foo.m : any
 >foo.m : () => void
+>      : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 /*a1*/(/*a2*/foo.m as any/*a3*/)/*a4*/?.();
 >(/*a2*/foo.m as any/*a3*/)/*a4*/?.() : any
 >(/*a2*/foo.m as any/*a3*/) : any
 >foo.m as any : any
 >foo.m : () => void
+>      : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 /*b1*/(/*b2*/<any>foo.m/*b3*/)/*b4*/?.();
 >(/*b2*/<any>foo.m/*b3*/)/*b4*/?.() : any
 >(/*b2*/<any>foo.m/*b3*/) : any
 ><any>foo.m : any
 >foo.m : () => void
+>      : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/50148
 (foo?.m as any).length;
 >(foo?.m as any).length : any
 >(foo?.m as any) : any
+>                : ^^^
 >foo?.m as any : any
 >foo?.m : () => void
+>       : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 >length : any
+>       : ^^^
 
 (<any>foo?.m).length;
 >(<any>foo?.m).length : any
 >(<any>foo?.m) : any
+>              : ^^^
 ><any>foo?.m : any
 >foo?.m : () => void
+>       : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >m : () => void
+>  : ^^^^^^^^^^
 >length : any
+>       : ^^^
 
 (foo?.["m"] as any).length;
 >(foo?.["m"] as any).length : any
 >(foo?.["m"] as any) : any
+>                    : ^^^
 >foo?.["m"] as any : any
 >foo?.["m"] : () => void
+>           : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >"m" : "m"
+>    : ^^^
 >length : any
+>       : ^^^
 
 (<any>foo?.["m"]).length;
 >(<any>foo?.["m"]).length : any
 >(<any>foo?.["m"]) : any
+>                  : ^^^
 ><any>foo?.["m"] : any
 >foo?.["m"] : () => void
+>           : ^^^^^^^^^^
 >foo : Foo
+>    : ^^^
 >"m" : "m"
+>    : ^^^
 >length : any
+>       : ^^^
 

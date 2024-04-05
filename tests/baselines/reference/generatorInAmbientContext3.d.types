@@ -1,7 +1,11 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext3.d.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext3.d.ts] ////
+
+=== generatorInAmbientContext3.d.ts ===
 declare class C {
 >C : C
+>  : ^
 
     *generator(): any;
 >generator : () => any
+>          : ^^^^^^   
 }

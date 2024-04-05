@@ -1,111 +1,161 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportForms.ts] ////
+
+=== cls.js ===
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/conformance/jsdoc/declarations/func.js ===
+=== func.js ===
 export function func() {}
 >func : () => void
+>     : ^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+=== bar.js ===
 
 export * from "./cls";
 
-=== tests/cases/conformance/jsdoc/declarations/bar2.js ===
+=== bar2.js ===
 
 export * from "./func";
 export * from "./cls";
 
-=== tests/cases/conformance/jsdoc/declarations/baz.js ===
+=== baz.js ===
 import {Foo} from "./cls";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export {Foo};
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/bat.js ===
+=== bat.js ===
 import * as ns from "./cls";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export default ns;
 >ns : typeof ns
+>   : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/ban.js ===
+=== ban.js ===
 import * as ns from "./cls";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export {ns};
 >ns : typeof ns
+>   : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/bol.js ===
+=== bol.js ===
 import * as ns from "./cls";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export { ns as classContainer };
 >ns : typeof ns
+>   : ^^^^^^^^^
 >classContainer : typeof ns
+>               : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/cjs.js ===
+=== cjs.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports = { ns };
 >module.exports = { ns } : typeof module.exports
+>                        : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{ ns } : { ns: typeof ns; }
+>       : ^^^^^^^^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/cjs2.js ===
+=== cjs2.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports = ns;
 >module.exports = ns : typeof ns
+>                    : ^^^^^^^^^
 >module.exports : typeof ns
+>               : ^^^^^^^^^
 >module : { exports: typeof ns; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof ns
+>        : ^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/cjs3.js ===
+=== cjs3.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports.ns = ns;
 >module.exports.ns = ns : typeof ns
+>                       : ^^^^^^^^^
 >module.exports.ns : typeof ns
+>                  : ^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/cjs4.js ===
+=== cjs4.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports.names = ns;
 >module.exports.names = ns : typeof ns
+>                          : ^^^^^^^^^
 >module.exports.names : typeof ns
+>                     : ^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >names : typeof ns
+>      : ^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/includeAll.js ===
+=== includeAll.js ===
 
 import "./cjs4";
 import "./cjs3";

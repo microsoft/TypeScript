@@ -1,23 +1,33 @@
-=== tests/cases/compiler/db.d.ts ===
+//// [tests/cases/compiler/circularReferenceInImport.ts] ////
+
+=== db.d.ts ===
 declare namespace Db {
 >Db : typeof Types
+>   : ^^^^^^^^^^^^
 
     export import Types = Db;
 >Types : typeof Types
+>      : ^^^^^^^^^^^^
 >Db : typeof Types
+>   : ^^^^^^^^^^^^
 }
 
 export = Db;
 >Db : typeof Db
+>   : ^^^^^^^^^
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import * as Db from "./db"
 >Db : typeof Db
+>   : ^^^^^^^^^
 
 export function foo() {
 >foo : () => Object
+>    : ^^^^^^^^^^^^
 
     return new Object()
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts] ////
+
 //// [invokingNonGenericMethodWithTypeArguments2.ts]
 class Foo {
     private foo: any;

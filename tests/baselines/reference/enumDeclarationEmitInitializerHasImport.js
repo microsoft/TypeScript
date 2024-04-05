@@ -18,7 +18,7 @@ var Enum;
 (function (Enum) {
     Enum[Enum["Value1"] = 0] = "Value1";
     Enum[Enum["Value2"] = 1] = "Value2";
-})(Enum = exports.Enum || (exports.Enum = {}));
+})(Enum || (exports.Enum = Enum = {}));
 //// [consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

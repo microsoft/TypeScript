@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty12.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty12.ts]
 enum E {
     A = "A",

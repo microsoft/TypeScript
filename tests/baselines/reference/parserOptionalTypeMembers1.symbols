@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserOptionalTypeMembers1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserOptionalTypeMembers1.ts] ////
+
+=== parserOptionalTypeMembers1.ts ===
 interface PropertyDescriptor2 {
 >PropertyDescriptor2 : Symbol(PropertyDescriptor2, Decl(parserOptionalTypeMembers1.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionElementAccess.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionElementAccess.ts] ////
+
+=== es5-asyncFunctionElementAccess.ts ===
 declare var x, y, z, a, b, c;
 >x : any
 >y : any
@@ -9,6 +11,7 @@ declare var x, y, z, a, b, c;
 
 async function elementAccess0() {
 >elementAccess0 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     z = await x[y];
 >z = await x[y] : any
@@ -21,6 +24,7 @@ async function elementAccess0() {
 
 async function elementAccess1() {
 >elementAccess1 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     z = (await x)[y];
 >z = (await x)[y] : any
@@ -34,6 +38,7 @@ async function elementAccess1() {
 
 async function elementAccess2() {
 >elementAccess2 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     z = x[await y];
 >z = x[await y] : any

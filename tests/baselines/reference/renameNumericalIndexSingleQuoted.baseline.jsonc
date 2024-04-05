@@ -1,0 +1,15 @@
+// === findRenameLocations ===
+// @quotePreference: single
+
+// === /tests/cases/fourslash/renameNumericalIndexSingleQuoted.ts ===
+// const foo = { /*RENAME*/<|[|0RENAME|]: true|> };
+// foo[/*START PREFIX*/'[|0RENAME|]'/*END SUFFIX*/];
+
+
+
+// === findRenameLocations ===
+// @quotePreference: single
+
+// === /tests/cases/fourslash/renameNumericalIndexSingleQuoted.ts ===
+// const foo = { <|[|0RENAME|]: true|> };
+// foo[/*START PREFIX*/'/*RENAME*/[|0RENAME|]'/*END SUFFIX*/];

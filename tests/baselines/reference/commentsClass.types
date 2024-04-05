@@ -1,20 +1,29 @@
-=== tests/cases/compiler/commentsClass.ts ===
+//// [tests/cases/compiler/commentsClass.ts] ////
+
+=== commentsClass.ts ===
 /** This is class c2 without constuctor*/
 class c2 {
 >c2 : c2
+>   : ^^
 
 } // trailing comment1
 var i2 = new c2();
 >i2 : c2
+>   : ^^
 >new c2() : c2
+>         : ^^
 >c2 : typeof c2
+>   : ^^^^^^^^^
 
 var i2_c = c2;
 >i2_c : typeof c2
+>     : ^^^^^^^^^
 >c2 : typeof c2
+>   : ^^^^^^^^^
 
 class c3 {
 >c3 : c3
+>   : ^^
 
     /** Constructor comment*/
     constructor() {
@@ -22,16 +31,22 @@ class c3 {
 } /* trailing comment 2 */
 var i3 = new c3();
 >i3 : c3
+>   : ^^
 >new c3() : c3
+>         : ^^
 >c3 : typeof c3
+>   : ^^^^^^^^^
 
 var i3_c = c3;
 >i3_c : typeof c3
+>     : ^^^^^^^^^
 >c3 : typeof c3
+>   : ^^^^^^^^^
 
 /** Class comment*/
 class c4 {
 >c4 : c4
+>   : ^^
 
     /** Constructor comment*/
     constructor() {
@@ -39,36 +54,50 @@ class c4 {
 }
 var i4 = new c4();
 >i4 : c4
+>   : ^^
 >new c4() : c4
+>         : ^^
 >c4 : typeof c4
+>   : ^^^^^^^^^
 
 var i4_c = c4;
 >i4_c : typeof c4
+>     : ^^^^^^^^^
 >c4 : typeof c4
+>   : ^^^^^^^^^
 
 /** Class with statics*/
 class c5 {
 >c5 : c5
+>   : ^^
 
     static s1: number;
 >s1 : number
+>   : ^^^^^^
 }
 var i5 = new c5();
 >i5 : c5
+>   : ^^
 >new c5() : c5
+>         : ^^
 >c5 : typeof c5
+>   : ^^^^^^^^^
 
 var i5_c = c5;
 >i5_c : typeof c5
+>     : ^^^^^^^^^
 >c5 : typeof c5
+>   : ^^^^^^^^^
 
 /// class with statics and constructor
 class c6 { /// class with statics and constructor2
 >c6 : c6
+>   : ^^
 
     /// s1 comment
     static s1: number; /// s1 comment2
 >s1 : number
+>   : ^^^^^^
 
     /// constructor comment
     constructor() { /// constructor comment2
@@ -76,20 +105,27 @@ class c6 { /// class with statics and constructor2
 }
 var i6 = new c6();
 >i6 : c6
+>   : ^^
 >new c6() : c6
+>         : ^^
 >c6 : typeof c6
+>   : ^^^^^^^^^
 
 var i6_c = c6;
 >i6_c : typeof c6
+>     : ^^^^^^^^^
 >c6 : typeof c6
+>   : ^^^^^^^^^
 
 // class with statics and constructor
 class c7 {
 >c7 : c7
+>   : ^^
 
     // s1 comment
     static s1: number;
 >s1 : number
+>   : ^^^^^^
 
     // constructor comment
     constructor() {
@@ -97,21 +133,28 @@ class c7 {
 }
 var i7 = new c7();
 >i7 : c7
+>   : ^^
 >new c7() : c7
+>         : ^^
 >c7 : typeof c7
+>   : ^^^^^^^^^
 
 var i7_c = c7;
 >i7_c : typeof c7
+>     : ^^^^^^^^^
 >c7 : typeof c7
+>   : ^^^^^^^^^
 
 /** class with statics and constructor
  */
 class c8 {
 >c8 : c8
+>   : ^^
 
     /** s1 comment */
     static s1: number; /** s1 comment2 */
 >s1 : number
+>   : ^^^^^^
 
     /** constructor comment 
     */
@@ -122,15 +165,21 @@ class c8 {
 }
 var i8 = new c8();
 >i8 : c8
+>   : ^^
 >new c8() : c8
+>         : ^^
 >c8 : typeof c8
+>   : ^^^^^^^^^
 
 var i8_c = c8;
 >i8_c : typeof c8
+>     : ^^^^^^^^^
 >c8 : typeof c8
+>   : ^^^^^^^^^
 
 class c9 {
 >c9 : c9
+>   : ^^
 
     constructor() {
         /// This is some detached comment

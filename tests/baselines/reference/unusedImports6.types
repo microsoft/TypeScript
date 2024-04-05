@@ -1,24 +1,31 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/unusedImports6.ts] ////
+
+=== file1.ts ===
 export class Calculator {
 >Calculator : Calculator
+>           : ^^^^^^^^^^
 
     handleChar() {}
 >handleChar : () => void
+>           : ^^^^^^^^^^
 }
 
 export function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
 }
 
 export default function test2() {
 >test2 : () => void
+>      : ^^^^^^^^^^
 
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import d from "./file1"
 >d : () => void
+>  : ^^^^^^^^^^
 
 
 

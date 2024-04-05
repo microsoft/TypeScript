@@ -1,23 +1,34 @@
-=== tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts ===
+//// [tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts] ////
+
+=== incompatibleAssignmentOfIdenticallyNamedTypes.ts ===
 interface T { }
 declare const a: T;
 >a : T
+>  : ^
 
 class Foo<T> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
         this.x = a;
 >this.x = a : globalThis.T
+>           : ^^^^^^^^^^^^
 >this.x : T
+>       : ^
 >this : this
+>     : ^^^^
 >x : T
+>  : ^
 >a : globalThis.T
+>  : ^^^^^^^^^^^^
     }
 }
 

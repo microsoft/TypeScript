@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyFromCircularInference.ts ===
+//// [tests/cases/compiler/implicitAnyFromCircularInference.ts] ////
+
+=== implicitAnyFromCircularInference.ts ===
 // Error expected
 var a: typeof a;
 >a : Symbol(a, Decl(implicitAnyFromCircularInference.ts, 1, 3))
@@ -72,7 +74,6 @@ function foo(x: A): string { return "abc"; }
 class C {
 >C : Symbol(C, Decl(implicitAnyFromCircularInference.ts, 35, 44))
 
-    // Error expected
     s = foo(this);
 >s : Symbol(C.s, Decl(implicitAnyFromCircularInference.ts, 37, 9))
 >foo : Symbol(foo, Decl(implicitAnyFromCircularInference.ts, 33, 1))
@@ -80,16 +81,16 @@ class C {
 }
 
 class D {
->D : Symbol(D, Decl(implicitAnyFromCircularInference.ts, 40, 1))
+>D : Symbol(D, Decl(implicitAnyFromCircularInference.ts, 39, 1))
 
     // Error expected
     get x() {
->x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 42, 9))
+>x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
 
         return this.x;
->this.x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 42, 9))
->this : Symbol(D, Decl(implicitAnyFromCircularInference.ts, 40, 1))
->x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 42, 9))
+>this.x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
+>this : Symbol(D, Decl(implicitAnyFromCircularInference.ts, 39, 1))
+>x : Symbol(D.x, Decl(implicitAnyFromCircularInference.ts, 41, 9))
     }
 }
 

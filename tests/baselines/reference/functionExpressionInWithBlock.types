@@ -1,16 +1,23 @@
-=== tests/cases/compiler/functionExpressionInWithBlock.ts ===
+//// [tests/cases/compiler/functionExpressionInWithBlock.ts] ////
+
+=== functionExpressionInWithBlock.ts ===
 function x() {
 >x : () => void
+>  : ^^^^^^^^^^
 
  with({}) {
 >{} : {}
+>   : ^^
 
   function f() {
 >f : any
+>  : ^^^
 
    () => this;
 >() => this : any
+>           : ^^^
 >this : any
+>     : ^^^
   }
  }
 }

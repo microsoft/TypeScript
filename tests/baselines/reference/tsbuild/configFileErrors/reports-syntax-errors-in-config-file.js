@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -47,7 +48,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"4646078106-export function foo() { }","signature":false},{"version":"1045484683-export function bar() { }","signature":false}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"4646078106-export function foo() { }","signature":false},{"version":"1045484683-export function bar() { }","signature":false}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -82,11 +83,20 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "version": "1045484683-export function bar() { }"
       }
     },
+    "root": [
+      [
+        2,
+        "./a.ts"
+      ],
+      [
+        3,
+        "./b.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "changeFileSet": [
       "../lib/lib.d.ts",
       "./a.ts",
@@ -94,7 +104,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ]
   },
   "version": "FakeTSVersion",
-  "size": 834
+  "size": 823
 }
 
 
@@ -151,7 +161,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"9819159940-export function foo() { }export function fooBar() { }","signature":false},{"version":"1045484683-export function bar() { }","signature":false}],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"9819159940-export function foo() { }export function fooBar() { }","signature":false},{"version":"1045484683-export function bar() { }","signature":false}],"root":[2,3],"options":{"composite":true,"declaration":true},"referencedMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -186,12 +196,21 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "version": "1045484683-export function bar() { }"
       }
     },
+    "root": [
+      [
+        2,
+        "./a.ts"
+      ],
+      [
+        3,
+        "./b.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "changeFileSet": [
       "../lib/lib.d.ts",
       "./a.ts",
@@ -199,7 +218,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ]
   },
   "version": "FakeTSVersion",
-  "size": 881
+  "size": 870
 }
 
 
@@ -226,7 +245,16 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Change:: builds after fixing config file errors
 Input::
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true
+  },
+  "files": [
+    "a.ts",
+    "b.ts"
+  ]
+}
 
 
 
@@ -243,11 +271,10 @@ export declare function fooBar(): void;
 //// [/src/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooBar = exports.foo = void 0;
-function foo() { }
 exports.foo = foo;
-function fooBar() { }
 exports.fooBar = fooBar;
+function foo() { }
+function fooBar() { }
 
 
 //// [/src/b.d.ts]
@@ -257,13 +284,12 @@ export declare function bar(): void;
 //// [/src/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
 exports.bar = bar;
+function bar() { }
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9819159940-export function foo() { }export function fooBar() { }","signature":"-827728784-export declare function foo(): void;\r\nexport declare function fooBar(): void;\r\n"},{"version":"1045484683-export function bar() { }","signature":"-1357953631-export declare function bar(): void;\r\n"}],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9819159940-export function foo() { }export function fooBar() { }","signature":"-9218003498-export declare function foo(): void;\nexport declare function fooBar(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"root":[2,3],"options":{"composite":true,"declaration":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -286,26 +312,35 @@ exports.bar = bar;
       "./a.ts": {
         "original": {
           "version": "9819159940-export function foo() { }export function fooBar() { }",
-          "signature": "-827728784-export declare function foo(): void;\r\nexport declare function fooBar(): void;\r\n"
+          "signature": "-9218003498-export declare function foo(): void;\nexport declare function fooBar(): void;\n"
         },
         "version": "9819159940-export function foo() { }export function fooBar() { }",
-        "signature": "-827728784-export declare function foo(): void;\r\nexport declare function fooBar(): void;\r\n"
+        "signature": "-9218003498-export declare function foo(): void;\nexport declare function fooBar(): void;\n"
       },
       "./b.ts": {
         "original": {
           "version": "1045484683-export function bar() { }",
-          "signature": "-1357953631-export declare function bar(): void;\r\n"
+          "signature": "-2904461644-export declare function bar(): void;\n"
         },
         "version": "1045484683-export function bar() { }",
-        "signature": "-1357953631-export declare function bar(): void;\r\n"
+        "signature": "-2904461644-export declare function bar(): void;\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./a.ts"
+      ],
+      [
+        3,
+        "./b.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./a.ts",
@@ -314,6 +349,6 @@ exports.bar = bar;
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1050
+  "size": 1034
 }
 

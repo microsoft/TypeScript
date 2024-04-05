@@ -695,7 +695,7 @@ interface Date {
     getMilliseconds(): number;
     /** Gets the milliseconds of a Date object using Universal Coordinated Time (UTC). */
     getUTCMilliseconds(): number;
-    /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
+    /** Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer. */
     getTimezoneOffset(): number;
     /**
       * Sets the date and time value in the Date object.
@@ -1387,7 +1387,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
+    new (buffer: ArrayBuffer & { BYTES_PER_ELEMENT?: never }, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
 

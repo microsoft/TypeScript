@@ -1,14 +1,27 @@
-=== tests/cases/compiler/parserUnparsedTokenCrash2.ts ===
+//// [tests/cases/compiler/parserUnparsedTokenCrash2.ts] ////
+
+=== parserUnparsedTokenCrash2.ts ===
 export = } x = ( y = z ==== 'function') {
 > : any
+> : ^^^
 >x = ( y = z ==== 'function' : "function"
+>                            : ^^^^^^^^^^
 >x : any
+>  : ^^^
 >( y = z ==== 'function' : "function"
+>                        : ^^^^^^^^^^
 >( y = z === : boolean
+>            : ^^^^^^^
 >y = z === : boolean
+>          : ^^^^^^^
 >y : any
+>  : ^^^
 >z === : boolean
+>      : ^^^^^^^
 >z : any
+>  : ^^^
 > : any
+> : ^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.ts] ////
+
 //// [declFileForClassWithPrivateOverloadedFunction.ts]
 class C {
     private foo(x: number);

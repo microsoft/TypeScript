@@ -1,4 +1,7 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_notSupported2.ts] ////
+
 === /a.ts ===
 import jsx from "./jsx";
 >jsx : any
+>    : ^^^
 

@@ -1,51 +1,77 @@
-=== tests/cases/conformance/externalModules/test/foo_3.ts ===
+//// [tests/cases/conformance/externalModules/nameWithRelativePaths.ts] ////
+
+=== test/foo_3.ts ===
 import foo0 = require('../foo_0');
 >foo0 : typeof foo0
+>     : ^^^^^^^^^^^
 
 import foo1 = require('./test/foo_1');
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 
 import foo2 = require('./.././test/foo_2');
 >foo2 : typeof foo2
+>     : ^^^^^^^^^^^
 
 if(foo2.M2.x){
 >foo2.M2.x : boolean
+>          : ^^^^^^^
 >foo2.M2 : typeof foo2.M2
+>        : ^^^^^^^^^^^^^^
 >foo2 : typeof foo2
+>     : ^^^^^^^^^^^
 >M2 : typeof foo2.M2
+>   : ^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
 	var x = foo0.foo + foo1.f();
 >x : number
+>  : ^^^^^^
 >foo0.foo + foo1.f() : number
+>                    : ^^^^^^
 >foo0.foo : number
+>         : ^^^^^^
 >foo0 : typeof foo0
+>     : ^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >foo1.f() : number
+>         : ^^^^^^
 >foo1.f : () => number
+>       : ^^^^^^^^^^^^
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 }
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export var foo = 42;
 >foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 
-=== tests/cases/conformance/externalModules/test/test/foo_1.ts ===
+=== test/test/foo_1.ts ===
 export function f(){
 >f : () => number
+>  : ^^^^^^^^^^^^
 
 	return 42;
 >42 : 42
+>   : ^^
 }
 
-=== tests/cases/conformance/externalModules/test/foo_2.ts ===
+=== test/foo_2.ts ===
 export module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
 	export var x = true;
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 

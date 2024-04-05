@@ -26,7 +26,6 @@
             "end": 11,
             "flags": "JSDoc",
             "transformFlags": 0,
-            "originalKeywordKind": "FunctionKeyword",
             "escapedText": "function"
         }
     }

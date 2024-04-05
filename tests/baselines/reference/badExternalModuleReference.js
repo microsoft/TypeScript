@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badExternalModuleReference.ts] ////
+
 //// [badExternalModuleReference.ts]
 import a1 = require("garbage");
 export declare var a: {

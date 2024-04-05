@@ -1,13 +1,17 @@
-=== tests/cases/compiler/es5-asyncFunction.ts ===
+//// [tests/cases/compiler/es5-asyncFunction.ts] ////
+
+=== es5-asyncFunction.ts ===
 declare var x;
 >x : any
 
 async function empty() {
 >empty : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
 }
 
 async function singleAwait() {
 >singleAwait : () => Promise<void>
+>            : ^^^^^^^^^^^^^^^^^^^
 
     await x;
 >await x : any

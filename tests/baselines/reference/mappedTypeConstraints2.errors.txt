@@ -1,13 +1,18 @@
-tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
+mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
   Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
-tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(16,11): error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
+mappedTypeConstraints2.ts(16,11): error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
   Type 'Mapped3<K>[Uppercase<string>]' is not assignable to type '{ a: K; }'.
     Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
-tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
+mappedTypeConstraints2.ts(42,7): error TS2322: Type 'Mapped6<K>[keyof Mapped6<K>]' is not assignable to type '`_${string}`'.
+  Type 'Mapped6<K>[string] | Mapped6<K>[number] | Mapped6<K>[symbol]' is not assignable to type '`_${string}`'.
+    Type 'Mapped6<K>[string]' is not assignable to type '`_${string}`'.
+mappedTypeConstraints2.ts(51,57): error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
+mappedTypeConstraints2.ts(82,9): error TS2322: Type 'ObjectWithUnderscoredKeys<K>[`_${K}`]' is not assignable to type 'true'.
+  Type 'ObjectWithUnderscoredKeys<K>[`_${string}`]' is not assignable to type 'true'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts (3 errors) ====
+==== mappedTypeConstraints2.ts (5 errors) ====
     type Mapped1<K extends string> = { [P in K]: { a: P } };
     
     function f1<K extends string>(obj: Mapped1<K>, key: K) {
@@ -31,6 +36,36 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
 !!! error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
 !!! error TS2322:   Type 'Mapped3<K>[Uppercase<string>]' is not assignable to type '{ a: K; }'.
 !!! error TS2322:     Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
+    }
+    
+    type Mapped4<K extends `_${string}`> = {
+      [P in K]: P;
+    };
+    
+    function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
+      let s: `_${string}` = obj[key];
+    }
+    
+    type Mapped5<K extends string> = {
+      [P in K as P extends `_${string}` ? P : never]: P;
+    };
+    
+    function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
+      let s: `_${string}` = obj[key];
+    }
+    
+    // repro from #53066#issuecomment-1913384757
+    
+    type Mapped6<K extends string> = {
+      [P in K as `_${P}`]: P;
+    };
+    
+    function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
+      let s: `_${string}` = obj[key]; // Error
+          ~
+!!! error TS2322: Type 'Mapped6<K>[keyof Mapped6<K>]' is not assignable to type '`_${string}`'.
+!!! error TS2322:   Type 'Mapped6<K>[string] | Mapped6<K>[number] | Mapped6<K>[symbol]' is not assignable to type '`_${string}`'.
+!!! error TS2322:     Type 'Mapped6<K>[string]' is not assignable to type '`_${string}`'.
     }
     
     // Repro from #47794
@@ -64,5 +99,18 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
             }
         }
         return true;
+    }
+    
+    // repro from #50030
+    
+    type ObjectWithUnderscoredKeys<K extends string> = {
+        [k in K as `_${k}`]: true;
+    };
+    
+    function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+      const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`]; // assignability fails here, but ideally should not
+            ~~~~~~~~~~~~
+!!! error TS2322: Type 'ObjectWithUnderscoredKeys<K>[`_${K}`]' is not assignable to type 'true'.
+!!! error TS2322:   Type 'ObjectWithUnderscoredKeys<K>[`_${string}`]' is not assignable to type 'true'.
     }
     

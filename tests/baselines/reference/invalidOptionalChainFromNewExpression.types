@@ -1,22 +1,36 @@
-=== tests/cases/compiler/invalidOptionalChainFromNewExpression.ts ===
+//// [tests/cases/compiler/invalidOptionalChainFromNewExpression.ts] ////
+
+=== invalidOptionalChainFromNewExpression.ts ===
 class A {
 >A : A
+>  : ^
 
     b() {}
 >b : () => void
+>  : ^^^^^^^^^^
 }
 
 new A?.b()   // error
 >new A?.b() : void
+>           : ^^^^
 >new A?.b : () => void
+>         : ^^^^^^^^^^
 >new A : A
+>      : ^
 >A : typeof A
+>  : ^^^^^^^^
 >b : () => void
+>  : ^^^^^^^^^^
 
 new A()?.b() // ok
 >new A()?.b() : void
+>             : ^^^^
 >new A()?.b : () => void
+>           : ^^^^^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >b : () => void
+>  : ^^^^^^^^^^
 

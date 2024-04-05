@@ -1,36 +1,63 @@
-=== tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts] ////
+
+=== stringLiteralsAssertionsInEqualityComparisons02.ts ===
 type EnhancedString = string & { enhancements: any };
->EnhancedString : string & { enhancements: any; }
+>EnhancedString : EnhancedString
+>               : ^^^^^^^^^^^^^^
 >enhancements : any
+>             : ^^^
 
 var a = "foo" === "bar" as "baz";
 >a : boolean
+>  : ^^^^^^^
 >"foo" === "bar" as "baz" : boolean
+>                         : ^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >"bar" as "baz" : "baz"
+>               : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 var b = "foo" !== ("bar" as "foo");
 >b : boolean
+>  : ^^^^^^^
 >"foo" !== ("bar" as "foo") : boolean
+>                           : ^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >("bar" as "foo") : "foo"
+>                 : ^^^^^
 >"bar" as "foo" : "foo"
+>               : ^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 var c = "foo" == (<number>"bar");
 >c : boolean
+>  : ^^^^^^^
 >"foo" == (<number>"bar") : boolean
+>                         : ^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >(<number>"bar") : number
+>                : ^^^^^^
 ><number>"bar" : number
+>              : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 var d = "foo" === ("bar" as EnhancedString);
 >d : boolean
+>  : ^^^^^^^
 >"foo" === ("bar" as EnhancedString) : boolean
+>                                    : ^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >("bar" as EnhancedString) : EnhancedString
+>                          : ^^^^^^^^^^^^^^
 >"bar" as EnhancedString : EnhancedString
+>                        : ^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 

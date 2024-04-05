@@ -1,16 +1,18 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions2.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 export * from "fs";
 export * as fs from "fs";
 >fs : Symbol(fs, Decl(index.ts, 2, 6))
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 export * from "fs";
 export * as fs from "fs";
 >fs : Symbol(fs, Decl(index.ts, 2, 6))
 
-=== tests/cases/conformance/node/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 

@@ -1,35 +1,59 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts] ////
+
+=== ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     class Point {
 >Point : Point
+>      : ^^^^^
 
         constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
 
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
+>       : ^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     export var Unity = { start: new Point(0, 0), end: new Point(1, 0) };
 >Unity : { start: Point; end: Point; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ start: new Point(0, 0), end: new Point(1, 0) } : { start: Point; end: Point; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >start : Point
+>      : ^^^^^
 >new Point(0, 0) : Point
+>                : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 >end : Point
+>    : ^^^^^
 >new Point(1, 0) : Point
+>                : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 }
 

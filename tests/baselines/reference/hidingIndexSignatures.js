@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/hidingIndexSignatures.ts] ////
+
 //// [hidingIndexSignatures.ts]
 interface A {
     [a: string]: {};

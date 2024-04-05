@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts] ////
+
 //// [genericArrayWithoutTypeAnnotation.ts]
 interface IFoo<T>{
 }

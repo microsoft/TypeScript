@@ -1,5 +1,9 @@
+//// [tests/cases/compiler/jsFileCompilationNonNullAssertion.ts] ////
+
 === /src/a.js ===
 0!
 >0! : 0
+>   : ^
 >0 : 0
+>  : ^
 

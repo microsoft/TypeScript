@@ -1,14 +1,14 @@
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(23,15): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(36,19): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(53,21): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(53,45): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(65,17): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(78,38): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(94,21): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(23,15): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(36,19): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(53,21): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(53,45): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(65,17): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(78,38): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(94,21): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
 
 
-==== tests/cases/compiler/conditionalTypeDoesntSpinForever.ts (8 errors) ====
+==== conditionalTypeDoesntSpinForever.ts (8 errors) ====
     // A *self-contained* demonstration of the problem follows...
     // Test this by running `tsc --target es6` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.
     
@@ -34,7 +34,7 @@ tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: T
         "name" in soFar ? {} : {
                   ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:22:38: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:22:38: This type parameter might need an `extends object` constraint.
           name: <TYPE>(instance: TYPE = undefined) =>
             buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>
         }
@@ -50,7 +50,7 @@ tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: T
         "storedAs" in soFar ? {} : {
                       ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:35:37: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:35:37: This type parameter might need an `extends object` constraint.
           storedAsJsonEncodedRedisString: () =>
             buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as
               BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,
@@ -70,10 +70,10 @@ tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: T
         "identifier" in soFar || (!("record" in soFar)) ? {} : {
                         ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:52:44: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:52:44: This type parameter might need an `extends object` constraint.
                                                 ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:52:44: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:52:44: This type parameter might need an `extends object` constraint.
           identifier: <TYPE>(instance: TYPE = undefined) =>
             buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
         }
@@ -88,7 +88,7 @@ tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: T
         "record" in soFar ? {} : {
                     ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:64:40: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:64:40: This type parameter might need an `extends object` constraint.
           record: <TYPE>(instance: TYPE = undefined) =>
             buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>
         }
@@ -104,7 +104,7 @@ tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: T
         "maxMsToWaitBeforePublishing" in soFar ? {} : {
                                          ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:77:61: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:77:61: This type parameter might need an `extends object` constraint.
           maxMsToWaitBeforePublishing: (instance: number = 0) =>
             buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
           neverDelayPublishing: () =>
@@ -123,13 +123,13 @@ tests/cases/compiler/conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: T
         "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {
                         ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:93:22: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:93:22: This type parameter might need an `extends object` constraint.
           type: soFar,
           fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),
           hasField: (fieldName: string | number | symbol) => fieldName in soFar
                                                                           ~~~~~
 !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/conditionalTypeDoesntSpinForever.ts:93:22: This type parameter might need an `extends object` constraint.
+!!! related TS2208 conditionalTypeDoesntSpinForever.ts:93:22: This type parameter might need an `extends object` constraint.
         }
       );
       

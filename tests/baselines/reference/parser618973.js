@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser618973.ts] ////
+
 //// [parser618973.ts]
 export export class Foo {
   public Bar() {

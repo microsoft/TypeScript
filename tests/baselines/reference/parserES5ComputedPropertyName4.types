@@ -1,7 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName4.ts] ////
+
+=== parserES5ComputedPropertyName4.ts ===
 var v = { get [e]() { } };
 >v : { [x: number]: void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >{ get [e]() { } } : { [x: number]: void; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >[e] : void
+>    : ^^^^
 >e : any
+>  : ^^^
 

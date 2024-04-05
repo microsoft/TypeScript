@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorStaticParamNameErrors.ts] ////
+
 //// [constructorStaticParamNameErrors.ts]
 'use strict'
 // static as constructor parameter name should give error if 'use strict'

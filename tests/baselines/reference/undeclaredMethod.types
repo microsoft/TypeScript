@@ -1,33 +1,52 @@
-=== tests/cases/compiler/undeclaredMethod.ts ===
+//// [tests/cases/compiler/undeclaredMethod.ts] ////
+
+=== undeclaredMethod.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class C {
 >C : C
+>  : ^
 
         public salt() {}
 >salt : () => void
+>     : ^^^^^^^^^^
     }
 }
 
 var c:M.C = new M.C();
 >c : M.C
+>  : ^^^
 >M : any
+>  : ^^^
 >new M.C() : M.C
+>          : ^^^
 >M.C : typeof M.C
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >C : typeof M.C
+>  : ^^^^^^^^^^
 
 c.salt();	// cool
 >c.salt() : void
+>         : ^^^^
 >c.salt : () => void
+>       : ^^^^^^^^^^
 >c : M.C
+>  : ^^^
 >salt : () => void
+>     : ^^^^^^^^^^
 
 c.saltbar();	// crash
 >c.saltbar() : any
+>            : ^^^
 >c.saltbar : any
+>          : ^^^
 >c : M.C
+>  : ^^^
 >saltbar : any
+>        : ^^^
 
 

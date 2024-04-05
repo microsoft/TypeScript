@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyFromCircularInference.ts] ////
+
 //// [implicitAnyFromCircularInference.ts]
 // Error expected
 var a: typeof a;
@@ -37,7 +39,6 @@ interface A {
 function foo(x: A): string { return "abc"; }
 
 class C {
-    // Error expected
     s = foo(this);
 }
 
@@ -76,7 +77,6 @@ function h() {
 function foo(x) { return "abc"; }
 var C = /** @class */ (function () {
     function C() {
-        // Error expected
         this.s = foo(this);
     }
     return C;

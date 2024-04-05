@@ -5,5 +5,26 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": "* @a"
+    "comment": "*",
+    "tags": {
+        "0": {
+            "kind": "JSDocTag",
+            "pos": 5,
+            "end": 7,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 6,
+                "end": 7,
+                "transformFlags": 0,
+                "escapedText": "a"
+            }
+        },
+        "length": 1,
+        "pos": 5,
+        "end": 7,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
 }

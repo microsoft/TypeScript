@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyEnum.ts ===
+//// [tests/cases/compiler/emptyEnum.ts] ////
+
+=== emptyEnum.ts ===
 enum E {
 >E : Symbol(E, Decl(emptyEnum.ts, 0, 0))
 }

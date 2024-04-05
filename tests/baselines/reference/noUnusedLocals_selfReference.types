@@ -1,69 +1,102 @@
-=== tests/cases/compiler/noUnusedLocals_selfReference.ts ===
+//// [tests/cases/compiler/noUnusedLocals_selfReference.ts] ////
+
+=== noUnusedLocals_selfReference.ts ===
 export {}; // Make this a module scope, so these are local variables.
 
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     f;
 >f : () => void
+>  : ^^^^^^^^^^
 
     function g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
         g;
 >g : () => void
+>  : ^^^^^^^^^^
     }
 }
 class C {
 >C : C
+>  : ^
 
     m() { C; }
 >m : () => void
+>  : ^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 }
 enum E { A = 0, B = E.A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 >0 : 0
+>  : ^
 >B : E.A
+>  : ^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 interface I { x: I };
 >x : I
+>  : ^
 
 type T = { x: T };
->T : { x: T; }
+>T : T
+>  : ^
 >x : T
+>  : ^
 
 namespace N { N; }
 >N : typeof N
+>  : ^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 
 // Avoid a false positive.
 // Previously `T` was considered unused due to merging with the property,
 // back when all non-blocks were checked for recursion.
 export interface A<T> { T: T }
 >T : T
+>  : ^
 
 class P { private m() { this.m; } }
 >P : P
+>  : ^
 >m : () => void
+>  : ^^^^^^^^^^
 >this.m : () => void
+>       : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 P;
 >P : typeof P
+>  : ^^^^^^^^
 
 // Does not detect mutual recursion.
 function g() { D; }
 >g : () => void
+>  : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 class D { m() { g; } }
 >D : D
+>  : ^
 >m : () => void
+>  : ^^^^^^^^^^
 >g : () => void
+>  : ^^^^^^^^^^
 

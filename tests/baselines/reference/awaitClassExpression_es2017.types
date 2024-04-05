@@ -1,18 +1,28 @@
-=== tests/cases/conformance/async/es2017/awaitClassExpression_es2017.ts ===
+//// [tests/cases/conformance/async/es2017/awaitClassExpression_es2017.ts] ////
+
+=== awaitClassExpression_es2017.ts ===
 declare class C { }
 >C : C
+>  : ^
 
 declare var p: Promise<typeof C>;
 >p : Promise<typeof C>
+>  : ^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
+>     : ^^^^^^             
 
     class D extends (await p) {
 >D : D
+>  : ^
 >(await p) : C
+>          : ^
 >await p : typeof C
+>        : ^^^^^^^^
 >p : Promise<typeof C>
+>  : ^^^^^^^^^^^^^^^^^
     }
 }

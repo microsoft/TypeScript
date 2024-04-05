@@ -1,11 +1,11 @@
-tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts(3,12): error TS7008: Member 'x' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts(6,17): error TS7006: Parameter 'c1' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts(6,21): error TS7006: Parameter 'c2' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts(7,13): error TS7006: Parameter 'f1' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts(7,17): error TS7006: Parameter 'f2' implicitly has an 'any' type.
+implicitAnyDeclareMemberWithoutType2.ts(3,12): error TS7008: Member 'x' implicitly has an 'any' type.
+implicitAnyDeclareMemberWithoutType2.ts(6,17): error TS7006: Parameter 'c1' implicitly has an 'any' type.
+implicitAnyDeclareMemberWithoutType2.ts(6,21): error TS7006: Parameter 'c2' implicitly has an 'any' type.
+implicitAnyDeclareMemberWithoutType2.ts(7,13): error TS7006: Parameter 'f1' implicitly has an 'any' type.
+implicitAnyDeclareMemberWithoutType2.ts(7,17): error TS7006: Parameter 'f2' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts (5 errors) ====
+==== implicitAnyDeclareMemberWithoutType2.ts (5 errors) ====
     // this should be an error
     class C {
         public x = null;// error at "x"

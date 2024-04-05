@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classExpression.ts] ////
+
 //// [classExpression.ts]
 var x = class C {
 }

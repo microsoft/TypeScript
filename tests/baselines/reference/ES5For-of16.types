@@ -1,7 +1,10 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of16.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of16.ts] ////
+
+=== ES5For-of16.ts ===
 for (let v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     v;
 >v : any
@@ -9,6 +12,7 @@ for (let v of []) {
     for (let v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         var x = v;
 >x : any
@@ -16,6 +20,7 @@ for (let v of []) {
 
         v++;
 >v++ : number
+>    : ^^^^^^
 >v : any
     }
 }

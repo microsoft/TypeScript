@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implementArrayInterface.ts ===
+//// [tests/cases/compiler/implementArrayInterface.ts] ////
+
+=== implementArrayInterface.ts ===
 declare class MyArray<T> implements Array<T> {
 >MyArray : Symbol(MyArray, Decl(implementArrayInterface.ts, 0, 0))
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))

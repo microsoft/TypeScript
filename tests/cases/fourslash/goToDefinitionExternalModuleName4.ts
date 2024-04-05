@@ -3,4 +3,4 @@
 // @Filename: b.ts
 ////import n = require('unknown/*1*/');
 
-verify.goToDefinition("1", []);
+verify.baselineGoToDefinition("1");

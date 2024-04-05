@@ -1,103 +1,153 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts] ////
+
+=== NonInitializedExportInInternalModule.ts ===
 module Inner {
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
     var;
     let;
 >let : any
+>    : ^^^
 
     const;
     
     export var a;
 >a : any
+>  : ^^^
 
     export let b;
 >b : any
+>  : ^^^
 
     export var c: string;
 >c : string
+>  : ^^^^^^
 
     export let d: number;
 >d : number
+>  : ^^^^^^
 
     class A {}
 >A : A
+>  : ^
 
     export var e: A;
 >e : A
+>  : ^
 
     export let f: A;
 >f : A
+>  : ^
     
     namespace B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export let a = 1, b, c = 2;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : any
+>  : ^^^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         export let x, y, z;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
     }
     
     module C {
 >C : typeof C
+>  : ^^^^^^^^
 
         export var a = 1, b, c = 2;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : any
+>  : ^^^
 >c : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         export var x, y, z;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
     }
     
     // Shouldn't be filtered
     export var a1 = 1;
 >a1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     export let b1 = 1;
 >b1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     export var c1: string = 'a';
 >c1 : string
+>   : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
     export let d1: number = 1;
 >d1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     class D {}
 >D : D
+>  : ^
 
     export var e1 = new D;
 >e1 : D
+>   : ^
 >new D : D
+>      : ^
 >D : typeof D
+>  : ^^^^^^^^
 
     export let f1 = new D;
 >f1 : D
+>   : ^
 >new D : D
+>      : ^
 >D : typeof D
+>  : ^^^^^^^^
 
     export var g1: D = new D;
 >g1 : D
+>   : ^
 >new D : D
+>      : ^
 >D : typeof D
+>  : ^^^^^^^^
 
     export let h1: D = new D;
 >h1 : D
+>   : ^
 >new D : D
+>      : ^
 >D : typeof D
+>  : ^^^^^^^^
 }

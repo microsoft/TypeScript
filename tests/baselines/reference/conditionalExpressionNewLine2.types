@@ -1,10 +1,17 @@
-=== tests/cases/compiler/conditionalExpressionNewLine2.ts ===
+//// [tests/cases/compiler/conditionalExpressionNewLine2.ts] ////
+
+=== conditionalExpressionNewLine2.ts ===
 var v = a 
 >v : any
+>  : ^^^
 >a   ? b : c : any
+>            : ^^^
 >a : any
+>  : ^^^
 
   ? b : c;
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 

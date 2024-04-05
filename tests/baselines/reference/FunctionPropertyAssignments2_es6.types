@@ -1,6 +1,11 @@
-=== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments2_es6.ts ===
+//// [tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments2_es6.ts] ////
+
+=== FunctionPropertyAssignments2_es6.ts ===
 var v = { *() { } }
 >v : { ""(): Generator<never, void, unknown>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ *() { } } : { ""(): Generator<never, void, unknown>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : () => Generator<never, void, unknown>
+> : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

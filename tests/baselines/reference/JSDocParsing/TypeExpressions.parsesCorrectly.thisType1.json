@@ -19,7 +19,6 @@
                 "end": 14,
                 "flags": "JSDoc",
                 "transformFlags": 0,
-                "originalKeywordKind": "ThisKeyword",
                 "escapedText": "this"
             },
             "type": {

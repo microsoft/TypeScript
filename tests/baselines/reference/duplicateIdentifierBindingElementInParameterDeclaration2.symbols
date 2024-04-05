@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration2.ts ===
+//// [tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration2.ts] ////
+
+=== duplicateIdentifierBindingElementInParameterDeclaration2.ts ===
 "use strict"
 function f0(a, [a, [b]], {b}) { }
 >f0 : Symbol(f0, Decl(duplicateIdentifierBindingElementInParameterDeclaration2.ts, 0, 12))

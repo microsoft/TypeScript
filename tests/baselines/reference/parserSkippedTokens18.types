@@ -1,6 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts] ////
+
+=== parserSkippedTokens18.ts ===
 foo(a \
 >foo(a \ : any
+>        : ^^^
 >foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 

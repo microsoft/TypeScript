@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reboundBaseClassSymbol.ts ===
+//// [tests/cases/compiler/reboundBaseClassSymbol.ts] ////
+
+=== reboundBaseClassSymbol.ts ===
 interface A { a: number; }
 >A : Symbol(A, Decl(reboundBaseClassSymbol.ts, 0, 0))
 >a : Symbol(A.a, Decl(reboundBaseClassSymbol.ts, 0, 13))

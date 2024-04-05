@@ -34,7 +34,7 @@ var ConstEnumOnlyModule;
         ConstFooEnum[ConstFooEnum["Values"] = 1] = "Values";
         ConstFooEnum[ConstFooEnum["Here"] = 2] = "Here";
     })(ConstFooEnum = ConstEnumOnlyModule.ConstFooEnum || (ConstEnumOnlyModule.ConstFooEnum = {}));
-})(ConstEnumOnlyModule = exports.ConstEnumOnlyModule || (exports.ConstEnumOnlyModule = {}));
+})(ConstEnumOnlyModule || (exports.ConstEnumOnlyModule = ConstEnumOnlyModule = {}));
 //// [reexport.js]
 "use strict";
 var Foo = require("./foo");

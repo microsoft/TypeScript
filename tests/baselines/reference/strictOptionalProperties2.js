@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictOptionalProperties2.ts] ////
+
 //// [strictOptionalProperties2.ts]
 // Repro from #44567
 

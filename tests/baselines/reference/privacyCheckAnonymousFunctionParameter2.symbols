@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts ===
+//// [tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts] ////
+
+=== privacyCheckAnonymousFunctionParameter2.ts ===
 export var x = 1;  // Makes this an external module 
 >x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 0, 10))
 

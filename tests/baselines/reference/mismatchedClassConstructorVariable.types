@@ -1,10 +1,15 @@
-=== tests/cases/compiler/mismatchedClassConstructorVariable.ts ===
+//// [tests/cases/compiler/mismatchedClassConstructorVariable.ts] ////
+
+=== mismatchedClassConstructorVariable.ts ===
 var baz: foo;
 >baz : foo
+>    : ^^^
 
 class baz { }
 >baz : baz
+>    : ^^^
 
 class foo { }
 >foo : foo
+>    : ^^^
 

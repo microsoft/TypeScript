@@ -1,10 +1,15 @@
-=== tests/cases/compiler/arrayAssignmentTest4.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest4.ts] ////
+
+=== arrayAssignmentTest4.ts ===
 class C3 {
 >C3 : C3
+>   : ^^
 
     CM3M1() { return 3;}
 >CM3M1 : () => number
+>      : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 }
 
 
@@ -21,27 +26,41 @@ Type 1 of any[]:
 */
 var c3 : C3 = new C3();
 >c3 : C3
+>   : ^^
 >new C3() : C3
+>         : ^^
 >C3 : typeof C3
+>   : ^^^^^^^^^
 
 var o1 = {one : 1};
 >o1 : { one: number; }
+>   : ^^^^^^^^^^^^^^^^
 >{one : 1} : { one: number; }
+>          : ^^^^^^^^^^^^^^^^
 >one : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 var arr_any: any[] = [];
 >arr_any : any[]
+>        : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 arr_any = function () { return null;} // should be an error - is
 >arr_any = function () { return null;} : () => any
+>                                      : ^^^^^^^^^
 >arr_any : any[]
+>        : ^^^^^
 >function () { return null;} : () => any
->null : null
+>                            : ^^^^^^^^^
 
 arr_any = c3; // should be an error - is
 >arr_any = c3 : C3
+>             : ^^
 >arr_any : any[]
+>        : ^^^^^
 >c3 : C3
+>   : ^^
 

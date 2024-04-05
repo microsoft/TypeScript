@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionWithIndexSignature.ts ===
+//// [tests/cases/compiler/unionWithIndexSignature.ts] ////
+
+=== unionWithIndexSignature.ts ===
 interface NumList {
 >NumList : Symbol(NumList, Decl(unionWithIndexSignature.ts, 0, 0))
 

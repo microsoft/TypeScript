@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters1.ts] ////
+
 //// [declarationEmitTypeAliasWithTypeParameters1.ts]
 export type Bar<X, Y> = () => [X, Y];
 export type Foo<Y> = Bar<any, Y>;

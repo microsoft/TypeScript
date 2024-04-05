@@ -1,5 +1,7 @@
-=== tests/cases/compiler/declFileClassExtendsNull.ts ===
+//// [tests/cases/compiler/declFileClassExtendsNull.ts] ////
+
+=== declFileClassExtendsNull.ts ===
 class ExtendsNull extends null {
 >ExtendsNull : ExtendsNull
->null : null
+>            : ^^^^^^^^^^^
 }

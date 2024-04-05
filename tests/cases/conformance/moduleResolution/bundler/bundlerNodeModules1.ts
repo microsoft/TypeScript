@@ -1,4 +1,5 @@
 // @moduleResolution: bundler
+// @module: esnext, preserve
 // @traceResolution: true
 
 // @Filename: /node_modules/dual/package.json

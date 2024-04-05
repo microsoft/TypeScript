@@ -1,30 +1,42 @@
-=== tests/cases/compiler/exportDeclarationInInternalModule.ts ===
+//// [tests/cases/compiler/exportDeclarationInInternalModule.ts] ////
+
+=== exportDeclarationInInternalModule.ts ===
 class Bbb {
 >Bbb : Bbb
+>    : ^^^
 }
 
 class Aaa extends Bbb { }
 >Aaa : Aaa
+>    : ^^^
 >Bbb : Bbb
+>    : ^^^
 
 module Aaa {
 >Aaa : typeof Aaa
+>    : ^^^^^^^^^^
 
     export class SomeType { }
 >SomeType : SomeType
+>         : ^^^^^^^^
 }
 
 module Bbb {
 >Bbb : typeof Bbb
+>    : ^^^^^^^^^^
 
     export class SomeType { }
 >SomeType : SomeType
+>         : ^^^^^^^^
 
     export * from Aaa;      // this line causes the nullref
 >Aaa : any
+>    : ^^^
 }
 
 var a: Bbb.SomeType;
 >a : Bbb.SomeType
+>  : ^^^^^^^^^^^^
 >Bbb : any
+>    : ^^^
 

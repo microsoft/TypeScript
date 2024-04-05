@@ -1,40 +1,52 @@
-=== tests/cases/compiler/clinterfaces.ts ===
+//// [tests/cases/compiler/clinterfaces.ts] ////
+
+=== clinterfaces.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     class C { }
 >C : C
+>  : ^
 
     interface C { }
     interface D { }
     class D { }
 >D : D
+>  : ^
 }
 
 interface Foo<T> {
     a: string;
 >a : string
+>  : ^^^^^^
 }
 
 class Foo<T>{
 >Foo : Foo<T>
+>    : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 }
 
 class Bar<T>{
 >Bar : Bar<T>
+>    : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 }
 
 interface Bar<T> {
     a: string;
 >a : string
+>  : ^^^^^^
 }
 
 export = Foo;
 >Foo : Foo<T>
+>    : ^^^^^^
 

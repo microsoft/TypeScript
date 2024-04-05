@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleReopenedTypeOtherBlock.ts] ////
+
 //// [moduleReopenedTypeOtherBlock.ts]
 module M {
     export class C1 { }

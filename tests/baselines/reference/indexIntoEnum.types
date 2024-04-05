@@ -1,13 +1,21 @@
-=== tests/cases/compiler/indexIntoEnum.ts ===
+//// [tests/cases/compiler/indexIntoEnum.ts] ////
+
+=== indexIntoEnum.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     enum E { }
 >E : E
+>  : ^
 
     var x = E[0];
 >x : string
+>  : ^^^^^^
 >E[0] : string
+>     : ^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 }

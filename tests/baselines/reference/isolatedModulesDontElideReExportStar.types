@@ -1,6 +1,9 @@
+//// [tests/cases/compiler/isolatedModulesDontElideReExportStar.ts] ////
+
 === /a.ts ===
 export type T = number;
 >T : number
+>  : ^^^^^^
 
 === /b.ts ===
 

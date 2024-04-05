@@ -1,32 +1,49 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxDefaultAttributesResolution3.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface Prop {
     x: false;
 >x : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 }
 class Poisoned extends React.Component<Prop, {}> {
 >Poisoned : Poisoned
+>         : ^^^^^^^^
 >React.Component : React.Component<Prop, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 
 // Error
 let p = <Poisoned x/>;
 >p : JSX.Element
+>  : ^^^^^^^^^^^
 ><Poisoned x/> : JSX.Element
+>              : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >x : true
+>  : ^^^^
 

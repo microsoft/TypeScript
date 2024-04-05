@@ -1,29 +1,43 @@
-=== tests/cases/conformance/jsdoc/def.js ===
+//// [tests/cases/conformance/jsdoc/exportedEnumTypeAndValue.ts] ////
+
+=== def.js ===
 /** @enum {number} */
 const MyEnum = {
 >MyEnum : { a: number; b: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  a: 1,  b: 2} : { a: number; b: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   b: 2
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 };
 export default MyEnum;
 >MyEnum : number
+>       : ^^^^^^
 
-=== tests/cases/conformance/jsdoc/use.js ===
+=== use.js ===
 import MyEnum from "./def";
 >MyEnum : { a: number; b: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /** @type {MyEnum} */
 const v = MyEnum.b;
 >v : number
+>  : ^^^^^^
 >MyEnum.b : number
+>         : ^^^^^^
 >MyEnum : { a: number; b: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 

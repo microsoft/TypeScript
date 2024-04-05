@@ -1,6 +1,11 @@
-=== tests/cases/conformance/es6/templates/templateStringWithOpenCommentInStringPortion.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithOpenCommentInStringPortion.ts] ////
+
+=== templateStringWithOpenCommentInStringPortion.ts ===
 ` /**head  ${ 10 } // still middle  ${ 20 } /* still tail `
->` /**head  ${ 10 } // still middle  ${ 20 } /* still tail ` : string
+>` /**head  ${ 10 } // still middle  ${ 20 } /* still tail ` : " /**head  10 // still middle  20 /* still tail "
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 

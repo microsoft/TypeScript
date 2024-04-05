@@ -1,15 +1,14 @@
+//// [tests/cases/compiler/javascriptImportDefaultBadExport.ts] ////
+
 === /a.js ===
-// https://github.com/microsoft/TypeScript/issues/34481
-
-
 const alias = {};
->alias : Symbol(alias, Decl(a.js, 3, 5))
+>alias : Symbol(alias, Decl(a.js, 0, 5))
 
 module.exports = alias;
 >module.exports : Symbol(module.exports, Decl(a.js, 0, 0))
->module : Symbol(export=, Decl(a.js, 3, 17))
->exports : Symbol(export=, Decl(a.js, 3, 17))
->alias : Symbol(alias, Decl(a.js, 3, 5))
+>module : Symbol(export=, Decl(a.js, 0, 17))
+>exports : Symbol(export=, Decl(a.js, 0, 17))
+>alias : Symbol(alias, Decl(a.js, 0, 5))
 
 === /b.js ===
 import a from "./a";

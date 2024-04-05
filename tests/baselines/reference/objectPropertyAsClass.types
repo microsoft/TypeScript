@@ -1,69 +1,101 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/objectPropertyAsClass.ts] ////
+
+=== index.js ===
 const a1 = {
 >a1 : { foo(): void; }
+>   : ^^^^^^^^^^^^^^^^
 >{    foo() {        this.x = 0;    }} : { foo(): void; }
+>                                      : ^^^^^^^^^^^^^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : any
 >this : { foo(): void; }
+>     : ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
     }
 }
 
 const a2 = {
 >a2 : { foo: typeof foo; }
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{    foo: function() {        this.x = 0;    }} : { foo: typeof foo; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^
 
     foo: function() {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >function() {        this.x = 0;    } : typeof foo
+>                                     : ^^^^^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : any
 >this : { foo: typeof foo; }
+>     : ^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
     }
 }
 
 const b1 = {
 >b1 : { foo(): void; }
+>   : ^^^^^^^^^^^^^^^^
 >{    /** @class */    foo() {        this.x = 0;    }} : { foo(): void; }
+>                                                       : ^^^^^^^^^^^^^^^^
 
     /** @class */
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : any
 >this : { foo(): void; }
+>     : ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
     }
 }
 
 const b2 = {
 >b2 : { foo: typeof foo; }
+>   : ^^^^^^^^^^^^^^^^^^^^
 >{    /** @class */    foo: function() {        this.x = 0;    }} : { foo: typeof foo; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^
 
     /** @class */
     foo: function() {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >function() {        this.x = 0;    } : typeof foo
+>                                     : ^^^^^^^^^^
 
         this.x = 0;
 >this.x = 0 : 0
+>           : ^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
     }
 }
 

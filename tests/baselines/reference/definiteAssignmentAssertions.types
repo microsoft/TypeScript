@@ -1,30 +1,41 @@
-=== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts ===
+//// [tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts] ////
+
+=== definiteAssignmentAssertions.ts ===
 // Suppress strict property initialization check
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     a!: number;
 >a : number
+>  : ^^^^^^
 
     b: string;  // Error
 >b : string
+>  : ^^^^^^
 }
 
 // Suppress definite assignment check in constructor
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     a!: number;
 >a : number
+>  : ^^^^^^
 
     constructor() {
         let x = this.a;
 >x : number
+>  : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
     }
 }
 
@@ -32,136 +43,185 @@ class C2 {
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     a! = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     b!: number = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     static c!: number;
 >c : number
+>  : ^^^^^^
 
     d!;
 >d : any
+>  : ^^^
 }
 
 // Definite assignment assertion not permitted in ambient context
 
 declare class C4 {
 >C4 : C4
+>   : ^^
 
     a!: number;
 >a : number
+>  : ^^^^^^
 }
 
 // Definite assignment assertion not permitted on abstract property
 
 abstract class C5 {
 >C5 : C5
+>   : ^^
 
     abstract a!: number;
 >a : number
+>  : ^^^^^^
 }
 
 // Suppress definite assignment check for variable
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x!: number;
 >x : number
+>  : ^^^^^^
 
     let y = x;
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     var a!: number;
 >a : number
+>  : ^^^^^^
 
     var b = a;
 >b : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x!: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         let s: string = x;
 >s : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
     }
     else {
         let n: number = x;
 >n : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     let x!: number;
 >x : number
+>  : ^^^^^^
 
     const g = () => {
 >g : () => void
+>  : ^^^^^^^^^^
 >() => {        x = 1;    } : () => void
+>                           : ^^^^^^^^^^
 
         x = 1;
 >x = 1 : 1
+>      : ^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     g();
 >g() : void
+>    : ^^^^
 >g : () => void
+>  : ^^^^^^^^^^
 
     let y = x;
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 // Definite assignment assertion requires type annotation and no initializer
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     let a!;
 >a : any
+>  : ^^^
 
     let b! = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     let c!: number = 1;
 >c : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // Definite assignment assertion not permitted in ambient context
 
 declare let v1!: number;
 >v1 : number
+>   : ^^^^^^
 
 declare var v2!: number;
 >v2 : number
+>   : ^^^^^^
 
 declare namespace foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 	var v!: number;
 >v : number
+>  : ^^^^^^
 }
 

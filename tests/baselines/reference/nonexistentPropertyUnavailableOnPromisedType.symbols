@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonexistentPropertyUnavailableOnPromisedType.ts ===
+//// [tests/cases/compiler/nonexistentPropertyUnavailableOnPromisedType.ts] ////
+
+=== nonexistentPropertyUnavailableOnPromisedType.ts ===
 function f(x: Promise<number>) {
 >f : Symbol(f, Decl(nonexistentPropertyUnavailableOnPromisedType.ts, 0, 0))
 >x : Symbol(x, Decl(nonexistentPropertyUnavailableOnPromisedType.ts, 0, 11))

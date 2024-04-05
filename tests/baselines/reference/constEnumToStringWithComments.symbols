@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumToStringWithComments.ts ===
+//// [tests/cases/compiler/constEnumToStringWithComments.ts] ////
+
+=== constEnumToStringWithComments.ts ===
 const enum Foo {
 >Foo : Symbol(Foo, Decl(constEnumToStringWithComments.ts, 0, 0))
 

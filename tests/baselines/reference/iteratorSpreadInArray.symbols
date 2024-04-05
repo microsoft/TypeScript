@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInArray.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInArray.ts] ////
+
+=== iteratorSpreadInArray.ts ===
 class SymbolIterator {
 >SymbolIterator : Symbol(SymbolIterator, Decl(iteratorSpreadInArray.ts, 0, 0))
 

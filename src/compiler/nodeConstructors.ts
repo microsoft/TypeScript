@@ -14,7 +14,6 @@ import {
     EmitNode,
     EntityName,
     ExportDeclaration,
-    ExportedModulesFromDeclarationEmit,
     FileReference,
     FlowNode,
     forEach,
@@ -81,8 +80,8 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export class NodeObject implements Node {
-    declare kind: SyntaxKind;
+export class NodeObject<TKind extends SyntaxKind> implements Node {
+    declare kind: TKind;
     declare flags: NodeFlags;
     declare modifierFlagsCache: ModifierFlags;
     declare transformFlags: TransformFlags;
@@ -93,9 +92,7 @@ export class NodeObject implements Node {
     declare pos: number;
     declare end: number;
 
-    declare private _children: Node[] | undefined;
-
-    constructor(kind: SyntaxKind) {
+    constructor(kind: TKind) {
         this.pos = -1;
         this.end = -1;
         this.kind = kind;
@@ -319,7 +316,6 @@ export class IdentifierObject implements Identifier {
         this.parent = undefined!;
         this.original = undefined;
         this.emitNode = undefined;
-        this.flowNode = undefined;
     }
 
     get text(): string {
@@ -496,7 +492,7 @@ export class PrivateIdentifierObject implements PrivateIdentifier {
 }
 
 /** @internal */
-export class SourceFileObject extends NodeObject implements SourceFile {
+export class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
     declare kind: SyntaxKind.SourceFile;
@@ -551,7 +547,6 @@ export class SourceFileObject extends NodeObject implements SourceFile {
     declare localJsxFragmentNamespace?: __String | undefined;
     declare localJsxFactory?: EntityName | undefined;
     declare localJsxFragmentFactory?: EntityName | undefined;
-    declare exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit | undefined;
     declare endFlowNode?: FlowNode | undefined;
     declare symbol: Symbol;
     declare localSymbol?: Symbol | undefined;
@@ -610,7 +605,7 @@ export class SourceFileObject extends NodeObject implements SourceFile {
     }
 
     private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
+        const result = createMultiMap<string, Declaration>();
 
         this.forEachChild(visit);
 

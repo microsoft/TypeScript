@@ -1,0 +1,3 @@
+// === goToSourceDefinition ===
+// === /index.js ===
+// const { blah/*GOTO SOURCE DEF*/ } = require("unresolved");

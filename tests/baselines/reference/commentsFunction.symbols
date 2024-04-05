@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsFunction.ts ===
+//// [tests/cases/compiler/commentsFunction.ts] ////
+
+=== commentsFunction.ts ===
 /** This comment should appear for foo*/
 function foo() {
 >foo : Symbol(foo, Decl(commentsFunction.ts, 0, 0))

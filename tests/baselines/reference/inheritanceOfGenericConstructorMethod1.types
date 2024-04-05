@@ -1,28 +1,45 @@
-=== tests/cases/compiler/inheritanceOfGenericConstructorMethod1.ts ===
+//// [tests/cases/compiler/inheritanceOfGenericConstructorMethod1.ts] ////
+
+=== inheritanceOfGenericConstructorMethod1.ts ===
 class A<T> { }
 >A : A<T>
+>  : ^^^^
 
 class B<T> extends A<T> {}
 >B : B<T>
+>  : ^^^^
 >A : A<T>
+>  : ^^^^
 
 var a = new A<Date>();
 >a : A<Date>
+>  : ^^^^^^^
 >new A<Date>() : A<Date>
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var b1 = new B(); // no error
 >b1 : B<unknown>
+>   : ^^^^^^^^^^
 >new B() : B<unknown>
+>        : ^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var b2: B<Date> = new B<Date>(); // no error
 >b2 : B<Date>
+>   : ^^^^^^^
 >new B<Date>() : B<Date>
+>              : ^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var b3 = new B<Date>(); // error, could not select overload for 'new' expression
 >b3 : B<Date>
+>   : ^^^^^^^
 >new B<Date>() : B<Date>
+>              : ^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 

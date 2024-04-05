@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsThisTypes.ts] ////
+
 //// [index.js]
 export class A {
     /** @returns {this} */

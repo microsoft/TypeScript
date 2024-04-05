@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts] ////
+
+=== typeArgumentInferenceWithObjectLiteral.ts ===
 interface Computed<T> {
 >Computed : Symbol(Computed, Decl(typeArgumentInferenceWithObjectLiteral.ts, 0, 0))
 >T : Symbol(T, Decl(typeArgumentInferenceWithObjectLiteral.ts, 0, 19))

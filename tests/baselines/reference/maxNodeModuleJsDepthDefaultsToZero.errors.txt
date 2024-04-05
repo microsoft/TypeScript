@@ -10,6 +10,11 @@
             "outDir": "bin"
         }
     }
+==== /typings/index.d.ts (0 errors) ====
+    declare module "shortid" {
+        export var x: number;
+    }
+    
 ==== /index.ts (1 errors) ====
     /// <reference path="/typings/index.d.ts" />
     import * as foo from "shortid";
@@ -27,9 +32,4 @@
     var z = require('z');
     var y = { y: 'foo' };
     module.exports = y;
-    
-==== /typings/index.d.ts (0 errors) ====
-    declare module "shortid" {
-        export var x: number;
-    }
     

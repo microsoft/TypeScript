@@ -1,86 +1,115 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndInvalidOperands.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndInvalidOperands.ts] ////
+
+=== exponentiationOperatorWithNullValueAndInvalidOperands.ts ===
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
 
 var a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
 var b: string;
 >b : string
+>  : ^^^^^^
 
 var c: Object;
 >c : Object
+>  : ^^^^^^
 
 // operator **
 var r1a1 = null ** a;
 >r1a1 : number
+>     : ^^^^^^
 >null ** a : number
->null : null
+>          : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r1a2 = null ** b;
 >r1a2 : number
+>     : ^^^^^^
 >null ** b : number
->null : null
+>          : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r1a3 = null ** c;
 >r1a3 : number
+>     : ^^^^^^
 >null ** c : number
->null : null
+>          : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r1b1 = a ** null;
 >r1b1 : number
+>     : ^^^^^^
 >a ** null : number
+>          : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r1b2 = b ** null;
 >r1b2 : number
+>     : ^^^^^^
 >b ** null : number
+>          : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r1b3 = c ** null;
 >r1b3 : number
+>     : ^^^^^^
 >c ** null : number
+>          : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r1c1 = null ** true;
 >r1c1 : number
+>     : ^^^^^^
 >null ** true : number
->null : null
+>             : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r1c2 = null ** '';
 >r1c2 : number
+>     : ^^^^^^
 >null ** '' : number
->null : null
+>           : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r1c3 = null ** {};
 >r1c3 : number
+>     : ^^^^^^
 >null ** {} : number
->null : null
+>           : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r1d1 = true ** null;
 >r1d1 : number
+>     : ^^^^^^
 >true ** null : number
+>             : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r1d2 = '' ** null;
 >r1d2 : number
+>     : ^^^^^^
 >'' ** null : number
+>           : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r1d3 = {} ** null;
 >r1d3 : number
+>     : ^^^^^^
 >{} ** null : number
+>           : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 

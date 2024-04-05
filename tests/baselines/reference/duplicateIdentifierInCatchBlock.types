@@ -1,39 +1,53 @@
-=== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts ===
+//// [tests/cases/compiler/duplicateIdentifierInCatchBlock.ts] ////
+
+=== duplicateIdentifierInCatchBlock.ts ===
 var v;
 >v : any
+>  : ^^^
 
 try { } catch (e) {
 >e : any
+>  : ^^^
 
     function v() { }
 >v : () => void
+>  : ^^^^^^^^^^
 }
 
 function w() { }
 >w : () => void
+>  : ^^^^^^^^^^
 
 try { } catch (e) {
 >e : any
+>  : ^^^
 
     var w;
 >w : any
+>  : ^^^
 }
 
 try { } catch (e) {
 >e : any
+>  : ^^^
 
     var x;
 >x : any
+>  : ^^^
 
     function x() { } // error
 >x : () => void
+>  : ^^^^^^^^^^
 
     function e() { } // error
 >e : () => void
+>  : ^^^^^^^^^^
 
     var p: string;
 >p : string
+>  : ^^^^^^
 
     var p: number; // error
 >p : string
+>  : ^^^^^^
 }

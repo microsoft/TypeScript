@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/moduleResolution_automaticTypeDirectiveNames.ts] ////
+
 === /a.ts ===
 a;
 >a : string
+>  : ^^^^^^
 
 === /node_modules/@types/a/index.d.ts ===
 declare const a: string;
 >a : string
+>  : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file1.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution18.tsx] ////
+
+=== file1.tsx ===
 declare module JSX {
 	interface Element { }
 }
@@ -6,6 +8,9 @@ declare module JSX {
 // Error under implicit any
 <div n='x' />;
 ><div n='x' /> : JSX.Element
+>              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >n : string
+>  : ^^^^^^
 

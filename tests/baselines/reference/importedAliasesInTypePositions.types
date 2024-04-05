@@ -1,38 +1,57 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
+
+=== file2.ts ===
 import RT_ALIAS = require("file1");
 >RT_ALIAS : typeof RT_ALIAS
+>         : ^^^^^^^^^^^^^^^
 
 import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 >ReferredTo : typeof ReferredTo
+>           : ^^^^^^^^^^^^^^^^^
 >RT_ALIAS : typeof RT_ALIAS
+>         : ^^^^^^^^^^^^^^^
 >elaborate : typeof RT_ALIAS.elaborate
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >nested : typeof RT_ALIAS.elaborate.nested
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mod : typeof RT_ALIAS.elaborate.nested.mod
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : typeof RT_ALIAS.elaborate.nested.mod.name
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ReferredTo : ReferredTo
+>           : ^^^^^^^^^^
 
 export module ImportingModule {
 >ImportingModule : typeof ImportingModule
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 
     class UsesReferredType {
 >UsesReferredType : UsesReferredType
+>                 : ^^^^^^^^^^^^^^^^
 
         constructor(private referred: ReferredTo) { }
 >referred : ReferredTo
+>         : ^^^^^^^^^^
     }
 }
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export module elaborate.nested.mod.name {
 >elaborate : typeof elaborate
+>          : ^^^^^^^^^^^^^^^^
 >nested : typeof nested
+>       : ^^^^^^^^^^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >name : typeof name
+>     : ^^^^^^^^^^^
 
     export class ReferredTo {
 >ReferredTo : ReferredTo
+>           : ^^^^^^^^^^
 
         doSomething(): void {
 >doSomething : () => void
+>            : ^^^^^^    
         }
     }
 }

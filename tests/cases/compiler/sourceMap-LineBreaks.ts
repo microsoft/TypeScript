@@ -1,4 +1,4 @@
-// @target: ES3
+// @target: ES5
 // @sourcemap: true
 var endsWithlineSeparator = 10;  var endsWithParagraphSeparator = 10;  var endsWithNextLine = 1;var endsWithLineFeed = 1;
 var endsWithCarriageReturnLineFeed = 1;

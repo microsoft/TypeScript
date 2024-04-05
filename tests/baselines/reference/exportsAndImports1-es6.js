@@ -40,7 +40,6 @@ exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 var v = 1;
 exports.v = v;
 function f() { }
-exports.f = f;
 class C {
 }
 exports.C = C;
@@ -49,12 +48,10 @@ var E;
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E || (E = {}));
-exports.E = E;
+})(E || (exports.E = E = {}));
 var M;
 (function (M) {
-})(M || (M = {}));
-exports.M = M;
+})(M || (exports.M = M = {}));
 var a = M.x;
 exports.a = a;
 //// [t2.js]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleCrashBug1.ts] ////
+
 //// [moduleCrashBug1.ts]
 module _modes {
  export interface IMode {

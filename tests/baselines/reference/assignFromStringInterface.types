@@ -1,18 +1,29 @@
-=== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts ===
+//// [tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts] ////
+
+=== assignFromStringInterface.ts ===
 var x = '';
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var a: String;
 >a : String
+>  : ^^^^^^
 
 x = a;
 >x = a : String
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >a : String
+>  : ^^^^^^
 
 a = x;
 >a = x : string
+>      : ^^^^^^
 >a : String
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 

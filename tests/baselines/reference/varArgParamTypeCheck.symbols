@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varArgParamTypeCheck.ts ===
+//// [tests/cases/compiler/varArgParamTypeCheck.ts] ////
+
+=== varArgParamTypeCheck.ts ===
 function sequence(...sequences:{():void;}[]) {
 >sequence : Symbol(sequence, Decl(varArgParamTypeCheck.ts, 0, 0))
 >sequences : Symbol(sequences, Decl(varArgParamTypeCheck.ts, 0, 18))

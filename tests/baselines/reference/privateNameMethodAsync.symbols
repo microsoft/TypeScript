@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts] ////
+
+=== privateNameMethodAsync.ts ===
 const C = class {
 >C : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 5))
 

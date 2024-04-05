@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralsAndDecoratorMetadata.ts] ////
+
 //// [templateLiteralsAndDecoratorMetadata.ts]
 declare var format: any;
 export class Greeter {

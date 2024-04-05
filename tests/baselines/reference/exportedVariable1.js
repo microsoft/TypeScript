@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportedVariable1.ts] ////
+
 //// [exportedVariable1.ts]
 export var foo = {name: "Bill"};
 var upper = foo.name.toUpperCase();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation2.ts] ////
+
 === /test.js ===
 module.exports = {
 >module.exports : Symbol(module.exports, Decl(test.js, 0, 0))

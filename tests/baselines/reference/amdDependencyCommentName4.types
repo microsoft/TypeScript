@@ -1,4 +1,6 @@
-=== tests/cases/compiler/amdDependencyCommentName4.ts ===
+//// [tests/cases/compiler/amdDependencyCommentName4.ts] ////
+
+=== amdDependencyCommentName4.ts ===
 ///<amd-dependency path='aliasedModule5' name='n1'/>
 ///<amd-dependency path='unaliasedModule3'/>
 ///<amd-dependency path='aliasedModule6' name='n2'/>
@@ -8,28 +10,38 @@ import "unaliasedModule1";
 
 import r1 = require("aliasedModule1");
 >r1 : any
+>   : ^^^
 
 r1;
 >r1 : any
+>   : ^^^
 
 import {p1, p2, p3} from "aliasedModule2";
 >p1 : any
+>   : ^^^
 >p2 : any
+>   : ^^^
 >p3 : any
+>   : ^^^
 
 p1;
 >p1 : any
+>   : ^^^
 
 import d from "aliasedModule3";
 >d : any
+>  : ^^^
 
 d;
 >d : any
+>  : ^^^
 
 import * as ns from "aliasedModule4";
 >ns : any
+>   : ^^^
 
 ns;
 >ns : any
+>   : ^^^
 
 import "unaliasedModule2";

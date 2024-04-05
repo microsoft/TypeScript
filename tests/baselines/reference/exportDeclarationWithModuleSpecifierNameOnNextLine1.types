@@ -1,29 +1,38 @@
-=== tests/cases/compiler/t1.ts ===
+//// [tests/cases/compiler/exportDeclarationWithModuleSpecifierNameOnNextLine1.ts] ////
+
+=== t1.ts ===
 export var x = "x";
 >x : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 
-=== tests/cases/compiler/t2.ts ===
+=== t2.ts ===
 export { x } from
 >x : string
+>  : ^^^^^^
 
     "./t1";
 
-=== tests/cases/compiler/t3.ts ===
+=== t3.ts ===
 
 export { } from
     "./t1";
 
-=== tests/cases/compiler/t4.ts ===
+=== t4.ts ===
 export { x as a } from
 >x : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     "./t1";
 
-=== tests/cases/compiler/t5.ts ===
+=== t5.ts ===
 export { x as a, } from
 >x : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
     "./t1";

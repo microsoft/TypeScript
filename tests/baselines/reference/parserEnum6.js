@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum6.ts] ////
+
 //// [parserEnum6.ts]
 enum E {
   "A", "B", "C"

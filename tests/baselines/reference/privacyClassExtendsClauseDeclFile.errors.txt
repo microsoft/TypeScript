@@ -1,8 +1,8 @@
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(19,77): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
+privacyClassExtendsClauseDeclFile_externalModule.ts(19,77): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
+privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
 
 
-==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts (2 errors) ====
+==== privacyClassExtendsClauseDeclFile_externalModule.ts (2 errors) ====
     export module publicModule {
         export class publicClassInPublicModule {
             private f1() {
@@ -24,12 +24,12 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(21,83):
         class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-!!! related TS2728 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' is declared here.
+!!! related TS2728 privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' is declared here.
         }
         export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-!!! related TS2728 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' is declared here.
+!!! related TS2728 privacyClassExtendsClauseDeclFile_externalModule.ts:26:18: 'publicClassInPrivateModule' is declared here.
         }
     }
     
@@ -79,7 +79,7 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(21,83):
     export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
     }
     
-==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts (0 errors) ====
+==== privacyClassExtendsClauseDeclFile_GlobalFile.ts (0 errors) ====
     module publicModuleInGlobal {
         export class publicClassInPublicModule {
             private f1() {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts] ////
+
 //// [arrayTypeInSignatureOfInterfaceAndClass.ts]
 declare module WinJS {
     class Promise<T> {

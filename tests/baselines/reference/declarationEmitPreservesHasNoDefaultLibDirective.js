@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPreservesHasNoDefaultLibDirective.ts] ////
+
 //// [declarationEmitPreservesHasNoDefaultLibDirective.ts]
 /// <reference no-default-lib="true"/>
 class Foo {

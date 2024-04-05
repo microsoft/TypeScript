@@ -1,189 +1,411 @@
-=== tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx ===
+//// [tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx] ////
+
+=== jsxNamespacePrefixInNameReact.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 var justElement1 = <a:element />;
 >justElement1 : any
+>             : ^^^
 ><a:element /> : any
->a:element : any
+>              : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var justElement2 = <a:element></a:element>;
 >justElement2 : any
+>             : ^^^
 ><a:element></a:element> : any
->a:element : any
->a:element : any
+>                        : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var justElement3 = <a:element attr={"value"}></a:element>;
 >justElement3 : any
+>             : ^^^
 ><a:element attr={"value"}></a:element> : any
->a:element : any
+>                                       : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 >attr : string
+>     : ^^^^^^
 >"value" : "value"
->a:element : any
+>        : ^^^^^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var justElement4 = <a:element>{"text"}</a:element>;
 >justElement4 : any
+>             : ^^^
 ><a:element>{"text"}</a:element> : any
->a:element : any
+>                                : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 >"text" : "text"
->a:element : any
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
 >justElement5 : any
+>             : ^^^
 ><a:element attr={"value"}>{"text"}</a:element> : any
->a:element : any
+>                                               : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 >attr : string
+>     : ^^^^^^
 >"value" : "value"
+>        : ^^^^^^^
 >"text" : "text"
->a:element : any
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var tooManySeparators1 = <a:ele:ment />;
 >tooManySeparators1 : any
+>                   : ^^^
 ><a:ele:ment /> : any
->a:ele : any
+>               : ^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : true
+>     : ^^^^
 
 var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
 >tooManySeparators2 : any
+>                   : ^^^
 ><a:ele:ment></a:ele : any
->a:ele : any
+>                    : ^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : true
->a:ele : any
+>     : ^^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : any
+>     : ^^^
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
 >tooManySeparators3 : any
+>                   : ^^^
 ><a:ele:ment attr={"value"}></a:ele : any
->a:ele : any
+>                                   : ^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : true
+>     : ^^^^
 >attr : string
+>     : ^^^^^^
 >"value" : "value"
->a:ele : any
+>        : ^^^^^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : any
+>     : ^^^
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
 >tooManySeparators4 : any
+>                   : ^^^
 ><a:ele:ment>{"text"}</a:ele : any
->a:ele : any
+>                            : ^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : true
+>     : ^^^^
 >"text" : "text"
->a:ele : any
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : any
+>     : ^^^
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
 >tooManySeparators5 : any
+>                   : ^^^
 ><a:ele:ment attr={"value"}>{"text"}</a:ele : any
->a:ele : any
+>                                           : ^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : true
+>     : ^^^^
 >attr : string
+>     : ^^^^^^
 >"value" : "value"
+>        : ^^^^^^^
 >"text" : "text"
->a:ele : any
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>ele : any
+>    : ^^^
 >ment : any
+>     : ^^^
 >> : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 var justAttribute1 = <element a:attr={"value"} />;
 >justAttribute1 : any
+>               : ^^^
 ><element a:attr={"value"} /> : any
+>                             : ^^^
 >element : any
+>        : ^^^
 >a:attr : string
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 
 var justAttribute2 = <element a:attr={"value"}></element>;
 >justAttribute2 : any
+>               : ^^^
 ><element a:attr={"value"}></element> : any
+>                                     : ^^^
 >element : any
+>        : ^^^
 >a:attr : string
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 >element : any
+>        : ^^^
 
 var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
 >justAttribute3 : any
+>               : ^^^
 ><element a:attr={"value"}>{"text"}</element> : any
+>                                             : ^^^
 >element : any
+>        : ^^^
 >a:attr : string
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 >"text" : "text"
+>       : ^^^^^^
 >element : any
+>        : ^^^
 
 var both1 = <a:element a:attr={"value"} />;
 >both1 : any
+>      : ^^^
 ><a:element a:attr={"value"} /> : any
->a:element : any
+>                               : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 >a:attr : string
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 
 var both2 = <a:element k:attr={"value"}></a:element>;
 >both2 : any
+>      : ^^^
 ><a:element k:attr={"value"}></a:element> : any
->a:element : any
+>                                         : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 >k:attr : string
+>       : ^^^^^^
+>k : any
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
->a:element : any
+>        : ^^^^^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
 >both3 : any
+>      : ^^^
 ><a:element a:attr={"value"}>{"text"}</a:element> : any
->a:element : any
+>                                                 : ^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 >a:attr : string
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 >"text" : "text"
->a:element : any
+>       : ^^^^^^
+>a : any
+>  : ^^^
+>element : any
+>        : ^^^
 
 var endOfIdent1 = <a: attr={"value"} />;
 >endOfIdent1 : any
+>            : ^^^
 ><a: attr={"value"} /> : any
+>                      : ^^^
 >a : any
->attr : string
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 
 var endOfIdent2 = <a attr:={"value"} />;
 >endOfIdent2 : any
+>            : ^^^
 ><a attr:={"value"} /> : any
+>                      : ^^^
 >a : any
->attr : true
+>  : ^^^
+>attr: : string
+>      : ^^^^^^
+>attr : any
+>     : ^^^
+> : any
+> : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 
 var beginOfIdent1 = <:a attr={"value"} />;
 >beginOfIdent1 : boolean
+>              : ^^^^^^^
 >< : boolean
+>  : ^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 >a : any
+>  : ^^^
 >attr : boolean
+>     : ^^^^^^^
 >{"value"} /> : boolean
+>             : ^^^^^^^
 >{"value"} / : number
+>            : ^^^^^^
 >{"value"} : { value: any; }
+>          : ^^^^^^^^^^^^^^^
 >"value" : any
+>        : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 
 var beginOfIdent2 = <a :attr={"value"} />;
 >beginOfIdent2 : any
+>              : ^^^
 ><a :attr={"value"} /> : any
+>                      : ^^^
 >a : any
->attr : string
+>  : ^^^
+>attr : any
+>     : ^^^
 >"value" : "value"
+>        : ^^^^^^^
 
 var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
 >upcaseComponent1 : any
+>                 : ^^^
 ><ns:Upcase /> : any
->ns:Upcase : any
+>              : ^^^
+>ns : any
+>   : ^^^
+>Upcase : any
+>       : ^^^
 
 var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
 >upcaseComponent2 : any
+>                 : ^^^
 ><Upcase:element /> : any
->Upcase:element : any
+>                   : ^^^
+>Upcase : any
+>       : ^^^
+>element : any
+>        : ^^^
 

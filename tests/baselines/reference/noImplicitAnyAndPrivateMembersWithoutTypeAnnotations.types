@@ -1,13 +1,19 @@
-=== tests/cases/compiler/app.ts ===
+//// [tests/cases/compiler/noImplicitAnyAndPrivateMembersWithoutTypeAnnotations.ts] ////
+
+=== app.ts ===
 /// <reference path="test.d.ts" />
 var x = new Something();
 >x : Something
+>  : ^^^^^^^^^
 >new Something() : Something
+>                : ^^^^^^^^^
 >Something : typeof Something
+>          : ^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/test.d.ts ===
+=== test.d.ts ===
 declare class Something
 >Something : Something
+>          : ^^^^^^^^^
 {
     private static someStaticVar;
 >someStaticVar : any

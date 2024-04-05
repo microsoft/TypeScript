@@ -1,45 +1,64 @@
-=== tests/cases/compiler/exportStarFromEmptyModule_module1.ts ===
+//// [tests/cases/compiler/exportStarFromEmptyModule.ts] ////
+
+=== exportStarFromEmptyModule_module1.ts ===
 export class A {
 >A : A
+>  : ^
 
     static r;
 >r : any
+>  : ^^^
 }
 
-=== tests/cases/compiler/exportStarFromEmptyModule_module2.ts ===
+=== exportStarFromEmptyModule_module2.ts ===
 
 // empty
 
-=== tests/cases/compiler/exportStarFromEmptyModule_module3.ts ===
+=== exportStarFromEmptyModule_module3.ts ===
 export * from "./exportStarFromEmptyModule_module2";
 export * from "./exportStarFromEmptyModule_module1";
 
 export class A {
 >A : A
+>  : ^
 
     static q;
 >q : any
+>  : ^^^
 }
 
-=== tests/cases/compiler/exportStarFromEmptyModule_module4.ts ===
+=== exportStarFromEmptyModule_module4.ts ===
 import * as X from "./exportStarFromEmptyModule_module3";
 >X : typeof X
+>  : ^^^^^^^^
 
 var s: X.A;
 >s : X.A
+>  : ^^^
 >X : any
+>  : ^^^
 
 X.A.q;
 >X.A.q : any
+>      : ^^^
 >X.A : typeof X.A
+>    : ^^^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >A : typeof X.A
+>  : ^^^^^^^^^^
 >q : any
+>  : ^^^
 
 X.A.r; // Error
 >X.A.r : any
+>      : ^^^
 >X.A : typeof X.A
+>    : ^^^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >A : typeof X.A
+>  : ^^^^^^^^^^
 >r : any
+>  : ^^^
 

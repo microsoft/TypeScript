@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts] ////
+
+=== subtypesOfUnion.ts ===
 enum E { e1, e2 }
 >E : Symbol(E, Decl(subtypesOfUnion.ts, 0, 0))
 >e1 : Symbol(E.e1, Decl(subtypesOfUnion.ts, 0, 8))

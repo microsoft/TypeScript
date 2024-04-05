@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts] ////
+
+=== parserMemberAccessorDeclaration7.ts ===
 class C {
 >C : C
+>  : ^
 
     public public get Foo() { }
 >Foo : void
+>    : ^^^^
 }

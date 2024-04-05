@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts] ////
+
+=== destructuringObjectBindingPatternAndAssignment3.ts ===
 // Error
 var {h?} = { h?: 1 };
 >h : Symbol(h, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 1, 5))

@@ -1,18 +1,31 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit14.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit14.ts] ////
+
+=== symbolDeclarationEmit14.ts ===
 class C {
 >C : C
+>  : ^
 
     get [Symbol.toPrimitive]() { return ""; }
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     get [Symbol.toStringTag]() { return ""; }
 >[Symbol.toStringTag] : string
+>                     : ^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 }

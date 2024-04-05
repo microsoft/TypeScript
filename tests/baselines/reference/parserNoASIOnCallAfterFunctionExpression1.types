@@ -1,12 +1,21 @@
-=== tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts] ////
+
+=== parserNoASIOnCallAfterFunctionExpression1.ts ===
 var x = function () { }
 >x : any
+>  : ^^^
 >function () { }(<any>window).foo : any
+>                                 : ^^^
 >function () { }(<any>window) : void
+>                             : ^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 (<any>window).foo;
 ><any>window : any
+>            : ^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 

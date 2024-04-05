@@ -1,16 +1,21 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationEmitTrippleSlashReference.ts] ////
+
+=== a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 /// <reference path="c.js"/>
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
-=== tests/cases/compiler/c.js ===
+=== c.js ===
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 }
 

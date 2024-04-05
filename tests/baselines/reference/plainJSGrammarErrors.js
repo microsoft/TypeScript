@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
 //// [plainJSGrammarErrors.js]
 class C {
     // #private mistakes

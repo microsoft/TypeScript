@@ -1,7 +1,13 @@
-=== tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_1.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_1.ts] ////
+
+=== destructuringTypeAssertionsES5_1.ts ===
 var { x } = <any>foo();
 >x : any
+>  : ^^^
 ><any>foo() : any
+>           : ^^^
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
 

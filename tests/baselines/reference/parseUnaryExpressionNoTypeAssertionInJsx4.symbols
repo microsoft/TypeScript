@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx4.ts] ////
+
+=== index.tsx ===
+const x = "oops";
+>x : Symbol(x, Decl(index.tsx, 0, 5))
+
+const a = + <number> x;
+>a : Symbol(a, Decl(index.tsx, 2, 5))
+
+const b = + <> x;
+const c = + <1234> x;
+

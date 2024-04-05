@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicateFreshLiteralWidening.ts ===
+//// [tests/cases/compiler/typePredicateFreshLiteralWidening.ts] ////
+
+=== typePredicateFreshLiteralWidening.ts ===
 type Narrowable = string | number | bigint | boolean;
 >Narrowable : Symbol(Narrowable, Decl(typePredicateFreshLiteralWidening.ts, 0, 0))
 

@@ -1,25 +1,38 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithSuperMethodCall01.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithSuperMethodCall01.ts] ////
+
+=== emitClassDeclarationWithSuperMethodCall01.ts ===
 class Parent {
 >Parent : Parent
+>       : ^^^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }
 
 class Foo extends Parent {
 >Foo : Foo
+>    : ^^^
 >Parent : Parent
+>       : ^^^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         var x = () => super.foo();
 >x : () => void
+>  : ^^^^^^^^^^
 >() => super.foo() : () => void
+>                  : ^^^^^^^^^^
 >super.foo() : void
+>            : ^^^^
 >super.foo : () => void
+>          : ^^^^^^^^^^
 >super : Parent
+>      : ^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }

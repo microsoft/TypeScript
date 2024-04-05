@@ -1,13 +1,17 @@
-=== tests/cases/compiler/conflictingMemberTypesInBases.ts ===
+//// [tests/cases/compiler/conflictingMemberTypesInBases.ts] ////
+
+=== conflictingMemberTypesInBases.ts ===
 interface A {
     m: string;
 >m : string
+>  : ^^^^^^
 }
 interface B extends A {
 }
 interface C {
     m: number;
 >m : number
+>  : ^^^^^^
 }
 interface D extends C {
 }

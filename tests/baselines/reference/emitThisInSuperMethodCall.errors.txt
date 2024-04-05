@@ -1,9 +1,9 @@
-tests/cases/compiler/emitThisInSuperMethodCall.ts(10,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-tests/cases/compiler/emitThisInSuperMethodCall.ts(17,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-tests/cases/compiler/emitThisInSuperMethodCall.ts(23,13): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+emitThisInSuperMethodCall.ts(10,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+emitThisInSuperMethodCall.ts(17,17): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+emitThisInSuperMethodCall.ts(23,13): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 
-==== tests/cases/compiler/emitThisInSuperMethodCall.ts (3 errors) ====
+==== emitThisInSuperMethodCall.ts (3 errors) ====
     class User {
         sayHello() {
         }

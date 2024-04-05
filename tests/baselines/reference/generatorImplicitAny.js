@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorImplicitAny.ts] ////
+
 //// [generatorImplicitAny.ts]
 function* g() {}
 

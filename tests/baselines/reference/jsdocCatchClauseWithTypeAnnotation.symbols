@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/foo.js ===
+//// [tests/cases/conformance/jsdoc/jsdocCatchClauseWithTypeAnnotation.ts] ////
+
+=== foo.js ===
 /**
  * @typedef {any} Any
  */
@@ -110,14 +112,14 @@ function fn() {
 >x : Symbol(x, Decl(foo.js, 44, 39))
 >x : Symbol(x, Decl(foo.js, 44, 39))
 
-    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // should be OK
+    try { } catch (/** @type {unknown} */ { x }) { console.log(x); } // error in the destructure
 >x : Symbol(x, Decl(foo.js, 45, 43))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(foo.js, 45, 43))
 
-    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // should be OK
+    try { } catch (/** @type {Unknown} */ { x }) { console.log(x); } // error in the destructure
 >x : Symbol(x, Decl(foo.js, 46, 43))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))

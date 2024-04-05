@@ -1,50 +1,68 @@
-=== tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts ===
+//// [tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts] ////
+
+=== unusedLocalsAndParametersTypeAliases.ts ===
 // used in a declaration
 type handler1 = () => void;
->handler1 : () => void
+>handler1 : handler1
+>         : ^^^^^^^^
 
 export interface I1 {
     getHandler: handler1;
 >getHandler : handler1
+>           : ^^^^^^^^
 }
 
 // exported
 export type handler2 = () => void;
->handler2 : () => void
+>handler2 : handler2
+>         : ^^^^^^^^
 
 // used in extends clause
 type handler3 = () => void;
->handler3 : () => void
+>handler3 : handler3
+>         : ^^^^^^^^
 
 export interface I3<T extends handler3> {
     getHandler: T;
 >getHandler : T
+>           : ^
 }
 
 // used in another type alias declaration
 type handler4 = () => void;
->handler4 : () => void
+>handler4 : handler4
+>         : ^^^^^^^^
 
 type handler5 = handler4 | (()=>number);
->handler5 : handler4 | (() => number)
+>handler5 : handler5
+>         : ^^^^^^^^
 
 var x: handler5;
 >x : handler5
+>  : ^^^^^^^^
 
 x();
 >x() : number | void
+>    : ^^^^^^^^^^^^^
 >x : handler5
+>  : ^^^^^^^^
 
 // used as type argument
 type handler6 = () => void;
->handler6 : () => void
+>handler6 : handler6
+>         : ^^^^^^^^
 
 var y: Array<handler6>;
 >y : handler6[]
+>  : ^^^^^^^^^^
 
 y[0]();
 >y[0]() : void
+>       : ^^^^
 >y[0] : handler6
+>     : ^^^^^^^^
 >y : handler6[]
+>  : ^^^^^^^^^^
 >0 : 0
+>  : ^
     

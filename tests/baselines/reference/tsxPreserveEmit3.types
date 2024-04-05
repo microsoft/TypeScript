@@ -1,18 +1,22 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxPreserveEmit3.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 
-=== tests/cases/conformance/jsx/test.d.ts ===
+=== test.d.ts ===
 export var React;
 >React : any
 
-=== tests/cases/conformance/jsx/react-consumer.tsx ===
+=== react-consumer.tsx ===
 // This import should be elided
 import {React} from "./test";
 >React : any
+>      : ^^^
 

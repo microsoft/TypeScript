@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts ===
+//// [tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts] ////
+
+=== nonGenericClassExtendingGenericClassWithAny.ts ===
 class Foo<T> {
 >Foo : Symbol(Foo, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 0))
 >T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))

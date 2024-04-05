@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx] ////
+
+=== jsxJsxsCjsTransformKeyProp.tsx ===
 /// <reference path="react16.d.ts" />
 const props = { answer: 42 }
 >props : Symbol(props, Decl(jsxJsxsCjsTransformKeyProp.tsx, 1, 5))

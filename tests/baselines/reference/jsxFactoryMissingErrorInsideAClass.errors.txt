@@ -1,7 +1,7 @@
-tests/cases/compiler/test.tsx(3,17): error TS2304: Cannot find name 'factory'.
+test.tsx(3,17): error TS2304: Cannot find name 'factory'.
 
 
-==== tests/cases/compiler/test.tsx (1 errors) ====
+==== test.tsx (1 errors) ====
     export class C {
         factory() {
             return <div></div>;

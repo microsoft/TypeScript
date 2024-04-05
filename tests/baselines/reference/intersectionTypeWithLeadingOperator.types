@@ -1,20 +1,31 @@
-=== tests/cases/compiler/intersectionTypeWithLeadingOperator.ts ===
+//// [tests/cases/compiler/intersectionTypeWithLeadingOperator.ts] ////
+
+=== intersectionTypeWithLeadingOperator.ts ===
 type A = & string;
 >A : string
+>  : ^^^^^^
 
 type B =
->B : { foo: string; } & { bar: number; }
+>B : B
+>  : ^
 
   & { foo: string }
 >foo : string
+>    : ^^^^^^
 
   & { bar: number };
 >bar : number
+>    : ^^^^^^
 
 type C = [& { foo: 1 } & { bar: 2 }, & { foo: 3 } & { bar: 4 }];
->C : [{ foo: 1; } & { bar: 2; }, { foo: 3; } & { bar: 4; }]
+>C : C
+>  : ^
 >foo : 1
+>    : ^
 >bar : 2
+>    : ^
 >foo : 3
+>    : ^
 >bar : 4
+>    : ^
 

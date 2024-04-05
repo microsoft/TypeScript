@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncInterface_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncInterface_es6.ts] ////
+
+=== asyncInterface_es6.ts ===
 async interface I {  
 >I : Symbol(I, Decl(asyncInterface_es6.ts, 0, 0))
 }

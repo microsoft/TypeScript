@@ -1,32 +1,48 @@
-=== tests/cases/compiler/constEnumDeclarations.ts ===
+//// [tests/cases/compiler/constEnumDeclarations.ts] ////
+
+=== constEnumDeclarations.ts ===
 const enum E {
 >E : E
+>  : ^
 
     A = 1,
 >A : E.A
+>  : ^^^
 >1 : 1
+>  : ^
 
     B = 2,
 >B : E.B
+>  : ^^^
 >2 : 2
+>  : ^
 
     C = A | B
 >C : E.C
+>  : ^^^
 >A | B : number
+>      : ^^^^^^
 >A : E.A
+>  : ^^^
 >B : E.B
+>  : ^^^
 }
 
 const enum E2 {
 >E2 : E2
+>   : ^^
 
     A = 1,
 >A : E2.A
+>  : ^^^^
 >1 : 1
+>  : ^
 
     B,
 >B : E2.B
+>  : ^^^^
 
     C
 >C : E2.C
+>  : ^^^^
 }

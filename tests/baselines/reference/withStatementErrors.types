@@ -1,43 +1,71 @@
-=== tests/cases/compiler/withStatementErrors.ts ===
+//// [tests/cases/compiler/withStatementErrors.ts] ////
+
+=== withStatementErrors.ts ===
 declare var ooo:any;
 >ooo : any
+>    : ^^^
 
 with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
 >ooo.eee.oo.ah_ah.ting.tang.walla.walla : any
+>                                       : ^^^
 >ooo.eee.oo.ah_ah.ting.tang.walla : any
+>                                 : ^^^
 >ooo.eee.oo.ah_ah.ting.tang : any
+>                           : ^^^
 >ooo.eee.oo.ah_ah.ting : any
+>                      : ^^^
 >ooo.eee.oo.ah_ah : any
+>                 : ^^^
 >ooo.eee.oo : any
+>           : ^^^
 >ooo.eee : any
+>        : ^^^
 >ooo : any
+>    : ^^^
 >eee : any
+>    : ^^^
 >oo : any
+>   : ^^^
 >ah_ah : any
+>      : ^^^
 >ting : any
+>     : ^^^
 >tang : any
+>     : ^^^
 >walla : any
+>      : ^^^
 >walla : any
+>      : ^^^
 
     bing = true; // no error
 >bing = true : any
+>            : ^^^
 >bing : any
+>     : ^^^
 >true : any
+>     : ^^^
 
     bang = true; // no error
 >bang = true : any
+>            : ^^^
 >bang : any
+>     : ^^^
 >true : any
+>     : ^^^
     
     function bar() {} // no error
 >bar : any
+>    : ^^^
 
     bar(); // no error
 >bar() : any
+>      : ^^^
 >bar : any
+>    : ^^^
 
     class C {} // error   
 >C : any
+>  : ^^^
     
     interface I {} // error
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts] ////
+
 //// [renamingDestructuredPropertyInFunctionType.ts]
 // GH#37454, GH#41044
 
@@ -99,14 +101,14 @@ type O = {
     c: number;
 };
 type F1 = (arg: number) => any;
-type F2 = ({ a }: O) => any;
-type F3 = ({ a, b, c }: O) => any;
-type F4 = ({ a }: O) => any;
-type F5 = ({ a, b, c }: O) => any;
+type F2 = ({ a: string }: O) => any;
+type F3 = ({ a: string, b, c }: O) => any;
+type F4 = ({ a: string }: O) => any;
+type F5 = ({ a: string, b, c }: O) => any;
 type F6 = ({ a: string }: {
     a: any;
 }) => typeof string;
-type F7 = ({ a, b: number }: {
+type F7 = ({ a: string, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
@@ -116,14 +118,14 @@ type F8 = ({ a, b: number }: {
 }) => typeof number;
 type F9 = ([a, b, c]: [any, any, any]) => void;
 type G1 = new (arg: number) => any;
-type G2 = new ({ a }: O) => any;
-type G3 = new ({ a, b, c }: O) => any;
-type G4 = new ({ a }: O) => any;
-type G5 = new ({ a, b, c }: O) => any;
+type G2 = new ({ a: string }: O) => any;
+type G3 = new ({ a: string, b, c }: O) => any;
+type G4 = new ({ a: string }: O) => any;
+type G5 = new ({ a: string, b, c }: O) => any;
 type G6 = new ({ a: string }: {
     a: any;
 }) => typeof string;
-type G7 = new ({ a, b: number }: {
+type G7 = new ({ a: string, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
@@ -154,30 +156,30 @@ type G13 = new ({ [2]: string }: {
 }) => void;
 interface I {
     method1(arg: number): any;
-    method2({ a }: {
+    method2({ a: string }: {
         a: any;
     }): any;
     (arg: number): any;
-    ({ a }: {
+    ({ a: string }: {
         a: any;
     }): any;
     new (arg: number): any;
-    new ({ a }: {
+    new ({ a: string }: {
         a: any;
     }): any;
 }
-declare function f1({ a }: O): void;
+declare function f1({ a: string }: O): void;
 declare const f2: ({ a: string }: O) => void;
 declare const f3: ({ a: string, b, c }: O) => void;
-declare const f4: ({ a: string }: O) => string;
-declare const f5: ({ a: string, b, c }: O) => string;
+declare const f4: ({ a: string }: O) => typeof string;
+declare const f5: ({ a: string, b, c }: O) => typeof string;
 declare const obj1: {
     method({ a: string }: O): void;
 };
 declare const obj2: {
-    method({ a: string }: O): string;
+    method({ a: string }: O): typeof string;
 };
-declare function f6({ a }: O): void;
+declare function f6({ a: string }: O): void;
 declare const f7: ({ a: string, b, c }: O) => void;
 declare const f8: ({ "a": string }: O) => void;
 declare function f9({ 2: string }: {

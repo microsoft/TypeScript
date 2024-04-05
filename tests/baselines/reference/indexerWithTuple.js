@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/indexerWithTuple.ts] ////
+
 //// [indexerWithTuple.ts]
 var strNumTuple: [string, number] = ["foo", 10];
 var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];

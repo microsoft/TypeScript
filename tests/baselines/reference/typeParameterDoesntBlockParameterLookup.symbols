@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterDoesntBlockParameterLookup.ts ===
+//// [tests/cases/compiler/typeParameterDoesntBlockParameterLookup.ts] ////
+
+=== typeParameterDoesntBlockParameterLookup.ts ===
 declare function f<Foo extends Bar, Bar>(Bar: any): void
 >f : Symbol(f, Decl(typeParameterDoesntBlockParameterLookup.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(typeParameterDoesntBlockParameterLookup.ts, 0, 19))

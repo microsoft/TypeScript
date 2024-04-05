@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralsSourceMap.ts ===
+//// [tests/cases/compiler/templateLiteralsSourceMap.ts] ////
+
+=== templateLiteralsSourceMap.ts ===
 const s = `a${0}b${1}c${2}`;
 >s : Symbol(s, Decl(templateLiteralsSourceMap.ts, 0, 5))
 

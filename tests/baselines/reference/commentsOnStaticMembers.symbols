@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsOnStaticMembers.ts ===
+//// [tests/cases/compiler/commentsOnStaticMembers.ts] ////
+
+=== commentsOnStaticMembers.ts ===
 class test {
 >test : Symbol(test, Decl(commentsOnStaticMembers.ts, 0, 0))
 

@@ -1,109 +1,165 @@
-=== tests/cases/compiler/operatorAddNullUndefined.ts ===
+//// [tests/cases/compiler/operatorAddNullUndefined.ts] ////
+
+=== operatorAddNullUndefined.ts ===
 enum E { x }
 >E : E
+>  : ^
 >x : E.x
+>  : ^^^
 
 var x1 = null + null;
 >x1 : any
+>   : ^^^
 >null + null : any
->null : null
->null : null
+>            : ^^^
 
 var x2 = null + undefined;
 >x2 : any
+>   : ^^^
 >null + undefined : any
->null : null
+>                 : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x3 = undefined + null;
 >x3 : any
+>   : ^^^
 >undefined + null : any
+>                 : ^^^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 
 var x4 = undefined + undefined;
 >x4 : any
+>   : ^^^
 >undefined + undefined : any
+>                      : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x5 = 1 + null;
 >x5 : any
+>   : ^^^
 >1 + null : any
+>         : ^^^
 >1 : 1
->null : null
+>  : ^
 
 var x6 = 1 + undefined;
 >x6 : any
+>   : ^^^
 >1 + undefined : any
+>              : ^^^
 >1 : 1
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x7 = null + 1;
 >x7 : any
+>   : ^^^
 >null + 1 : any
->null : null
+>         : ^^^
 >1 : 1
+>  : ^
 
 var x8 = undefined + 1;
 >x8 : any
+>   : ^^^
 >undefined + 1 : any
+>              : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var x9 = "test" + null;
 >x9 : string
+>   : ^^^^^^
 >"test" + null : string
+>              : ^^^^^^
 >"test" : "test"
->null : null
+>       : ^^^^^^
 
 var x10 = "test" + undefined;
 >x10 : string
+>    : ^^^^^^
 >"test" + undefined : string
+>                   : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var x11 = null + "test";
 >x11 : string
+>    : ^^^^^^
 >null + "test" : string
->null : null
+>              : ^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 var x12 = undefined + "test";
 >x12 : string
+>    : ^^^^^^
 >undefined + "test" : string
+>                   : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
 var x13 = null + E.x
 >x13 : any
+>    : ^^^
 >null + E.x : any
->null : null
+>           : ^^^
 >E.x : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >x : E
+>  : ^
 
 var x14 = undefined + E.x
 >x14 : any
+>    : ^^^
 >undefined + E.x : any
+>                : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >E.x : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >x : E
+>  : ^
 
 var x15 = E.x + null
 >x15 : any
+>    : ^^^
 >E.x + null : any
+>           : ^^^
 >E.x : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >x : E
->null : null
+>  : ^
 
 var x16 = E.x + undefined
 >x16 : any
+>    : ^^^
 >E.x + undefined : any
+>                : ^^^
 >E.x : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >x : E
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 

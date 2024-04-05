@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts] ////
+
 //// [errorsForCallAndAssignmentAreSimilar.ts]
 function minimalExample1() {
     type Disc =

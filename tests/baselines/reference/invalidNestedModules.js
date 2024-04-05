@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts] ////
+
 //// [invalidNestedModules.ts]
 module A.B.C {
     export class Point {

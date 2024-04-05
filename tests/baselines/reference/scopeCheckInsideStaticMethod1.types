@@ -1,36 +1,56 @@
-=== tests/cases/compiler/scopeCheckInsideStaticMethod1.ts ===
+//// [tests/cases/compiler/scopeCheckInsideStaticMethod1.ts] ////
+
+=== scopeCheckInsideStaticMethod1.ts ===
 class C {
 >C : C
+>  : ^
 
    private v;
 >v : any
+>  : ^^^
 
    public p;
 >p : any
+>  : ^^^
 
    static s;
 >s : any
+>  : ^^^
 
    static b() {
 >b : () => void
+>  : ^^^^^^^^^^
 
       v = 1; // ERR
 >v = 1 : 1
+>      : ^
 >v : any
+>  : ^^^
 >1 : 1
+>  : ^
 
       C.s = 1;
 >C.s = 1 : 1
+>        : ^
 >C.s : any
+>    : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >s : any
+>  : ^^^
 >1 : 1
+>  : ^
 
       this.p = 1; // ERR
 >this.p = 1 : 1
+>           : ^
 >this.p : any
+>       : ^^^
 >this : typeof C
+>     : ^^^^^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
    }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug28576.js ===
+//// [tests/cases/conformance/salsa/propertyAssignmentOnUnresolvedImportedSymbol.ts] ////
+
+=== bug28576.js ===
 import x from 'arglebaz'
 >x : Symbol(x, Decl(bug28576.js, 0, 6))
 {

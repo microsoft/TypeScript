@@ -1,7 +1,7 @@
-tests/cases/conformance/types/primitives/enum/validEnumAssignments.ts(26,1): error TS2322: Type '-1' is not assignable to type 'E'.
+validEnumAssignments.ts(26,1): error TS2322: Type '-1' is not assignable to type 'E'.
 
 
-==== tests/cases/conformance/types/primitives/enum/validEnumAssignments.ts (1 errors) ====
+==== validEnumAssignments.ts (1 errors) ====
     enum E {
         A,
         B

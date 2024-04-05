@@ -1,8 +1,13 @@
-=== tests/cases/compiler/restParamModifier.ts ===
+//// [tests/cases/compiler/restParamModifier.ts] ////
+
+=== restParamModifier.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(...public rest: string[]) {}
 >public : any[]
+>       : ^^^^^
 >rest : string[]
+>     : ^^^^^^^^
 }

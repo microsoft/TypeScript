@@ -1,4 +1,6 @@
-=== tests/cases/compiler/json.stringify.ts ===
+//// [tests/cases/compiler/json.stringify.ts] ////
+
+=== json.stringify.ts ===
 var value = null;
 >value : Symbol(value, Decl(json.stringify.ts, 0, 3))
 

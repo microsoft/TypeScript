@@ -1,8 +1,12 @@
-=== tests/cases/compiler/es5ExportDefaultClassDeclaration.ts ===
+//// [tests/cases/compiler/es5ExportDefaultClassDeclaration.ts] ////
+
+=== es5ExportDefaultClassDeclaration.ts ===
 export default class C {
 >C : C
+>  : ^
 
     method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }
 

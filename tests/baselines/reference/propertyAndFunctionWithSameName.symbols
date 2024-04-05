@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndFunctionWithSameName.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndFunctionWithSameName.ts] ////
+
+=== propertyAndFunctionWithSameName.ts ===
 class C {
 >C : Symbol(C, Decl(propertyAndFunctionWithSameName.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownSymbols1.ts] ////
+
 //// [unknownSymbols1.ts]
 var x = asdf;
 var y: asdf;

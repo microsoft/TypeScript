@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringAssignmentWithExportedName.ts ===
+//// [tests/cases/compiler/destructuringAssignmentWithExportedName.ts] ////
+
+=== destructuringAssignmentWithExportedName.ts ===
 export let exportedFoo: any;
 >exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
 

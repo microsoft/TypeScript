@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation8.ts] ////
+
 //// [interfaceImplementation8.ts]
 /*
     1

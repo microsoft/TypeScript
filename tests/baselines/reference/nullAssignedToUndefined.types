@@ -1,12 +1,17 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts] ////
+
+=== nullAssignedToUndefined.ts ===
 var x = undefined = null; // error
 >x : any
+>  : ^^^
 >undefined = null : null
+>                 : ^^^^
 >undefined : any
->null : null
+>          : ^^^
 
 var y: typeof undefined = null; // ok, widened
 >y : any
+>  : ^^^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 

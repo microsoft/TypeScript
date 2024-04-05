@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx] ////
+
 //// [jsxEsprimaFbTestSuite.tsx]
 declare var React: any;
 declare var 日本語;

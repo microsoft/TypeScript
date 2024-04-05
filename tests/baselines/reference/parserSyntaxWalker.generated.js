@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserSyntaxWalker.generated.ts] ////
+
 //// [parserSyntaxWalker.generated.ts]
 //declare module "fs" {
 //    export class File {

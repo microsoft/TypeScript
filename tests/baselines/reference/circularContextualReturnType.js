@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularContextualReturnType.ts] ////
+
 //// [circularContextualReturnType.ts]
 // Repro from #17711
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat2.ts] ////
+
 //// [enumAssignmentCompat2.ts]
 enum W {
 

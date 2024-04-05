@@ -1,997 +1,1440 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJs1.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder/index.cjs ===
+=== subfolder/index.cjs ===
 // cjs format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder/index.mjs ===
+=== subfolder/index.mjs ===
 // esm format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder2/index.js ===
+=== subfolder2/index.js ===
 // cjs format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder2/index.cjs ===
+=== subfolder2/index.cjs ===
 // cjs format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder2/index.mjs ===
+=== subfolder2/index.mjs ===
 // esm format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder2/another/index.js ===
+=== subfolder2/another/index.js ===
 // esm format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder2/another/index.cjs ===
+=== subfolder2/another/index.cjs ===
 // cjs format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/subfolder2/another/index.mjs ===
+=== subfolder2/another/index.mjs ===
 // esm format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 import * as m1 from "./index.js";
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 import * as m2 from "./index.mjs";
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 import * as m3 from "./index.cjs";
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 import * as m4 from "./subfolder/index.js";
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 import * as m5 from "./subfolder/index.mjs";
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 import * as m6 from "./subfolder/index.cjs";
 >m6 : typeof m6
+>   : ^^^^^^^^^
 
 import * as m7 from "./subfolder2/index.js";
 >m7 : typeof m7
+>   : ^^^^^^^^^
 
 import * as m8 from "./subfolder2/index.mjs";
 >m8 : typeof m8
+>   : ^^^^^^^^^
 
 import * as m9 from "./subfolder2/index.cjs";
 >m9 : typeof m9
+>   : ^^^^^^^^^
 
 import * as m10 from "./subfolder2/another/index.js";
 >m10 : typeof m10
+>    : ^^^^^^^^^^
 
 import * as m11 from "./subfolder2/another/index.mjs";
 >m11 : typeof m11
+>    : ^^^^^^^^^^
 
 import * as m12 from "./subfolder2/another/index.cjs";
 >m12 : typeof m12
+>    : ^^^^^^^^^^
 
 // The next ones shouldn't all work - esm format files have no index resolution or extension resolution
 import * as m13 from "./";
 >m13 : any
+>    : ^^^
 
 import * as m14 from "./index";
 >m14 : any
+>    : ^^^
 
 import * as m15 from "./subfolder";
 >m15 : any
+>    : ^^^
 
 import * as m16 from "./subfolder/";
 >m16 : any
+>    : ^^^
 
 import * as m17 from "./subfolder/index";
 >m17 : any
+>    : ^^^
 
 import * as m18 from "./subfolder2";
 >m18 : any
+>    : ^^^
 
 import * as m19 from "./subfolder2/";
 >m19 : any
+>    : ^^^
 
 import * as m20 from "./subfolder2/index";
 >m20 : any
+>    : ^^^
 
 import * as m21 from "./subfolder2/another";
 >m21 : any
+>    : ^^^
 
 import * as m22 from "./subfolder2/another/";
 >m22 : any
+>    : ^^^
 
 import * as m23 from "./subfolder2/another/index";
 >m23 : any
+>    : ^^^
 
 void m1;
 >void m1 : undefined
+>        : ^^^^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 void m2;
 >void m2 : undefined
+>        : ^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 void m3;
 >void m3 : undefined
+>        : ^^^^^^^^^
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 void m4;
 >void m4 : undefined
+>        : ^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 void m5;
 >void m5 : undefined
+>        : ^^^^^^^^^
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 void m6;
 >void m6 : undefined
+>        : ^^^^^^^^^
 >m6 : typeof m6
+>   : ^^^^^^^^^
 
 void m7;
 >void m7 : undefined
+>        : ^^^^^^^^^
 >m7 : typeof m7
+>   : ^^^^^^^^^
 
 void m8;
 >void m8 : undefined
+>        : ^^^^^^^^^
 >m8 : typeof m8
+>   : ^^^^^^^^^
 
 void m9;
 >void m9 : undefined
+>        : ^^^^^^^^^
 >m9 : typeof m9
+>   : ^^^^^^^^^
 
 void m10;
 >void m10 : undefined
+>         : ^^^^^^^^^
 >m10 : typeof m10
+>    : ^^^^^^^^^^
 
 void m11;
 >void m11 : undefined
+>         : ^^^^^^^^^
 >m11 : typeof m11
+>    : ^^^^^^^^^^
 
 void m12;
 >void m12 : undefined
+>         : ^^^^^^^^^
 >m12 : typeof m12
+>    : ^^^^^^^^^^
 
 void m13;
 >void m13 : undefined
+>         : ^^^^^^^^^
 >m13 : any
+>    : ^^^
 
 void m14;
 >void m14 : undefined
+>         : ^^^^^^^^^
 >m14 : any
+>    : ^^^
 
 void m15;
 >void m15 : undefined
+>         : ^^^^^^^^^
 >m15 : any
+>    : ^^^
 
 void m16;
 >void m16 : undefined
+>         : ^^^^^^^^^
 >m16 : any
+>    : ^^^
 
 void m17;
 >void m17 : undefined
+>         : ^^^^^^^^^
 >m17 : any
+>    : ^^^
 
 void m18;
 >void m18 : undefined
+>         : ^^^^^^^^^
 >m18 : any
+>    : ^^^
 
 void m19;
 >void m19 : undefined
+>         : ^^^^^^^^^
 >m19 : any
+>    : ^^^
 
 void m20;
 >void m20 : undefined
+>         : ^^^^^^^^^
 >m20 : any
+>    : ^^^
 
 void m21;
 >void m21 : undefined
+>         : ^^^^^^^^^
 >m21 : any
+>    : ^^^
 
 void m22;
 >void m22 : undefined
+>         : ^^^^^^^^^
 >m22 : any
+>    : ^^^
 
 void m23;
 >void m23 : undefined
+>         : ^^^^^^^^^
 >m23 : any
+>    : ^^^
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
 >m24 : typeof m1
+>    : ^^^^^^^^^
 
 import m25 = require("./index");
 >m25 : typeof m1
+>    : ^^^^^^^^^
 
 import m26 = require("./subfolder");
 >m26 : typeof m26
+>    : ^^^^^^^^^^
 
 import m27 = require("./subfolder/");
 >m27 : typeof m26
+>    : ^^^^^^^^^^
 
 import m28 = require("./subfolder/index");
 >m28 : typeof m26
+>    : ^^^^^^^^^^
 
 import m29 = require("./subfolder2");
 >m29 : typeof m29
+>    : ^^^^^^^^^^
 
 import m30 = require("./subfolder2/");
 >m30 : typeof m29
+>    : ^^^^^^^^^^
 
 import m31 = require("./subfolder2/index");
 >m31 : typeof m29
+>    : ^^^^^^^^^^
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
+>    : ^^^^^^^^^^
 
 import m33 = require("./subfolder2/another/");
 >m33 : typeof m10
+>    : ^^^^^^^^^^
 
 import m34 = require("./subfolder2/another/index");
 >m34 : typeof m10
+>    : ^^^^^^^^^^
 
 void m24;
 >void m24 : undefined
+>         : ^^^^^^^^^
 >m24 : typeof m1
+>    : ^^^^^^^^^
 
 void m25;
 >void m25 : undefined
+>         : ^^^^^^^^^
 >m25 : typeof m1
+>    : ^^^^^^^^^
 
 void m26;
 >void m26 : undefined
+>         : ^^^^^^^^^
 >m26 : typeof m26
+>    : ^^^^^^^^^^
 
 void m27;
 >void m27 : undefined
+>         : ^^^^^^^^^
 >m27 : typeof m26
+>    : ^^^^^^^^^^
 
 void m28;
 >void m28 : undefined
+>         : ^^^^^^^^^
 >m28 : typeof m26
+>    : ^^^^^^^^^^
 
 void m29;
 >void m29 : undefined
+>         : ^^^^^^^^^
 >m29 : typeof m29
+>    : ^^^^^^^^^^
 
 void m30;
 >void m30 : undefined
+>         : ^^^^^^^^^
 >m30 : typeof m29
+>    : ^^^^^^^^^^
 
 void m31;
 >void m31 : undefined
+>         : ^^^^^^^^^
 >m31 : typeof m29
+>    : ^^^^^^^^^^
 
 void m32;
 >void m32 : undefined
+>         : ^^^^^^^^^
 >m32 : typeof m10
+>    : ^^^^^^^^^^
 
 void m33;
 >void m33 : undefined
+>         : ^^^^^^^^^
 >m33 : typeof m10
+>    : ^^^^^^^^^^
 
 void m34;
 >void m34 : undefined
+>         : ^^^^^^^^^
 >m34 : typeof m10
+>    : ^^^^^^^^^^
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 >_m35 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./") : Promise<any>
+>             : ^^^^^^^^^^^^
 >"./" : "./"
+>     : ^^^^
 
 const _m36 = import("./index");
 >_m36 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./index") : Promise<any>
+>                  : ^^^^^^^^^^^^
 >"./index" : "./index"
+>          : ^^^^^^^^^
 
 const _m37 = import("./subfolder");
 >_m37 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder") : Promise<any>
+>                      : ^^^^^^^^^^^^
 >"./subfolder" : "./subfolder"
+>              : ^^^^^^^^^^^^^
 
 const _m38 = import("./subfolder/");
 >_m38 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder/") : Promise<any>
+>                       : ^^^^^^^^^^^^
 >"./subfolder/" : "./subfolder/"
+>               : ^^^^^^^^^^^^^^
 
 const _m39 = import("./subfolder/index");
 >_m39 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder/index") : Promise<any>
+>                            : ^^^^^^^^^^^^
 >"./subfolder/index" : "./subfolder/index"
+>                    : ^^^^^^^^^^^^^^^^^^^
 
 const _m40 = import("./subfolder2");
 >_m40 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2") : Promise<any>
+>                       : ^^^^^^^^^^^^
 >"./subfolder2" : "./subfolder2"
+>               : ^^^^^^^^^^^^^^
 
 const _m41 = import("./subfolder2/");
 >_m41 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/") : Promise<any>
+>                        : ^^^^^^^^^^^^
 >"./subfolder2/" : "./subfolder2/"
+>                : ^^^^^^^^^^^^^^^
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/index") : Promise<any>
+>                             : ^^^^^^^^^^^^
 >"./subfolder2/index" : "./subfolder2/index"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another") : Promise<any>
+>                               : ^^^^^^^^^^^^
 >"./subfolder2/another" : "./subfolder2/another"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another/") : Promise<any>
+>                                : ^^^^^^^^^^^^
 >"./subfolder2/another/" : "./subfolder2/another/"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another/index") : Promise<any>
+>                                     : ^^^^^^^^^^^^
 >"./subfolder2/another/index" : "./subfolder2/another/index"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // esm format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/index.cjs ===
+=== index.cjs ===
 // ESM-format imports below should issue errors
 import * as m1 from "./index.js";
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 import * as m2 from "./index.mjs";
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 import * as m3 from "./index.cjs";
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 import * as m4 from "./subfolder/index.js";
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 import * as m5 from "./subfolder/index.mjs";
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 import * as m6 from "./subfolder/index.cjs";
 >m6 : typeof m6
+>   : ^^^^^^^^^
 
 import * as m7 from "./subfolder2/index.js";
 >m7 : typeof m7
+>   : ^^^^^^^^^
 
 import * as m8 from "./subfolder2/index.mjs";
 >m8 : typeof m8
+>   : ^^^^^^^^^
 
 import * as m9 from "./subfolder2/index.cjs";
 >m9 : typeof m9
+>   : ^^^^^^^^^
 
 import * as m10 from "./subfolder2/another/index.js";
 >m10 : typeof m10
+>    : ^^^^^^^^^^
 
 import * as m11 from "./subfolder2/another/index.mjs";
 >m11 : typeof m11
+>    : ^^^^^^^^^^
 
 import * as m12 from "./subfolder2/another/index.cjs";
 >m12 : typeof m12
+>    : ^^^^^^^^^^
 
 // The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
 import * as m13 from "./";
 >m13 : typeof m1
+>    : ^^^^^^^^^
 
 import * as m14 from "./index";
 >m14 : typeof m1
+>    : ^^^^^^^^^
 
 import * as m15 from "./subfolder";
 >m15 : typeof m4
+>    : ^^^^^^^^^
 
 import * as m16 from "./subfolder/";
 >m16 : typeof m4
+>    : ^^^^^^^^^
 
 import * as m17 from "./subfolder/index";
 >m17 : typeof m4
+>    : ^^^^^^^^^
 
 import * as m18 from "./subfolder2";
 >m18 : typeof m7
+>    : ^^^^^^^^^
 
 import * as m19 from "./subfolder2/";
 >m19 : typeof m7
+>    : ^^^^^^^^^
 
 import * as m20 from "./subfolder2/index";
 >m20 : typeof m7
+>    : ^^^^^^^^^
 
 import * as m21 from "./subfolder2/another";
 >m21 : typeof m10
+>    : ^^^^^^^^^^
 
 import * as m22 from "./subfolder2/another/";
 >m22 : typeof m10
+>    : ^^^^^^^^^^
 
 import * as m23 from "./subfolder2/another/index";
 >m23 : typeof m10
+>    : ^^^^^^^^^^
 
 void m1;
 >void m1 : undefined
+>        : ^^^^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 void m2;
 >void m2 : undefined
+>        : ^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 void m3;
 >void m3 : undefined
+>        : ^^^^^^^^^
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 void m4;
 >void m4 : undefined
+>        : ^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 void m5;
 >void m5 : undefined
+>        : ^^^^^^^^^
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 void m6;
 >void m6 : undefined
+>        : ^^^^^^^^^
 >m6 : typeof m6
+>   : ^^^^^^^^^
 
 void m7;
 >void m7 : undefined
+>        : ^^^^^^^^^
 >m7 : typeof m7
+>   : ^^^^^^^^^
 
 void m8;
 >void m8 : undefined
+>        : ^^^^^^^^^
 >m8 : typeof m8
+>   : ^^^^^^^^^
 
 void m9;
 >void m9 : undefined
+>        : ^^^^^^^^^
 >m9 : typeof m9
+>   : ^^^^^^^^^
 
 void m10;
 >void m10 : undefined
+>         : ^^^^^^^^^
 >m10 : typeof m10
+>    : ^^^^^^^^^^
 
 void m11;
 >void m11 : undefined
+>         : ^^^^^^^^^
 >m11 : typeof m11
+>    : ^^^^^^^^^^
 
 void m12;
 >void m12 : undefined
+>         : ^^^^^^^^^
 >m12 : typeof m12
+>    : ^^^^^^^^^^
 
 void m13;
 >void m13 : undefined
+>         : ^^^^^^^^^
 >m13 : typeof m1
+>    : ^^^^^^^^^
 
 void m14;
 >void m14 : undefined
+>         : ^^^^^^^^^
 >m14 : typeof m1
+>    : ^^^^^^^^^
 
 void m15;
 >void m15 : undefined
+>         : ^^^^^^^^^
 >m15 : typeof m4
+>    : ^^^^^^^^^
 
 void m16;
 >void m16 : undefined
+>         : ^^^^^^^^^
 >m16 : typeof m4
+>    : ^^^^^^^^^
 
 void m17;
 >void m17 : undefined
+>         : ^^^^^^^^^
 >m17 : typeof m4
+>    : ^^^^^^^^^
 
 void m18;
 >void m18 : undefined
+>         : ^^^^^^^^^
 >m18 : typeof m7
+>    : ^^^^^^^^^
 
 void m19;
 >void m19 : undefined
+>         : ^^^^^^^^^
 >m19 : typeof m7
+>    : ^^^^^^^^^
 
 void m20;
 >void m20 : undefined
+>         : ^^^^^^^^^
 >m20 : typeof m7
+>    : ^^^^^^^^^
 
 void m21;
 >void m21 : undefined
+>         : ^^^^^^^^^
 >m21 : typeof m10
+>    : ^^^^^^^^^^
 
 void m22;
 >void m22 : undefined
+>         : ^^^^^^^^^
 >m22 : typeof m10
+>    : ^^^^^^^^^^
 
 void m23;
 >void m23 : undefined
+>         : ^^^^^^^^^
 >m23 : typeof m10
+>    : ^^^^^^^^^^
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
 >m24 : typeof m1
+>    : ^^^^^^^^^
 
 import m25 = require("./index");
 >m25 : typeof m1
+>    : ^^^^^^^^^
 
 import m26 = require("./subfolder");
 >m26 : typeof m4
+>    : ^^^^^^^^^
 
 import m27 = require("./subfolder/");
 >m27 : typeof m4
+>    : ^^^^^^^^^
 
 import m28 = require("./subfolder/index");
 >m28 : typeof m4
+>    : ^^^^^^^^^
 
 import m29 = require("./subfolder2");
 >m29 : typeof m7
+>    : ^^^^^^^^^
 
 import m30 = require("./subfolder2/");
 >m30 : typeof m7
+>    : ^^^^^^^^^
 
 import m31 = require("./subfolder2/index");
 >m31 : typeof m7
+>    : ^^^^^^^^^
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
+>    : ^^^^^^^^^^
 
 import m33 = require("./subfolder2/another/");
 >m33 : typeof m10
+>    : ^^^^^^^^^^
 
 import m34 = require("./subfolder2/another/index");
 >m34 : typeof m10
+>    : ^^^^^^^^^^
 
 void m24;
 >void m24 : undefined
+>         : ^^^^^^^^^
 >m24 : typeof m1
+>    : ^^^^^^^^^
 
 void m25;
 >void m25 : undefined
+>         : ^^^^^^^^^
 >m25 : typeof m1
+>    : ^^^^^^^^^
 
 void m26;
 >void m26 : undefined
+>         : ^^^^^^^^^
 >m26 : typeof m4
+>    : ^^^^^^^^^
 
 void m27;
 >void m27 : undefined
+>         : ^^^^^^^^^
 >m27 : typeof m4
+>    : ^^^^^^^^^
 
 void m28;
 >void m28 : undefined
+>         : ^^^^^^^^^
 >m28 : typeof m4
+>    : ^^^^^^^^^
 
 void m29;
 >void m29 : undefined
+>         : ^^^^^^^^^
 >m29 : typeof m7
+>    : ^^^^^^^^^
 
 void m30;
 >void m30 : undefined
+>         : ^^^^^^^^^
 >m30 : typeof m7
+>    : ^^^^^^^^^
 
 void m31;
 >void m31 : undefined
+>         : ^^^^^^^^^
 >m31 : typeof m7
+>    : ^^^^^^^^^
 
 void m32;
 >void m32 : undefined
+>         : ^^^^^^^^^
 >m32 : typeof m10
+>    : ^^^^^^^^^^
 
 void m33;
 >void m33 : undefined
+>         : ^^^^^^^^^
 >m33 : typeof m10
+>    : ^^^^^^^^^^
 
 void m34;
 >void m34 : undefined
+>         : ^^^^^^^^^
 >m34 : typeof m10
+>    : ^^^^^^^^^^
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 >_m35 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./") : Promise<any>
+>             : ^^^^^^^^^^^^
 >"./" : "./"
+>     : ^^^^
 
 const _m36 = import("./index");
 >_m36 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./index") : Promise<any>
+>                  : ^^^^^^^^^^^^
 >"./index" : "./index"
+>          : ^^^^^^^^^
 
 const _m37 = import("./subfolder");
 >_m37 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder") : Promise<any>
+>                      : ^^^^^^^^^^^^
 >"./subfolder" : "./subfolder"
+>              : ^^^^^^^^^^^^^
 
 const _m38 = import("./subfolder/");
 >_m38 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder/") : Promise<any>
+>                       : ^^^^^^^^^^^^
 >"./subfolder/" : "./subfolder/"
+>               : ^^^^^^^^^^^^^^
 
 const _m39 = import("./subfolder/index");
 >_m39 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder/index") : Promise<any>
+>                            : ^^^^^^^^^^^^
 >"./subfolder/index" : "./subfolder/index"
+>                    : ^^^^^^^^^^^^^^^^^^^
 
 const _m40 = import("./subfolder2");
 >_m40 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2") : Promise<any>
+>                       : ^^^^^^^^^^^^
 >"./subfolder2" : "./subfolder2"
+>               : ^^^^^^^^^^^^^^
 
 const _m41 = import("./subfolder2/");
 >_m41 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/") : Promise<any>
+>                        : ^^^^^^^^^^^^
 >"./subfolder2/" : "./subfolder2/"
+>                : ^^^^^^^^^^^^^^^
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/index") : Promise<any>
+>                             : ^^^^^^^^^^^^
 >"./subfolder2/index" : "./subfolder2/index"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another") : Promise<any>
+>                               : ^^^^^^^^^^^^
 >"./subfolder2/another" : "./subfolder2/another"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another/") : Promise<any>
+>                                : ^^^^^^^^^^^^
 >"./subfolder2/another/" : "./subfolder2/another/"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another/index") : Promise<any>
+>                                     : ^^^^^^^^^^^^
 >"./subfolder2/another/index" : "./subfolder2/another/index"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // cjs format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 
-=== tests/cases/conformance/node/allowJs/index.mjs ===
+=== index.mjs ===
 import * as m1 from "./index.js";
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 import * as m2 from "./index.mjs";
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 import * as m3 from "./index.cjs";
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 import * as m4 from "./subfolder/index.js";
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 import * as m5 from "./subfolder/index.mjs";
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 import * as m6 from "./subfolder/index.cjs";
 >m6 : typeof m6
+>   : ^^^^^^^^^
 
 import * as m7 from "./subfolder2/index.js";
 >m7 : typeof m7
+>   : ^^^^^^^^^
 
 import * as m8 from "./subfolder2/index.mjs";
 >m8 : typeof m8
+>   : ^^^^^^^^^
 
 import * as m9 from "./subfolder2/index.cjs";
 >m9 : typeof m9
+>   : ^^^^^^^^^
 
 import * as m10 from "./subfolder2/another/index.js";
 >m10 : typeof m10
+>    : ^^^^^^^^^^
 
 import * as m11 from "./subfolder2/another/index.mjs";
 >m11 : typeof m11
+>    : ^^^^^^^^^^
 
 import * as m12 from "./subfolder2/another/index.cjs";
 >m12 : typeof m12
+>    : ^^^^^^^^^^
 
 // The next ones should all fail - esm format files have no index resolution or extension resolution
 import * as m13 from "./";
 >m13 : any
+>    : ^^^
 
 import * as m14 from "./index";
 >m14 : any
+>    : ^^^
 
 import * as m15 from "./subfolder";
 >m15 : any
+>    : ^^^
 
 import * as m16 from "./subfolder/";
 >m16 : any
+>    : ^^^
 
 import * as m17 from "./subfolder/index";
 >m17 : any
+>    : ^^^
 
 import * as m18 from "./subfolder2";
 >m18 : any
+>    : ^^^
 
 import * as m19 from "./subfolder2/";
 >m19 : any
+>    : ^^^
 
 import * as m20 from "./subfolder2/index";
 >m20 : any
+>    : ^^^
 
 import * as m21 from "./subfolder2/another";
 >m21 : any
+>    : ^^^
 
 import * as m22 from "./subfolder2/another/";
 >m22 : any
+>    : ^^^
 
 import * as m23 from "./subfolder2/another/index";
 >m23 : any
+>    : ^^^
 
 void m1;
 >void m1 : undefined
+>        : ^^^^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
 void m2;
 >void m2 : undefined
+>        : ^^^^^^^^^
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
 void m3;
 >void m3 : undefined
+>        : ^^^^^^^^^
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 void m4;
 >void m4 : undefined
+>        : ^^^^^^^^^
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
 void m5;
 >void m5 : undefined
+>        : ^^^^^^^^^
 >m5 : typeof m5
+>   : ^^^^^^^^^
 
 void m6;
 >void m6 : undefined
+>        : ^^^^^^^^^
 >m6 : typeof m6
+>   : ^^^^^^^^^
 
 void m7;
 >void m7 : undefined
+>        : ^^^^^^^^^
 >m7 : typeof m7
+>   : ^^^^^^^^^
 
 void m8;
 >void m8 : undefined
+>        : ^^^^^^^^^
 >m8 : typeof m8
+>   : ^^^^^^^^^
 
 void m9;
 >void m9 : undefined
+>        : ^^^^^^^^^
 >m9 : typeof m9
+>   : ^^^^^^^^^
 
 void m10;
 >void m10 : undefined
+>         : ^^^^^^^^^
 >m10 : typeof m10
+>    : ^^^^^^^^^^
 
 void m11;
 >void m11 : undefined
+>         : ^^^^^^^^^
 >m11 : typeof m11
+>    : ^^^^^^^^^^
 
 void m12;
 >void m12 : undefined
+>         : ^^^^^^^^^
 >m12 : typeof m12
+>    : ^^^^^^^^^^
 
 void m13;
 >void m13 : undefined
+>         : ^^^^^^^^^
 >m13 : any
+>    : ^^^
 
 void m14;
 >void m14 : undefined
+>         : ^^^^^^^^^
 >m14 : any
+>    : ^^^
 
 void m15;
 >void m15 : undefined
+>         : ^^^^^^^^^
 >m15 : any
+>    : ^^^
 
 void m16;
 >void m16 : undefined
+>         : ^^^^^^^^^
 >m16 : any
+>    : ^^^
 
 void m17;
 >void m17 : undefined
+>         : ^^^^^^^^^
 >m17 : any
+>    : ^^^
 
 void m18;
 >void m18 : undefined
+>         : ^^^^^^^^^
 >m18 : any
+>    : ^^^
 
 void m19;
 >void m19 : undefined
+>         : ^^^^^^^^^
 >m19 : any
+>    : ^^^
 
 void m20;
 >void m20 : undefined
+>         : ^^^^^^^^^
 >m20 : any
+>    : ^^^
 
 void m21;
 >void m21 : undefined
+>         : ^^^^^^^^^
 >m21 : any
+>    : ^^^
 
 void m22;
 >void m22 : undefined
+>         : ^^^^^^^^^
 >m22 : any
+>    : ^^^
 
 void m23;
 >void m23 : undefined
+>         : ^^^^^^^^^
 >m23 : any
+>    : ^^^
 
 // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
 import m24 = require("./");
 >m24 : typeof m1
+>    : ^^^^^^^^^
 
 import m25 = require("./index");
 >m25 : typeof m1
+>    : ^^^^^^^^^
 
 import m26 = require("./subfolder");
 >m26 : typeof m26
+>    : ^^^^^^^^^^
 
 import m27 = require("./subfolder/");
 >m27 : typeof m26
+>    : ^^^^^^^^^^
 
 import m28 = require("./subfolder/index");
 >m28 : typeof m26
+>    : ^^^^^^^^^^
 
 import m29 = require("./subfolder2");
 >m29 : typeof m29
+>    : ^^^^^^^^^^
 
 import m30 = require("./subfolder2/");
 >m30 : typeof m29
+>    : ^^^^^^^^^^
 
 import m31 = require("./subfolder2/index");
 >m31 : typeof m29
+>    : ^^^^^^^^^^
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
+>    : ^^^^^^^^^^
 
 import m33 = require("./subfolder2/another/");
 >m33 : typeof m10
+>    : ^^^^^^^^^^
 
 import m34 = require("./subfolder2/another/index");
 >m34 : typeof m10
+>    : ^^^^^^^^^^
 
 void m24;
 >void m24 : undefined
+>         : ^^^^^^^^^
 >m24 : typeof m1
+>    : ^^^^^^^^^
 
 void m25;
 >void m25 : undefined
+>         : ^^^^^^^^^
 >m25 : typeof m1
+>    : ^^^^^^^^^
 
 void m26;
 >void m26 : undefined
+>         : ^^^^^^^^^
 >m26 : typeof m26
+>    : ^^^^^^^^^^
 
 void m27;
 >void m27 : undefined
+>         : ^^^^^^^^^
 >m27 : typeof m26
+>    : ^^^^^^^^^^
 
 void m28;
 >void m28 : undefined
+>         : ^^^^^^^^^
 >m28 : typeof m26
+>    : ^^^^^^^^^^
 
 void m29;
 >void m29 : undefined
+>         : ^^^^^^^^^
 >m29 : typeof m29
+>    : ^^^^^^^^^^
 
 void m30;
 >void m30 : undefined
+>         : ^^^^^^^^^
 >m30 : typeof m29
+>    : ^^^^^^^^^^
 
 void m31;
 >void m31 : undefined
+>         : ^^^^^^^^^
 >m31 : typeof m29
+>    : ^^^^^^^^^^
 
 void m32;
 >void m32 : undefined
+>         : ^^^^^^^^^
 >m32 : typeof m10
+>    : ^^^^^^^^^^
 
 void m33;
 >void m33 : undefined
+>         : ^^^^^^^^^
 >m33 : typeof m10
+>    : ^^^^^^^^^^
 
 void m34;
 >void m34 : undefined
+>         : ^^^^^^^^^
 >m34 : typeof m10
+>    : ^^^^^^^^^^
 
 // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
 const _m35 = import("./");
 >_m35 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./") : Promise<any>
+>             : ^^^^^^^^^^^^
 >"./" : "./"
+>     : ^^^^
 
 const _m36 = import("./index");
 >_m36 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./index") : Promise<any>
+>                  : ^^^^^^^^^^^^
 >"./index" : "./index"
+>          : ^^^^^^^^^
 
 const _m37 = import("./subfolder");
 >_m37 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder") : Promise<any>
+>                      : ^^^^^^^^^^^^
 >"./subfolder" : "./subfolder"
+>              : ^^^^^^^^^^^^^
 
 const _m38 = import("./subfolder/");
 >_m38 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder/") : Promise<any>
+>                       : ^^^^^^^^^^^^
 >"./subfolder/" : "./subfolder/"
+>               : ^^^^^^^^^^^^^^
 
 const _m39 = import("./subfolder/index");
 >_m39 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder/index") : Promise<any>
+>                            : ^^^^^^^^^^^^
 >"./subfolder/index" : "./subfolder/index"
+>                    : ^^^^^^^^^^^^^^^^^^^
 
 const _m40 = import("./subfolder2");
 >_m40 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2") : Promise<any>
+>                       : ^^^^^^^^^^^^
 >"./subfolder2" : "./subfolder2"
+>               : ^^^^^^^^^^^^^^
 
 const _m41 = import("./subfolder2/");
 >_m41 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/") : Promise<any>
+>                        : ^^^^^^^^^^^^
 >"./subfolder2/" : "./subfolder2/"
+>                : ^^^^^^^^^^^^^^^
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/index") : Promise<any>
+>                             : ^^^^^^^^^^^^
 >"./subfolder2/index" : "./subfolder2/index"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another") : Promise<any>
+>                               : ^^^^^^^^^^^^
 >"./subfolder2/another" : "./subfolder2/another"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another/") : Promise<any>
+>                                : ^^^^^^^^^^^^
 >"./subfolder2/another/" : "./subfolder2/another/"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Promise<any>
+>     : ^^^^^^^^^^^^
 >import("./subfolder2/another/index") : Promise<any>
+>                                     : ^^^^^^^^^^^^
 >"./subfolder2/another/index" : "./subfolder2/another/index"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // esm format file
 const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export {x};
 >x : 1
+>  : ^
 

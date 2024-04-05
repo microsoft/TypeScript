@@ -1,23 +1,34 @@
-=== tests/cases/conformance/es6/Symbols/symbolType19.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType19.ts] ////
+
+=== symbolType19.ts ===
 enum E { }
 >E : E
+>  : ^
 
 var x: symbol | E;
 >x : symbol | E
+>  : ^^^^^^^^^^
 
 x;
 >x : symbol | E
+>  : ^^^^^^^^^^
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : symbol | E
+>  : ^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     x;
 >x : E
+>  : ^
 }
 else {
     x;
 >x : symbol
+>  : ^^^^^^
 }

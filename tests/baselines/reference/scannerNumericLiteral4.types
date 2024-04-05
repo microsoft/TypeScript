@@ -1,4 +1,7 @@
-=== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral4.ts ===
+//// [tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral4.ts] ////
+
+=== scannerNumericLiteral4.ts ===
 1e
 >1e : 1
+>   : ^
 

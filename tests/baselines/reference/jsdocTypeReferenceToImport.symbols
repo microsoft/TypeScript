@@ -1,51 +1,51 @@
-=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.js ===
-// #34802
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.ts] ////
 
+=== jsdocTypeReferenceToImport.js ===
 const C = require('./ex').C;
->C : Symbol(C, Decl(jsdocTypeReferenceToImport.js, 2, 5))
+>C : Symbol(C, Decl(jsdocTypeReferenceToImport.js, 0, 5))
 >require('./ex').C : Symbol(C, Decl(ex.d.ts, 0, 0))
 >require : Symbol(require)
->'./ex' : Symbol("tests/cases/conformance/jsdoc/ex", Decl(ex.d.ts, 0, 0))
+>'./ex' : Symbol("ex", Decl(ex.d.ts, 0, 0))
 >C : Symbol(C, Decl(ex.d.ts, 0, 0))
 
 const D = require('./ex')?.C;
->D : Symbol(D, Decl(jsdocTypeReferenceToImport.js, 3, 5))
+>D : Symbol(D, Decl(jsdocTypeReferenceToImport.js, 1, 5))
 >require('./ex')?.C : Symbol(C, Decl(ex.d.ts, 0, 0))
 >require : Symbol(require)
->'./ex' : Symbol("tests/cases/conformance/jsdoc/ex", Decl(ex.d.ts, 0, 0))
+>'./ex' : Symbol("ex", Decl(ex.d.ts, 0, 0))
 >C : Symbol(C, Decl(ex.d.ts, 0, 0))
 
 /** @type {C} c */
 var c = new C()
->c : Symbol(c, Decl(jsdocTypeReferenceToImport.js, 5, 3))
->C : Symbol(C, Decl(jsdocTypeReferenceToImport.js, 2, 5))
+>c : Symbol(c, Decl(jsdocTypeReferenceToImport.js, 3, 3))
+>C : Symbol(C, Decl(jsdocTypeReferenceToImport.js, 0, 5))
 
 c.start
 >c.start : Symbol(C.start, Decl(ex.d.ts, 0, 16))
->c : Symbol(c, Decl(jsdocTypeReferenceToImport.js, 5, 3))
+>c : Symbol(c, Decl(jsdocTypeReferenceToImport.js, 3, 3))
 >start : Symbol(C.start, Decl(ex.d.ts, 0, 16))
 
 c.end
 >c.end : Symbol(C.end, Decl(ex.d.ts, 1, 17))
->c : Symbol(c, Decl(jsdocTypeReferenceToImport.js, 5, 3))
+>c : Symbol(c, Decl(jsdocTypeReferenceToImport.js, 3, 3))
 >end : Symbol(C.end, Decl(ex.d.ts, 1, 17))
 
 /** @type {D} c */
 var d = new D()
->d : Symbol(d, Decl(jsdocTypeReferenceToImport.js, 10, 3))
->D : Symbol(D, Decl(jsdocTypeReferenceToImport.js, 3, 5))
+>d : Symbol(d, Decl(jsdocTypeReferenceToImport.js, 8, 3))
+>D : Symbol(D, Decl(jsdocTypeReferenceToImport.js, 1, 5))
 
 d.start
 >d.start : Symbol(C.start, Decl(ex.d.ts, 0, 16))
->d : Symbol(d, Decl(jsdocTypeReferenceToImport.js, 10, 3))
+>d : Symbol(d, Decl(jsdocTypeReferenceToImport.js, 8, 3))
 >start : Symbol(C.start, Decl(ex.d.ts, 0, 16))
 
 d.end
 >d.end : Symbol(C.end, Decl(ex.d.ts, 1, 17))
->d : Symbol(d, Decl(jsdocTypeReferenceToImport.js, 10, 3))
+>d : Symbol(d, Decl(jsdocTypeReferenceToImport.js, 8, 3))
 >end : Symbol(C.end, Decl(ex.d.ts, 1, 17))
 
-=== tests/cases/conformance/jsdoc/ex.d.ts ===
+=== ex.d.ts ===
 export class C {
 >C : Symbol(C, Decl(ex.d.ts, 0, 0))
 

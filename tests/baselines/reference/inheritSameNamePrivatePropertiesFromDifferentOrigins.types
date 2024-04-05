@@ -1,19 +1,26 @@
-=== tests/cases/compiler/inheritSameNamePrivatePropertiesFromDifferentOrigins.ts ===
+//// [tests/cases/compiler/inheritSameNamePrivatePropertiesFromDifferentOrigins.ts] ////
+
+=== inheritSameNamePrivatePropertiesFromDifferentOrigins.ts ===
 class C {
 >C : C
+>  : ^
 
     private x: number;
 >x : number
+>  : ^^^^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     private x: number;
 >x : number
+>  : ^^^^^^
 }
 
 interface A extends C, C2 { // error
     y: string;
 >y : string
+>  : ^^^^^^
 }

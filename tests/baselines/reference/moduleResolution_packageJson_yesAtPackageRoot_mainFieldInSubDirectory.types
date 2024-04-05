@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/moduleResolution_packageJson_yesAtPackageRoot_mainFieldInSubDirectory.ts] ////
+
 === /node_modules/foo/src/index.d.ts ===
 export const x: number;
 >x : number
+>  : ^^^^^^
 
 === /index.ts ===
 import { x } from "foo";
 >x : number
+>  : ^^^^^^
 

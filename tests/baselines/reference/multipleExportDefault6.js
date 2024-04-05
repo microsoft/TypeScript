@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault6.ts] ////
+
 //// [multipleExportDefault6.ts]
 export default {
     lol: 1

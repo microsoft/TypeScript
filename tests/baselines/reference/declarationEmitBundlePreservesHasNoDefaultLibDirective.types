@@ -1,12 +1,16 @@
-=== tests/cases/compiler/extensions.ts ===
+//// [tests/cases/compiler/declarationEmitBundlePreservesHasNoDefaultLibDirective.ts] ////
+
+=== extensions.ts ===
 /// <reference no-default-lib="true"/>
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     public: string;
 >public : string
+>       : ^^^^^^
 }
-=== tests/cases/compiler/core.ts ===
+=== core.ts ===
 
 interface Array<T> {}
 interface Boolean {}

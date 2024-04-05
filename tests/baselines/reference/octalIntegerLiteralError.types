@@ -1,30 +1,46 @@
-=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts ===
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts] ////
+
+=== octalIntegerLiteralError.ts ===
 // error
 var oct1 = 0O13334823;
 >oct1 : number
+>     : ^^^^^^
 >0O13334 : 5852
+>        : ^^^^
 >823 : 823
+>    : ^^^
 
 var oct2 = 0o34318592;
 >oct2 : number
+>     : ^^^^^^
 >0o3431 : 1817
+>       : ^^^^
 >8592 : 8592
+>     : ^^^^
 
 var obj1 = {
 >obj1 : { 19230: string; }
+>     : ^^^^^^^^^^^^^^^^^^
 >{    0O45436: "hi",    19230: "Hello",    "19230": "world",} : { 19230: string; }
+>                                                             : ^^^^^^^^^^^^^^^^^^
 
     0O45436: "hi",
 >0O45436 : string
+>        : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
     19230: "Hello",
 >19230 : string
+>      : ^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 
     "19230": "world",
 >"19230" : string
+>        : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 
 };
 

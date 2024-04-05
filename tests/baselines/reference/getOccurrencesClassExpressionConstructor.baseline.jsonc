@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionConstructor.ts ===
+// let A = class Foo {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|]();|>
+//     <|[|{| kind: "reference" |}constructor|](x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](y: string);|>
+//     <|[|{| kind: "reference" |}constructor|](a?: any) {
+//     }|>
+// }
+// 
+// let B = class D {
+// --- (line: 10) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionConstructor.ts ===
+// let A = class Foo {
+//     <|[|{| kind: "reference" |}constructor|]();|>
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](y: string);|>
+//     <|[|{| kind: "reference" |}constructor|](a?: any) {
+//     }|>
+// }
+// 
+// let B = class D {
+// --- (line: 10) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionConstructor.ts ===
+// let A = class Foo {
+//     <|[|{| kind: "reference" |}constructor|]();|>
+//     <|[|{| kind: "reference" |}constructor|](x: number);|>
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](y: string);|>
+//     <|[|{| kind: "reference" |}constructor|](a?: any) {
+//     }|>
+// }
+// 
+// let B = class D {
+// --- (line: 10) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionConstructor.ts ===
+// let A = class Foo {
+//     <|[|{| kind: "reference" |}constructor|]();|>
+//     <|[|{| kind: "reference" |}constructor|](x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](y: string);|>
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](a?: any) {
+//     }|>
+// }
+// 
+// let B = class D {
+// --- (line: 10) skipped ---

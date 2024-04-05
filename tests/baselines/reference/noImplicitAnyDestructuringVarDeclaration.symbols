@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts] ////
+
+=== noImplicitAnyDestructuringVarDeclaration.ts ===
 var [a], {b}, c, d; // error
 >a : Symbol(a, Decl(noImplicitAnyDestructuringVarDeclaration.ts, 0, 5))
 >b : Symbol(b, Decl(noImplicitAnyDestructuringVarDeclaration.ts, 0, 10))

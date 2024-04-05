@@ -17,6 +17,16 @@ CleanBuild:
         "version": "1045484683-export function bar() { }"
       }
     },
+    "root": [
+      [
+        2,
+        "./a.ts"
+      ],
+      [
+        3,
+        "./b.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true
@@ -45,6 +55,16 @@ IncrementalBuild:
         "version": "1045484683-export function bar() { }"
       }
     },
+    "root": [
+      [
+        2,
+        "./a.ts"
+      ],
+      [
+        3,
+        "./b.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },

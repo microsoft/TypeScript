@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyInterface.ts ===
+//// [tests/cases/compiler/privacyInterface.ts] ////
+
+=== privacyInterface.ts ===
 export module m1 {
 >m1 : Symbol(m1, Decl(privacyInterface.ts, 0, 0))
 

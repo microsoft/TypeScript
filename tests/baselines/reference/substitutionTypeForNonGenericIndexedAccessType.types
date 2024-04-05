@@ -1,6 +1,9 @@
-=== tests/cases/compiler/substitutionTypeForNonGenericIndexedAccessType.ts ===
+//// [tests/cases/compiler/substitutionTypeForNonGenericIndexedAccessType.ts] ////
+
+=== substitutionTypeForNonGenericIndexedAccessType.ts ===
 interface A {}
 
 type B = A extends Record<'foo', string> ? A['foo'] : string; // no error
 >B : string
+>  : ^^^^^^
 

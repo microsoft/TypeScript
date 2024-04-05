@@ -1,23 +1,33 @@
-=== tests/cases/compiler/typeOfThisInStatics.ts ===
+//// [tests/cases/compiler/typeOfThisInStatics.ts] ////
+
+=== typeOfThisInStatics.ts ===
 class C {
 >C : C
+>  : ^
 
     static foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         var r = this;
 >r : typeof C
+>  : ^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
     }
     static get x() {
 >x : number
+>  : ^^^^^^
 
         var r = this;
 >r : typeof C
+>  : ^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }
 

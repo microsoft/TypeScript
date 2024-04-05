@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts] ////
+
 //// [assignmentCompatWithDiscriminatedUnion.ts]
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 

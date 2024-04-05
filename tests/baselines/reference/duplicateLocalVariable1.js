@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLocalVariable1.ts] ////
+
 //// [duplicateLocalVariable1.ts]
 //import FileManager = require('filemanager');
 //import App = require('app');

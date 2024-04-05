@@ -1,43 +1,68 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.ts] ////
+
+=== privateNameJsBadAssignment.js ===
 exports.#nope = 1;           // Error (outside class body)
 >exports.#nope = 1 : 1
+>                  : ^
 >exports.#nope : any
+>              : ^^^
 >exports : any
+>        : ^^^
 >1 : 1
+>  : ^
 
 function A() { }
 >A : typeof A
+>  : ^^^^^^^^
 
 A.prototype.#no = 2;         // Error (outside class body)
 >A.prototype.#no = 2 : 2
+>                    : ^
 >A.prototype.#no : any
+>                : ^^^
 >A.prototype : any
+>            : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >2 : 2
+>  : ^
 
 class B {}
 >B : B
+>  : ^
 
 B.#foo = 3;                  // Error (outside class body)
 >B.#foo = 3 : 3
+>           : ^
 >B.#foo : any
+>       : ^^^
 >B : typeof B
+>  : ^^^^^^^^
 >3 : 3
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     #bar = 6;
 >#bar : number
+>     : ^^^^^^
 >6 : 6
+>  : ^
 
     constructor () {
         this.#foo = 3;       // Error (undeclared)
 >this.#foo = 3 : 3
+>              : ^
 >this.#foo : any
+>          : ^^^
 >this : this
+>     : ^^^^
 >3 : 3
+>  : ^
     }
 }
 

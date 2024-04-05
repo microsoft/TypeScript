@@ -1,12 +1,12 @@
-tests/cases/conformance/jsdoc/a.js(14,29): error TS2339: Property 'a' does not exist on type 'U'.
-tests/cases/conformance/jsdoc/a.js(14,35): error TS2339: Property 'b' does not exist on type 'U'.
-tests/cases/conformance/jsdoc/a.js(21,3): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
+a.js(14,29): error TS2339: Property 'a' does not exist on type 'U'.
+a.js(14,35): error TS2339: Property 'b' does not exist on type 'U'.
+a.js(21,3): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-tests/cases/conformance/jsdoc/a.js(24,15): error TS2304: Cannot find name 'NoLongerAllowed'.
-tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
+a.js(24,15): error TS2304: Cannot find name 'NoLongerAllowed'.
+a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
 
 
-==== tests/cases/conformance/jsdoc/a.js (5 errors) ====
+==== a.js (5 errors) ====
     /**
      * @template {{ a: number, b: string }} T,U A Comment
      * @template {{ c: boolean }} V uh ... are comments even supported??
@@ -35,7 +35,7 @@ tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type
       ~~~~~~~~~~
 !!! error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
 !!! error TS2345:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-!!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here.
+!!! related TS2728 a.js:2:28: 'b' is declared here.
     
     /**
      * @template {NoLongerAllowed}

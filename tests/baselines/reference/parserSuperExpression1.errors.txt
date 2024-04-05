@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression1.ts(3,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression1.ts(10,13): error TS2335: 'super' can only be referenced in a derived class.
+parserSuperExpression1.ts(3,9): error TS2335: 'super' can only be referenced in a derived class.
+parserSuperExpression1.ts(10,13): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression1.ts (2 errors) ====
+==== parserSuperExpression1.ts (2 errors) ====
     class C {
         private foo() {
             super.foo();

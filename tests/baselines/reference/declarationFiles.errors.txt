@@ -1,11 +1,11 @@
-tests/cases/conformance/types/thisType/declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/thisType/declarationFiles.ts(30,5): error TS2527: The inferred type of 'x1' references an inaccessible 'this' type. A type annotation is necessary.
-tests/cases/conformance/types/thisType/declarationFiles.ts(32,5): error TS2527: The inferred type of 'x3' references an inaccessible 'this' type. A type annotation is necessary.
-tests/cases/conformance/types/thisType/declarationFiles.ts(34,5): error TS2527: The inferred type of 'f1' references an inaccessible 'this' type. A type annotation is necessary.
-tests/cases/conformance/types/thisType/declarationFiles.ts(40,5): error TS2527: The inferred type of 'f3' references an inaccessible 'this' type. A type annotation is necessary.
+declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+declarationFiles.ts(30,5): error TS2527: The inferred type of 'x1' references an inaccessible 'this' type. A type annotation is necessary.
+declarationFiles.ts(32,5): error TS2527: The inferred type of 'x3' references an inaccessible 'this' type. A type annotation is necessary.
+declarationFiles.ts(34,5): error TS2527: The inferred type of 'f1' references an inaccessible 'this' type. A type annotation is necessary.
+declarationFiles.ts(40,5): error TS2527: The inferred type of 'f3' references an inaccessible 'this' type. A type annotation is necessary.
 
 
-==== tests/cases/conformance/types/thisType/declarationFiles.ts (5 errors) ====
+==== declarationFiles.ts (5 errors) ====
     class C1 {
         x: this;
         f(x: this): this { return undefined; }

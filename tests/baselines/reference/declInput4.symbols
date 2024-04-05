@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declInput4.ts ===
+//// [tests/cases/compiler/declInput4.ts] ////
+
+=== declInput4.ts ===
 module M {
 >M : Symbol(M, Decl(declInput4.ts, 0, 0))
 

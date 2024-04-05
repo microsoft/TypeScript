@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts] ////
+
 //// [decoratorMetadataGenericTypeVariable.ts]
 export class C<TypeVariable> {
   @Decorate

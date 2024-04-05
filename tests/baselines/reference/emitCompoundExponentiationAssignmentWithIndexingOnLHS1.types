@@ -1,99 +1,175 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS1.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS1.ts] ////
+
+=== emitCompoundExponentiationAssignmentWithIndexingOnLHS1.ts ===
 var array0 = [1, 2, 3]
 >array0 : number[]
+>       : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var i0 = 0;
 >i0 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 array0[++i0] **= 2;
 >array0[++i0] **= 2 : number
+>                   : ^^^^^^
 >array0[++i0] : number
+>             : ^^^^^^
 >array0 : number[]
+>       : ^^^^^^^^
 >++i0 : number
+>     : ^^^^^^
 >i0 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
 var array1 = [1, 2, 3]
 >array1 : number[]
+>       : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var i1 = 0;
 >i1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 array1[++i1] **= array1[++i1] **= 2;
 >array1[++i1] **= array1[++i1] **= 2 : number
+>                                    : ^^^^^^
 >array1[++i1] : number
+>             : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >++i1 : number
+>     : ^^^^^^
 >i1 : number
+>   : ^^^^^^
 >array1[++i1] **= 2 : number
+>                   : ^^^^^^
 >array1[++i1] : number
+>             : ^^^^^^
 >array1 : number[]
+>       : ^^^^^^^^
 >++i1 : number
+>     : ^^^^^^
 >i1 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
 var array2 = [1, 2, 3]
 >array2 : number[]
+>       : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var i2 = 0;
 >i2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 array2[++i2] **= array2[++i2] ** 2;
 >array2[++i2] **= array2[++i2] ** 2 : number
+>                                   : ^^^^^^
 >array2[++i2] : number
+>             : ^^^^^^
 >array2 : number[]
+>       : ^^^^^^^^
 >++i2 : number
+>     : ^^^^^^
 >i2 : number
+>   : ^^^^^^
 >array2[++i2] ** 2 : number
+>                  : ^^^^^^
 >array2[++i2] : number
+>             : ^^^^^^
 >array2 : number[]
+>       : ^^^^^^^^
 >++i2 : number
+>     : ^^^^^^
 >i2 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
 var array3 = [2, 2, 3];
 >array3 : number[]
+>       : ^^^^^^^^
 >[2, 2, 3] : number[]
+>          : ^^^^^^^^
 >2 : 2
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var j0 = 0, j1 = 1;
 >j0 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >j1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 array3[j0++] **= array3[j1++] **= array3[j0++] **= 1;
 >array3[j0++] **= array3[j1++] **= array3[j0++] **= 1 : number
+>                                                     : ^^^^^^
 >array3[j0++] : number
+>             : ^^^^^^
 >array3 : number[]
+>       : ^^^^^^^^
 >j0++ : number
+>     : ^^^^^^
 >j0 : number
+>   : ^^^^^^
 >array3[j1++] **= array3[j0++] **= 1 : number
+>                                    : ^^^^^^
 >array3[j1++] : number
+>             : ^^^^^^
 >array3 : number[]
+>       : ^^^^^^^^
 >j1++ : number
+>     : ^^^^^^
 >j1 : number
+>   : ^^^^^^
 >array3[j0++] **= 1 : number
+>                   : ^^^^^^
 >array3[j0++] : number
+>             : ^^^^^^
 >array3 : number[]
+>       : ^^^^^^^^
 >j0++ : number
+>     : ^^^^^^
 >j0 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 

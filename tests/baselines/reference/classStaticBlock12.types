@@ -1,15 +1,22 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock12.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock12.ts] ////
+
+=== classStaticBlock12.ts ===
 class C {
 >C : C
+>  : ^
 
   static #x = 1;
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
   
   static {
     C.#x;
 >C.#x : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
   }
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx] ////
+
 //// [tsxAttributesHasInferrableIndex.tsx]
 type AttributeValue = number | string | Date | boolean;
 interface Attributes {

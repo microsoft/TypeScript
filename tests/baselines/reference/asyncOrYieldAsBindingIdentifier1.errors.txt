@@ -1,12 +1,12 @@
-tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(14,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(18,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(22,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(38,9): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
-tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(42,9): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
-tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(46,11): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+asyncOrYieldAsBindingIdentifier1.ts(14,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+asyncOrYieldAsBindingIdentifier1.ts(18,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+asyncOrYieldAsBindingIdentifier1.ts(22,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+asyncOrYieldAsBindingIdentifier1.ts(38,9): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+asyncOrYieldAsBindingIdentifier1.ts(42,9): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+asyncOrYieldAsBindingIdentifier1.ts(46,11): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
 
 
-==== tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts (6 errors) ====
+==== asyncOrYieldAsBindingIdentifier1.ts (6 errors) ====
     function f_let () {
         let await = 1
     }

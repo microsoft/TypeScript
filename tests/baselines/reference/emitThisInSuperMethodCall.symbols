@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitThisInSuperMethodCall.ts ===
+//// [tests/cases/compiler/emitThisInSuperMethodCall.ts] ////
+
+=== emitThisInSuperMethodCall.ts ===
 class User {
 >User : Symbol(User, Decl(emitThisInSuperMethodCall.ts, 0, 0))
 

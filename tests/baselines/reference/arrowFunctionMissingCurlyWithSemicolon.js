@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts] ////
+
 //// [arrowFunctionMissingCurlyWithSemicolon.ts]
 // Should error at semicolon.
 var f = () => ;

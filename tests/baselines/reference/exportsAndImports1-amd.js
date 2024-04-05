@@ -41,7 +41,6 @@ define(["require", "exports"], function (require, exports) {
     var v = 1;
     exports.v = v;
     function f() { }
-    exports.f = f;
     var C = /** @class */ (function () {
         function C() {
         }
@@ -53,12 +52,10 @@ define(["require", "exports"], function (require, exports) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(E || (E = {}));
-    exports.E = E;
+    })(E || (exports.E = E = {}));
     var M;
     (function (M) {
-    })(M || (M = {}));
-    exports.M = M;
+    })(M || (exports.M = M = {}));
     var a = M.x;
     exports.a = a;
 });

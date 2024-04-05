@@ -1,10 +1,15 @@
-=== tests/cases/compiler/exportDefaultInterfaceAndValue.ts ===
+//// [tests/cases/compiler/exportDefaultInterfaceAndValue.ts] ////
+
+=== exportDefaultInterfaceAndValue.ts ===
 export default interface A { a: string; }
 >a : string
+>  : ^^^^^^
 
 export default function() { return 1; }
 >1 : 1
+>  : ^
 
 declare var x: A;
 >x : A
+>  : ^
 

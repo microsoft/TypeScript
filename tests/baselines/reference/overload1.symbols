@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overload1.ts ===
+//// [tests/cases/compiler/overload1.ts] ////
+
+=== overload1.ts ===
 module O {
 >O : Symbol(O, Decl(overload1.ts, 0, 0))
 

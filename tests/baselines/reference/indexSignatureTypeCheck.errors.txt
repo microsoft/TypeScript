@@ -1,10 +1,10 @@
-tests/cases/compiler/indexSignatureTypeCheck.ts(14,8): error TS1019: An index signature parameter cannot have a question mark.
-tests/cases/compiler/indexSignatureTypeCheck.ts(15,6): error TS1017: An index signature cannot have a rest parameter.
-tests/cases/compiler/indexSignatureTypeCheck.ts(16,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/indexSignatureTypeCheck.ts(17,6): error TS1096: An index signature must have exactly one parameter.
+indexSignatureTypeCheck.ts(14,8): error TS1019: An index signature parameter cannot have a question mark.
+indexSignatureTypeCheck.ts(15,6): error TS1017: An index signature cannot have a rest parameter.
+indexSignatureTypeCheck.ts(16,6): error TS1096: An index signature must have exactly one parameter.
+indexSignatureTypeCheck.ts(17,6): error TS1096: An index signature must have exactly one parameter.
 
 
-==== tests/cases/compiler/indexSignatureTypeCheck.ts (4 errors) ====
+==== indexSignatureTypeCheck.ts (4 errors) ====
     interface IPropertySet {
     
         [index: string]: any;

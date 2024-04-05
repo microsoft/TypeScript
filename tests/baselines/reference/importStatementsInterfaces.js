@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts] ////
+
 //// [importStatementsInterfaces.ts]
 module A {
     export interface Point {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/jsdocTwoLineTypedef.ts ===
+//// [tests/cases/conformance/jsdoc/jsdocTwoLineTypedef.ts] ////
+
+=== jsdocTwoLineTypedef.ts ===
 // Regression from #18301
 /**
  * @typedef LoadCallback

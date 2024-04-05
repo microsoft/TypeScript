@@ -11,6 +11,9 @@ import {
 
 /** Performance measurements for the compiler. */
 
+// NOTE: declared global is injected by ts-perf to monitor profiler marks to generate heap snapshots.
+declare let onProfilerEvent: ((eventName: string) => void) | undefined;
+
 let perfHooks: PerformanceHooks | undefined;
 // when set, indicates the implementation of `Performance` to use for user timing.
 // when unset, indicates user timing is unavailable or disabled.
@@ -32,7 +35,7 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
     let enterCount = 0;
     return {
         enter,
-        exit
+        exit,
     };
 
     function enter() {
@@ -74,6 +77,9 @@ export function mark(markName: string) {
         counts.set(markName, count + 1);
         marks.set(markName, timestamp());
         performanceImpl?.mark(markName);
+        if (typeof onProfilerEvent === "function") {
+            onProfilerEvent(markName);
+        }
     }
 }
 
@@ -174,7 +180,7 @@ export function enable(system: System = sys) {
     if (!enabled) {
         enabled = true;
         perfHooks ||= tryGetNativePerformanceHooks();
-        if (perfHooks) {
+        if (perfHooks?.performance) {
             timeorigin = perfHooks.performance.timeOrigin;
             // NodeJS's Web Performance API is currently slower than expected, but we'd still like
             // to be able to leverage native trace events when node is run with either `--cpu-prof`

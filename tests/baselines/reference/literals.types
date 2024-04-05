@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/literals/literals.ts ===
+//// [tests/cases/conformance/expressions/literals/literals.ts] ////
+
+=== literals.ts ===
 //typeof null is Null
 //typeof true is Boolean
 //typeof false is Boolean
@@ -8,105 +10,154 @@
 
 var nu = null / null;
 >nu : number
+>   : ^^^^^^
 >null / null : number
->null : null
->null : null
+>            : ^^^^^^
 
 var u = undefined / undefined;
 >u : number
+>  : ^^^^^^
 >undefined / undefined : number
+>                      : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 var b = true;
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var b = false;
 >b : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var n: number;
 >n : number
+>  : ^^^^^^
 
 var n = 1;
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var n = 1.0;
 >n : number
+>  : ^^^^^^
 >1.0 : 1
+>    : ^
 
 var n = 1e4;
 >n : number
+>  : ^^^^^^
 >1e4 : 10000
+>    : ^^^^^
 
 var n = 001; // Error in ES5
 >n : number
+>  : ^^^^^^
 >001 : 1
+>    : ^
 
 var n = 0x1;
 >n : number
+>  : ^^^^^^
 >0x1 : 1
+>    : ^
 
 var n = -1;
 >n : number
+>  : ^^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
 var n = -1.0;
 >n : number
+>  : ^^^^^^
 >-1.0 : -1
+>     : ^^
 >1.0 : 1
+>    : ^
 
 var n = -1e-4;
 >n : number
+>  : ^^^^^^
 >-1e-4 : -0.0001
+>      : ^^^^^^^
 >1e-4 : 0.0001
+>     : ^^^^^^
 
 var n = -003; // Error in ES5
 >n : number
+>  : ^^^^^^
 >-003 : -3
+>     : ^^
 >003 : 3
+>    : ^
 
 var n = -0x1;
 >n : number
+>  : ^^^^^^
 >-0x1 : -1
+>     : ^^
 >0x1 : 1
+>    : ^
 
 var s: string;
 >s : string
+>  : ^^^^^^
 
 var s = '';
 >s : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var s = "";
 >s : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var s = 'foo\
 >s : string
+>  : ^^^^^^
 >'foo\    bar' : "foo    bar"
+>              : ^^^^^^^^^^^^
 
     bar';
 var s = "foo\
 >s : string
+>  : ^^^^^^
 >"foo\    bar" : "foo    bar"
+>              : ^^^^^^^^^^^^
 
     bar";
 
 var r: RegExp;
 >r : RegExp
+>  : ^^^^^^
 
 var r = /what/;
 >r : RegExp
+>  : ^^^^^^
 >/what/ : RegExp
+>       : ^^^^^^
 
 var r = /\\\\/;
 >r : RegExp
+>  : ^^^^^^
 >/\\\\/ : RegExp
+>       : ^^^^^^
 

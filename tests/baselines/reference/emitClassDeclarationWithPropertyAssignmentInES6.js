@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts] ////
+
 //// [emitClassDeclarationWithPropertyAssignmentInES6.ts]
 class C {
     x: string = "Hello world";

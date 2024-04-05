@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionExpressionWithResolutionOfTypeOfSameName02.ts] ////
+
 //// [functionExpressionWithResolutionOfTypeOfSameName02.ts]
 interface Foo {
 }

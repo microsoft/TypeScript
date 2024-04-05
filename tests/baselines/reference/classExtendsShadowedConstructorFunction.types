@@ -1,20 +1,30 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts] ////
+
+=== classExtendsShadowedConstructorFunction.ts ===
 class C { foo: string; }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var C = 1;
 >C : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     class D extends C { // error, C must evaluate to constructor function
 >D : D
+>  : ^
 >C : number
+>  : ^^^^^^
 
         bar: string;
 >bar : string
+>    : ^^^^^^
     }
 }

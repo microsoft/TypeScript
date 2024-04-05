@@ -1,245 +1,391 @@
-=== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts] ////
+
+=== assignmentLHSIsValue.ts ===
 // expected error for all the LHS of assignments
 var value: any;
 >value : any
+>      : ^^^
 
 // this
 class C {
 >C : C
+>  : ^
 
     constructor() { this = value; }
 >this = value : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >value : any
+>      : ^^^
 
     foo() { this = value; }
 >foo : () => void
+>    : ^^^^^^^^^^
 >this = value : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >value : any
+>      : ^^^
 
     static sfoo() { this = value; }
 >sfoo : () => void
+>     : ^^^^^^^^^^
 >this = value : any
+>             : ^^^
 >this : typeof C
+>     : ^^^^^^^^
 >value : any
+>      : ^^^
 }
 
 function foo() { this = value; }
 >foo : () => void
+>    : ^^^^^^^^^^
 >this = value : any
+>             : ^^^
 >this : any
+>     : ^^^
 >value : any
+>      : ^^^
 
 this = value;
 >this = value : any
+>             : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
 // identifiers: module, class, enum, function
 module M { export var a; }
 >M : typeof M
+>  : ^^^^^^^^
 >a : any
+>  : ^^^
 
 M = value;
 >M = value : any
+>          : ^^^
 >M : any
+>  : ^^^
 >value : any
+>      : ^^^
 
 C = value;
 >C = value : any
+>          : ^^^
 >C : any
+>  : ^^^
 >value : any
+>      : ^^^
 
 enum E { }
 >E : E
+>  : ^
 
 E = value;
 >E = value : any
+>          : ^^^
 >E : any
+>  : ^^^
 >value : any
+>      : ^^^
 
 foo = value;
 >foo = value : any
+>            : ^^^
 >foo : any
+>    : ^^^
 >value : any
+>      : ^^^
 
 // literals
 null = value;
 >null = value : any
->null : null
+>             : ^^^
 >value : any
+>      : ^^^
 
 true = value;
 >true = value : any
+>             : ^^^
 >true : true
+>     : ^^^^
 >value : any
+>      : ^^^
 
 false = value;
 >false = value : any
+>              : ^^^
 >false : false
+>      : ^^^^^
 >value : any
+>      : ^^^
 
 0 = value;
 >0 = value : any
+>          : ^^^
 >0 : 0
+>  : ^
 >value : any
+>      : ^^^
 
 '' = value;
 >'' = value : any
+>           : ^^^
 >'' : ""
+>   : ^^
 >value : any
+>      : ^^^
 
 /d+/ = value;
 >/d+/ = value : any
+>             : ^^^
 >/d+/ : RegExp
+>     : ^^^^^^
 >value : any
+>      : ^^^
 
 // object literals
 { a: 0} = value;
 >a : any
+>  : ^^^
 >0 : 0
+>  : ^
 >value : any
+>      : ^^^
 
 // array literals
 ['', ''] = value;
 >['', ''] = value : any
+>                 : ^^^
 >['', ''] : [string, string]
+>         : ^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >'' : ""
+>   : ^^
 >value : any
+>      : ^^^
 
 // super
 class Derived extends C {
 >Derived : Derived
+>        : ^^^^^^^
 >C : C
+>  : ^
 
     constructor() { super(); super = value; }
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 >super = value : any
+>              : ^^^
 >super : any
+>      : ^^^
 >super : C
+>      : ^
 > : any
+> : ^^^
 >value : any
+>      : ^^^
 
     foo() { super = value }
 >foo : () => void
+>    : ^^^^^^^^^^
 >super = value : any
+>              : ^^^
 >super : any
+>      : ^^^
 >super : C
+>      : ^
 > : any
+> : ^^^
 >value : any
+>      : ^^^
 
     static sfoo() { super = value; }
 >sfoo : () => void
+>     : ^^^^^^^^^^
 >super = value : any
+>              : ^^^
 >super : any
+>      : ^^^
 >super : typeof C
+>      : ^^^^^^^^
 > : any
+> : ^^^
 >value : any
+>      : ^^^
 }
 
 // function expression
 function bar() { } = value;
 >bar : () => void
+>    : ^^^^^^^^^^
 >value : any
+>      : ^^^
 
 () => { } = value;
 >() => { } = : () => void
+>            : ^^^^^^^^^^
 >value : any
+>      : ^^^
 
 // function calls
 foo() = value;
 >foo() = value : any
+>              : ^^^
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 >value : any
+>      : ^^^
 
 // parentheses, the containted expression is value
 (this) = value;
 >(this) = value : any
+>               : ^^^
 >(this) : typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 
 (M) = value;
 >(M) = value : any
+>            : ^^^
 >(M) : any
+>    : ^^^
 >M : any
+>  : ^^^
 >value : any
+>      : ^^^
 
 (C) = value;
 >(C) = value : any
+>            : ^^^
 >(C) : any
+>    : ^^^
 >C : any
+>  : ^^^
 >value : any
+>      : ^^^
 
 (E) = value;
 >(E) = value : any
+>            : ^^^
 >(E) : any
+>    : ^^^
 >E : any
+>  : ^^^
 >value : any
+>      : ^^^
 
 (foo) = value;
 >(foo) = value : any
+>              : ^^^
 >(foo) : any
+>      : ^^^
 >foo : any
+>    : ^^^
 >value : any
+>      : ^^^
 
 (null) = value;
 >(null) = value : any
+>               : ^^^
 >(null) : null
->null : null
+>       : ^^^^
 >value : any
+>      : ^^^
 
 (true) = value;
 >(true) = value : any
+>               : ^^^
 >(true) : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 >value : any
+>      : ^^^
 
 (0) = value;
 >(0) = value : any
+>            : ^^^
 >(0) : 0
+>    : ^
 >0 : 0
+>  : ^
 >value : any
+>      : ^^^
 
 ('') = value;
 >('') = value : any
+>             : ^^^
 >('') : ""
+>     : ^^
 >'' : ""
+>   : ^^
 >value : any
+>      : ^^^
 
 (/d+/) = value;
 >(/d+/) = value : any
+>               : ^^^
 >(/d+/) : RegExp
+>       : ^^^^^^
 >/d+/ : RegExp
+>     : ^^^^^^
 >value : any
+>      : ^^^
 
 ({}) = value;
 >({}) = value : any
+>             : ^^^
 >({}) : {}
+>     : ^^
 >{} : {}
+>   : ^^
 >value : any
+>      : ^^^
 
 ([]) = value;
 >([]) = value : any
+>             : ^^^
 >([]) : []
+>     : ^^
 >[] : []
+>   : ^^
 >value : any
+>      : ^^^
 
 (function baz() { }) = value;
 >(function baz() { }) = value : any
+>                             : ^^^
 >(function baz() { }) : () => void
+>                     : ^^^^^^^^^^
 >function baz() { } : () => void
+>                   : ^^^^^^^^^^
 >baz : () => void
+>    : ^^^^^^^^^^
 >value : any
+>      : ^^^
 
 (foo()) = value;
 >(foo()) = value : any
+>                : ^^^
 >(foo()) : void
+>        : ^^^^
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 >value : any
+>      : ^^^
 

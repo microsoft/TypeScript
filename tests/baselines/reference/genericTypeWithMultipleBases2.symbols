@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeWithMultipleBases2.ts ===
+//// [tests/cases/compiler/genericTypeWithMultipleBases2.ts] ////
+
+=== genericTypeWithMultipleBases2.ts ===
 export interface I1 {
 >I1 : Symbol(I1, Decl(genericTypeWithMultipleBases2.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatArrowSelf.ts ===
+//// [tests/cases/compiler/fatArrowSelf.ts] ////
+
+=== fatArrowSelf.ts ===
 module Events {
 >Events : Symbol(Events, Decl(fatArrowSelf.ts, 0, 0))
 

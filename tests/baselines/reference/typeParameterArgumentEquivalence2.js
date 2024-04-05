@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterArgumentEquivalence2.ts] ////
+
 //// [typeParameterArgumentEquivalence2.ts]
 function foo<T,U>() {
     var x: (item: U) => boolean;

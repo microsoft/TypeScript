@@ -1,54 +1,80 @@
-=== tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts ===
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts] ////
+
+=== mergedModuleDeclarationCodeGen5.ts ===
 module M.buz.plop {
 >M : typeof M
+>  : ^^^^^^^^
 >buz : typeof buz
+>    : ^^^^^^^^^^
 >plop : typeof buz.plop
+>     : ^^^^^^^^^^^^^^^
 
     export function doom() { }
 >doom : () => void
+>     : ^^^^^^^^^^
 
     export function M() { }
 >M : () => void
+>  : ^^^^^^^^^^
 }
 module M.buz.plop {
 >M : typeof M
+>  : ^^^^^^^^
 >buz : typeof buz
+>    : ^^^^^^^^^^
 >plop : typeof globalThis.M.buz.plop
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function gunk() { }
 >gunk : () => void
+>     : ^^^^^^^^^^
 
     function buz() { }
 >buz : () => void
+>    : ^^^^^^^^^^
 
     export class fudge { }
 >fudge : fudge
+>      : ^^^^^
 
     export enum plop { }
 >plop : plop
+>     : ^^^^
 
     // Emit these references as follows
     var v1 = gunk; // gunk
 >v1 : () => void
+>   : ^^^^^^^^^^
 >gunk : () => void
+>     : ^^^^^^^^^^
 
     var v2 = buz; // buz
 >v2 : () => void
+>   : ^^^^^^^^^^
 >buz : () => void
+>    : ^^^^^^^^^^
 
     export var v3 = doom; // _plop.doom
 >v3 : () => void
+>   : ^^^^^^^^^^
 >doom : () => void
+>     : ^^^^^^^^^^
 
     export var v4 = M; // _plop.M
 >v4 : () => void
+>   : ^^^^^^^^^^
 >M : () => void
+>  : ^^^^^^^^^^
 
     export var v5 = fudge; // fudge
 >v5 : typeof fudge
+>   : ^^^^^^^^^^^^
 >fudge : typeof fudge
+>      : ^^^^^^^^^^^^
 
     export var v6 = plop; // plop
 >v6 : typeof plop
+>   : ^^^^^^^^^^^
 >plop : typeof plop
+>     : ^^^^^^^^^^^
 }

@@ -1,0 +1,45 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationLocal_00.ts ===
+// he/*GOTO IMPL*/llo();
+// <|function [|hello|]() {}|>
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "hello",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "function"
+   }
+  ]

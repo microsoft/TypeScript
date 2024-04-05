@@ -1,10 +1,10 @@
-tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(4,34): error TS2694: Namespace 'X' has no exported member 'bar'.
+exportSpecifierReferencingOuterDeclaration2_B.ts(4,34): error TS2694: Namespace 'X' has no exported member 'bar'.
 
 
-==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts (0 errors) ====
+==== exportSpecifierReferencingOuterDeclaration2_A.ts (0 errors) ====
     declare module X { export interface bar { } }
     
-==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts (1 errors) ====
+==== exportSpecifierReferencingOuterDeclaration2_B.ts (1 errors) ====
     declare module X { export interface foo { } }
     export { X };
     export declare function foo(): X.foo;

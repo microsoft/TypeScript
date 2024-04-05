@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numberVsBigIntOperations.ts] ////
+
 //// [numberVsBigIntOperations.ts]
 // Cannot mix bigints and numbers
 let bigInt = 1n, num = 2;

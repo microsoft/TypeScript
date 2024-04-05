@@ -1,0 +1,21 @@
+error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
+error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
+
+
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+==== /mod.ts (0 errors) ====
+    export type A = unknown;
+    export type B = never;
+    export type C = any;
+    
+==== /index.ts (0 errors) ====
+    import { type A, type B, type C } from "./mod.js";
+    
+==== /reexport.ts (0 errors) ====
+    export { type A, type B, type C } from "./mod.js";
+    

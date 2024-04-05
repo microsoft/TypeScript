@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/neverReturningFunctions1.ts] ////
+
 //// [neverReturningFunctions1.ts]
 function fail(message?: string): never {
     throw new Error(message);

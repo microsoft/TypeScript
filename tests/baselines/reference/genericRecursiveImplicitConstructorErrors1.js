@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors1.ts] ////
+
 //// [genericRecursiveImplicitConstructorErrors1.ts]
 export declare module TypeScript {
   class PullSymbol { }

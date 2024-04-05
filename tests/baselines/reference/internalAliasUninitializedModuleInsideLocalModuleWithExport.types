@@ -1,28 +1,40 @@
-=== tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithExport.ts ===
+//// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithExport.ts] ////
+
+=== internalAliasUninitializedModuleInsideLocalModuleWithExport.ts ===
 export module a {
     export module b {
         export interface I {
             foo();
 >foo : () => any
+>    : ^^^^^^^^^
         }
     }
 }
 
 export module c {
 >c : typeof c
+>  : ^^^^^^^^
 
     export import b = a.b;
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     export var x: b.I;
 >x : b.I
+>  : ^^^
 >b : any
+>  : ^^^
 
     x.foo();
 >x.foo() : any
 >x.foo : () => any
+>      : ^^^^^^^^^
 >x : b.I
+>  : ^^^
 >foo : () => any
+>    : ^^^^^^^^^
 }

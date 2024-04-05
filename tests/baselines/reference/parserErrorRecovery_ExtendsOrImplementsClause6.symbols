@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts] ////
+
+=== parserErrorRecovery_ExtendsOrImplementsClause6.ts ===
 interface I extends { }
 >I : Symbol(I, Decl(parserErrorRecovery_ExtendsOrImplementsClause6.ts, 0, 0))
 

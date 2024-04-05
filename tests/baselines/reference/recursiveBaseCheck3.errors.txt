@@ -1,16 +1,16 @@
-tests/cases/compiler/recursiveBaseCheck3.ts(1,7): error TS2506: 'A' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/recursiveBaseCheck3.ts(1,20): error TS2449: Class 'C' used before its declaration.
-tests/cases/compiler/recursiveBaseCheck3.ts(2,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/recursiveBaseCheck3.ts(4,9): error TS2339: Property 'blah' does not exist on type 'C<unknown>'.
+recursiveBaseCheck3.ts(1,7): error TS2506: 'A' is referenced directly or indirectly in its own base expression.
+recursiveBaseCheck3.ts(1,20): error TS2449: Class 'C' used before its declaration.
+recursiveBaseCheck3.ts(2,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+recursiveBaseCheck3.ts(4,9): error TS2339: Property 'blah' does not exist on type 'C<unknown>'.
 
 
-==== tests/cases/compiler/recursiveBaseCheck3.ts (4 errors) ====
+==== recursiveBaseCheck3.ts (4 errors) ====
     class A<T> extends C<T> { }
           ~
 !!! error TS2506: 'A' is referenced directly or indirectly in its own base expression.
                        ~
 !!! error TS2449: Class 'C' used before its declaration.
-!!! related TS2728 tests/cases/compiler/recursiveBaseCheck3.ts:2:7: 'C' is declared here.
+!!! related TS2728 recursiveBaseCheck3.ts:2:7: 'C' is declared here.
     class C<T> extends A<T> { }
           ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.

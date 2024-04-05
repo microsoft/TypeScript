@@ -1,46 +1,67 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation.ts] ////
+
 === /test.js ===
 class Abcde {
 >Abcde : Abcde
+>      : ^^^^^
 
   /** @type {string} */
   x;
 >x : string
+>  : ^^^^^^
 }
 
 module.exports = {
 >module.exports = {  Abcde} : typeof module."./test"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module."./test"
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module."./test"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module."./test"
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >{  Abcde} : { Abcde: typeof Abcde; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   Abcde
 >Abcde : typeof Abcde
+>      : ^^^^^^^^^^^^
 
 };
 
 === /index.ts ===
 import { Abcde } from "./test";
 >Abcde : typeof Abcde
+>      : ^^^^^^^^^^^^
 
 declare module "./test" {
 >"./test" : typeof import("/test")
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 
   interface Abcde { b: string }
 >b : string
+>  : ^^^^^^
 }
 
 new Abcde().x;
 >new Abcde().x : string
+>              : ^^^^^^
 >new Abcde() : Abcde
+>            : ^^^^^
 >Abcde : typeof Abcde
+>      : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 // Bug: the type meaning from /test.js does not
 // propagate through the object literal export.
 const x: Abcde = { b: "" };
 >x : Abcde
+>  : ^^^^^
 >{ b: "" } : { b: string; }
+>          : ^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 

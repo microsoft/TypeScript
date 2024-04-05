@@ -1,19 +1,26 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution1.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		div: any
 >div : any
+>    : ^^^
 	}
 }
 
 // OK
 <div />;
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 // Fail
 <span />;
 ><span /> : JSX.Element
+>         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 

@@ -1,10 +1,10 @@
-tests/cases/conformance/jsdoc/validate.ts(14,3): error TS2540: Cannot assign to 'lastName' because it is a read-only property.
-tests/cases/conformance/jsdoc/validate.ts(15,3): error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
-tests/cases/conformance/jsdoc/validate.ts(16,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
+validate.ts(14,3): error TS2540: Cannot assign to 'lastName' because it is a read-only property.
+validate.ts(15,3): error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
+validate.ts(16,1): error TS2322: Type 'number' is not assignable to type 'string'.
+validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
 
 
-==== tests/cases/conformance/jsdoc/validate.ts (4 errors) ====
+==== validate.ts (4 errors) ====
     // Validate in TS as simple validations would usually be interpreted as more special assignments
     import x = require("./");
     x.name;
@@ -31,7 +31,7 @@ tests/cases/conformance/jsdoc/validate.ts(17,3): error TS2540: Cannot assign to 
       ~~~~~~~~~~
 !!! error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
     
-==== tests/cases/conformance/jsdoc/index.js (0 errors) ====
+==== index.js (0 errors) ====
     const x = {};
     Object.defineProperty(x, "name", { value: "Charles", writable: true });
     Object.defineProperty(x, "middleInit", { value: "H" });

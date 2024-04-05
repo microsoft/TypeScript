@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx] ////
+
+=== checkJsxNamespaceNamesQuestionableForms.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 0, 0))
 
@@ -21,11 +23,7 @@ declare namespace JSX {
 }
 
 <a:b></a:b>;
->a:b : Symbol(JSX.IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
->a:b : Symbol(JSX.IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
-
 <b:c.x></b:c.x>;
-<this:b></this:b>;
->this:b : Symbol(JSX.IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
->this:b : Symbol(JSX.IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
+>x : Symbol(x, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 11, 5))
 
+<this:b></this:b>;

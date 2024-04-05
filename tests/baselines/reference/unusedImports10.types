@@ -1,12 +1,17 @@
-=== tests/cases/compiler/unusedImports10.ts ===
+//// [tests/cases/compiler/unusedImports10.ts] ////
+
+=== unusedImports10.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class Calculator {
 >Calculator : Calculator
+>           : ^^^^^^^^^^
 
         public handelChar() {
 >handelChar : () => void
+>           : ^^^^^^^^^^
         }
     }
 }
@@ -14,5 +19,7 @@ module A {
 module B {
     import a = A;
 >a : typeof a
+>  : ^^^^^^^^
 >A : typeof a
+>  : ^^^^^^^^
 }

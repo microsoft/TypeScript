@@ -1,90 +1,157 @@
-=== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts] ////
+
+=== destructuringVariableDeclaration2.ts ===
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
 var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
 >a1 : number
+>   : ^^^^^^
 >a2 : string
+>   : ^^^^^^
 >a1 : number
+>   : ^^^^^^
 >a2 : string
+>   : ^^^^^^
 >{ a1: true, a2: 1 } : { a1: boolean; a2: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 >a2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error
 >a3 : number
+>   : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a5 : boolean
+>   : ^^^^^^^
 >[1, [[false]], true] : [number, [[boolean]], true]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >[[false]] : [[boolean]]
+>          : ^^^^^^^^^^^
 >[false] : [boolean]
+>        : ^^^^^^^^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      Otherwise, if the declaration includes an initializer expression, T is the type of that initializer expression.
 var temp = { t1: true, t2: "false" };
 >temp : { t1: boolean; t2: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ t1: true, t2: "false" } : { t1: boolean; t2: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 >t2 : string
+>   : ^^^^^^
 >"false" : "false"
+>        : ^^^^^^^
 
 var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
 >b0 : number
+>   : ^^^^^^
 >3 : 3
+>  : ^
 >b1 : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 >b2 : { t1: boolean; t2: string; } | { t1: false; t2: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp : { t1: boolean; t2: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, false, { t1: false, t2: 5}] : [number, false, { t1: false; t2: number; }]
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >false : false
+>      : ^^^^^
 >{ t1: false, t2: 5} : { t1: false; t2: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : false
+>   : ^^^^^
 >false : false
+>      : ^^^^^
 >t2 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 
 // The type T associated with a binding element is determined as follows:
 //      If the binding element is a rest element, T is an array type with
 //          an element type E, where E is the type of the numeric index signature of S.
 var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
 >c1 : number
+>   : ^^^^^^
 >c2 : number
+>   : ^^^^^^
 >c3 : any
+>   : ^^^
 >c4 : number
+>   : ^^^^^^
 >c5 : number
+>   : ^^^^^^
 > : undefined
+> : ^^^^^^^^^
 >c6 : []
+>   : ^^
 >[1, 2, { c3: 4, c5: 0 }] : [number, number, { c3: number; c5: number; }]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >{ c3: 4, c5: 0 } : { c3: number; c5: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c3 : number
+>   : ^^^^^^
 >4 : 4
+>  : ^
 >c5 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 // When a destructuring variable declaration, binding property, or binding element specifies
 // an initializer expression, the type of the initializer expression is required to be assignable
 // to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
 var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } };  // Error
 >d : any
+>  : ^^^
 >d1 : number[]
+>   : ^^^^^^^^
 >["string", null] : string[]
+>                 : ^^^^^^^^
 >"string" : "string"
->null : null
+>         : ^^^^^^^^
 >d : { d1: number[]; }
+>  : ^^^^^^        ^^^
 >d1 : number[]
+>   : ^^^^^^^^
 >{ d: { d1: [1, 2] } } : { d: { d1: number[]; }; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : { d1: number[]; }
+>  : ^^^^^^^^^^^^^^^^^
 >{ d1: [1, 2] } : { d1: number[]; }
+>               : ^^^^^^^^^^^^^^^^^
 >d1 : number[]
+>   : ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

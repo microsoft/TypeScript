@@ -1,134 +1,208 @@
-=== tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
+
+=== staticPropertyNotInClassType.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
+>           : ^^^^^^^^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         fn() { return this; }
 >fn : () => this
+>   : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         static get x() { return 1; }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         static set x(v) { }
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
         constructor(public a: number, private b: number) { }
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
         static foo: string; // not reflected in class type
 >foo : string
+>    : ^^^^^^
     }
 
     module C {
 >C : typeof C
+>  : ^^^^^^^^
 
         export var bar = ''; // not reflected in class type
 >bar : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
     }
 
     var c = new C(1, 2);
 >c : C
+>  : ^
 >new C(1, 2) : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     var r = c.fn();
 >r : C
+>  : ^
 >c.fn() : C
+>       : ^
 >c.fn : () => C
+>     : ^^^^^^^
 >c : C
+>  : ^
 >fn : () => C
+>   : ^^^^^^^
 
     var r4 = c.foo; // error
 >r4 : any
+>   : ^^^
 >c.foo : any
+>      : ^^^
 >c : C
+>  : ^
 >foo : any
+>    : ^^^
 
     var r5 = c.bar; // error
 >r5 : any
+>   : ^^^
 >c.bar : any
+>      : ^^^
 >c : C
+>  : ^
 >bar : any
+>    : ^^^
 
     var r6 = c.x; // error
 >r6 : any
+>   : ^^^
 >c.x : any
+>    : ^^^
 >c : C
+>  : ^
 >x : any
+>  : ^^^
 }
 
 module Generic {
 >Generic : typeof Generic
+>        : ^^^^^^^^^^^^^^
 
     class C<T, U> {
 >C : C<T, U>
+>  : ^^^^^^^
 
         fn() { return this; }
 >fn : () => this
+>   : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         static get x() { return 1; }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         static set x(v) { }
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
         constructor(public a: T, private b: U) { }
 >a : T
+>  : ^
 >b : U
+>  : ^
 
         static foo: T; // not reflected in class type
 >foo : T
+>    : ^
     }
 
     module C {
 >C : typeof C
+>  : ^^^^^^^^
 
         export var bar = ''; // not reflected in class type
 >bar : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
     }
 
     var c = new C(1, '');
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >new C(1, '') : C<number, string>
+>             : ^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
     var r = c.fn();
 >r : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >c.fn() : C<number, string>
+>       : ^^^^^^^^^^^^^^^^^
 >c.fn : () => C<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >fn : () => C<number, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
     var r4 = c.foo; // error
 >r4 : any
+>   : ^^^
 >c.foo : any
+>      : ^^^
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 
     var r5 = c.bar; // error
 >r5 : any
+>   : ^^^
 >c.bar : any
+>      : ^^^
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >bar : any
+>    : ^^^
 
     var r6 = c.x; // error
 >r6 : any
+>   : ^^^
 >c.x : any
+>    : ^^^
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 }

@@ -1,6 +1,11 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors3.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors3.ts] ////
+
+=== fatarrowfunctionsOptionalArgsErrors3.ts ===
 (...) => 105;
 >(...) => 105 : (...: any[]) => number
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 > : any[]
+> : ^^^^^
 >105 : 105
+>    : ^^^
 

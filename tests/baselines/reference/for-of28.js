@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of28.ts] ////
+
 //// [for-of28.ts]
 class StringIterator {
     next: any;

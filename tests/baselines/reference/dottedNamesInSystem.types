@@ -1,23 +1,38 @@
-=== tests/cases/compiler/dottedNamesInSystem.ts ===
+//// [tests/cases/compiler/dottedNamesInSystem.ts] ////
+
+=== dottedNamesInSystem.ts ===
 export namespace A.B.C {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     export function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 export function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
     return A.B.C.foo();
 >A.B.C.foo() : void
+>            : ^^^^
 >A.B.C.foo : () => void
+>          : ^^^^^^^^^^
 >A.B.C : typeof A.B.C
+>      : ^^^^^^^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >C : typeof A.B.C
+>  : ^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }

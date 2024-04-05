@@ -1,9 +1,15 @@
-=== tests/cases/compiler/parseCommaSeparatedNewlineNumber.ts ===
+//// [tests/cases/compiler/parseCommaSeparatedNewlineNumber.ts] ////
+
+=== parseCommaSeparatedNewlineNumber.ts ===
 (a,
 >(a,1) : 1
+>      : ^
 >a,1 : 1
+>    : ^
 >a : any
+>  : ^^^
 
 1)
 >1 : 1
+>  : ^
 

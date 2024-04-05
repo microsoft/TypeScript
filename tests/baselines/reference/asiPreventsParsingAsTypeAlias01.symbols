@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts ===
+//// [tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts] ////
+
+=== asiPreventsParsingAsTypeAlias01.ts ===
 var type;
 >type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias01.ts, 0, 3))
 

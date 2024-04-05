@@ -1,15 +1,27 @@
-=== tests/cases/conformance/es6/Symbols/symbolType2.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType2.ts] ////
+
+=== symbolType2.ts ===
 Symbol.isConcatSpreadable in {};
 >Symbol.isConcatSpreadable in {} : boolean
+>                                : ^^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 "" in Symbol.toPrimitive;
 >"" in Symbol.toPrimitive : boolean
+>                         : ^^^^^^^
 >"" : ""
+>   : ^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 

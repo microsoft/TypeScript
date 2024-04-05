@@ -1,6 +1,9 @@
-=== tests/cases/compiler/moduleWithTryStatement1.ts ===
+//// [tests/cases/compiler/moduleWithTryStatement1.ts] ////
+
+=== moduleWithTryStatement1.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   try {
   }
@@ -10,5 +13,7 @@ module M {
 }
 var v = M;
 >v : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 

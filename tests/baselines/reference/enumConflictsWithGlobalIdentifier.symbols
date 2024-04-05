@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts ===
+//// [tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts] ////
+
+=== enumConflictsWithGlobalIdentifier.ts ===
 enum Position { 
 >Position : Symbol(Position, Decl(enumConflictsWithGlobalIdentifier.ts, 0, 0))
 

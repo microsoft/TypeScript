@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts] ////
+
 //// [assignFromBooleanInterface2.ts]
 interface Boolean {
     doStuff(): string;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/autoLift2.ts ===
+//// [tests/cases/compiler/autoLift2.ts] ////
+
+=== autoLift2.ts ===
 class A
 >A : Symbol(A, Decl(autoLift2.ts, 0, 0))
 

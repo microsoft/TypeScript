@@ -1,4 +1,6 @@
-=== tests/cases/compiler/covariance1.ts ===
+//// [tests/cases/compiler/covariance1.ts] ////
+
+=== covariance1.ts ===
 module M {
 >M : Symbol(M, Decl(covariance1.ts, 0, 0))
 

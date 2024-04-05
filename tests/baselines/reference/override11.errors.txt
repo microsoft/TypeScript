@@ -1,7 +1,7 @@
-tests/cases/conformance/override/override11.ts(6,27): error TS1029: 'public' modifier must precede 'override' modifier.
+override11.ts(6,27): error TS1029: 'public' modifier must precede 'override' modifier.
 
 
-==== tests/cases/conformance/override/override11.ts (1 errors) ====
+==== override11.ts (1 errors) ====
     class Base {
         foo = 1;
     }

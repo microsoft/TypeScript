@@ -1,59 +1,89 @@
-=== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts ===
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts] ////
+
+=== objectTypeHidingMembersOfObjectAssignmentCompat.ts ===
 interface I {
     toString(): void;
 >toString : () => void
+>         : ^^^^^^    
 }
 
 var i: I;
 >i : I
+>  : ^
 
 var o: Object;
 >o : Object
+>  : ^^^^^^
 
 o = i; // error
 >o = i : I
+>      : ^
 >o : Object
+>  : ^^^^^^
 >i : I
+>  : ^
 
 i = o; // ok
 >i = o : Object
+>      : ^^^^^^
 >i : I
+>  : ^
 >o : Object
+>  : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     toString(): void { }
 >toString : () => void
+>         : ^^^^^^    
 }
 var c: C;
 >c : C
+>  : ^
 
 o = c; // error
 >o = c : C
+>      : ^
 >o : Object
+>  : ^^^^^^
 >c : C
+>  : ^
 
 c = o; // ok
 >c = o : Object
+>      : ^^^^^^
 >c : C
+>  : ^
 >o : Object
+>  : ^^^^^^
 
 var a = {
 >a : { toString: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    toString: () => { }} : { toString: () => void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     toString: () => { }
 >toString : () => void
+>         : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 }
 o = a; // error
 >o = a : { toString: () => void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : Object
+>  : ^^^^^^
 >a : { toString: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 a = o; // ok
 >a = o : Object
+>      : ^^^^^^
 >a : { toString: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : Object
+>  : ^^^^^^
 

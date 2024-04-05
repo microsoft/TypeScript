@@ -23,6 +23,20 @@ CleanBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "referencedMap": {
       "./c.ts": [
         "./a.ts"
@@ -63,6 +77,20 @@ IncrementalBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true
@@ -110,6 +138,20 @@ CleanBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "referencedMap": {
       "./c.ts": [
         "./a.ts"
@@ -150,6 +192,20 @@ IncrementalBuild:
         "version": "-19615769517-import { b } from \"./b\";export const d = b;"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./a.ts",
+          "./b.ts",
+          "./c.ts",
+          "./d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "declarationMap": true

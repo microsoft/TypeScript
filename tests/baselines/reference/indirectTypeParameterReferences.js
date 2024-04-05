@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indirectTypeParameterReferences.ts] ////
+
 //// [indirectTypeParameterReferences.ts]
 // Repro from #19043
 

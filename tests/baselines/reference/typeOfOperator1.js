@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfOperator1.ts] ////
+
 //// [typeOfOperator1.ts]
 var x = 1;
 var y: string = typeof x;

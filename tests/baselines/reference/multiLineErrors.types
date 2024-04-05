@@ -1,46 +1,66 @@
-=== tests/cases/compiler/multiLineErrors.ts ===
+//// [tests/cases/compiler/multiLineErrors.ts] ////
+
+=== multiLineErrors.ts ===
 var t = 32;
 >t : number
+>  : ^^^^^^
 >32 : 32
+>   : ^^
 
 function noReturn(): {
->noReturn : () => {    n: string;    y: number;}
+>noReturn : () => { n: string; y: number; }
+>         : ^^^^^^                         
 
     n: string;
 >n : string
+>  : ^^^^^^
 
     y: number;
 >y : number
+>  : ^^^^^^
 }
 {
     var x = 4;
 >x : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
     var y = 10;
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 interface A1 {
     x: { y: number; };
 >x : { y: number; }
+>  : ^^^^^      ^^^
 >y : number
+>  : ^^^^^^
 }
 interface A2 {
     x: { y: string; };
 >x : { y: string; }
+>  : ^^^^^      ^^^
 >y : string
+>  : ^^^^^^
 }
 
 var t1: A1;
 >t1 : A1
+>   : ^^
 
 var t2: A2;
 >t2 : A2
+>   : ^^
 
 t1 = t2;
 >t1 = t2 : A2
+>        : ^^
 >t1 : A1
+>   : ^^
 >t2 : A2
+>   : ^^
 

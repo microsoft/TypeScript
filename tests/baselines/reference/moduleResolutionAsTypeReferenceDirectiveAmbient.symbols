@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveAmbient.ts] ////
+
+=== /a.ts ===
+import { a2 } from "phaser";
+>a2 : Symbol(a2, Decl(a.ts, 0, 8))
+
+=== /typings/phaser/types/phaser.d.ts ===
+declare module "phaser" {
+>"phaser" : Symbol("phaser", Decl(phaser.d.ts, 0, 0))
+
+    export const a2: number;
+>a2 : Symbol(a2, Decl(phaser.d.ts, 1, 16))
+}
+

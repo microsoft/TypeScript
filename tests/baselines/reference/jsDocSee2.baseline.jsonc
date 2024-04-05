@@ -1,0 +1,100 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// /** @see {/*GOTO DEF*/foooo} unknown reference*/
+// const a = ""
+// /** @see {@bar} invalid tag*/
+// const b = ""
+// --- (line: 5) skipped ---
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// /** @see {foooo} unknown reference*/
+// const a = ""
+// /** @see {/*GOTO DEF*/@bar} invalid tag*/
+// const b = ""
+// /** @see foooo unknown reference without brace*/
+// const c = ""
+// --- (line: 7) skipped ---
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// /** @see {foooo} unknown reference*/
+// const a = ""
+// /** @see {@bar} invalid tag*/
+// const b = ""
+// /** @see /*GOTO DEF*/foooo unknown reference without brace*/
+// const c = ""
+// /** @see @bar invalid tag without brace*/
+// const d = ""
+// --- (line: 9) skipped ---
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// --- (line: 3) skipped ---
+// const b = ""
+// /** @see foooo unknown reference without brace*/
+// const c = ""
+// /** @see /*GOTO DEF*/@bar invalid tag without brace*/
+// const d = ""
+// /** @see {d@fff} partial reference */
+// const e = ""
+// --- (line: 11) skipped ---
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// --- (line: 4) skipped ---
+// /** @see foooo unknown reference without brace*/
+// const c = ""
+// /** @see @bar invalid tag without brace*/
+// <|const [|d|] = ""|>
+// /** @see {/*GOTO DEF*/d@fff} partial reference */
+// const e = ""
+// /** @see @@@@@@ total invalid tag*/
+// const f = ""
+// /** @see d@{fff} partial reference */
+// const g = ""
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "d",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// --- (line: 7) skipped ---
+// const d = ""
+// /** @see {d@fff} partial reference */
+// const e = ""
+// /** @see /*GOTO DEF*/@@@@@@ total invalid tag*/
+// const f = ""
+// /** @see d@{fff} partial reference */
+// const g = ""
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsDocSee2.ts ===
+// --- (line: 9) skipped ---
+// const e = ""
+// /** @see @@@@@@ total invalid tag*/
+// const f = ""
+// /** @see d@{/*GOTO DEF*/fff} partial reference */
+// const g = ""

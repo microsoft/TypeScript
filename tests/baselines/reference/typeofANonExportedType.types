@@ -1,140 +1,206 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts] ////
+
+=== typeofANonExportedType.ts ===
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 export var r1: typeof x;
 >r1 : number
+>   : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 var y = { foo: '' };
 >y : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 >{ foo: '' } : { foo: string; }
+>            : ^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
 export var r2: typeof y;
 >r2 : { foo: string; }
+>   : ^^^^^^^^^^^^^^^^
 >y : { foo: string; }
+>  : ^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 export var c: C;
 >c : C
+>  : ^
 
 var c2: C;
 >c2 : C
+>   : ^
 
 export var r3: typeof C;
 >r3 : typeof C
+>   : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 export var r4: typeof c;
 >r4 : C
+>   : ^
 >c : C
+>  : ^
 
 export var r4b: typeof c2;
 >r4b : C
+>    : ^
 >c2 : C
+>   : ^
 
 interface I {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 export var i: I;
 >i : I
+>  : ^
 
 var i2: I;
 >i2 : I
+>   : ^
 
 export var r5: typeof i;
 >r5 : I
+>   : ^
 >i : I
+>  : ^
 
 export var r5: typeof i2;
 >r5 : I
+>   : ^
 >i2 : I
+>   : ^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var foo = '';
 >foo : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
     export class C {
 >C : C
+>  : ^
 
         foo: string;
 >foo : string
+>    : ^^^^^^
     }
 }
 export var r6: typeof M;
 >r6 : typeof M
+>   : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 export var r7: typeof M.foo;
 >r7 : string
+>   : ^^^^^^
 >M.foo : string
+>      : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 import Z = M;
 >Z : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 export var r8: typeof Z;
 >r8 : typeof M
+>   : ^^^^^^^^
 >Z : typeof M
+>  : ^^^^^^^^
 
 export var r9: typeof Z.foo;
 >r9 : string
+>   : ^^^^^^
 >Z.foo : string
+>      : ^^^^^^
 >Z : typeof M
+>  : ^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 enum E {
 >E : E
+>  : ^
 
     A
 >A : E.A
+>  : ^^^
 }
 export var r10: typeof E;
 >r10 : typeof E
+>    : ^^^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 
 export var r11: typeof E.A;
 >r11 : E
+>    : ^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 export var r12: typeof r12;
 >r12 : any
+>    : ^^^
 >r12 : any
+>    : ^^^
 
 function foo() { }
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 module foo {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     export var y = 1;
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     export class C {
 >C : C
+>  : ^
 
         foo: string;
 >foo : string
+>    : ^^^^^^
     }
 }
 export var r13: typeof foo;
 >r13 : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 

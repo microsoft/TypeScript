@@ -1,20 +1,29 @@
-=== tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts ===
+//// [tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts] ////
+
+=== objectLiteralWithGetAccessorInsideFunction.ts ===
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
     var x = {
 >x : { readonly _extraOccluded: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        get _extraOccluded() {            var occluded = 0;            return occluded;        },    } : { readonly _extraOccluded: number; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         get _extraOccluded() {
 >_extraOccluded : number
+>               : ^^^^^^
 
             var occluded = 0;
 >occluded : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
             return occluded;
 >occluded : number
+>         : ^^^^^^
 
         },
     }

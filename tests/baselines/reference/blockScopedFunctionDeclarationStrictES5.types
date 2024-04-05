@@ -1,18 +1,27 @@
-=== tests/cases/compiler/blockScopedFunctionDeclarationStrictES5.ts ===
+//// [tests/cases/compiler/blockScopedFunctionDeclarationStrictES5.ts] ////
+
+=== blockScopedFunctionDeclarationStrictES5.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 if (true) {
 >true : true
+>     : ^^^^
 
     function foo() { } // Error to declare function in block scope
 >foo : () => void
+>    : ^^^^^^^^^^
 
     foo(); // This call should be ok
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 foo(); // Error to find name foo
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
 

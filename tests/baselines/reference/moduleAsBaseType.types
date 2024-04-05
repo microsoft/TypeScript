@@ -1,10 +1,15 @@
-=== tests/cases/compiler/moduleAsBaseType.ts ===
+//// [tests/cases/compiler/moduleAsBaseType.ts] ////
+
+=== moduleAsBaseType.ts ===
 module M {}
 class C extends M {}
 >C : C
+>  : ^
 >M : any
+>  : ^^^
 
 interface I extends M { }
 class C2 implements M { }
 >C2 : C2
+>   : ^^
 

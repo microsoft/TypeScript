@@ -1,17 +1,17 @@
-tests/cases/compiler/recursiveFunctionTypes.ts(1,28): error TS2322: Type 'number' is not assignable to type '() => typeof fn'.
-tests/cases/compiler/recursiveFunctionTypes.ts(3,5): error TS2322: Type '() => typeof fn' is not assignable to type 'number'.
-tests/cases/compiler/recursiveFunctionTypes.ts(4,5): error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
+recursiveFunctionTypes.ts(1,28): error TS2322: Type 'number' is not assignable to type '() => typeof fn'.
+recursiveFunctionTypes.ts(3,5): error TS2322: Type '() => typeof fn' is not assignable to type 'number'.
+recursiveFunctionTypes.ts(4,5): error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
   Type '() => typeof fn' is not assignable to type 'number'.
-tests/cases/compiler/recursiveFunctionTypes.ts(11,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/recursiveFunctionTypes.ts(12,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/recursiveFunctionTypes.ts(17,5): error TS2322: Type '() => I<typeof f3>' is not assignable to type 'number'.
-tests/cases/compiler/recursiveFunctionTypes.ts(22,5): error TS2345: Argument of type 'number' is not assignable to parameter of type '(t: typeof g) => void'.
-tests/cases/compiler/recursiveFunctionTypes.ts(25,1): error TS2322: Type 'number' is not assignable to type '() => any'.
-tests/cases/compiler/recursiveFunctionTypes.ts(30,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/compiler/recursiveFunctionTypes.ts(33,8): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/recursiveFunctionTypes.ts(34,4): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
-tests/cases/compiler/recursiveFunctionTypes.ts(42,8): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload matches this call.
+recursiveFunctionTypes.ts(11,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+recursiveFunctionTypes.ts(12,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+recursiveFunctionTypes.ts(17,5): error TS2322: Type '() => I<typeof f3>' is not assignable to type 'number'.
+recursiveFunctionTypes.ts(22,5): error TS2345: Argument of type 'number' is not assignable to parameter of type '(t: typeof g) => void'.
+recursiveFunctionTypes.ts(25,1): error TS2322: Type 'number' is not assignable to type '() => any'.
+recursiveFunctionTypes.ts(30,10): error TS2394: This overload signature is not compatible with its implementation signature.
+recursiveFunctionTypes.ts(33,8): error TS2554: Expected 0-1 arguments, but got 2.
+recursiveFunctionTypes.ts(34,4): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
+recursiveFunctionTypes.ts(42,8): error TS2554: Expected 0-1 arguments, but got 2.
+recursiveFunctionTypes.ts(43,4): error TS2769: No overload matches this call.
   Overload 1 of 4, '(a: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }): () => number', gave the following error.
     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
   Overload 2 of 4, '(a: number): number', gave the following error.
@@ -20,9 +20,9 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload 
     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
 
 
-==== tests/cases/compiler/recursiveFunctionTypes.ts (13 errors) ====
+==== recursiveFunctionTypes.ts (13 errors) ====
     function fn(): typeof fn { return 1; }
-                               ~~~~~~~~~
+                               ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type '() => typeof fn'.
     
     var x: number = fn; // error
@@ -40,10 +40,10 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload 
     
     function f2(): typeof g2 { } 
                    ~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     function g2(): typeof f2 { } 
                    ~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     
     interface I<T> { }
     function f3(): I<typeof f3> { return f3; }
@@ -70,7 +70,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload 
     function f6(a: typeof f6): () => number;
              ~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/recursiveFunctionTypes.ts:31:10: The implementation signature is declared here.
+!!! related TS2750 recursiveFunctionTypes.ts:31:10: The implementation signature is declared here.
     function f6(a?: any) { return f6; }
     
     f6("", 3); // error (arity mismatch)
@@ -79,7 +79,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload 
     f6(""); // ok (function takes an any param)
        ~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
-!!! related TS2793 tests/cases/compiler/recursiveFunctionTypes.ts:31:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+!!! related TS2793 recursiveFunctionTypes.ts:31:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     f6(); // ok
     
     declare function f7(): typeof f7;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment18.ts] ////
+
+=== a.js ===
 var GLOBSTAR = m.GLOBSTAR = {}
 >GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 >m.GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))

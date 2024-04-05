@@ -1,12 +1,12 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(1,11): error TS2310: Type 'Base' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(5,11): error TS2310: Type 'Derived' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(9,11): error TS2310: Type 'Derived2' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(14,15): error TS2310: Type 'Base<T>' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(18,15): error TS2310: Type 'Derived<T>' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(22,15): error TS2310: Type 'Derived2<T>' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(1,11): error TS2310: Type 'Base' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(5,11): error TS2310: Type 'Derived' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(9,11): error TS2310: Type 'Derived2' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(14,15): error TS2310: Type 'Base<T>' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(18,15): error TS2310: Type 'Derived<T>' recursively references itself as a base type.
+interfaceThatIndirectlyInheritsFromItself.ts(22,15): error TS2310: Type 'Derived2<T>' recursively references itself as a base type.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts (6 errors) ====
+==== interfaceThatIndirectlyInheritsFromItself.ts (6 errors) ====
     interface Base extends Derived2 { // error
               ~~~~
 !!! error TS2310: Type 'Base' recursively references itself as a base type.

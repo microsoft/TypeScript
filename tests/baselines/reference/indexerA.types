@@ -1,34 +1,55 @@
-=== tests/cases/compiler/indexerA.ts ===
+//// [tests/cases/compiler/indexerA.ts] ////
+
+=== indexerA.ts ===
 class JQueryElement {
 >JQueryElement : JQueryElement
+>              : ^^^^^^^^^^^^^
 
     id:string;
 >id : string
+>   : ^^^^^^
 }
 
 class JQuery {
 >JQuery : JQuery
+>       : ^^^^^^
 
     [n:number]:JQueryElement
 >n : number
+>  : ^^^^^^
 }
 
 var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >jq : JQuery
+>   : ^^^^^^
 >{ 0: { id : "a" }, 1: { id : "b" } } : { 0: { id: string; }; 1: { id: string; }; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : { id: string; }
+>  : ^^^^^^^^^^^^^^^
 >{ id : "a" } : { id: string; }
+>             : ^^^^^^^^^^^^^^^
 >id : string
+>   : ^^^^^^
 >"a" : "a"
+>    : ^^^
 >1 : { id: string; }
+>  : ^^^^^^^^^^^^^^^
 >{ id : "b" } : { id: string; }
+>             : ^^^^^^^^^^^^^^^
 >id : string
+>   : ^^^^^^
 >"b" : "b"
+>    : ^^^
 
 jq[0].id;
 >jq[0].id : string
+>         : ^^^^^^
 >jq[0] : JQueryElement
+>      : ^^^^^^^^^^^^^
 >jq : JQuery
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >id : string
+>   : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES61.ts ===
+//// [tests/cases/compiler/classExpressionWithStaticPropertiesES61.ts] ////
+
+=== classExpressionWithStaticPropertiesES61.ts ===
 var v = class C { 
 >v : Symbol(v, Decl(classExpressionWithStaticPropertiesES61.ts, 0, 3))
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES61.ts, 0, 7))

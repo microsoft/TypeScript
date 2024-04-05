@@ -1,51 +1,81 @@
-=== tests/cases/compiler/propertyNamesWithStringLiteral.ts ===
+//// [tests/cases/compiler/propertyNamesWithStringLiteral.ts] ////
+
+=== propertyNamesWithStringLiteral.ts ===
 class _Color {
 >_Color : _Color
+>       : ^^^^^^
 
     a: number; r: number; g: number; b: number;
 >a : number
+>  : ^^^^^^
 >r : number
+>  : ^^^^^^
 >g : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 }
 
 interface NamedColors {
     azure: _Color;
 >azure : _Color
+>      : ^^^^^^
 
     "blue": _Color;
 >"blue" : _Color
+>       : ^^^^^^
 
     "pale blue": _Color;
 >"pale blue" : _Color
+>            : ^^^^^^
 }
 module Color {
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 
     export var namedColors: NamedColors;
 >namedColors : NamedColors
+>            : ^^^^^^^^^^^
 }
 var a = Color.namedColors["azure"];
 >a : _Color
+>  : ^^^^^^
 >Color.namedColors["azure"] : _Color
+>                           : ^^^^^^
 >Color.namedColors : NamedColors
+>                  : ^^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >namedColors : NamedColors
+>            : ^^^^^^^^^^^
 >"azure" : "azure"
+>        : ^^^^^^^
 
 var a = Color.namedColors.blue; // Should not error
 >a : _Color
+>  : ^^^^^^
 >Color.namedColors.blue : _Color
+>                       : ^^^^^^
 >Color.namedColors : NamedColors
+>                  : ^^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >namedColors : NamedColors
+>            : ^^^^^^^^^^^
 >blue : _Color
+>     : ^^^^^^
 
 var a = Color.namedColors["pale blue"]; // should not error
 >a : _Color
+>  : ^^^^^^
 >Color.namedColors["pale blue"] : _Color
+>                               : ^^^^^^
 >Color.namedColors : NamedColors
+>                  : ^^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >namedColors : NamedColors
+>            : ^^^^^^^^^^^
 >"pale blue" : "pale blue"
+>            : ^^^^^^^^^^^
 

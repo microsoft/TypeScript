@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRestNegative.ts] ////
+
 //// [objectRestNegative.ts]
 let o = { a: 1, b: 'no' };
 var { ...mustBeLast, a } = o;

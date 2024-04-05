@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceWithMultipleDeclarations.ts ===
+//// [tests/cases/compiler/interfaceWithMultipleDeclarations.ts] ////
+
+=== interfaceWithMultipleDeclarations.ts ===
 interface I1<V> {
 }
 interface I1<S> { // Name mismatch
@@ -32,6 +34,7 @@ interface I3<T> { // length mismatch
 
 class Foo<T> {
 >Foo : Foo<T>
+>    : ^^^^^^
 }
 interface I4<T extends Foo<T>> {
 }

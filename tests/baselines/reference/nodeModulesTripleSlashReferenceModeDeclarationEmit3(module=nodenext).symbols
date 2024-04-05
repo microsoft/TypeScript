@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit3.ts] ////
+
 === /index.ts ===
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export interface LocalInterface extends RequireInterface {}
 >LocalInterface : Symbol(LocalInterface, Decl(index.ts, 0, 0))
 >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 1, 16))

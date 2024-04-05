@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/deleteReadonlyInStrictNullChecks.ts] ////
+
+=== deleteReadonlyInStrictNullChecks.ts ===
+interface Function { readonly name: string; }
+>name : string
+>     : ^^^^^^
+
+class Foo {}
+>Foo : Foo
+>    : ^^^
+
+delete Foo.name;
+>delete Foo.name : boolean
+>                : ^^^^^^^
+>Foo.name : string
+>         : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+

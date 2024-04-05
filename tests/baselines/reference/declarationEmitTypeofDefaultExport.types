@@ -1,13 +1,20 @@
+//// [tests/cases/compiler/declarationEmitTypeofDefaultExport.ts] ////
+
 === /a.ts ===
 export default class C {};
 >C : C
+>  : ^
 
 === /b.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 export default a.default;
 >a.default : typeof a.default
+>          : ^^^^^^^^^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >default : typeof a.default
+>        : ^^^^^^^^^^^^^^^^
 

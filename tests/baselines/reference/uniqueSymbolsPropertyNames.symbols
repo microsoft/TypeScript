@@ -1,0 +1,184 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsPropertyNames.ts] ////
+
+=== uniqueSymbolsPropertyNames.ts ===
+interface OpTypes {
+>OpTypes : Symbol(OpTypes, Decl(uniqueSymbolsPropertyNames.ts, 0, 0))
+
+  readonly equal: unique symbol;
+>equal : Symbol(OpTypes.equal, Decl(uniqueSymbolsPropertyNames.ts, 0, 19))
+}
+
+namespace OpNamespace {
+>OpNamespace : Symbol(OpNamespace, Decl(uniqueSymbolsPropertyNames.ts, 2, 1))
+
+  export declare const equal: unique symbol;
+>equal : Symbol(equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+}
+
+const uniqueSymbol0 = Symbol.for("");
+>uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+const uniqueSymbol1 = Symbol.for("");
+>uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+
+function getUniqueSymbol0(): typeof uniqueSymbol0 {
+>getUniqueSymbol0 : Symbol(getUniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 9, 37))
+>uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
+
+  return uniqueSymbol0;
+>uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
+}
+
+function getUniqueSymbol1(): typeof uniqueSymbol1 {
+>getUniqueSymbol1 : Symbol(getUniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 14, 1))
+>uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
+
+    return uniqueSymbol1;
+>uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
+  }
+
+const Op: OpTypes = {
+>Op : Symbol(Op, Decl(uniqueSymbolsPropertyNames.ts, 20, 5))
+>OpTypes : Symbol(OpTypes, Decl(uniqueSymbolsPropertyNames.ts, 0, 0))
+
+  equal: Symbol.for("equal"),
+>equal : Symbol(equal, Decl(uniqueSymbolsPropertyNames.ts, 20, 21))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+
+} as OpTypes;
+>OpTypes : Symbol(OpTypes, Decl(uniqueSymbolsPropertyNames.ts, 0, 0))
+
+const t0 = {
+>t0 : Symbol(t0, Decl(uniqueSymbolsPropertyNames.ts, 24, 5))
+
+  equal: "first",
+>equal : Symbol(equal, Decl(uniqueSymbolsPropertyNames.ts, 24, 12), Decl(uniqueSymbolsPropertyNames.ts, 25, 17), Decl(uniqueSymbolsPropertyNames.ts, 26, 18))
+
+  equal: "second",
+>equal : Symbol(equal, Decl(uniqueSymbolsPropertyNames.ts, 24, 12), Decl(uniqueSymbolsPropertyNames.ts, 25, 17), Decl(uniqueSymbolsPropertyNames.ts, 26, 18))
+
+  ["equal"]: "last",
+>["equal"] : Symbol(equal, Decl(uniqueSymbolsPropertyNames.ts, 24, 12), Decl(uniqueSymbolsPropertyNames.ts, 25, 17), Decl(uniqueSymbolsPropertyNames.ts, 26, 18))
+>"equal" : Symbol(equal, Decl(uniqueSymbolsPropertyNames.ts, 24, 12), Decl(uniqueSymbolsPropertyNames.ts, 25, 17), Decl(uniqueSymbolsPropertyNames.ts, 26, 18))
+
+};
+
+const t1 = {
+>t1 : Symbol(t1, Decl(uniqueSymbolsPropertyNames.ts, 30, 5))
+
+  [Op.equal]: "first",
+>[Op.equal] : Symbol([Op.equal], Decl(uniqueSymbolsPropertyNames.ts, 30, 12), Decl(uniqueSymbolsPropertyNames.ts, 31, 22))
+>Op.equal : Symbol(OpTypes.equal, Decl(uniqueSymbolsPropertyNames.ts, 0, 19))
+>Op : Symbol(Op, Decl(uniqueSymbolsPropertyNames.ts, 20, 5))
+>equal : Symbol(OpTypes.equal, Decl(uniqueSymbolsPropertyNames.ts, 0, 19))
+
+  [Op.equal]: "last",
+>[Op.equal] : Symbol([Op.equal], Decl(uniqueSymbolsPropertyNames.ts, 30, 12), Decl(uniqueSymbolsPropertyNames.ts, 31, 22))
+>Op.equal : Symbol(OpTypes.equal, Decl(uniqueSymbolsPropertyNames.ts, 0, 19))
+>Op : Symbol(Op, Decl(uniqueSymbolsPropertyNames.ts, 20, 5))
+>equal : Symbol(OpTypes.equal, Decl(uniqueSymbolsPropertyNames.ts, 0, 19))
+
+};
+
+const t2 = {
+>t2 : Symbol(t2, Decl(uniqueSymbolsPropertyNames.ts, 35, 5))
+
+  [OpNamespace.equal]: "first",
+>[OpNamespace.equal] : Symbol([OpNamespace.equal], Decl(uniqueSymbolsPropertyNames.ts, 35, 12), Decl(uniqueSymbolsPropertyNames.ts, 36, 31))
+>OpNamespace.equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+>OpNamespace : Symbol(OpNamespace, Decl(uniqueSymbolsPropertyNames.ts, 2, 1))
+>equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+
+  [OpNamespace.equal]: "last",
+>[OpNamespace.equal] : Symbol([OpNamespace.equal], Decl(uniqueSymbolsPropertyNames.ts, 35, 12), Decl(uniqueSymbolsPropertyNames.ts, 36, 31))
+>OpNamespace.equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+>OpNamespace : Symbol(OpNamespace, Decl(uniqueSymbolsPropertyNames.ts, 2, 1))
+>equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+
+};
+
+const t3 = {
+>t3 : Symbol(t3, Decl(uniqueSymbolsPropertyNames.ts, 40, 5))
+
+  [getUniqueSymbol0()]: "first",
+>[getUniqueSymbol0()] : Symbol([getUniqueSymbol0()], Decl(uniqueSymbolsPropertyNames.ts, 40, 12))
+>getUniqueSymbol0 : Symbol(getUniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 9, 37))
+
+  [getUniqueSymbol0()]: "last",
+>[getUniqueSymbol0()] : Symbol([getUniqueSymbol0()], Decl(uniqueSymbolsPropertyNames.ts, 41, 32))
+>getUniqueSymbol0 : Symbol(getUniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 9, 37))
+
+  [getUniqueSymbol1()]: "first",
+>[getUniqueSymbol1()] : Symbol([getUniqueSymbol1()], Decl(uniqueSymbolsPropertyNames.ts, 42, 31))
+>getUniqueSymbol1 : Symbol(getUniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 14, 1))
+
+  [getUniqueSymbol1()]: "last",
+>[getUniqueSymbol1()] : Symbol([getUniqueSymbol1()], Decl(uniqueSymbolsPropertyNames.ts, 43, 32))
+>getUniqueSymbol1 : Symbol(getUniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 14, 1))
+
+};
+
+class Cls1 {
+>Cls1 : Symbol(Cls1, Decl(uniqueSymbolsPropertyNames.ts, 45, 2))
+
+  [uniqueSymbol0] = "first";
+>[uniqueSymbol0] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28))
+>uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
+
+  [uniqueSymbol0] = "last";
+>[uniqueSymbol0] : Symbol(Cls1[uniqueSymbol0], Decl(uniqueSymbolsPropertyNames.ts, 47, 12), Decl(uniqueSymbolsPropertyNames.ts, 48, 28))
+>uniqueSymbol0 : Symbol(uniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 8, 5))
+
+  [uniqueSymbol1] = "first";
+>[uniqueSymbol1] : Symbol(Cls1[uniqueSymbol1], Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
+>uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
+
+  [uniqueSymbol1] = "last";
+>[uniqueSymbol1] : Symbol(Cls1[uniqueSymbol1], Decl(uniqueSymbolsPropertyNames.ts, 49, 27), Decl(uniqueSymbolsPropertyNames.ts, 50, 28))
+>uniqueSymbol1 : Symbol(uniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 9, 5))
+}
+
+class Cls2 {
+>Cls2 : Symbol(Cls2, Decl(uniqueSymbolsPropertyNames.ts, 52, 1))
+
+  [OpNamespace.equal] = "first";
+>[OpNamespace.equal] : Symbol(Cls2[OpNamespace.equal], Decl(uniqueSymbolsPropertyNames.ts, 54, 12), Decl(uniqueSymbolsPropertyNames.ts, 55, 32))
+>OpNamespace.equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+>OpNamespace : Symbol(OpNamespace, Decl(uniqueSymbolsPropertyNames.ts, 2, 1))
+>equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+
+  [OpNamespace.equal] = "last";
+>[OpNamespace.equal] : Symbol(Cls2[OpNamespace.equal], Decl(uniqueSymbolsPropertyNames.ts, 54, 12), Decl(uniqueSymbolsPropertyNames.ts, 55, 32))
+>OpNamespace.equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+>OpNamespace : Symbol(OpNamespace, Decl(uniqueSymbolsPropertyNames.ts, 2, 1))
+>equal : Symbol(OpNamespace.equal, Decl(uniqueSymbolsPropertyNames.ts, 5, 22))
+}
+
+class Cls3 {
+>Cls3 : Symbol(Cls3, Decl(uniqueSymbolsPropertyNames.ts, 57, 1))
+
+  [getUniqueSymbol0()] = "first";
+>[getUniqueSymbol0()] : Symbol(Cls3[getUniqueSymbol0()], Decl(uniqueSymbolsPropertyNames.ts, 59, 12))
+>getUniqueSymbol0 : Symbol(getUniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 9, 37))
+
+  [getUniqueSymbol0()] = "last";
+>[getUniqueSymbol0()] : Symbol(Cls3[getUniqueSymbol0()], Decl(uniqueSymbolsPropertyNames.ts, 60, 33))
+>getUniqueSymbol0 : Symbol(getUniqueSymbol0, Decl(uniqueSymbolsPropertyNames.ts, 9, 37))
+
+  [getUniqueSymbol1()] = "first";
+>[getUniqueSymbol1()] : Symbol(Cls3[getUniqueSymbol1()], Decl(uniqueSymbolsPropertyNames.ts, 61, 32))
+>getUniqueSymbol1 : Symbol(getUniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 14, 1))
+
+  [getUniqueSymbol1()] = "last";
+>[getUniqueSymbol1()] : Symbol(Cls3[getUniqueSymbol1()], Decl(uniqueSymbolsPropertyNames.ts, 62, 33))
+>getUniqueSymbol1 : Symbol(getUniqueSymbol1, Decl(uniqueSymbolsPropertyNames.ts, 14, 1))
+}

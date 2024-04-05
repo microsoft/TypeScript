@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===
+//// [tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts] ////
+
+=== conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===
 /// <reference path="react16.d.ts" />
 
 type Stuff<T> =

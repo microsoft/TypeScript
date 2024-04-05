@@ -1,10 +1,15 @@
-=== tests/cases/conformance/jsx/tsxAttributeResolution.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution.tsx] ////
+
+=== tsxAttributeResolution.tsx ===
 declare namespace JSX {
 	interface IntrinsicElements {
 		x: { y: number; z: string; };
 >x : { y: number; z: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >y : number
+>  : ^^^^^^
 >z : string
+>  : ^^^^^^
 	}
 }
 

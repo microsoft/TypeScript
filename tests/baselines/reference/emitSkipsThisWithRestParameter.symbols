@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitSkipsThisWithRestParameter.ts ===
+//// [tests/cases/compiler/emitSkipsThisWithRestParameter.ts] ////
+
+=== emitSkipsThisWithRestParameter.ts ===
 function rebase(fn: (base: any, ...args: any[]) => any): (...args: any[]) => any {
 >rebase : Symbol(rebase, Decl(emitSkipsThisWithRestParameter.ts, 0, 0))
 >fn : Symbol(fn, Decl(emitSkipsThisWithRestParameter.ts, 0, 16))

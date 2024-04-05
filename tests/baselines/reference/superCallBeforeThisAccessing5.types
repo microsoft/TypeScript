@@ -1,7 +1,9 @@
-=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing5.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing5.ts] ////
+
+=== superCallBeforeThisAccessing5.ts ===
 class D extends null {
 >D : D
->null : null
+>  : ^
 
     private _t;
 >_t : any
@@ -10,7 +12,9 @@ class D extends null {
         this._t;  // No error
 >this._t : any
 >this : this
+>     : ^^^^
 >_t : any
+>   : ^^^
     }
 }
 

@@ -8,9 +8,8 @@
 
 const [r0Def, r0, r1Def, r1] = test.ranges();
 
-verify.baselineFindAllReferences('0', '1')
-
 // Verify that it doesn't try to rename "default"
 goTo.rangeStart(r0);
 verify.renameInfoFailed();
-verify.renameLocations(r1, [r1]);
+verify.baselineFindAllReferences('0', '1');
+verify.baselineRename(r1);

@@ -1,8 +1,13 @@
-=== tests/cases/compiler/typeofStrictNull.ts ===
+//// [tests/cases/compiler/typeofStrictNull.ts] ////
+
+=== typeofStrictNull.ts ===
 let a: number;
 >a : number
+>  : ^^^^^^
 
 let b: typeof a;
 >b : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 

@@ -1,18 +1,28 @@
-=== tests/cases/compiler/indexClassByNumber.ts ===
+//// [tests/cases/compiler/indexClassByNumber.ts] ////
+
+=== indexClassByNumber.ts ===
 // Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
 
 class foo { }
 >foo : foo
+>    : ^^^
 
 var f = new foo();
 >f : foo
+>  : ^^^
 >new foo() : foo
+>          : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 f[0] = 4; // Shouldn't be allowed
 >f[0] = 4 : 4
+>         : ^
 >f[0] : error
 >f : foo
+>  : ^^^
 >0 : 0
+>  : ^
 >4 : 4
+>  : ^
 

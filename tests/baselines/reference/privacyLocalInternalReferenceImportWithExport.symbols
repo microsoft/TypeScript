@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyLocalInternalReferenceImportWithExport.ts ===
+//// [tests/cases/compiler/privacyLocalInternalReferenceImportWithExport.ts] ////
+
+=== privacyLocalInternalReferenceImportWithExport.ts ===
 // private elements
 module m_private {
 >m_private : Symbol(m_private, Decl(privacyLocalInternalReferenceImportWithExport.ts, 0, 0))

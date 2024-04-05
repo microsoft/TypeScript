@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionGlobal4.ts] ////
+
 //// [spellingSuggestionGlobal4.ts]
 export {}
 declare global { var x: any }

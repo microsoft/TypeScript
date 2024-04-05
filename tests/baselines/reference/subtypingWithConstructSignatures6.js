@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts] ////
+
 //// [subtypingWithConstructSignatures6.ts]
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithConstructSignatures4 but using class type parameters instead of generic signatures

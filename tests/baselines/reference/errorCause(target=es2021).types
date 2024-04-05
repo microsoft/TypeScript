@@ -1,113 +1,201 @@
-=== tests/cases/compiler/errorCause.ts ===
+//// [tests/cases/compiler/errorCause.ts] ////
+
+=== errorCause.ts ===
 declare const a: unknown;
 >a : unknown
+>  : ^^^^^^^
 
 let err = new Error("foo", { cause: new Error("bar") });
 >err : Error
+>    : ^^^^^
 >new Error("foo", { cause: new Error("bar") }) : Error
+>                                              : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 err.cause;
 >err.cause : any
+>          : ^^^
 >err : Error
+>    : ^^^^^
 >cause : any
+>      : ^^^
 
 let anotherErr = new Error("foo", { cause: a });
 >anotherErr : Error
+>           : ^^^^^
 >new Error("foo", { cause: a }) : Error
+>                               : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: a } : { cause: unknown; }
+>             : ^^^^^^^^^^^^^^^^^^^
 >cause : unknown
+>      : ^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
 anotherErr.cause;
 >anotherErr.cause : any
+>                 : ^^^
 >anotherErr : Error
+>           : ^^^^^
 >cause : any
+>      : ^^^
 
 new EvalError("foo", { cause: new Error("bar") });
 >new EvalError("foo", { cause: new Error("bar") }) : EvalError & Error
+>                                                  : ^^^^^^^^^^^^^^^^^
 >EvalError : EvalErrorConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 new EvalError("foo", { cause: a });
 >new EvalError("foo", { cause: a }) : EvalError & Error
+>                                   : ^^^^^^^^^^^^^^^^^
 >EvalError : EvalErrorConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: a } : { cause: unknown; }
+>             : ^^^^^^^^^^^^^^^^^^^
 >cause : unknown
+>      : ^^^^^^^
 >a : unknown
+>  : ^^^^^^^
 
 new RangeError("foo", { cause: new Error("bar") });
 >new RangeError("foo", { cause: new Error("bar") }) : RangeError & Error
+>                                                   : ^^^^^^^^^^^^^^^^^^
 >RangeError : RangeErrorConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 new ReferenceError("foo", { cause: new Error("bar") });
 >new ReferenceError("foo", { cause: new Error("bar") }) : ReferenceError & Error
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^
 >ReferenceError : ReferenceErrorConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 new SyntaxError("foo", { cause: new Error("bar") });
 >new SyntaxError("foo", { cause: new Error("bar") }) : SyntaxError & Error
+>                                                    : ^^^^^^^^^^^^^^^^^^^
 >SyntaxError : SyntaxErrorConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 new TypeError("foo", { cause: new Error("bar") });
 >new TypeError("foo", { cause: new Error("bar") }) : TypeError & Error
+>                                                  : ^^^^^^^^^^^^^^^^^
 >TypeError : TypeErrorConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 new URIError("foo", { cause: new Error("bar") });
 >new URIError("foo", { cause: new Error("bar") }) : URIError & Error
+>                                                 : ^^^^^^^^^^^^^^^^
 >URIError : URIErrorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 new AggregateError([], "foo", { cause: new Error("bar") });
 >new AggregateError([], "foo", { cause: new Error("bar") }) : AggregateError
+>                                                           : ^^^^^^^^^^^^^^
 >AggregateError : AggregateErrorConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
+>                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
+>      : ^^^^^
 >new Error("bar") : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 

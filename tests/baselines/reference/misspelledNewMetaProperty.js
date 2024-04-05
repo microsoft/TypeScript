@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/misspelledNewMetaProperty.ts] ////
+
 //// [misspelledNewMetaProperty.ts]
 function foo(){new.targ}
 

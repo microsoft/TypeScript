@@ -1,15 +1,22 @@
-=== tests/cases/compiler/inheritanceStaticMembersCompatible.ts ===
+//// [tests/cases/compiler/inheritanceStaticMembersCompatible.ts] ////
+
+=== inheritanceStaticMembersCompatible.ts ===
 class a {
 >a : a
+>  : ^
 
     static x: a;
 >x : a
+>  : ^
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 
     static x: b;
 >x : b
+>  : ^
 }

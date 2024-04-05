@@ -1,7 +1,10 @@
-=== tests/cases/compiler/infinitelyExpandingTypeAssignability.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypeAssignability.ts] ////
+
+=== infinitelyExpandingTypeAssignability.ts ===
 interface A<T> {
    x : T
 >x : T
+>  : ^
 }
  
 interface B<T> extends A<B<B<B<T>>>> { }
@@ -10,8 +13,11 @@ interface C<T> extends A<C<C<C<T>>>> { }
  
 var x : B<string>
 >x : B<string>
+>  : ^^^^^^^^^
 
 var y : C<string> = x
 >y : C<string>
+>  : ^^^^^^^^^
 >x : B<string>
+>  : ^^^^^^^^^
 

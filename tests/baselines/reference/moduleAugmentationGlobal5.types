@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f3.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal5.ts] ////
+
+=== f3.ts ===
 
 /// <reference path="f1.d.ts"/>
 /// <reference path="f2.d.ts"/>
@@ -6,23 +8,27 @@ import "A";
 import "B";
 
 
-=== tests/cases/compiler/f1.d.ts ===
+=== f1.d.ts ===
 declare module "A" {
 >"A" : typeof import("A")
+>    : ^^^^^^^^^^^^^^^^^^
 
     global {
 >global : any
+>       : ^^^
 
         interface Something {x}
 >x : any
     }
 }
-=== tests/cases/compiler/f2.d.ts ===
+=== f2.d.ts ===
 declare module "B" {
 >"B" : typeof import("B")
+>    : ^^^^^^^^^^^^^^^^^^
 
     global {
 >global : any
+>       : ^^^
 
         interface Something {y}
 >y : any

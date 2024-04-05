@@ -1,8 +1,13 @@
-=== tests/cases/compiler/parse2.ts ===
+//// [tests/cases/compiler/parse2.ts] ////
+
+=== parse2.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
  foo(
 >foo( : void
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultInterfaceClassAndValue.ts] ////
+
 //// [exportDefaultInterfaceClassAndValue.ts]
 const foo = 1
 export default foo

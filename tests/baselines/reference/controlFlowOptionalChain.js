@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts] ////
+
 //// [controlFlowOptionalChain.ts]
 // assignments in shortcutting chain
 declare const o: undefined | {
@@ -590,6 +592,23 @@ while (arr[i]?.tag === "left") {
 }
 
 
+// Repro from #51941
+
+type Test5 = {
+  main?: {
+    childs: Record<string, Test5>;
+  };
+};
+
+function f50(obj: Test5) {
+   for (const key in obj.main?.childs) {
+      if (obj.main.childs[key] === obj) {
+        return obj;
+      }
+   }
+   return null;
+}
+
 //// [controlFlowOptionalChain.js]
 "use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
@@ -1090,4 +1109,13 @@ while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
     if (((_v = arr[i]) === null || _v === void 0 ? void 0 : _v.tag) === "right") {
         console.log("I should ALSO be reachable");
     }
+}
+function f50(obj) {
+    var _a;
+    for (var key in (_a = obj.main) === null || _a === void 0 ? void 0 : _a.childs) {
+        if (obj.main.childs[key] === obj) {
+            return obj;
+        }
+    }
+    return null;
 }

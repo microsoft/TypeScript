@@ -1,12 +1,17 @@
-=== tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts ===
+//// [tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts] ////
+
+=== inferTypeConstraintInstantiationCircularity.ts ===
 type AMappedType<T> = { [KeyType in keyof T]: number };
 >AMappedType : AMappedType<T>
+>            : ^^^^^^^^^^^^^^
 
 type HasM = {
->HasM : { m: number; }
+>HasM : HasM
+>     : ^^^^
 
   m: number;
 >m : number
+>  : ^^^^^^
 
 };
 
@@ -16,17 +21,21 @@ interface X1<
   T extends HasM,
   Output = AMappedType<{ s: number; } & { [k in keyof T]: number; }>
 >s : number
+>  : ^^^^^^
 
 > {
   tee: T;
 >tee : T
+>    : ^
 
   output: Output;
 >output : Output
+>       : ^^^^^^
 }
 
 type F1<T> = T extends X1<infer U> ? U : never;
 >F1 : F1<T>
+>   : ^^^^^
 
 // With default inlined
 
@@ -36,31 +45,39 @@ interface X2<
 > {
   tee: T;
 >tee : T
+>    : ^
 
   output: Output;
 >output : Output
+>       : ^^^^^^
 }
 
 type F2<T> = T extends X2<infer U, AMappedType<{ s: number; } & { [k in keyof (infer U)]: number; }>> ? U : never;
 >F2 : F2<T>
+>   : ^^^^^
 >s : number
+>  : ^^^^^^
 
 // Original repro
 
 type Simplify<T> = {[KeyType in keyof T]: T[KeyType]};
 >Simplify : Simplify<T>
+>         : ^^^^^^^^^^^
 
 type optionalKeys<T extends object> = {
 >optionalKeys : optionalKeys<T>
+>             : ^^^^^^^^^^^^^^^
 
     [k in keyof T]: undefined extends T[k] ? k : never;
 }[keyof T];
 
 type requiredKeys<T extends object> = Exclude<keyof T, optionalKeys<T>>;
 >requiredKeys : requiredKeys<T>
+>             : ^^^^^^^^^^^^^^^
 
 export type addQuestionMarks<T extends object> = {
 >addQuestionMarks : addQuestionMarks<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     [k in optionalKeys<T>]?: T[k];
 } & {
@@ -68,16 +85,19 @@ export type addQuestionMarks<T extends object> = {
 };
 
 type ZodRawShape = {
->ZodRawShape : { [k: string]: ZodType<any>; }
+>ZodRawShape : ZodRawShape
+>            : ^^^^^^^^^^^
 
     [k: string]: ZodType<any>;
 >k : string
+>  : ^^^^^^
 
 };
 
 interface ZodType<Output> {
   _type: Output;
 >_type : Output
+>      : ^^^^^^
 }
 
 interface ZodObject<
@@ -92,10 +112,12 @@ interface ZodObject<
 > extends ZodType<Output> {
   readonly _shape: T;
 >_shape : T
+>       : ^
 }
 
 type MyObject<T> = T extends ZodObject<infer U>
 >MyObject : MyObject<T>
+>         : ^^^^^^^^^^^
 
   ? U extends ZodRawShape
     ? U
@@ -106,26 +128,33 @@ type MyObject<T> = T extends ZodObject<infer U>
 
 type Cell<Value extends BaseValue = any, BaseValue = unknown> = {
 >Cell : Cell<Value, BaseValue>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
   id: string
 >id : string
+>   : ^^^^^^
 }
 
 type Items<Type extends Cell = Cell> = {
 >Items : Items<Type>
+>      : ^^^^^^^^^^^
 
   type: Type
 >type : Type
+>     : ^^^^
 
   name: string
 >name : string
+>     : ^^^^^^
 }
 
 type InferIOItemToJSType<T extends Items> =
 >InferIOItemToJSType : InferIOItemToJSType<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 
   T extends { type: infer U }
 >type : U
+>     : ^
 
     ? U extends Cell<infer V/**, infer _ or unknown, or any valid type **/>
       ? V

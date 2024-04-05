@@ -1,30 +1,30 @@
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(5,5): error TS2451: Cannot redeclare block-scoped variable 'var2'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(6,7): error TS2451: Cannot redeclare block-scoped variable 'var2'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(8,7): error TS2451: Cannot redeclare block-scoped variable 'var3'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(9,5): error TS2451: Cannot redeclare block-scoped variable 'var3'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(11,7): error TS2451: Cannot redeclare block-scoped variable 'var4'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(12,7): error TS2451: Cannot redeclare block-scoped variable 'var4'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(14,5): error TS2300: Duplicate identifier 'var5'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(15,5): error TS2300: Duplicate identifier 'var5'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(17,5): error TS2451: Cannot redeclare block-scoped variable 'var6'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(18,5): error TS2451: Cannot redeclare block-scoped variable 'var6'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(21,9): error TS2451: Cannot redeclare block-scoped variable 'var7'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(22,9): error TS2451: Cannot redeclare block-scoped variable 'var7'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(24,13): error TS2451: Cannot redeclare block-scoped variable 'var8'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(25,15): error TS2451: Cannot redeclare block-scoped variable 'var8'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(31,13): error TS2451: Cannot redeclare block-scoped variable 'var9'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(32,13): error TS2451: Cannot redeclare block-scoped variable 'var9'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(36,11): error TS2451: Cannot redeclare block-scoped variable 'var10'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(37,11): error TS2451: Cannot redeclare block-scoped variable 'var10'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(40,9): error TS2451: Cannot redeclare block-scoped variable 'var11'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(41,9): error TS2451: Cannot redeclare block-scoped variable 'var11'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(45,9): error TS2451: Cannot redeclare block-scoped variable 'var12'.
-tests/cases/compiler/letDeclarations-scopes-duplicates.ts(46,9): error TS2451: Cannot redeclare block-scoped variable 'var12'.
+letDeclarations-scopes-duplicates.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
+letDeclarations-scopes-duplicates.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
+letDeclarations-scopes-duplicates.ts(5,5): error TS2451: Cannot redeclare block-scoped variable 'var2'.
+letDeclarations-scopes-duplicates.ts(6,7): error TS2451: Cannot redeclare block-scoped variable 'var2'.
+letDeclarations-scopes-duplicates.ts(8,7): error TS2451: Cannot redeclare block-scoped variable 'var3'.
+letDeclarations-scopes-duplicates.ts(9,5): error TS2451: Cannot redeclare block-scoped variable 'var3'.
+letDeclarations-scopes-duplicates.ts(11,7): error TS2451: Cannot redeclare block-scoped variable 'var4'.
+letDeclarations-scopes-duplicates.ts(12,7): error TS2451: Cannot redeclare block-scoped variable 'var4'.
+letDeclarations-scopes-duplicates.ts(14,5): error TS2300: Duplicate identifier 'var5'.
+letDeclarations-scopes-duplicates.ts(15,5): error TS2300: Duplicate identifier 'var5'.
+letDeclarations-scopes-duplicates.ts(17,5): error TS2451: Cannot redeclare block-scoped variable 'var6'.
+letDeclarations-scopes-duplicates.ts(18,5): error TS2451: Cannot redeclare block-scoped variable 'var6'.
+letDeclarations-scopes-duplicates.ts(21,9): error TS2451: Cannot redeclare block-scoped variable 'var7'.
+letDeclarations-scopes-duplicates.ts(22,9): error TS2451: Cannot redeclare block-scoped variable 'var7'.
+letDeclarations-scopes-duplicates.ts(24,13): error TS2451: Cannot redeclare block-scoped variable 'var8'.
+letDeclarations-scopes-duplicates.ts(25,15): error TS2451: Cannot redeclare block-scoped variable 'var8'.
+letDeclarations-scopes-duplicates.ts(31,13): error TS2451: Cannot redeclare block-scoped variable 'var9'.
+letDeclarations-scopes-duplicates.ts(32,13): error TS2451: Cannot redeclare block-scoped variable 'var9'.
+letDeclarations-scopes-duplicates.ts(36,11): error TS2451: Cannot redeclare block-scoped variable 'var10'.
+letDeclarations-scopes-duplicates.ts(37,11): error TS2451: Cannot redeclare block-scoped variable 'var10'.
+letDeclarations-scopes-duplicates.ts(40,9): error TS2451: Cannot redeclare block-scoped variable 'var11'.
+letDeclarations-scopes-duplicates.ts(41,9): error TS2451: Cannot redeclare block-scoped variable 'var11'.
+letDeclarations-scopes-duplicates.ts(45,9): error TS2451: Cannot redeclare block-scoped variable 'var12'.
+letDeclarations-scopes-duplicates.ts(46,9): error TS2451: Cannot redeclare block-scoped variable 'var12'.
 
 
-==== tests/cases/compiler/letDeclarations-scopes-duplicates.ts (24 errors) ====
+==== letDeclarations-scopes-duplicates.ts (24 errors) ====
     // Errors: redeclaration
     let var1 = 0;
         ~~~~

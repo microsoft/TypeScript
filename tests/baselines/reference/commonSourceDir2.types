@@ -1,8 +1,12 @@
+//// [tests/cases/compiler/commonSourceDir2.ts] ////
+
 === A:/foo/bar.ts ===
 var x: number;
 >x : number
+>  : ^^^^^^
 
 === B:/foo/baz.ts ===
 var y: number;
 >y : number
+>  : ^^^^^^
 

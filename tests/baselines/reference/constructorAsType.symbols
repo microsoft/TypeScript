@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorAsType.ts ===
+//// [tests/cases/compiler/constructorAsType.ts] ////
+
+=== constructorAsType.ts ===
 var Person:new () => {name: string;} = function () {return {name:"joe"};};
 >Person : Symbol(Person, Decl(constructorAsType.ts, 0, 3))
 >name : Symbol(name, Decl(constructorAsType.ts, 0, 22))

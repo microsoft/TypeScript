@@ -1,9 +1,15 @@
-=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target8.ts ===
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target8.ts] ////
+
+=== esnextmodulekindWithES5Target8.ts ===
 export const c = 0;
 >c : 0
+>  : ^
 >0 : 0
+>  : ^
 
 export let l = 1;
 >l : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

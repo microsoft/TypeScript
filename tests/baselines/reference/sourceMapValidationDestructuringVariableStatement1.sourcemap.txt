@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatement1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatement1.js
+emittedFile:sourceMapValidationDestructuringVariableStatement1.js
 sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 -------------------------------------------------------------------
 >>>var hello = "hello";
@@ -637,7 +637,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 4 >         ^^^^
 5 >             ^^^^^
 6 >                  ^^
-7 >                    ^^^^^->
+7 >                    ^
+8 >                     ^^^^->
 1 >
   >
 2 >if (
@@ -645,12 +646,14 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 4 >          == 
 5 >             nameB
 6 >                  ) 
+7 >                    {
 1 >Emitted(13, 1) Source(22, 1) + SourceIndex(0)
 2 >Emitted(13, 5) Source(22, 5) + SourceIndex(0)
 3 >Emitted(13, 10) Source(22, 10) + SourceIndex(0)
 4 >Emitted(13, 14) Source(22, 14) + SourceIndex(0)
 5 >Emitted(13, 19) Source(22, 19) + SourceIndex(0)
 6 >Emitted(13, 21) Source(22, 21) + SourceIndex(0)
+7 >Emitted(13, 22) Source(22, 22) + SourceIndex(0)
 ---
 >>>    console.log(skillB);
 1->^^^^
@@ -661,7 +664,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 6 >                ^^^^^^
 7 >                      ^
 8 >                       ^
-1->{
+1->
   >    
 2 >    console
 3 >           .
@@ -680,18 +683,24 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 8 >Emitted(14, 25) Source(23, 25) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^->
 1 >
-  >}
-1 >Emitted(15, 2) Source(24, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(15, 1) Source(24, 1) + SourceIndex(0)
+2 >Emitted(15, 2) Source(24, 2) + SourceIndex(0)
 ---
 >>>else {
 1->^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^->
+2 >     ^
+3 >      ^^^^^^^^^^^^^^^^^^->
 1->
   >else 
+2 >     {
 1->Emitted(16, 6) Source(25, 6) + SourceIndex(0)
+2 >Emitted(16, 7) Source(25, 7) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -702,7 +711,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1->{
+1->
   >    
 2 >    console
 3 >           .
@@ -721,10 +730,13 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 8 >Emitted(17, 24) Source(26, 24) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(18, 2) Source(27, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(18, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(18, 2) Source(27, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatement1.js.map

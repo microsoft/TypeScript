@@ -1,0 +1,33 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInTypes.ts ===
+// var n: /*GOTO DEF*/number;
+// var s: string;
+// var b: boolean;
+// var v: void;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInTypes.ts ===
+// var n: number;
+// var s: /*GOTO DEF*/string;
+// var b: boolean;
+// var v: void;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInTypes.ts ===
+// var n: number;
+// var s: string;
+// var b: /*GOTO DEF*/boolean;
+// var v: void;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInTypes.ts ===
+// var n: number;
+// var s: string;
+// var b: boolean;
+// var v: /*GOTO DEF*/void;

@@ -1,35 +1,55 @@
-=== tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts] ////
+
+=== typeFromPrivatePropertyAssignment.ts ===
 type Foo = { foo?: string };
->Foo : { foo?: string; }
+>Foo : Foo
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     #a?: Foo;
 >#a : Foo
+>   : ^^^
 
     #b?: Foo;
 >#b : Foo
+>   : ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         const a = this.#a || {};
 >a : Foo
+>  : ^^^
 >this.#a || {} : Foo
+>              : ^^^
 >this.#a : Foo
+>        : ^^^
 >this : this
+>     : ^^^^
 >{} : {}
+>   : ^^
 
         this.#b = this.#b || {};
 >this.#b = this.#b || {} : Foo
+>                        : ^^^
 >this.#b : Foo
+>        : ^^^
 >this : this
+>     : ^^^^
 >this.#b || {} : Foo
+>              : ^^^
 >this.#b : Foo
+>        : ^^^
 >this : this
+>     : ^^^^
 >{} : {}
+>   : ^^
     }
 }
 

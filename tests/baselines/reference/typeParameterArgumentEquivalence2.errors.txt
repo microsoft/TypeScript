@@ -1,14 +1,14 @@
-tests/cases/compiler/typeParameterArgumentEquivalence2.ts(4,5): error TS2322: Type '(item: T) => boolean' is not assignable to type '(item: U) => boolean'.
+typeParameterArgumentEquivalence2.ts(4,5): error TS2322: Type '(item: T) => boolean' is not assignable to type '(item: U) => boolean'.
   Types of parameters 'item' and 'item' are incompatible.
     Type 'U' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/compiler/typeParameterArgumentEquivalence2.ts(5,5): error TS2322: Type '(item: U) => boolean' is not assignable to type '(item: T) => boolean'.
+typeParameterArgumentEquivalence2.ts(5,5): error TS2322: Type '(item: U) => boolean' is not assignable to type '(item: T) => boolean'.
   Types of parameters 'item' and 'item' are incompatible.
     Type 'T' is not assignable to type 'U'.
       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
-==== tests/cases/compiler/typeParameterArgumentEquivalence2.ts (2 errors) ====
+==== typeParameterArgumentEquivalence2.ts (2 errors) ====
     function foo<T,U>() {
         var x: (item: U) => boolean;
         var y: (item: T) => boolean;
@@ -18,13 +18,13 @@ tests/cases/compiler/typeParameterArgumentEquivalence2.ts(5,5): error TS2322: Ty
 !!! error TS2322:   Types of parameters 'item' and 'item' are incompatible.
 !!! error TS2322:     Type 'U' is not assignable to type 'T'.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/compiler/typeParameterArgumentEquivalence2.ts:1:16: This type parameter might need an `extends T` constraint.
+!!! related TS2208 typeParameterArgumentEquivalence2.ts:1:16: This type parameter might need an `extends T` constraint.
         y = x;  // Shound be an error
         ~
 !!! error TS2322: Type '(item: U) => boolean' is not assignable to type '(item: T) => boolean'.
 !!! error TS2322:   Types of parameters 'item' and 'item' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
 !!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/compiler/typeParameterArgumentEquivalence2.ts:1:14: This type parameter might need an `extends U` constraint.
+!!! related TS2208 typeParameterArgumentEquivalence2.ts:1:14: This type parameter might need an `extends U` constraint.
     }
     

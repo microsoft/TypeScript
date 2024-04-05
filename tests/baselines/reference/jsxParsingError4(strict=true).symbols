@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/jsxParsingError4.tsx] ////
+
+=== a.tsx ===
 declare const React: any
 >React : Symbol(React, Decl(a.tsx, 0, 13))
 
@@ -17,8 +19,8 @@ const a = (
 >a : Symbol(a, Decl(a.tsx, 7, 5))
 
   <public-foo></public-foo>
->public-foo : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
->public-foo : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
+>public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
+>public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 
 );
 
@@ -26,8 +28,8 @@ const b = (
 >b : Symbol(b, Decl(a.tsx, 11, 5))
 
   <public></public>
->public : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
->public : Symbol(JSX.IntrinsicElements, Decl(a.tsx, 1, 23))
+>public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
+>public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 
 );
 

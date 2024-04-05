@@ -1,9 +1,9 @@
-tests/cases/conformance/internalModules/DeclarationMerging/part2.ts(3,24): error TS2304: Cannot find name 'Point'.
-tests/cases/conformance/internalModules/DeclarationMerging/part2.ts(7,36): error TS2304: Cannot find name 'Point'.
-tests/cases/conformance/internalModules/DeclarationMerging/part2.ts(7,54): error TS2304: Cannot find name 'Point'.
+part2.ts(3,24): error TS2304: Cannot find name 'Point'.
+part2.ts(7,36): error TS2304: Cannot find name 'Point'.
+part2.ts(7,54): error TS2304: Cannot find name 'Point'.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts (0 errors) ====
+==== part1.ts (0 errors) ====
     export module A {
         export interface Point {
             x: number;
@@ -19,7 +19,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/part2.ts(7,54): error
         export var Origin: Point = { x: 0, y: 0 };
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts (3 errors) ====
+==== part2.ts (3 errors) ====
     export module A {
         // collision with 'Origin' var in other part of merged module
         export var Origin: Point = { x: 0, y: 0 };

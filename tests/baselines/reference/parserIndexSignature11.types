@@ -1,13 +1,20 @@
-=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts] ////
+
+=== parserIndexSignature11.ts ===
 interface I {
         [p]; // Used to be indexer, now it is a computed property
 >[p] : any
+>    : ^^^
 >p : any
+>  : ^^^
 
         [p1: string];
 >p1 : string
+>   : ^^^^^^
 
         [p2: string, p3: number];
 >p2 : string
+>   : ^^^^^^
 >p3 : number
+>   : ^^^^^^
 }

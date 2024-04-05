@@ -3,7 +3,7 @@
 //// var x: [|number?|] = 12;
 
 verify.codeFix({
-    description: "Change 'number?' to 'number | null | undefined'",
+    description: "Change 'number?' to 'number | undefined'",
     index: 1,
-    newRangeContent: "number | null | undefined",
+    newRangeContent: "number | undefined",
 });

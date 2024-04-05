@@ -1,68 +1,100 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/augmentExportEquals6.ts] ////
+
+=== file1.ts ===
 class foo {}
->foo : import("tests/cases/compiler/file1.ts")
+>foo : import("file1.ts")
+>    : ^^^^^^^^^^^^^^^^^^
 
 namespace foo {
->foo : typeof import("tests/cases/compiler/file1.ts")
+>foo : typeof import("file1.ts")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export class A {}
 >A : A
+>  : ^
 
     export namespace B { export let a; }
 >B : typeof B
+>  : ^^^^^^^^
 >a : any
 }
 export = foo;
->foo : import("tests/cases/compiler/file1.ts")
+>foo : import("file1.ts")
+>    : ^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import x = require("./file1"); 
 >x : typeof x
+>  : ^^^^^^^^
 
 x.B.b = 1;
 >x.B.b = 1 : 1
+>          : ^
 >x.B.b : number
+>      : ^^^^^^
 >x.B : typeof x.B
+>    : ^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >B : typeof x.B
+>  : ^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 // OK - './file1' is a namespace
 declare module "./file1" {
 >"./file1" : typeof x
+>          : ^^^^^^^^
 
     interface A { a: number }
 >a : number
+>  : ^^^^^^
 
     namespace B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export let b: number;
 >b : number
+>  : ^^^^^^
     }
 }
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 import * as x from "./file1";
 >x : typeof x
+>  : ^^^^^^^^
 
 import "./file2";
 let a: x.A;
 >a : x.A
+>  : ^^^
 >x : any
+>  : ^^^
 
 let b = a.a;
 >b : number
+>  : ^^^^^^
 >a.a : number
+>    : ^^^^^^
 >a : x.A
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
 let c = x.B.b;
 >c : number
+>  : ^^^^^^
 >x.B.b : number
+>      : ^^^^^^
 >x.B : typeof x.B
+>    : ^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >B : typeof x.B
+>  : ^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 

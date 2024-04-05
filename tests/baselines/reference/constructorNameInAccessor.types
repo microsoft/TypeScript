@@ -1,12 +1,18 @@
-=== tests/cases/conformance/salsa/constructorNameInAccessor.ts ===
+//// [tests/cases/conformance/salsa/constructorNameInAccessor.ts] ////
+
+=== constructorNameInAccessor.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     get constructor() { return }
 >constructor : void
+>            : ^^^^
 
     set constructor(value) {}
 >constructor : void
+>            : ^^^^
 >value : void
+>      : ^^^^
 }
 

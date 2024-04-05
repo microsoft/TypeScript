@@ -28,6 +28,7 @@ import {
     StringLiteralType,
     Symbol,
     SymbolFlags,
+    SymbolLinks,
     symbolName,
     SymbolTable,
     Type,
@@ -57,8 +58,9 @@ export class SymbolObject implements Symbol {
     declare constEnumOnlyModule: boolean | undefined;
     declare isReferenced?: SymbolFlags | undefined;
     declare isReplaceableByMethod?: boolean | undefined;
-    declare isAssigned?: boolean | undefined;
+    declare lastAssignmentPos?: number | undefined;
     declare assignmentDeclarationMembers?: Map<number, Declaration> | undefined;
+    declare links?: SymbolLinks;
 
     constructor(flags: SymbolFlags, name: __String) {
         this.flags = flags;
@@ -73,8 +75,8 @@ export class SymbolObject implements Symbol {
         this.exportSymbol = undefined;
         this.constEnumOnlyModule = undefined;
         this.isReferenced = undefined;
-        this.isAssigned = undefined;
-        (this as any).links = undefined; // used by TransientSymbol
+        this.lastAssignmentPos = undefined;
+        this.links = undefined; // used by TransientSymbol
     }
 
     getFlags(): SymbolFlags {

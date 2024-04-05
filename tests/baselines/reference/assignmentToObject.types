@@ -1,15 +1,25 @@
-=== tests/cases/compiler/assignmentToObject.ts ===
+//// [tests/cases/compiler/assignmentToObject.ts] ////
+
+=== assignmentToObject.ts ===
 var a = { toString: 5 };
 >a : { toString: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >{ toString: 5 } : { toString: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >toString : number
+>         : ^^^^^^
 >5 : 5
+>  : ^
 
 var b: {} = a;  // ok
 >b : {}
+>  : ^^
 >a : { toString: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 var c: Object = a;  // should be error
 >c : Object
+>  : ^^^^^^
 >a : { toString: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 

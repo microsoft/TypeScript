@@ -1,32 +1,46 @@
-=== tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts ===
+//// [tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts] ////
+
+=== types.forAwait.es2018.3.ts ===
 async function f1() {
 >f1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let y: number;
 >y : number
+>  : ^^^^^^
 
     for await (const x of {}) {
 >x : any
+>  : ^^^
 >{} : {}
+>   : ^^
     }
     for await (y of {}) {
 >y : number
+>  : ^^^^^^
 >{} : {}
+>   : ^^
     }
 }
 async function* f2() {
 >f2 : () => {}
+>   : ^^^^^^^^
 
     let y: number;
 >y : number
+>  : ^^^^^^
 
     for await (const x of {}) {
 >x : any
+>  : ^^^
 >{} : {}
+>   : ^^
     }
     for await (y of {}) {
 >y : number
+>  : ^^^^^^
 >{} : {}
+>   : ^^
     }
 }
 

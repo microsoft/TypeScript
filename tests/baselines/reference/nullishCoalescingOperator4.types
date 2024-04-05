@@ -1,23 +1,39 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts] ////
+
+=== nullishCoalescingOperator4.ts ===
 declare const a1: 'literal' | undefined | null
 >a1 : "literal" | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const aa1 = a1 ?? a1.toLowerCase()
 >aa1 : any
+>    : ^^^
 >a1 ?? a1.toLowerCase() : any
+>                       : ^^^
 >a1 : "literal" | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1.toLowerCase() : any
+>                 : ^^^
 >a1.toLowerCase : any
+>               : ^^^
 >a1 : null | undefined
+>   : ^^^^^^^^^^^^^^^^
 >toLowerCase : any
+>            : ^^^
 
 const aa2 = a1 || a1.toLocaleUpperCase()
 >aa2 : any
+>    : ^^^
 >a1 || a1.toLocaleUpperCase() : any
+>                             : ^^^
 >a1 : "literal" | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1.toLocaleUpperCase() : any
+>                       : ^^^
 >a1.toLocaleUpperCase : any
+>                     : ^^^
 >a1 : null | undefined
+>   : ^^^^^^^^^^^^^^^^
 >toLocaleUpperCase : any
+>                  : ^^^
 

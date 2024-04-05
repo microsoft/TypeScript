@@ -1,5 +1,9 @@
-=== tests/cases/compiler/downlevelLetConst3.ts ===
+//// [tests/cases/compiler/downlevelLetConst3.ts] ////
+
+=== downlevelLetConst3.ts ===
 const a = 1
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 

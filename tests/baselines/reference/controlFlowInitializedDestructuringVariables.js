@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowInitializedDestructuringVariables.ts] ////
+
 //// [controlFlowInitializedDestructuringVariables.ts]
 declare const obj: { a?: string, b?: number };
 const {

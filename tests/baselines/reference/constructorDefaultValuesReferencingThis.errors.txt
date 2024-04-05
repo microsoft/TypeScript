@@ -1,23 +1,25 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts(2,21): error TS2333: 'this' cannot be referenced in constructor arguments.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts(6,21): error TS2333: 'this' cannot be referenced in constructor arguments.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts(10,28): error TS2333: 'this' cannot be referenced in constructor arguments.
+constructorDefaultValuesReferencingThis.ts(15,21): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts (3 errors) ====
+==== constructorDefaultValuesReferencingThis.ts (1 errors) ====
     class C {
+        public baseProp = 1;
         constructor(x = this) { }
-                        ~~~~
-!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }
     
     class D<T> {
         constructor(x = this) { }
-                        ~~~~
-!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }
     
     class E<T> {
         constructor(public x = this) { }
-                               ~~~~
-!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }
+    
+    class F extends C {
+        constructor(y = this.baseProp) {
+                        ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super();
+        }
+    }
+    

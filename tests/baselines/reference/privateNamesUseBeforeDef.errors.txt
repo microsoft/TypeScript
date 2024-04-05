@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts(2,17): error TS2729: Property '#bar' is used before its initialization.
-tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts(17,17): error TS2729: Property '#bar' is used before its initialization.
+privateNamesUseBeforeDef.ts(2,17): error TS2729: Property '#bar' is used before its initialization.
+privateNamesUseBeforeDef.ts(17,17): error TS2729: Property '#bar' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts (2 errors) ====
+==== privateNamesUseBeforeDef.ts (2 errors) ====
     class A {
         #foo = this.#bar; // Error
                     ~~~~
 !!! error TS2729: Property '#bar' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts:3:5: '#bar' is declared here.
+!!! related TS2728 privateNamesUseBeforeDef.ts:3:5: '#bar' is declared here.
         #bar = 3;
     }
     
@@ -25,7 +25,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts
         #foo = this.#bar; // Error
                     ~~~~
 !!! error TS2729: Property '#bar' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts:18:5: '#bar' is declared here.
+!!! related TS2728 privateNamesUseBeforeDef.ts:18:5: '#bar' is declared here.
         #bar = this.#foo;
     }
     

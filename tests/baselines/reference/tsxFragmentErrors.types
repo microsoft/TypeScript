@@ -1,18 +1,27 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxFragmentErrors.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 <>hi</div> // Error
-><>hi</div> // Error<>eof   // Error : JSX.Element
-><>hi</div> : JSX.Element
+><>hi</ : JSX.Element
+>       : ^^^^^^^^^^^
+>div> // Error<>eof   // Error : boolean
+>                              : ^^^^^^^
+>div : any
+>    : ^^^
 
 <>eof   // Error
 ><>eof   // Error : JSX.Element
+>                 : ^^^^^^^^^^^
 

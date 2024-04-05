@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList4.ts(2,4): error TS2304: Cannot find name 'bar'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList4.ts(2,8): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList4.ts(2,10): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList4.ts(3,4): error TS1005: ',' expected.
+parserErrorRecovery_ArgumentList4.ts(2,4): error TS2304: Cannot find name 'bar'.
+parserErrorRecovery_ArgumentList4.ts(2,8): error TS2304: Cannot find name 'a'.
+parserErrorRecovery_ArgumentList4.ts(2,10): error TS2304: Cannot find name 'b'.
+parserErrorRecovery_ArgumentList4.ts(3,4): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList4.ts (4 errors) ====
+==== parserErrorRecovery_ArgumentList4.ts (4 errors) ====
     function foo() {
        bar(a,b
        ~~~

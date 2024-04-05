@@ -1,10 +1,10 @@
-tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(2,18): error TS2300: Duplicate identifier 'Point'.
-tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(10,18): error TS2300: Duplicate identifier 'Point'.
-tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(17,18): error TS2300: Duplicate identifier 'Line'.
-tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error TS2300: Duplicate identifier 'Line'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(2,18): error TS2300: Duplicate identifier 'Point'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(10,18): error TS2300: Duplicate identifier 'Point'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(17,18): error TS2300: Duplicate identifier 'Line'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error TS2300: Duplicate identifier 'Line'.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (4 errors) ====
+==== TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (4 errors) ====
     module A {
         export class Point {
                      ~~~~~

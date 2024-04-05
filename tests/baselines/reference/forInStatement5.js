@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forInStatement5.ts] ////
+
 //// [forInStatement5.ts]
 var a: string;
 var expr: any;

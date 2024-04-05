@@ -1,7 +1,7 @@
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
+exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (1 errors) ====
+==== exhaustiveSwitchImplicitReturn.ts (1 errors) ====
     function foo1(bar: "a"): number {
         switch(bar) {
             case "a":

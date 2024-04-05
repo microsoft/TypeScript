@@ -1,24 +1,38 @@
-=== tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts ===
+//// [tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts] ////
+
+=== declarationEmitFunctionDuplicateNamespace.ts ===
 function f(a: 0): 0;
 >f : typeof f
+>  : ^^^^^^^^
 >a : 0
+>  : ^
 
 function f(a: 1): 1;
 >f : typeof f
+>  : ^^^^^^^^
 >a : 1
+>  : ^
 
 function f(a: 0 | 1) {
 >f : typeof f
+>  : ^^^^^^^^
 >a : 0 | 1
+>  : ^^^^^
 
     return a;
 >a : 0 | 1
+>  : ^^^^^
 }
 
 f.x = 2;
 >f.x = 2 : 2
+>        : ^
 >f.x : number
+>    : ^^^^^^
 >f : typeof f
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 

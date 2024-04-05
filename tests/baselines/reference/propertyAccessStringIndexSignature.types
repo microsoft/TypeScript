@@ -1,41 +1,64 @@
-=== tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts ===
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts] ////
+
+=== propertyAccessStringIndexSignature.ts ===
 interface Flags { [name: string]: boolean };
 >name : string
+>     : ^^^^^^
 
 let flags: Flags;
 >flags : Flags
+>      : ^^^^^
 
 flags.b;
 >flags.b : boolean
+>        : ^^^^^^^
 >flags : Flags
+>      : ^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 flags.f;
 >flags.f : boolean
+>        : ^^^^^^^
 >flags : Flags
+>      : ^^^^^
 >f : boolean
+>  : ^^^^^^^
 
 flags.isNotNecessarilyNeverFalse;
 >flags.isNotNecessarilyNeverFalse : boolean
+>                                 : ^^^^^^^
 >flags : Flags
+>      : ^^^^^
 >isNotNecessarilyNeverFalse : boolean
+>                           : ^^^^^^^
 
 flags['this is fine'];
 >flags['this is fine'] : boolean
+>                      : ^^^^^^^
 >flags : Flags
+>      : ^^^^^
 >'this is fine' : "this is fine"
+>               : ^^^^^^^^^^^^^^
 
 interface Empty { }
 let empty: Empty;
 >empty : Empty
+>      : ^^^^^
 
 empty.nope;
 >empty.nope : any
+>           : ^^^
 >empty : Empty
+>      : ^^^^^
 >nope : any
+>     : ^^^
 
 empty["that's ok"];
 >empty["that's ok"] : any
+>                   : ^^^
 >empty : Empty
+>      : ^^^^^
 >"that's ok" : "that's ok"
+>            : ^^^^^^^^^^^
 

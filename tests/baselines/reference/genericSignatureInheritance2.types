@@ -1,11 +1,15 @@
-=== tests/cases/compiler/genericSignatureInheritance2.ts ===
+//// [tests/cases/compiler/genericSignatureInheritance2.ts] ////
+
+=== genericSignatureInheritance2.ts ===
 interface I {
     <T>(x: T): string;
 >x : T
+>  : ^
 }
 
 interface I2 extends I { 
     <T>(x: T): void;
 >x : T
+>  : ^
 }
 

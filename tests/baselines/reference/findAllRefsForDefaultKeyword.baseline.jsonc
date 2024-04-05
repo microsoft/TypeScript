@@ -1,89 +1,111 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, /*FIND ALL REFS*/default: string) {}
+// 
+// const default = 1;
+// 
+// --- (line: 5) skipped ---
 
-undefined
 
-undefined
 
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// function f(value: string, default: string) {}
+// 
+// const /*FIND ALL REFS*/default = 1;
+// 
+// function default() {}
+// 
+// --- (line: 7) skipped ---
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
 // function f(value: string, default: string) {}
 // 
 // const default = 1;
 // 
-// function default() {}
+// function /*FIND ALL REFS*/default() {}
 // 
 // class default {}
 // 
+// --- (line: 9) skipped ---
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// --- (line: 3) skipped ---
+// 
+// function default() {}
+// 
+// class /*FIND ALL REFS*/default {}
+// 
 // const foo = {
-//     /*FIND ALL REFS*/[|default|]: 1
+//     default: 1
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultKeyword.ts",
-      "kind": "property",
-      "name": "(property) default: number",
-      "textSpan": {
-        "start": 126,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "default",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 126,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 126,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultKeyword.ts",
-        "contextSpan": {
-          "start": 126,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+// --- (line: 6) skipped ---
+// class default {}
+// 
+// const foo = {
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}default|]: 1|>
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
+  // --- (line: 6) skipped ---
+  // class default {}
+  // 
+  // const foo = {
+  //     /*FIND ALL REFS*/<|[|default|]: 1|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) default: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

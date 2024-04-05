@@ -16,4 +16,4 @@
 ////
 //// var x = <MyClass [|[|{| "contextRangeIndex": 2 |}name|]='hello'|]/>;
 
-verify.rangesWithSameTextAreRenameLocations("name");
+verify.baselineRenameAtRangesWithText("name");

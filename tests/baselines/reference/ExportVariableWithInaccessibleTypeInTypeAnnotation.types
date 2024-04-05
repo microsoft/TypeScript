@@ -1,38 +1,58 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithInaccessibleTypeInTypeAnnotation.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithInaccessibleTypeInTypeAnnotation.ts] ////
+
+=== ExportVariableWithInaccessibleTypeInTypeAnnotation.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 
     // valid since Point is exported
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
+>       : ^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     interface Point3d extends Point {
         z: number;
 >z : number
+>  : ^^^^^^
     }
 
     // invalid Point3d is not exported
     export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
 >Origin3d : Point3d
+>         : ^^^^^^^
 >{ x: 0, y: 0, z: 0 } : { x: number; y: number; z: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >z : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 

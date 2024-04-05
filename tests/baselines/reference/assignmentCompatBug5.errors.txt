@@ -1,20 +1,18 @@
-tests/cases/compiler/assignmentCompatBug5.ts(2,8): error TS2345: Argument of type '{ b: number; }' is not assignable to parameter of type '{ a: number; }'.
-  Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
-tests/cases/compiler/assignmentCompatBug5.ts(5,7): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/assignmentCompatBug5.ts(5,12): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/assignmentCompatBug5.ts(8,6): error TS2345: Argument of type '(s: string) => void' is not assignable to parameter of type '(n: number) => number'.
+assignmentCompatBug5.ts(2,8): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+assignmentCompatBug5.ts(5,7): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentCompatBug5.ts(5,12): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentCompatBug5.ts(8,6): error TS2345: Argument of type '(s: string) => void' is not assignable to parameter of type '(n: number) => number'.
   Types of parameters 's' and 'n' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/assignmentCompatBug5.ts(9,6): error TS2345: Argument of type '(n: number) => void' is not assignable to parameter of type '(n: number) => number'.
+assignmentCompatBug5.ts(9,6): error TS2345: Argument of type '(n: number) => void' is not assignable to parameter of type '(n: number) => number'.
   Type 'void' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/assignmentCompatBug5.ts (5 errors) ====
+==== assignmentCompatBug5.ts (5 errors) ====
     function foo1(x: { a: number; }) { }
     foo1({ b: 5 });
-           ~~~~
-!!! error TS2345: Argument of type '{ b: number; }' is not assignable to parameter of type '{ a: number; }'.
-!!! error TS2345:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+           ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
     
     function foo2(x: number[]) { }
     foo2(["s", "t"]);

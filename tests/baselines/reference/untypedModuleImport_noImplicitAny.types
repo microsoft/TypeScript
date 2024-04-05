@@ -1,4 +1,7 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_noImplicitAny.ts] ////
+
 === /a.ts ===
 import * as foo from "foo";
 >foo : any
+>    : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts] ////
+
 //// [exportInterfaceClassAndValueWithDuplicatesInImportList.ts]
 const foo = 1
 class Foo {}

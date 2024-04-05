@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts ===
+//// [tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts] ////
+
+=== doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts ===
 
 () => {
     // Single line comment

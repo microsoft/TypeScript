@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts ===
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
+=== uncalledFunctionChecksInConditional2.ts ===
 {
   const perf = window.performance
 >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
@@ -64,21 +66,45 @@
 >perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
 >mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
   }
+
+  // With ??
+  if (
+    (
+      perf &&
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+
+      perf.mark &&
+>perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+>mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
+
+      perf.measure
+>perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+>measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
+
+    ) ?? !!true
+  ) {
+    perf.mark("");
+>perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 1, 7))
+>mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
+  }
 };
 
 // Original #49192
 declare let inBrowser: boolean;
->inBrowser : Symbol(inBrowser, Decl(uncalledFunctionChecksInConditional2.ts, 26, 11))
+>inBrowser : Symbol(inBrowser, Decl(uncalledFunctionChecksInConditional2.ts, 37, 11))
 {
   let mark;
->mark : Symbol(mark, Decl(uncalledFunctionChecksInConditional2.ts, 28, 5))
+>mark : Symbol(mark, Decl(uncalledFunctionChecksInConditional2.ts, 39, 5))
 
   let measure;
->measure : Symbol(measure, Decl(uncalledFunctionChecksInConditional2.ts, 29, 5))
+>measure : Symbol(measure, Decl(uncalledFunctionChecksInConditional2.ts, 40, 5))
 
   const perf = inBrowser && window.performance
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
->inBrowser : Symbol(inBrowser, Decl(uncalledFunctionChecksInConditional2.ts, 26, 11))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
+>inBrowser : Symbol(inBrowser, Decl(uncalledFunctionChecksInConditional2.ts, 37, 11))
 >window.performance : Symbol(performance, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >performance : Symbol(performance, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
@@ -86,65 +112,102 @@ declare let inBrowser: boolean;
   /* istanbul ignore if */
   if (
     perf &&
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 
     perf.mark &&
 >perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
 
     perf.measure &&
 >perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
 
     perf.clearMarks &&
 >perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
 
     perf.clearMeasures
 >perf.clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >clearMeasures : Symbol(Performance.clearMeasures, Decl(lib.dom.d.ts, --, --))
 
   ) {
     mark = (tag) => perf.mark(tag)
->mark : Symbol(mark, Decl(uncalledFunctionChecksInConditional2.ts, 28, 5))
->tag : Symbol(tag, Decl(uncalledFunctionChecksInConditional2.ts, 39, 12))
+>mark : Symbol(mark, Decl(uncalledFunctionChecksInConditional2.ts, 39, 5))
+>tag : Symbol(tag, Decl(uncalledFunctionChecksInConditional2.ts, 50, 12))
 >perf.mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >mark : Symbol(Performance.mark, Decl(lib.dom.d.ts, --, --))
->tag : Symbol(tag, Decl(uncalledFunctionChecksInConditional2.ts, 39, 12))
+>tag : Symbol(tag, Decl(uncalledFunctionChecksInConditional2.ts, 50, 12))
 
     measure = (name, startTag, endTag) => {
->measure : Symbol(measure, Decl(uncalledFunctionChecksInConditional2.ts, 29, 5))
->name : Symbol(name, Decl(uncalledFunctionChecksInConditional2.ts, 40, 15))
->startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 40, 20))
->endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 40, 30))
+>measure : Symbol(measure, Decl(uncalledFunctionChecksInConditional2.ts, 40, 5))
+>name : Symbol(name, Decl(uncalledFunctionChecksInConditional2.ts, 51, 15))
+>startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 20))
+>endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 30))
 
       perf.measure(name, startTag, endTag)
 >perf.measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >measure : Symbol(Performance.measure, Decl(lib.dom.d.ts, --, --))
->name : Symbol(name, Decl(uncalledFunctionChecksInConditional2.ts, 40, 15))
->startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 40, 20))
->endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 40, 30))
+>name : Symbol(name, Decl(uncalledFunctionChecksInConditional2.ts, 51, 15))
+>startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 20))
+>endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 30))
 
       perf.clearMarks(startTag)
 >perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
->startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 40, 20))
+>startTag : Symbol(startTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 20))
 
       perf.clearMarks(endTag)
 >perf.clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
->perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 30, 7))
+>perf : Symbol(perf, Decl(uncalledFunctionChecksInConditional2.ts, 41, 7))
 >clearMarks : Symbol(Performance.clearMarks, Decl(lib.dom.d.ts, --, --))
->endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 40, 30))
+>endTag : Symbol(endTag, Decl(uncalledFunctionChecksInConditional2.ts, 51, 30))
 
       // perf.clearMeasures(name)
     }
   }
 };
+
+let _isMobile: boolean;
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+
+function isMobile() {
+>isMobile : Symbol(isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 23))
+
+  if (_isMobile === undefined) {
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+>undefined : Symbol(undefined)
+
+    const isMobileMatch =
+>isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+
+      typeof window !== 'undefined' &&
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+      window.matchMedia && // no error
+>window.matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+      window.matchMedia('(max-device-width: 680px)');
+>window.matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>matchMedia : Symbol(matchMedia, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+>isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+>isMobileMatch.matches : Symbol(MediaQueryList.matches, Decl(lib.dom.d.ts, --, --))
+>isMobileMatch : Symbol(isMobileMatch, Decl(uncalledFunctionChecksInConditional2.ts, 63, 9))
+>matches : Symbol(MediaQueryList.matches, Decl(lib.dom.d.ts, --, --))
+  }
+  return _isMobile;
+>_isMobile : Symbol(_isMobile, Decl(uncalledFunctionChecksInConditional2.ts, 60, 3))
+}
 

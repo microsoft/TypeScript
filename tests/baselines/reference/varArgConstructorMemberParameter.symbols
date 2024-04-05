@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varArgConstructorMemberParameter.ts ===
+//// [tests/cases/compiler/varArgConstructorMemberParameter.ts] ////
+
+=== varArgConstructorMemberParameter.ts ===
 class Foo1 {
 >Foo1 : Symbol(Foo1, Decl(varArgConstructorMemberParameter.ts, 0, 0))
 

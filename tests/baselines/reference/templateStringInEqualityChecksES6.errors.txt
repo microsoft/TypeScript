@@ -1,0 +1,13 @@
+templateStringInEqualityChecksES6.ts(1,9): error TS2367: This comparison appears to be unintentional because the types '"abc0abc"' and '"abc"' have no overlap.
+templateStringInEqualityChecksES6.ts(2,9): error TS2367: This comparison appears to be unintentional because the types '"abc"' and '"abc0abc"' have no overlap.
+
+
+==== templateStringInEqualityChecksES6.ts (2 errors) ====
+    var x = `abc${0}abc` === `abc` ||
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '"abc0abc"' and '"abc"' have no overlap.
+            `abc` !== `abc${0}abc` &&
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '"abc"' and '"abc0abc"' have no overlap.
+            `abc${0}abc` == "abc0abc" &&
+            "abc0abc" !== `abc${0}abc`;

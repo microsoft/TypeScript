@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/emptyOptionalBindingPatternInDeclarationSignature.ts] ////
+
+=== emptyOptionalBindingPatternInDeclarationSignature.ts ===
+// #50791
+
+declare function fn1({}?: { x: string }): void;
+>fn1 : Symbol(fn1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 0, 0))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 2, 27))
+
+declare function fn2({ x }?: { x: string }): void;
+>fn2 : Symbol(fn2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 2, 47))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 3, 22))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 3, 30))
+
+declare function fn3([]?: [ x: string ]): void;
+>fn3 : Symbol(fn3, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 3, 50))
+
+declare function fn4([ x ]?: [ x: string ]): void;
+>fn4 : Symbol(fn4, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 4, 47))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 5, 22))
+
+declare class C1 {
+>C1 : Symbol(C1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 5, 50))
+
+    method({}?: { x: string }): void
+>method : Symbol(C1.method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 7, 18))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 8, 17))
+
+    static method2({}?: { x: string }): void
+>method2 : Symbol(C1.method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 8, 36))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 9, 25))
+
+    static field: ({}?: { x: string }) => void
+>field : Symbol(C1.field, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 9, 44))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 11, 25))
+
+    static field2: ({}?: { x: string }) => void
+>field2 : Symbol(C1.field2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 11, 46))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 12, 26))
+}
+
+interface I1 {
+>I1 : Symbol(I1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 13, 1))
+
+    method({}?: { x: string }): void
+>method : Symbol(I1.method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 15, 14))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 16, 17))
+
+    method2: ({}?: { x: string }) => void
+>method2 : Symbol(I1.method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 16, 36))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 17, 20))
+}
+
+type T1 = ({}?: { x: string }) => void
+>T1 : Symbol(T1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 18, 1))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 20, 17))
+
+type T2 = {
+>T2 : Symbol(T2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 20, 38))
+
+    method({}?: { x: string }): void
+>method : Symbol(method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 22, 11))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 23, 17))
+
+    method2: ({}?: { x: string }) => void
+>method2 : Symbol(method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 23, 36))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 24, 20))
+}
+
+declare const val1: ({}?: { x: string }) => void
+>val1 : Symbol(val1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 27, 13))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 27, 27))
+
+declare const val2: {
+>val2 : Symbol(val2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 29, 13))
+
+    method({}?: { x: string }): void
+>method : Symbol(method, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 29, 21))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 30, 17))
+
+    method2: ({}?: { x: string }) => void
+>method2 : Symbol(method2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 30, 36))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 31, 20))
+}
+

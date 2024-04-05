@@ -1,8 +1,10 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/nodeResolution7.ts] ////
+
+=== b.ts ===
 import y = require("a"); 
 >y : Symbol(y, Decl(b.ts, 0, 0))
 
-=== tests/cases/compiler/node_modules/a/index.d.ts ===
+=== node_modules/a/index.d.ts ===
 declare module "a" {
 >"a" : Symbol("a", Decl(index.d.ts, 0, 0))
 

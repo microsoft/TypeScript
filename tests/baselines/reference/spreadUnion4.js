@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadUnion4.ts] ////
+
 //// [spreadUnion4.ts]
 declare const a: { x: () => void }
 declare const b: { x?: () => void }

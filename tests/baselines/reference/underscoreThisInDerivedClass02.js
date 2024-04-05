@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/underscoreThisInDerivedClass02.ts] ////
+
 //// [underscoreThisInDerivedClass02.ts]
 // @target es5
 

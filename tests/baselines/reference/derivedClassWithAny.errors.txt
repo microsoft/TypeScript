@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
+derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts (1 errors) ====
+==== derivedClassWithAny.ts (1 errors) ====
     class C {
         x: number;
         get X(): number { return 1; }

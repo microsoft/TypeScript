@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionOverloadCompatibilityWithVoid02.ts] ////
+
 //// [functionOverloadCompatibilityWithVoid02.ts]
 function f(x: string): void;
 function f(x: string): number {

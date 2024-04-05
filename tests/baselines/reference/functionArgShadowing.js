@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionArgShadowing.ts] ////
+
 //// [functionArgShadowing.ts]
 class A { foo() { } }
 class B { bar() { } }

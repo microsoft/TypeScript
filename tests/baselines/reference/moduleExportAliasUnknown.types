@@ -1,17 +1,31 @@
-=== tests/cases/conformance/salsa/bug27025.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasUnknown.ts] ////
+
+=== bug27025.js ===
 module.exports = window.nonprop;
 >module.exports = window.nonprop : any
+>                                : ^^^
 >module.exports : any
+>               : ^^^
 >module : { exports: any; }
+>       : ^^^^^^^^^^^^^^^^^
 >exports : any
+>        : ^^^
 >window.nonprop : any
+>               : ^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonprop : any
+>        : ^^^
 
 exports.foo = bar;
 >exports.foo = bar : any
+>                  : ^^^
 >exports.foo : any
+>            : ^^^
 >exports : any
+>        : ^^^
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts] ////
+
+=== stringLiteralsWithSwitchStatements04.ts ===
 let x: "foo";
 >x : Symbol(x, Decl(stringLiteralsWithSwitchStatements04.ts, 0, 3))
 

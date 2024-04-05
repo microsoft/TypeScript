@@ -1,4 +1,7 @@
-=== tests/cases/conformance/types/primitives/null/directReferenceToNull.ts ===
+//// [tests/cases/conformance/types/primitives/null/directReferenceToNull.ts] ////
+
+=== directReferenceToNull.ts ===
 var x: Null;
 >x : Null
+>  : ^^^^
 

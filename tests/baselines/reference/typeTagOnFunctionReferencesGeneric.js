@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeTagOnFunctionReferencesGeneric.ts] ////
+
 //// [typeTagOnFunctionReferencesGeneric.js]
 /**
  * @typedef {<T>(m : T) => T} IFn
@@ -22,12 +24,11 @@ inJsArrow(2); // no error gets linted as expected
  * @typedef {<T>(m : T) => T} IFn
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.inJs = void 0;
+exports.inJs = inJs;
 /**@type {IFn}*/
 function inJs(l) {
     return l;
 }
-exports.inJs = inJs;
 inJs(1); // lints error. Why?
 /**@type {IFn}*/
 var inJsArrow = function (j) {

@@ -1,8 +1,11 @@
-=== tests/cases/compiler/inheritedGenericCallSignature.ts ===
+//// [tests/cases/compiler/inheritedGenericCallSignature.ts] ////
+
+=== inheritedGenericCallSignature.ts ===
 interface I1<T> {
 
     (a: T): T;
 >a : T
+>  : ^
 
 }
 
@@ -15,6 +18,7 @@ interface I2<T> extends I1<T[]> {
 
     b: T;
 >b : T
+>  : ^
 
 }
 
@@ -22,17 +26,25 @@ interface I2<T> extends I1<T[]> {
 
 var x: I2<Date>;
 >x : I2<Date>
+>  : ^^^^^^^^
 
  
 
 var y = x(undefined);
 >y : Date[]
+>  : ^^^^^^
 >x(undefined) : Date[]
+>             : ^^^^^^
 >x : I2<Date>
+>  : ^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 y.length;  // should not error
 >y.length : number
+>         : ^^^^^^
 >y : Date[]
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 

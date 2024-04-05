@@ -1,3 +1,28 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/jsdocLink1.ts ===
+// class C {
+// }
+// /**
+//  * {@link C}
+//  * @wat Makes a {@link C}. A default one.
+//  * {@link C()}
+//  * {@link C|postfix text}
+//  * {@link unformatted postfix text}
+//  * @see {@link C} its great
+//  */
+// function CC() {
+//          ^^
+// | ----------------------------------------------------------------------
+// | function CC(): void
+// | {@link C}
+// | @wat Makes a {@link C}. A default one.
+// | {@link C()}
+// | {@link Cpostfix text}
+// | {@link unformatted postfix text}
+// | @see {@link C} its great
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +30,7 @@
       "position": 189,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

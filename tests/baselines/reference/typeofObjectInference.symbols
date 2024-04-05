@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofObjectInference.ts ===
+//// [tests/cases/compiler/typeofObjectInference.ts] ////
+
+=== typeofObjectInference.ts ===
 let val = 1
 >val : Symbol(val, Decl(typeofObjectInference.ts, 0, 3))
 

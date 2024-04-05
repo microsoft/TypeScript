@@ -1,24 +1,37 @@
-=== tests/cases/compiler/propertyOrdering2.ts ===
+//// [tests/cases/compiler/propertyOrdering2.ts] ////
+
+=== propertyOrdering2.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor(public x, y) { }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
        foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
         var a = this.x;
 >a : any
+>  : ^^^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 
         return this.y;
 >this.y : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
     }
 }
 

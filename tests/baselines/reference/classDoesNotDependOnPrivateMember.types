@@ -1,12 +1,17 @@
-=== tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts ===
+//// [tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts] ////
+
+=== classDoesNotDependOnPrivateMember.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     interface I { }
     export class C {
 >C : C
+>  : ^
 
         private x: I;
 >x : I
+>  : ^
     }
 }

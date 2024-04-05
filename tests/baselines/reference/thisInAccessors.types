@@ -1,68 +1,97 @@
-=== tests/cases/compiler/thisInAccessors.ts ===
+//// [tests/cases/compiler/thisInAccessors.ts] ////
+
+=== thisInAccessors.ts ===
 // this capture only in getter
 class GetterOnly {
 >GetterOnly : GetterOnly
+>           : ^^^^^^^^^^
 
     get Value() {
 >Value : string
+>      : ^^^^^^
 
         var fn = () => this;
 >fn : () => this
+>   : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         return '';
 >'' : ""
+>   : ^^
     }
     set Value(val) {
 >Value : string
+>      : ^^^^^^
 >val : string
+>    : ^^^^^^
     }
 }
 
 // this capture only in setter
 class SetterOnly {
 >SetterOnly : SetterOnly
+>           : ^^^^^^^^^^
 
     get Value() {
 >Value : string
+>      : ^^^^^^
 
         return '';
 >'' : ""
+>   : ^^
     }
     set Value(val) {
 >Value : string
+>      : ^^^^^^
 >val : string
+>    : ^^^^^^
 
         var fn = () => this;
 >fn : () => this
+>   : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 // this capture only in both setter and getter
 class GetterAndSetter {
 >GetterAndSetter : GetterAndSetter
+>                : ^^^^^^^^^^^^^^^
 
     get Value() {
 >Value : string
+>      : ^^^^^^
 
         var fn = () => this;
 >fn : () => this
+>   : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         return '';
 >'' : ""
+>   : ^^
     }
     set Value(val) {
 >Value : string
+>      : ^^^^^^
 >val : string
+>    : ^^^^^^
 
         var fn = () => this;
 >fn : () => this
+>   : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }

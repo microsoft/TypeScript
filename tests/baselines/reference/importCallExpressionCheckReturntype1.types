@@ -1,33 +1,51 @@
-=== tests/cases/conformance/dynamicImport/anotherModule.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionCheckReturntype1.ts] ////
+
+=== anotherModule.ts ===
 export class D{}
 >D : D
+>  : ^
 
-=== tests/cases/conformance/dynamicImport/defaultPath.ts ===
+=== defaultPath.ts ===
 export class C {}
 >C : C
+>  : ^
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 import * as defaultModule from "./defaultPath";
 >defaultModule : typeof defaultModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 import * as anotherModule from "./anotherModule";
 >anotherModule : typeof anotherModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 let p1: Promise<typeof anotherModule> = import("./defaultPath");
 >p1 : Promise<typeof anotherModule>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anotherModule : typeof anotherModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 >import("./defaultPath") : Promise<typeof defaultModule>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./defaultPath" : "./defaultPath"
+>                : ^^^^^^^^^^^^^^^
 
 let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
 >p2 : Promise<typeof anotherModule>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./defaultPath") as Promise<typeof anotherModule> : Promise<typeof anotherModule>
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./defaultPath") : Promise<typeof defaultModule>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./defaultPath" : "./defaultPath"
+>                : ^^^^^^^^^^^^^^^
 >anotherModule : typeof anotherModule
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 let p3: Promise<any> = import("./defaultPath");
 >p3 : Promise<any>
+>   : ^^^^^^^^^^^^
 >import("./defaultPath") : Promise<typeof defaultModule>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./defaultPath" : "./defaultPath"
+>                : ^^^^^^^^^^^^^^^
 

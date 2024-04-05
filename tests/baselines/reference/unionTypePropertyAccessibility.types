@@ -1,149 +1,219 @@
-=== tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts ===
+//// [tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts] ////
+
+=== unionTypePropertyAccessibility.ts ===
 class Default {
 >Default : Default
+>        : ^^^^^^^
 
     member: string;
 >member : string
+>       : ^^^^^^
 }
 
 class Public {
 >Public : Public
+>       : ^^^^^^
 
     public member: string;
 >member : string
+>       : ^^^^^^
 }
 
 class Protected {
 >Protected : Protected
+>          : ^^^^^^^^^
 
     protected member: string;
 >member : string
+>       : ^^^^^^
 }
 
 class Private {
 >Private : Private
+>        : ^^^^^^^
 
     private member: number;
 >member : number
+>       : ^^^^^^
 }
 
 var v1: Default;
 >v1 : Default
+>   : ^^^^^^^
 
 var v2: Public;
 >v2 : Public
+>   : ^^^^^^
 
 var v3: Protected;
 >v3 : Protected
+>   : ^^^^^^^^^
 
 var v4: Private;
 >v4 : Private
+>   : ^^^^^^^
 
 var v5: Default | Public;
 >v5 : Default | Public
+>   : ^^^^^^^^^^^^^^^^
 
 var v6: Default | Protected;
 >v6 : Default | Protected
+>   : ^^^^^^^^^^^^^^^^^^^
 
 var v7: Default | Private;
 >v7 : Default | Private
+>   : ^^^^^^^^^^^^^^^^^
 
 var v8: Public | Protected;
 >v8 : Public | Protected
+>   : ^^^^^^^^^^^^^^^^^^
 
 var v9: Public | Private;
 >v9 : Public | Private
+>   : ^^^^^^^^^^^^^^^^
 
 var v10: Protected | Private;
 >v10 : Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^
 
 var v11: Default | Public | Protected;
 >v11 : Default | Public | Protected
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var v12: Default | Public | Private;
 >v12 : Default | Public | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var v13: Default | Protected | Private;
 >v13 : Default | Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var v14: Public | Private | Protected;
 >v14 : Public | Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var v15: Default | Public | Private | Protected;
 >v15 : Default | Public | Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 v1.member;
 >v1.member : string
+>          : ^^^^^^
 >v1 : Default
+>   : ^^^^^^^
 >member : string
+>       : ^^^^^^
 
 v2.member;
 >v2.member : string
+>          : ^^^^^^
 >v2 : Public
+>   : ^^^^^^
 >member : string
+>       : ^^^^^^
 
 v3.member;
 >v3.member : string
+>          : ^^^^^^
 >v3 : Protected
+>   : ^^^^^^^^^
 >member : string
+>       : ^^^^^^
 
 v4.member;
 >v4.member : number
+>          : ^^^^^^
 >v4 : Private
+>   : ^^^^^^^
 >member : number
+>       : ^^^^^^
 
 v5.member;
 >v5.member : string
+>          : ^^^^^^
 >v5 : Default | Public
+>   : ^^^^^^^^^^^^^^^^
 >member : string
+>       : ^^^^^^
 
 v6.member;
 >v6.member : any
+>          : ^^^
 >v6 : Default | Protected
+>   : ^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v7.member;
 >v7.member : any
+>          : ^^^
 >v7 : Default | Private
+>   : ^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v8.member;
 >v8.member : any
+>          : ^^^
 >v8 : Public | Protected
+>   : ^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v9.member;
 >v9.member : any
+>          : ^^^
 >v9 : Public | Private
+>   : ^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v10.member;
 >v10.member : any
+>           : ^^^
 >v10 : Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v11.member;
 >v11.member : any
+>           : ^^^
 >v11 : Default | Public | Protected
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v12.member;
 >v12.member : any
+>           : ^^^
 >v12 : Default | Public | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v13.member;
 >v13.member : any
+>           : ^^^
 >v13 : Default | Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v14.member;
 >v14.member : any
+>           : ^^^
 >v14 : Public | Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 
 v15.member;
 >v15.member : any
+>           : ^^^
 >v15 : Default | Public | Protected | Private
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >member : any
+>       : ^^^
 

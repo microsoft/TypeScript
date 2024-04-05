@@ -1,8 +1,10 @@
-=== tests/cases/compiler/Class1.ts ===
+//// [tests/cases/compiler/metadataReferencedWithinFilteredUnion.ts] ////
+
+=== Class1.ts ===
 export class Class1 {
 >Class1 : Symbol(Class1, Decl(Class1.ts, 0, 0))
 }
-=== tests/cases/compiler/Class2.ts ===
+=== Class2.ts ===
 import { Class1 } from './Class1';
 >Class1 : Symbol(Class1, Decl(Class2.ts, 0, 8))
 

@@ -1,42 +1,60 @@
-=== tests/cases/compiler/innerAliases2.ts ===
+//// [tests/cases/compiler/innerAliases2.ts] ////
+
+=== innerAliases2.ts ===
 module _provider {
 >_provider : typeof _provider
+>          : ^^^^^^^^^^^^^^^^
 
                 export class UsefulClass {
 >UsefulClass : UsefulClass
+>            : ^^^^^^^^^^^
 
                                 public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
                                 }
                 }
 }
 
 module consumer {
 >consumer : typeof consumer
+>         : ^^^^^^^^^^^^^^^
 
                 import provider = _provider;
 >provider : typeof provider
+>         : ^^^^^^^^^^^^^^^
 >_provider : typeof provider
+>          : ^^^^^^^^^^^^^^^
                 
                 var g:provider.UsefulClass= null;
 >g : provider.UsefulClass
+>  : ^^^^^^^^^^^^^^^^^^^^
 >provider : any
->null : null
+>         : ^^^
                 
                 function use():provider.UsefulClass { 
 >use : () => provider.UsefulClass
+>    : ^^^^^^                    
 >provider : any
+>         : ^^^
 
                                 var p2:provider.UsefulClass= new provider.UsefulClass();
 >p2 : provider.UsefulClass
+>   : ^^^^^^^^^^^^^^^^^^^^
 >provider : any
+>         : ^^^
 >new provider.UsefulClass() : provider.UsefulClass
+>                           : ^^^^^^^^^^^^^^^^^^^^
 >provider.UsefulClass : typeof provider.UsefulClass
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >provider : typeof provider
+>         : ^^^^^^^^^^^^^^^
 >UsefulClass : typeof provider.UsefulClass
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                                 return p2; 
 >p2 : provider.UsefulClass
+>   : ^^^^^^^^^^^^^^^^^^^^
                 }
 }
 

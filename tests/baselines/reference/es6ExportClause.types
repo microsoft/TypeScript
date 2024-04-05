@@ -1,37 +1,53 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ExportClause.ts] ////
+
+=== server.ts ===
 class c {
 >c : c
+>  : ^
 }
 interface i {
 }
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 module uninstantiated {
 }
 export { c };
 >c : typeof c
+>  : ^^^^^^^^
 
 export { c as c2 };
 >c : typeof c
+>  : ^^^^^^^^
 >c2 : typeof c
+>   : ^^^^^^^^
 
 export { i, m as instantiatedModule };
 >i : any
+>  : ^^^
 >m : typeof m
+>  : ^^^^^^^^
 >instantiatedModule : typeof m
+>                   : ^^^^^^^^
 
 export { uninstantiated };
 >uninstantiated : any
+>               : ^^^
 
 export { x };
 >x : number
+>  : ^^^^^^
 

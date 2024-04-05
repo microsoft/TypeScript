@@ -1,13 +1,8 @@
-error TS2468: Cannot find global value 'Promise'.
-/src/buzz.mts(2,1): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-/src/buzz.mts(2,8): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+/src/buzz.mts(2,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 
 
-!!! error TS2468: Cannot find global value 'Promise'.
-==== /src/buzz.mts (2 errors) ====
+==== /src/buzz.mts (1 errors) ====
     // Extensionless relative path dynamic import in an ES module
     import("./foo").then(x => x); // should error, ask for extension
-    ~~~~~~~~~~~~~~~
-!!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
            ~~~~~~~
-!!! error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.

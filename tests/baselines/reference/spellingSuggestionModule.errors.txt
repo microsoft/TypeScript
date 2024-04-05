@@ -1,9 +1,9 @@
-tests/cases/compiler/spellingSuggestionModule.ts(2,1): error TS2304: Cannot find name 'foobar'.
-tests/cases/compiler/spellingSuggestionModule.ts(5,1): error TS2304: Cannot find name 'barfoo'.
-tests/cases/compiler/spellingSuggestionModule.ts(8,1): error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?
+spellingSuggestionModule.ts(2,1): error TS2304: Cannot find name 'foobar'.
+spellingSuggestionModule.ts(5,1): error TS2304: Cannot find name 'barfoo'.
+spellingSuggestionModule.ts(8,1): error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?
 
 
-==== tests/cases/compiler/spellingSuggestionModule.ts (3 errors) ====
+==== spellingSuggestionModule.ts (3 errors) ====
     declare module "foobar" { export const x: number; }
     foobar;
     ~~~~~~
@@ -18,5 +18,5 @@ tests/cases/compiler/spellingSuggestionModule.ts(8,1): error TS2552: Cannot find
     faroo;
     ~~~~~
 !!! error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?
-!!! related TS2728 tests/cases/compiler/spellingSuggestionModule.ts:7:16: 'farboo' is declared here.
+!!! related TS2728 spellingSuggestionModule.ts:7:16: 'farboo' is declared here.
     

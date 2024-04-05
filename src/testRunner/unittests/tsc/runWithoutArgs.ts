@@ -1,7 +1,5 @@
-import {
-    loadProjectFromFiles,
-    verifyTsc,
-} from "./helpers";
+import { verifyTsc } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsc:: runWithoutArgs::", () => {
     verifyTsc({
@@ -9,7 +7,7 @@ describe("unittests:: tsc:: runWithoutArgs::", () => {
         subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
         fs: () => loadProjectFromFiles({}),
         commandLineArgs: [],
-        environmentVariables: { TS_TEST_TERMINAL_WIDTH: "120" }
+        environmentVariables: { TS_TEST_TERMINAL_WIDTH: "120" },
     });
 
     verifyTsc({
@@ -24,7 +22,6 @@ describe("unittests:: tsc:: runWithoutArgs::", () => {
         subScenario: "does not add color when NO_COLOR is set",
         fs: () => loadProjectFromFiles({}),
         commandLineArgs: [],
-        environmentVariables: { NO_COLOR: "true" }
+        environmentVariables: { NO_COLOR: "true" },
     });
-
 });

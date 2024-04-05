@@ -1,12 +1,18 @@
-=== tests/cases/compiler/assignmentCompatability44.ts ===
+//// [tests/cases/compiler/assignmentCompatability44.ts] ////
+
+=== assignmentCompatability44.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor(x: number) {}
 >x : number
+>  : ^^^^^^
 }
 
 const foo: { new(): Foo } = Foo;
 >foo : new () => Foo
+>    : ^^^^^^^^^^   
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

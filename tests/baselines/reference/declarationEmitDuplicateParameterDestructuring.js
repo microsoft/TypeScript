@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDuplicateParameterDestructuring.ts] ////
+
 //// [declarationEmitDuplicateParameterDestructuring.ts]
 export const fn1 = ({ prop: a, prop: b }: { prop: number }) => a + b;
 

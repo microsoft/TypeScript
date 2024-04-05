@@ -1,9 +1,15 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of54.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of54.ts] ////
+
+=== for-of54.ts ===
 for (let v of []) {
 >v : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var v = 0;
 >v : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }

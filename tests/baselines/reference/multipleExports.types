@@ -1,26 +1,37 @@
-=== tests/cases/compiler/multipleExports.ts ===
+//// [tests/cases/compiler/multipleExports.ts] ////
+
+=== multipleExports.ts ===
 export module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var v = 0;
 >v : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     export let x;
 >x : any
+>  : ^^^
 }
 
 const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
 export module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     v;
 >v : number
+>  : ^^^^^^
 
     export {x};
 >x : any
+>  : ^^^
 }
 

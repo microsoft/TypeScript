@@ -1,13 +1,20 @@
-=== tests/cases/conformance/es6/destructuring/destructuringCatch.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringCatch.ts] ////
+
+=== destructuringCatch.ts ===
 try {
     throw [0, 1];
 >[0, 1] : number[]
+>       : ^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 }
 catch ([a, b]) {
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     a + b;
 >a + b : any
@@ -18,14 +25,21 @@ catch ([a, b]) {
 try {
     throw { a: 0, b: 1 };
 >{ a: 0, b: 1 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 catch ({a, b}) {
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     a + b;
 >a + b : any
@@ -36,17 +50,27 @@ catch ({a, b}) {
 try {
     throw [{ x: [0], z: 1 }];
 >[{ x: [0], z: 1 }] : { x: number[]; z: number; }[]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: [0], z: 1 } : { x: number[]; z: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 catch ([{x: [y], z}]) {
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 
     y + z;
 >y + z : any
@@ -59,6 +83,7 @@ try {
 }
 catch (/*Test comment ranges*/[/*a*/a]) {
 >a : any
+>  : ^^^
 
 }
 

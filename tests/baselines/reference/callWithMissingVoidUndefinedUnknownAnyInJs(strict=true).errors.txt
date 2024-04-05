@@ -1,18 +1,18 @@
-tests/cases/conformance/expressions/functionCalls/jsfile.js(6,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/jsfile.js(7,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/jsfile.js(8,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/jsfile.js(10,4): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/jsfile.js(11,4): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/jsfile.js(12,4): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/tsfile.ts(6,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/tsfile.ts(7,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/tsfile.ts(8,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/tsfile.ts(10,4): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/tsfile.ts(11,4): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/tsfile.ts(12,4): error TS2554: Expected 1 arguments, but got 0.
+jsfile.js(6,1): error TS2554: Expected 1 arguments, but got 0.
+jsfile.js(7,1): error TS2554: Expected 1 arguments, but got 0.
+jsfile.js(8,1): error TS2554: Expected 1 arguments, but got 0.
+jsfile.js(10,4): error TS2554: Expected 1 arguments, but got 0.
+jsfile.js(11,4): error TS2554: Expected 1 arguments, but got 0.
+jsfile.js(12,4): error TS2554: Expected 1 arguments, but got 0.
+tsfile.ts(6,1): error TS2554: Expected 1 arguments, but got 0.
+tsfile.ts(7,1): error TS2554: Expected 1 arguments, but got 0.
+tsfile.ts(8,1): error TS2554: Expected 1 arguments, but got 0.
+tsfile.ts(10,4): error TS2554: Expected 1 arguments, but got 0.
+tsfile.ts(11,4): error TS2554: Expected 1 arguments, but got 0.
+tsfile.ts(12,4): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/conformance/expressions/functionCalls/defs.d.ts (0 errors) ====
+==== defs.d.ts (0 errors) ====
     declare function f1(p: void): void;
     declare function f2(p: undefined): void;
     declare function f3(p: unknown): void;
@@ -24,67 +24,67 @@ tests/cases/conformance/expressions/functionCalls/tsfile.ts(12,4): error TS2554:
     declare const o3: I<unknown>;
     declare const o4: I<any>;
     
-==== tests/cases/conformance/expressions/functionCalls/jsfile.js (6 errors) ====
+==== jsfile.js (6 errors) ====
     // current behavior: treat trailing `void` as optional
     f1();
     o1.m();
     
     // new behavior: treat 'undefined', 'unknown', and 'any' as optional in non-strict mode
     f2();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:2:21: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:2:21: An argument for 'p' was not provided.
     f3();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:3:21: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:3:21: An argument for 'p' was not provided.
     f4();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:4:21: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:4:21: An argument for 'p' was not provided.
     
     o2.m();
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:6:20: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:6:20: An argument for 'p' was not provided.
     o3.m();
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:6:20: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:6:20: An argument for 'p' was not provided.
     o4.m();
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:6:20: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:6:20: An argument for 'p' was not provided.
     
-==== tests/cases/conformance/expressions/functionCalls/tsfile.ts (6 errors) ====
+==== tsfile.ts (6 errors) ====
     // current behavior: treat trailing `void` as optional
     f1();
     o1.m();
     
     // no change in behavior
     f2();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:2:21: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:2:21: An argument for 'p' was not provided.
     f3();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:3:21: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:3:21: An argument for 'p' was not provided.
     f4();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:4:21: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:4:21: An argument for 'p' was not provided.
     
     o2.m();
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:6:20: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:6:20: An argument for 'p' was not provided.
     o3.m();
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:6:20: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:6:20: An argument for 'p' was not provided.
     o4.m();
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/defs.d.ts:6:20: An argument for 'p' was not provided.
+!!! related TS6210 defs.d.ts:6:20: An argument for 'p' was not provided.
     

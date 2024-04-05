@@ -1,0 +1,49 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface interface1 extends interface1 {
+//    /*HIGHLIGHTS*/<|[|{| kind: "reference" |}doStuff|](): void;|>
+//    propName: string;
+// }
+// 
+// var v: interface1;
+// v.propName;
+// v.[|{| kind: "reference" |}doStuff|]();
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    /*HIGHLIGHTS*/<|[|{| kind: "reference" |}propName|]: string;|>
+// }
+// 
+// var v: interface1;
+// v.[|{| kind: "reference" |}propName|];
+// v.doStuff();
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    <|[|{| kind: "reference" |}propName|]: string;|>
+// }
+// 
+// var v: interface1;
+// v./*HIGHLIGHTS*/[|{| kind: "reference" |}propName|];
+// v.doStuff();
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface interface1 extends interface1 {
+//    <|[|{| kind: "reference" |}doStuff|](): void;|>
+//    propName: string;
+// }
+// 
+// var v: interface1;
+// v.propName;
+// v./*HIGHLIGHTS*/[|{| kind: "reference" |}doStuff|]();

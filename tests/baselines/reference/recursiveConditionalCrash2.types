@@ -1,15 +1,20 @@
-=== tests/cases/compiler/recursiveConditionalCrash2.ts ===
+//// [tests/cases/compiler/recursiveConditionalCrash2.ts] ////
+
+=== recursiveConditionalCrash2.ts ===
 // Simplified #43529
 
 export type CanBeExpanded<T extends object> = {
 >CanBeExpanded : CanBeExpanded<T>
+>              : ^^^^^^^^^^^^^^^^
 
   value: T
 >value : T
+>      : ^
 }
 
 type Expand__<O, N, Depth> =
 >Expand__ : Expand__<O, N, Depth>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 
   N extends Depth ?
       unknown :
@@ -18,5 +23,6 @@ type Expand__<O, N, Depth> =
           O
 
 export type UseQueryOptions<T> = Expand__<T, 4, 2>
->UseQueryOptions : T extends CanBeExpanded<any> ? T["value"] extends CanBeExpanded<any> ? T["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? any : T["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"] : T["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"] : T["value"]["value"]["value"]["value"]["value"]["value"]["value"]["value"] : T["value"]["value"]["value"]["value"]["value"]["value"]["value"] : T["value"]["value"]["value"]["value"]["value"]["value"] : T["value"]["value"]["value"]["value"]["value"] : T["value"]["value"]["value"]["value"] : T["value"]["value"]["value"] : T["value"]["value"] : T["value"] : T
+>UseQueryOptions : T extends CanBeExpanded<any> ? T["value"] extends infer T_1 ? T_1 extends T["value"] ? T_1 extends CanBeExpanded<any> ? T_1["value"] extends infer T_2 ? T_2 extends T_1["value"] ? T_2 extends CanBeExpanded<any> ? T_2["value"] extends infer T_3 ? T_3 extends T_2["value"] ? T_3 extends CanBeExpanded<any> ? T_3["value"] extends infer T_4 ? T_4 extends T_3["value"] ? T_4 extends CanBeExpanded<any> ? T_4["value"] extends infer T_5 ? T_5 extends T_4["value"] ? T_5 extends CanBeExpanded<any> ? T_5["value"] extends infer T_6 ? T_6 extends T_5["value"] ? T_6 extends CanBeExpanded<any> ? T_6["value"] extends infer T_7 ? T_7 extends T_6["value"] ? T_7 extends CanBeExpanded<any> ? T_7["value"] extends infer T_8 ? T_8 extends T_7["value"] ? T_8 extends CanBeExpanded<any> ? T_8["value"] extends infer T_9 ? T_9 extends T_8["value"] ? T_9 extends CanBeExpanded<any> ? T_9["value"] extends infer T_10 ? T_10 extends T_9["value"] ? T_10 extends CanBeExpanded<any> ? any : T_10 : never : never : T_9 : never : never : T_8 : never : never : T_7 : never : never : T_6 : never : never : T_5 : never : never : T_4 : never : never : T_3 : never : never : T_2 : never : never : T_1 : never : never : T
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

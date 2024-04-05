@@ -23,7 +23,7 @@ declare module "D" {
 }
 
 //// [e.ts]
-/// <reference path="c.d.ts"/>
+/// <reference path="c.d.ts" preserve="true"/>
 import {A} from "./a";
 import {Cls} from "C";
 
@@ -44,6 +44,7 @@ import "e";
 let a: A;
 let b = a.getB().x.toFixed();
 let c = a.getCls().y.toLowerCase();
+
 
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
@@ -83,8 +84,7 @@ define("main", ["require", "exports", "D", "e"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="tests/cases/compiler/c.d.ts" />
-/// <reference path="tests/cases/compiler/d.d.ts" />
+/// <reference path="c.d.ts" preserve="true" />
 declare module "a" {
     export class A {
     }

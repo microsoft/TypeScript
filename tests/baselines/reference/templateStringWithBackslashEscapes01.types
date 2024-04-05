@@ -1,17 +1,27 @@
-=== tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01.ts] ////
+
+=== templateStringWithBackslashEscapes01.ts ===
 var a = `hello\world`;
 >a : string
+>  : ^^^^^^
 >`hello\world` : "helloworld"
+>              : ^^^^^^^^^^^^
 
 var b = `hello\\world`;
 >b : string
+>  : ^^^^^^
 >`hello\\world` : "hello\\world"
+>               : ^^^^^^^^^^^^^^
 
 var c = `hello\\\world`;
 >c : string
+>  : ^^^^^^
 >`hello\\\world` : "hello\\world"
+>                : ^^^^^^^^^^^^^^
 
 var d = `hello\\\\world`;
 >d : string
+>  : ^^^^^^
 >`hello\\\\world` : "hello\\\\world"
+>                 : ^^^^^^^^^^^^^^^^
 

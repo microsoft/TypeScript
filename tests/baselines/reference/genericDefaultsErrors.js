@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericDefaultsErrors.ts] ////
+
 //// [genericDefaultsErrors.ts]
 declare const x: any;
 

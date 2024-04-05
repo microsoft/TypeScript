@@ -1,62 +1,93 @@
-=== tests/cases/compiler/asyncFunctionWithForStatementNoInitializer.ts ===
+//// [tests/cases/compiler/asyncFunctionWithForStatementNoInitializer.ts] ////
+
+=== asyncFunctionWithForStatementNoInitializer.ts ===
 async function test1() {
 >test1 : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
 
     let i = 0
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     let limit = 10
 >limit : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
     for (; i < limit; ++i) {
 >i < limit : boolean
+>          : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >limit : number
+>      : ^^^^^^
 >++i : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
     }
 }
 
 async function test2() {
 >test2 : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
 
     let i = 0
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     let limit = 10
 >limit : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
     for (i = 1; i < limit; ++i) {
 >i = 1 : 1
+>      : ^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >i < limit : boolean
+>          : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >limit : number
+>      : ^^^^^^
 >++i : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
     }
 }
 
 async function test3() {
 >test3 : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
 
     let i = 0
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     for (;; ++i) {
 >++i : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
     }
 }
 
 async function test4() {
 >test4 : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
 
     for (;;) {
     }

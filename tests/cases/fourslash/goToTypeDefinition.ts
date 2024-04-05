@@ -9,4 +9,4 @@
 // @Filename: goToTypeDefinition_Consumption.ts
 /////*reference*/c = undefined;
 
-verify.goToType("reference", "definition");
+verify.baselineGoToType("reference");

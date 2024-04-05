@@ -1,160 +1,222 @@
-=== tests/cases/compiler/unusedPrivateMembers.ts ===
+//// [tests/cases/compiler/unusedPrivateMembers.ts] ////
+
+=== unusedPrivateMembers.ts ===
 class Test1 {
 >Test1 : Test1
+>      : ^^^^^
 
     private initializeInternal() {
 >initializeInternal : () => void
+>                   : ^^^^^^^^^^
     }
 
     public test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         var x = new Test1();
 >x : Test1
+>  : ^^^^^
 >new Test1() : Test1
+>            : ^^^^^
 >Test1 : typeof Test1
+>      : ^^^^^^^^^^^^
 
         x.initializeInternal();
 >x.initializeInternal() : void
+>                       : ^^^^
 >x.initializeInternal : () => void
+>                     : ^^^^^^^^^^
 >x : Test1
+>  : ^^^^^
 >initializeInternal : () => void
+>                   : ^^^^^^^^^^
     }
 }
 
 class Test2 {
 >Test2 : Test2
+>      : ^^^^^
 
     private p = 0;
 >p : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     public test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         var x = new Test2();
 >x : Test2
+>  : ^^^^^
 >new Test2() : Test2
+>            : ^^^^^
 >Test2 : typeof Test2
+>      : ^^^^^^^^^^^^
 
         x.p;
 >x.p : number
+>    : ^^^^^^
 >x : Test2
+>  : ^^^^^
 >p : number
+>  : ^^^^^^
     }
 }
 
 class Test3 {
 >Test3 : Test3
+>      : ^^^^^
 
     private get x () {
 >x : number
+>  : ^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 
     public test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         var x = new Test3();
 >x : Test3
+>  : ^^^^^
 >new Test3() : Test3
+>            : ^^^^^
 >Test3 : typeof Test3
+>      : ^^^^^^^^^^^^
 
         x.x;
 >x.x : number
+>    : ^^^^^^
 >x : Test3
+>  : ^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
 class Test4 {
 >Test4 : Test4
+>      : ^^^^^
 
     private set x(v) {
 >x : any
+>  : ^^^
 >v : any
+>  : ^^^
 
         v;
 >v : any
+>  : ^^^
     }
 
     public test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         var x = new Test4();
 >x : Test4
+>  : ^^^^^
 >new Test4() : Test4
+>            : ^^^^^
 >Test4 : typeof Test4
+>      : ^^^^^^^^^^^^
 
         x.x;
 >x.x : any
+>    : ^^^
 >x : Test4
+>  : ^^^^^
 >x : any
+>  : ^^^
     }
 }
 
 class Test5<T> {
 >Test5 : Test5<T>
+>      : ^^^^^^^^
 
     private p: T;
 >p : T
+>  : ^
 
     public test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         var x = new Test5<number>();
 >x : Test5<number>
+>  : ^^^^^^^^^^^^^
 >new Test5<number>() : Test5<number>
+>                    : ^^^^^^^^^^^^^
 >Test5 : typeof Test5
+>      : ^^^^^^^^^^^^
 
         x.p;
 >x.p : number
+>    : ^^^^^^
 >x : Test5<number>
+>  : ^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
     }
 }
 
 class Test6 {
 >Test6 : Test6
+>      : ^^^^^
 
     private get a() {
 >a : number
+>  : ^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     private set a(v) {
 >a : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
         v;
 >v : number
+>  : ^^^^^^
     }
     private b = 0;
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     public test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         var x = new Test6();
 >x : Test6
+>  : ^^^^^
 >new Test6() : Test6
+>            : ^^^^^
 >Test6 : typeof Test6
+>      : ^^^^^^^^^^^^
 
         x.a++;
 >x.a++ : number
+>      : ^^^^^^
 >x.a : number
+>    : ^^^^^^
 >x : Test6
+>  : ^^^^^
 >a : number
-
-        x.b++;
->x.b++ : number
->x.b : number
->x : Test6
->b : number
+>  : ^^^^^^
     }
 }
 

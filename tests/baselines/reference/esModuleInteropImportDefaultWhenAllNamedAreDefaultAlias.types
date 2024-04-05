@@ -1,15 +1,25 @@
-=== tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts ===
+//// [tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts] ////
+
+=== esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts ===
 import {default as a, default as b} from "m";
 >default : any
+>        : ^^^
 >a : any
+>  : ^^^
 >default : any
+>        : ^^^
 >b : any
+>  : ^^^
 
 void a;
 >void a : undefined
+>       : ^^^^^^^^^
 >a : any
+>  : ^^^
 
 void b;
 >void b : undefined
+>       : ^^^^^^^^^
 >b : any
+>  : ^^^
 

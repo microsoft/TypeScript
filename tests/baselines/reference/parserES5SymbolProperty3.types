@@ -1,10 +1,17 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty3.ts] ////
+
+=== parserES5SymbolProperty3.ts ===
 declare class C {
 >C : C
+>  : ^
 
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : () => string
+>                     : ^^^^^^      
 >Symbol.unscopables : any
+>                   : ^^^
 >Symbol : any
+>       : ^^^
 >unscopables : any
+>            : ^^^
 }

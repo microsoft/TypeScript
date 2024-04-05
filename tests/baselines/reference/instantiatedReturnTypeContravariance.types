@@ -1,22 +1,27 @@
-=== tests/cases/compiler/instantiatedReturnTypeContravariance.ts ===
+//// [tests/cases/compiler/instantiatedReturnTypeContravariance.ts] ////
+
+=== instantiatedReturnTypeContravariance.ts ===
 interface B<T> {
 
 name: string;
 >name : string
+>     : ^^^^^^
 
 x(): T;
 >x : () => T
+>  : ^^^^^^ 
 
 }
  
 class c {
 >c : c
+>  : ^
 
 foo(): B<void> {
 >foo : () => B<void>
+>    : ^^^^^^       
 
 return null;
->null : null
 
 }
 
@@ -24,13 +29,15 @@ return null;
  
 class d extends c {
 >d : d
+>  : ^
 >c : c
+>  : ^
 
 foo(): B<number> {
 >foo : () => B<number>
+>    : ^^^^^^         
 
 return null;
->null : null
 
 }
 

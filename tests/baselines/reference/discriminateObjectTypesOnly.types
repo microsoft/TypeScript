@@ -1,39 +1,55 @@
-=== tests/cases/compiler/discriminateObjectTypesOnly.ts ===
+//// [tests/cases/compiler/discriminateObjectTypesOnly.ts] ////
+
+=== discriminateObjectTypesOnly.ts ===
 type Thing = number | object;
->Thing : number | object
+>Thing : Thing
+>      : ^^^^^
 
 const k: Thing = { toFixed: null }; // OK, satisfies object
 >k : Thing
+>  : ^^^^^
 >{ toFixed: null } : { toFixed: null; }
+>                  : ^^^^^^^^^^^^^^^^^^
 >toFixed : null
->null : null
+>        : ^^^^
 
 type Thing2 = number | { toFixed: null } | object;
->Thing2 : number | object | { toFixed: null; }
+>Thing2 : Thing2
+>       : ^^^^^^
 >toFixed : null
->null : null
+>        : ^^^^
 
 const q: Thing2 = { toFixed: null };
 >q : Thing2
+>  : ^^^^^^
 >{ toFixed: null } : { toFixed: null; }
+>                  : ^^^^^^^^^^^^^^^^^^
 >toFixed : null
->null : null
+>        : ^^^^
 
 const h: Thing2 = { toString: null }; // OK, satisfies object
 >h : Thing2
+>  : ^^^^^^
 >{ toString: null } : { toString: null; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >toString : null
->null : null
+>         : ^^^^
 
 type Thing3 = number | { toFixed: null, toString: undefined } | object;
->Thing3 : number | object | { toFixed: null; toString: undefined; }
+>Thing3 : Thing3
+>       : ^^^^^^
 >toFixed : null
->null : null
+>        : ^^^^
 >toString : undefined
+>         : ^^^^^^^^^
 
 const l: Thing3 = { toString: undefined }; // error, toFixed isn't null
 >l : Thing3
+>  : ^^^^^^
 >{ toString: undefined } : { toString: undefined; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >toString : undefined
+>         : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

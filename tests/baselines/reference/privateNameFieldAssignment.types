@@ -1,213 +1,364 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldAssignment.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldAssignment.ts] ////
+
+=== privateNameFieldAssignment.ts ===
 class A {
 >A : A
+>  : ^
 
     #field = 0;
 >#field : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     constructor() {
         this.#field = 1;
 >this.#field = 1 : 1
+>                : ^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >1 : 1
+>  : ^
 
         this.#field += 2;
 >this.#field += 2 : number
+>                 : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >2 : 2
+>  : ^
 
         this.#field -= 3;
 >this.#field -= 3 : number
+>                 : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >3 : 3
+>  : ^
 
         this.#field /= 4;
 >this.#field /= 4 : number
+>                 : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >4 : 4
+>  : ^
 
         this.#field *= 5;
 >this.#field *= 5 : number
+>                 : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >5 : 5
+>  : ^
 
         this.#field **= 6;
 >this.#field **= 6 : number
+>                  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >6 : 6
+>  : ^
 
         this.#field %= 7;
 >this.#field %= 7 : number
+>                 : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >7 : 7
+>  : ^
 
         this.#field <<= 8;
 >this.#field <<= 8 : number
+>                  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >8 : 8
+>  : ^
 
         this.#field >>= 9;
 >this.#field >>= 9 : number
+>                  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >9 : 9
+>  : ^
 
         this.#field >>>= 10;
 >this.#field >>>= 10 : number
+>                    : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >10 : 10
+>   : ^^
 
         this.#field &= 11;
 >this.#field &= 11 : number
+>                  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >11 : 11
+>   : ^^
 
         this.#field |= 12;
 >this.#field |= 12 : number
+>                  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >12 : 12
+>   : ^^
 
         this.#field ^= 13;
 >this.#field ^= 13 : number
+>                  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >13 : 13
+>   : ^^
 
         A.getInstance().#field = 1;
 >A.getInstance().#field = 1 : 1
+>                           : ^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >1 : 1
+>  : ^
 
         A.getInstance().#field += 2;
 >A.getInstance().#field += 2 : number
+>                            : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >2 : 2
+>  : ^
 
         A.getInstance().#field -= 3;
 >A.getInstance().#field -= 3 : number
+>                            : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >3 : 3
+>  : ^
 
         A.getInstance().#field /= 4;
 >A.getInstance().#field /= 4 : number
+>                            : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >4 : 4
+>  : ^
 
         A.getInstance().#field *= 5;
 >A.getInstance().#field *= 5 : number
+>                            : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >5 : 5
+>  : ^
 
         A.getInstance().#field **= 6;
 >A.getInstance().#field **= 6 : number
+>                             : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >6 : 6
+>  : ^
 
         A.getInstance().#field %= 7;
 >A.getInstance().#field %= 7 : number
+>                            : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >7 : 7
+>  : ^
 
         A.getInstance().#field <<= 8;
 >A.getInstance().#field <<= 8 : number
+>                             : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >8 : 8
+>  : ^
 
         A.getInstance().#field >>= 9;
 >A.getInstance().#field >>= 9 : number
+>                             : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >9 : 9
+>  : ^
 
         A.getInstance().#field >>>= 10;
 >A.getInstance().#field >>>= 10 : number
+>                               : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >10 : 10
+>   : ^^
 
         A.getInstance().#field &= 11;
 >A.getInstance().#field &= 11 : number
+>                             : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >11 : 11
+>   : ^^
 
         A.getInstance().#field |= 12;
 >A.getInstance().#field |= 12 : number
+>                             : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >12 : 12
+>   : ^^
 
         A.getInstance().#field ^= 13;
 >A.getInstance().#field ^= 13 : number
+>                             : ^^^^^^
 >A.getInstance().#field : number
+>                       : ^^^^^^
 >A.getInstance() : A
+>                : ^
 >A.getInstance : () => A
+>              : ^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >getInstance : () => A
+>            : ^^^^^^^
 >13 : 13
+>   : ^^
     }
     static getInstance() {
 >getInstance : () => A
+>            : ^^^^^^^
 
         return new A();
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
     }
 }
 

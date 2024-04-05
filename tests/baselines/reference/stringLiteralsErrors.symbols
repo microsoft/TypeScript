@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringLiteralsErrors.ts ===
+//// [tests/cases/compiler/stringLiteralsErrors.ts] ////
+
+=== stringLiteralsErrors.ts ===
 // Srtings missing line terminator
 var es1 = "line 1
 >es1 : Symbol(es1, Decl(stringLiteralsErrors.ts, 1, 3))

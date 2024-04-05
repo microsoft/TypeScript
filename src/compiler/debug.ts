@@ -10,7 +10,6 @@ import {
     FlowFlags,
     FlowLabel,
     FlowNode,
-    FlowNodeBase,
     FlowSwitchClause,
     getEffectiveModifierFlagsNoCache,
     getEmitFlags,
@@ -71,6 +70,7 @@ import {
     ObjectFlags,
     ObjectType,
     RelationComparisonResult,
+    ScriptKind,
     Signature,
     SignatureCheckMode,
     SignatureFlags,
@@ -109,7 +109,7 @@ export enum LogLevel {
     Error,
     Warning,
     Info,
-    Verbose
+    Verbose,
 }
 
 /** @internal */
@@ -160,7 +160,7 @@ export namespace Debug {
         }
     }
 
-    const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel, assertion: AnyFunction }>> = {};
+    const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel; assertion: AnyFunction; }>> = {};
 
     export function getAssertionLevel() {
         return currentAssertionLevel;
@@ -202,6 +202,7 @@ export namespace Debug {
     }
 
     export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
+        // eslint-disable-next-line no-debugger
         debugger;
         const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
         if ((Error as any).captureStackTrace) {
@@ -213,7 +214,8 @@ export namespace Debug {
     export function failBadSyntaxKind(node: Node, message?: string, stackCrawlMark?: AnyFunction): never {
         return fail(
             `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
-            stackCrawlMark || failBadSyntaxKind);
+            stackCrawlMark || failBadSyntaxKind,
+        );
     }
 
     export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
@@ -285,14 +287,15 @@ export namespace Debug {
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
     export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
-    export function assertEachNode(nodes: readonly Node[], test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertEachNode(nodes: readonly Node[] | undefined, test: (node: Node) => boolean, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
             assert(
                 test === undefined || every(nodes, test),
                 message || "Unexpected node.",
-                () => `Node array did not pass test '${getFunctionName(test)}'.`,
-                stackCrawlMark || assertEachNode);
+                () => `Node array did not pass test '${getFunctionName(test!)}'.`,
+                stackCrawlMark || assertEachNode,
+            );
         }
     }
 
@@ -304,7 +307,8 @@ export namespace Debug {
                 node !== undefined && (test === undefined || test(node)),
                 message || "Unexpected node.",
                 () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
-                stackCrawlMark || assertNode);
+                stackCrawlMark || assertNode,
+            );
         }
     }
 
@@ -316,7 +320,8 @@ export namespace Debug {
                 node === undefined || test === undefined || !test(node),
                 message || "Unexpected node.",
                 () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
-                stackCrawlMark || assertNotNode);
+                stackCrawlMark || assertNotNode,
+            );
         }
     }
 
@@ -329,12 +334,13 @@ export namespace Debug {
                 test === undefined || node === undefined || test(node),
                 message || "Unexpected node.",
                 () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
-                stackCrawlMark || assertOptionalNode);
+                stackCrawlMark || assertOptionalNode,
+            );
         }
     }
 
-    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }>;
-    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K }> | undefined;
+    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }>;
+    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }> | undefined;
     export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
@@ -342,7 +348,8 @@ export namespace Debug {
                 kind === undefined || node === undefined || node.kind === kind,
                 message || "Unexpected node.",
                 () => `Node ${formatSyntaxKind(node?.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
-                stackCrawlMark || assertOptionalToken);
+                stackCrawlMark || assertOptionalToken,
+            );
         }
     }
 
@@ -353,7 +360,8 @@ export namespace Debug {
                 node === undefined,
                 message || "Unexpected node.",
                 () => `Node ${formatSyntaxKind(node!.kind)} was unexpected'.`,
-                stackCrawlMark || assertMissingNode);
+                stackCrawlMark || assertMissingNode,
+            );
         }
     }
 
@@ -363,7 +371,7 @@ export namespace Debug {
      * as a result can reduce the number of unnecessary casts.
      */
     export function type<T>(value: unknown): asserts value is T;
-    export function type(_value: unknown) { }
+    export function type(_value: unknown) {}
 
     export function getFunctionName(func: AnyFunction) {
         if (typeof func !== "function") {
@@ -374,7 +382,7 @@ export namespace Debug {
         }
         else {
             const text = Function.prototype.toString.call(func);
-            const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
+            const match = /^function\s+([\w$]+)\s*\(/.exec(text);
             return match ? match[1] : "";
         }
     }
@@ -449,6 +457,10 @@ export namespace Debug {
         return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
     }
 
+    export function formatScriptKind(kind: ScriptKind | undefined): string {
+        return formatEnum(kind, (ts as any).ScriptKind, /*isFlags*/ false);
+    }
+
     export function formatNodeFlags(flags: NodeFlags | undefined): string {
         return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
     }
@@ -503,16 +515,15 @@ export namespace Debug {
 
     let isDebugInfoEnabled = false;
 
-    let flowNodeProto: FlowNodeBase | undefined;
+    let flowNodeProto: FlowNode | undefined;
 
-    function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
+    function attachFlowNodeDebugInfoWorker(flowNode: FlowNode) {
         if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
             Object.defineProperties(flowNode, {
                 // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                 __tsDebuggerDisplay: {
-                    value(this: FlowNodeBase) {
-                        const flowHeader =
-                            this.flags & FlowFlags.Start ? "FlowStart" :
+                    value(this: FlowNode) {
+                        const flowHeader = this.flags & FlowFlags.Start ? "FlowStart" :
                             this.flags & FlowFlags.BranchLabel ? "FlowBranchLabel" :
                             this.flags & FlowFlags.LoopLabel ? "FlowLoopLabel" :
                             this.flags & FlowFlags.Assignment ? "FlowAssignment" :
@@ -525,22 +536,30 @@ export namespace Debug {
                             this.flags & FlowFlags.Unreachable ? "FlowUnreachable" :
                             "UnknownFlow";
                         const remainingFlags = this.flags & ~(FlowFlags.Referenced - 1);
-                        return `${flowHeader}${remainingFlags ? ` (${formatFlowFlags(remainingFlags)})`: ""}`;
-                    }
+                        return `${flowHeader}${remainingFlags ? ` (${formatFlowFlags(remainingFlags)})` : ""}`;
+                    },
                 },
-                __debugFlowFlags: { get(this: FlowNodeBase) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
-                __debugToString: { value(this: FlowNodeBase) { return formatControlFlowGraph(this); } }
+                __debugFlowFlags: {
+                    get(this: FlowNode) {
+                        return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true);
+                    },
+                },
+                __debugToString: {
+                    value(this: FlowNode) {
+                        return formatControlFlowGraph(this);
+                    },
+                },
             });
         }
     }
 
-    export function attachFlowNodeDebugInfo(flowNode: FlowNodeBase) {
+    export function attachFlowNodeDebugInfo(flowNode: FlowNode) {
         if (isDebugInfoEnabled) {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `FlowNode`
                 // so the method doesn't show up in the watch window.
                 if (!flowNodeProto) {
-                    flowNodeProto = Object.create(Object.prototype) as FlowNodeBase;
+                    flowNodeProto = Object.create(Object.prototype) as FlowNode;
                     attachFlowNodeDebugInfoWorker(flowNodeProto);
                 }
                 Object.setPrototypeOf(flowNode, flowNodeProto);
@@ -550,6 +569,7 @@ export namespace Debug {
                 attachFlowNodeDebugInfoWorker(flowNode);
             }
         }
+        return flowNode;
     }
 
     let nodeArrayProto: NodeArray<Node> | undefined;
@@ -567,8 +587,8 @@ export namespace Debug {
                         // we're just taking note of it for anyone checking regex performance in the future.
                         defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
                         return `NodeArray ${defaultValue}`;
-                    }
-                }
+                    },
+                },
             });
         }
     }
@@ -606,27 +626,29 @@ export namespace Debug {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Symbol) {
-                    const symbolHeader =
-                        this.flags & SymbolFlags.Transient ? "TransientSymbol" :
+                    const symbolHeader = this.flags & SymbolFlags.Transient ? "TransientSymbol" :
                         "Symbol";
                     const remainingSymbolFlags = this.flags & ~SymbolFlags.Transient;
                     return `${symbolHeader} '${symbolName(this)}'${remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""}`;
-                }
+                },
             },
-            __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+            __debugFlags: {
+                get(this: Symbol) {
+                    return formatSymbolFlags(this.flags);
+                },
+            },
         });
 
         Object.defineProperties(TypeObject.prototype, {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Type) {
-                    const typeHeader =
+                    const typeHeader = this.flags & TypeFlags.Intrinsic ? `IntrinsicType ${(this as IntrinsicType).intrinsicName}${(this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""}` :
                         this.flags & TypeFlags.Nullable ? "NullableType" :
                         this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
                         this.flags & TypeFlags.BigIntLiteral ? `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${(this as BigIntLiteralType).value.base10Value}n` :
                         this.flags & TypeFlags.UniqueESSymbol ? "UniqueESSymbolType" :
                         this.flags & TypeFlags.Enum ? "EnumType" :
-                        this.flags & TypeFlags.Intrinsic ? `IntrinsicType ${(this as IntrinsicType).intrinsicName}` :
                         this.flags & TypeFlags.Union ? "UnionType" :
                         this.flags & TypeFlags.Intersection ? "IntersectionType" :
                         this.flags & TypeFlags.Index ? "IndexType" :
@@ -635,7 +657,7 @@ export namespace Debug {
                         this.flags & TypeFlags.Substitution ? "SubstitutionType" :
                         this.flags & TypeFlags.TypeParameter ? "TypeParameter" :
                         this.flags & TypeFlags.Object ?
-                            (this as ObjectType).objectFlags & ObjectFlags.ClassOrInterface ? "InterfaceType" :
+                        (this as ObjectType).objectFlags & ObjectFlags.ClassOrInterface ? "InterfaceType" :
                             (this as ObjectType).objectFlags & ObjectFlags.Reference ? "TypeReference" :
                             (this as ObjectType).objectFlags & ObjectFlags.Tuple ? "TupleType" :
                             (this as ObjectType).objectFlags & ObjectFlags.Anonymous ? "AnonymousType" :
@@ -646,10 +668,18 @@ export namespace Debug {
                         "Type";
                     const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
                     return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""}`;
-                }
+                },
             },
-            __debugFlags: { get(this: Type) { return formatTypeFlags(this.flags); } },
-            __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((this as ObjectType).objectFlags) : ""; } },
+            __debugFlags: {
+                get(this: Type) {
+                    return formatTypeFlags(this.flags);
+                },
+            },
+            __debugObjectFlags: {
+                get(this: Type) {
+                    return this.flags & TypeFlags.Object ? formatObjectFlags((this as ObjectType).objectFlags) : "";
+                },
+            },
             __debugTypeToString: {
                 value(this: Type) {
                     // avoid recomputing
@@ -659,20 +689,28 @@ export namespace Debug {
                         weakTypeTextMap.set(this, text);
                     }
                     return text;
-                }
+                },
             },
         });
 
         Object.defineProperties(SignatureObject.prototype, {
-            __debugFlags: { get(this: Signature) { return formatSignatureFlags(this.flags); } },
-            __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } }
+            __debugFlags: {
+                get(this: Signature) {
+                    return formatSignatureFlags(this.flags);
+                },
+            },
+            __debugSignatureToString: {
+                value(this: Signature) {
+                    return this.checker?.signatureToString(this);
+                },
+            },
         });
 
         const nodeConstructors = [
             NodeObject,
             IdentifierObject,
             TokenObject,
-            SourceFileObject
+            SourceFileObject,
         ];
 
         for (const ctor of nodeConstructors) {
@@ -681,8 +719,7 @@ export namespace Debug {
                     // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                     __tsDebuggerDisplay: {
                         value(this: Node) {
-                            const nodeHeader =
-                                isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
+                            const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
                                 isIdentifier(this) ? `Identifier '${idText(this)}'` :
                                 isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
                                 isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
@@ -720,14 +757,38 @@ export namespace Debug {
                                 isImportTypeNode(this) ? "ImportTypeNode" :
                                 formatSyntaxKind(this.kind);
                             return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
-                        }
+                        },
                     },
-                    __debugKind: { get(this: Node) { return formatSyntaxKind(this.kind); } },
-                    __debugNodeFlags: { get(this: Node) { return formatNodeFlags(this.flags); } },
-                    __debugModifierFlags: { get(this: Node) { return formatModifierFlags(getEffectiveModifierFlagsNoCache(this)); } },
-                    __debugTransformFlags: { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
-                    __debugIsParseTreeNode: { get(this: Node) { return isParseTreeNode(this); } },
-                    __debugEmitFlags: { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
+                    __debugKind: {
+                        get(this: Node) {
+                            return formatSyntaxKind(this.kind);
+                        },
+                    },
+                    __debugNodeFlags: {
+                        get(this: Node) {
+                            return formatNodeFlags(this.flags);
+                        },
+                    },
+                    __debugModifierFlags: {
+                        get(this: Node) {
+                            return formatModifierFlags(getEffectiveModifierFlagsNoCache(this));
+                        },
+                    },
+                    __debugTransformFlags: {
+                        get(this: Node) {
+                            return formatTransformFlags(this.transformFlags);
+                        },
+                    },
+                    __debugIsParseTreeNode: {
+                        get(this: Node) {
+                            return isParseTreeNode(this);
+                        },
+                    },
+                    __debugEmitFlags: {
+                        get(this: Node) {
+                            return formatEmitFlags(getEmitFlags(this));
+                        },
+                    },
                     __debugGetText: {
                         value(this: Node, includeTrivia?: boolean) {
                             if (nodeIsSynthesized(this)) return "";
@@ -740,8 +801,8 @@ export namespace Debug {
                                 weakNodeTextMap.set(this, text);
                             }
                             return text;
-                        }
-                    }
+                        },
+                    },
                 });
             }
         }
@@ -751,8 +812,7 @@ export namespace Debug {
 
     export function formatVariance(varianceFlags: VarianceFlags) {
         const variance = varianceFlags & VarianceFlags.VarianceMask;
-        let result =
-            variance === VarianceFlags.Invariant ? "in out" :
+        let result = variance === VarianceFlags.Invariant ? "in out" :
             variance === VarianceFlags.Bivariant ? "[bivariant]" :
             variance === VarianceFlags.Contravariant ? "in" :
             variance === VarianceFlags.Covariant ? "out" :
@@ -766,26 +826,34 @@ export namespace Debug {
         return result;
     }
 
-    export type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
+    export type DebugType = Type & { __debugTypeToString(): string; }; // eslint-disable-line @typescript-eslint/naming-convention
     export class DebugTypeMapper {
         declare kind: TypeMapKind;
         __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
             type<TypeMapper>(this);
             switch (this.kind) {
-                case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
-                case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
-                case TypeMapKind.Array: return zipWith<DebugType, DebugType | string, unknown>(
-                    this.sources as readonly DebugType[],
-                    this.targets as readonly DebugType[] || map(this.sources, () => "any"),
-                    (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`).join(", ");
-                case TypeMapKind.Deferred: return zipWith(
-                    this.sources,
-                    this.targets,
-                    (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
+                case TypeMapKind.Function:
+                    return this.debugInfo?.() || "(function mapper)";
+                case TypeMapKind.Simple:
+                    return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
+                case TypeMapKind.Array:
+                    return zipWith<DebugType, DebugType | string, unknown>(
+                        this.sources as readonly DebugType[],
+                        this.targets as readonly DebugType[] || map(this.sources, () => "any"),
+                        (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`,
+                    ).join(", ");
+                case TypeMapKind.Deferred:
+                    return zipWith(
+                        this.sources,
+                        this.targets,
+                        (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`,
+                    ).join(", ");
                 case TypeMapKind.Merged:
-                case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
+                case TypeMapKind.Composite:
+                    return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
 m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
-                default: return assertNever(this);
+                default:
+                    return assertNever(this);
             }
         }
     }
@@ -864,16 +932,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             target: FlowGraphNode;
         }
 
-        const hasAntecedentFlags =
-            FlowFlags.Assignment |
+        const hasAntecedentFlags = FlowFlags.Assignment |
             FlowFlags.Condition |
             FlowFlags.SwitchClause |
             FlowFlags.ArrayMutation |
             FlowFlags.Call |
             FlowFlags.ReduceLabel;
 
-        const hasNodeFlags =
-            FlowFlags.Start |
+        const hasNodeFlags = FlowFlags.Start |
             FlowFlags.Assignment |
             FlowFlags.Call |
             FlowFlags.Condition |
@@ -897,15 +963,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return !!(f.flags & FlowFlags.SwitchClause);
         }
 
-        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedents: FlowNode[] } {
-            return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedents;
+        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedent: FlowNode[]; } {
+            return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedent;
         }
 
-        function hasAntecedent(f: FlowNode): f is Extract<FlowNode, { antecedent: FlowNode }> {
+        function hasAntecedent(f: FlowNode): f is Extract<FlowNode, { antecedent: FlowNode; }> {
             return !!(f.flags & hasAntecedentFlags);
         }
 
-        function hasNode(f: FlowNode): f is Extract<FlowNode, { node?: Node }> {
+        function hasNode(f: FlowNode): f is Extract<FlowNode, { node?: Node; }> {
             return !!(f.flags & hasNodeFlags);
         }
 
@@ -942,7 +1008,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     lane: -1,
                     endLane: -1,
                     level: -1,
-                    circular: "circularity"
+                    circular: "circularity",
                 };
                 nodes.push(graphNode);
                 return graphNode;
@@ -952,7 +1018,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
                 nodes.push(graphNode);
                 if (hasAntecedents(flowNode)) {
-                    for (const antecedent of flowNode.antecedents) {
+                    for (const antecedent of flowNode.antecedent) {
                         buildGraphEdge(graphNode, antecedent, seen);
                     }
                 }
@@ -1041,15 +1107,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (circular) {
                 text = `${text}#${getDebugFlowNodeId(flowNode)}`;
             }
-            if (hasNode(flowNode)) {
-                if (flowNode.node) {
-                    text += ` (${getNodeText(flowNode.node)})`;
-                }
-            }
-            else if (isFlowSwitchClause(flowNode)) {
+            if (isFlowSwitchClause(flowNode)) {
                 const clauses: string[] = [];
-                for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
-                    const clause = flowNode.switchStatement.caseBlock.clauses[i];
+                const { switchStatement, clauseStart, clauseEnd } = flowNode.node;
+                for (let i = clauseStart; i < clauseEnd; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
                     if (isDefaultClause(clause)) {
                         clauses.push("default");
                     }
@@ -1058,6 +1120,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
                 text += ` (${clauses.join(", ")})`;
+            }
+            else if (hasNode(flowNode)) {
+                if (flowNode.node) {
+                    text += ` (${getNodeText(flowNode.node)})`;
+                }
             }
             return circular === "circularity" ? `Circular(${text})` : text;
         }
@@ -1139,17 +1206,28 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         function getBoxCharacter(connector: Connection) {
             switch (connector) {
-                case Connection.UpDown: return BoxCharacter.ud;
-                case Connection.LeftRight: return BoxCharacter.lr;
-                case Connection.UpLeft: return BoxCharacter.ul;
-                case Connection.UpRight: return BoxCharacter.ur;
-                case Connection.DownLeft: return BoxCharacter.dl;
-                case Connection.DownRight: return BoxCharacter.dr;
-                case Connection.UpDownLeft: return BoxCharacter.udl;
-                case Connection.UpDownRight: return BoxCharacter.udr;
-                case Connection.UpLeftRight: return BoxCharacter.ulr;
-                case Connection.DownLeftRight: return BoxCharacter.dlr;
-                case Connection.UpDownLeftRight: return BoxCharacter.udlr;
+                case Connection.UpDown:
+                    return BoxCharacter.ud;
+                case Connection.LeftRight:
+                    return BoxCharacter.lr;
+                case Connection.UpLeft:
+                    return BoxCharacter.ul;
+                case Connection.UpRight:
+                    return BoxCharacter.ur;
+                case Connection.DownLeft:
+                    return BoxCharacter.dl;
+                case Connection.DownRight:
+                    return BoxCharacter.dr;
+                case Connection.UpDownLeft:
+                    return BoxCharacter.udl;
+                case Connection.UpDownRight:
+                    return BoxCharacter.udr;
+                case Connection.UpLeftRight:
+                    return BoxCharacter.ulr;
+                case Connection.DownLeftRight:
+                    return BoxCharacter.dlr;
+                case Connection.UpDownLeftRight:
+                    return BoxCharacter.udlr;
             }
             return " ";
         }

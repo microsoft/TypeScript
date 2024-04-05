@@ -1,175 +1,277 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts] ////
+
+=== assignParameterPropertyToPropertyDeclarationESNext.ts ===
 class C {
 >C : C
+>  : ^
 
     qux = this.bar // should error
 >qux : string
+>    : ^^^^^^
 >this.bar : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
     bar = this.foo // should error
 >bar : string
+>    : ^^^^^^
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
     quiz = this.bar // ok
 >quiz : string
+>     : ^^^^^^
 >this.bar : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
     quench = this.m1() // ok
 >quench : void
+>       : ^^^^
 >this.m1() : void
+>          : ^^^^
 >this.m1 : () => void
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m1 : () => void
+>   : ^^^^^^^^^^
 
     quanch = this.m3() // should error
 >quanch : void
+>       : ^^^^
 >this.m3() : void
+>          : ^^^^
 >this.m3 : () => void
+>        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >m3 : () => void
+>   : ^^^^^^^^^^
 
     m1() {
 >m1 : () => void
+>   : ^^^^^^^^^^
 
         this.foo // ok
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
     }
     m3 = function() { }
 >m3 : () => void
+>   : ^^^^^^^^^^
 >function() { } : () => void
+>               : ^^^^^^^^^^
 
     constructor(public foo: string) {}
 >foo : string
+>    : ^^^^^^
 
     quim = this.baz // should error
 >quim : string
+>     : ^^^^^^
 >this.baz : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >baz : string
+>    : ^^^^^^
 
     baz = this.foo; // should error
 >baz : string
+>    : ^^^^^^
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
     quid = this.baz // ok
 >quid : string
+>     : ^^^^^^
 >this.baz : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >baz : string
+>    : ^^^^^^
 
     m2() {
 >m2 : () => void
+>   : ^^^^^^^^^^
 
         this.foo // ok
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
     }
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     quill = this.foo // ok
 >quill : string
+>      : ^^^^^^
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 }
 
 class E {
 >E : E
+>  : ^
 
     bar = () => this.foo1 + this.foo2; // both ok
 >bar : () => string
+>    : ^^^^^^^^^^^^
 >() => this.foo1 + this.foo2 : () => string
+>                            : ^^^^^^^^^^^^
 >this.foo1 + this.foo2 : string
+>                      : ^^^^^^
 >this.foo1 : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >foo1 : string
+>     : ^^^^^^
 >this.foo2 : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >foo2 : string
+>     : ^^^^^^
 
     foo1 = '';
 >foo1 : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 
     constructor(public foo2: string) {}
 >foo2 : string
+>     : ^^^^^^
 }
 
 class F {
 >F : F
+>  : ^
 
     Inner = class extends F {
 >Inner : typeof (Anonymous class)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class extends F {        p2 = this.p1    } : typeof (Anonymous class)
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >F : F
+>  : ^
 
         p2 = this.p1
 >p2 : number
+>   : ^^^^^^
 >this.p1 : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >p1 : number
+>   : ^^^^^^
     }
     p1 = 0
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }
 class G {
 >G : G
+>  : ^
 
     Inner = class extends G {
 >Inner : typeof (Anonymous class)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class extends G {        p2 = this.p1    } : typeof (Anonymous class)
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >G : G
+>  : ^
 
         p2 = this.p1
 >p2 : number
+>   : ^^^^^^
 >this.p1 : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >p1 : number
+>   : ^^^^^^
     }
     constructor(public p1: number) {}
 >p1 : number
+>   : ^^^^^^
 }
 class H {
 >H : H
+>  : ^
 
     constructor(public p1: C) {}
 >p1 : C
+>   : ^
 
     public p2 = () => {
 >p2 : () => string
+>   : ^^^^^^^^^^^^
 >() => {        return this.p1.foo;    } : () => string
+>                                        : ^^^^^^^^^^^^
 
         return this.p1.foo;
 >this.p1.foo : string
+>            : ^^^^^^
 >this.p1 : C
+>        : ^
 >this : this
+>     : ^^^^
 >p1 : C
+>   : ^
 >foo : string
+>    : ^^^^^^
     }
 
     public p3 = () => this.p1.foo;
 >p3 : () => string
+>   : ^^^^^^^^^^^^
 >() => this.p1.foo : () => string
+>                  : ^^^^^^^^^^^^
 >this.p1.foo : string
+>            : ^^^^^^
 >this.p1 : C
+>        : ^
 >this : this
+>     : ^^^^
 >p1 : C
+>   : ^
 >foo : string
+>    : ^^^^^^
 }
 

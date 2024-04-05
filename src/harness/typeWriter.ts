@@ -1,10 +1,16 @@
 import * as ts from "./_namespaces/ts";
+import {
+    createPrinter,
+    createTextWriter,
+    memoize,
+} from "./_namespaces/ts";
 
 export interface TypeWriterTypeResult {
     line: number;
     syntaxKind: number;
     sourceText: string;
     type: string;
+    underline?: string;
 }
 
 export interface TypeWriterSymbolResult {
@@ -20,6 +26,7 @@ export interface TypeWriterResult {
     sourceText: string;
     symbol?: string;
     type?: string;
+    underline?: string;
 }
 
 function* forEachASTNode(node: ts.Node) {
@@ -37,6 +44,134 @@ function* forEachASTNode(node: ts.Node) {
     }
 }
 
+const createSyntheticNodeUnderliningPrinter = memoize((): { printer: ts.Printer; writer: ts.EmitTextWriter; underliner: ts.EmitTextWriter; reset(): void; } => {
+    let underlining = false;
+    const printer = createPrinter({ removeComments: true }, {
+        onEmitNode: (hint, node, cb) => {
+            if (ts.nodeIsSynthesized(node) !== underlining) {
+                // either node is synthetic and underlining needs to be enabled, or node is not synthetic and
+                // underlining needs to be disabled
+                underlining = !underlining;
+                const result = cb(hint, node);
+                underlining = !underlining;
+                return result;
+            }
+            // underlining does not need to change
+            return cb(hint, node);
+        },
+    });
+    const baseWriter = createTextWriter("");
+    const underliner = createTextWriter("");
+
+    return {
+        printer,
+        writer: {
+            write(s: string): void {
+                baseWriter.write(s);
+                underliner.write(underlineFor(s));
+            },
+            writeTrailingSemicolon(text: string): void {
+                baseWriter.writeTrailingSemicolon(text);
+                underliner.writeTrailingSemicolon(underlineFor(text));
+            },
+            writeComment(text: string): void {
+                baseWriter.writeComment(text);
+                underliner.writeComment(underlineFor(text));
+            },
+            getText(): string {
+                return baseWriter.getText();
+            },
+            rawWrite(s: string): void {
+                baseWriter.rawWrite(s);
+                underliner.rawWrite(underlineFor(s));
+            },
+            writeLiteral(s: string): void {
+                baseWriter.writeLiteral(s);
+                underliner.writeLiteral(underlineFor(s));
+            },
+            getTextPos(): number {
+                return baseWriter.getTextPos();
+            },
+            getLine(): number {
+                return baseWriter.getLine();
+            },
+            getColumn(): number {
+                return baseWriter.getColumn();
+            },
+            getIndent(): number {
+                return baseWriter.getIndent();
+            },
+            isAtStartOfLine(): boolean {
+                return baseWriter.isAtStartOfLine();
+            },
+            hasTrailingComment(): boolean {
+                return baseWriter.hasTrailingComment();
+            },
+            hasTrailingWhitespace(): boolean {
+                return baseWriter.hasTrailingWhitespace();
+            },
+            writeKeyword(text: string): void {
+                baseWriter.writeKeyword(text);
+                underliner.writeKeyword(underlineFor(text));
+            },
+            writeOperator(text: string): void {
+                baseWriter.writeOperator(text);
+                underliner.writeOperator(underlineFor(text));
+            },
+            writePunctuation(text: string): void {
+                baseWriter.writePunctuation(text);
+                underliner.writePunctuation(underlineFor(text));
+            },
+            writeSpace(text: string): void {
+                baseWriter.writeSpace(text);
+                underliner.writeSpace(underlineFor(text));
+            },
+            writeStringLiteral(text: string): void {
+                baseWriter.writeStringLiteral(text);
+                underliner.writeStringLiteral(underlineFor(text));
+            },
+            writeParameter(text: string): void {
+                baseWriter.writeParameter(text);
+                underliner.writeParameter(underlineFor(text));
+            },
+            writeProperty(text: string): void {
+                baseWriter.writeProperty(text);
+                underliner.writeProperty(underlineFor(text));
+            },
+            writeSymbol(text: string, symbol: ts.Symbol): void {
+                baseWriter.writeSymbol(text, symbol);
+                underliner.writeSymbol(underlineFor(text), symbol);
+            },
+            writeLine(force?: boolean | undefined): void {
+                baseWriter.writeLine(force);
+                underliner.writeLine(force);
+            },
+            increaseIndent(): void {
+                baseWriter.increaseIndent();
+                underliner.increaseIndent();
+            },
+            decreaseIndent(): void {
+                baseWriter.decreaseIndent();
+                underliner.decreaseIndent();
+            },
+            clear(): void {
+                baseWriter.clear();
+                underliner.clear();
+            },
+        },
+        underliner,
+        reset() {
+            underlining = false;
+            baseWriter.clear();
+            underliner.clear();
+        },
+    };
+
+    function underlineFor(s: string) {
+        return s.length === 0 ? s : (underlining ? "^" : " ").repeat(s.length);
+    }
+});
+
 export class TypeWriterWalker {
     currentSourceFile!: ts.SourceFile;
 
@@ -52,25 +187,19 @@ export class TypeWriterWalker {
         const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ true);
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
-            yield value as TypeWriterSymbolResult;
-        }
+        yield* gen as IterableIterator<TypeWriterSymbolResult>;
     }
 
     public *getTypes(fileName: string): IterableIterator<TypeWriterTypeResult> {
         const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ false);
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
-            yield value as TypeWriterTypeResult;
-        }
+        yield* gen as IterableIterator<TypeWriterTypeResult>;
     }
 
     private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
         const gen = forEachASTNode(node);
-        let res = gen.next();
-        for (; !res.done; res = gen.next()) {
-            const {value: node} = res;
+        for (const node of gen) {
             if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
                 const result = this.writeTypeOrSymbol(node, isSymbolWalk);
                 if (result) {
@@ -129,7 +258,9 @@ export class TypeWriterWalker {
             // return `error`s via `getTypeAtLocation`
             // But this is generally expected, so we don't call those out, either
             let typeString: string;
-            if (!this.hadErrorBaseline &&
+            let underline: string | undefined;
+            if (
+                !this.hadErrorBaseline &&
                 type.flags & ts.TypeFlags.Any &&
                 !ts.isBindingElement(node.parent) &&
                 !ts.isPropertyAccessOrQualifiedName(node.parent) &&
@@ -138,22 +269,31 @@ export class TypeWriterWalker {
                 !ts.isMetaProperty(node.parent) &&
                 !this.isImportStatementName(node) &&
                 !this.isExportStatementName(node) &&
-                !this.isIntrinsicJsxTag(node)) {
+                !this.isIntrinsicJsxTag(node)
+            ) {
                 typeString = (type as ts.IntrinsicType).intrinsicName;
             }
             else {
-                typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
-                if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && typeString === ts.idText(node)) {
+                const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
+                let typeNode = this.checker.typeToTypeNode(type, node.parent, (typeFormatFlags & ts.TypeFormatFlags.NodeBuilderFlagsMask) | ts.NodeBuilderFlags.IgnoreErrors)!;
+                if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && ts.isIdentifier(typeNode) && ts.idText(typeNode) === ts.idText(node)) {
                     // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
                     // the name of the type alias, recreate the type string without reusing the alias name
-                    typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.InTypeAlias);
+                    typeNode = this.checker.typeToTypeNode(type, node.parent, ((typeFormatFlags | ts.TypeFormatFlags.InTypeAlias) & ts.TypeFormatFlags.NodeBuilderFlagsMask) | ts.NodeBuilderFlags.IgnoreErrors)!;
                 }
+
+                const { printer, writer, underliner, reset } = createSyntheticNodeUnderliningPrinter();
+                printer.writeNode(ts.EmitHint.Unspecified, typeNode, this.currentSourceFile, writer);
+                typeString = writer.getText();
+                underline = underliner.getText();
+                reset();
             }
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,
                 sourceText,
-                type: typeString
+                type: typeString,
+                underline,
             };
         }
         const symbol = this.checker.getSymbolAtLocation(node);
@@ -178,7 +318,7 @@ export class TypeWriterWalker {
                 const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
                 const fileName = ts.getBaseFileName(declSourceFile.fileName);
                 const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
-                const declText = `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
+                const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
                 symbolString += declText;
                 (declaration as any).__symbolTestOutputCache = declText;
             }
@@ -188,7 +328,7 @@ export class TypeWriterWalker {
             line: lineAndCharacter.line,
             syntaxKind: node.kind,
             sourceText,
-            symbol: symbolString
+            symbol: symbolString,
         };
     }
 }

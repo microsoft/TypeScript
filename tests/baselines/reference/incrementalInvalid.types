@@ -1,6 +1,10 @@
-=== tests/cases/compiler/incrementalInvalid.ts ===
+//// [tests/cases/compiler/incrementalInvalid.ts] ////
+
+=== incrementalInvalid.ts ===
 const x = 10;
 >x : 10
+>  : ^^
 >10 : 10
+>   : ^^
 
 

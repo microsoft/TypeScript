@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unreachableFlowAfterFinally.ts] ////
+
 //// [unreachableFlowAfterFinally.ts]
 function f() {
     let x = 100;

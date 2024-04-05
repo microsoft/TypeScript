@@ -1,4 +1,7 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserSwitchStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserSwitchStatement1.d.ts] ////
+
+=== parserSwitchStatement1.d.ts ===
 switch (foo) {
 >foo : any
+>    : ^^^
 }

@@ -1,11 +1,16 @@
-=== tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.js ===
+//// [tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.ts] ////
+
+=== jsdocReadonlyDeclarations.js ===
 class C {
 >C : C
+>  : ^
 
     /** @readonly */
     x = 6
 >x : 6
+>  : ^
 >6 : 6
+>  : ^
 
     /** @readonly */
     constructor(n) {
@@ -14,8 +19,11 @@ class C {
         this.x = n
 >this.x = n : any
 >this.x : 6
+>       : ^
 >this : this
+>     : ^^^^
 >x : 6
+>  : ^
 >n : any
 
         /**
@@ -25,33 +33,47 @@ class C {
         this.y = n
 >this.y = n : any
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >n : any
     }
 }
 new C().x
 >new C().x : 6
+>          : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >x : 6
+>  : ^
 
 function F() {
 >F : typeof F
+>  : ^^^^^^^^
 
     /** @readonly */
     this.z = 1
 >this.z = 1 : 1
+>           : ^
 >this.z : any
 >this : this
+>     : ^^^^
 >z : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 // https://github.com/microsoft/TypeScript/issues/38401
 class D {
 >D : D
+>  : ^
 
     constructor(/** @readonly */ x) {}
 >x : any
 }
+

@@ -1,16 +1,16 @@
-tests/cases/compiler/a.ts(1,8): error TS1259: Module '"tests/cases/compiler/b"' can only be default-imported using the 'esModuleInterop' flag
+a.ts(1,8): error TS1259: Module '"b"' can only be default-imported using the 'esModuleInterop' flag
 
 
-==== tests/cases/compiler/b.d.ts (0 errors) ====
+==== b.d.ts (0 errors) ====
     declare class Foo {
     	member: string;
     }
     export = Foo;
     
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     import Foo from "./b";
            ~~~
-!!! error TS1259: Module '"tests/cases/compiler/b"' can only be default-imported using the 'esModuleInterop' flag
-!!! related TS2594 tests/cases/compiler/b.d.ts:4:1: This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+!!! error TS1259: Module '"b"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 b.d.ts:4:1: This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     export var x = new Foo();
     

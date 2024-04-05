@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticsNotInScopeInClodule.ts] ////
+
 //// [staticsNotInScopeInClodule.ts]
 class Clod {
     static x = 10;

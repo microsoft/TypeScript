@@ -1,11 +1,11 @@
-tests/cases/conformance/es6/for-ofStatements/for-of55.ts(2,15): error TS2448: Block-scoped variable 'v' used before its declaration.
+for-of55.ts(2,15): error TS2448: Block-scoped variable 'v' used before its declaration.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of55.ts (1 errors) ====
+==== for-of55.ts (1 errors) ====
     let v = [1];
     for (let v of v) {
                   ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es6/for-ofStatements/for-of55.ts:2:10: 'v' is declared here.
+!!! related TS2728 for-of55.ts:2:10: 'v' is declared here.
         v;
     }

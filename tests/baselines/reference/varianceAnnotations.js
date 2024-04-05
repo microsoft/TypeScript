@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts] ////
+
 //// [varianceAnnotations.ts]
 type Covariant<out T> = {
     x: T;
@@ -326,7 +328,7 @@ declare const qq: ActionObject<{
 }>;
 declare let Anon: {
     new <out T>(): {
-        foo(): any;
+        foo(): InstanceType<(typeof Anon<T>)>;
     };
 };
 declare let OuterC: {

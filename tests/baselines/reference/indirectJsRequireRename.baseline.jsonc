@@ -1,132 +1,93 @@
-// === /lib/plugins/aws/package/compile/events/httpApi/index.js ===
-// const { [|logWarning|] } = require('../../../../../../classes/Error');
-
+// === findAllReferences ===
 // === /lib/classes/Error.js ===
-// module.exports.[|logWarning|] = message => { };
+// <|module.exports.[|{| isWriteAccess: true |}logWarning|] = message => { };|>
 
 // === /bin/serverless.js ===
 // require('../lib/classes/Error').[|log/*FIND ALL REFS*/Warning|](`CLI triage crashed with: ${error.stack}`);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/lib/classes/Error.js",
-      "kind": "property",
-      "name": "(property) logWarning: (message: any) => void",
-      "textSpan": {
-        "start": 15,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "logWarning",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "message",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 10
-        },
-        "fileName": "/lib/classes/Error.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 32,
-          "length": 10
-        },
-        "fileName": "/bin/serverless.js",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 10
-        },
-        "fileName": "/lib/plugins/aws/package/compile/events/httpApi/index.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      }
+// === /lib/plugins/aws/package/compile/events/httpApi/index.js ===
+// <|const { [|{| isWriteAccess: true |}logWarning|] } = require('../../../../../../classes/Error');|>
+
+  // === Definitions ===
+  // === /lib/classes/Error.js ===
+  // <|module.exports.[|logWarning|]|> = message => { };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) logWarning: (message: any) => void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "logWarning",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "message",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

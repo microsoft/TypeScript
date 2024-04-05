@@ -1,4 +1,11 @@
-=== tests/cases/compiler/src/thing.ts ===
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirDeclDirNestedDirs.ts] ////
+
+=== index.ts ===
+export {srcthing as thing} from "./src/thing.js";
+>srcthing : Symbol(srcthing, Decl(thing.ts, 9, 11))
+>thing : Symbol(thing, Decl(index.ts, 0, 8))
+
+=== src/thing.ts ===
 // The following import should cause `index.ts`
 // to be included in the build, which will,
 // in turn, cause the common src directory to not be `src`
@@ -17,9 +24,4 @@ me.thing();
 export function srcthing(): void {}
 >srcthing : Symbol(srcthing, Decl(thing.ts, 9, 11))
 
-
-=== tests/cases/compiler/index.ts ===
-export {srcthing as thing} from "./src/thing.js";
->srcthing : Symbol(srcthing, Decl(thing.ts, 9, 11))
->thing : Symbol(thing, Decl(index.ts, 0, 8))
 

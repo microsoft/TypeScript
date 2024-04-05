@@ -1,6 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression3.ts] ////
+
+=== parserUnaryExpression3.ts ===
 ++[0];
 >++[0] : number
+>      : ^^^^^^
 >[0] : [number]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 

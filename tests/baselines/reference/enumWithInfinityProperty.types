@@ -1,9 +1,14 @@
-=== tests/cases/compiler/enumWithInfinityProperty.ts ===
+//// [tests/cases/compiler/enumWithInfinityProperty.ts] ////
+
+=== enumWithInfinityProperty.ts ===
 enum A {
 >A : A
+>  : ^
 
     Infinity = 1
 >Infinity : A.Infinity
+>         : ^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 

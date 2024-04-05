@@ -1,16 +1,23 @@
-=== tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts ===
+//// [tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts] ////
+
+=== switchStatementsWithMultipleDefaults1.ts ===
     var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     
     switch (x) {
 >x : number
+>  : ^^^^^^
 
         case 1:
 >1 : 1
+>  : ^
 
         case 2:
 >2 : 2
+>  : ^
 
         default:    // No issues.
             break;
@@ -18,9 +25,13 @@
         default:    // Error; third 'default' clause.
         case 3:
 >3 : 3
+>  : ^
 
             x *= x;
 >x *= x : number
+>       : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
     }

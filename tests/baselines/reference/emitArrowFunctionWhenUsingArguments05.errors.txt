@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments05.ts(2,19): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.
+emitArrowFunctionWhenUsingArguments05.ts(2,19): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
 
 
-==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments05.ts (1 errors) ====
+==== emitArrowFunctionWhenUsingArguments05.ts (1 errors) ====
     function f(arguments) {
         var a = () => arguments;
                       ~~~~~~~~~
-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.
+!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
     }

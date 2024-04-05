@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorReturnTypeIndirectReferenceToGlobalType.ts] ////
+
 //// [generatorReturnTypeIndirectReferenceToGlobalType.ts]
 interface I1 extends Iterator<0, 1, 2> {}
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts] ////
+
+=== bitwiseNotOperatorWithAnyOtherType.ts ===
 // ~ operator on any type
 
 var ANY: any;

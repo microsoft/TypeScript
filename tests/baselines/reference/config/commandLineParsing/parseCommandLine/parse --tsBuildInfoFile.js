@@ -1,7 +1,7 @@
 --tsBuildInfoFile build.tsbuildinfo 0.ts
 CompilerOptions::
 {
- "tsBuildInfoFile": "build.tsbuildinfo"
+  "tsBuildInfoFile": "build.tsbuildinfo"
 }
 WatchOptions::
 

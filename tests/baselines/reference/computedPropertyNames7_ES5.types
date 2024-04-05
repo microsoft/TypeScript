@@ -1,18 +1,29 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES5.ts] ////
+
+=== computedPropertyNames7_ES5.ts ===
 enum E {
 >E : E
+>  : ^
 
     member
 >member : E.member
+>       : ^^^^^^^^
 }
 var v = {
 >v : { 0: number; }
+>  : ^^^^^^^^^^^^^^
 >{    [E.member]: 0} : { 0: number; }
+>                    : ^^^^^^^^^^^^^^
 
     [E.member]: 0
 >[E.member] : number
+>           : ^^^^^^
 >E.member : E
+>         : ^
 >E : typeof E
+>  : ^^^^^^^^
 >member : E
+>       : ^
 >0 : 0
+>  : ^
 }

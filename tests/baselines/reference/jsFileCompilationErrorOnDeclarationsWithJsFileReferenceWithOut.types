@@ -1,16 +1,21 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationErrorOnDeclarationsWithJsFileReferenceWithOut.ts] ////
+
+=== a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 /// <reference path="c.js"/>
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
-=== tests/cases/compiler/c.js ===
+=== c.js ===
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 }
 

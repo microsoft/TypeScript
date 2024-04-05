@@ -1,9 +1,9 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts(5,11): error TS2430: Interface 'Derived' incorrectly extends interface 'Base'.
+interfaceThatHidesBaseProperty2.ts(5,11): error TS2430: Interface 'Derived' incorrectly extends interface 'Base'.
   The types of 'x.a' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts (1 errors) ====
+==== interfaceThatHidesBaseProperty2.ts (1 errors) ====
     interface Base {
         x: { a: number };
     }

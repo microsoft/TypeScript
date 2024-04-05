@@ -1,22 +1,32 @@
-=== tests/cases/compiler/thisInSuperCall1.ts ===
+//// [tests/cases/compiler/thisInSuperCall1.ts] ////
+
+=== thisInSuperCall1.ts ===
 class Base { 
 >Base : Base
+>     : ^^^^
 
     constructor(a: any) {}
 >a : any
+>  : ^^^
 }
 
 class Foo extends Base {
 >Foo : Foo
+>    : ^^^
 >Base : Base
+>     : ^^^^
 
     constructor(public x: number) {
 >x : number
+>  : ^^^^^^
 
         super(this);
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 

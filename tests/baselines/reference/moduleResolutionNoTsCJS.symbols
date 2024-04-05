@@ -1,21 +1,21 @@
-=== tests/cases/compiler/x.ts ===
+//// [tests/cases/compiler/moduleResolutionNoTsCJS.ts] ////
 
-// CommonJS output
-
-export default 0;
-
-=== tests/cases/compiler/y.tsx ===
+=== x.ts ===
 
 export default 0;
 
-=== tests/cases/compiler/z.d.ts ===
+=== y.tsx ===
+
+export default 0;
+
+=== z.d.ts ===
 declare const x: number;
 >x : Symbol(x, Decl(z.d.ts, 0, 13))
 
 export default x;
 >x : Symbol(x, Decl(z.d.ts, 0, 13))
 
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import x from "./x.ts";
 >x : Symbol(x, Decl(user.ts, 0, 6))
 

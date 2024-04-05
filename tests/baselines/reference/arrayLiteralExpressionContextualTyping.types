@@ -1,71 +1,122 @@
-=== tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts] ////
+
+=== arrayLiteralExpressionContextualTyping.ts ===
 // In a contextually typed array literal expression containing no spread elements, an element expression at index N is contextually typed by
 //      the type of the property with the numeric name N in the contextual type, if any, or otherwise
 //      the numeric index type of the contextual type, if any.
 var array = [1, 2, 3];
 >array : number[]
+>      : ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var array1 = [true, 2, 3];  // Contextual type by the numeric index type of the contextual type
 >array1 : (number | boolean)[]
+>       : ^^^^^^^^^^^^^^^^^^^^
 >[true, 2, 3] : (number | boolean)[]
+>             : ^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var tup: [number, number, number] = [1, 2, 3, 4];
 >tup : [number, number, number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4] : [number, number, number, number]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 
 var tup1: [number|string, number|string, number|string] = [1, 2, 3, "string"];
 >tup1 : [string | number, string | number, string | number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, "string"] : [number, number, number, string]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 var tup2: [number, number, number] = [1, 2, 3, "string"];  // Error
 >tup2 : [number, number, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, "string"] : [number, number, number, string]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 // In a contextually typed array literal expression containing one or more spread elements,
 // an element expression at index N is contextually typed by the numeric index type of the contextual type, if any.
 var spr = [1, 2, 3, ...array];
 >spr : number[]
+>    : ^^^^^^^^
 >[1, 2, 3, ...array] : number[]
+>                    : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >...array : number
+>         : ^^^^^^
 >array : number[]
+>      : ^^^^^^^^
 
 var spr1 = [1, 2, 3, ...tup];
 >spr1 : number[]
+>     : ^^^^^^^^
 >[1, 2, 3, ...tup] : number[]
+>                  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >...tup : number
+>       : ^^^^^^
 >tup : [number, number, number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var spr2:[number, number, number] = [1, 2, 3, ...tup];  // Error
 >spr2 : [number, number, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, ...tup] : [number, number, number, number, number, number]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >...tup : number
+>       : ^^^^^^
 >tup : [number, number, number]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -47,11 +47,11 @@ exports.default = 12;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = exports.x = void 0;
+exports.default = foo;
+exports.bar = foo;
 function foo() {
     return foo;
 }
-exports.default = foo;
-exports.bar = foo;
 exports.x = foo;
 //// [index3.js]
 "use strict";
@@ -107,9 +107,9 @@ exports.default = 12;
 //// [index6.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = func;
 // merge type alias and function (OK)
 function func() { }
-exports.default = func;
 ;
 /**
  * @typedef {string | number} default

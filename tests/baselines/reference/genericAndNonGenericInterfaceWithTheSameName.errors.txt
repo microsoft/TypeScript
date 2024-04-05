@@ -1,12 +1,12 @@
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(3,11): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(7,11): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(12,15): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(16,15): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(34,22): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(3,11): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(7,11): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(12,15): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(16,15): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(34,22): error TS2428: All declarations of 'A' must have identical type parameters.
+genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declarations of 'A' must have identical type parameters.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts (6 errors) ====
+==== genericAndNonGenericInterfaceWithTheSameName.ts (6 errors) ====
     // generic and non-generic interfaces with the same name do not merge
     
     interface A {

@@ -1,8 +1,8 @@
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts(3,22): error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts(4,26): error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType3.ts(3,22): error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType3.ts(4,26): error TS2842: 'string' is an unused renaming of '[sym]'. Did you intend to use it as a type annotation?
 
 
-==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts (2 errors) ====
+==== renamingDestructuredPropertyInFunctionType3.ts (2 errors) ====
     const sym = Symbol();
     type O = Record<symbol, unknown>
     type F14 = ({ [sym]: string }: O) => void; // Error

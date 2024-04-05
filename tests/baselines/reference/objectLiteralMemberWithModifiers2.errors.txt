@@ -1,8 +1,8 @@
-tests/cases/compiler/objectLiteralMemberWithModifiers2.ts(1,11): error TS1042: 'public' modifier cannot be used here.
-tests/cases/compiler/objectLiteralMemberWithModifiers2.ts(1,22): error TS2378: A 'get' accessor must return a value.
+objectLiteralMemberWithModifiers2.ts(1,11): error TS1042: 'public' modifier cannot be used here.
+objectLiteralMemberWithModifiers2.ts(1,22): error TS2378: A 'get' accessor must return a value.
 
 
-==== tests/cases/compiler/objectLiteralMemberWithModifiers2.ts (2 errors) ====
+==== objectLiteralMemberWithModifiers2.ts (2 errors) ====
     var v = { public get foo() { } }
               ~~~~~~
 !!! error TS1042: 'public' modifier cannot be used here.

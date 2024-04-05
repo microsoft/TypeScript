@@ -1,16 +1,16 @@
-tests/cases/compiler/paramterDestrcuturingDeclaration.ts(2,10): error TS2842: 'name' is an unused renaming of 'p'. Did you intend to use it as a type annotation?
-tests/cases/compiler/paramterDestrcuturingDeclaration.ts(3,14): error TS2842: 'boolean' is an unused renaming of 'p'. Did you intend to use it as a type annotation?
+paramterDestrcuturingDeclaration.ts(2,10): error TS2842: 'name' is an unused renaming of 'p'. Did you intend to use it as a type annotation?
+paramterDestrcuturingDeclaration.ts(3,14): error TS2842: 'boolean' is an unused renaming of 'p'. Did you intend to use it as a type annotation?
 
 
-==== tests/cases/compiler/paramterDestrcuturingDeclaration.ts (2 errors) ====
+==== paramterDestrcuturingDeclaration.ts (2 errors) ====
     interface C {
         ({p: name}): any;
              ~~~~
 !!! error TS2842: 'name' is an unused renaming of 'p'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/paramterDestrcuturingDeclaration.ts:2:15: We can only write a type for 'p' by adding a type for the entire parameter here.
+!!! related TS2843 paramterDestrcuturingDeclaration.ts:2:15: We can only write a type for 'p' by adding a type for the entire parameter here.
         new ({p: boolean}): any;
                  ~~~~~~~
 !!! error TS2842: 'boolean' is an unused renaming of 'p'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/paramterDestrcuturingDeclaration.ts:3:22: We can only write a type for 'p' by adding a type for the entire parameter here.
+!!! related TS2843 paramterDestrcuturingDeclaration.ts:3:22: We can only write a type for 'p' by adding a type for the entire parameter here.
     }
     

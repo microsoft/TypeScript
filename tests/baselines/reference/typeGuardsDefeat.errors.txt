@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(21,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(21,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+typeGuardsDefeat.ts(21,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+typeGuardsDefeat.ts(21,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+typeGuardsDefeat.ts(32,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+typeGuardsDefeat.ts(32,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts (4 errors) ====
+==== typeGuardsDefeat.ts (4 errors) ====
     // Also note that it is possible to defeat a type guard by calling a function that changes the 
     // type of the guarded variable.
     function foo(x: number | string) {

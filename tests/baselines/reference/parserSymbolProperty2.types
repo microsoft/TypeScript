@@ -1,8 +1,14 @@
-=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty2.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty2.ts] ////
+
+=== parserSymbolProperty2.ts ===
 interface I {
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : () => string
+>                     : ^^^^^^      
 >Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 }

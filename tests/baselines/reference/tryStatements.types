@@ -1,6 +1,9 @@
-=== tests/cases/conformance/statements/tryStatements/tryStatements.ts ===
+//// [tests/cases/conformance/statements/tryStatements/tryStatements.ts] ////
+
+=== tryStatements.ts ===
 function fn() {
 >fn : () => void
+>   : ^^^^^^^^^^
 
     try { } catch { }
 

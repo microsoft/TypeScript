@@ -1,11 +1,12 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 //// [/user/username/projects/myproject/lib1/tools/public.ts]
-export * from "./tools.interface";
+export * from "./toolsinterface";
 
 //// [/user/username/projects/myproject/app.ts]
 import { Data } from "lib2/public";
@@ -39,7 +40,14 @@ export class Data2 {
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["app.ts"],"compilerOptions":{"baseUrl":"."}}
+{
+  "files": [
+    "app.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": "."
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -58,74 +66,13 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --isolatedModules
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data2.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data2.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (used version)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data2.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -147,7 +94,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./tools.interface"), exports);
+__exportStar(require("./toolsinterface"), exports);
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
@@ -235,35 +182,45 @@ exports.App = App;
 
 
 
-Change:: Rename property title to title2 of interface ITest to initialize signatures
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
-Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
-export interface ITest {
-    title2: string;
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/app.ts: *new*
+  {}
+/user/username/projects/myproject/lib1/public.ts: *new*
+  {}
+/user/username/projects/myproject/lib1/tools/public.ts: *new*
+  {}
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
+  {}
+/user/username/projects/myproject/lib2/data.ts: *new*
+  {}
+/user/username/projects/myproject/lib2/data2.ts: *new*
+  {}
+/user/username/projects/myproject/lib2/public.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/app.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject",
+  "watch": true,
+  "isolatedModules": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
-
-
-Output::
->> Screen clear
-[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
-
-[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
-  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
-
-[7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
-
-[[90m12:01:02 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -272,7 +229,8 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -281,7 +239,80 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (used version)
+/user/username/projects/myproject/lib1/public.ts (used version)
+/user/username/projects/myproject/lib2/data2.ts (used version)
+/user/username/projects/myproject/lib2/data.ts (used version)
+/user/username/projects/myproject/lib2/public.ts (used version)
+/user/username/projects/myproject/app.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
+Change:: Rename property title to title2 of interface ITest to initialize signatures
+
+Input::
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
+export interface ITest {
+    title2: string;
+}
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
+
+[7m5[0m             title: "title"
+[7m [0m [91m            ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/app.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject",
+  "watch": true,
+  "isolatedModules": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -289,59 +320,48 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
 
 Change:: Rename property title2 to title of interface ITest to revert back to original text
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title: string;
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:10 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/app.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject",
+  "watch": true,
+  "isolatedModules": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -350,7 +370,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -359,7 +379,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -367,65 +387,53 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
 
 Change:: Rename property title to title2 of interface ITest
 
 Input::
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
     title2: string;
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
-  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
+[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~~~~~~~~~~[0m
+[7m [0m [91m            ~~~~~[0m
 
-[[90m12:01:18 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/app.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject",
+  "watch": true,
+  "isolatedModules": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -434,7 +442,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
 /user/username/projects/myproject/lib2/data2.ts
@@ -443,7 +451,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
 /user/username/projects/myproject/lib2/data.ts (used version)
@@ -451,32 +459,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/app.ts:
-  {}
-/user/username/projects/myproject/lib2/public.ts:
-  {}
-/user/username/projects/myproject/lib2/data.ts:
-  {}
-/user/username/projects/myproject/lib1/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {}
-/user/username/projects/myproject/lib2/data2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents

@@ -1,19 +1,27 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/jsxPropsAsIdentifierNames.tsx] ////
+
+=== index.tsx ===
 declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
         div: {
 >div : { static?: boolean; }
+>    : ^^^^^^^^^^^       ^^^
 
             static?: boolean;
 >static : boolean
+>       : ^^^^^^^
 
         };
     }
 }
 export default <div static={true} />;
 ><div static={true} /> : any
+>                      : ^^^
 >div : any
+>    : ^^^
 >static : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 

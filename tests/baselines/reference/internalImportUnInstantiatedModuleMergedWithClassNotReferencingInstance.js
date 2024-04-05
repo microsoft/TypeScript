@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts] ////
+
 //// [internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts]
 class A {
     aProp: string;

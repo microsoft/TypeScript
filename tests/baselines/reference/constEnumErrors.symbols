@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumErrors.ts ===
+//// [tests/cases/compiler/constEnumErrors.ts] ////
+
+=== constEnumErrors.ts ===
 const enum E {
 >E : Symbol(E, Decl(constEnumErrors.ts, 0, 0))
 

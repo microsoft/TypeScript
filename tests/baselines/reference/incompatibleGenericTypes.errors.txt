@@ -1,8 +1,8 @@
-tests/cases/compiler/incompatibleGenericTypes.ts(9,5): error TS2322: Type 'I1<boolean>' is not assignable to type 'I1<number>'.
+incompatibleGenericTypes.ts(9,5): error TS2322: Type 'I1<boolean>' is not assignable to type 'I1<number>'.
   Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/incompatibleGenericTypes.ts (1 errors) ====
+==== incompatibleGenericTypes.ts (1 errors) ====
     interface I1<T> {
     
       m1<U>(callback: (p: T) => U): I1<U>;

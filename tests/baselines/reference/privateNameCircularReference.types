@@ -1,22 +1,36 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts] ////
+
+=== privateNameCircularReference.ts ===
 class A {
 >A : A
+>  : ^
 
     #foo = this.#bar;
 >#foo : any
+>     : ^^^
 >this.#bar : any
+>          : ^^^
 >this : this
+>     : ^^^^
 
     #bar = this.#foo;
 >#bar : any
+>     : ^^^
 >this.#foo : any
+>          : ^^^
 >this : this
+>     : ^^^^
 
     ["#baz"] = this["#baz"]; // Error (should *not* be private name error)
 >["#baz"] : any
+>         : ^^^
 >"#baz" : "#baz"
+>       : ^^^^^^
 >this["#baz"] : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >"#baz" : "#baz"
+>       : ^^^^^^
 }
 

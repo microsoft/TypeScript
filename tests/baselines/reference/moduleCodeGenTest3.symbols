@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleCodeGenTest3.ts ===
+//// [tests/cases/compiler/moduleCodeGenTest3.ts] ////
+
+=== moduleCodeGenTest3.ts ===
 module Baz { export var x = "hello"; }
 >Baz : Symbol(Baz, Decl(moduleCodeGenTest3.ts, 0, 0))
 >x : Symbol(x, Decl(moduleCodeGenTest3.ts, 0, 23))

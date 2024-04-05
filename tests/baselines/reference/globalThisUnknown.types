@@ -1,39 +1,61 @@
-=== tests/cases/conformance/es2019/globalThisUnknown.ts ===
+//// [tests/cases/conformance/es2019/globalThisUnknown.ts] ////
+
+=== globalThisUnknown.ts ===
 declare let win: Window & typeof globalThis;
 >win : Window & typeof globalThis
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 
 // this access should be an error
 win.hi
 >win.hi : any
+>       : ^^^
 >win : Window & typeof globalThis
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hi : any
+>   : ^^^
 
 // these two should be fine, with type any
 this.hi
 >this.hi : any
+>        : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >hi : any
+>   : ^^^
 
 globalThis.hi
 >globalThis.hi : any
+>              : ^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >hi : any
+>   : ^^^
 
 // element access is always ok without noImplicitAny
 win['hi']
 >win['hi'] : any
+>          : ^^^
 >win : Window & typeof globalThis
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
 this['hi']
 >this['hi'] : any
+>           : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
 globalThis['hi']
 >globalThis['hi'] : any
+>                 : ^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
 

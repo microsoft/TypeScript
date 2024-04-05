@@ -1,8 +1,12 @@
-=== tests/cases/conformance/async/es5/a.ts ===
+//// [tests/cases/conformance/async/es5/asyncMultiFile_es5.ts] ////
+
+=== a.ts ===
 async function f() {}
 >f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/async/es5/b.ts ===
+=== b.ts ===
 function g() { }
 >g : () => void
+>  : ^^^^^^^^^^
 

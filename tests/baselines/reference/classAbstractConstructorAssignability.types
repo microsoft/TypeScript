@@ -1,39 +1,61 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructorAssignability.ts] ////
+
+=== classAbstractConstructorAssignability.ts ===
 class A {}
 >A : A
+>  : ^
 
 abstract class B extends A {}
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 class C extends B {}
 >C : C
+>  : ^
 >B : B
+>  : ^
 
 var AA : typeof A = B;
 >AA : typeof A
+>   : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var BB : typeof B = A;
 >BB : typeof B
+>   : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var CC : typeof C = B;
 >CC : typeof C
+>   : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 new AA;
 >new AA : A
+>       : ^
 >AA : typeof A
+>   : ^^^^^^^^
 
 new BB;
 >new BB : any
+>       : ^^^
 >BB : typeof B
+>   : ^^^^^^^^
 
 new CC;
 >new CC : C
+>       : ^
 >CC : typeof C
+>   : ^^^^^^^^
 

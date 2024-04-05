@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES6.ts] ////
+
 //// [computedPropertyNames48_ES6.ts]
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
 

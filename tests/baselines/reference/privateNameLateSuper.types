@@ -1,10 +1,15 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameLateSuper.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameLateSuper.ts] ////
+
+=== privateNameLateSuper.ts ===
 class B {}
 >B : B
+>  : ^
 
 class A extends B {
 >A : A
+>  : ^
 >B : B
+>  : ^
 
     #x;
 >#x : any
@@ -12,11 +17,15 @@ class A extends B {
     constructor() {
         void 0;
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof B
+>      : ^^^^^^^^
     }
 }
 

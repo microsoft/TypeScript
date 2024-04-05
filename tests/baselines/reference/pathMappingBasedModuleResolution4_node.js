@@ -1,5 +1,7 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution4_node.ts] ////
 
+//// [index.d.ts]
+export var y: number;
 //// [file1.ts]
 import {x} from "folder2/file2"
 declare function use(a: any): void;
@@ -13,8 +15,6 @@ export var x = a + b;
 //// [file3.ts]
 export var x = 1;
 
-//// [index.d.ts]
-export var y: number;
 
 //// [file3.js]
 "use strict";

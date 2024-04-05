@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts] ////
+
+=== implicitAnyDeclareMemberWithoutType.ts ===
 // this should be an error
 interface IFace {
 >IFace : Symbol(IFace, Decl(implicitAnyDeclareMemberWithoutType.ts, 0, 0))

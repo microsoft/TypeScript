@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts] ////
+
+=== templateStringWithEmbeddedInstanceOf.ts ===
 var x = `abc${ "hello" instanceof String }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedInstanceOf.ts, 0, 3))
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

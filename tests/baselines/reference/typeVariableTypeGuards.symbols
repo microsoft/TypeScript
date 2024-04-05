@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeVariableTypeGuards.ts ===
+//// [tests/cases/compiler/typeVariableTypeGuards.ts] ////
+
+=== typeVariableTypeGuards.ts ===
 // Repro from #14091
 
 interface Foo {
@@ -217,5 +219,21 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
 >key : Symbol(key, Decl(typeVariableTypeGuards.ts, 76, 53))
     }
+}
+
+// https://github.com/microsoft/TypeScript/issues/57381
+
+function f6<T extends string | (new () => {})>(a: T) {
+>f6 : Symbol(f6, Decl(typeVariableTypeGuards.ts, 80, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 84, 12))
+>a : Symbol(a, Decl(typeVariableTypeGuards.ts, 84, 47))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 84, 12))
+
+  if (typeof a !== "string") {
+>a : Symbol(a, Decl(typeVariableTypeGuards.ts, 84, 47))
+
+    new a();
+>a : Symbol(a, Decl(typeVariableTypeGuards.ts, 84, 47))
+  }
 }
 

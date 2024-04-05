@@ -1,31 +1,47 @@
-=== tests/cases/compiler/genericTypeWithCallableMembers.ts ===
+//// [tests/cases/compiler/genericTypeWithCallableMembers.ts] ////
+
+=== genericTypeWithCallableMembers.ts ===
 interface Constructable {
     new (): Constructable;
 }
  
 class C<T extends Constructable> {
 >C : C<T>
+>  : ^^^^
 
     constructor(public data: T, public data2: Constructable) { }
 >data : T
+>     : ^
 >data2 : Constructable
+>      : ^^^^^^^^^^^^^
 
     create() {
 >create : () => void
+>       : ^^^^^^^^^^
 
         var x = new this.data(); // no error
 >x : Constructable
+>  : ^^^^^^^^^^^^^
 >new this.data() : Constructable
+>                : ^^^^^^^^^^^^^
 >this.data : T
+>          : ^
 >this : this
+>     : ^^^^
 >data : T
+>     : ^
 
         var x2 = new this.data2(); // was error, shouldn't be
 >x2 : Constructable
+>   : ^^^^^^^^^^^^^
 >new this.data2() : Constructable
+>                 : ^^^^^^^^^^^^^
 >this.data2 : Constructable
+>           : ^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >data2 : Constructable
+>      : ^^^^^^^^^^^^^
     }
 }
 

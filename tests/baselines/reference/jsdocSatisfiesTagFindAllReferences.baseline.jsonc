@@ -1,0 +1,95 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * <|@typedef {Object} [|{| isWriteAccess: true |}T|]
+//  * @property {number} a
+//  |>*/
+// 
+// /** @satisfies {/*FIND ALL REFS*/[|T|]} comment */
+// const foo = { a: 1 };
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * <|@typedef {Object} [|T|]
+  //  * @property {number} a
+  //  |>*/
+  // 
+  // /** @satisfies {/*FIND ALL REFS*/T} comment */
+  // const foo = { a: 1 };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = {\n    a: number;\n}",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

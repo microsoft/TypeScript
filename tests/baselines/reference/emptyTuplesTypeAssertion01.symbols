@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts ===
+//// [tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts] ////
+
+=== emptyTuplesTypeAssertion01.ts ===
 let x = <[]>[];
 >x : Symbol(x, Decl(emptyTuplesTypeAssertion01.ts, 0, 3))
 

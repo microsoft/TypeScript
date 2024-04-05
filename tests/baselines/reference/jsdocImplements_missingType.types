@@ -1,14 +1,23 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_missingType.ts] ////
+
 === /a.js ===
 class A { constructor() { this.x = 0; } }
 >A : A
+>  : ^
 >this.x = 0 : 0
+>           : ^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >0 : 0
+>  : ^
 
 /** @implements */
 class B  {
 >B : B
+>  : ^
 }
 

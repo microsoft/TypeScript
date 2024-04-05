@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationClass.ts] ////
+
 //// [sourceMapValidationClass.ts]
 class Greeter {
     constructor(public greeting: string, ...b: string[]) {

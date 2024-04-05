@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicImportEvaluateSpecifier.ts] ////
+
 //// [dynamicImportEvaluateSpecifier.ts]
 // https://github.com/microsoft/TypeScript/issues/48285
 let i = 0;

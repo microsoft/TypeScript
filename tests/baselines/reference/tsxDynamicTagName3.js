@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxDynamicTagName3.tsx] ////
+
 //// [tsxDynamicTagName3.tsx]
 declare module JSX {
 	interface Element { }

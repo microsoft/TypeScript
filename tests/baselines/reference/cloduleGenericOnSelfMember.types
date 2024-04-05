@@ -1,31 +1,47 @@
-=== tests/cases/compiler/cloduleGenericOnSelfMember.ts ===
+//// [tests/cases/compiler/cloduleGenericOnSelfMember.ts] ////
+
+=== cloduleGenericOnSelfMember.ts ===
 class ServiceBase<T> {
 >ServiceBase : ServiceBase<T>
+>            : ^^^^^^^^^^^^^^
 
     field: T;
 >field : T
+>      : ^
 }
 class Service extends ServiceBase<typeof Service.Base> {
 >Service : Service
+>        : ^^^^^^^
 >ServiceBase : ServiceBase<{ name: string; value: number; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Service.Base : { name: string; value: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Service : typeof Service
+>        : ^^^^^^^^^^^^^^
 >Base : { name: string; value: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 namespace Service {
 >Service : typeof Service
+>        : ^^^^^^^^^^^^^^
 
     export const Base = {
 >Base : { name: string; value: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        name: "1",        value: 5    } : { name: string; value: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         name: "1",
 >name : string
+>     : ^^^^^^
 >"1" : "1"
+>    : ^^^
 
         value: 5
 >value : number
+>      : ^^^^^^
 >5 : 5
+>  : ^
 
     };
 }

@@ -35,14 +35,15 @@ registerCodeFix({
     },
     fixIds: [fixId],
 
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const edits = doChange(diag.file, diag.start, diag.length, diag.code, context);
-        if (edits) {
-            for (const edit of edits) {
-                changes.pushRaw(context.sourceFile, edit);
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const edits = doChange(diag.file, diag.start, diag.length, diag.code, context);
+            if (edits) {
+                for (const edit of edits) {
+                    changes.pushRaw(context.sourceFile, edit);
+                }
             }
-        }
-    }),
+        }),
 });
 
 function doChange(file: SourceFile, start: number, length: number, code: number, context: CodeFixContext | CodeFixAllContext) {

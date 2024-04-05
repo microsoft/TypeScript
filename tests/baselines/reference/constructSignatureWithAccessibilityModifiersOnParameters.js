@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts] ////
+
 //// [constructSignatureWithAccessibilityModifiersOnParameters.ts]
 // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
 

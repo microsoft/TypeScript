@@ -1,0 +1,97 @@
+// === Linked Editing ===
+=== /jsx0.tsx ===
+const jsx = <>
+
+--No linked edits found--
+
+
+=== /jsx1.tsx ===
+const jsx = </>
+
+--No linked edits found--
+
+
+=== /jsx2.tsx ===
+const jsx = <div>
+
+--No linked edits found--
+
+
+=== /jsx3.tsx ===
+const jsx = </div>
+
+--No linked edits found--
+
+
+=== /jsx4.tsx ===
+const jsx = <div> </>;
+
+--No linked edits found--
+
+
+=== /jsx5.tsx ===
+const jsx = <> </div>;
+
+--No linked edits found--
+
+
+=== /jsx6.tsx ===
+const jsx = div> </div>;
+
+--No linked edits found--
+
+
+=== /jsx7.tsx ===
+const jsx = <div> /div>;
+
+--No linked edits found--
+
+
+=== /jsx8.tsx ===
+const jsx = <div </div>;
+
+--No linked edits found--
+
+
+=== /jsx9.tsx ===
+const jsx = <div> </div;
+
+--No linked edits found--
+
+
+=== /jsx10.tsx ===
+const jsx = <> </;
+
+--No linked edits found--
+
+
+=== /jsx11.tsx ===
+const jsx = < </>;
+
+--No linked edits found--
+
+
+=== /jsx12.tsx ===
+const jsx = > </>;
+
+--No linked edits found--
+
+
+=== /jsx13.tsx ===
+const jsx = <> />;
+
+--No linked edits found--
+
+
+=== /jsx14.tsx ===
+const jsx = <> <div> </> </div>;
+
+--No linked edits found--
+
+
+=== /jsx15.tsx ===
+const jsx = <div> <> </div> </>;
+
+--No linked edits found--
+
+

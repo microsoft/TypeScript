@@ -1,8 +1,12 @@
-=== tests/cases/compiler/methodInAmbientClass1.ts ===
+//// [tests/cases/compiler/methodInAmbientClass1.ts] ////
+
+=== methodInAmbientClass1.ts ===
     declare class Foo {
 >Foo : Foo
+>    : ^^^
 
     	fn(): boolean {
 >fn : () => boolean
+>   : ^^^^^^       
     	}
     }

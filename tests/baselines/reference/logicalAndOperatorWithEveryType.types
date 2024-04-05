@@ -1,634 +1,1008 @@
-=== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts] ////
+
+=== logicalAndOperatorWithEveryType.ts ===
 // The && operator permits the operands to be of any type and produces a result of the same
 // type as the second operand.
 
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a1: any;
 >a1 : any
+>   : ^^^
 
 var a2: boolean;
 >a2 : boolean
+>   : ^^^^^^^
 
 var a3: number
 >a3 : number
+>   : ^^^^^^
 
 var a4: string;
 >a4 : string
+>   : ^^^^^^
 
 var a5: void;
 >a5 : void
+>   : ^^^^
 
 var a6: E;
 >a6 : E
+>   : ^
 
 var a7: {};
 >a7 : {}
+>   : ^^
 
 var a8: string[];
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ra1 = a1 && a1;
 >ra1 : any
+>    : ^^^
 >a1 && a1 : any
+>         : ^^^
 >a1 : any
+>   : ^^^
 >a1 : any
+>   : ^^^
 
 var ra2 = a2 && a1;
 >ra2 : any
+>    : ^^^
 >a2 && a1 : any
+>         : ^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra3 = a3 && a1;
 >ra3 : any
+>    : ^^^
 >a3 && a1 : any
+>         : ^^^
 >a3 : number
+>   : ^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra4 = a4 && a1;
 >ra4 : any
+>    : ^^^
 >a4 && a1 : any
+>         : ^^^
 >a4 : string
+>   : ^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra5 = a5 && a1;
 >ra5 : void
+>    : ^^^^
 >a5 && a1 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a1 : any
+>   : ^^^
 
 var ra6 = a6 && a1;
 >ra6 : any
+>    : ^^^
 >a6 && a1 : any
+>         : ^^^
 >a6 : E
+>   : ^
 >a1 : any
+>   : ^^^
 
 var ra7 = a7 && a1;
 >ra7 : any
+>    : ^^^
 >a7 && a1 : any
+>         : ^^^
 >a7 : {}
+>   : ^^
 >a1 : any
+>   : ^^^
 
 var ra8 = a8 && a1;
 >ra8 : any
+>    : ^^^
 >a8 && a1 : any
+>         : ^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a1 : any
+>   : ^^^
 
 var ra9 = null && a1;
 >ra9 : any
+>    : ^^^
 >null && a1 : null
->null : null
+>           : ^^^^
 >a1 : any
+>   : ^^^
 
 var ra10 = undefined && a1;
 >ra10 : any
+>     : ^^^
 >undefined && a1 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a1 : any
+>   : ^^^
 
 var rb1 = a1 && a2;
 >rb1 : boolean
+>    : ^^^^^^^
 >a1 && a2 : boolean
+>         : ^^^^^^^
 >a1 : any
+>   : ^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb2 = a2 && a2;
 >rb2 : boolean
+>    : ^^^^^^^
 >a2 && a2 : boolean
+>         : ^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a2 : true
+>   : ^^^^
 
 var rb3 = a3 && a2;
 >rb3 : boolean
+>    : ^^^^^^^
 >a3 && a2 : boolean
+>         : ^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb4 = a4 && a2;
 >rb4 : boolean
+>    : ^^^^^^^
 >a4 && a2 : boolean
+>         : ^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb5 = a5 && a2;
 >rb5 : void
+>    : ^^^^
 >a5 && a2 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb6 = a6 && a2;
 >rb6 : boolean
+>    : ^^^^^^^
 >a6 && a2 : boolean
+>         : ^^^^^^^
 >a6 : E
+>   : ^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb7 = a7 && a2;
 >rb7 : boolean
+>    : ^^^^^^^
 >a7 && a2 : boolean
+>         : ^^^^^^^
 >a7 : {}
+>   : ^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb8 = a8 && a2;
 >rb8 : boolean
+>    : ^^^^^^^
 >a8 && a2 : boolean
+>         : ^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb9 = null && a2;
 >rb9 : any
+>    : ^^^
 >null && a2 : null
->null : null
+>           : ^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rb10 = undefined && a2;
 >rb10 : any
+>     : ^^^
 >undefined && a2 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 
 var rc1 = a1 && a3;
 >rc1 : number
+>    : ^^^^^^
 >a1 && a3 : number
+>         : ^^^^^^
 >a1 : any
+>   : ^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc2 = a2 && a3;
 >rc2 : number
+>    : ^^^^^^
 >a2 && a3 : number
+>         : ^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc3 = a3 && a3;
 >rc3 : number
+>    : ^^^^^^
 >a3 && a3 : number
+>         : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc4 = a4 && a3;
 >rc4 : number
+>    : ^^^^^^
 >a4 && a3 : number
+>         : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc5 = a5 && a3;
 >rc5 : void
+>    : ^^^^
 >a5 && a3 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc6 = a6 && a3;
 >rc6 : number
+>    : ^^^^^^
 >a6 && a3 : number
+>         : ^^^^^^
 >a6 : E
+>   : ^
 >a3 : number
+>   : ^^^^^^
 
 var rc7 = a7 && a3;
 >rc7 : number
+>    : ^^^^^^
 >a7 && a3 : number
+>         : ^^^^^^
 >a7 : {}
+>   : ^^
 >a3 : number
+>   : ^^^^^^
 
 var rc8 = a8 && a3;
 >rc8 : number
+>    : ^^^^^^
 >a8 && a3 : number
+>         : ^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc9 = null && a3;
 >rc9 : any
+>    : ^^^
 >null && a3 : null
->null : null
+>           : ^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rc10 = undefined && a3;
 >rc10 : any
+>     : ^^^
 >undefined && a3 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 
 var rd1 = a1 && a4;
 >rd1 : string
+>    : ^^^^^^
 >a1 && a4 : string
+>         : ^^^^^^
 >a1 : any
+>   : ^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd2 = a2 && a4;
 >rd2 : string
+>    : ^^^^^^
 >a2 && a4 : string
+>         : ^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd3 = a3 && a4;
 >rd3 : string
+>    : ^^^^^^
 >a3 && a4 : string
+>         : ^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd4 = a4 && a4;
 >rd4 : string
+>    : ^^^^^^
 >a4 && a4 : string
+>         : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd5 = a5 && a4;
 >rd5 : void
+>    : ^^^^
 >a5 && a4 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd6 = a6 && a4;
 >rd6 : string
+>    : ^^^^^^
 >a6 && a4 : string
+>         : ^^^^^^
 >a6 : E
+>   : ^
 >a4 : string
+>   : ^^^^^^
 
 var rd7 = a7 && a4;
 >rd7 : string
+>    : ^^^^^^
 >a7 && a4 : string
+>         : ^^^^^^
 >a7 : {}
+>   : ^^
 >a4 : string
+>   : ^^^^^^
 
 var rd8 = a8 && a4;
 >rd8 : string
+>    : ^^^^^^
 >a8 && a4 : string
+>         : ^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd9 = null && a4;
 >rd9 : any
+>    : ^^^
 >null && a4 : null
->null : null
+>           : ^^^^
 >a4 : string
+>   : ^^^^^^
 
 var rd10 = undefined && a4;
 >rd10 : any
+>     : ^^^
 >undefined && a4 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 
 var re1 = a1 && a5;
 >re1 : void
+>    : ^^^^
 >a1 && a5 : void
+>         : ^^^^
 >a1 : any
+>   : ^^^
 >a5 : void
+>   : ^^^^
 
 var re2 = a2 && a5;
 >re2 : void
+>    : ^^^^
 >a2 && a5 : void
+>         : ^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re3 = a3 && a5;
 >re3 : void
+>    : ^^^^
 >a3 && a5 : void
+>         : ^^^^
 >a3 : number
+>   : ^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re4 = a4 && a5;
 >re4 : void
+>    : ^^^^
 >a4 && a5 : void
+>         : ^^^^
 >a4 : string
+>   : ^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re5 = a5 && a5;
 >re5 : void
+>    : ^^^^
 >a5 && a5 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a5 : never
+>   : ^^^^^
 
 var re6 = a6 && a5;
 >re6 : void
+>    : ^^^^
 >a6 && a5 : void
+>         : ^^^^
 >a6 : E
+>   : ^
 >a5 : void
+>   : ^^^^
 
 var re7 = a7 && a5;
 >re7 : void
+>    : ^^^^
 >a7 && a5 : void
+>         : ^^^^
 >a7 : {}
+>   : ^^
 >a5 : void
+>   : ^^^^
 
 var re8 = a8 && a5;
 >re8 : void
+>    : ^^^^
 >a8 && a5 : void
+>         : ^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a5 : void
+>   : ^^^^
 
 var re9 = null && a5;
 >re9 : any
+>    : ^^^
 >null && a5 : null
->null : null
+>           : ^^^^
 >a5 : void
+>   : ^^^^
 
 var re10 = undefined && a5;
 >re10 : any
+>     : ^^^
 >undefined && a5 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a5 : void
+>   : ^^^^
 
 var rf1 = a1 && a6;
 >rf1 : E
+>    : ^
 >a1 && a6 : E
+>         : ^
 >a1 : any
+>   : ^^^
 >a6 : E
+>   : ^
 
 var rf2 = a2 && a6;
 >rf2 : E
+>    : ^
 >a2 && a6 : E
+>         : ^
 >a2 : boolean
+>   : ^^^^^^^
 >a6 : E
+>   : ^
 
 var rf3 = a3 && a6;
 >rf3 : E
+>    : ^
 >a3 && a6 : E
+>         : ^
 >a3 : number
+>   : ^^^^^^
 >a6 : E
+>   : ^
 
 var rf4 = a4 && a6;
 >rf4 : E
+>    : ^
 >a4 && a6 : E
+>         : ^
 >a4 : string
+>   : ^^^^^^
 >a6 : E
+>   : ^
 
 var rf5 = a5 && a6;
 >rf5 : void
+>    : ^^^^
 >a5 && a6 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a6 : E
+>   : ^
 
 var rf6 = a6 && a6;
 >rf6 : E
+>    : ^
 >a6 && a6 : E
+>         : ^
 >a6 : E
+>   : ^
 >a6 : E.b | E.c
+>   : ^^^^^^^^^
 
 var rf7 = a7 && a6;
 >rf7 : E
+>    : ^
 >a7 && a6 : E
+>         : ^
 >a7 : {}
+>   : ^^
 >a6 : E
+>   : ^
 
 var rf8 = a8 && a6;
 >rf8 : E
+>    : ^
 >a8 && a6 : E
+>         : ^
 >a8 : string[]
+>   : ^^^^^^^^
 >a6 : E
+>   : ^
 
 var rf9 = null && a6;
 >rf9 : any
+>    : ^^^
 >null && a6 : null
->null : null
+>           : ^^^^
 >a6 : E
+>   : ^
 
 var rf10 = undefined && a6;
 >rf10 : any
+>     : ^^^
 >undefined && a6 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a6 : E
+>   : ^
 
 var rg1 = a1 && a7;
 >rg1 : {}
+>    : ^^
 >a1 && a7 : {}
+>         : ^^
 >a1 : any
+>   : ^^^
 >a7 : {}
+>   : ^^
 
 var rg2 = a2 && a7;
 >rg2 : {}
+>    : ^^
 >a2 && a7 : {}
+>         : ^^
 >a2 : boolean
+>   : ^^^^^^^
 >a7 : {}
+>   : ^^
 
 var rg3 = a3 && a7;
 >rg3 : {}
+>    : ^^
 >a3 && a7 : {}
+>         : ^^
 >a3 : number
+>   : ^^^^^^
 >a7 : {}
+>   : ^^
 
 var rg4 = a4 && a7;
 >rg4 : {}
+>    : ^^
 >a4 && a7 : {}
+>         : ^^
 >a4 : string
+>   : ^^^^^^
 >a7 : {}
+>   : ^^
 
 var rg5 = a5 && a7;
 >rg5 : void
+>    : ^^^^
 >a5 && a7 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a7 : {}
+>   : ^^
 
 var rg6 = a6 && a7;
 >rg6 : {}
+>    : ^^
 >a6 && a7 : {}
+>         : ^^
 >a6 : E
+>   : ^
 >a7 : {}
+>   : ^^
 
 var rg7 = a7 && a7;
 >rg7 : {}
+>    : ^^
 >a7 && a7 : {}
+>         : ^^
 >a7 : {}
+>   : ^^
 >a7 : {}
+>   : ^^
 
 var rg8 = a8 && a7;
 >rg8 : {}
+>    : ^^
 >a8 && a7 : {}
+>         : ^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a7 : {}
+>   : ^^
 
 var rg9 = null && a7;
 >rg9 : any
+>    : ^^^
 >null && a7 : null
->null : null
+>           : ^^^^
 >a7 : {}
+>   : ^^
 
 var rg10 = undefined && a7;
 >rg10 : any
+>     : ^^^
 >undefined && a7 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a7 : {}
+>   : ^^
 
 var rh1 = a1 && a8;
 >rh1 : string[]
+>    : ^^^^^^^^
 >a1 && a8 : string[]
+>         : ^^^^^^^^
 >a1 : any
+>   : ^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh2 = a2 && a8;
 >rh2 : string[]
+>    : ^^^^^^^^
 >a2 && a8 : string[]
+>         : ^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh3 = a3 && a8;
 >rh3 : string[]
+>    : ^^^^^^^^
 >a3 && a8 : string[]
+>         : ^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh4 = a4 && a8;
 >rh4 : string[]
+>    : ^^^^^^^^
 >a4 && a8 : string[]
+>         : ^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh5 = a5 && a8;
 >rh5 : void
+>    : ^^^^
 >a5 && a8 : void
+>         : ^^^^
 >a5 : void
+>   : ^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh6 = a6 && a8;
 >rh6 : string[]
+>    : ^^^^^^^^
 >a6 && a8 : string[]
+>         : ^^^^^^^^
 >a6 : E
+>   : ^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh7 = a7 && a8;
 >rh7 : string[]
+>    : ^^^^^^^^
 >a7 && a8 : string[]
+>         : ^^^^^^^^
 >a7 : {}
+>   : ^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh8 = a8 && a8;
 >rh8 : string[]
+>    : ^^^^^^^^
 >a8 && a8 : string[]
+>         : ^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh9 = null && a8;
 >rh9 : any
+>    : ^^^
 >null && a8 : null
->null : null
+>           : ^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var rh10 = undefined && a8;
 >rh10 : any
+>     : ^^^
 >undefined && a8 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 
 var ri1 = a1 && null;
 >ri1 : any
+>    : ^^^
 >a1 && null : null
+>           : ^^^^
 >a1 : any
->null : null
+>   : ^^^
 
 var ri2 = a2 && null;
 >ri2 : any
+>    : ^^^
 >a2 && null : null
+>           : ^^^^
 >a2 : boolean
->null : null
+>   : ^^^^^^^
 
 var ri3 = a3 && null;
 >ri3 : any
+>    : ^^^
 >a3 && null : null
+>           : ^^^^
 >a3 : number
->null : null
+>   : ^^^^^^
 
 var ri4 = a4 && null;
 >ri4 : any
+>    : ^^^
 >a4 && null : null
+>           : ^^^^
 >a4 : string
->null : null
+>   : ^^^^^^
 
 var ri5 = a5 && null;
 >ri5 : void
+>    : ^^^^
 >a5 && null : void
+>           : ^^^^
 >a5 : void
->null : null
+>   : ^^^^
 
 var ri6 = a6 && null;
 >ri6 : any
+>    : ^^^
 >a6 && null : null
+>           : ^^^^
 >a6 : E
->null : null
+>   : ^
 
 var ri7 = a7 && null;
 >ri7 : any
+>    : ^^^
 >a7 && null : null
+>           : ^^^^
 >a7 : {}
->null : null
+>   : ^^
 
 var ri8 = a8 && null;
 >ri8 : any
+>    : ^^^
 >a8 && null : null
+>           : ^^^^
 >a8 : string[]
->null : null
+>   : ^^^^^^^^
 
 var ri9 = null && null;
 >ri9 : any
+>    : ^^^
 >null && null : null
->null : null
->null : null
+>             : ^^^^
 
 var ri10 = undefined && null;
 >ri10 : any
+>     : ^^^
 >undefined && null : undefined
+>                  : ^^^^^^^^^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 
 var rj1 = a1 && undefined;
 >rj1 : any
+>    : ^^^
 >a1 && undefined : undefined
+>                : ^^^^^^^^^
 >a1 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj2 = a2 && undefined;
 >rj2 : any
+>    : ^^^
 >a2 && undefined : undefined
+>                : ^^^^^^^^^
 >a2 : boolean
+>   : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj3 = a3 && undefined;
 >rj3 : any
+>    : ^^^
 >a3 && undefined : undefined
+>                : ^^^^^^^^^
 >a3 : number
+>   : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj4 = a4 && undefined;
 >rj4 : any
+>    : ^^^
 >a4 && undefined : undefined
+>                : ^^^^^^^^^
 >a4 : string
+>   : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj5 = a5 && undefined;
 >rj5 : void
+>    : ^^^^
 >a5 && undefined : void
+>                : ^^^^
 >a5 : void
+>   : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj6 = a6 && undefined;
 >rj6 : any
+>    : ^^^
 >a6 && undefined : undefined
+>                : ^^^^^^^^^
 >a6 : E
+>   : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj7 = a7 && undefined;
 >rj7 : any
+>    : ^^^
 >a7 && undefined : undefined
+>                : ^^^^^^^^^
 >a7 : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj8 = a8 && undefined;
 >rj8 : any
+>    : ^^^
 >a8 && undefined : undefined
+>                : ^^^^^^^^^
 >a8 : string[]
+>   : ^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj9 = null && undefined;
 >rj9 : any
+>    : ^^^
 >null && undefined : null
->null : null
+>                  : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var rj10 = undefined && undefined;
 >rj10 : any
+>     : ^^^
 >undefined && undefined : undefined
+>                       : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

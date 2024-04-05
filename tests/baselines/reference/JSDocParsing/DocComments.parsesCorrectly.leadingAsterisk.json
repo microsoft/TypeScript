@@ -17,7 +17,6 @@
                 "pos": 9,
                 "end": 13,
                 "transformFlags": 0,
-                "originalKeywordKind": "TypeKeyword",
                 "escapedText": "type"
             },
             "typeExpression": {

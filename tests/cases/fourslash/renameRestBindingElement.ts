@@ -10,4 +10,4 @@
 ////}
 
 const [r0Def, r0, r1] = test.ranges();
-verify.renameLocations(r0, { ranges: [r0, r1], providePrefixAndSuffixTextForRename: true });
+verify.baselineRename(r0, { providePrefixAndSuffixTextForRename: true });

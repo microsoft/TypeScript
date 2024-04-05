@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts] ////
+
 //// [classAbstractSingleLineDecl.ts]
 abstract class A {}
 

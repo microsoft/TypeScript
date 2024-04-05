@@ -1,13 +1,20 @@
-=== tests/cases/compiler/extendsClauseAlreadySeen.ts ===
+//// [tests/cases/compiler/extendsClauseAlreadySeen.ts] ////
+
+=== extendsClauseAlreadySeen.ts ===
 class C {
 >C : C
+>  : ^
 
 }
 class D extends C extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 >C : C
+>  : ^
 
     baz() { }
 >baz : () => void
+>    : ^^^^^^^^^^
 }

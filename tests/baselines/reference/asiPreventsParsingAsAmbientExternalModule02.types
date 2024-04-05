@@ -1,21 +1,29 @@
-=== tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule02.ts ===
+//// [tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule02.ts] ////
+
+=== asiPreventsParsingAsAmbientExternalModule02.ts ===
 var declare: number;
 >declare : number
+>        : ^^^^^^
 
 var module: string;
 >module : string
+>       : ^^^^^^
 
 module container {
 >container : typeof container
+>          : ^^^^^^^^^^^^^^^^
 
     declare                // this is the identifier 'declare'
 >declare : number
+>        : ^^^^^^
 
     module                 // this is the identifier 'module'
 >module : string
+>       : ^^^^^^
 
     "my external module"   // this is just a string
 >"my external module" : "my external module"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     { }                    // this is a block body
 }

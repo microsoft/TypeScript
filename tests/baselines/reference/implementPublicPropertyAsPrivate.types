@@ -1,12 +1,18 @@
-=== tests/cases/compiler/implementPublicPropertyAsPrivate.ts ===
+//// [tests/cases/compiler/implementPublicPropertyAsPrivate.ts] ////
+
+=== implementPublicPropertyAsPrivate.ts ===
 interface I {
     x: number;
 >x : number
+>  : ^^^^^^
 }
 class C implements I {
 >C : C
+>  : ^
 
     private x = 0; // should raise error at class decl
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }

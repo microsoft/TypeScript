@@ -25,8 +25,9 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "protected foo: string;",
+            filterText: "foo"
         }
     ],
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts] ////
+
 //// [parserSkippedTokens18.ts]
 foo(a \
 

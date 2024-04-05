@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyAndUnknownHaveFalsyComponents.ts] ////
+
 //// [anyAndUnknownHaveFalsyComponents.ts]
 declare let x1: any;
 const y1 = x1 && 3;

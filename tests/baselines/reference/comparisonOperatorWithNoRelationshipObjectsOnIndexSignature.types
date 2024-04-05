@@ -1,447 +1,728 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts] ////
+
+=== comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     public a: string;
 >a : string
+>  : ^^^^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     public b: string;
 >b : string
+>  : ^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     public c: string;
 >c : string
+>  : ^^^^^^
 }
 
 var a1: { [a: string]: string };
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 var b1: { [b: string]: number };
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var a2: { [index: string]: Base };
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : string
+>      : ^^^^^^
 
 var b2: { [index: string]: C };
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >index : string
+>      : ^^^^^^
 
 var a3: { [index: number]: Base };
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : number
+>      : ^^^^^^
 
 var b3: { [index: number]: C };
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >index : number
+>      : ^^^^^^
 
 var a4: { [index: number]: Derived };
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : number
+>      : ^^^^^^
 
 var b4: { [index: string]: Base };
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : string
+>      : ^^^^^^
 
 // operator <
 var r1a1 = a1 < b1;
 >r1a1 : boolean
+>     : ^^^^^^^
 >a1 < b1 : boolean
+>        : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1a2 = a2 < b2;
 >r1a2 : boolean
+>     : ^^^^^^^
 >a2 < b2 : boolean
+>        : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1a3 = a3 < b3;
 >r1a3 : boolean
+>     : ^^^^^^^
 >a3 < b3 : boolean
+>        : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1a4 = a4 < b4;
 >r1a4 : boolean
+>     : ^^^^^^^
 >a4 < b4 : boolean
+>        : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1b1 = b1 < a1;
 >r1b1 : boolean
+>     : ^^^^^^^
 >b1 < a1 : boolean
+>        : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1b2 = b2 < a2;
 >r1b2 : boolean
+>     : ^^^^^^^
 >b2 < a2 : boolean
+>        : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1b3 = b3 < a3;
 >r1b3 : boolean
+>     : ^^^^^^^
 >b3 < a3 : boolean
+>        : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r1b4 = b4 < a4;
 >r1b4 : boolean
+>     : ^^^^^^^
 >b4 < a4 : boolean
+>        : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator >
 var r2a1 = a1 > b1;
 >r2a1 : boolean
+>     : ^^^^^^^
 >a1 > b1 : boolean
+>        : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2a2 = a2 > b2;
 >r2a2 : boolean
+>     : ^^^^^^^
 >a2 > b2 : boolean
+>        : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2a3 = a3 > b3;
 >r2a3 : boolean
+>     : ^^^^^^^
 >a3 > b3 : boolean
+>        : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2a4 = a4 > b4;
 >r2a4 : boolean
+>     : ^^^^^^^
 >a4 > b4 : boolean
+>        : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b1 = b1 > a1;
 >r2b1 : boolean
+>     : ^^^^^^^
 >b1 > a1 : boolean
+>        : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b2 = b2 > a2;
 >r2b2 : boolean
+>     : ^^^^^^^
 >b2 > a2 : boolean
+>        : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b3 = b3 > a3;
 >r2b3 : boolean
+>     : ^^^^^^^
 >b3 > a3 : boolean
+>        : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b4 = b4 > a4;
 >r2b4 : boolean
+>     : ^^^^^^^
 >b4 > a4 : boolean
+>        : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator <=
 var r3a1 = a1 <= b1;
 >r3a1 : boolean
+>     : ^^^^^^^
 >a1 <= b1 : boolean
+>         : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3a2 = a2 <= b2;
 >r3a2 : boolean
+>     : ^^^^^^^
 >a2 <= b2 : boolean
+>         : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3a3 = a3 <= b3;
 >r3a3 : boolean
+>     : ^^^^^^^
 >a3 <= b3 : boolean
+>         : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3a4 = a4 <= b4;
 >r3a4 : boolean
+>     : ^^^^^^^
 >a4 <= b4 : boolean
+>         : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3b1 = b1 <= a1;
 >r3b1 : boolean
+>     : ^^^^^^^
 >b1 <= a1 : boolean
+>         : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3b2 = b2 <= a2;
 >r3b2 : boolean
+>     : ^^^^^^^
 >b2 <= a2 : boolean
+>         : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3b3 = b3 <= a3;
 >r3b3 : boolean
+>     : ^^^^^^^
 >b3 <= a3 : boolean
+>         : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3b4 = b4 <= a4;
 >r3b4 : boolean
+>     : ^^^^^^^
 >b4 <= a4 : boolean
+>         : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator >=
 var r4a1 = a1 >= b1;
 >r4a1 : boolean
+>     : ^^^^^^^
 >a1 >= b1 : boolean
+>         : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4a2 = a2 >= b2;
 >r4a2 : boolean
+>     : ^^^^^^^
 >a2 >= b2 : boolean
+>         : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4a3 = a3 >= b3;
 >r4a3 : boolean
+>     : ^^^^^^^
 >a3 >= b3 : boolean
+>         : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4a4 = a4 >= b4;
 >r4a4 : boolean
+>     : ^^^^^^^
 >a4 >= b4 : boolean
+>         : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4b1 = b1 >= a1;
 >r4b1 : boolean
+>     : ^^^^^^^
 >b1 >= a1 : boolean
+>         : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4b2 = b2 >= a2;
 >r4b2 : boolean
+>     : ^^^^^^^
 >b2 >= a2 : boolean
+>         : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4b3 = b3 >= a3;
 >r4b3 : boolean
+>     : ^^^^^^^
 >b3 >= a3 : boolean
+>         : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4b4 = b4 >= a4;
 >r4b4 : boolean
+>     : ^^^^^^^
 >b4 >= a4 : boolean
+>         : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator ==
 var r5a1 = a1 == b1;
 >r5a1 : boolean
+>     : ^^^^^^^
 >a1 == b1 : boolean
+>         : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5a2 = a2 == b2;
 >r5a2 : boolean
+>     : ^^^^^^^
 >a2 == b2 : boolean
+>         : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5a3 = a3 == b3;
 >r5a3 : boolean
+>     : ^^^^^^^
 >a3 == b3 : boolean
+>         : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5a4 = a4 == b4;
 >r5a4 : boolean
+>     : ^^^^^^^
 >a4 == b4 : boolean
+>         : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5b1 = b1 == a1;
 >r5b1 : boolean
+>     : ^^^^^^^
 >b1 == a1 : boolean
+>         : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5b2 = b2 == a2;
 >r5b2 : boolean
+>     : ^^^^^^^
 >b2 == a2 : boolean
+>         : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5b3 = b3 == a3;
 >r5b3 : boolean
+>     : ^^^^^^^
 >b3 == a3 : boolean
+>         : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r5b4 = b4 == a4;
 >r5b4 : boolean
+>     : ^^^^^^^
 >b4 == a4 : boolean
+>         : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator !=
 var r6a1 = a1 != b1;
 >r6a1 : boolean
+>     : ^^^^^^^
 >a1 != b1 : boolean
+>         : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6a2 = a2 != b2;
 >r6a2 : boolean
+>     : ^^^^^^^
 >a2 != b2 : boolean
+>         : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6a3 = a3 != b3;
 >r6a3 : boolean
+>     : ^^^^^^^
 >a3 != b3 : boolean
+>         : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6a4 = a4 != b4;
 >r6a4 : boolean
+>     : ^^^^^^^
 >a4 != b4 : boolean
+>         : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6b1 = b1 != a1;
 >r6b1 : boolean
+>     : ^^^^^^^
 >b1 != a1 : boolean
+>         : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6b2 = b2 != a2;
 >r6b2 : boolean
+>     : ^^^^^^^
 >b2 != a2 : boolean
+>         : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6b3 = b3 != a3;
 >r6b3 : boolean
+>     : ^^^^^^^
 >b3 != a3 : boolean
+>         : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6b4 = b4 != a4;
 >r6b4 : boolean
+>     : ^^^^^^^
 >b4 != a4 : boolean
+>         : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator ===
 var r7a1 = a1 === b1;
 >r7a1 : boolean
+>     : ^^^^^^^
 >a1 === b1 : boolean
+>          : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7a2 = a2 === b2;
 >r7a2 : boolean
+>     : ^^^^^^^
 >a2 === b2 : boolean
+>          : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7a3 = a3 === b3;
 >r7a3 : boolean
+>     : ^^^^^^^
 >a3 === b3 : boolean
+>          : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7a4 = a4 === b4;
 >r7a4 : boolean
+>     : ^^^^^^^
 >a4 === b4 : boolean
+>          : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7b1 = b1 === a1;
 >r7b1 : boolean
+>     : ^^^^^^^
 >b1 === a1 : boolean
+>          : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7b2 = b2 === a2;
 >r7b2 : boolean
+>     : ^^^^^^^
 >b2 === a2 : boolean
+>          : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7b3 = b3 === a3;
 >r7b3 : boolean
+>     : ^^^^^^^
 >b3 === a3 : boolean
+>          : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r7b4 = b4 === a4;
 >r7b4 : boolean
+>     : ^^^^^^^
 >b4 === a4 : boolean
+>          : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // operator !==
 var r8a1 = a1 !== b1;
 >r8a1 : boolean
+>     : ^^^^^^^
 >a1 !== b1 : boolean
+>          : ^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8a2 = a2 !== b2;
 >r8a2 : boolean
+>     : ^^^^^^^
 >a2 !== b2 : boolean
+>          : ^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8a3 = a3 !== b3;
 >r8a3 : boolean
+>     : ^^^^^^^
 >a3 !== b3 : boolean
+>          : ^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8a4 = a4 !== b4;
 >r8a4 : boolean
+>     : ^^^^^^^
 >a4 !== b4 : boolean
+>          : ^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8b1 = b1 !== a1;
 >r8b1 : boolean
+>     : ^^^^^^^
 >b1 !== a1 : boolean
+>          : ^^^^^^^
 >b1 : { [b: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : { [a: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8b2 = b2 !== a2;
 >r8b2 : boolean
+>     : ^^^^^^^
 >b2 !== a2 : boolean
+>          : ^^^^^^^
 >b2 : { [index: string]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a2 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8b3 = b3 !== a3;
 >r8b3 : boolean
+>     : ^^^^^^^
 >b3 !== a3 : boolean
+>          : ^^^^^^^
 >b3 : { [index: number]: C; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a3 : { [index: number]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r8b4 = b4 !== a4;
 >r8b4 : boolean
+>     : ^^^^^^^
 >b4 !== a4 : boolean
+>          : ^^^^^^^
 >b4 : { [index: string]: Base; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a4 : { [index: number]: Derived; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration1.ts] ////
+
+=== parserFunctionDeclaration1.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   declare function F();
 >F : () => any
+>  : ^^^^^^^^^
 }

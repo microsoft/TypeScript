@@ -1,8 +1,14 @@
-error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+objectTypeWithStringNamedNumericProperty.ts(33,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(34,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(64,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(65,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(94,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(95,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+objectTypeWithStringNamedNumericProperty.ts(124,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+objectTypeWithStringNamedNumericProperty.ts(125,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
 
 
-!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
-==== tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts (0 errors) ====
+==== objectTypeWithStringNamedNumericProperty.ts (8 errors) ====
     // string named numeric properties are legal and distinct when indexed by string values
     // indexed numerically the value is converted to a number
     // no errors expected below
@@ -36,7 +42,11 @@ error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5
     var r10 = i[0x1]
     var r11 = i[-0x1]
     var r12 = i[01]
+                ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     var r13 = i[-01]
+                ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
     
     interface I {
         "0.1": void;
@@ -67,7 +77,11 @@ error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5
     var r10 = i[0x1]
     var r11 = i[-0x1]
     var r12 = i[01]
+                ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     var r13 = i[-01]
+                ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
     
     var a: {
         "0.1": void;
@@ -97,7 +111,11 @@ error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5
     var r10 = i[0x1]
     var r11 = i[-0x1]
     var r12 = i[01]
+                ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     var r13 = i[-01]
+                ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
     
     var b = {
         "0.1": <void>null,
@@ -127,5 +145,9 @@ error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5
     var r10 = i[0x1]
     var r11 = i[-0x1]
     var r12 = i[01]
+                ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     var r13 = i[-01]
+                ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
     

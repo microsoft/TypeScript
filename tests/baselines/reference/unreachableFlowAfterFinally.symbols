@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unreachableFlowAfterFinally.ts ===
+//// [tests/cases/compiler/unreachableFlowAfterFinally.ts] ////
+
+=== unreachableFlowAfterFinally.ts ===
 function f() {
 >f : Symbol(f, Decl(unreachableFlowAfterFinally.ts, 0, 0))
 

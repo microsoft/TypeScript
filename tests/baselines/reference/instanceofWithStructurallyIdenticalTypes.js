@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts] ////
+
 //// [instanceofWithStructurallyIdenticalTypes.ts]
 // Repro from #7271
 

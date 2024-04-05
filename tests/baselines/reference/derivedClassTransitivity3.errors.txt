@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts(18,1): error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
+derivedClassTransitivity3.ts(18,1): error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
   Types of property 'foo' are incompatible.
     Type '(x: string, y?: number) => void' is not assignable to type '(x: string, y: string) => void'.
       Types of parameters 'y' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts (1 errors) ====
+==== derivedClassTransitivity3.ts (1 errors) ====
     // subclassing is not transitive when you can remove required parameters and add optional parameters
     
     class C<T> {

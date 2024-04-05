@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/deferredConditionalTypes.ts] ////
+
+=== deferredConditionalTypes.ts ===
+type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
+>A : A<T>
+>  : ^^^^
+>x : T
+>  : ^
+>x : 0
+>  : ^
+
+type T0<T> = A<T> extends 0 ? 1 : 0;  // Deferred
+>T0 : T0<T>
+>   : ^^^^^
+
+type T1<T> = [A<T>] extends [0] ? 1 : 0;  // Deferred
+>T1 : T1<T>
+>   : ^^^^^
+
+type T2<T> = [A<T>, A<T>] extends [0, 0] ? 1 : 0;  // Deferred
+>T2 : T2<T>
+>   : ^^^^^
+
+type T3<T> = [A<T>, A<T>, A<T>] extends [0, 0, 0] ? 1 : 0;  // Deferred
+>T3 : T3<T>
+>   : ^^^^^
+
+type T4<T> = [A<T>] extends [0, 0] ? 1 : 0;  // 0
+>T4 : 0
+>   : ^
+
+type T5<T> = [A<T>, A<T>] extends [0] ? 1 : 0;  // 0
+>T5 : 0
+>   : ^
+
+type T6<T> = { y: A<T> } extends { y: 0 } ? 1 : 0;  // 0, but should be deferred
+>T6 : 0
+>   : ^
+>y : A<T>
+>  : ^^^^
+>y : 0
+>  : ^
+
+// Repro from #52068
+
+type Or<A extends boolean, B extends boolean> = [A, B] extends [false, false] ? false : true;
+>Or : Or<A, B>
+>   : ^^^^^^^^
+>false : false
+>      : ^^^^^
+>false : false
+>      : ^^^^^
+>false : false
+>      : ^^^^^
+>true : true
+>     : ^^^^
+
+type And<A extends boolean, B extends boolean> = [A, B] extends [true, true] ? true : false;
+>And : And<A, B>
+>    : ^^^^^^^^^
+>true : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type Not<T extends boolean> = T extends true ? false : true;
+>Not : Not<T>
+>    : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+>true : true
+>     : ^^^^
+
+type Extends<A, B> = A extends B ? true : false;
+>Extends : Extends<A, B>
+>        : ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
+>IsNumberLiteral : IsNumberLiteral<T>
+>                : ^^^^^^^^^^^^^^^^^^
+
+type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
+>IsLiteral : IsLiteral<T>
+>          : ^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+// Repro from #51145#issuecomment-1276804047
+
+type Values<O extends object> =
+>Values : Values<O>
+>       : ^^^^^^^^^
+
+  O extends any[] 
+    ? O[number]
+    : O[keyof O]
+
+type Equals<A, B> = [A, B] extends [B, A] ? true : false;
+>Equals : Equals<A, B>
+>       : ^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type FilterByStringValue<O extends object> = {
+>FilterByStringValue : FilterByStringValue<O>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
+>true : true
+>     : ^^^^
+}
+
+type FilteredValuesMatchNever<O extends object>
+>FilteredValuesMatchNever : FilteredValuesMatchNever<O>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  = Equals<Values<FilterByStringValue<[O]>>, never>
+
+type FilteredRes1 = FilteredValuesMatchNever<[]>
+>FilteredRes1 : true
+>             : ^^^^
+
+// repro from #46761
+
+type Bit = 0 | 1;
+>Bit : Bit
+>    : ^^^
+
+type AndBit<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
+>AndBit : AndBit<A, B>
+>       : ^^^^^^^^^^^^
+
+type TestBit<A extends Bit, B extends Bit> = AndBit<
+>TestBit : TestBit<A, B>
+>        : ^^^^^^^^^^^^^
+
+  A extends 1 ? 0 : 1,
+  B extends 1 ? 0 : 1
+>;
+
+type TestBitRes = TestBit<1, 1>; 
+>TestBitRes : 0
+>           : ^
+

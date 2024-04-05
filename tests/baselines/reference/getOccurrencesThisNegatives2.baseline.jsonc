@@ -1,0 +1,81 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThisNegatives2.ts ===
+// --- (line: 9) skipped ---
+//             this;
+//         }
+//         else {
+//             this.t/*HIGHLIGHTS*/his;
+//         }
+//     }
+//     function inside() {
+// --- (line: 17) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThisNegatives2.ts ===
+// --- (line: 30) skipped ---
+//                 this;
+//             }
+//             else {
+//                 this./*HIGHLIGHTS*/this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 38) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThisNegatives2.ts ===
+// --- (line: 54) skipped ---
+//                 this;
+//             }
+//             else {
+//                 this.thi/*HIGHLIGHTS*/s;
+//             }
+//         }
+//         function inside() {
+// --- (line: 62) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThisNegatives2.ts ===
+// --- (line: 74) skipped ---
+//                 this;
+//             }
+//             else {
+//                 this.t/*HIGHLIGHTS*/his;
+//             }
+//         }
+//         function inside() {
+// --- (line: 82) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThisNegatives2.ts ===
+// --- (line: 96) skipped ---
+//                 this;
+//             }
+//             else {
+//                 this.th/*HIGHLIGHTS*/is;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThisNegatives2.ts ===
+// --- (line: 116) skipped ---
+//                 this;
+//             }
+//             else {
+//                 this.th/*HIGHLIGHTS*/is;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---

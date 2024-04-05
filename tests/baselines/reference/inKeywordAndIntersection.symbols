@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inKeywordAndIntersection.ts ===
+//// [tests/cases/compiler/inKeywordAndIntersection.ts] ////
+
+=== inKeywordAndIntersection.ts ===
 class A { a = 0 }
 >A : Symbol(A, Decl(inKeywordAndIntersection.ts, 0, 0))
 >a : Symbol(A.a, Decl(inKeywordAndIntersection.ts, 0, 9))

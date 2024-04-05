@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx] ////
+
 //// [tsxSpreadDoesNotReportExcessProps.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

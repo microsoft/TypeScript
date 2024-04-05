@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsDynamicImport.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 export async function main() {
 >main : Symbol(main, Decl(index.js, 0, 0))
@@ -7,7 +9,7 @@ export async function main() {
 >readFile : Symbol(readFile, Decl(index.js, 2, 11))
 >"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 }
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 export async function main() {
 >main : Symbol(main, Decl(index.js, 0, 0))
@@ -16,7 +18,7 @@ export async function main() {
 >readFile : Symbol(readFile, Decl(index.js, 2, 11))
 >"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 }
-=== tests/cases/conformance/node/allowJs/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
 

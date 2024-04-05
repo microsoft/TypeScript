@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithAnyOtherType.ts] ////
+
 //// [deleteOperatorWithAnyOtherType.ts]
 // delete  operator on any type
 

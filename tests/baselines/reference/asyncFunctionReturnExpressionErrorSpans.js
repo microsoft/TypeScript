@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts] ////
+
 //// [asyncFunctionReturnExpressionErrorSpans.ts]
 interface Foo {
     bar: {

@@ -1,12 +1,18 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface01.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface01.ts] ////
+
+=== asiPreventsParsingAsInterface01.ts ===
 var interface: number, I: string;
 >interface : number
+>          : ^^^^^^
 >I : string
+>  : ^^^^^^
 
 interface   // This should be the identifier 'interface'
 >interface : number
+>          : ^^^^^^
 
 I           // This should be the identifier 'I'
 >I : string
+>  : ^^^^^^
 
 {}          // This should be a block body

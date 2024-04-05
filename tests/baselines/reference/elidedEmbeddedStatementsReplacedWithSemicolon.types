@@ -1,50 +1,67 @@
-=== tests/cases/compiler/elidedEmbeddedStatementsReplacedWithSemicolon.ts ===
+//// [tests/cases/compiler/elidedEmbeddedStatementsReplacedWithSemicolon.ts] ////
+
+=== elidedEmbeddedStatementsReplacedWithSemicolon.ts ===
 if (1)
 >1 : 1
+>  : ^
 
     const enum A {}
 >A : A
+>  : ^
 
 else
     const enum B {}
 >B : B
+>  : ^
 
 do
     const enum C {}
 >C : C
+>  : ^
 
 while (0);
 >0 : 0
+>  : ^
 
 while (0)
 >0 : 0
+>  : ^
 
     const enum D {}
 >D : D
+>  : ^
 
 for (;0;)
 >0 : 0
+>  : ^
 
     const enum E {}
 >E : E
+>  : ^
 
 for (let _ in [])
 >_ : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     const enum F {}
 >F : F
+>  : ^
 
 for (let _ of [])
 >_ : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     const enum G {}
 >G : G
+>  : ^
 
 // @ts-ignore suppress `with` statement error
 with (window)
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const enum H {}
 >H : error

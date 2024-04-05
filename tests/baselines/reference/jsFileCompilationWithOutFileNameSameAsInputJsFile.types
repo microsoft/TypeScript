@@ -1,10 +1,14 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationWithOutFileNameSameAsInputJsFile.ts] ////
+
+=== /a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
-=== tests/cases/compiler/b.js ===
+=== /b.js ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 

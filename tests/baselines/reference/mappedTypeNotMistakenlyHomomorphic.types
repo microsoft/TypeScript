@@ -1,27 +1,40 @@
-=== tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts ===
+//// [tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts] ////
+
+=== mappedTypeNotMistakenlyHomomorphic.ts ===
 enum ABC { A, B }
 >ABC : ABC
+>    : ^^^
 >A : ABC.A
+>  : ^^^^^
 >B : ABC.B
+>  : ^^^^^
 
 type Gen<T extends ABC> = { v: T; } & (
 >Gen : Gen<T>
+>    : ^^^^^^
 >v : T
+>  : ^
   {
     v: ABC.A,
 >v : ABC.A
+>  : ^^^^^
 >ABC : any
+>    : ^^^
 
     a: string,
 >a : string
+>  : ^^^^^^
 
   } | {
     v: ABC.B,
 >v : ABC.B
+>  : ^^^^^
 >ABC : any
+>    : ^^^
 
     b: string,
 >b : string
+>  : ^^^^^^
   }
 )
 
@@ -33,6 +46,7 @@ type Gen<T extends ABC> = { v: T; } & (
 //
 type Gen2<T extends ABC> = {
 >Gen2 : Gen2<T>
+>     : ^^^^^^^
 
   [Property in keyof Gen<T>]: string;
 };
@@ -40,43 +54,69 @@ type Gen2<T extends ABC> = {
 // 'a' and 'b' properties required !?!?
 const gen2TypeA: Gen2<ABC.A> = { v:  "I am A", a: "" };
 >gen2TypeA : Gen2<ABC.A>
+>          : ^^^^^^^^^^^
 >ABC : any
+>    : ^^^
 >{ v:  "I am A", a: "" } : { v: string; a: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >"I am A" : "I am A"
+>         : ^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 const gen2TypeB: Gen2<ABC.B> = { v:  "I am B", b: "" };
 >gen2TypeB : Gen2<ABC.B>
+>          : ^^^^^^^^^^^
 >ABC : any
+>    : ^^^
 >{ v:  "I am B", b: "" } : { v: string; b: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >"I am B" : "I am B"
+>         : ^^^^^^^^
 >b : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 // 'v' ???
 type K = keyof Gen2<ABC.A>;
 >K : "v" | "a"
+>  : ^^^^^^^^^
 >ABC : any
+>    : ^^^
 
 // :(
 declare let a: Gen2<ABC.A>;
 >a : Gen2<ABC.A>
+>  : ^^^^^^^^^^^
 >ABC : any
+>    : ^^^
 
 declare let b: Gen2<ABC.B>;
 >b : Gen2<ABC.B>
+>  : ^^^^^^^^^^^
 >ABC : any
+>    : ^^^
 
 a = b;
 >a = b : Gen2<ABC.B>
+>      : ^^^^^^^^^^^
 >a : Gen2<ABC.A>
+>  : ^^^^^^^^^^^
 >b : Gen2<ABC.B>
+>  : ^^^^^^^^^^^
 
 b = a;
 >b = a : Gen2<ABC.A>
+>      : ^^^^^^^^^^^
 >b : Gen2<ABC.B>
+>  : ^^^^^^^^^^^
 >a : Gen2<ABC.A>
+>  : ^^^^^^^^^^^
 

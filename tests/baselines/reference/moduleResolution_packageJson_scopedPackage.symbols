@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolution_packageJson_scopedPackage.ts] ////
+
 === /a.ts ===
 import { x } from "@foo/bar";
 >x : Symbol(x, Decl(a.ts, 0, 8))

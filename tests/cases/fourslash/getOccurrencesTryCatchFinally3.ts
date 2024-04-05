@@ -16,12 +16,4 @@
 ////finally {
 ////}
 
-
-for (var i = 1; i <= test.markers().length; i++) {
-    goTo.marker("" + i);
-    verify.occurrencesAtPositionCount(2);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-}
+verify.baselineDocumentHighlights(test.markers());

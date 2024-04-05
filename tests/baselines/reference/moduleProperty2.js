@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleProperty2.ts] ////
+
 //// [moduleProperty2.ts]
 module M {
     function f() {

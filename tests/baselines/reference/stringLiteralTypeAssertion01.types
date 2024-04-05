@@ -1,94 +1,149 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts] ////
+
+=== stringLiteralTypeAssertion01.ts ===
 type S = "a" | "b";
->S : "a" | "b"
+>S : S
+>  : ^
 
 type T = S[] | S;
->T : S | S[]
+>T : T
+>  : ^
 
 var s: S;
 >s : S
+>  : ^
 
 var t: T;
 >t : T
+>  : ^
 
 var str: string;
 >str : string
+>    : ^^^^^^
 
 ////////////////
 
 s = <S>t;
 >s = <S>t : S
+>         : ^
 >s : S
+>  : ^
 ><S>t : S
+>     : ^
 >t : T
+>  : ^
 
 s = t as S;
 >s = t as S : S
+>           : ^
 >s : S
+>  : ^
 >t as S : S
+>       : ^
 >t : T
+>  : ^
 
 s = <S>str;
 >s = <S>str : S
+>           : ^
 >s : S
+>  : ^
 ><S>str : S
+>       : ^
 >str : string
+>    : ^^^^^^
 
 s = str as S;
 >s = str as S : S
+>             : ^
 >s : S
+>  : ^
 >str as S : S
+>         : ^
 >str : string
+>    : ^^^^^^
 
 ////////////////
 
 t = <T>s;
 >t = <T>s : T
+>         : ^
 >t : T
+>  : ^
 ><T>s : T
+>     : ^
 >s : S
+>  : ^
 
 t = s as T;
 >t = s as T : T
+>           : ^
 >t : T
+>  : ^
 >s as T : T
+>       : ^
 >s : S
+>  : ^
 
 t = <T>str;
 >t = <T>str : T
+>           : ^
 >t : T
+>  : ^
 ><T>str : T
+>       : ^
 >str : string
+>    : ^^^^^^
 
 t = str as T;
 >t = str as T : T
+>             : ^
 >t : T
+>  : ^
 >str as T : T
+>         : ^
 >str : string
+>    : ^^^^^^
 
 ////////////////
 
 str = <string>s;
 >str = <string>s : string
+>                : ^^^^^^
 >str : string
+>    : ^^^^^^
 ><string>s : string
+>          : ^^^^^^
 >s : S
+>  : ^
 
 str = s as string;
 >str = s as string : string
+>                  : ^^^^^^
 >str : string
+>    : ^^^^^^
 >s as string : string
+>            : ^^^^^^
 >s : S
+>  : ^
 
 str = <string>t;
 >str = <string>t : string
+>                : ^^^^^^
 >str : string
+>    : ^^^^^^
 ><string>t : string
+>          : ^^^^^^
 >t : T
+>  : ^
 
 str = t as string;
 >str = t as string : string
+>                  : ^^^^^^
 >str : string
+>    : ^^^^^^
 >t as string : string
+>            : ^^^^^^
 >t : T
+>  : ^
 

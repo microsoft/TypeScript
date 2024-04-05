@@ -1,9 +1,15 @@
-=== tests/cases/compiler/dynamicImportTrailingComma.ts ===
+//// [tests/cases/compiler/dynamicImportTrailingComma.ts] ////
+
+=== dynamicImportTrailingComma.ts ===
 const path = './foo';
 >path : "./foo"
+>     : ^^^^^^^
 >'./foo' : "./foo"
+>        : ^^^^^^^
 
 import(path,);
 >import(path,) : Promise<any>
+>              : ^^^^^^^^^^^^
 >path : "./foo"
+>     : ^^^^^^^
 

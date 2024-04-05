@@ -1,7 +1,7 @@
-tests/cases/compiler/importTypeWithUnparenthesizedGenericFunctionParsed.ts(1,36): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+importTypeWithUnparenthesizedGenericFunctionParsed.ts(1,36): error TS2307: Cannot find module 'module' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/importTypeWithUnparenthesizedGenericFunctionParsed.ts (1 errors) ====
+==== importTypeWithUnparenthesizedGenericFunctionParsed.ts (1 errors) ====
     export declare const fail1: import("module").Modifier<<T>(x: T) => T>; // shouldn't be a parse error
                                        ~~~~~~~~
 !!! error TS2307: Cannot find module 'module' or its corresponding type declarations.

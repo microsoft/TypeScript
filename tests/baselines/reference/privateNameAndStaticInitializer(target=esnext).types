@@ -1,19 +1,29 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameAndStaticInitializer.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndStaticInitializer.ts] ////
+
+=== privateNameAndStaticInitializer.ts ===
 class A {
 >A : A
+>  : ^
 
   #foo = 1;
 >#foo : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
   static inst = new A();
 >inst : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
   #prop = 2;
 >#prop : number
+>      : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 

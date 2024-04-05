@@ -1,0 +1,162 @@
+//// [tests/cases/compiler/destructureCatchClause.ts] ////
+
+=== destructureCatchClause.ts ===
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
+try {} catch ({ x }) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([ x ]) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: { x } }) { x }
+>a : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: [ x ] }) { x }
+>a : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([{ x }]) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([[ x ]]) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: { b: { c: { x }} }}) { x }
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+
+try {} catch ({ x }: any) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([ x ]: any) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: { x } }: any) { x }
+>a : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: [ x ] }: any) { x }
+>a : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([{ x }]: any) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([[ x ]]: any) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: { b: { c: { x }} }}: any) { x }
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+
+try {} catch ({ x }: unknown) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([ x ]: unknown) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: { x } }: unknown) { x }
+>a : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: [ x ] }: unknown) { x }
+>a : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([{ x }]: unknown) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ([[ x ]]: unknown) { x }
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+try {} catch ({ a: { b: { c: { x }} }}: unknown) { x }
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+>c : any
+>  : ^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+

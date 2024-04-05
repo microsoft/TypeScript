@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassNameConflict.ts] ////
+
 //// [privateNameNestedClassNameConflict.ts]
 class A {
     #foo: string;

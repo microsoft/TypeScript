@@ -1,1 +1,0 @@
-import localforage = require("localforage");

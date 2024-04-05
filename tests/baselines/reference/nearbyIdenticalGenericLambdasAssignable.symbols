@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts ===
+//// [tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts] ////
+
+=== nearbyIdenticalGenericLambdasAssignable.ts ===
 declare const fA: <T>() => { v: T };
 >fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
 >T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 19))

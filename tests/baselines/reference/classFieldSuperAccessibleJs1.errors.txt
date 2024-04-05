@@ -1,0 +1,18 @@
+index.js(9,23): error TS2565: Property 'blah2' is used before being assigned.
+
+
+==== index.js (1 errors) ====
+    class C {
+      static blah1 = 123;
+    }
+    C.blah2 = 456;
+    
+    class D extends C {
+      static {
+        console.log(super.blah1);
+        console.log(super.blah2);
+                          ~~~~~
+!!! error TS2565: Property 'blah2' is used before being assigned.
+      }
+    }
+    

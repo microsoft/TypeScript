@@ -1,7 +1,7 @@
-tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts(12,5): error TS2610: 'x' is defined as an accessor in class 'a', but is overridden here in 'b' as an instance property.
+inheritanceMemberPropertyOverridingAccessor.ts(12,5): error TS2610: 'x' is defined as an accessor in class 'a', but is overridden here in 'b' as an instance property.
 
 
-==== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts (1 errors) ====
+==== inheritanceMemberPropertyOverridingAccessor.ts (1 errors) ====
     class a {
         private __x: () => string;
         get x() {

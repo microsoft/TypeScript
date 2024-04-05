@@ -1,7 +1,7 @@
-import * as ts from "./_namespaces/ts";
 import * as documents from "./_namespaces/documents";
-import * as Utils from "./_namespaces/Utils";
 import { Compiler } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
 
 interface SourceMapSpanWithDecodeErrors {
     sourceMapSpan: ts.Mapping;
@@ -149,7 +149,6 @@ namespace SourceMapSpanWriter {
         if (!SourceMapDecoder.hasCompletedDecoding()) {
             sourceMapRecorder.WriteLine("!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded");
             sourceMapRecorder.WriteLine("!!!! **** Remaining decoded string: " + SourceMapDecoder.getRemainingDecodeString());
-
         }
 
         // write remaining js lines

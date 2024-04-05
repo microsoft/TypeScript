@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/exportDefaultNamespace.ts ===
+//// [tests/cases/conformance/declarationEmit/exportDefaultNamespace.ts] ////
+
+=== exportDefaultNamespace.ts ===
 export default function someFunc() {
 >someFunc : Symbol(someFunc, Decl(exportDefaultNamespace.ts, 0, 0), Decl(exportDefaultNamespace.ts, 2, 1))
 

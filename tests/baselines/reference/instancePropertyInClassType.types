@@ -1,139 +1,217 @@
-=== tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts] ////
+
+=== instancePropertyInClassType.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
+>           : ^^^^^^^^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         x: string;
 >x : string
+>  : ^^^^^^
 
         get y() {
 >y : number
+>  : ^^^^^^
 
             return 1;
 >1 : 1
+>  : ^
         }
         set y(v) { }
 >y : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
         fn() { return this; }
 >fn : () => this
+>   : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         constructor(public a: number, private b: number) { }
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
     }
 
     var c = new C(1, 2);
 >c : C
+>  : ^
 >new C(1, 2) : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     var r = c.fn();
 >r : C
+>  : ^
 >c.fn() : C
+>       : ^
 >c.fn : () => C
+>     : ^^^^^^^
 >c : C
+>  : ^
 >fn : () => C
+>   : ^^^^^^^
 
     var r2 = r.x;
 >r2 : string
+>   : ^^^^^^
 >r.x : string
+>    : ^^^^^^
 >r : C
+>  : ^
 >x : string
+>  : ^^^^^^
 
     var r3 = r.y;
 >r3 : number
+>   : ^^^^^^
 >r.y : number
+>    : ^^^^^^
 >r : C
+>  : ^
 >y : number
+>  : ^^^^^^
 
     r.y = 4;
 >r.y = 4 : 4
+>        : ^
 >r.y : number
+>    : ^^^^^^
 >r : C
+>  : ^
 >y : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
     var r6 = c.y(); // error
 >r6 : any
+>   : ^^^
 >c.y() : any
+>      : ^^^
 >c.y : number
+>    : ^^^^^^
 >c : C
+>  : ^
 >y : number
+>  : ^^^^^^
 
 }
 
 module Generic {
 >Generic : typeof Generic
+>        : ^^^^^^^^^^^^^^
 
     class C<T,U> {
 >C : C<T, U>
+>  : ^^^^^^^
 
         x: T;
 >x : T
+>  : ^
 
         get y() {
 >y : U
+>  : ^
 
             return null;
->null : null
         }
         set y(v: U) { }
 >y : U
+>  : ^
 >v : U
+>  : ^
 
         fn() { return this; }
 >fn : () => this
+>   : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         constructor(public a: T, private b: U) { }
 >a : T
+>  : ^
 >b : U
+>  : ^
     }
 
     var c = new C(1, '');
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >new C(1, '') : C<number, string>
+>             : ^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
     var r = c.fn();
 >r : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >c.fn() : C<number, string>
+>       : ^^^^^^^^^^^^^^^^^
 >c.fn : () => C<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >fn : () => C<number, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
     var r2 = r.x;
 >r2 : number
+>   : ^^^^^^
 >r.x : number
+>    : ^^^^^^
 >r : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     var r3 = r.y;
 >r3 : string
+>   : ^^^^^^
 >r.y : string
+>    : ^^^^^^
 >r : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 
     r.y = '';
 >r.y = '' : ""
+>         : ^^
 >r.y : string
+>    : ^^^^^^
 >r : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     var r6 = c.y(); // error
 >r6 : any
+>   : ^^^
 >c.y() : any
+>      : ^^^
 >c.y : string
+>    : ^^^^^^
 >c : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 }

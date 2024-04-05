@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleExportsUnaryExpression.ts] ////
+
 //// [moduleExportsUnaryExpression.ts]
 let x = 1;
 
@@ -20,7 +22,8 @@ export { x };
 "use strict";
 var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = exports.foo = void 0;
+exports.x = void 0;
+exports.foo = foo;
 var x = 1;
 exports.x = x;
 function foo(y) {
@@ -37,4 +40,3 @@ function foo(y) {
     exports.x = ++x;
     exports.x = --x;
 }
-exports.foo = foo;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extension.ts] ////
+
 //// [extension.ts]
 interface I {
     x;

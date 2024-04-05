@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lateBoundMethodNameAssigmentJS.js ===
+//// [tests/cases/compiler/lateBoundMethodNameAssigmentJS.ts] ////
+
+=== lateBoundMethodNameAssigmentJS.js ===
 const _symbol = Symbol("_sym");
 >_symbol : Symbol(_symbol, Decl(lateBoundMethodNameAssigmentJS.js, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

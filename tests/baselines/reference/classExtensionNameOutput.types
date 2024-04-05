@@ -1,20 +1,30 @@
-=== tests/cases/compiler/classExtensionNameOutput.ts ===
+//// [tests/cases/compiler/classExtensionNameOutput.ts] ////
+
+=== classExtensionNameOutput.ts ===
 class A {}
 >A : A
+>  : ^
 
 if (true) {
 >true : true
+>     : ^^^^
 
   class B extends A {}
 >B : B
+>  : ^
 >A : A
+>  : ^
 
   const foo = function () {
 >foo : () => void
+>    : ^^^^^^^^^^
 >function () {    new B();  } : () => void
+>                             : ^^^^^^^^^^
 
     new B();
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
   }
 }

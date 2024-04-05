@@ -1,14 +1,14 @@
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
+mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
   Types have separate declarations of a private property 'w'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2415: Class 'E' incorrectly extends base class 'C2'.
+mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2415: Class 'E' incorrectly extends base class 'C2'.
   Property 'w' is private in type 'C2' but not in type 'E'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2420: Class 'E' incorrectly implements interface 'A'.
+mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2420: Class 'E' incorrectly implements interface 'A'.
   Property 'x' is missing in type 'E' but required in type 'A'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(30,11): error TS2341: Property 'x' is private and only accessible within class 'C'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts(31,12): error TS2341: Property 'w' is private and only accessible within class 'C2'.
+mergedInterfacesWithInheritedPrivates2.ts(30,11): error TS2341: Property 'x' is private and only accessible within class 'C'.
+mergedInterfacesWithInheritedPrivates2.ts(31,12): error TS2341: Property 'w' is private and only accessible within class 'C2'.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts (5 errors) ====
+==== mergedInterfacesWithInheritedPrivates2.ts (5 errors) ====
     class C {
         private x: number;
     }
@@ -41,7 +41,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
           ~
 !!! error TS2420: Class 'E' incorrectly implements interface 'A'.
 !!! error TS2420:   Property 'x' is missing in type 'E' but required in type 'A'.
-!!! related TS2728 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:2:13: 'x' is declared here.
+!!! related TS2728 mergedInterfacesWithInheritedPrivates2.ts:2:13: 'x' is declared here.
         w: number;
         y: string;
         z: string;

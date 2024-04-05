@@ -1,743 +1,988 @@
-=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithNullValueAndInvalidOperands.ts] ////
+
+=== arithmeticOperatorWithNullValueAndInvalidOperands.ts ===
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
 
 var a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
 var b: string;
 >b : string
+>  : ^^^^^^
 
 var c: Object;
 >c : Object
+>  : ^^^^^^
 
 // operator *
 var r1a1 = null * a;
 >r1a1 : number
+>     : ^^^^^^
 >null * a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r1a2 = null * b;
 >r1a2 : number
+>     : ^^^^^^
 >null * b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r1a3 = null * c;
 >r1a3 : number
+>     : ^^^^^^
 >null * c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r1b1 = a * null;
 >r1b1 : number
+>     : ^^^^^^
 >a * null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r1b2 = b * null;
 >r1b2 : number
+>     : ^^^^^^
 >b * null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r1b3 = c * null;
 >r1b3 : number
+>     : ^^^^^^
 >c * null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r1c1 = null * true;
 >r1c1 : number
+>     : ^^^^^^
 >null * true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r1c2 = null * '';
 >r1c2 : number
+>     : ^^^^^^
 >null * '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r1c3 = null * {};
 >r1c3 : number
+>     : ^^^^^^
 >null * {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r1d1 = true * null;
 >r1d1 : number
+>     : ^^^^^^
 >true * null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r1d2 = '' * null;
 >r1d2 : number
+>     : ^^^^^^
 >'' * null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r1d3 = {} * null;
 >r1d3 : number
+>     : ^^^^^^
 >{} * null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator /
 var r2a1 = null / a;
 >r2a1 : number
+>     : ^^^^^^
 >null / a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r2a2 = null / b;
 >r2a2 : number
+>     : ^^^^^^
 >null / b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r2a3 = null / c;
 >r2a3 : number
+>     : ^^^^^^
 >null / c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r2b1 = a / null;
 >r2b1 : number
+>     : ^^^^^^
 >a / null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r2b2 = b / null;
 >r2b2 : number
+>     : ^^^^^^
 >b / null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r2b3 = c / null;
 >r2b3 : number
+>     : ^^^^^^
 >c / null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r2c1 = null / true;
 >r2c1 : number
+>     : ^^^^^^
 >null / true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r2c2 = null / '';
 >r2c2 : number
+>     : ^^^^^^
 >null / '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r2c3 = null / {};
 >r2c3 : number
+>     : ^^^^^^
 >null / {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r2d1 = true / null;
 >r2d1 : number
+>     : ^^^^^^
 >true / null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r2d2 = '' / null;
 >r2d2 : number
+>     : ^^^^^^
 >'' / null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r2d3 = {} / null;
 >r2d3 : number
+>     : ^^^^^^
 >{} / null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator %
 var r3a1 = null % a;
 >r3a1 : number
+>     : ^^^^^^
 >null % a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r3a2 = null % b;
 >r3a2 : number
+>     : ^^^^^^
 >null % b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r3a3 = null % c;
 >r3a3 : number
+>     : ^^^^^^
 >null % c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r3b1 = a % null;
 >r3b1 : number
+>     : ^^^^^^
 >a % null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r3b2 = b % null;
 >r3b2 : number
+>     : ^^^^^^
 >b % null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r3b3 = c % null;
 >r3b3 : number
+>     : ^^^^^^
 >c % null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r3c1 = null % true;
 >r3c1 : number
+>     : ^^^^^^
 >null % true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r3c2 = null % '';
 >r3c2 : number
+>     : ^^^^^^
 >null % '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r3c3 = null % {};
 >r3c3 : number
+>     : ^^^^^^
 >null % {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r3d1 = true % null;
 >r3d1 : number
+>     : ^^^^^^
 >true % null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r3d2 = '' % null;
 >r3d2 : number
+>     : ^^^^^^
 >'' % null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r3d3 = {} % null;
 >r3d3 : number
+>     : ^^^^^^
 >{} % null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator -
 var r4a1 = null - a;
 >r4a1 : number
+>     : ^^^^^^
 >null - a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r4a2 = null - b;
 >r4a2 : number
+>     : ^^^^^^
 >null - b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r4a3 = null - c;
 >r4a3 : number
+>     : ^^^^^^
 >null - c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r4b1 = a - null;
 >r4b1 : number
+>     : ^^^^^^
 >a - null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r4b2 = b - null;
 >r4b2 : number
+>     : ^^^^^^
 >b - null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r4b3 = c - null;
 >r4b3 : number
+>     : ^^^^^^
 >c - null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r4c1 = null - true;
 >r4c1 : number
+>     : ^^^^^^
 >null - true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r4c2 = null - '';
 >r4c2 : number
+>     : ^^^^^^
 >null - '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r4c3 = null - {};
 >r4c3 : number
+>     : ^^^^^^
 >null - {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r4d1 = true - null;
 >r4d1 : number
+>     : ^^^^^^
 >true - null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r4d2 = '' - null;
 >r4d2 : number
+>     : ^^^^^^
 >'' - null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r4d3 = {} - null;
 >r4d3 : number
+>     : ^^^^^^
 >{} - null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator <<
 var r5a1 = null << a;
 >r5a1 : number
+>     : ^^^^^^
 >null << a : number
->null : null
+>          : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r5a2 = null << b;
 >r5a2 : number
+>     : ^^^^^^
 >null << b : number
->null : null
+>          : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r5a3 = null << c;
 >r5a3 : number
+>     : ^^^^^^
 >null << c : number
->null : null
+>          : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r5b1 = a << null;
 >r5b1 : number
+>     : ^^^^^^
 >a << null : number
+>          : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r5b2 = b << null;
 >r5b2 : number
+>     : ^^^^^^
 >b << null : number
+>          : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r5b3 = c << null;
 >r5b3 : number
+>     : ^^^^^^
 >c << null : number
+>          : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r5c1 = null << true;
 >r5c1 : number
+>     : ^^^^^^
 >null << true : number
->null : null
+>             : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r5c2 = null << '';
 >r5c2 : number
+>     : ^^^^^^
 >null << '' : number
->null : null
+>           : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r5c3 = null << {};
 >r5c3 : number
+>     : ^^^^^^
 >null << {} : number
->null : null
+>           : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r5d1 = true << null;
 >r5d1 : number
+>     : ^^^^^^
 >true << null : number
+>             : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r5d2 = '' << null;
 >r5d2 : number
+>     : ^^^^^^
 >'' << null : number
+>           : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r5d3 = {} << null;
 >r5d3 : number
+>     : ^^^^^^
 >{} << null : number
+>           : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator >>
 var r6a1 = null >> a;
 >r6a1 : number
+>     : ^^^^^^
 >null >> a : number
->null : null
+>          : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r6a2 = null >> b;
 >r6a2 : number
+>     : ^^^^^^
 >null >> b : number
->null : null
+>          : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r6a3 = null >> c;
 >r6a3 : number
+>     : ^^^^^^
 >null >> c : number
->null : null
+>          : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r6b1 = a >> null;
 >r6b1 : number
+>     : ^^^^^^
 >a >> null : number
+>          : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r6b2 = b >> null;
 >r6b2 : number
+>     : ^^^^^^
 >b >> null : number
+>          : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r6b3 = c >> null;
 >r6b3 : number
+>     : ^^^^^^
 >c >> null : number
+>          : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r6c1 = null >> true;
 >r6c1 : number
+>     : ^^^^^^
 >null >> true : number
->null : null
+>             : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r6c2 = null >> '';
 >r6c2 : number
+>     : ^^^^^^
 >null >> '' : number
->null : null
+>           : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r6c3 = null >> {};
 >r6c3 : number
+>     : ^^^^^^
 >null >> {} : number
->null : null
+>           : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r6d1 = true >> null;
 >r6d1 : number
+>     : ^^^^^^
 >true >> null : number
+>             : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r6d2 = '' >> null;
 >r6d2 : number
+>     : ^^^^^^
 >'' >> null : number
+>           : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r6d3 = {} >> null;
 >r6d3 : number
+>     : ^^^^^^
 >{} >> null : number
+>           : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator >>>
 var r7a1 = null >>> a;
 >r7a1 : number
+>     : ^^^^^^
 >null >>> a : number
->null : null
+>           : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r7a2 = null >>> b;
 >r7a2 : number
+>     : ^^^^^^
 >null >>> b : number
->null : null
+>           : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r7a3 = null >>> c;
 >r7a3 : number
+>     : ^^^^^^
 >null >>> c : number
->null : null
+>           : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r7b1 = a >>> null;
 >r7b1 : number
+>     : ^^^^^^
 >a >>> null : number
+>           : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r7b2 = b >>> null;
 >r7b2 : number
+>     : ^^^^^^
 >b >>> null : number
+>           : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r7b3 = c >>> null;
 >r7b3 : number
+>     : ^^^^^^
 >c >>> null : number
+>           : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r7c1 = null >>> true;
 >r7c1 : number
+>     : ^^^^^^
 >null >>> true : number
->null : null
+>              : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r7c2 = null >>> '';
 >r7c2 : number
+>     : ^^^^^^
 >null >>> '' : number
->null : null
+>            : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r7c3 = null >>> {};
 >r7c3 : number
+>     : ^^^^^^
 >null >>> {} : number
->null : null
+>            : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r7d1 = true >>> null;
 >r7d1 : number
+>     : ^^^^^^
 >true >>> null : number
+>              : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r7d2 = '' >>> null;
 >r7d2 : number
+>     : ^^^^^^
 >'' >>> null : number
+>            : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r7d3 = {} >>> null;
 >r7d3 : number
+>     : ^^^^^^
 >{} >>> null : number
+>            : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator &
 var r8a1 = null & a;
 >r8a1 : number
+>     : ^^^^^^
 >null & a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r8a2 = null & b;
 >r8a2 : number
+>     : ^^^^^^
 >null & b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r8a3 = null & c;
 >r8a3 : number
+>     : ^^^^^^
 >null & c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r8b1 = a & null;
 >r8b1 : number
+>     : ^^^^^^
 >a & null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r8b2 = b & null;
 >r8b2 : number
+>     : ^^^^^^
 >b & null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r8b3 = c & null;
 >r8b3 : number
+>     : ^^^^^^
 >c & null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r8c1 = null & true;
 >r8c1 : number
+>     : ^^^^^^
 >null & true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r8c2 = null & '';
 >r8c2 : number
+>     : ^^^^^^
 >null & '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r8c3 = null & {};
 >r8c3 : number
+>     : ^^^^^^
 >null & {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r8d1 = true & null;
 >r8d1 : number
+>     : ^^^^^^
 >true & null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r8d2 = '' & null;
 >r8d2 : number
+>     : ^^^^^^
 >'' & null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r8d3 = {} & null;
 >r8d3 : number
+>     : ^^^^^^
 >{} & null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator ^
 var r9a1 = null ^ a;
 >r9a1 : number
+>     : ^^^^^^
 >null ^ a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r9a2 = null ^ b;
 >r9a2 : number
+>     : ^^^^^^
 >null ^ b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r9a3 = null ^ c;
 >r9a3 : number
+>     : ^^^^^^
 >null ^ c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r9b1 = a ^ null;
 >r9b1 : number
+>     : ^^^^^^
 >a ^ null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r9b2 = b ^ null;
 >r9b2 : number
+>     : ^^^^^^
 >b ^ null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r9b3 = c ^ null;
 >r9b3 : number
+>     : ^^^^^^
 >c ^ null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r9c1 = null ^ true;
 >r9c1 : number
+>     : ^^^^^^
 >null ^ true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r9c2 = null ^ '';
 >r9c2 : number
+>     : ^^^^^^
 >null ^ '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r9c3 = null ^ {};
 >r9c3 : number
+>     : ^^^^^^
 >null ^ {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r9d1 = true ^ null;
 >r9d1 : number
+>     : ^^^^^^
 >true ^ null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r9d2 = '' ^ null;
 >r9d2 : number
+>     : ^^^^^^
 >'' ^ null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r9d3 = {} ^ null;
 >r9d3 : number
+>     : ^^^^^^
 >{} ^ null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 
 // operator |
 var r10a1 = null | a;
 >r10a1 : number
+>      : ^^^^^^
 >null | a : number
->null : null
+>         : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r10a2 = null | b;
 >r10a2 : number
+>      : ^^^^^^
 >null | b : number
->null : null
+>         : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r10a3 = null | c;
 >r10a3 : number
+>      : ^^^^^^
 >null | c : number
->null : null
+>         : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r10b1 = a | null;
 >r10b1 : number
+>      : ^^^^^^
 >a | null : number
+>         : ^^^^^^
 >a : boolean
->null : null
+>  : ^^^^^^^
 
 var r10b2 = b | null;
 >r10b2 : number
+>      : ^^^^^^
 >b | null : number
+>         : ^^^^^^
 >b : string
->null : null
+>  : ^^^^^^
 
 var r10b3 = c | null;
 >r10b3 : number
+>      : ^^^^^^
 >c | null : number
+>         : ^^^^^^
 >c : Object
->null : null
+>  : ^^^^^^
 
 var r10c1 = null | true;
 >r10c1 : number
+>      : ^^^^^^
 >null | true : number
->null : null
+>            : ^^^^^^
 >true : true
+>     : ^^^^
 
 var r10c2 = null | '';
 >r10c2 : number
+>      : ^^^^^^
 >null | '' : number
->null : null
+>          : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r10c3 = null | {};
 >r10c3 : number
+>      : ^^^^^^
 >null | {} : number
->null : null
+>          : ^^^^^^
 >{} : {}
+>   : ^^
 
 var r10d1 = true | null;
 >r10d1 : number
+>      : ^^^^^^
 >true | null : number
+>            : ^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 var r10d2 = '' | null;
 >r10d2 : number
+>      : ^^^^^^
 >'' | null : number
+>          : ^^^^^^
 >'' : ""
->null : null
+>   : ^^
 
 var r10d3 = {} | null;
 >r10d3 : number
+>      : ^^^^^^
 >{} | null : number
+>          : ^^^^^^
 >{} : {}
->null : null
+>   : ^^
 

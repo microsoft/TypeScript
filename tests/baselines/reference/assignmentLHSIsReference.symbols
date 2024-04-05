@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts] ////
+
+=== assignmentLHSIsReference.ts ===
 var value: any;
 >value : Symbol(value, Decl(assignmentLHSIsReference.ts, 0, 3))
 

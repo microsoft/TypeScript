@@ -2,19 +2,19 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": [
-            "node", "mocha", "chai"
+            "node",
+            "mocha",
+            "chai"
         ]
     },
     "references": [
         { "path": "../compiler" },
-        { "path": "../executeCommandLine" },
         { "path": "../services" },
         { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
         { "path": "../deprecatedCompat" },
-        { "path": "../harness" },
-        { "path": "../loggedIO" }
+        { "path": "../harness" }
     ],
     "include": ["**/*"]
 }

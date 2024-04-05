@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment7.ts] ////
+
 //// [destructuringObjectBindingPatternAndAssignment7.ts]
 enum K {
     a = "a",

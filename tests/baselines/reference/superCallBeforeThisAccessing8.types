@@ -1,13 +1,18 @@
-=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing8.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing8.ts] ////
+
+=== superCallBeforeThisAccessing8.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(c) { }
 >c : any
 }
 class D extends Base {
 >D : D
+>  : ^
 >Base : Base
+>     : ^^^^
 
     private _t;
 >_t : any
@@ -15,19 +20,27 @@ class D extends Base {
     constructor() {
         let x = {
 >x : { k: void; j: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^
 >{            k: super(undefined),             j: this._t,  // no error        } : { k: void; j: any; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^
 
             k: super(undefined), 
 >k : void
+>  : ^^^^
 >super(undefined) : void
+>                 : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             j: this._t,  // no error
 >j : any
 >this._t : any
 >this : this
+>     : ^^^^
 >_t : any
+>   : ^^^
         }
     }
 }

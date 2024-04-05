@@ -1,59 +1,76 @@
-=== tests/cases/conformance/types/members/duplicateStringIndexers.ts ===
+//// [tests/cases/conformance/types/members/duplicateStringIndexers.ts] ////
+
+=== duplicateStringIndexers.ts ===
 // it is an error to have duplicate index signatures of the same kind in a type
 
 module test {
 >test : typeof test
+>     : ^^^^^^^^^^^
 
     interface Number {
         [x: string]: string;
 >x : string
+>  : ^^^^^^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
     }
 
     interface String {
         [x: string]: string;
 >x : string
+>  : ^^^^^^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
     }
 
     interface Array<T> {
         [x: string]: T;
 >x : string
+>  : ^^^^^^
 
         [x: string]: T;
 >x : string
+>  : ^^^^^^
     }
 
     class C {
 >C : C
+>  : ^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
     }
 
     interface I {
         [x: string]: string;
 >x : string
+>  : ^^^^^^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
     }
 
     var a: {
 >a : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
 
         [x: string]: string;
 >x : string
+>  : ^^^^^^
     }
 }
 

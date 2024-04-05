@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentInferenceOrdering.ts] ////
+
 //// [typeArgumentInferenceOrdering.ts]
 class C {
     y: I;

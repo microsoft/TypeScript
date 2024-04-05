@@ -1,19 +1,27 @@
-=== tests/cases/compiler/exportAlreadySeen.ts ===
+//// [tests/cases/compiler/exportAlreadySeen.ts] ////
+
+=== exportAlreadySeen.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     export export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
     export export module N {
 >N : typeof N
+>  : ^^^^^^^^
 
         export export class C { }
 >C : C
+>  : ^
 
         export export interface I { }
     }  
@@ -21,18 +29,23 @@ module M {
 
 declare module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export export var x;
 >x : any
+>  : ^^^
 
     export export function f()
 >f : () => any
+>  : ^^^^^^^^^
 
     export export module N {
 >N : typeof N
+>  : ^^^^^^^^
 
         export export class C { }
 >C : C
+>  : ^
 
         export export interface I { }
     }

@@ -1,30 +1,50 @@
-=== tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx ===
+//// [tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx] ////
+
+=== Performance Stats ===
+Subtype cache: 100 / 100 (nearest 100)
+Assignability cache: 3,600 / 3,600 (nearest 100)
+Type Count: 7,800 / 7,800 (nearest 100)
+Instantiation count: 75,500 / 75,500 (nearest 500)
+Symbol count: 66,500 / 66,500 (nearest 500)
+
+=== jsxCallElaborationCheckNoCrash1.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 type Tags = "span" | "div";
->Tags : "div" | "span"
+>Tags : Tags
+>     : ^^^^
 
 export const Hoc = <Tag extends Tags>(
 >Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^         
 ><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC
+>                                                                                                                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^         
 
    TagElement: Tag,
 >TagElement : Tag
+>           : ^^^
 
 ): React.SFC => {
 >React : any
+>      : ^^^
 
    const Component = () => <TagElement />;
 >Component : () => JSX.Element
+>          : ^^^^^^^^^^^^^^^^^
 >() => <TagElement /> : () => JSX.Element
+>                     : ^^^^^^^^^^^^^^^^^
 ><TagElement /> : JSX.Element
+>               : ^^^^^^^^^^^
 >TagElement : Tag
+>           : ^^^
 
    return Component;
 >Component : () => JSX.Element
+>          : ^^^^^^^^^^^^^^^^^
 
 };
 

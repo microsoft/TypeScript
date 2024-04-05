@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/widenedTypes.ts] ////
+
 //// [widenedTypes.ts]
 null instanceof (() => { });
 ({}) instanceof null; // Ok because null is a subtype of function

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target3.ts ===
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target3.ts] ////
+
+=== esnextmodulekindWithES5Target3.ts ===
 declare function foo(...args: any[]): any;
 >foo : Symbol(foo, Decl(esnextmodulekindWithES5Target3.ts, 0, 0))
 >args : Symbol(args, Decl(esnextmodulekindWithES5Target3.ts, 0, 21))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts] ////
+
 //// [wrappedAndRecursiveConstraints4.ts]
 class C<T extends { length: number }> {
     constructor(x: T) { }

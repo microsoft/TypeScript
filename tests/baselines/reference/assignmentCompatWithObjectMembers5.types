@@ -1,29 +1,42 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts] ////
+
+=== assignmentCompatWithObjectMembers5.ts ===
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 interface I {
     fooo: string;
 >fooo : string
+>     : ^^^^^^
 }
 
 var i: I;
 >i : I
+>  : ^
 
 c = i; // error
 >c = i : I
+>      : ^
 >c : C
+>  : ^
 >i : I
+>  : ^
 
 i = c; // error
 >i = c : C
+>      : ^
 >i : I
+>  : ^
 >c : C
+>  : ^
 

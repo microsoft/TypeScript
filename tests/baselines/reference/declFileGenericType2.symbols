@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileGenericType2.ts ===
+//// [tests/cases/compiler/declFileGenericType2.ts] ////
+
+=== declFileGenericType2.ts ===
 declare module templa.mvc {
 >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
 >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))

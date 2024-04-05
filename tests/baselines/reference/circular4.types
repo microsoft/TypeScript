@@ -1,26 +1,36 @@
+//// [tests/cases/conformance/externalModules/typeOnly/circular4.ts] ////
+
 === /a.ts ===
 import type { ns2 } from './b';
 >ns2 : any
+>    : ^^^
 
 export namespace ns1 {
   export namespace nested {
     export type T = ns2.nested.T;
 >T : any
+>  : ^^^
 >ns2 : any
+>    : ^^^
 >nested : any
+>       : ^^^
   }
 }
 
 === /b.ts ===
 import type { ns1 } from './a';
 >ns1 : any
+>    : ^^^
 
 export namespace ns2 {
   export namespace nested {
     export type T = ns1.nested.T;
 >T : any
+>  : ^^^
 >ns1 : any
+>    : ^^^
 >nested : any
+>       : ^^^
   }
 }
 

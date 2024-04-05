@@ -1,25 +1,25 @@
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'Object'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(22,10): error TS2365: Operator '+' cannot be applied to types 'number' and 'Object'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(25,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(26,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(27,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(30,11): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(31,11): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(32,11): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(33,11): error TS2365: Operator '+' cannot be applied to types '{}' and '{}'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(34,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'Number'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(35,11): error TS2365: Operator '+' cannot be applied to types 'number' and '() => void'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(36,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(37,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'typeof C'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(38,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'C'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(39,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts(40,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'typeof M'.
+additionOperatorWithInvalidOperands.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+additionOperatorWithInvalidOperands.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
+additionOperatorWithInvalidOperands.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'Object'.
+additionOperatorWithInvalidOperands.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+additionOperatorWithInvalidOperands.ts(22,10): error TS2365: Operator '+' cannot be applied to types 'number' and 'Object'.
+additionOperatorWithInvalidOperands.ts(25,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'boolean'.
+additionOperatorWithInvalidOperands.ts(26,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'number'.
+additionOperatorWithInvalidOperands.ts(27,10): error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
+additionOperatorWithInvalidOperands.ts(30,11): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+additionOperatorWithInvalidOperands.ts(31,11): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+additionOperatorWithInvalidOperands.ts(32,11): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
+additionOperatorWithInvalidOperands.ts(33,11): error TS2365: Operator '+' cannot be applied to types '{}' and '{}'.
+additionOperatorWithInvalidOperands.ts(34,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'Number'.
+additionOperatorWithInvalidOperands.ts(35,11): error TS2365: Operator '+' cannot be applied to types 'number' and '() => void'.
+additionOperatorWithInvalidOperands.ts(36,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'void'.
+additionOperatorWithInvalidOperands.ts(37,11): error TS2365: Operator '+' cannot be applied to types 'number' and 'typeof C'.
+additionOperatorWithInvalidOperands.ts(38,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'C'.
+additionOperatorWithInvalidOperands.ts(39,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'void'.
+additionOperatorWithInvalidOperands.ts(40,11): error TS2365: Operator '+' cannot be applied to types 'E' and 'typeof M'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts (19 errors) ====
+==== additionOperatorWithInvalidOperands.ts (19 errors) ====
     function foo() { }
     class C {
         public a: string;

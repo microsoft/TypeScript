@@ -1,12 +1,21 @@
-=== tests/cases/compiler/shebangError.ts ===
+//// [tests/cases/compiler/shebangError.ts] ////
+
+=== shebangError.ts ===
 var foo = 'Shebang is only allowed on the first line';
 >foo : string
+>    : ^^^^^^
 >'Shebang is only allowed on the first line' : "Shebang is only allowed on the first line"
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 #!/usr/bin/env node
 >!/usr/bin/env : number
+>              : ^^^^^^
 >!/usr/bin : boolean
+>          : ^^^^^^^
 >/usr/bin : RegExp
+>         : ^^^^^^
 >env : any
+>    : ^^^
 >node : any
+>     : ^^^
 

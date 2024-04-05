@@ -1,17 +1,24 @@
-=== tests/cases/compiler/properties.ts ===
+//// [tests/cases/compiler/properties.ts] ////
+
+=== properties.ts ===
 class MyClass
 >MyClass : MyClass
+>        : ^^^^^^^
 {
     public get Count(): number
 >Count : number
+>      : ^^^^^^
     {
         return 42;
 >42 : 42
+>   : ^^
     }
 
     public set Count(value: number)
 >Count : number
+>      : ^^^^^^
 >value : number
+>      : ^^^^^^
     {
         //
     }

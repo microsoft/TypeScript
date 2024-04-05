@@ -1,15 +1,22 @@
-=== tests/cases/compiler/classIndexer5.ts ===
+//// [tests/cases/compiler/classIndexer5.ts] ////
+
+=== classIndexer5.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     [key: string]: number;
 >key : string
+>    : ^^^^^^
 
     #a: boolean;
 >#a : boolean
+>   : ^^^^^^^
 
     #b = false;
 >#b : boolean
+>   : ^^^^^^^
 >false : false
+>      : ^^^^^
 }
 

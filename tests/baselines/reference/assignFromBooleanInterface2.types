@@ -1,52 +1,78 @@
-=== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts ===
+//// [tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts] ////
+
+=== assignFromBooleanInterface2.ts ===
 interface Boolean {
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 }
 
 interface NotBoolean {
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 }
 
 var x = true;
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var a: Boolean;
 >a : Boolean
+>  : ^^^^^^^
 
 var b: NotBoolean;
 >b : NotBoolean
+>  : ^^^^^^^^^^
 
 a = x;
 >a = x : true
+>      : ^^^^
 >a : Boolean
+>  : ^^^^^^^
 >x : true
+>  : ^^^^
 
 a = b;
 >a = b : NotBoolean
+>      : ^^^^^^^^^^
 >a : Boolean
+>  : ^^^^^^^
 >b : NotBoolean
+>  : ^^^^^^^^^^
 
 b = a;
 >b = a : Boolean
+>      : ^^^^^^^
 >b : NotBoolean
+>  : ^^^^^^^^^^
 >a : Boolean
+>  : ^^^^^^^
 
 b = x;
 >b = x : true
+>      : ^^^^
 >b : NotBoolean
+>  : ^^^^^^^^^^
 >x : true
+>  : ^^^^
 
 x = a; // expected error
 >x = a : Boolean
+>      : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >a : Boolean
+>  : ^^^^^^^
 
 x = b; // expected error
 >x = b : NotBoolean
+>      : ^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >b : NotBoolean
+>  : ^^^^^^^^^^
 
 

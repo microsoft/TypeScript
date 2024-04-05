@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithStringEmitDeclaration.ts] ////
+
 //// [enumConstantMemberWithStringEmitDeclaration.ts]
 enum T1 {
     a = "1",

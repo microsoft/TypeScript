@@ -1,13 +1,19 @@
-=== tests/cases/compiler/ambientExternalModuleReopen.ts ===
+//// [tests/cases/compiler/ambientExternalModuleReopen.ts] ////
+
+=== ambientExternalModuleReopen.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     var x: string;
 >x : string
+>  : ^^^^^^
 }
 declare module 'fs' {
 >'fs' : typeof import("fs")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     var y: number;
 >y : number
+>  : ^^^^^^
 }

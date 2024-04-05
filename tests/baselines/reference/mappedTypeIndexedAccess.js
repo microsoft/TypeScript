@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeIndexedAccess.ts] ////
+
 //// [mappedTypeIndexedAccess.ts]
 // Repro from #15756
 

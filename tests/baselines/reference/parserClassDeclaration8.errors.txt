@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration8.ts(2,3): error TS2390: Constructor implementation is missing.
+parserClassDeclaration8.ts(2,3): error TS2390: Constructor implementation is missing.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration8.ts (1 errors) ====
+==== parserClassDeclaration8.ts (1 errors) ====
     class C {
       constructor();
       ~~~~~~~~~~~~~~

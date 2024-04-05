@@ -1,44 +1,64 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/declarationImportTypeAliasInferredAndEmittable.ts] ////
+
+=== foo.ts ===
 class Conn {
 >Conn : Conn
+>     : ^^^^
 
     constructor() { }
     item = 3;
 >item : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
     method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }
 
 export = Conn;
 >Conn : Conn
+>     : ^^^^
 
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 type Conn = import("./foo");
->Conn : import("tests/cases/compiler/foo")
+>Conn : import("foo")
+>     : ^^^^^^^^^^^^^
 
 declare var x: Conn;
->x : import("tests/cases/compiler/foo")
+>x : import("foo")
+>  : ^^^^^^^^^^^^^
 
 export class Wrap {
 >Wrap : Wrap
+>     : ^^^^
 
     connItem: number;
 >connItem : number
+>         : ^^^^^^
 
     constructor(c = x) {
->c : import("tests/cases/compiler/foo")
->x : import("tests/cases/compiler/foo")
+>c : import("foo")
+>  : ^^^^^^^^^^^^^
+>x : import("foo")
+>  : ^^^^^^^^^^^^^
 
         this.connItem = c.item;
 >this.connItem = c.item : number
+>                       : ^^^^^^
 >this.connItem : number
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >connItem : number
+>         : ^^^^^^
 >c.item : number
->c : import("tests/cases/compiler/foo")
+>       : ^^^^^^
+>c : import("foo")
+>  : ^^^^^^^^^^^^^
 >item : number
+>     : ^^^^^^
     }
 }
 

@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace6.ts] ////
+
+=== /a.ts ===
+export class A {}
+>A : A
+>  : ^
+
+export class B {}
+>B : B
+>  : ^
+
+=== /b.ts ===
+
+export type * from "./a";
+
+=== /c.ts ===
+
+export * from "./b";
+
+=== /d.ts ===
+import { A, B } from "./c";
+>A : typeof A
+>  : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+let _: A = new A();  // Error
+>_ : A
+>  : ^
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+
+let __: B = new B(); // Error
+>__ : B
+>   : ^
+>new B() : B
+>        : ^
+>B : typeof B
+>  : ^^^^^^^^
+

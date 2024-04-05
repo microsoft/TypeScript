@@ -1,33 +1,33 @@
-=== tests/cases/conformance/declarationEmit/fakelib.ts ===
-// Test that passing noLib disables <reference lib> resolution.
+//// [tests/cases/conformance/declarationEmit/libReferenceNoLib.ts] ////
 
+=== fakelib.ts ===
 interface Object { }
 >Object : Symbol(Object, Decl(fakelib.ts, 0, 0))
 
 interface Array<T> { }
->Array : Symbol(Array, Decl(fakelib.ts, 2, 20))
->T : Symbol(T, Decl(fakelib.ts, 3, 16))
+>Array : Symbol(Array, Decl(fakelib.ts, 0, 20))
+>T : Symbol(T, Decl(fakelib.ts, 1, 16))
 
 interface String { }
->String : Symbol(String, Decl(fakelib.ts, 3, 22))
+>String : Symbol(String, Decl(fakelib.ts, 1, 22))
 
 interface Boolean { }
->Boolean : Symbol(Boolean, Decl(fakelib.ts, 4, 20))
+>Boolean : Symbol(Boolean, Decl(fakelib.ts, 2, 20))
 
 interface Number { }
->Number : Symbol(Number, Decl(fakelib.ts, 5, 21))
+>Number : Symbol(Number, Decl(fakelib.ts, 3, 21))
 
 interface Function { }
->Function : Symbol(Function, Decl(fakelib.ts, 6, 20))
+>Function : Symbol(Function, Decl(fakelib.ts, 4, 20))
 
 interface RegExp { }
->RegExp : Symbol(RegExp, Decl(fakelib.ts, 7, 22))
+>RegExp : Symbol(RegExp, Decl(fakelib.ts, 5, 22))
 
 interface IArguments { }
->IArguments : Symbol(IArguments, Decl(fakelib.ts, 8, 20))
+>IArguments : Symbol(IArguments, Decl(fakelib.ts, 6, 20))
 
 
-=== tests/cases/conformance/declarationEmit/file1.ts ===
+=== file1.ts ===
 /// <reference lib="dom" />
 export declare interface HTMLElement { field: string; }
 >HTMLElement : Symbol(HTMLElement, Decl(file1.ts, 0, 0))

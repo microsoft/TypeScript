@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts] ////
+
 //// [declarationEmitBindingPatternWithReservedWord.ts]
 type LocaleData = Record<string, never>
 type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<

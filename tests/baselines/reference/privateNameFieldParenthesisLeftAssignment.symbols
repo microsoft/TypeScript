@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldParenthesisLeftAssignment.ts] ////
+
+=== privateNameFieldParenthesisLeftAssignment.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
+
+    #p: number;
+>#p : Symbol(Foo.#p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 11))
+
+    constructor(value: number) {
+>value : Symbol(value, Decl(privateNameFieldParenthesisLeftAssignment.ts, 3, 16))
+
+        this.#p = value;
+>this.#p : Symbol(Foo.#p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
+>value : Symbol(value, Decl(privateNameFieldParenthesisLeftAssignment.ts, 3, 16))
+    }
+
+    t1(p: number) {
+>t1 : Symbol(Foo.t1, Decl(privateNameFieldParenthesisLeftAssignment.ts, 5, 5))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 7, 7))
+
+        (this.#p as number) = p;
+>this.#p : Symbol(Foo.#p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 7, 7))
+    }
+
+    t2(p: number) {
+>t2 : Symbol(Foo.t2, Decl(privateNameFieldParenthesisLeftAssignment.ts, 9, 5))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 11, 7))
+
+        (((this.#p as number))) = p;
+>this.#p : Symbol(Foo.#p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 11, 7))
+    }
+
+    t3(p: number) {
+>t3 : Symbol(Foo.t3, Decl(privateNameFieldParenthesisLeftAssignment.ts, 13, 5))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 15, 7))
+
+        (this.#p) = p;
+>this.#p : Symbol(Foo.#p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 15, 7))
+    }
+
+    t4(p: number) {
+>t4 : Symbol(Foo.t4, Decl(privateNameFieldParenthesisLeftAssignment.ts, 17, 5))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 19, 7))
+
+        (((this.#p))) = p;
+>this.#p : Symbol(Foo.#p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNameFieldParenthesisLeftAssignment.ts, 0, 0))
+>p : Symbol(p, Decl(privateNameFieldParenthesisLeftAssignment.ts, 19, 7))
+    }
+}
+

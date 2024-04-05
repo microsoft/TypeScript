@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts] ////
+
+=== parserStrictMode14.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 with (a) {
 >a : any
+>  : ^^^
 }

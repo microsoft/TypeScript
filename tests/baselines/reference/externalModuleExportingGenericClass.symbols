@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externalModuleExportingGenericClass_file1.ts ===
+//// [tests/cases/compiler/externalModuleExportingGenericClass.ts] ////
+
+=== externalModuleExportingGenericClass_file1.ts ===
 import a = require('./externalModuleExportingGenericClass_file0');
 >a : Symbol(a, Decl(externalModuleExportingGenericClass_file1.ts, 0, 0))
 
@@ -18,7 +20,7 @@ var v3: number = (new a<number>()).foo;
 >a : Symbol(a, Decl(externalModuleExportingGenericClass_file1.ts, 0, 0))
 >foo : Symbol(a.foo, Decl(externalModuleExportingGenericClass_file0.ts, 0, 12))
 
-=== tests/cases/compiler/externalModuleExportingGenericClass_file0.ts ===
+=== externalModuleExportingGenericClass_file0.ts ===
 class C<T> {
 >C : Symbol(C, Decl(externalModuleExportingGenericClass_file0.ts, 0, 0))
 >T : Symbol(T, Decl(externalModuleExportingGenericClass_file0.ts, 0, 8))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts] ////
+
 //// [enumLiteralAssignableToEnumInsideUnion.ts]
 module X {
     export enum Foo {

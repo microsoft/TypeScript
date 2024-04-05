@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionWhileStatements.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionWhileStatements.ts] ////
+
+=== es5-asyncFunctionWhileStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
 >y : any
@@ -9,6 +11,7 @@ declare var x, y, z, a, b, c;
 
 async function whileStatement0() {
 >whileStatement0 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { y; }
 >x : any
@@ -17,6 +20,7 @@ async function whileStatement0() {
 
 async function whileStatement1() {
 >whileStatement1 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (await x) { y; }
 >await x : any
@@ -26,6 +30,7 @@ async function whileStatement1() {
 
 async function whileStatement2() {
 >whileStatement2 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { await y; }
 >x : any
@@ -35,6 +40,7 @@ async function whileStatement2() {
 
 async function whileStatement3() {
 >whileStatement3 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { continue; }
 >x : any
@@ -42,6 +48,7 @@ async function whileStatement3() {
 
 async function whileStatement4() {
 >whileStatement4 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (await x) { continue; }
 >await x : any
@@ -50,6 +57,7 @@ async function whileStatement4() {
 
 async function whileStatement5() {
 >whileStatement5 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { await y; continue; }
 >x : any
@@ -59,58 +67,74 @@ async function whileStatement5() {
 
 async function whileStatement6() {
 >whileStatement6 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { if (1) continue; await y; }
 >x : any
 >1 : 1
+>  : ^
 >await y : any
 >y : any
 }
 
 async function whileStatement7() {
 >whileStatement7 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     A: while (x) { continue A; }
 >A : any
+>  : ^^^
 >x : any
 >A : any
+>  : ^^^
 }
 
 async function whileStatement8() {
 >whileStatement8 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     B: while (await x) { continue B; }
 >B : any
+>  : ^^^
 >await x : any
 >x : any
 >B : any
+>  : ^^^
 }
 
 async function whileStatement9() {
 >whileStatement9 : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
     C: while (x) { await y; continue C; }
 >C : any
+>  : ^^^
 >x : any
 >await y : any
 >y : any
 >C : any
+>  : ^^^
 }
 
 async function whileStatement10() {
 >whileStatement10 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     D: while (x) { if (1) continue D; await y; }
 >D : any
+>  : ^^^
 >x : any
 >1 : 1
+>  : ^
 >D : any
+>  : ^^^
 >await y : any
 >y : any
 }
 
 async function whileStatement11() {
 >whileStatement11 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { break; }
 >x : any
@@ -118,6 +142,7 @@ async function whileStatement11() {
 
 async function whileStatement12() {
 >whileStatement12 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     while (await x) { break; }
 >await x : any
@@ -126,6 +151,7 @@ async function whileStatement12() {
 
 async function whileStatement13() {
 >whileStatement13 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { await y; break; }
 >x : any
@@ -135,52 +161,67 @@ async function whileStatement13() {
 
 async function whileStatement14() {
 >whileStatement14 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     while (x) { if (1) break; await y; }
 >x : any
 >1 : 1
+>  : ^
 >await y : any
 >y : any
 }
 
 async function whileStatement15() {
 >whileStatement15 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     E: while (x) { break E; }
 >E : any
+>  : ^^^
 >x : any
 >E : any
+>  : ^^^
 }
 
 async function whileStatement16() {
 >whileStatement16 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     F: while (await x) { break F; }
 >F : any
+>  : ^^^
 >await x : any
 >x : any
 >F : any
+>  : ^^^
 }
 
 async function whileStatement17() {
 >whileStatement17 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     G: while (x) { await y; break G; }
 >G : any
+>  : ^^^
 >x : any
 >await y : any
 >y : any
 >G : any
+>  : ^^^
 }
 
 async function whileStatement18() {
 >whileStatement18 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     H: while (x) { if (1) break H; await y; }
 >H : any
+>  : ^^^
 >x : any
 >1 : 1
+>  : ^
 >H : any
+>  : ^^^
 >await y : any
 >y : any
 }

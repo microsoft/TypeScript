@@ -1,10 +1,10 @@
-tests/cases/conformance/async/es5/asyncAliasReturnType_es5.ts(3,21): error TS1055: Type 'PromiseAlias' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+asyncAliasReturnType_es5.ts(3,21): error TS1055: Type 'PromiseAlias' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
 
 
-==== tests/cases/conformance/async/es5/asyncAliasReturnType_es5.ts (1 errors) ====
+==== asyncAliasReturnType_es5.ts (1 errors) ====
     type PromiseAlias<T> = Promise<T>;
     
     async function f(): PromiseAlias<void> {
                         ~~~~~~~~~~~~~~~~~~
-!!! error TS1055: Type 'PromiseAlias' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+!!! error TS1055: Type 'PromiseAlias' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
     }

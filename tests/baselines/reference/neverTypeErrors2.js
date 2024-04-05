@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/never/neverTypeErrors2.ts] ////
+
 //// [neverTypeErrors2.ts]
 function f1() {
     let x: never;

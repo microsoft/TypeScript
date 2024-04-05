@@ -1,4 +1,6 @@
-=== tests/cases/compiler/m1.ts ===
+//// [tests/cases/compiler/constEnumMergingWithValues1.ts] ////
+
+=== m1.ts ===
 function foo() {}
 >foo : Symbol(foo, Decl(m1.ts, 0, 0), Decl(m1.ts, 0, 17))
 

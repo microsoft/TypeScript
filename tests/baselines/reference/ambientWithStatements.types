@@ -1,36 +1,47 @@
-=== tests/cases/compiler/ambientWithStatements.ts ===
+//// [tests/cases/compiler/ambientWithStatements.ts] ////
+
+=== ambientWithStatements.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     break;
     continue;
     debugger;
     do { } while (true);
 >true : true
+>     : ^^^^
 
     var x;
 >x : any
+>  : ^^^
 
     for (x in null) { }
 >x : any
->null : null
+>  : ^^^
 
     if (true) { } else { }
 >true : true
+>     : ^^^^
 
     1;
 >1 : 1
+>  : ^
 
     L: var y;
 >L : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     return;
     switch (x) {
 >x : any
+>  : ^^^
 
         case 1:
 >1 : 1
+>  : ^
 
             break;
         default:
@@ -38,15 +49,18 @@ declare module M {
     }
     throw "nooo";
 >"nooo" : "nooo"
+>       : ^^^^^^
 
     try {
     }
     catch (e) {
 >e : any
+>  : ^^^
     }
     finally {
     }
     with (x) {
 >x : any
+>  : ^^^
     }
 }

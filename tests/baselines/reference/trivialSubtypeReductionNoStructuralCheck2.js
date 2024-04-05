@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck2.ts] ////
+
 //// [trivialSubtypeReductionNoStructuralCheck2.ts]
 declare const props: WizardStepProps;
 export class Wizard {

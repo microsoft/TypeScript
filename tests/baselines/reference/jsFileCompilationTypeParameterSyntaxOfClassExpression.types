@@ -1,5 +1,9 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationTypeParameterSyntaxOfClassExpression.ts] ////
+
+=== a.js ===
 const Bar = class<T> {};
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >class<T> {} : typeof Bar
+>            : ^^^^^^^^^^
 

@@ -1,5 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType2.ts] ////
+
+=== parserObjectType2.ts ===
 var v: { x: number };
 >v : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 

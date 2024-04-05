@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteral.ts] ////
+
 //// [functionLiteral.ts]
 // basic valid forms of function literals
 

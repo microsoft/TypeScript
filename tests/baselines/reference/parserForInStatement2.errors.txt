@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts(1,9): error TS1123: Variable declaration list cannot be empty.
-tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts(1,13): error TS2304: Cannot find name 'X'.
+parserForInStatement2.ts(1,9): error TS1123: Variable declaration list cannot be empty.
+parserForInStatement2.ts(1,13): error TS2304: Cannot find name 'X'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts (2 errors) ====
+==== parserForInStatement2.ts (2 errors) ====
     for (var in X) {
             
 !!! error TS1123: Variable declaration list cannot be empty.

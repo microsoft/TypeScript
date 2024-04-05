@@ -9,7 +9,5 @@
 
 const [r0Def, r0, r1Def, r1, r2Def, r2] = test.ranges();
 
-verify.renameLocations(r0, [r0, r1, { range: r2, suffixText: " as a" }]);
-verify.renameLocations(r1, [{ range: r1, prefixText: "a as " }, { range: r2, suffixText: " as a" }]);
-verify.renameLocations(r2, [{ range: r2, prefixText: "a as " }]);
-verify.baselineFindAllReferences('1', '2', '3')
+verify.baselineFindAllReferences('1', '2', '3');
+verify.baselineRename([r0, r1, r2]);

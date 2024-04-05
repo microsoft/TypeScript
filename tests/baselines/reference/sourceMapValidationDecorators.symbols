@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDecorators.ts ===
+//// [tests/cases/compiler/sourceMapValidationDecorators.ts] ////
+
+=== sourceMapValidationDecorators.ts ===
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 0, 33))

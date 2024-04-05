@@ -1,4 +1,7 @@
+//// [tests/cases/compiler/moduleResolution_noLeadingDot.ts] ////
+
 === /a.ts ===
 true;
 >true : true
+>     : ^^^^
 

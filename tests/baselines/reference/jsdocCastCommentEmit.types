@@ -1,11 +1,15 @@
-=== tests/cases/compiler/jsdocCastCommentEmit.ts ===
+//// [tests/cases/compiler/jsdocCastCommentEmit.ts] ////
+
+=== jsdocCastCommentEmit.ts ===
 // allowJs: true
 // checkJs: true
 // outDir: out/
 // filename: input.js
 function f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
     return /* @type {number} */ 42;
 >42 : 42
+>   : ^^
 }

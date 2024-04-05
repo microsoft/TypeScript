@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowTypeByInstanceof.ts] ////
+
 //// [narrowTypeByInstanceof.ts]
     class Match {
         public range(): any {

@@ -23,4 +23,4 @@
 //// let opt3 = <Opt [|wrong|] />;
 //// let opt4 = <Opt propx={100} propString="hi" />;
 
-verify.rangesAreRenameLocations();
+verify.baselineRename();

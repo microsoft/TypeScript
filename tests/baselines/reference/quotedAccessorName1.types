@@ -1,8 +1,13 @@
-=== tests/cases/compiler/quotedAccessorName1.ts ===
+//// [tests/cases/compiler/quotedAccessorName1.ts] ////
+
+=== quotedAccessorName1.ts ===
 class C {
 >C : C
+>  : ^
 
     get "foo"() { return 0; }
 >"foo" : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 }

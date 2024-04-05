@@ -1,36 +1,58 @@
-=== tests/cases/compiler/es6ImportNamedImportParsingError_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportParsingError.ts] ////
+
+=== es6ImportNamedImportParsingError_0.ts ===
 export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export var x = a;
 >x : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 export var m = a;
 >m : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts ===
+=== es6ImportNamedImportParsingError_1.ts ===
 import { * } from "es6ImportNamedImportParsingError_0";
 >* : number
+>  : ^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 >from : any
+>     : ^^^
 >"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 import defaultBinding, from "es6ImportNamedImportParsingError_0";
 >defaultBinding : any
+>               : ^^^
 
 import , { a } from "es6ImportNamedImportParsingError_0";
 >a : any
+>  : ^^^
 >from : any
+>     : ^^^
 >"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 import { a }, from "es6ImportNamedImportParsingError_0";
 >a : any
+>  : ^^^
 >, from : any
+>       : ^^^
 > : any
+> : ^^^
 >from : any
+>     : ^^^
 >"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

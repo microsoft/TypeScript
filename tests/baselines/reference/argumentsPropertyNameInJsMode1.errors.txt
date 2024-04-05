@@ -1,7 +1,7 @@
-tests/cases/compiler/a.js(9,7): error TS2554: Expected 0-1 arguments, but got 3.
+a.js(9,7): error TS2554: Expected 0-1 arguments, but got 3.
 
 
-==== tests/cases/compiler/a.js (1 errors) ====
+==== a.js (1 errors) ====
     const foo = {
        f1: (params) => { }
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/es6ExportEqualsInterop.ts] ////
+
+=== main.ts ===
 /// <reference path="modules.d.ts"/>
 
 // import-equals
@@ -296,7 +298,7 @@ export * from "function-module";
 export * from "class";
 export * from "class-module";
 
-=== tests/cases/compiler/modules.d.ts ===
+=== modules.d.ts ===
 declare module "interface" {
 >"interface" : Symbol("interface", Decl(modules.d.ts, 0, 0))
 

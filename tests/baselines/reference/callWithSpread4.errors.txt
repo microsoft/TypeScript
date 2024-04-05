@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(18,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread4.ts(18,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread4.ts(27,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts (2 errors) ====
+==== callWithSpread4.ts (2 errors) ====
     type R = { a: number }
     type W = { b: number }
     type RW = { a: number, b: number }

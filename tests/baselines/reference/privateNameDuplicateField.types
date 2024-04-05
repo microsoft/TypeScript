@@ -1,832 +1,1128 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts] ////
+
+=== privateNameDuplicateField.ts ===
 function Field() {
 >Field : () => void
+>      : ^^^^^^^^^^
 
     // Error
     class A_Field_Field {
 >A_Field_Field : A_Field_Field
+>              : ^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Field_Method {
 >A_Field_Method : A_Field_Method
+>               : ^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Field_Getter {
 >A_Field_Getter : A_Field_Getter
+>               : ^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Field_Setter {
 >A_Field_Setter : A_Field_Setter
+>               : ^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_Field_StaticField {
 >A_Field_StaticField : A_Field_StaticField
+>                    : ^^^^^^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Field_StaticMethod {
 >A_Field_StaticMethod : A_Field_StaticMethod
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Field_StaticGetter {
 >A_Field_StaticGetter : A_Field_StaticGetter
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Field_StaticSetter {
 >A_Field_StaticSetter : A_Field_StaticSetter
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 function Method() {
 >Method : () => void
+>       : ^^^^^^^^^^
 
     // Error
     class A_Method_Field {
 >A_Method_Field : A_Method_Field
+>               : ^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         #foo = "foo";
 >#foo : () => void
+>     : ^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Method_Method {
 >A_Method_Method : A_Method_Method
+>                : ^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Method_Getter {
 >A_Method_Getter : A_Method_Getter
+>                : ^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Method_Setter {
 >A_Method_Setter : A_Method_Setter
+>                : ^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_Method_StaticField {
 >A_Method_StaticField : A_Method_StaticField
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Method_StaticMethod {
 >A_Method_StaticMethod : A_Method_StaticMethod
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Method_StaticGetter {
 >A_Method_StaticGetter : A_Method_StaticGetter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Method_StaticSetter {
 >A_Method_StaticSetter : A_Method_StaticSetter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 
 function Getter() {
 >Getter : () => void
+>       : ^^^^^^^^^^
 
     // Error
     class A_Getter_Field {
 >A_Getter_Field : A_Getter_Field
+>               : ^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Getter_Method {
 >A_Getter_Method : A_Getter_Method
+>                : ^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Getter_Getter {
 >A_Getter_Getter : A_Getter_Getter
+>                : ^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     //OK
     class A_Getter_Setter {
 >A_Getter_Setter : A_Getter_Setter
+>                : ^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_Getter_StaticField {
 >A_Getter_StaticField : A_Getter_StaticField
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Getter_StaticMethod {
 >A_Getter_StaticMethod : A_Getter_StaticMethod
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Getter_StaticGetter {
 >A_Getter_StaticGetter : A_Getter_StaticGetter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Getter_StaticSetter {
 >A_Getter_StaticSetter : A_Getter_StaticSetter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 function Setter() {
 >Setter : () => void
+>       : ^^^^^^^^^^
 
     // Error
     class A_Setter_Field {
 >A_Setter_Field : A_Setter_Field
+>               : ^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Setter_Method {
 >A_Setter_Method : A_Setter_Method
+>                : ^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // OK
     class A_Setter_Getter {
 >A_Setter_Getter : A_Setter_Getter
+>                : ^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Setter_Setter {
 >A_Setter_Setter : A_Setter_Setter
+>                : ^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_Setter_StaticField {
 >A_Setter_StaticField : A_Setter_StaticField
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_Setter_StaticMethod {
 >A_Setter_StaticMethod : A_Setter_StaticMethod
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_Setter_StaticGetter {
 >A_Setter_StaticGetter : A_Setter_StaticGetter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_Setter_StaticSetter {
 >A_Setter_StaticSetter : A_Setter_StaticSetter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 function StaticField() {
 >StaticField : () => void
+>            : ^^^^^^^^^^
 
     // Error
     class A_StaticField_Field {
 >A_StaticField_Field : A_StaticField_Field
+>                    : ^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticField_Method {
 >A_StaticField_Method : A_StaticField_Method
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticField_Getter {
 >A_StaticField_Getter : A_StaticField_Getter
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticField_Setter {
 >A_StaticField_Setter : A_StaticField_Setter
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_StaticField_StaticField {
 >A_StaticField_StaticField : A_StaticField_StaticField
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticField_StaticMethod {
 >A_StaticField_StaticMethod : A_StaticField_StaticMethod
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticField_StaticGetter {
 >A_StaticField_StaticGetter : A_StaticField_StaticGetter
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticField_StaticSetter {
 >A_StaticField_StaticSetter : A_StaticField_StaticSetter
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 function StaticMethod() {
 >StaticMethod : () => void
+>             : ^^^^^^^^^^
 
     // Error
     class A_StaticMethod_Field {
 >A_StaticMethod_Field : A_StaticMethod_Field
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticMethod_Method {
 >A_StaticMethod_Method : A_StaticMethod_Method
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticMethod_Getter {
 >A_StaticMethod_Getter : A_StaticMethod_Getter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticMethod_Setter {
 >A_StaticMethod_Setter : A_StaticMethod_Setter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_StaticMethod_StaticField {
 >A_StaticMethod_StaticField : A_StaticMethod_StaticField
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static #foo = "foo";
 >#foo : () => void
+>     : ^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticMethod_StaticMethod {
 >A_StaticMethod_StaticMethod : A_StaticMethod_StaticMethod
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticMethod_StaticGetter {
 >A_StaticMethod_StaticGetter : A_StaticMethod_StaticGetter
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticMethod_StaticSetter {
 >A_StaticMethod_StaticSetter : A_StaticMethod_StaticSetter
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 function StaticGetter() {
 >StaticGetter : () => void
+>             : ^^^^^^^^^^
 
     // Error
     class A_StaticGetter_Field {
 >A_StaticGetter_Field : A_StaticGetter_Field
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticGetter_Method {
 >A_StaticGetter_Method : A_StaticGetter_Method
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticGetter_Getter {
 >A_StaticGetter_Getter : A_StaticGetter_Getter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticGetter_Setter {
 >A_StaticGetter_Setter : A_StaticGetter_Setter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_StaticGetter_StaticField {
 >A_StaticGetter_StaticField : A_StaticGetter_StaticField
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticGetter_StaticMethod {
 >A_StaticGetter_StaticMethod : A_StaticGetter_StaticMethod
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // Error
     class A_StaticGetter_StaticGetter {
 >A_StaticGetter_StaticGetter : A_StaticGetter_StaticGetter
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
     // OK
     class A_StaticGetter_StaticSetter {
 >A_StaticGetter_StaticSetter : A_StaticGetter_StaticSetter
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 
 function StaticSetter() {
 >StaticSetter : () => void
+>             : ^^^^^^^^^^
 
     // Error
     class A_StaticSetter_Field {
 >A_StaticSetter_Field : A_StaticSetter_Field
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticSetter_Method {
 >A_StaticSetter_Method : A_StaticSetter_Method
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
 
     // Error
     class A_StaticSetter_Getter {
 >A_StaticSetter_Getter : A_StaticSetter_Getter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticSetter_Setter {
 >A_StaticSetter_Setter : A_StaticSetter_Setter
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 
     // Error
     class A_StaticSetter_StaticField {
 >A_StaticSetter_StaticField : A_StaticSetter_StaticField
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static #foo = "foo";
 >#foo : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 
     // Error
     class A_StaticSetter_StaticMethod {
 >A_StaticSetter_StaticMethod : A_StaticSetter_StaticMethod
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static #foo() { }
 >#foo : () => void
+>     : ^^^^^^^^^^
     }
 
     // OK
     class A_StaticSetter_StaticGetter {
 >A_StaticSetter_StaticGetter : A_StaticSetter_StaticGetter
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static get #foo() { return ""}
 >#foo : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
 
     // Error
     class A_StaticSetter_StaticSetter {
 >A_StaticSetter_StaticSetter : A_StaticSetter_StaticSetter
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
 
         static set #foo(value: string) { }
 >#foo : string
+>     : ^^^^^^
 >value : string
+>      : ^^^^^^
     }
 }
 

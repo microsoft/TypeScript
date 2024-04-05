@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts] ////
+
 //// [circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts]
 declare class Component<P> {
     constructor(props: Readonly<P>);

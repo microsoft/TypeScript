@@ -1,8 +1,10 @@
-=== tests/cases/compiler/funduleSplitAcrossFiles_function.ts ===
+//// [tests/cases/compiler/funduleSplitAcrossFiles.ts] ////
+
+=== funduleSplitAcrossFiles_function.ts ===
 function D() { }
 >D : Symbol(D, Decl(funduleSplitAcrossFiles_function.ts, 0, 0), Decl(funduleSplitAcrossFiles_module.ts, 0, 0))
 
-=== tests/cases/compiler/funduleSplitAcrossFiles_module.ts ===
+=== funduleSplitAcrossFiles_module.ts ===
 module D {
 >D : Symbol(D, Decl(funduleSplitAcrossFiles_function.ts, 0, 0), Decl(funduleSplitAcrossFiles_module.ts, 0, 0))
 

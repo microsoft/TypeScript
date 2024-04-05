@@ -1,33 +1,48 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
+
+=== typeGuardInClass.ts ===
 let x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
 if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     let n = class {
 >n : typeof n
+>  : ^^^^^^^^
 >class {        constructor() {            let y: string = x;        }    } : typeof n
+>                                                                           : ^^^^^^^^
 
         constructor() {
             let y: string = x;
 >y : string
+>  : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
         }
     }
 }
 else {
     let m = class {
 >m : typeof m
+>  : ^^^^^^^^
 >class {        constructor() {            let y: number = x;        }    } : typeof m
+>                                                                           : ^^^^^^^^
 
         constructor() {
             let y: number = x;
 >y : number
+>  : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
         }
     }
 }

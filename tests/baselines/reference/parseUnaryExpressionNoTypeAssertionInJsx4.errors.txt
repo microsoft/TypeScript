@@ -1,0 +1,24 @@
+index.tsx(3,14): error TS17008: JSX element 'number' has no corresponding closing tag.
+index.tsx(4,13): error TS17014: JSX fragment has no corresponding closing tag.
+index.tsx(5,14): error TS1003: Identifier expected.
+index.tsx(5,18): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+index.tsx(6,1): error TS1005: '</' expected.
+
+
+==== index.tsx (5 errors) ====
+    const x = "oops";
+    
+    const a = + <number> x;
+                 ~~~~~~
+!!! error TS17008: JSX element 'number' has no corresponding closing tag.
+    const b = + <> x;
+                ~~
+!!! error TS17014: JSX fragment has no corresponding closing tag.
+    const c = + <1234> x;
+                 ~~~~
+!!! error TS1003: Identifier expected.
+                     ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    
+    
+!!! error TS1005: '</' expected.

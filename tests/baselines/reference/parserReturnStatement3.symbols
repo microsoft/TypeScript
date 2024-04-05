@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement3.ts] ////
+
+=== parserReturnStatement3.ts ===
 function f() {
 >f : Symbol(f, Decl(parserReturnStatement3.ts, 0, 0))
 

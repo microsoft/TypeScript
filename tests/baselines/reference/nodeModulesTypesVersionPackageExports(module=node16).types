@@ -1,63 +1,89 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesTypesVersionPackageExports.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as mod from "inner";
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
 mod.correctVersionApplied;
 >mod.correctVersionApplied : true
+>                          : ^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >correctVersionApplied : true
+>                      : ^^^^
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as mod from "inner";
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
 mod.correctVersionApplied;
 >mod.correctVersionApplied : true
+>                          : ^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >correctVersionApplied : true
+>                      : ^^^^
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // cjs format file
 import * as mod from "inner";
 >mod : typeof mod
+>    : ^^^^^^^^^^
 
 mod.correctVersionApplied;
 >mod.correctVersionApplied : true
+>                          : ^^^^
 >mod : typeof mod
+>    : ^^^^^^^^^^
 >correctVersionApplied : true
+>                      : ^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // cjs format file
 export const noConditionsApplied = true;
 >noConditionsApplied : true
+>                    : ^^^^
 >true : true
+>     : ^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+=== node_modules/inner/index.d.mts ===
 // esm format file
 export const importConditionApplied = true;
 >importConditionApplied : true
+>                       : ^^^^
 >true : true
+>     : ^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+=== node_modules/inner/index.d.cts ===
 // cjs format file
 export const wrongConditionApplied = true;
 >wrongConditionApplied : true
+>                      : ^^^^
 >true : true
+>     : ^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/old-types.d.ts ===
+=== node_modules/inner/old-types.d.ts ===
 export const noVersionApplied = true;
 >noVersionApplied : true
+>                 : ^^^^
 >true : true
+>     : ^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/new-types.d.ts ===
+=== node_modules/inner/new-types.d.ts ===
 export const correctVersionApplied = true;
 >correctVersionApplied : true
+>                      : ^^^^
 >true : true
+>     : ^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/future-types.d.ts ===
+=== node_modules/inner/future-types.d.ts ===
 export const futureVersionApplied = true;
 >futureVersionApplied : true
+>                     : ^^^^
 >true : true
+>     : ^^^^
 

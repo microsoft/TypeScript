@@ -1,36 +1,57 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportAssertions.ts] ////
+
+=== index.ts ===
 import json from "./package.json" assert { type: "json" };
 >json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : any
+>     : ^^^
 
-=== tests/cases/conformance/node/otherc.cts ===
+=== otherc.cts ===
 import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
 >json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : any
+>     : ^^^
 
 const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
 >json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./package.json", { assert: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./package.json" : "./package.json"
+>                 : ^^^^^^^^^^^^^^^^
 >{ assert: { type: "json" } } : { assert: { type: string; }; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assert : { type: string; }
+>       : ^^^^^^^^^^^^^^^^^
 >{ type: "json" } : { type: string; }
+>                 : ^^^^^^^^^^^^^^^^^
 >type : string
+>     : ^^^^^^
 >"json" : "json"
+>       : ^^^^^^
 
-=== tests/cases/conformance/node/package.json ===
+=== package.json ===
 {
 >{    "name": "pkg",    "private": true,    "type": "module"} : { name: string; private: boolean; type: string; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "name": "pkg",
 >"name" : string
+>       : ^^^^^^
 >"pkg" : "pkg"
+>      : ^^^^^
 
     "private": true,
 >"private" : boolean
+>          : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "type": "module"
 >"type" : string
+>       : ^^^^^^
 >"module" : "module"
+>         : ^^^^^^^^
 }

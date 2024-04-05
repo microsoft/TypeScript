@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty7.ts] ////
+
 //// [symbolProperty7.ts]
 class C {
     [Symbol()] = 0;

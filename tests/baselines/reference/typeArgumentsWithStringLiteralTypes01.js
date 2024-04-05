@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts] ////
+
 //// [typeArgumentsWithStringLiteralTypes01.ts]
 declare function randBool(): boolean;
 declare function takeReturnString(str: string): string;

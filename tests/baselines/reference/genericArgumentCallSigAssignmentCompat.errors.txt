@@ -1,9 +1,9 @@
-tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts(16,31): error TS2345: Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator<string | number | boolean, boolean>'.
+genericArgumentCallSigAssignmentCompat.ts(16,31): error TS2345: Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator<string | number | boolean, boolean>'.
   Type 'string | number | boolean' is not assignable to type 'boolean'.
     Type 'string' is not assignable to type 'boolean'.
 
 
-==== tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts (1 errors) ====
+==== genericArgumentCallSigAssignmentCompat.ts (1 errors) ====
     module Underscore {
         export interface Iterator<T, U> {
             (value: T, index: any, list: any): U;

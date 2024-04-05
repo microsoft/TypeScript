@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-2.ts] ////
+
 //// [privateNamesConstructorChain-2.ts]
 class Parent<T> {
     #foo = 3;

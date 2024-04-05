@@ -1,46 +1,71 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment2.ts] ////
+
+=== a.js ===
 function Outer() {
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 
     this.y = 2
 >this.y = 2 : 2
+>           : ^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >2 : 2
+>  : ^
 }
 Outer.Inner = class I {
 >Outer.Inner = class I {    constructor() {        this.x = 1    }} : typeof I
+>                                                                   : ^^^^^^^^
 >Outer.Inner : typeof I
+>            : ^^^^^^^^
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 >Inner : typeof I
+>      : ^^^^^^^^
 >class I {    constructor() {        this.x = 1    }} : typeof I
+>                                                     : ^^^^^^^^
 >I : typeof I
+>  : ^^^^^^^^
 
     constructor() {
         this.x = 1
 >this.x = 1 : 1
+>           : ^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 /** @type {Outer} */
 var ok
 >ok : Outer
+>   : ^^^^^
 
 ok.y
 >ok.y : number
+>     : ^^^^^^
 >ok : Outer
+>   : ^^^^^
 >y : number
+>  : ^^^^^^
 
 /** @type {Outer.Inner} */
 var oc
 >oc : I
+>   : ^
 
 oc.x
 >oc.x : number
+>     : ^^^^^^
 >oc : I
+>   : ^
 >x : number
+>  : ^^^^^^
 

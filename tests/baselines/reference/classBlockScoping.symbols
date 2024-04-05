@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classBlockScoping.ts ===
+//// [tests/cases/compiler/classBlockScoping.ts] ////
+
+=== classBlockScoping.ts ===
 function f(b: boolean) {
 >f : Symbol(f, Decl(classBlockScoping.ts, 0, 0))
 >b : Symbol(b, Decl(classBlockScoping.ts, 0, 11))

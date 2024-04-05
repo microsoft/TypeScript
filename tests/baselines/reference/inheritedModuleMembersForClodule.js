@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedModuleMembersForClodule.ts] ////
+
 //// [inheritedModuleMembersForClodule.ts]
 class C {
     static foo(): string {

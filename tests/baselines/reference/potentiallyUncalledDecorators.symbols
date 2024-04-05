@@ -1,4 +1,6 @@
-=== tests/cases/compiler/potentiallyUncalledDecorators.ts ===
+//// [tests/cases/compiler/potentiallyUncalledDecorators.ts] ////
+
+=== potentiallyUncalledDecorators.ts ===
 // Angular-style Input/Output API:
 declare function Input(bindingPropertyName?: string): any;
 >Input : Symbol(Input, Decl(potentiallyUncalledDecorators.ts, 0, 0))
@@ -15,7 +17,7 @@ class FooComponent {
 // Glimmer-style tracked API:
 declare const tracked: PropertyDecorator & { (...watchedProperties: string[]): any; }
 >tracked : Symbol(tracked, Decl(potentiallyUncalledDecorators.ts, 7, 13))
->PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 >watchedProperties : Symbol(watchedProperties, Decl(potentiallyUncalledDecorators.ts, 7, 46))
 
 class Person {
@@ -50,9 +52,9 @@ class MultiplyByTwo {
 
 interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorator {
 >OmniDecorator : Symbol(OmniDecorator, Decl(potentiallyUncalledDecorators.ts, 19, 1))
->MethodDecorator : Symbol(MethodDecorator, Decl(lib.es5.d.ts, --, --))
->ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
->PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
+>MethodDecorator : Symbol(MethodDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
 }
 
 declare function noArgs(): OmniDecorator;

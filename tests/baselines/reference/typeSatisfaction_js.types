@@ -1,6 +1,11 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_js.ts] ////
+
 === /src/a.js ===
 var v = undefined satisfies 1;
 >v : any
+>  : ^^^
 >undefined satisfies 1 : undefined
+>                      : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

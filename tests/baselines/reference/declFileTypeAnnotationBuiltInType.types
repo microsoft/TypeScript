@@ -1,54 +1,70 @@
-=== tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts] ////
+
+=== declFileTypeAnnotationBuiltInType.ts ===
 // string
 function foo(): string {
 >foo : () => string
+>    : ^^^^^^      
 
     return "";
 >"" : ""
+>   : ^^
 }
 function foo2() {
 >foo2 : () => string
+>     : ^^^^^^^^^^^^
 
     return "";
 >"" : ""
+>   : ^^
 }
 
 // number
 function foo3(): number {
 >foo3 : () => number
+>     : ^^^^^^      
 
     return 10;
 >10 : 10
+>   : ^^
 }
 function foo4() {
 >foo4 : () => number
+>     : ^^^^^^^^^^^^
 
     return 10;
 >10 : 10
+>   : ^^
 }
 
 // boolean
 function foo5(): boolean {
 >foo5 : () => boolean
+>     : ^^^^^^       
 
     return true;
 >true : true
+>     : ^^^^
 }
 function foo6() {
 >foo6 : () => boolean
+>     : ^^^^^^^^^^^^^
 
     return false;
 >false : false
+>      : ^^^^^
 }
 
 // void
 function foo7(): void {
 >foo7 : () => void
+>     : ^^^^^^    
 
     return;
 }
 function foo8() {
 >foo8 : () => void
+>     : ^^^^^^^^^^
 
     return;
 }
@@ -56,13 +72,17 @@ function foo8() {
 // any
 function foo9(): any {
 >foo9 : () => any
+>     : ^^^^^^   
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 function foo10() {
 >foo10 : () => any
+>      : ^^^^^^^^^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }

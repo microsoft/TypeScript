@@ -1,56 +1,85 @@
-=== tests/cases/compiler/innerAliases.ts ===
+//// [tests/cases/compiler/innerAliases.ts] ////
+
+=== innerAliases.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export module C {
 >C : typeof C
+>  : ^^^^^^^^
 
             export class Class1 {}
 >Class1 : Class1
+>       : ^^^^^^
         }
     }
 }
 
 module D {
 >D : typeof D
+>  : ^^^^^^^^
 
     import inner = A.B.C; 
 >inner : typeof inner
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >C : typeof inner
+>  : ^^^^^^^^^^^^
    
     var c1 = new inner.Class1(); 
 >c1 : inner.Class1
+>   : ^^^^^^^^^^^^
 >new inner.Class1() : inner.Class1
+>                   : ^^^^^^^^^^^^
 >inner.Class1 : typeof inner.Class1
+>             : ^^^^^^^^^^^^^^^^^^^
 >inner : typeof inner
+>      : ^^^^^^^^^^^^
 >Class1 : typeof inner.Class1
+>       : ^^^^^^^^^^^^^^^^^^^
 
     export module E { 
 >E : typeof E
+>  : ^^^^^^^^
 
         export class Class2 {}
 >Class2 : Class2
+>       : ^^^^^^
     }
 }
 
 var c: D.inner.Class1;
 >c : D.inner.Class1
+>  : ^^^^^^^^^^^^^^
 >D : any
+>  : ^^^
 >inner : any
+>      : ^^^
 
 c = new D.inner.Class1();
 >c = new D.inner.Class1() : any
+>                         : ^^^
 >c : D.inner.Class1
+>  : ^^^^^^^^^^^^^^
 >new D.inner.Class1() : any
+>                     : ^^^
 >D.inner.Class1 : any
+>               : ^^^
 >D.inner : any
+>        : ^^^
 >D : typeof D
+>  : ^^^^^^^^
 >inner : any
+>      : ^^^
 >Class1 : any
+>       : ^^^
 
 

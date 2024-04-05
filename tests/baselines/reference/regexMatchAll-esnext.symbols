@@ -1,4 +1,6 @@
-=== tests/cases/compiler/regexMatchAll-esnext.ts ===
+//// [tests/cases/compiler/regexMatchAll-esnext.ts] ////
+
+=== regexMatchAll-esnext.ts ===
 const matches = /\w/g[Symbol.matchAll]("matchAll");
 >matches : Symbol(matches, Decl(regexMatchAll-esnext.ts, 0, 5))
 >Symbol.matchAll : Symbol(SymbolConstructor.matchAll, Decl(lib.es2020.symbol.wellknown.d.ts, --, --))

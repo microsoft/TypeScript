@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall17.ts] ////
+
 //// [functionCall17.ts]
 function foo(a:string, b?:string, c?:number, ...d:number[]){}
 foo('foo', 1); 

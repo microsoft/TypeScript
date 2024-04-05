@@ -1,20 +1,20 @@
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(4,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(9,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(14,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(18,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(26,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(30,16): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(34,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(38,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS2754: 'super' may not use type arguments.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(67,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(4,9): error TS2335: 'super' can only be referenced in a derived class.
+errorSuperCalls.ts(9,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(14,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(18,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(26,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(30,16): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(34,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(38,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(46,14): error TS2754: 'super' may not use type arguments.
+errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(67,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+errorSuperCalls.ts(71,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 
 
-==== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts (14 errors) ====
+==== errorSuperCalls.ts (14 errors) ====
     //super call in class constructor with no base type
     class NoBase {
         constructor() {

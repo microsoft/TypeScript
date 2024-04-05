@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignToExistingClass.ts ===
+//// [tests/cases/compiler/assignToExistingClass.ts] ////
+
+=== assignToExistingClass.ts ===
 module Test {
 >Test : Symbol(Test, Decl(assignToExistingClass.ts, 0, 0))
 

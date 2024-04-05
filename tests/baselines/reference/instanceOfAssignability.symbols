@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instanceOfAssignability.ts ===
+//// [tests/cases/compiler/instanceOfAssignability.ts] ////
+
+=== instanceOfAssignability.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(instanceOfAssignability.ts, 0, 0))
 

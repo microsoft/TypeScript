@@ -1,29 +1,41 @@
-=== tests/cases/conformance/constEnums/enum.ts ===
+//// [tests/cases/conformance/constEnums/importElisionConstEnumMerge1.ts] ////
+
+=== enum.ts ===
 export const enum Enum {
 >Enum : Enum
+>     : ^^^^
 
   One = 1,
 >One : Enum.One
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 }
 
-=== tests/cases/conformance/constEnums/merge.ts ===
+=== merge.ts ===
 import { Enum } from "./enum";
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 
 namespace Enum {
   export type Foo = number;
 >Foo : number
+>    : ^^^^^^
 }
 export { Enum };
 >Enum : typeof Enum
+>     : ^^^^^^^^^^^
 
-=== tests/cases/conformance/constEnums/index.ts ===
+=== index.ts ===
 import { Enum } from "./merge";
->Enum : typeof import("tests/cases/conformance/constEnums/enum").Enum
+>Enum : typeof import("enum").Enum
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Enum.One;
->Enum.One : import("tests/cases/conformance/constEnums/enum").Enum
->Enum : typeof import("tests/cases/conformance/constEnums/enum").Enum
->One : import("tests/cases/conformance/constEnums/enum").Enum
+>Enum.One : import("enum").Enum
+>         : ^^^^^^^^^^^^^^^^^^^
+>Enum : typeof import("enum").Enum
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>One : import("enum").Enum
+>    : ^^^^^^^^^^^^^^^^^^^
 

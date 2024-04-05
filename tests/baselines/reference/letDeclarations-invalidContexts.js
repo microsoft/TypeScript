@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-invalidContexts.ts] ////
+
 //// [letDeclarations-invalidContexts.ts]
 // Errors, let must be defined inside a block
 if (true) 

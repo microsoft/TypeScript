@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns01_ES5.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns01_ES5.ts] ////
+
+=== emptyVariableDeclarationBindingPatterns01_ES5.ts ===
 (function () {
     var a: any;
 >a : Symbol(a, Decl(emptyVariableDeclarationBindingPatterns01_ES5.ts, 1, 7))

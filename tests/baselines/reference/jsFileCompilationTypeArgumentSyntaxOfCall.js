@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationTypeArgumentSyntaxOfCall.ts] ////
+
 //// [a.jsx]
 Foo<number>();
 Foo<number>(1);

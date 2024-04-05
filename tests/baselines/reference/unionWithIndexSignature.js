@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionWithIndexSignature.ts] ////
+
 //// [unionWithIndexSignature.ts]
 interface NumList {
   kind: 'n';
@@ -30,18 +32,17 @@ export function flatten<T extends number|TypedArray>(arr: T) {
 //// [unionWithIndexSignature.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.flatten = exports.isTypedArray = exports.foo = void 0;
+exports.foo = foo;
+exports.isTypedArray = isTypedArray;
+exports.flatten = flatten;
 function foo(arr) {
     var zz = arr[1]; // Error
 }
-exports.foo = foo;
 function isTypedArray(a) {
     return a instanceof Int32Array || a instanceof Uint8Array;
 }
-exports.isTypedArray = isTypedArray;
 function flatten(arr) {
     if (isTypedArray(arr)) {
         arr[1];
     }
 }
-exports.flatten = flatten;

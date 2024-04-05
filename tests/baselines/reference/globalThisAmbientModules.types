@@ -1,37 +1,56 @@
-=== tests/cases/conformance/es2019/globalThisAmbientModules.ts ===
+//// [tests/cases/conformance/es2019/globalThisAmbientModules.ts] ////
+
+=== globalThisAmbientModules.ts ===
 declare module "ambientModule" {
 >"ambientModule" : typeof import("ambientModule")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export type typ = 1
 >typ : 1
+>    : ^
 
     export var val: typ
 >val : 1
+>    : ^
 }
 namespace valueModule { export var val = 1 }
 >valueModule : typeof valueModule
+>            : ^^^^^^^^^^^^^^^^^^
 >val : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 namespace namespaceModule { export type typ = 1 }
 >typ : 1
+>    : ^
 
 // should error
 type GlobalBad1 = (typeof globalThis)["\"ambientModule\""]
 >GlobalBad1 : any
+>           : ^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 
 type GlobalOk1 = (typeof globalThis)["valueModule"]
 >GlobalOk1 : typeof valueModule
+>          : ^^^^^^^^^^^^^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 
 type GlobalOk2 = globalThis.namespaceModule.typ
 >GlobalOk2 : 1
+>          : ^
 >globalThis : any
+>           : ^^^
 >namespaceModule : any
+>                : ^^^
 
 const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 >bad1 : any
+>     : ^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >'ambientModule' : "ambientModule"
+>                : ^^^^^^^^^^^^^^^
 

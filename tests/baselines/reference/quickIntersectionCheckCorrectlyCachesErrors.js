@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.ts] ////
+
 //// [quickIntersectionCheckCorrectlyCachesErrors.tsx]
 interface F<P> {
     (props: P & { children?: boolean }): void;
@@ -28,7 +30,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wu = void 0;
+exports.wu = wu;
 function wu(CC) {
     var WU = /** @class */ (function () {
         function WU() {
@@ -40,4 +42,3 @@ function wu(CC) {
         return WU;
     }());
 }
-exports.wu = wu;

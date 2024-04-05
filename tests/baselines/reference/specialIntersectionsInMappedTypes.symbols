@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specialIntersectionsInMappedTypes.ts ===
+//// [tests/cases/compiler/specialIntersectionsInMappedTypes.ts] ////
+
+=== specialIntersectionsInMappedTypes.ts ===
 // Repro from #50683
 
 type Alignment = (string & {}) | "left" | "center" | "right";

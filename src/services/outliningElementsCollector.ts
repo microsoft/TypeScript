@@ -11,6 +11,7 @@ import {
     DefaultClause,
     findChildOfKind,
     getLeadingCommentRanges,
+    ImportAttributes,
     isAnyImportSyntax,
     isArrayLiteralExpression,
     isBinaryExpression,
@@ -36,6 +37,8 @@ import {
     JsxElement,
     JsxFragment,
     JsxOpeningLikeElement,
+    NamedExports,
+    NamedImports,
     Node,
     NodeArray,
     NoSubstitutionTemplateLiteral,
@@ -43,15 +46,12 @@ import {
     OutliningSpanKind,
     ParenthesizedExpression,
     positionsAreOnSameLine,
-    Push,
     SignatureDeclaration,
     SourceFile,
     startsWith,
     SyntaxKind,
     TemplateExpression,
     TextSpan,
-    trimString,
-    trimStringStart,
     TryStatement,
 } from "./_namespaces/ts";
 
@@ -63,7 +63,7 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
     return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
 }
 
-function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     let depthRemaining = 40;
     let current = 0;
     // Includes the EOF Token so that comments which aren't attached to statements are included
@@ -71,13 +71,13 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
     const n = statements.length;
     while (current < n) {
         while (current < n && !isAnyImportSyntax(statements[current])) {
-            visitNonImportNode(statements[current]);
+            visitNode(statements[current]);
             current++;
         }
         if (current === n) break;
         const firstImport = current;
         while (current < n && isAnyImportSyntax(statements[current])) {
-            addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
+            visitNode(statements[current]);
             current++;
         }
         const lastImport = current - 1;
@@ -86,7 +86,7 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         }
     }
 
-    function visitNonImportNode(n: Node) {
+    function visitNode(n: Node) {
         if (depthRemaining === 0) return;
         cancellationToken.throwIfCancellationRequested();
 
@@ -112,27 +112,27 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         depthRemaining--;
         if (isCallExpression(n)) {
             depthRemaining++;
-            visitNonImportNode(n.expression);
+            visitNode(n.expression);
             depthRemaining--;
-            n.arguments.forEach(visitNonImportNode);
-            n.typeArguments?.forEach(visitNonImportNode);
+            n.arguments.forEach(visitNode);
+            n.typeArguments?.forEach(visitNode);
         }
         else if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
             // Consider an 'else if' to be on the same depth as the 'if'.
-            visitNonImportNode(n.expression);
-            visitNonImportNode(n.thenStatement);
+            visitNode(n.expression);
+            visitNode(n.thenStatement);
             depthRemaining++;
-            visitNonImportNode(n.elseStatement);
+            visitNode(n.elseStatement);
             depthRemaining--;
         }
         else {
-            n.forEachChild(visitNonImportNode);
+            n.forEachChild(visitNode);
         }
         depthRemaining++;
     }
 }
 
-function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
+function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): void {
     const regions: OutliningSpan[] = [];
     const lineStarts = sourceFile.getLineStarts();
     for (const currentLineStart of lineStarts) {
@@ -162,15 +162,15 @@ const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?(?:\r)?$/;
 function isRegionDelimiter(lineText: string) {
     // We trim the leading whitespace and // without the regex since the
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
-    lineText = trimStringStart(lineText);
-    if (!startsWith(lineText, "\/\/")) {
+    lineText = lineText.trimStart();
+    if (!startsWith(lineText, "//")) {
         return null; // eslint-disable-line no-null/no-null
     }
-    lineText = trimString(lineText.slice(2));
+    lineText = lineText.slice(2).trim();
     return regionDelimiterRegExp.exec(lineText);
 }
 
-function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     const comments = getLeadingCommentRanges(sourceFile.text, pos);
     if (!comments) return;
 
@@ -217,7 +217,7 @@ function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFil
     }
 }
 
-function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
     if (isJsxText(n)) return;
     addOutliningForLeadingCommentsForPos(n.pos, sourceFile, cancellationToken, out);
 }
@@ -298,6 +298,23 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return spanForCallExpression(n as CallExpression);
         case SyntaxKind.ParenthesizedExpression:
             return spanForParenthesizedExpression(n as ParenthesizedExpression);
+        case SyntaxKind.NamedImports:
+        case SyntaxKind.NamedExports:
+        case SyntaxKind.ImportAttributes:
+            return spanForImportExportElements(n as NamedImports | NamedExports | ImportAttributes);
+    }
+
+    function spanForImportExportElements(node: NamedImports | NamedExports | ImportAttributes) {
+        if (!node.elements.length) {
+            return undefined;
+        }
+        const openToken = findChildOfKind(node, SyntaxKind.OpenBraceToken, sourceFile);
+        const closeToken = findChildOfKind(node, SyntaxKind.CloseBraceToken, sourceFile);
+        if (!openToken || !closeToken || positionsAreOnSameLine(openToken.pos, closeToken.pos, sourceFile)) {
+            return undefined;
+        }
+
+        return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ false);
     }
 
     function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {

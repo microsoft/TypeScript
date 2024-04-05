@@ -1,17 +1,17 @@
-tests/cases/conformance/generators/generatorAssignability.ts(10,5): error TS2764: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array spread will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(14,5): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(18,5): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(22,1): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(26,1): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(30,11): error TS2763: Cannot iterate value because the 'next' method of its iterator expects type 'string', but for-of will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(35,21): error TS2763: Cannot iterate value because the 'next' method of its iterator expects type 'string', but for-of will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(39,21): error TS2763: Cannot iterate value because the 'next' method of its iterator expects type 'string', but for-of will always send 'undefined'.
-tests/cases/conformance/generators/generatorAssignability.ts(45,12): error TS2766: Cannot delegate iteration to value because the 'next' method of its iterator expects type 'string', but the containing generator will always send 'boolean'.
-tests/cases/conformance/generators/generatorAssignability.ts(51,12): error TS2766: Cannot delegate iteration to value because the 'next' method of its iterator expects type 'string', but the containing generator will always send 'boolean'.
-tests/cases/conformance/generators/generatorAssignability.ts(55,12): error TS2766: Cannot delegate iteration to value because the 'next' method of its iterator expects type 'string', but the containing generator will always send 'boolean'.
+generatorAssignability.ts(10,5): error TS2764: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array spread will always send 'undefined'.
+generatorAssignability.ts(14,5): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
+generatorAssignability.ts(18,5): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
+generatorAssignability.ts(22,1): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
+generatorAssignability.ts(26,1): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
+generatorAssignability.ts(30,11): error TS2763: Cannot iterate value because the 'next' method of its iterator expects type 'string', but for-of will always send 'undefined'.
+generatorAssignability.ts(35,21): error TS2763: Cannot iterate value because the 'next' method of its iterator expects type 'string', but for-of will always send 'undefined'.
+generatorAssignability.ts(39,21): error TS2763: Cannot iterate value because the 'next' method of its iterator expects type 'string', but for-of will always send 'undefined'.
+generatorAssignability.ts(45,12): error TS2766: Cannot delegate iteration to value because the 'next' method of its iterator expects type 'string', but the containing generator will always send 'boolean'.
+generatorAssignability.ts(51,12): error TS2766: Cannot delegate iteration to value because the 'next' method of its iterator expects type 'string', but the containing generator will always send 'boolean'.
+generatorAssignability.ts(55,12): error TS2766: Cannot delegate iteration to value because the 'next' method of its iterator expects type 'string', but the containing generator will always send 'boolean'.
 
 
-==== tests/cases/conformance/generators/generatorAssignability.ts (11 errors) ====
+==== generatorAssignability.ts (11 errors) ====
     declare let _: any;
     declare const g1: Generator<number, void, string>;
     declare const g2: Generator<number, void, undefined>;

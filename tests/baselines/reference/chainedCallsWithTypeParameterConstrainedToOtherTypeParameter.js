@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts] ////
+
 //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts]
 class Chain<T extends A> {
     constructor(public value: T) { }

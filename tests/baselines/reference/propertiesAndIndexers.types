@@ -1,94 +1,122 @@
-=== tests/cases/compiler/propertiesAndIndexers.ts ===
+//// [tests/cases/compiler/propertiesAndIndexers.ts] ////
+
+=== propertiesAndIndexers.ts ===
 interface X { }
 interface Y {
     n: number;
 >n : number
+>  : ^^^^^^
 }
 interface Z {
     s: string;
 >s : string
+>  : ^^^^^^
 }
 
 interface A {
     a: Y;
 >a : Y
+>  : ^
 
     b: X;
 >b : X
+>  : ^
 
     1: Z;
 >1 : Z
+>  : ^
 }
 
 interface B extends A {
     [n: number]: string;
 >n : number
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
     3: boolean;
 >3 : boolean
+>  : ^^^^^^^
 
     6(): string;
 >6 : () => string
+>  : ^^^^^^      
 }
 
 interface B {
     4: boolean;
 >4 : boolean
+>  : ^^^^^^^
 
     5: string;
 >5 : string
+>  : ^^^^^^
 }
 
 interface C extends A {
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
     3: boolean;
 >3 : boolean
+>  : ^^^^^^^
 }
 
 interface D extends B, C {
     2: Z;
 >2 : Z
+>  : ^
 
     Infinity: number;
 >Infinity : number
+>         : ^^^^^^
 
     zoo: string;
 >zoo : string
+>    : ^^^^^^
 }
 
 class P {
 >P : P
+>  : ^
 
     [n: string]: string
 >n : string
+>  : ^^^^^^
 }
 
 class Q extends P {
 >Q : Q
+>  : ^
 >P : P
+>  : ^
 
     t: number;
 >t : number
+>  : ^^^^^^
 }
 
 var c: {
 >c : { [n: number]: string; c: boolean; 3: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^       ^^^
 
     [n: number]: string;
 >n : number
+>  : ^^^^^^
 
     c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
     3: boolean;
 >3 : boolean
+>  : ^^^^^^^
 
 };

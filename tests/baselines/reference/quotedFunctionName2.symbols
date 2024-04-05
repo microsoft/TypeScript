@@ -1,4 +1,6 @@
-=== tests/cases/compiler/quotedFunctionName2.ts ===
+//// [tests/cases/compiler/quotedFunctionName2.ts] ////
+
+=== quotedFunctionName2.ts ===
 class Test1 {
 >Test1 : Symbol(Test1, Decl(quotedFunctionName2.ts, 0, 0))
 

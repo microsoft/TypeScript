@@ -1,4 +1,6 @@
-=== tests/cases/compiler/gettersAndSettersAccessibility.ts ===
+//// [tests/cases/compiler/gettersAndSettersAccessibility.ts] ////
+
+=== gettersAndSettersAccessibility.ts ===
 class C99 {
 >C99 : Symbol(C99, Decl(gettersAndSettersAccessibility.ts, 0, 0))
 

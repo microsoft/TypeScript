@@ -1,8 +1,12 @@
-=== tests/cases/compiler/ClassDeclaration10.ts ===
+//// [tests/cases/compiler/ClassDeclaration10.ts] ////
+
+=== ClassDeclaration10.ts ===
 class C {
 >C : C
+>  : ^
 
    constructor();
    foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }

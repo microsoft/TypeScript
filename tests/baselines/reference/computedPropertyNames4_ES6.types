@@ -1,76 +1,119 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames4_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames4_ES6.ts] ////
+
+=== computedPropertyNames4_ES6.ts ===
 var s: string;
 >s : string
+>  : ^^^^^^
 
 var n: number;
 >n : number
+>  : ^^^^^^
 
 var a: any;
 >a : any
 
 var v = {
 >v : { [x: string]: string | number; [x: number]: string | number; "": number; 0: number; "hello bye": number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : { [x: string]: string | number; [x: number]: string | number; "": number; 0: number; "hello bye": number; }
+>                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [s]: 0,
 >[s] : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     [n]: n,
 >[n] : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     [s + s]: 1,
 >[s + s] : number
+>        : ^^^^^^
 >s + s : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     [s + n]: 2,
 >[s + n] : number
+>        : ^^^^^^
 >s + n : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     [+s]: s,
 >[+s] : string
+>     : ^^^^^^
 >+s : number
+>   : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     [""]: 0,
 >[""] : number
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
     [0]: 0,
 >[0] : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
     [a]: 1,
 >[a] : number
+>    : ^^^^^^
 >a : any
 >1 : 1
+>  : ^
 
     [<any>true]: 0,
 >[<any>true] : number
+>            : ^^^^^^
 ><any>true : any
 >true : true
+>     : ^^^^
 >0 : 0
+>  : ^
 
     [`hello bye`]: 0,
 >[`hello bye`] : number
+>              : ^^^^^^
 >`hello bye` : "hello bye"
+>            : ^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     [`hello ${a} bye`]: 0
 >[`hello ${a} bye`] : number
+>                   : ^^^^^^
 >`hello ${a} bye` : string
+>                 : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 }

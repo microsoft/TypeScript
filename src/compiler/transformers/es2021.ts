@@ -1,6 +1,5 @@
 import {
     AssignmentExpression,
-    BinaryExpression,
     Bundle,
     chainBundle,
     getNonAssignmentOperatorForCompoundAssignment,
@@ -14,7 +13,6 @@ import {
     Node,
     skipParentheses,
     SourceFile,
-    SyntaxKind,
     Token,
     TransformationContext,
     TransformFlags,
@@ -27,7 +25,7 @@ import {
 export function transformES2021(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         hoistVariableDeclaration,
-        factory
+        factory,
     } = context;
     return chainBundle(context, transformSourceFile);
 
@@ -43,16 +41,10 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
         if ((node.transformFlags & TransformFlags.ContainsES2021) === 0) {
             return node;
         }
-        switch (node.kind) {
-            case SyntaxKind.BinaryExpression:
-                const binaryExpression = node as BinaryExpression;
-                if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
-                    return transformLogicalAssignment(binaryExpression);
-                }
-            // falls through
-            default:
-                return visitEachChild(node, visitor, context);
+        if (isLogicalOrCoalescingAssignmentExpression(node)) {
+            return transformLogicalAssignment(node);
         }
+        return visitEachChild(node, visitor, context);
     }
 
     function transformLogicalAssignment(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
@@ -68,17 +60,17 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
                 factory.createTempVariable(hoistVariableDeclaration);
             const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
                 propertyAccessTarget,
-                left.expression
+                left.expression,
             );
 
             if (isPropertyAccessExpression(left)) {
                 assignmentTarget = factory.createPropertyAccessExpression(
                     propertyAccessTarget,
-                    left.name
+                    left.name,
                 );
                 left = factory.createPropertyAccessExpression(
                     propertyAccessTargetAssignment,
-                    left.name
+                    left.name,
                 );
             }
             else {
@@ -88,14 +80,14 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
 
                 assignmentTarget = factory.createElementAccessExpression(
                     propertyAccessTarget,
-                    elementAccessArgument
+                    elementAccessArgument,
                 );
                 left = factory.createElementAccessExpression(
                     propertyAccessTargetAssignment,
                     elementAccessArgumentSimpleCopiable ? left.argumentExpression : factory.createAssignment(
                         elementAccessArgument,
-                        left.argumentExpression
-                    )
+                        left.argumentExpression,
+                    ),
                 );
             }
         }
@@ -106,9 +98,9 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
             factory.createParenthesizedExpression(
                 factory.createAssignment(
                     assignmentTarget,
-                    right
-                )
-            )
+                    right,
+                ),
+            ),
         );
     }
 }

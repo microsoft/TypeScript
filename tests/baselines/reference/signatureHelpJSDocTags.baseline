@@ -1,3 +1,86 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpJSDocTags.ts ===
+// /**
+//  * This is class Foo.
+//  * @mytag comment1 comment2
+//  */
+// class Foo {
+//     /**
+//      * This is the constructor.
+//      * @myjsdoctag this is a comment
+//      */
+//     constructor(value: number) {}
+//     /**
+//      * method1 documentation
+//      * @mytag comment1 comment2
+//      */
+//     static method1() {}
+//     /**
+//      * @mytag
+//      */
+//     method2() {}
+//     /**
+//      * @mytag comment1 comment2
+//      */
+//     property1: string;
+//     /**
+//      * @mytag1 some comments
+//      * some more comments about mytag1
+//      * @mytag2
+//      * here all the comments are on a new line
+//      * @mytag3
+//      * @mytag
+//      */
+//     property2: number;
+//     /**
+//      * @returns {number} a value
+//      */
+//     method3(): number { return 3; }
+//     /**
+//      * @param {string} foo A value.
+//      * @returns {number} Another value
+//      * @mytag
+//      */
+//     method4(foo: string): number { return 3; }
+//     /** @mytag */
+//     method5() {}
+//     /** method documentation
+//      *  @mytag a JSDoc tag
+//      */
+//     newMethod() {}
+// }
+// var foo = new Foo(4);
+//                   ^
+// | ----------------------------------------------------------------------
+// | Foo(**value: number**): Foo
+// | This is the constructor.
+// | @myjsdoctag this is a comment
+// | ----------------------------------------------------------------------
+// Foo.method1();
+//             ^
+// | ----------------------------------------------------------------------
+// | method1(): void
+// | method1 documentation
+// | @mytag comment1 comment2
+// | ----------------------------------------------------------------------
+// foo.method2();
+//             ^
+// | ----------------------------------------------------------------------
+// | method2(): void
+// | @mytag 
+// | ----------------------------------------------------------------------
+// foo.method3();
+//             ^
+// | ----------------------------------------------------------------------
+// | method3(): number
+// | @returns a value
+// | ----------------------------------------------------------------------
+// foo.method4();
+// foo.property1;
+// foo.property2;
+// foo.method5();
+// foo.newMet
+
 [
   {
     "marker": {
@@ -5,7 +88,7 @@
       "position": 981,
       "name": "10"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -107,7 +190,7 @@
       "position": 997,
       "name": "11"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -184,7 +267,7 @@
       "position": 1012,
       "name": "12"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -250,7 +333,7 @@
       "position": 1027,
       "name": "13"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

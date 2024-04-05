@@ -1,32 +1,42 @@
-=== tests/cases/compiler/moduleMerge.ts ===
+//// [tests/cases/compiler/moduleMerge.ts] ////
+
+=== moduleMerge.ts ===
 // This should not compile both B classes are in the same module this should be a collission
 
 module A
 >A : typeof A
+>  : ^^^^^^^^
 {
     class B
 >B : B
+>  : ^
     {
         public Hello(): string
 >Hello : () => string
+>      : ^^^^^^      
         {
             return "from private B";
 >"from private B" : "from private B"
+>                 : ^^^^^^^^^^^^^^^^
         }
     }
 }
 
 module A
 >A : typeof A
+>  : ^^^^^^^^
 {
     export class B
 >B : B
+>  : ^
     {
         public Hello(): string
 >Hello : () => string
+>      : ^^^^^^      
         {
             return "from export B";
 >"from export B" : "from export B"
+>                : ^^^^^^^^^^^^^^^
         }
     }
 }

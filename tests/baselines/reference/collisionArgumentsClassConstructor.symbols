@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsClassConstructor.ts ===
+//// [tests/cases/compiler/collisionArgumentsClassConstructor.ts] ////
+
+=== collisionArgumentsClassConstructor.ts ===
 // Constructors
 class c1 {
 >c1 : Symbol(c1, Decl(collisionArgumentsClassConstructor.ts, 0, 0))

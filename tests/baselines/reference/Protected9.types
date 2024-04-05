@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/Protected/Protected9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Protected/Protected9.ts] ////
+
+=== Protected9.ts ===
 class C {
 >C : C
+>  : ^
 
    constructor(protected p) { }
 >p : any

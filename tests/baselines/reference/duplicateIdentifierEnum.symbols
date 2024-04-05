@@ -1,55 +1,56 @@
-=== tests/cases/compiler/duplicateIdentifierEnum_A.ts ===
-// Test the error message when attempting to merge an enum with a class, an interface, or a function.
+//// [tests/cases/compiler/duplicateIdentifierEnum.ts] ////
+
+=== duplicateIdentifierEnum_A.ts ===
 enum A {
 >A : Symbol(A, Decl(duplicateIdentifierEnum_A.ts, 0, 0))
 
     bar
->bar : Symbol(A.bar, Decl(duplicateIdentifierEnum_A.ts, 1, 8))
+>bar : Symbol(A.bar, Decl(duplicateIdentifierEnum_A.ts, 0, 8))
 }
 class A {
->A : Symbol(A, Decl(duplicateIdentifierEnum_A.ts, 3, 1))
+>A : Symbol(A, Decl(duplicateIdentifierEnum_A.ts, 2, 1))
 
     foo: number;
->foo : Symbol(A.foo, Decl(duplicateIdentifierEnum_A.ts, 4, 9))
+>foo : Symbol(A.foo, Decl(duplicateIdentifierEnum_A.ts, 3, 9))
 }
 
 interface B {
->B : Symbol(B, Decl(duplicateIdentifierEnum_A.ts, 6, 1))
+>B : Symbol(B, Decl(duplicateIdentifierEnum_A.ts, 5, 1))
 
     foo: number;
->foo : Symbol(B.foo, Decl(duplicateIdentifierEnum_A.ts, 8, 13))
+>foo : Symbol(B.foo, Decl(duplicateIdentifierEnum_A.ts, 7, 13))
 }
 const enum B {
->B : Symbol(B, Decl(duplicateIdentifierEnum_A.ts, 10, 1))
+>B : Symbol(B, Decl(duplicateIdentifierEnum_A.ts, 9, 1))
 
     bar
->bar : Symbol(B.bar, Decl(duplicateIdentifierEnum_A.ts, 11, 14))
+>bar : Symbol(B.bar, Decl(duplicateIdentifierEnum_A.ts, 10, 14))
 }
 
 const enum C {
->C : Symbol(C, Decl(duplicateIdentifierEnum_A.ts, 13, 1))
+>C : Symbol(C, Decl(duplicateIdentifierEnum_A.ts, 12, 1))
 
 }
 function C() {
->C : Symbol(C, Decl(duplicateIdentifierEnum_A.ts, 17, 1))
+>C : Symbol(C, Decl(duplicateIdentifierEnum_A.ts, 16, 1))
 
     return 0;
 }
 
 enum D {
->D : Symbol(D, Decl(duplicateIdentifierEnum_A.ts, 20, 1))
+>D : Symbol(D, Decl(duplicateIdentifierEnum_A.ts, 19, 1))
 
     bar
->bar : Symbol(D.bar, Decl(duplicateIdentifierEnum_A.ts, 22, 8))
+>bar : Symbol(D.bar, Decl(duplicateIdentifierEnum_A.ts, 21, 8))
 }
 class E {
->E : Symbol(E, Decl(duplicateIdentifierEnum_A.ts, 24, 1))
+>E : Symbol(E, Decl(duplicateIdentifierEnum_A.ts, 23, 1))
 
     foo: number;
->foo : Symbol(E.foo, Decl(duplicateIdentifierEnum_A.ts, 25, 9))
+>foo : Symbol(E.foo, Decl(duplicateIdentifierEnum_A.ts, 24, 9))
 }
 // also make sure the error appears when trying to merge an enum in a separate file.
-=== tests/cases/compiler/duplicateIdentifierEnum_B.ts ===
+=== duplicateIdentifierEnum_B.ts ===
 function D() {
 >D : Symbol(D, Decl(duplicateIdentifierEnum_B.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug26885.js ===
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment3.ts] ////
+
+=== bug26885.js ===
 function Multimap3() {
 >Multimap3 : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
 

@@ -1,15 +1,26 @@
-=== tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts] ////
+
+=== templateStringInModuleNameES6.ts ===
 declare module `M1` {
 >declare : any
+>        : ^^^
 >module `M1` : any
+>            : ^^^
 >module : any
+>       : ^^^
 >`M1` : "M1"
+>     : ^^^^
 }
 
 declare module `M${2}` {
 >declare : any
+>        : ^^^
 >module `M${2}` : any
+>               : ^^^
 >module : any
+>       : ^^^
 >`M${2}` : string
+>        : ^^^^^^
 >2 : 2
+>  : ^
 }

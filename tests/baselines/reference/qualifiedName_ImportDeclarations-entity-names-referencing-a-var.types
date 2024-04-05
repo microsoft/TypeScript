@@ -1,23 +1,35 @@
-=== tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts ===
+//// [tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts] ////
+
+=== qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts ===
 module Alpha {
 >Alpha : typeof Alpha
+>      : ^^^^^^^^^^^^
 
     export var x = 100;
 >x : number
+>  : ^^^^^^
 >100 : 100
+>    : ^^^
 }
 
 module Beta {
     import p = Alpha.x;
 >p : number
+>  : ^^^^^^
 >Alpha : typeof Alpha
+>      : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 
 var x = Alpha.x
 >x : number
+>  : ^^^^^^
 >Alpha.x : number
+>        : ^^^^^^
 >Alpha : typeof Alpha
+>      : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

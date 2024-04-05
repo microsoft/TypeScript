@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/consumer.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignTypes.ts] ////
+
+=== consumer.ts ===
 import iString = require('./expString');
 >iString : Symbol(iString, Decl(consumer.ts, 0, 0))
 
@@ -54,35 +56,35 @@ var v7: {<x>(p1: x): x} = iGeneric;
 >x : Symbol(x, Decl(consumer.ts, 19, 10))
 >iGeneric : Symbol(iGeneric, Decl(consumer.ts, 16, 14))
 
-=== tests/cases/conformance/externalModules/expString.ts ===
+=== expString.ts ===
 var x = "test";
 >x : Symbol(x, Decl(expString.ts, 0, 3))
 
 export = x;
 >x : Symbol(x, Decl(expString.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/expNumber.ts ===
+=== expNumber.ts ===
 var x = 42;
 >x : Symbol(x, Decl(expNumber.ts, 0, 3))
 
 export = x;
 >x : Symbol(x, Decl(expNumber.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/expBoolean.ts ===
+=== expBoolean.ts ===
 var x = true;
 >x : Symbol(x, Decl(expBoolean.ts, 0, 3))
 
 export = x;
 >x : Symbol(x, Decl(expBoolean.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/expArray.ts ===
+=== expArray.ts ===
 var x = [1,2];
 >x : Symbol(x, Decl(expArray.ts, 0, 3))
 
 export = x;
 >x : Symbol(x, Decl(expArray.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/expObject.ts ===
+=== expObject.ts ===
 var x = { answer: 42, when: 1776};
 >x : Symbol(x, Decl(expObject.ts, 0, 3))
 >answer : Symbol(answer, Decl(expObject.ts, 0, 9))
@@ -91,14 +93,14 @@ var x = { answer: 42, when: 1776};
 export = x;
 >x : Symbol(x, Decl(expObject.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/expAny.ts ===
+=== expAny.ts ===
 var x;
 >x : Symbol(x, Decl(expAny.ts, 0, 3))
 
 export = x;
 >x : Symbol(x, Decl(expAny.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/expGeneric.ts ===
+=== expGeneric.ts ===
 function x<T>(a: T){
 >x : Symbol(x, Decl(expGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(expGeneric.ts, 0, 11))

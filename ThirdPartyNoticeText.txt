@@ -85,12 +85,12 @@ DOM
 W3C License
 This work is being provided by the copyright holders under the following license.
 By obtaining and/or copying this work, you (the licensee) agree that you have read, understood, and will comply with the following terms and conditions.
-Permission to copy, modify, and distribute this work, with or without modification,†for any purpose and without fee or royalty is hereby granted, provided that you include the following 
+Permission to copy, modify, and distribute this work, with or without modification,¬†for any purpose and without fee or royalty is hereby granted, provided that you include the following 
 on ALL copies of the work or portions thereof, including modifications:
 * The full text of this NOTICE in a location viewable to users of the redistributed or derivative work.
 * Any pre-existing intellectual property disclaimers, notices, or terms and conditions. If none exist, the W3C Software and Document Short Notice should be included.
 * Notice of any changes or modifications, through a copyright statement on the new code or document such as "This software or document includes material copied from or derived 
-from [title and URI of the W3C document]. Copyright © [YEAR] W3CÆ (MIT, ERCIM, Keio, Beihang)." 
+from [title and URI of the W3C document]. Copyright ¬© [YEAR] W3C¬Æ (MIT, ERCIM, Keio, Beihang)." 
 Disclaimers
 THIS WORK IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR 
 FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE OR DOCUMENT WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
@@ -101,7 +101,7 @@ Title to copyright in this work will at all times remain with copyright holders.
 ---------
 
 DOM
-Copyright © 2018 WHATWG (Apple, Google, Mozilla, Microsoft). This work is licensed under a Creative Commons Attribution 4.0 International License: Attribution 4.0 International 
+Copyright ¬© 2018 WHATWG (Apple, Google, Mozilla, Microsoft). This work is licensed under a Creative Commons Attribution 4.0 International License: Attribution 4.0 International 
 ======================================================================= 
 Creative Commons Corporation ("Creative Commons") is not a law firm and does not provide legal services or legal advice. Distribution of Creative Commons public licenses does not create a lawyer-client or other relationship. Creative Commons makes its licenses and related information available on an "as-is" basis. Creative Commons gives no warranties regarding its licenses, any material licensed under their terms and conditions, or any related information. Creative Commons disclaims all liability for damages resulting from their use to the fullest extent possible. Using Creative Commons Public Licenses Creative Commons public licenses provide a standard set of terms and conditions that creators and other rights holders may use to share original works of authorship and other material subject to copyright and certain other rights specified in the public license below. The following considerations are for informational purposes only, are not exhaustive, and do not form part of our licenses. Considerations for licensors: Our public licenses are intended for use by those authorized to give the public permission to use material in ways otherwise restricted by copyright and certain other rights. Our licenses are irrevocable. Licensors should read and understand the terms and conditions of the license they choose before applying it. Licensors should also secure all rights necessary before applying our licenses so that the public can reuse the material as expected. Licensors should clearly mark any material not subject to the license. This includes other CC- licensed material, or material used under an exception or limitation to copyright. More considerations for licensors:
 
@@ -113,7 +113,7 @@ Creative Commons Attribution 4.0 International Public License By exercising the 
 ----------------------Web Background Synchronization------------------------------
 
 Web Background Synchronization Specification
-Portions of spec © by W3C
+Portions of spec ¬© by W3C
 
 W3C Community Final Specification Agreement 
 To secure commitments from participants for the full text of a Community or Business Group Report, the group may call for voluntary commitments to the following terms; a "summary" is 
@@ -136,11 +136,11 @@ Any other capitalized terms not specifically defined herein have the same meanin
 7.2.1. Licensing Obligations to Resulting Specification. If I do not join the Corresponding Working Group, I agree to offer patent licenses according to the W3C Royalty-Free licensing requirements described in Section 5 of the W3C Patent Policy for the portions of the Specification included in the resulting Recommendation. This licensing commitment does not extend to any portion of an implementation of the Recommendation that was not included in the Specification. This licensing commitment may not be revoked but may be modified through the exclusion process defined in Section 4 of the W3C Patent Policy. I am not required to join the Corresponding Working Group to exclude patents from the W3C Royalty-Free licensing commitment, but must otherwise follow the normal exclusion procedures defined by the W3C Patent Policy. The W3C Team will notify me of any Call for Exclusion in the Corresponding Working Group as set forth in Section 4.5 of the W3C Patent Policy.
 7.2.2. No Disclosure Obligation. If I do not join the Corresponding Working Group, I have no patent disclosure obligations outside of those set forth in Section 6 of the W3C Patent Policy.
 8. Conflict of Interest. I will disclose significant relationships when those relationships might reasonably be perceived as creating a conflict of interest with my role. I will notify W3C of any change in my affiliation using W3C-provided mechanisms.
-9. Representations, Warranties and Disclaimers. I represent and warrant that I am legally entitled to grant the rights and promises set forth in this Agreement. IN ALL OTHER RESPECTS THE SPECIFICATION IS PROVIDED ìAS IS.î The entire risk as to implementing or otherwise using the Specification is assumed by the implementer and user. Except as stated herein, I expressly disclaim any warranties (express, implied, or otherwise), including implied warranties of merchantability, non-infringement, fitness for a particular purpose, or title, related to the Specification. IN NO EVENT WILL ANY PARTY BE LIABLE TO ANY OTHER PARTY FOR LOST PROFITS OR ANY FORM OF INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER FROM ANY CAUSES OF ACTION OF ANY KIND WITH RESPECT TO THIS AGREEMENT, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, AND WHETHER OR NOT THE OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. All of my obligations under Section 3 regarding the transfer, successors in interest, or assignment of Granted Claims will be satisfied if I notify the transferee or assignee of any patent that I know contains Granted Claims of the obligations under Section 3. Nothing in this Agreement requires me to undertake a patent search.
+9. Representations, Warranties and Disclaimers. I represent and warrant that I am legally entitled to grant the rights and promises set forth in this Agreement. IN ALL OTHER RESPECTS THE SPECIFICATION IS PROVIDED ‚ÄúAS IS.‚Äù The entire risk as to implementing or otherwise using the Specification is assumed by the implementer and user. Except as stated herein, I expressly disclaim any warranties (express, implied, or otherwise), including implied warranties of merchantability, non-infringement, fitness for a particular purpose, or title, related to the Specification. IN NO EVENT WILL ANY PARTY BE LIABLE TO ANY OTHER PARTY FOR LOST PROFITS OR ANY FORM OF INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER FROM ANY CAUSES OF ACTION OF ANY KIND WITH RESPECT TO THIS AGREEMENT, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, AND WHETHER OR NOT THE OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. All of my obligations under Section 3 regarding the transfer, successors in interest, or assignment of Granted Claims will be satisfied if I notify the transferee or assignee of any patent that I know contains Granted Claims of the obligations under Section 3. Nothing in this Agreement requires me to undertake a patent search.
 10. Definitions. 
-10.1. Agreement. ìAgreementî means this W3C Community Final Specification Agreement.
-10.2. Corresponding Working Group. ìCorresponding Working Groupî is a W3C Working Group that is chartered to develop a Recommendation, as defined in the W3C Process Document, that takes the Specification as an input.
-10.3. Essential Claims. ìEssential Claimsî shall mean all claims in any patent or patent application in any jurisdiction in the world that would necessarily be infringed by implementation of the Specification. A claim is necessarily infringed hereunder only when it is not possible to avoid infringing it because there is no non-infringing alternative for implementing the normative portions of the Specification. Existence of a non-infringing alternative shall be judged based on the state of the art at the time of the publication of the Specification. The following are expressly excluded from and shall not be deemed to constitute Essential Claims: 
+10.1. Agreement. ‚ÄúAgreement‚Äù means this W3C Community Final Specification Agreement.
+10.2. Corresponding Working Group. ‚ÄúCorresponding Working Group‚Äù is a W3C Working Group that is chartered to develop a Recommendation, as defined in the W3C Process Document, that takes the Specification as an input.
+10.3. Essential Claims. ‚ÄúEssential Claims‚Äù shall mean all claims in any patent or patent application in any jurisdiction in the world that would necessarily be infringed by implementation of the Specification. A claim is necessarily infringed hereunder only when it is not possible to avoid infringing it because there is no non-infringing alternative for implementing the normative portions of the Specification. Existence of a non-infringing alternative shall be judged based on the state of the art at the time of the publication of the Specification. The following are expressly excluded from and shall not be deemed to constitute Essential Claims: 
 10.3.1. any claims other than as set forth above even if contained in the same patent as Essential Claims; and
 10.3.2. claims which would be infringed only by: 
 portions of an implementation that are not specified in the normative portions of the Specification, or
@@ -148,10 +148,10 @@ enabling technologies that may be necessary to make or use any product or portio
 the implementation of technology developed elsewhere and merely incorporated by reference in the body of the Specification.
 10.3.3. design patents and design registrations.
 For purposes of this definition, the normative portions of the Specification shall be deemed to include only architectural and interoperability requirements. Optional features in the RFC 2119 sense are considered normative unless they are specifically identified as informative. Implementation examples or any other material that merely illustrate the requirements of the Specification are informative, rather than normative.
-10.4. I, Me, or My. ìI,î ìme,î or ìmyî refers to the signatory.
-10.5 Project. ìProjectî means the W3C Community Group or Business Group for which I executed this Agreement.
-10.6. Specification. ìSpecificationî means the Specification identified by the Project as the target of this agreement in a call for Final Specification Commitments. W3C shall provide the authoritative mechanisms for the identification of this Specification.
-10.7. W3C Community RF Licensing Requirements. ìW3C Community RF Licensing Requirementsî license shall mean a non-assignable, non-sublicensable license to make, have made, use, sell, have sold, offer to sell, import, and distribute and dispose of implementations of the Specification that: 
+10.4. I, Me, or My. ‚ÄúI,‚Äù ‚Äúme,‚Äù or ‚Äúmy‚Äù refers to the signatory.
+10.5 Project. ‚ÄúProject‚Äù means the W3C Community Group or Business Group for which I executed this Agreement.
+10.6. Specification. ‚ÄúSpecification‚Äù means the Specification identified by the Project as the target of this agreement in a call for Final Specification Commitments. W3C shall provide the authoritative mechanisms for the identification of this Specification.
+10.7. W3C Community RF Licensing Requirements. ‚ÄúW3C Community RF Licensing Requirements‚Äù license shall mean a non-assignable, non-sublicensable license to make, have made, use, sell, have sold, offer to sell, import, and distribute and dispose of implementations of the Specification that: 
 10.7.1. shall be available to all, worldwide, whether or not they are W3C Members;
 10.7.2. shall extend to all Essential Claims owned or controlled by me;
 10.7.3. may be limited to implementations of the Specification, and to what is required by the Specification;
@@ -162,7 +162,7 @@ For purposes of this definition, the normative portions of the Specification sha
 10.7.8. shall not be considered accepted by an implementer who manifests an intent not to accept the terms of the W3C Community RF Licensing Requirements license as offered by the licensor.
 10.7.9. The RF license conforming to the requirements in this policy shall be made available by the licensor as long as the Specification is in effect. The term of such license shall be for the life of the patents in question.
 I am encouraged to provide a contact from which licensing information can be obtained and other relevant licensing information. Any such information will be made publicly available. 
-10.8. You or Your. ìYou,î ìyou,î or ìyourî means any person or entity who exercises copyright or patent rights granted under this Agreement, and any person that person or entity controls.
+10.8. You or Your. ‚ÄúYou,‚Äù ‚Äúyou,‚Äù or ‚Äúyour‚Äù means any person or entity who exercises copyright or patent rights granted under this Agreement, and any person that person or entity controls.
 
 -------------------------------------------------------------------------------------
 

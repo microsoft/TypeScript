@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicates01.ts ===
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicates01.ts] ////
+
+=== declarationEmitIdentifierPredicates01.ts ===
 export function f(x: any): x is number {
 >f : Symbol(f, Decl(declarationEmitIdentifierPredicates01.ts, 0, 0))
 >x : Symbol(x, Decl(declarationEmitIdentifierPredicates01.ts, 0, 18))

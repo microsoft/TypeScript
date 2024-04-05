@@ -1,12 +1,12 @@
-tests/cases/conformance/jsx/file.tsx(14,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
-tests/cases/conformance/jsx/file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
-tests/cases/conformance/jsx/file.tsx(31,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-tests/cases/conformance/jsx/file.tsx(37,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-tests/cases/conformance/jsx/file.tsx(43,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
-tests/cases/conformance/jsx/file.tsx(49,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+file.tsx(14,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
+file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+file.tsx(31,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+file.tsx(37,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+file.tsx(43,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
+file.tsx(49,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.
 
 
-==== tests/cases/conformance/jsx/file.tsx (6 errors) ====
+==== file.tsx (6 errors) ====
     import React = require('react');
     
     interface Prop {
@@ -23,7 +23,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2746: This JSX tag's 'childr
     let k = <Comp a={10} b="hi" />;
              ~~~~
 !!! error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:6:5: 'children' is declared here.
+!!! related TS2728 file.tsx:6:5: 'children' is declared here.
     
     let k0 =
         <Comp a={10} b="hi" children="Random" >

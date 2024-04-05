@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts] ////
+
 //// [protectedInstanceMemberAccessibility.ts]
 class A {
     protected x: string;

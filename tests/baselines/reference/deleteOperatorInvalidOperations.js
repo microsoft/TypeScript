@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts] ////
+
 //// [deleteOperatorInvalidOperations.ts]
 // Unary operator delete
 var ANY;

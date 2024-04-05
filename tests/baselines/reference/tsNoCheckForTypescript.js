@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/tsNoCheckForTypescript.ts] ////
+
 //// [file.ts]
 // @ts-nocheck
 
@@ -40,11 +42,11 @@ export declare class Bet implements Aleph {
 //// [DtsFileErrors]
 
 
-tests/cases/conformance/jsdoc/file.d.ts(6,5): error TS2416: Property 'q' in type 'Bet' is not assignable to the same property in base type 'Aleph'.
+file.d.ts(6,5): error TS2416: Property 'q' in type 'Bet' is not assignable to the same property in base type 'Aleph'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsdoc/file.d.ts (1 errors) ====
+==== file.d.ts (1 errors) ====
     export declare const a: any;
     export interface Aleph {
         q: number;

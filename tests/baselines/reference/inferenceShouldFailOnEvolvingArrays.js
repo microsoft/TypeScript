@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceShouldFailOnEvolvingArrays.ts] ////
+
 //// [inferenceShouldFailOnEvolvingArrays.ts]
 // repro from https://github.com/Microsoft/TypeScript/issues/25675
 // The type of `arg` blocks inference but simplifies to T.

@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithEnumType.ts(21,1): error TS2695: Left side of comma operator is unused and has no side effects.
+logicalNotOperatorWithEnumType.ts(21,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithEnumType.ts (1 errors) ====
+==== logicalNotOperatorWithEnumType.ts (1 errors) ====
     // ! operator on enum type
     
     enum ENUM { A, B, C };

@@ -1,148 +1,209 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassesErr.ts] ////
+
+=== index.js ===
 // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
 
 export class M<T> {
 >M : M<T>
+>  : ^^^^
 
     field: T;
 >field : T
+>      : ^
 }
 
 export class N<U> extends M<U> {
 >N : N<U>
+>  : ^^^^
 >M : M<U>
+>  : ^^^^
 
     other: U;
 >other : U
+>      : ^
 }
 
 export class O {
 >O : O
+>  : ^
 
     [idx: string]: string;
 >idx : string
+>    : ^^^^^^
 }
 
 export class P extends O {}
 >P : P
+>  : ^
 >O : O
+>  : ^
 
 export class Q extends O {
 >Q : Q
+>  : ^
 >O : O
+>  : ^
 
     [idx: string]: "ok";
 >idx : string
+>    : ^^^^^^
 }
 
 export class R extends O {
 >R : R
+>  : ^
 >O : O
+>  : ^
 
     [idx: number]: "ok";
 >idx : number
+>    : ^^^^^^
 }
 
 export class S extends O {
 >S : S
+>  : ^
 >O : O
+>  : ^
 
     [idx: string]: "ok";
 >idx : string
+>    : ^^^^^^
 
     [idx: number]: never;
 >idx : number
+>    : ^^^^^^
 }
 
 export class T {
 >T : T
+>  : ^
 
     [idx: number]: string;
 >idx : number
+>    : ^^^^^^
 }
 
 export class U extends T {}
 >U : U
+>  : ^
 >T : T
+>  : ^
 
 
 export class V extends T {
 >V : V
+>  : ^
 >T : T
+>  : ^
 
     [idx: string]: string;
 >idx : string
+>    : ^^^^^^
 }
 
 export class W extends T {
 >W : W
+>  : ^
 >T : T
+>  : ^
 
     [idx: number]: "ok";
 >idx : number
+>    : ^^^^^^
 }
 
 export class X extends T {
 >X : X
+>  : ^
 >T : T
+>  : ^
 
     [idx: string]: string;
 >idx : string
+>    : ^^^^^^
 
     [idx: number]: "ok";
 >idx : number
+>    : ^^^^^^
 }
 
 export class Y {
 >Y : Y
+>  : ^
 
     [idx: string]: {x: number};
 >idx : string
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     [idx: number]: {x: number, y: number};
 >idx : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 export class Z extends Y {}
 >Z : Z
+>  : ^
 >Y : Y
+>  : ^
 
 export class AA extends Y {
 >AA : AA
+>   : ^^
 >Y : Y
+>  : ^
 
     [idx: string]: {x: number, y: number};
 >idx : string
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 export class BB extends Y {
 >BB : BB
+>   : ^^
 >Y : Y
+>  : ^
 
     [idx: number]: {x: 0, y: 0};
 >idx : number
+>    : ^^^^^^
 >x : 0
+>  : ^
 >y : 0
+>  : ^
 }
 
 export class CC extends Y {
 >CC : CC
+>   : ^^
 >Y : Y
+>  : ^
 
     [idx: string]: {x: number, y: number};
 >idx : string
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     [idx: number]: {x: 0, y: 0};
 >idx : number
+>    : ^^^^^^
 >x : 0
+>  : ^
 >y : 0
+>  : ^
 }
 

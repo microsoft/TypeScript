@@ -1,160 +1,105 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
-// /*FIND ALL REFS*/declare module "[|foo|]" {
+// /*FIND ALL REFS*/<|declare module "[|{| isWriteAccess: true, isDefinition: true |}foo|]" {
 //     var f: number;
-// }
+// }|>
 // 
 // declare module "bar" {
-//     export import foo = require("[|foo|]");
+//     <|export import foo = require("[|foo|]");|>
 //     var f2: typeof foo.f;
 // }
 // 
-// declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 10) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "module",
-      "name": "module \"foo\"",
-      "textSpan": {
-        "start": 16,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // /*FIND ALL REFS*/<|declare module "[|foo|]" {
+  //     var f: number;
+  // }|>
+  // 
+  // declare module "bar" {
+  //     export import foo = require("foo");
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
-// declare module "/*FIND ALL REFS*/[|foo|]" {
+// <|declare module "/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|]" {
 //     var f: number;
-// }
+// }|>
 // 
 // declare module "bar" {
-//     export import foo = require("[|foo|]");
+//     <|export import foo = require("[|foo|]");|>
 //     var f2: typeof foo.f;
 // }
 // 
-// declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 10) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "module",
-      "name": "module \"foo\"",
-      "textSpan": {
-        "start": 16,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // <|declare module "/*FIND ALL REFS*/[|foo|]" {
+  //     var f: number;
+  // }|>
+  // 
+  // declare module "bar" {
+  //     export import foo = require("foo");
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
-//     /*FIND ALL REFS*/var [|f|]: number;
+//     /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}f|]: number;|>
 // }
 // 
 // declare module "bar" {
@@ -163,83 +108,59 @@
 // }
 // 
 // declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "var",
-      "name": "var f: number",
-      "textSpan": {
-        "start": 31,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 27,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 27,
-          "length": 14
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 131,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     /*FIND ALL REFS*/<|var [|f|]: number;|>
+  // }
+  // 
+  // declare module "bar" {
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var f: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
-//     var /*FIND ALL REFS*/[|f|]: number;
+//     <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|]: number;|>
 // }
 // 
 // declare module "bar" {
@@ -248,241 +169,179 @@
 // }
 // 
 // declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "var",
-      "name": "var f: number",
-      "textSpan": {
-        "start": 31,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 27,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 27,
-          "length": 14
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 131,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     <|var /*FIND ALL REFS*/[|f|]: number;|>
+  // }
+  // 
+  // declare module "bar" {
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var f: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
-// /*FIND ALL REFS*/declare module "[|bar|]" {
+// /*FIND ALL REFS*/<|declare module "[|{| isWriteAccess: true, isDefinition: true |}bar|]" {
 //     export import foo = require("foo");
 //     var f2: typeof foo.f;
-// }
+// }|>
 // 
 // declare module "baz" {
-//     import bar = require("[|bar|]");
+//     <|import bar = require("[|bar|]");|>
 //     var f2: typeof bar.foo;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "module",
-      "name": "module \"bar\"",
-      "textSpan": {
-        "start": 61,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"bar\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 45,
-        "length": 90
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 45,
-          "length": 90
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 186,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 164,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // /*FIND ALL REFS*/<|declare module "[|bar|]" {
+  //     export import foo = require("foo");
+  //     var f2: typeof foo.f;
+  // }|>
+  // 
+  // declare module "baz" {
+  //     import bar = require("bar");
+  //     var f2: typeof bar.foo;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"bar\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"bar\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
-// declare module "/*FIND ALL REFS*/[|bar|]" {
+// <|declare module "/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}bar|]" {
 //     export import foo = require("foo");
 //     var f2: typeof foo.f;
-// }
+// }|>
 // 
 // declare module "baz" {
-//     import bar = require("[|bar|]");
+//     <|import bar = require("[|bar|]");|>
 //     var f2: typeof bar.foo;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "module",
-      "name": "module \"bar\"",
-      "textSpan": {
-        "start": 61,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"bar\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 45,
-        "length": 90
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 45,
-          "length": 90
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 186,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 164,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // <|declare module "/*FIND ALL REFS*/[|bar|]" {
+  //     export import foo = require("foo");
+  //     var f2: typeof foo.f;
+  // }|>
+  // 
+  // declare module "baz" {
+  //     import bar = require("bar");
+  //     var f2: typeof bar.foo;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"bar\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"bar\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
 // declare module "bar" {
-//     /*FIND ALL REFS*/export import [|foo|] = require("foo");
+//     /*FIND ALL REFS*/<|export import [|{| isWriteAccess: true, isDefinition: true |}foo|] = require("foo");|>
 //     var f2: typeof [|foo|].f;
 // }
 // 
@@ -491,140 +350,113 @@
 //     var f2: typeof bar.[|foo|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "alias",
-      "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
-      "textSpan": {
-        "start": 86,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 72,
-        "length": 35
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 216,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // declare module "bar" {
+  //     /*FIND ALL REFS*/<|export import [|foo|] = require("foo");|>
+  //     var f2: typeof foo.f;
+  // }
+  // 
+  // --- (line: 10) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
 // declare module "bar" {
-//     export import /*FIND ALL REFS*/[|foo|] = require("foo");
+//     <|export import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|] = require("foo");|>
 //     var f2: typeof [|foo|].f;
 // }
 // 
@@ -633,215 +465,165 @@
 //     var f2: typeof bar.[|foo|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "alias",
-      "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
-      "textSpan": {
-        "start": 86,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 72,
-        "length": 35
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 216,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // declare module "bar" {
+  //     <|export import /*FIND ALL REFS*/[|foo|] = require("foo");|>
+  //     var f2: typeof foo.f;
+  // }
+  // 
+  // --- (line: 10) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
-// declare module "[|foo|]" {
+// <|declare module "[|{| isWriteAccess: true |}foo|]" {
 //     var f: number;
-// }
+// }|>
 // 
 // declare module "bar" {
-//     export import foo = require("/*FIND ALL REFS*/[|foo|]");
+//     <|export import foo = require("/*FIND ALL REFS*/[|foo|]");|>
 //     var f2: typeof foo.f;
 // }
 // 
-// declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 10) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "module",
-      "name": "module \"foo\"",
-      "textSpan": {
-        "start": 16,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // <|declare module "[|foo|]" {
+  //     var f: number;
+  // }|>
+  // 
+  // declare module "bar" {
+  //     export import foo = require("/*FIND ALL REFS*/foo");
+  //     var f2: typeof foo.f;
+  // }
+  // 
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"foo\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
 // declare module "bar" {
-//     export import [|foo|] = require("foo");
+//     <|export import [|{| isWriteAccess: true |}foo|] = require("foo");|>
 //     var f2: typeof /*FIND ALL REFS*/[|foo|].f;
 // }
 // 
@@ -850,133 +632,110 @@
 //     var f2: typeof bar.[|foo|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "alias",
-      "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
-      "textSpan": {
-        "start": 86,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 72,
-        "length": 35
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 216,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // declare module "bar" {
+  //     <|export import [|foo|] = require("foo");|>
+  //     var f2: typeof /*FIND ALL REFS*/foo.f;
+  // }
+  // 
+  // declare module "baz" {
+  // --- (line: 11) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
-//     var [|f|]: number;
+//     <|var [|{| isWriteAccess: true |}f|]: number;|>
 // }
 // 
 // declare module "bar" {
@@ -985,293 +744,232 @@
 // }
 // 
 // declare module "baz" {
-//     import bar = require("bar");
-//     var f2: typeof bar.foo;
-// }
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "var",
-      "name": "var f: number",
-      "textSpan": {
-        "start": 31,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 27,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 27,
-          "length": 14
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 131,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     <|var [|f|]: number;|>
+  // }
+  // 
+  // declare module "bar" {
+  //     export import foo = require("foo");
+  //     var f2: typeof foo./*FIND ALL REFS*/f;
+  // }
+  // 
+  // declare module "baz" {
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var f: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
-// declare module "foo" {
-//     var f: number;
-// }
-// 
-// declare module "bar" {
-//     export import foo = require("foo");
-//     var f2: typeof foo.f;
+// --- (line: 7) skipped ---
 // }
 // 
 // declare module "baz" {
-//     /*FIND ALL REFS*/import [|bar|] = require("bar");
+//     /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}bar|] = require("bar");|>
 //     var f2: typeof [|bar|].foo;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "alias",
-      "name": "(alias) module \"bar\"\nimport bar = require(\"bar\")",
-      "textSpan": {
-        "start": 171,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"bar\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "bar",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"bar\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 164,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 171,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 164,
-          "length": 28
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // --- (line: 7) skipped ---
+  // }
+  // 
+  // declare module "baz" {
+  //     /*FIND ALL REFS*/<|import [|bar|] = require("bar");|>
+  //     var f2: typeof bar.foo;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) module \"bar\"\nimport bar = require(\"bar\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"bar\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"bar\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
-// declare module "[|bar|]" {
+// <|declare module "[|{| isWriteAccess: true |}bar|]" {
 //     export import foo = require("foo");
 //     var f2: typeof foo.f;
-// }
+// }|>
 // 
 // declare module "baz" {
-//     import bar = require("/*FIND ALL REFS*/[|bar|]");
+//     <|import bar = require("/*FIND ALL REFS*/[|bar|]");|>
 //     var f2: typeof bar.foo;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "module",
-      "name": "module \"bar\"",
-      "textSpan": {
-        "start": 61,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"bar\"",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 45,
-        "length": 90
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 61,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 45,
-          "length": 90
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 186,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 164,
-          "length": 28
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // <|declare module "[|bar|]" {
+  //     export import foo = require("foo");
+  //     var f2: typeof foo.f;
+  // }|>
+  // 
+  // declare module "baz" {
+  //     import bar = require("/*FIND ALL REFS*/bar");
+  //     var f2: typeof bar.foo;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"bar\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"bar\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // declare module "foo" {
 //     var f: number;
 // }
 // 
 // declare module "bar" {
-//     export import [|foo|] = require("foo");
+//     <|export import [|{| isWriteAccess: true |}foo|] = require("foo");|>
 //     var f2: typeof [|foo|].f;
 // }
 // 
@@ -1280,126 +978,102 @@
 //     var f2: typeof bar./*FIND ALL REFS*/[|foo|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-      "kind": "alias",
-      "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
-      "textSpan": {
-        "start": 86,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"foo\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 72,
-        "length": 35
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "contextSpan": {
-          "start": 72,
-          "length": 35
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 127,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 216,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForAmbients.ts ===
+  // declare module "foo" {
+  //     var f: number;
+  // }
+  // 
+  // declare module "bar" {
+  //     <|export import [|foo|] = require("foo");|>
+  //     var f2: typeof foo.f;
+  // }
+  // 
+  // declare module "baz" {
+  //     import bar = require("bar");
+  //     var f2: typeof bar./*FIND ALL REFS*/foo;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) module \"foo\"\nimport foo = require(\"foo\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,18 +1,29 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts] ////
+
+=== collisionCodeGenModuleWithMemberVariable.ts ===
 module m1 {
 >m1 : typeof globalThis.m1
+>   : ^^^^^^^^^^^^^^^^^^^^
 
     export var m1 = 10;
 >m1 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 
     var b = m1;
 >b : number
+>  : ^^^^^^
 >m1 : number
+>   : ^^^^^^
 }
 var foo = m1.m1;
 >foo : number
+>    : ^^^^^^
 >m1.m1 : number
+>      : ^^^^^^
 >m1 : typeof m1
+>   : ^^^^^^^^^
 >m1 : number
+>   : ^^^^^^
 

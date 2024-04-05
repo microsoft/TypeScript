@@ -1,15 +1,21 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration17.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration17.ts] ////
+
+=== parserClassDeclaration17.ts ===
 declare class Enumerator {
 >Enumerator : Enumerator
+>           : ^^^^^^^^^^
 
     public atEnd(): boolean;
 >atEnd : () => boolean
+>      : ^^^^^^       
 
     public moveNext();
 >moveNext : () => any
+>         : ^^^^^^^^^
 
     public item(): any;
 >item : () => any
+>     : ^^^^^^   
 
     constructor (o: any);
 >o : any

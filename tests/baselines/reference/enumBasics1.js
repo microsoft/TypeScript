@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumBasics1.ts] ////
+
 //// [enumBasics1.ts]
 enum E {
 	A = 1,

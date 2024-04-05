@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorMessagesIntersectionTypes01.ts ===
+//// [tests/cases/compiler/errorMessagesIntersectionTypes01.ts] ////
+
+=== errorMessagesIntersectionTypes01.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(errorMessagesIntersectionTypes01.ts, 0, 0))
 

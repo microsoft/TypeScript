@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts] ////
+
 //// [taggedTemplateStringsWithOverloadResolution1_ES6.ts]
 function foo(strs: TemplateStringsArray): number;
 function foo(strs: TemplateStringsArray, x: number): string;

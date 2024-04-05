@@ -1,42 +1,54 @@
-=== tests/cases/compiler/interfaceDeclaration1.ts ===
+//// [tests/cases/compiler/interfaceDeclaration1.ts] ////
+
+=== interfaceDeclaration1.ts ===
 interface I1 {
     item:number;
 >item : number
+>     : ^^^^^^
 
     item:number;
 >item : number
+>     : ^^^^^^
 }
 
 interface I2 {
     item:any;
 >item : any
+>     : ^^^
 
     item:number;
 >item : any
+>     : ^^^
 }
 
 interface I3 {
     prototype:number;
 >prototype : number
+>          : ^^^^^^
 }
 
 interface I4 {
     class:number;
 >class : number
+>      : ^^^^^^
 
     number:number;
 >number : number
+>       : ^^^^^^
 
     super:number;
 >super : number
+>      : ^^^^^^
 
     prototype:number;
 >prototype : number
+>          : ^^^^^^
 }
 
 interface I5 extends I5 { 
     foo():void;
 >foo : () => void
+>    : ^^^^^^    
 }
 
 interface I6 {
@@ -47,18 +59,24 @@ interface I7 extends I6 { }
 
 var v1:I7;
 >v1 : I7
+>   : ^^
 
 v1();
 >v1() : void
+>     : ^^^^
 >v1 : I7
+>   : ^^
 
 class C1 implements I3 {
 >C1 : C1
+>   : ^^
 
     constructor() {
         var prototype: number = 3;
 >prototype : number
+>          : ^^^^^^
 >3 : 3
+>  : ^
     }
 }
 
@@ -68,11 +86,13 @@ interface i9 extends i8 { }
 interface i10 {
 	foo():number;
 >foo : () => number
+>    : ^^^^^^      
 }
 
 interface i11{
 	foo():string;
 >foo : () => string
+>    : ^^^^^^      
 }
 
 interface i12 extends i10, i11 { }

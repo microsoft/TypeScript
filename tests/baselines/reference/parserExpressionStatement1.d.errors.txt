@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserExpressionStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/parser/ecmascript5/Statements/parserExpressionStatement1.d.ts(1,1): error TS2304: Cannot find name 'Foo'.
+parserExpressionStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
+parserExpressionStatement1.d.ts(1,1): error TS2304: Cannot find name 'Foo'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserExpressionStatement1.d.ts (2 errors) ====
+==== parserExpressionStatement1.d.ts (2 errors) ====
     Foo();
     ~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

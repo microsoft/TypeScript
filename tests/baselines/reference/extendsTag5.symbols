@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/jsdoc/extendsTag5.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {{
+*     a: number | string;
+*     b: boolean | string[];
+* }} Foo
+*/
+
+/**
+* @template {Foo} T
+*/
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+   /**
+    * @param {T} a
+    */
+   constructor(a) {
+>a : Symbol(a, Decl(a.js, 14, 15))
+
+       return a
+>a : Symbol(a, Decl(a.js, 14, 15))
+   }
+}
+
+/**
+* @extends {A<{
+*     a: string,
+*     b: string[]
+* }>}
+*/
+class B extends A {}
+>B : Symbol(B, Decl(a.js, 17, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+/**
+ * @extends {A<{
+ *     a: string,
+ *     b: string
+ * }>}
+ */
+class C extends A {}
+>C : Symbol(C, Decl(a.js, 25, 20))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+/**
+ * @extends {A<{a: string, b: string[]}>}
+ */
+class D extends A {}
+>D : Symbol(D, Decl(a.js, 33, 20))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+/**
+ * @extends {A<{a: string, b: string}>}
+ */
+class E extends A {}
+>E : Symbol(E, Decl(a.js, 38, 20))
+>A : Symbol(A, Decl(a.js, 0, 0))
+

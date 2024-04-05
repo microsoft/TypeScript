@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisConditionalOnMethodReturnOfGenericInstance.ts] ////
+
 //// [thisConditionalOnMethodReturnOfGenericInstance.ts]
 class A<T> {
     unmeasurableUsage!: {[K in keyof T]-?: T[K]};

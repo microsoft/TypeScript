@@ -1,16 +1,24 @@
-=== tests/cases/compiler/memberScope.ts ===
+//// [tests/cases/compiler/memberScope.ts] ////
+
+=== memberScope.ts ===
 module Salt {
 >Salt : typeof Salt
+>     : ^^^^^^^^^^^
 
   export class Pepper {}
 >Pepper : Pepper
+>       : ^^^^^^
 
   export module Basil { }
   var z = Basil.Pepper;
 >z : any
+>  : ^^^
 >Basil.Pepper : any
+>             : ^^^
 >Basil : any
+>      : ^^^
 >Pepper : any
+>       : ^^^
 }
 
 

@@ -1,13 +1,19 @@
-=== tests/cases/compiler/staticClassProps.ts ===
+//// [tests/cases/compiler/staticClassProps.ts] ////
+
+=== staticClassProps.ts ===
 class C
 >C : C
+>  : ^
 {
     public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         static z = 1;
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 

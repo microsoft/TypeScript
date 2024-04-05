@@ -1,26 +1,38 @@
-=== tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts ===
+//// [tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts] ////
+
+=== nestedInfinitelyExpandedRecursiveTypes.ts ===
 interface F<T> {
       t: G<F<() => T>>;
 >t : G<F<() => T>>
+>  : ^^^^^^^^^^ ^^
 }
 interface G<U> {
       t: G<G<() => U>>;
 >t : G<G<() => U>>
+>  : ^^^^^^^^^^ ^^
 }
  
 var f: F<string>;
 >f : F<string>
+>  : ^^^^^^^^^
 
 var g: G<string>;
 >g : G<string>
+>  : ^^^^^^^^^
 
 f = g;
 >f = g : G<string>
+>      : ^^^^^^^^^
 >f : F<string>
+>  : ^^^^^^^^^
 >g : G<string>
+>  : ^^^^^^^^^
 
 g = f;
 >g = f : F<string>
+>      : ^^^^^^^^^
 >g : G<string>
+>  : ^^^^^^^^^
 >f : F<string>
+>  : ^^^^^^^^^
 

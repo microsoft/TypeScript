@@ -13,4 +13,4 @@
 ////     }
 //// }
 
-verify.goToDefinition(['1'], [])
+verify.baselineGoToDefinition('1')

@@ -1,70 +1,129 @@
-=== tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts] ////
+
+=== declarationEmitDestructuringArrayPattern2.ts ===
 var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
 >x10 : number
+>    : ^^^^^^
 >y10 : string
+>    : ^^^^^^
 >z10 : boolean
+>    : ^^^^^^^
 >[1, ["hello", [true]]] : [number, [string, [boolean]]]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >["hello", [true]] : [string, [boolean]]
+>                  : ^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >[true] : [boolean]
+>       : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var [x11 = 0, y11 = ""] = [1, "hello"];
 >x11 : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >y11 : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 var [a11, b11, c11] = [];
 >a11 : undefined
+>    : ^^^^^^^^^
 >b11 : undefined
+>    : ^^^^^^^^^
 >c11 : undefined
+>    : ^^^^^^^^^
 >[] : []
+>   : ^^
 
 var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello", { x12: 5, y12: true }]];
 >a2 : number
+>   : ^^^^^^
 >b2 : string
+>   : ^^^^^^
 >x12 : number
+>    : ^^^^^^
 >y12 : any
+>    : ^^^
 >c2 : boolean
+>   : ^^^^^^^
 >["abc", { x12: 10, y12: false }] : [string, { x12: number; y12: boolean; }]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
 >{ x12: 10, y12: false } : { x12: number; y12: boolean; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x12 : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 >y12 : boolean
+>    : ^^^^^^^
 >false : false
+>      : ^^^^^
 >[1, ["hello", { x12: 5, y12: true }]] : [number, [string, { x12: number; y12: true; }]]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >["hello", { x12: 5, y12: true }] : [string, { x12: number; y12: true; }]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >{ x12: 5, y12: true } : { x12: number; y12: true; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x12 : number
+>    : ^^^^^^
 >5 : 5
+>  : ^
 >y12 : true
+>    : ^^^^
 >true : true
+>     : ^^^^
 
 var [x13, y13] = [1, "hello"];
 >x13 : number
+>    : ^^^^^^
 >y13 : string
+>    : ^^^^^^
 >[1, "hello"] : [number, string]
+>             : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 var [a3, b3] = [[x13, y13], { x: x13, y: y13 }];
 >a3 : (string | number)[]
+>   : ^^^^^^^^^^^^^^^^^^^
 >b3 : { x: number; y: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[[x13, y13], { x: x13, y: y13 }] : [(string | number)[], { x: number; y: string; }]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[x13, y13] : (string | number)[]
+>           : ^^^^^^^^^^^^^^^^^^^
 >x13 : number
+>    : ^^^^^^
 >y13 : string
+>    : ^^^^^^
 >{ x: x13, y: y13 } : { x: number; y: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x13 : number
+>    : ^^^^^^
 >y : string
+>  : ^^^^^^
 >y13 : string
+>    : ^^^^^^
 

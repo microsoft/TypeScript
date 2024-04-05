@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts] ////
+
 //// [autoAccessorDisallowedModifiers.ts]
 abstract class C1 {
     accessor accessor a: any;
@@ -13,6 +15,8 @@ abstract class C1 {
     accessor set k(v: any) {}
     accessor constructor() {}
     accessor l?: any;
+    accessor readonly m: any;
+    accessor declare n: any;
 }
 
 class C2 extends C1 {
@@ -50,6 +54,7 @@ class C1 {
     accessor set k(v) { }
     constructor() { }
     accessor l;
+    accessor m;
 }
 class C2 extends C1 {
     accessor g;

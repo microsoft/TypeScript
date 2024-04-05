@@ -1,0 +1,38 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/project/src/foo.ts ===
+// [|<|import * as x from /*FIND ALL REFS*/"[|tslib|]";|]|>
+
+// === /tests/cases/fourslash/project/src/bar.ts ===
+// [|export default "";|]
+
+// === /tests/cases/fourslash/project/src/bal.ts ===
+// [||]
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/project/src/dir/tslib.d.ts ===
+  // [|export function __importDefault(...args: any): any;
+  // export function __importStar(...args: any): any;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/tests/cases/fourslash/project/src/dir/tslib\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/tests/cases/fourslash/project/src/dir/tslib\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

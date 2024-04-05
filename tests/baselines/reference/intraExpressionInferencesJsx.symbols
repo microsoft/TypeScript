@@ -1,0 +1,276 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx] ////
+
+=== intraExpressionInferencesJsx.tsx ===
+/// <reference path="react16.d.ts" />
+
+// repro from #52798
+
+type A = {
+>A : Symbol(A, Decl(intraExpressionInferencesJsx.tsx, 0, 0))
+
+  a: boolean;
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 4, 10))
+
+};
+
+type B = {
+>B : Symbol(B, Decl(intraExpressionInferencesJsx.tsx, 6, 2))
+
+  b: string;
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 8, 10))
+
+};
+
+type C = {
+>C : Symbol(C, Decl(intraExpressionInferencesJsx.tsx, 10, 2))
+
+  c: number;
+>c : Symbol(c, Decl(intraExpressionInferencesJsx.tsx, 12, 10))
+
+};
+
+type Animations = {
+>Animations : Symbol(Animations, Decl(intraExpressionInferencesJsx.tsx, 14, 2))
+
+  [key: string]: { value: number } & (
+>key : Symbol(key, Decl(intraExpressionInferencesJsx.tsx, 17, 3))
+>value : Symbol(value, Decl(intraExpressionInferencesJsx.tsx, 17, 18))
+
+    | ({ kind: "a"; func?(): Partial<A> } & A)
+>kind : Symbol(kind, Decl(intraExpressionInferencesJsx.tsx, 18, 8))
+>func : Symbol(func, Decl(intraExpressionInferencesJsx.tsx, 18, 19))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(intraExpressionInferencesJsx.tsx, 0, 0))
+>A : Symbol(A, Decl(intraExpressionInferencesJsx.tsx, 0, 0))
+
+    | ({ kind: "b"; func?(): Partial<B> } & B)
+>kind : Symbol(kind, Decl(intraExpressionInferencesJsx.tsx, 19, 8))
+>func : Symbol(func, Decl(intraExpressionInferencesJsx.tsx, 19, 19))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(intraExpressionInferencesJsx.tsx, 6, 2))
+>B : Symbol(B, Decl(intraExpressionInferencesJsx.tsx, 6, 2))
+
+    | ({ kind: "c"; func?(): Partial<C> } & C)
+>kind : Symbol(kind, Decl(intraExpressionInferencesJsx.tsx, 20, 8))
+>func : Symbol(func, Decl(intraExpressionInferencesJsx.tsx, 20, 19))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(intraExpressionInferencesJsx.tsx, 10, 2))
+>C : Symbol(C, Decl(intraExpressionInferencesJsx.tsx, 10, 2))
+
+  );
+};
+
+type StyleParam<T extends Animations> = Record<keyof T, string>;
+>StyleParam : Symbol(StyleParam, Decl(intraExpressionInferencesJsx.tsx, 22, 2))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 24, 16))
+>Animations : Symbol(Animations, Decl(intraExpressionInferencesJsx.tsx, 14, 2))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 24, 16))
+
+type AnimatedViewProps<T extends Animations> = {
+>AnimatedViewProps : Symbol(AnimatedViewProps, Decl(intraExpressionInferencesJsx.tsx, 24, 64))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 26, 23))
+>Animations : Symbol(Animations, Decl(intraExpressionInferencesJsx.tsx, 14, 2))
+
+  style: (animationsValues: StyleParam<T>) => string;
+>style : Symbol(style, Decl(intraExpressionInferencesJsx.tsx, 26, 48))
+>animationsValues : Symbol(animationsValues, Decl(intraExpressionInferencesJsx.tsx, 27, 10))
+>StyleParam : Symbol(StyleParam, Decl(intraExpressionInferencesJsx.tsx, 22, 2))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 26, 23))
+
+  animations: T;
+>animations : Symbol(animations, Decl(intraExpressionInferencesJsx.tsx, 27, 53))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 26, 23))
+
+};
+
+const Component = <T extends Animations>({
+>Component : Symbol(Component, Decl(intraExpressionInferencesJsx.tsx, 31, 5))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 31, 19))
+>Animations : Symbol(Animations, Decl(intraExpressionInferencesJsx.tsx, 14, 2))
+
+  animations,
+>animations : Symbol(animations, Decl(intraExpressionInferencesJsx.tsx, 31, 42))
+
+  style,
+>style : Symbol(style, Decl(intraExpressionInferencesJsx.tsx, 32, 13))
+
+}: AnimatedViewProps<T>) => <></>;
+>AnimatedViewProps : Symbol(AnimatedViewProps, Decl(intraExpressionInferencesJsx.tsx, 24, 64))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 31, 19))
+
+<Component
+>Component : Symbol(Component, Decl(intraExpressionInferencesJsx.tsx, 31, 5))
+
+  animations={{
+>animations : Symbol(animations, Decl(intraExpressionInferencesJsx.tsx, 36, 10))
+
+    test: {
+>test : Symbol(test, Decl(intraExpressionInferencesJsx.tsx, 37, 15))
+
+      kind: "a",
+>kind : Symbol(kind, Decl(intraExpressionInferencesJsx.tsx, 38, 11))
+
+      value: 1,
+>value : Symbol(value, Decl(intraExpressionInferencesJsx.tsx, 39, 16))
+
+      a: true,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 40, 15))
+
+    },
+  }}
+  style={(anim) => {
+>style : Symbol(style, Decl(intraExpressionInferencesJsx.tsx, 43, 4))
+>anim : Symbol(anim, Decl(intraExpressionInferencesJsx.tsx, 44, 10))
+
+    return "";
+  }}
+/>;
+<Component
+>Component : Symbol(Component, Decl(intraExpressionInferencesJsx.tsx, 31, 5))
+
+  animations={{
+>animations : Symbol(animations, Decl(intraExpressionInferencesJsx.tsx, 48, 10))
+
+    test: {
+>test : Symbol(test, Decl(intraExpressionInferencesJsx.tsx, 49, 15))
+
+      kind: "a",
+>kind : Symbol(kind, Decl(intraExpressionInferencesJsx.tsx, 50, 11))
+
+      value: 1,
+>value : Symbol(value, Decl(intraExpressionInferencesJsx.tsx, 51, 16))
+
+      a: true,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 52, 15))
+
+      func() {
+>func : Symbol(func, Decl(intraExpressionInferencesJsx.tsx, 53, 14))
+
+        return {
+          a: true,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 55, 16))
+
+        };
+      },
+    },
+  }}
+  style={(anim) => {
+>style : Symbol(style, Decl(intraExpressionInferencesJsx.tsx, 60, 4))
+>anim : Symbol(anim, Decl(intraExpressionInferencesJsx.tsx, 61, 10))
+
+    return "";
+  }}
+/>;
+<Component
+>Component : Symbol(Component, Decl(intraExpressionInferencesJsx.tsx, 31, 5))
+
+  animations={{
+>animations : Symbol(animations, Decl(intraExpressionInferencesJsx.tsx, 65, 10))
+
+    test: {
+>test : Symbol(test, Decl(intraExpressionInferencesJsx.tsx, 66, 15))
+
+      kind: "a",
+>kind : Symbol(kind, Decl(intraExpressionInferencesJsx.tsx, 67, 11))
+
+      value: 1,
+>value : Symbol(value, Decl(intraExpressionInferencesJsx.tsx, 68, 16))
+
+      a: true,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 69, 15))
+
+      func: () => {
+>func : Symbol(func, Decl(intraExpressionInferencesJsx.tsx, 70, 14))
+
+        return {
+          a: true,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 72, 16))
+
+        };
+      },
+    },
+  }}
+  style={(anim) => {
+>style : Symbol(style, Decl(intraExpressionInferencesJsx.tsx, 77, 4))
+>anim : Symbol(anim, Decl(intraExpressionInferencesJsx.tsx, 78, 10))
+
+    return "";
+  }}
+/>;
+
+// repro from #52786
+
+interface Props<T> {
+>Props : Symbol(Props, Decl(intraExpressionInferencesJsx.tsx, 81, 3))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+
+  a: (x: string) => T;
+>a : Symbol(Props.a, Decl(intraExpressionInferencesJsx.tsx, 85, 20))
+>x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 86, 6))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+
+  b: (arg: T) => void;
+>b : Symbol(Props.b, Decl(intraExpressionInferencesJsx.tsx, 86, 22))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 87, 6))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 85, 16))
+}
+
+function Foo<T>(props: Props<T>) {
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
+>props : Symbol(props, Decl(intraExpressionInferencesJsx.tsx, 90, 16))
+>Props : Symbol(Props, Decl(intraExpressionInferencesJsx.tsx, 81, 3))
+>T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
+
+  return <div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+<Foo
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+
+  a={() => 10}
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 94, 4))
+
+  b={(arg) => { arg.toString(); }}
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 95, 14))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 96, 6))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+/>;
+
+<Foo
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+
+  a={(x) => 10}
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 99, 4))
+>x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 100, 6))
+
+  b={(arg) => { arg.toString(); }}
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 100, 15))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 101, 6))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+/>;
+
+<Foo {...{
+>Foo : Symbol(Foo, Decl(intraExpressionInferencesJsx.tsx, 88, 1))
+
+  a: (x) => 10,
+>a : Symbol(a, Decl(intraExpressionInferencesJsx.tsx, 104, 10))
+>x : Symbol(x, Decl(intraExpressionInferencesJsx.tsx, 105, 6))
+
+  b: (arg) => { arg.toString(); },
+>b : Symbol(b, Decl(intraExpressionInferencesJsx.tsx, 105, 15))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+>arg.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(intraExpressionInferencesJsx.tsx, 106, 6))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+}} />;
+

@@ -1,19 +1,19 @@
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(3,46): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(3,56): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4,61): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(19,16): error TS2322: Type 'string' is not assignable to type 'number'.
+destructuringVariableDeclaration2.ts(3,46): error TS2322: Type 'boolean' is not assignable to type 'number'.
+destructuringVariableDeclaration2.ts(3,56): error TS2322: Type 'number' is not assignable to type 'string'.
+destructuringVariableDeclaration2.ts(4,61): error TS2322: Type 'boolean' is not assignable to type 'string'.
+destructuringVariableDeclaration2.ts(19,16): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts (4 errors) ====
+==== destructuringVariableDeclaration2.ts (4 errors) ====
     // The type T associated with a destructuring variable declaration is determined as follows:
     //      If the declaration includes a type annotation, T is that type.
     var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
                                                  ~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts:3:17: The expected type comes from property 'a1' which is declared here on type '{ a1: number; a2: string; }'
+!!! related TS6500 destructuringVariableDeclaration2.ts:3:17: The expected type comes from property 'a1' which is declared here on type '{ a1: number; a2: string; }'
                                                            ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts:3:29: The expected type comes from property 'a2' which is declared here on type '{ a1: number; a2: string; }'
+!!! related TS6500 destructuringVariableDeclaration2.ts:3:29: The expected type comes from property 'a2' which is declared here on type '{ a1: number; a2: string; }'
     var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error
                                                                 ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string'.

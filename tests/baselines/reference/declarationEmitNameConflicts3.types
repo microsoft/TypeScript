@@ -1,73 +1,110 @@
-=== tests/cases/compiler/declarationEmitNameConflicts3.ts ===
+//// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
+
+=== declarationEmitNameConflicts3.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export interface D { }
     export module D {
 >D : typeof D
+>  : ^^^^^^^^
 
         export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
     }
     export module C {
 >C : typeof C
+>  : ^^^^^^^^
 
         export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
     }
     export module E {
 >E : typeof E
+>  : ^^^^^^^^
 
         export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
     }
 }
 
 module M.P {
 >M : typeof M
+>  : ^^^^^^^^
 >P : typeof P
+>  : ^^^^^^^^
 
     export class C {
 >C : C
+>  : ^
 
         static f() { }
 >f : () => void
+>  : ^^^^^^^^^^
     }
     export class E extends C { }
 >E : E
+>  : ^
 >C : C
+>  : ^
 
     export enum D {
 >D : D
+>  : ^
 
         f
 >f : D.f
+>  : ^^^
     }
     export var v: M.D; // ok
 >v : M.D
+>  : ^^^
 >M : any
+>  : ^^^
 
     export var w = M.D.f; // error, should be typeof M.D.f
 >w : () => void
+>  : ^^^^^^^^^^
 >M.D.f : () => void
+>      : ^^^^^^^^^^
 >M.D : typeof M.D
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >D : typeof M.D
+>  : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
     export var x = M.C.f; // error, should be typeof M.C.f
 >x : () => void
+>  : ^^^^^^^^^^
 >M.C.f : () => void
+>      : ^^^^^^^^^^
 >M.C : typeof M.C
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >C : typeof M.C
+>  : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
     export var x = M.E.f; // error, should be typeof M.E.f
 >x : () => void
+>  : ^^^^^^^^^^
 >M.E.f : () => void
+>      : ^^^^^^^^^^
 >M.E : typeof M.E
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >E : typeof M.E
+>  : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 }

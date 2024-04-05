@@ -1,10 +1,15 @@
-=== tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts ===
+//// [tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts] ////
+
+=== exportDefaultInterfaceAndTwoFunctions.ts ===
 export default interface A { a: string; }
 >a : string
+>  : ^^^^^^
 
 export default function() { return 1; }
 >1 : 1
+>  : ^
 
 export default function() { return 2; }
 >2 : 2
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts ===
+//// [tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts] ////
+
+=== intrinsicKeyword.ts ===
 let e1: intrinsic;
 >e1 : Symbol(e1, Decl(intrinsicKeyword.ts, 0, 3))
 >intrinsic : Symbol(intrinsic)

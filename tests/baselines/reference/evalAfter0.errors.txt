@@ -1,7 +1,7 @@
-tests/cases/compiler/evalAfter0.ts(4,2): error TS2695: Left side of comma operator is unused and has no side effects.
+evalAfter0.ts(4,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/compiler/evalAfter0.ts (1 errors) ====
+==== evalAfter0.ts (1 errors) ====
     (0,eval)("10"); // fine: special case for eval
     
     declare var eva;

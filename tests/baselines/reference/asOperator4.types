@@ -1,18 +1,24 @@
-=== tests/cases/conformance/expressions/asOperator/foo.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperator4.ts] ////
+
+=== foo.ts ===
 export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
-=== tests/cases/conformance/expressions/asOperator/bar.ts ===
+=== bar.ts ===
 import { foo } from './foo';
 >foo : () => void
+>    : ^^^^^^^^^^
 
 // These should emit identically
 <any>foo;
 ><any>foo : any
 >foo : () => void
+>    : ^^^^^^^^^^
 
 (foo as any);
 >(foo as any) : any
 >foo as any : any
 >foo : () => void
+>    : ^^^^^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariableInScope.ts] ////
+
 //// [decoratorMetadataGenericTypeVariableInScope.ts]
 // Unused, but could collide with the named type argument below.
 class TypeVariable {}

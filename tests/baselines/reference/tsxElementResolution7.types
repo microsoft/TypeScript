@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution7.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -6,45 +8,68 @@ declare module JSX {
 
 module my {
 >my : typeof my
+>   : ^^^^^^^^^
 
     export var div: any;
 >div : any
+>    : ^^^
 }
 // OK
 <my.div n='x' />;
 ><my.div n='x' /> : JSX.Element
+>                 : ^^^^^^^^^^^
 >my.div : any
+>       : ^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >div : any
+>    : ^^^
 >n : string
+>  : ^^^^^^
 
 // Error
 <my.other />;
 ><my.other /> : JSX.Element
+>             : ^^^^^^^^^^^
 >my.other : any
+>         : ^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >other : any
+>      : ^^^
 
 module q {
 >q : typeof q
+>  : ^^^^^^^^
 
     import mine = my;
 >mine : typeof mine
+>     : ^^^^^^^^^^^
 >my : typeof mine
+>   : ^^^^^^^^^^^
 
     // OK
     <mine.div n='x' />;
 ><mine.div n='x' /> : JSX.Element
+>                   : ^^^^^^^^^^^
 >mine.div : any
+>         : ^^^
 >mine : typeof mine
+>     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >n : string
+>  : ^^^^^^
 
     // Error
     <mine.non />;
 ><mine.non /> : JSX.Element
+>             : ^^^^^^^^^^^
 >mine.non : any
+>         : ^^^
 >mine : typeof mine
+>     : ^^^^^^^^^^^
 >non : any
+>    : ^^^
 }
 

@@ -1,142 +1,232 @@
-=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberType.ts] ////
+
+=== incrementOperatorWithNumberType.ts ===
 // ++ operator on number type
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 class A {
 >A : A
+>  : ^
 
     public a: number;
 >a : number
+>  : ^^^^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: number;
 >n : number
+>  : ^^^^^^
 }
 
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // number type var
 var ResultIsNumber1 = ++NUMBER;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var ResultIsNumber2 = NUMBER++;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >NUMBER++ : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 // expressions
 var ResultIsNumber3 = ++objA.a;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >++objA.a : number
+>         : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 var ResultIsNumber4 = ++M.n;
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >++M.n : number
+>      : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 var ResultIsNumber5 = objA.a++;
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >objA.a++ : number
+>         : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 var ResultIsNumber6 = M.n++;
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >M.n++ : number
+>      : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 var ResultIsNumber7 = NUMBER1[0]++;
 >ResultIsNumber7 : number
+>                : ^^^^^^
 >NUMBER1[0]++ : number
+>             : ^^^^^^
 >NUMBER1[0] : number
+>           : ^^^^^^
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 // miss assignment operators
 ++NUMBER;
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 ++NUMBER1[0];
 >++NUMBER1[0] : number
+>             : ^^^^^^
 >NUMBER1[0] : number
+>           : ^^^^^^
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 ++objA.a;
 >++objA.a : number
+>         : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 ++M.n;
 >++M.n : number
+>      : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 ++objA.a, M.n;
 >++objA.a, M.n : number
+>              : ^^^^^^
 >++objA.a : number
+>         : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 NUMBER++;
 >NUMBER++ : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 NUMBER1[0]++;
 >NUMBER1[0]++ : number
+>             : ^^^^^^
 >NUMBER1[0] : number
+>           : ^^^^^^
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 objA.a++;
 >objA.a++ : number
+>         : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 M.n++;
 >M.n++ : number
+>      : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 objA.a++, M.n++;
 >objA.a++, M.n++ : number
+>                : ^^^^^^
 >objA.a++ : number
+>         : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 >M.n++ : number
+>      : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 

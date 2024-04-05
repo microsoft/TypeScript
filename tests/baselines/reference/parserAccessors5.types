@@ -1,8 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors5.ts] ////
+
+=== parserAccessors5.ts ===
 declare class C {
 >C : C
+>  : ^
 
   get foo() { return 0; }
 >foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }

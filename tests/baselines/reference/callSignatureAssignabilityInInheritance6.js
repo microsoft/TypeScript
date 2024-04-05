@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts] ////
+
 //// [callSignatureAssignabilityInInheritance6.ts]
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithCallSignatures4 but using class type parameters instead of generic signatures

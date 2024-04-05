@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasErrors.ts ===
+//// [tests/cases/compiler/aliasErrors.ts] ////
+
+=== aliasErrors.ts ===
 module foo {    
 >foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
 

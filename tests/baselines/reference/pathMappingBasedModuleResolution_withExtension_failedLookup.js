@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_withExtension_failedLookup.ts] ////
+
 //// [a.ts]
 import { foo } from "foo";
 

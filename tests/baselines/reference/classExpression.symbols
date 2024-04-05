@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classExpression.ts ===
+//// [tests/cases/conformance/classes/classExpression.ts] ////
+
+=== classExpression.ts ===
 var x = class C {
 >x : Symbol(x, Decl(classExpression.ts, 0, 3))
 >C : Symbol(C, Decl(classExpression.ts, 0, 7))

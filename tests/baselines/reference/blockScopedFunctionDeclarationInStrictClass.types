@@ -1,22 +1,32 @@
-=== tests/cases/compiler/blockScopedFunctionDeclarationInStrictClass.ts ===
+//// [tests/cases/compiler/blockScopedFunctionDeclarationInStrictClass.ts] ////
+
+=== blockScopedFunctionDeclarationInStrictClass.ts ===
 class c {
 >c : c
+>  : ^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         if (true) {
 >true : true
+>     : ^^^^
 
             function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
             foo(); // ok
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
         }
         foo(); // not ok
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
     }
 }

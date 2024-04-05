@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNamesFragment.tsx] ////
+
 //// [jsxJsxsCjsTransformSubstitutesNamesFragment.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 const a = <>

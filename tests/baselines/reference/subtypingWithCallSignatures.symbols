@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts] ////
+
+=== subtypingWithCallSignatures.ts ===
 module CallSignature {
 >CallSignature : Symbol(CallSignature, Decl(subtypingWithCallSignatures.ts, 0, 0))
 

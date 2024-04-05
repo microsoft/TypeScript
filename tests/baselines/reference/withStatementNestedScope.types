@@ -1,22 +1,34 @@
-=== tests/cases/compiler/withStatementNestedScope.ts ===
+//// [tests/cases/compiler/withStatementNestedScope.ts] ////
+
+=== withStatementNestedScope.ts ===
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 with (x) {
 >x : number
+>  : ^^^^^^
 
     function f(a: number) {
 >f : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         return 1;
 >1 : any
+>  : ^^^
     }
     // should be any
     var r = f(1);
 >r : any
+>  : ^^^
 >f(1) : any
+>     : ^^^
 >f : any
+>  : ^^^
 >1 : any
+>  : ^^^
 }

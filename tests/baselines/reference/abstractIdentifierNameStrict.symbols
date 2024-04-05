@@ -1,4 +1,6 @@
-=== tests/cases/compiler/abstractIdentifierNameStrict.ts ===
+//// [tests/cases/compiler/abstractIdentifierNameStrict.ts] ////
+
+=== abstractIdentifierNameStrict.ts ===
 var abstract = true;
 >abstract : Symbol(abstract, Decl(abstractIdentifierNameStrict.ts, 0, 3))
 

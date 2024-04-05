@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
+//// [tests/cases/compiler/contextualTypeShouldBeLiteral.ts] ////
+
+=== contextualTypeShouldBeLiteral.ts ===
 interface X {
 >X : Symbol(X, Decl(contextualTypeShouldBeLiteral.ts, 0, 0))
 

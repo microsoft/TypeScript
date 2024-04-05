@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerAliases2.ts ===
+//// [tests/cases/compiler/innerAliases2.ts] ////
+
+=== innerAliases2.ts ===
 module _provider {
 >_provider : Symbol(_provider, Decl(innerAliases2.ts, 0, 0))
 

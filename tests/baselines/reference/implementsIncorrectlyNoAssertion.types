@@ -1,26 +1,36 @@
-=== tests/cases/compiler/implementsIncorrectlyNoAssertion.ts ===
+//// [tests/cases/compiler/implementsIncorrectlyNoAssertion.ts] ////
+
+=== implementsIncorrectlyNoAssertion.ts ===
 declare class Foo {
 >Foo : Foo
+>    : ^^^
 
     x: string;
 >x : string
+>  : ^^^^^^
 }
 declare class Bar {
 >Bar : Bar
+>    : ^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }
 type Wrapper = Foo & Bar;
->Wrapper : Foo & Bar
+>Wrapper : Wrapper
+>        : ^^^^^^^
 
 class Baz implements Wrapper {
 >Baz : Baz
+>    : ^^^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }
 

@@ -1,17 +1,23 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationDuplicateFunctionImplementationFileOrderReversed.ts] ////
+
+=== a.ts ===
 function foo() {
 >foo : { (): number; (): number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return 30;
 >30 : 30
+>   : ^^
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 function foo() {
 >foo : { (): number; (): number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return 10;
 >10 : 10
+>   : ^^
 }
 
 

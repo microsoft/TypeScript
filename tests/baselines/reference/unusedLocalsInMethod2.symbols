@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsInMethod2.ts ===
+//// [tests/cases/compiler/unusedLocalsInMethod2.ts] ////
+
+=== unusedLocalsInMethod2.ts ===
 class greeter {
 >greeter : Symbol(greeter, Decl(unusedLocalsInMethod2.ts, 0, 0))
 
@@ -7,9 +9,6 @@ class greeter {
 
         var x, y = 10;
 >x : Symbol(x, Decl(unusedLocalsInMethod2.ts, 2, 11))
->y : Symbol(y, Decl(unusedLocalsInMethod2.ts, 2, 14))
-
-        y++;
 >y : Symbol(y, Decl(unusedLocalsInMethod2.ts, 2, 14))
     }
 }

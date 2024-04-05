@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionJSDoc.ts] ////
+
 //// [source.js]
 /**
  * Foos a bar together using an `a` and a `b`
@@ -38,14 +40,14 @@ export const c = 12;
 //// [source.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = exports.Aleph = exports.foo = void 0;
+exports.c = exports.Aleph = void 0;
+exports.foo = foo;
 /**
  * Foos a bar together using an `a` and a `b`
  * @param {number} a
  * @param {string} b
  */
 function foo(a, b) { }
-exports.foo = foo;
 /**
  * Legacy - DO NOT USE
  */

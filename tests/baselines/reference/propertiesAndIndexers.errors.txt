@@ -1,25 +1,25 @@
-tests/cases/compiler/propertiesAndIndexers.ts(16,5): error TS2411: Property '1' of type 'Z' is not assignable to 'number' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(18,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'number' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(19,5): error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(23,5): error TS2411: Property '4' of type 'boolean' is not assignable to 'number' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(28,5): error TS2411: Property '1' of type 'Z' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(28,5): error TS2411: Property 'a' of type 'Y' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(28,5): error TS2411: Property 'b' of type 'X' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(29,5): error TS2411: Property 'c' of type 'boolean' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(30,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2411: Property '4' of type 'boolean' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2411: Property '5' of type 'string' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2411: Property '6' of type '() => string' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2413: 'number' index type 'string' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to 'number' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(35,5): error TS2411: Property 'Infinity' of type 'number' is not assignable to 'number' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(36,5): error TS2411: Property 'zoo' of type 'string' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(44,5): error TS2411: Property 't' of type 'number' is not assignable to 'string' index type 'string'.
-tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(16,5): error TS2411: Property '1' of type 'Z' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(18,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(19,5): error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(23,5): error TS2411: Property '4' of type 'boolean' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(28,5): error TS2411: Property '1' of type 'Z' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(28,5): error TS2411: Property 'a' of type 'Y' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(28,5): error TS2411: Property 'b' of type 'X' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(29,5): error TS2411: Property 'c' of type 'boolean' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(30,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(33,11): error TS2411: Property '4' of type 'boolean' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(33,11): error TS2411: Property '5' of type 'string' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(33,11): error TS2411: Property '6' of type '() => string' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(33,11): error TS2413: 'number' index type 'string' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(35,5): error TS2411: Property 'Infinity' of type 'number' is not assignable to 'number' index type 'string'.
+propertiesAndIndexers.ts(36,5): error TS2411: Property 'zoo' of type 'string' is not assignable to 'string' index type 'number'.
+propertiesAndIndexers.ts(44,5): error TS2411: Property 't' of type 'number' is not assignable to 'string' index type 'string'.
+propertiesAndIndexers.ts(50,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'number' index type 'string'.
 
 
-==== tests/cases/compiler/propertiesAndIndexers.ts (19 errors) ====
+==== propertiesAndIndexers.ts (19 errors) ====
     interface X { }
     interface Y {
         n: number;

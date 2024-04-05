@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts] ////
+
 //// [simplifyingConditionalWithInteriorConditionalIsRelated.ts]
 // from https://github.com/microsoft/TypeScript/issues/30706
 type ConditionalType<T> = T extends string ? string : number;

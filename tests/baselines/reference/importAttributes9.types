@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/importAttributes/importAttributes9.ts] ////
+
+=== ./a.ts ===
+export default {};
+>{} : {}
+>   : ^^
+
+=== ./b.ts ===
+declare global {
+>global : any
+>       : ^^^
+
+    interface  ImportAttributes {
+        type: "json"
+>type : "json"
+>     : ^^^^^^
+    }
+}
+
+import * as ns from "./a" with { type: "not-json" };
+>ns : typeof ns
+>   : ^^^^^^^^^
+>type : any
+>     : ^^^
+
+void ns;
+>void ns : undefined
+>        : ^^^^^^^^^
+>ns : typeof ns
+>   : ^^^^^^^^^
+
+async function f() {
+>f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
+
+    await import("./a", {
+>await import("./a", {        with: {            type: "not-json",        },    }) : typeof ns
+>                                                                                  : ^^^^^^^^^
+>import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof ns>
+>                                                                            : ^^^^^^^^^^^^^^^^^^
+>"./a" : "./a"
+>      : ^^^^^
+>{        with: {            type: "not-json",        },    } : { with: { type: "not-json"; }; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        with: {
+>with : { type: "not-json"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>{            type: "not-json",        } : { type: "not-json"; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^
+
+            type: "not-json",
+>type : "not-json"
+>     : ^^^^^^^^^^
+>"not-json" : "not-json"
+>           : ^^^^^^^^^^
+
+        },
+    });
+}
+

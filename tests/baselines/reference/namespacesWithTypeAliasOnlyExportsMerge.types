@@ -1,106 +1,154 @@
-=== tests/cases/compiler/constAndNS.ts ===
+//// [tests/cases/compiler/namespacesWithTypeAliasOnlyExportsMerge.ts] ////
+
+=== constAndNS.ts ===
 type A = number;
 >A : number
+>  : ^^^^^^
 
 declare const Q: number;
 >Q : number
+>  : ^^^^^^
 
 declare namespace Q {
     export { A };
 >A : any
+>  : ^^^
 }
 declare const try1: Q.A;
 >try1 : number
+>     : ^^^^^^
 >Q : any
+>  : ^^^
 
 declare namespace Q2 {
 >Q2 : typeof Q2
+>   : ^^^^^^^^^
 
     export { Q }
 >Q : number
+>  : ^^^^^^
 }
 declare const try2: Q2.Q.A;
 >try2 : number
+>     : ^^^^^^
 >Q2 : any
+>   : ^^^
 >Q : any
+>  : ^^^
 
 declare namespace Q3 {
     export {A as B};
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 }
 declare const try3: Q3.B;
 >try3 : number
+>     : ^^^^^^
 >Q3 : any
+>   : ^^^
 
 declare namespace Q4 {
 >Q4 : typeof Q4
+>   : ^^^^^^^^^
 
     export { Q as default };
 >Q : number
+>  : ^^^^^^
 >default : number
+>        : ^^^^^^
 }
 declare const try4: Q4.default.A;
 >try4 : number
+>     : ^^^^^^
 >Q4 : any
+>   : ^^^
 >default : any
+>        : ^^^
 
 export {};
-=== tests/cases/compiler/circular.ts ===
+=== circular.ts ===
 declare namespace NS1 {
     export { NS2 };
 >NS2 : any
+>    : ^^^
 }
 declare namespace NS2 {
     export { NS1 };
 >NS1 : any
+>    : ^^^
 }
 export {};
-=== tests/cases/compiler/circularWithUses.ts ===
+=== circularWithUses.ts ===
 type A = string;
 >A : string
+>  : ^^^^^^
 
 type B = number;
 >B : number
+>  : ^^^^^^
 
 declare namespace NS1 {
     export { NS2, A };
 >NS2 : any
+>    : ^^^
 >A : any
+>  : ^^^
 }
 declare namespace NS2 {
     export { NS1, B };
 >NS1 : any
+>    : ^^^
 >B : any
+>  : ^^^
 }
 export {};
 declare const try1: NS1.A;
 >try1 : string
+>     : ^^^^^^
 >NS1 : any
+>    : ^^^
 
 declare const try2: NS2.B;
 >try2 : number
+>     : ^^^^^^
 >NS2 : any
+>    : ^^^
 
 declare const try3: NS1.NS2.B;
 >try3 : number
+>     : ^^^^^^
 >NS1 : any
+>    : ^^^
 >NS2 : any
+>    : ^^^
 
 declare const try4: NS2.NS1.A;
 >try4 : string
+>     : ^^^^^^
 >NS2 : any
+>    : ^^^
 >NS1 : any
+>    : ^^^
 
 declare const try5: NS1.NS2.NS1.A;
 >try5 : string
+>     : ^^^^^^
 >NS1 : any
+>    : ^^^
 >NS2 : any
+>    : ^^^
 >NS1 : any
+>    : ^^^
 
 declare const try6: NS2.NS1.NS2.B;
 >try6 : number
+>     : ^^^^^^
 >NS2 : any
+>    : ^^^
 >NS1 : any
+>    : ^^^
 >NS2 : any
+>    : ^^^
 

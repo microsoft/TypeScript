@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportInFunction.ts ===
+//// [tests/cases/compiler/exportInFunction.ts] ////
+
+=== exportInFunction.ts ===
 function f() {
 >f : Symbol(f, Decl(exportInFunction.ts, 0, 0))
 

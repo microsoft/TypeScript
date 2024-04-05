@@ -583708,5 +583708,4 @@
 ////
 ////}
 
-goTo.marker("1");
-verify.goToDefinitionIs("1");
+verify.baselineGetDefinitionAtPosition("1");

@@ -1,12 +1,16 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts] ////
+
+=== subtypingWithObjectMembers2.ts ===
 interface Base {
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 interface Derived extends Base {
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
@@ -15,49 +19,61 @@ module NotOptional {
     interface A {
         foo: Base;
 >foo : Base
+>    : ^^^^
 
         bar: Base;
 >bar : Base
+>    : ^^^^
     }
 
     interface B extends A {
         foo: Derived; // ok
 >foo : Derived
+>    : ^^^^^^^
 
         bar: string; // error
 >bar : string
+>    : ^^^^^^
     }
 
     interface A2 {
         1: Base;
 >1 : Base
+>  : ^^^^
 
         2.0: Base;
 >2.0 : Base
+>    : ^^^^
     }
 
     interface B2 extends A2 {
         1: Derived; // ok
 >1 : Derived
+>  : ^^^^^^^
 
         2: string; // error
 >2 : string
+>  : ^^^^^^
     }
 
     interface A3 {
         '1': Base;
 >'1' : Base
+>    : ^^^^
 
         '2.0': Base;
 >'2.0' : Base
+>      : ^^^^
     }
 
     interface B3 extends A3 {
         '1': Derived; // ok
 >'1' : Derived
+>    : ^^^^^^^
 
         '2.0': string; // error
 >'2.0' : string
+>      : ^^^^^^
     }
 }
 
@@ -66,48 +82,60 @@ module Optional {
     interface A {
         foo?: Base;
 >foo : Base
+>    : ^^^^
 
         bar?: Base;
 >bar : Base
+>    : ^^^^
     }
 
     interface B extends A {
         foo?: Derived; // ok
 >foo : Derived
+>    : ^^^^^^^
 
         bar?: string; // error
 >bar : string
+>    : ^^^^^^
     }
 
     interface A2 {
         1?: Base;
 >1 : Base
+>  : ^^^^
 
         2.0?: Base;
 >2.0 : Base
+>    : ^^^^
     }
 
     interface B2 extends A2 {
         1?: Derived; // ok
 >1 : Derived
+>  : ^^^^^^^
 
         2?: string; // error
 >2 : string
+>  : ^^^^^^
     }
 
     interface A3 {
         '1'?: Base;
 >'1' : Base
+>    : ^^^^
 
         '2.0'?: Base;
 >'2.0' : Base
+>      : ^^^^
     }
 
     interface B3 extends A3 {
         '1'?: Derived; // ok
 >'1' : Derived
+>    : ^^^^^^^
 
         '2.0'?: string; // error
 >'2.0' : string
+>      : ^^^^^^
     }
 }

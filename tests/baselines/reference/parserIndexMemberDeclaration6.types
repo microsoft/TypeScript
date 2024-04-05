@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration6.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration6.ts] ////
+
+=== parserIndexMemberDeclaration6.ts ===
 class C {
 >C : C
+>  : ^
 
    static [x: string]: string;
 >x : string
+>  : ^^^^^^
 }

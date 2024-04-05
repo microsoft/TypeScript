@@ -1,18 +1,25 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/exportSpecifierForAGlobal.ts] ////
+
+=== a.d.ts ===
 declare class X { }
 >X : X
+>  : ^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export {X};
 >X : typeof X
+>  : ^^^^^^^^
 
 export function f() {
 >f : () => X
+>  : ^^^^^^^
 
     var x: X;
 >x : X
+>  : ^
 
     return x;
 >x : X
+>  : ^
 } 
 

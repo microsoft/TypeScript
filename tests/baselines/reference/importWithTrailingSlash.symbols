@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importWithTrailingSlash.ts] ////
+
 === /a.ts ===
 export default { a: 0 };
 >a : Symbol(a, Decl(a.ts, 0, 16))

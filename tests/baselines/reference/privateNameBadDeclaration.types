@@ -1,54 +1,83 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts] ////
+
+=== privateNameBadDeclaration.ts ===
 function A() { }
 >A : () => void
+>  : ^^^^^^^^^^
 
 A.prototype = {
 >A.prototype = {  #x: 1,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+>                                                                                                    : ^^
 >A.prototype : any
+>            : ^^^
 >A : () => void
+>  : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >{  #x: 1,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+>                                                                                      : ^^
 
   #x: 1,         // Error
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
   #m() {},       // Error
 >#m : () => void
+>   : ^^^^^^^^^^
 
   get #p() { return "" } // Error
 >#p : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 }
 class B { }
 >B : B
+>  : ^
 
 B.prototype = {
 >B.prototype = {  #y: 2,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+>                                                                                                    : ^^
 >B.prototype : B
+>            : ^
 >B : typeof B
+>  : ^^^^^^^^
 >prototype : B
+>          : ^
 >{  #y: 2,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+>                                                                                      : ^^
 
   #y: 2,         // Error
 >#y : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
   #m() {},       // Error
 >#m : () => void
+>   : ^^^^^^^^^^
 
   get #p() { return "" } // Error
 >#p : string
+>   : ^^^^^^
 >"" : ""
+>   : ^^
 }
 class C {
 >C : C
+>  : ^
 
   constructor() {
     this.#z = 3;
 >this.#z = 3 : 3
+>            : ^
 >this.#z : any
+>        : ^^^
 >this : this
+>     : ^^^^
 >3 : 3
+>  : ^
   }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts ===
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts] ////
+
+=== noImplicitAnyParametersInAmbientModule.ts ===
 declare module D_M {
 >D_M : Symbol(D_M, Decl(noImplicitAnyParametersInAmbientModule.ts, 0, 0))
 

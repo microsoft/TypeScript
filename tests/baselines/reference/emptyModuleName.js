@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyModuleName.ts] ////
+
 //// [emptyModuleName.ts]
 import * as A from "";
 class B extends A {

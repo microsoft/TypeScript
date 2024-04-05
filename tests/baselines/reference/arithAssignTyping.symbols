@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arithAssignTyping.ts ===
+//// [tests/cases/compiler/arithAssignTyping.ts] ////
+
+=== arithAssignTyping.ts ===
 class f { }
 >f : Symbol(f, Decl(arithAssignTyping.ts, 0, 0))
 

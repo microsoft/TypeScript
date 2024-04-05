@@ -1,29 +1,47 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts] ////
+
+=== typeOfThisInStaticMembers12.ts ===
 class C {
 >C : C
+>  : ^
 
     static readonly c: "foo" = "foo"
 >c : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     static bar =  class Inner {
 >bar : typeof Inner
+>    : ^^^^^^^^^^^^
 >class Inner {        static [this.c] = 123;        [this.c] = 123;    } : typeof Inner
+>                                                                        : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
         static [this.c] = 123;
 >[this.c] : number
+>         : ^^^^^^
 >this.c : any
+>       : ^^^
 >this : typeof Inner
+>     : ^^^^^^^^^^^^
 >c : any
+>  : ^^^
 >123 : 123
+>    : ^^^
 
         [this.c] = 123;
 >[this.c] : number
+>         : ^^^^^^
 >this.c : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >c : any
+>  : ^^^
 >123 : 123
+>    : ^^^
     }
 }
 

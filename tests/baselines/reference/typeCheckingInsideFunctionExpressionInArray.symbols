@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts ===
+//// [tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts] ////
+
+=== typeCheckingInsideFunctionExpressionInArray.ts ===
 var functions = [function () {
 >functions : Symbol(functions, Decl(typeCheckingInsideFunctionExpressionInArray.ts, 0, 3))
 

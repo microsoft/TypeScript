@@ -1,6 +1,9 @@
-=== tests/cases/compiler/moduleElementsInWrongContext3.ts ===
+//// [tests/cases/compiler/moduleElementsInWrongContext3.ts] ////
+
+=== moduleElementsInWrongContext3.ts ===
 module P {
 >P : typeof P
+>  : ^^^^^^^^
     {
         module M { }
         export namespace N {
@@ -11,50 +14,66 @@ module P {
 
         declare module "ambient" {
 >"ambient" : typeof import("ambient")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         }
 
         export = M;
 >M : any
+>  : ^^^
 
         var v;
 >v : any
+>  : ^^^
 
         function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
         export * from "ambient";
         export { foo };
 >foo : () => void
+>    : ^^^^^^^^^^
 
         export { baz as b } from "ambient";
 >baz : any
+>    : ^^^
 >b : any
+>  : ^^^
 
         export default v;
 >v : any
+>  : ^^^
 
         export default class C { }
 >C : C
+>  : ^
 
         export function bee() { }
 >bee : () => void
+>    : ^^^^^^^^^^
 
         import I = M;
 >I : any
+>  : ^^^
 >M : any
+>  : ^^^
 
         import I2 = require("foo");
 >I2 : any
+>   : ^^^
 
         import * as Foo from "ambient";
 >Foo : any
+>    : ^^^
 
         import bar from "ambient";
 >bar : any
+>    : ^^^
 
         import { baz } from "ambient";
 >baz : any
+>    : ^^^
 
         import "ambient";
     }

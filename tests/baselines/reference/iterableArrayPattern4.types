@@ -1,55 +1,82 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern4.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern4.ts] ////
+
+=== iterableArrayPattern4.ts ===
 class Bar { x }
 >Bar : Bar
+>    : ^^^
 >x : any
 
 class Foo extends Bar { y }
 >Foo : Foo
+>    : ^^^
 >Bar : Bar
+>    : ^^^
 >y : any
 
 class FooIterator {
 >FooIterator : FooIterator
+>            : ^^^^^^^^^^^
 
     next() {
 >next : () => { value: Foo; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: new Foo,
 >value : Foo
+>      : ^^^
 >new Foo : Foo
+>        : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var a: Bar, b: Bar[];
 >a : Bar
+>  : ^^^
 >b : Bar[]
+>  : ^^^^^
 
 [a, ...b] = new FooIterator
 >[a, ...b] = new FooIterator : FooIterator
+>                            : ^^^^^^^^^^^
 >[a, ...b] : [Bar, ...Bar[]]
+>          : ^^^^^^^^^^^^^^^
 >a : Bar
+>  : ^^^
 >...b : Bar
+>     : ^^^
 >b : Bar[]
+>  : ^^^^^
 >new FooIterator : FooIterator
+>                : ^^^^^^^^^^^
 >FooIterator : typeof FooIterator
+>            : ^^^^^^^^^^^^^^^^^^
 

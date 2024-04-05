@@ -1,14 +1,19 @@
-=== tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts ===
+//// [tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts] ////
+
+=== ambientInsideNonAmbientExternalModule.ts ===
 export declare var x;
 >x : any
 
 export declare function f();
 >f : () => any
+>  : ^^^^^^^^^
 
 export declare class C { }
 >C : C
+>  : ^
 
 export declare enum E { }
 >E : E
+>  : ^
 
 export declare module M { }

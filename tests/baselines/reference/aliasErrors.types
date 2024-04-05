@@ -1,95 +1,147 @@
-=== tests/cases/compiler/aliasErrors.ts ===
+//// [tests/cases/compiler/aliasErrors.ts] ////
+
+=== aliasErrors.ts ===
 module foo {    
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     export class Provide {
 >Provide : Provide
+>        : ^^^^^^^
     }
     export module bar { export module baz {export class boo {}}}
 >bar : typeof bar
+>    : ^^^^^^^^^^
 >baz : typeof baz
+>    : ^^^^^^^^^^
 >boo : boo
+>    : ^^^
 }
 
 import provide = foo;
 >provide : typeof foo
+>        : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 import booz = foo.bar.baz;
 >booz : typeof booz
+>     : ^^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >bar : typeof provide.bar
+>    : ^^^^^^^^^^^^^^^^^^
 >baz : typeof booz
+>    : ^^^^^^^^^^^
 
 import beez = foo.bar;
 >beez : typeof provide.bar
+>     : ^^^^^^^^^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >bar : typeof provide.bar
+>    : ^^^^^^^^^^^^^^^^^^
 
 import m = no;
 >m : any
+>  : ^^^
 >no : any
+>   : ^^^
 
 import m2 = no.mod;
 >m2 : any
+>   : ^^^
 >no : any
+>   : ^^^
 >mod : any
+>    : ^^^
 
 import n = 5;
 >n : any
+>  : ^^^
 > : any
+> : ^^^
 >5 : 5
+>  : ^
 
 import o = "s";
 >o : any
+>  : ^^^
 > : any
+> : ^^^
 >"s" : "s"
+>    : ^^^
 
 import q = null;
 >q : any
+>  : ^^^
 > : any
->null : null
+> : ^^^
 
 import r = undefined;
 >r : any
+>  : ^^^
 >undefined : any
+>          : ^^^
 
 
 var p = new provide.Provide();
 >p : provide.Provide
+>  : ^^^^^^^^^^^^^^^
 >new provide.Provide() : provide.Provide
+>                      : ^^^^^^^^^^^^^^^
 >provide.Provide : typeof provide.Provide
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >provide : typeof foo
+>        : ^^^^^^^^^^
 >Provide : typeof provide.Provide
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
 function use() {
 >use : () => void
+>    : ^^^^^^^^^^
     
   beez.baz.boo;
 >beez.baz.boo : typeof booz.boo
+>             : ^^^^^^^^^^^^^^^
 >beez.baz : typeof booz
+>         : ^^^^^^^^^^^
 >beez : typeof provide.bar
+>     : ^^^^^^^^^^^^^^^^^^
 >baz : typeof booz
+>    : ^^^^^^^^^^^
 >boo : typeof booz.boo
+>    : ^^^^^^^^^^^^^^^
 
   var p1: provide.Provide; 
 >p1 : provide.Provide
+>   : ^^^^^^^^^^^^^^^
 >provide : any
+>        : ^^^
 
   var p2: foo.Provide;
 >p2 : provide.Provide
+>   : ^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 
   var p3:booz.bar;
 >p3 : booz.bar
+>   : ^^^^^^^^
 >booz : any
+>     : ^^^
 
   var p22 = new provide.Provide();
 >p22 : provide.Provide
+>    : ^^^^^^^^^^^^^^^
 >new provide.Provide() : provide.Provide
+>                      : ^^^^^^^^^^^^^^^
 >provide.Provide : typeof provide.Provide
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >provide : typeof foo
+>        : ^^^^^^^^^^
 >Provide : typeof provide.Provide
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 

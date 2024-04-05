@@ -1,25 +1,37 @@
-=== tests/cases/conformance/es6/moduleExportsSystem/src/a.ts ===
+//// [tests/cases/conformance/es6/moduleExportsSystem/outFilerootDirModuleNamesSystem.ts] ////
+
+=== src/a.ts ===
 import foo from "./b";
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export default class Foo {}
 >Foo : Foo
+>    : ^^^
 
 foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
-=== tests/cases/conformance/es6/moduleExportsSystem/src/b.ts ===
+=== src/b.ts ===
 import Foo from "./a";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export default function foo() { new Foo(); }
 >foo : () => void
+>    : ^^^^^^^^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/37429
 import("./a");
->import("./a") : Promise<typeof import("tests/cases/conformance/es6/moduleExportsSystem/src/a")>
+>import("./a") : Promise<typeof import("src/a")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./a" : "./a"
+>      : ^^^^^
 

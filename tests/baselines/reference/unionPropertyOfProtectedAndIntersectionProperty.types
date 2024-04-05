@@ -1,25 +1,35 @@
-=== tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts ===
+//// [tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts] ////
+
+=== unionPropertyOfProtectedAndIntersectionProperty.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   protected foo = 0;
 >foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
   protected foo = 0;
 >foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 type Nothing<V extends Foo> = void;
 >Nothing : void
+>        : ^^^^
 
 type Broken<V extends Array<Foo | Bar>> = {
 >Broken : Broken<V>
+>       : ^^^^^^^^^
 
   readonly [P in keyof V]: V[P] extends Foo ? Nothing<V[P]> : never;
 };
@@ -29,12 +39,15 @@ type Broken<V extends Array<Foo | Bar>> = {
 
 type _3 = (Foo & Bar)['foo'];         // Ok
 >_3 : number
+>   : ^^^^^^
 
 type _4 = (Foo | Bar)['foo'];         // Error
 >_4 : any
+>   : ^^^
 
 type _5 = (Foo | (Foo & Bar))['foo']; // Prev error, now ok
 >_5 : number
+>   : ^^^^^^
 
 // V[P] in `Nothing<V[P]>` is the substitution type `V[P] & Foo`. When
 // checking if that's assignable to `Foo` in the constraint of `Nothing`,

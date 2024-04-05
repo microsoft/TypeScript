@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts(16,4): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts(19,8): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts(24,12): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+privateNameStaticAccessorsAccess.ts(16,4): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+privateNameStaticAccessorsAccess.ts(19,8): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
+privateNameStaticAccessorsAccess.ts(24,12): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts (3 errors) ====
+==== privateNameStaticAccessorsAccess.ts (3 errors) ====
     export {}
     class A2 {
         static get #prop() { return ""; }

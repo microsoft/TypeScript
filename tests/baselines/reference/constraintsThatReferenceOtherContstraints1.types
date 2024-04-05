@@ -1,19 +1,28 @@
-=== tests/cases/compiler/constraintsThatReferenceOtherContstraints1.ts ===
+//// [tests/cases/compiler/constraintsThatReferenceOtherContstraints1.ts] ////
+
+=== constraintsThatReferenceOtherContstraints1.ts ===
 interface Object { }
 
 class Foo<T, U extends T> { }
 >Foo : Foo<T, U>
+>    : ^^^^^^^^^
 
 class Bar<T extends Object, U extends T> {
 >Bar : Bar<T, U>
+>    : ^^^^^^^^^
 
     data: Foo<Object, Object>; // Error 1 Type 'Object' does not satisfy the constraint 'T' for type parameter 'U extends T'.
 >data : Foo<Object, Object>
+>     : ^^^^^^^^^^^^^^^^^^^
 }
 
 var x: Foo< { a: string }, { a: string; b: number }>; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 
 >x : Foo<{ a: string; }, { a: string; b: number; }>
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 

@@ -32,14 +32,14 @@ Entity.y;
 //// [m1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Decl;
 function Decl() {
     return 0;
 }
-exports.default = Decl;
 (function (Decl) {
     Decl.x = 10;
     Decl.y = 20;
-})(Decl = exports.Decl || (exports.Decl = {}));
+})(Decl || (Decl = {}));
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

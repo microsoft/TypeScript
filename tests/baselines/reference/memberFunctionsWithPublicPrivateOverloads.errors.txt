@@ -1,21 +1,21 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(3,12): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(7,12): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(12,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(15,15): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(16,15): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(20,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(25,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(32,12): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(36,12): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(41,15): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(45,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(49,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(53,19): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(59,11): error TS2341: Property 'foo' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts(62,12): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
+memberFunctionsWithPublicPrivateOverloads.ts(3,12): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(7,12): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(12,19): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(15,15): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(16,15): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(20,19): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(25,19): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(32,12): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(36,12): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(41,15): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(45,19): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(49,19): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(53,19): error TS2385: Overload signatures must all be public, private or protected.
+memberFunctionsWithPublicPrivateOverloads.ts(59,11): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+memberFunctionsWithPublicPrivateOverloads.ts(62,12): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts (15 errors) ====
+==== memberFunctionsWithPublicPrivateOverloads.ts (15 errors) ====
     class C {
         private foo(x: number);
         public foo(x: number, y: string); // error

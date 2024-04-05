@@ -1,16 +1,23 @@
-=== tests/cases/compiler/es5ExportEqualsDts.ts ===
+//// [tests/cases/compiler/es5ExportEqualsDts.ts] ////
+
+=== es5ExportEqualsDts.ts ===
 class A {
 >A : A
+>  : ^
 
     foo() {
 >foo : () => A.B
+>    : ^^^^^^^^^
 
         var aVal: A.B;
 >aVal : A.B
+>     : ^^^
 >A : any
+>  : ^^^
 
         return aVal;
 >aVal : A.B
+>     : ^^^
     }
 }
 
@@ -20,4 +27,5 @@ module A {
 
 export = A
 >A : A
+>  : ^
 

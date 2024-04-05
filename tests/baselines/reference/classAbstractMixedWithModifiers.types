@@ -1,38 +1,52 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts] ////
+
+=== classAbstractMixedWithModifiers.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract foo_a();
 >foo_a : () => any
+>      : ^^^^^^^^^
 
     public abstract foo_b();
 >foo_b : () => any
+>      : ^^^^^^^^^
 
     protected abstract foo_c();
 >foo_c : () => any
+>      : ^^^^^^^^^
 
     private abstract foo_d();
 >foo_d : () => any
+>      : ^^^^^^^^^
 
     abstract public foo_bb();
 >foo_bb : () => any
+>       : ^^^^^^^^^
 
     abstract protected foo_cc();
 >foo_cc : () => any
+>       : ^^^^^^^^^
 
     abstract private foo_dd();
 >foo_dd : () => any
+>       : ^^^^^^^^^
 
     abstract static foo_d();
 >foo_d : () => any
+>      : ^^^^^^^^^
 
     static abstract foo_e();
 >foo_e : () => any
+>      : ^^^^^^^^^
 
     abstract async foo_f();
 >foo_f : () => any
+>      : ^^^^^^^^^
 
     async abstract foo_g();
 >foo_g : () => any
+>      : ^^^^^^^^^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarations4.ts] ////
+
 //// [mergedDeclarations4.ts]
 module M {
     export function f() { }

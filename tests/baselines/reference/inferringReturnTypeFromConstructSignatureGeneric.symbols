@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts ===
+//// [tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts] ////
+
+=== inferringReturnTypeFromConstructSignatureGeneric.ts ===
 class GenericObject<T extends {} = {}> {
 >GenericObject : Symbol(GenericObject, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 20))
@@ -84,4 +86,14 @@ g3.give('1');
 >g3.give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
 >g3 : Symbol(g3, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 26, 5))
 >give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
+
+// repro from #35636
+class C<T> {}
+>C : Symbol(C, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 28, 13))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 31, 8))
+
+const g4 = g(C);
+>g4 : Symbol(g4, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 32, 5))
+>g : Symbol(g, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 14, 1))
+>C : Symbol(C, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 28, 13))
 

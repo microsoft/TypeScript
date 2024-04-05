@@ -1,35 +1,54 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesImportExportElision.ts] ////
+
+=== file1.ts ===
 import {c} from "module"
 >c : any
+>  : ^^^
 
 import {c2} from "module"
 >c2 : any
+>   : ^^^
 
 import * as ns from "module"
 >ns : any
+>   : ^^^
 
 class C extends c2.C {
 >C : C
+>  : ^
 >c2.C : any
+>     : ^^^
 >c2 : any
+>   : ^^^
 >C : any
+>  : ^^^
 }
 
 let x = new c();
 >x : any
+>  : ^^^
 >new c() : any
+>        : ^^^
 >c : any
+>  : ^^^
 
 let y = ns.value;
 >y : any
+>  : ^^^
 >ns.value : any
+>         : ^^^
 >ns : any
+>   : ^^^
 >value : any
+>      : ^^^
 
 export {c1} from "module";
 >c1 : any
+>   : ^^^
 
 export var z = x;
 >z : any
+>  : ^^^
 >x : any
+>  : ^^^
 

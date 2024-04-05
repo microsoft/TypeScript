@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxLibraryManagedAttributesUnusedGeneric.tsx ===
+//// [tests/cases/compiler/jsxLibraryManagedAttributesUnusedGeneric.tsx] ////
+
+=== jsxLibraryManagedAttributesUnusedGeneric.tsx ===
 // @ts-ignore
 import React from 'react'
 >React : Symbol(React, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 1, 6))

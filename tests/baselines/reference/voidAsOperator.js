@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidAsOperator.ts] ////
+
 //// [voidAsOperator.ts]
 if (!void 0 !== true) {
  

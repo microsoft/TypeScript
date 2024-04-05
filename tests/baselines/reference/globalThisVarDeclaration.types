@@ -1,113 +1,179 @@
-=== tests/cases/conformance/es2019/b.js ===
+//// [tests/cases/conformance/es2019/globalThisVarDeclaration.ts] ////
+
+=== b.js ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 this.a;
 >this.a : number
+>       : ^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 this.b;
 >this.b : number
+>       : ^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 globalThis.a;
 >globalThis.a : number
+>             : ^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 globalThis.b;
 >globalThis.b : number
+>             : ^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 // DOM access is not supported until the index signature is handled more strictly
 self.a;
 >self.a : number
+>       : ^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 self.b;
 >self.b : number
+>       : ^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 window.a;
 >window.a : number
+>         : ^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 window.b;
 >window.b : number
+>         : ^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 top.a;
 >top.a : any
+>      : ^^^
 >top : Window
+>    : ^^^^^^
 >a : any
+>  : ^^^
 
 top.b;
 >top.b : any
+>      : ^^^
 >top : Window
+>    : ^^^^^^
 >b : any
+>  : ^^^
 
-=== tests/cases/conformance/es2019/actual.ts ===
+=== actual.ts ===
 var b = 10;
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 this.a;
 >this.a : number
+>       : ^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 this.b;
 >this.b : number
+>       : ^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 globalThis.a;
 >globalThis.a : number
+>             : ^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 globalThis.b;
 >globalThis.b : number
+>             : ^^^^^^
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 // same here -- no DOM access to globalThis yet
 self.a;
 >self.a : number
+>       : ^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 self.b;
 >self.b : number
+>       : ^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 window.a;
 >window.a : number
+>         : ^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 window.b;
 >window.b : number
+>         : ^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
 top.a;
 >top.a : any
+>      : ^^^
 >top : Window
+>    : ^^^^^^
 >a : any
+>  : ^^^
 
 top.b;
 >top.b : any
+>      : ^^^
 >top : Window
+>    : ^^^^^^
 >b : any
+>  : ^^^
 
 

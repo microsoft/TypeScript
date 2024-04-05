@@ -1,20 +1,29 @@
-=== tests/cases/compiler/inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts ===
+//// [tests/cases/compiler/inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts] ////
+
+=== inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts ===
 class A {
 >A : A
+>  : ^
 
     public myMethod() { }
 >myMethod : () => void
+>         : ^^^^^^^^^^
 }
 
 class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     private myMethod() { }
 >myMethod : () => void
+>         : ^^^^^^^^^^
 }
 

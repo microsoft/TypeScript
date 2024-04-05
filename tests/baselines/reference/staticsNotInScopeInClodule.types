@@ -1,16 +1,24 @@
-=== tests/cases/compiler/staticsNotInScopeInClodule.ts ===
+//// [tests/cases/compiler/staticsNotInScopeInClodule.ts] ////
+
+=== staticsNotInScopeInClodule.ts ===
 class Clod {
 >Clod : Clod
+>     : ^^^^
 
     static x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 module Clod {
 >Clod : typeof Clod
+>     : ^^^^^^^^^^^
 
     var p = x; // x isn't in scope here
 >p : any
+>  : ^^^
 >x : any
+>  : ^^^
 }

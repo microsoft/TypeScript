@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts] ////
+
 //// [functionWithMultipleReturnStatements2.ts]
 // return type of a function with multiple returns is the BCT of each return statement
 // no errors expected here

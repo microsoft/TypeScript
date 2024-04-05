@@ -1,61 +1,91 @@
-=== tests/cases/compiler/sourceMap-LineBreaks.ts ===
+//// [tests/cases/compiler/sourceMap-LineBreaks.ts] ////
+
+=== sourceMap-LineBreaks.ts ===
 var endsWithlineSeparator = 10; 
 >endsWithlineSeparator : number
+>                      : ^^^^^^
 >10 : 10
+>   : ^^
 
 var endsWithParagraphSeparator = 10; 
 >endsWithParagraphSeparator : number
+>                           : ^^^^^^
 >10 : 10
+>   : ^^
 
 var endsWithNextLine = 1;var endsWithLineFeed = 1;
 >endsWithNextLine : number
+>                 : ^^^^^^
 >1 : 1
+>  : ^
 >endsWithLineFeed : number
+>                 : ^^^^^^
 >1 : 1
+>  : ^
 
 var endsWithCarriageReturnLineFeed = 1;
 >endsWithCarriageReturnLineFeed : number
+>                               : ^^^^^^
 >1 : 1
+>  : ^
 
 var endsWithCarriageReturn = 1;
 >endsWithCarriageReturn : number
+>                       : ^^^^^^
 >1 : 1
+>  : ^
 
 var endsWithLineFeedCarriageReturn = 1;
 >endsWithLineFeedCarriageReturn : number
+>                               : ^^^^^^
 >1 : 1
+>  : ^
 
 var endsWithLineFeedCarriageReturnLineFeed = 1;
 >endsWithLineFeedCarriageReturnLineFeed : number
+>                                       : ^^^^^^
 >1 : 1
+>  : ^
 
 var stringLiteralWithLineFeed = "line 1\
 >stringLiteralWithLineFeed : string
+>                          : ^^^^^^
 >"line 1\line 2" : "line 1line 2"
+>                : ^^^^^^^^^^^^^^
 
 line 2";
 var stringLiteralWithCarriageReturnLineFeed = "line 1\
 >stringLiteralWithCarriageReturnLineFeed : string
+>                                        : ^^^^^^
 >"line 1\line 2" : "line 1line 2"
+>                : ^^^^^^^^^^^^^^
 
 line 2";
 var stringLiteralWithCarriageReturn = "line 1\
 >stringLiteralWithCarriageReturn : string
+>                                : ^^^^^^
 >"line 1\line 2" : "line 1line 2"
+>                 : ^^^^^^^^^^^^^^
 
 line 2";
 
 var stringLiteralWithLineSeparator = "line 1\
 >stringLiteralWithLineSeparator : string
+>                               : ^^^^^^
 >"line 1\ line 2" : "line 1line 2"
+>                 : ^^^^^^^^^^^^^^
 
 line 2";
 var stringLiteralWithParagraphSeparator = "line 1\
 >stringLiteralWithParagraphSeparator : string
+>                                    : ^^^^^^
 >"line 1\ line 2" : "line 1line 2"
+>                 : ^^^^^^^^^^^^^^
 
 line 2";
 var stringLiteralWithNextLine = "line 1\line 2";
 >stringLiteralWithNextLine : string
+>                          : ^^^^^^
 >"line 1\line 2" : "line 1\u0085line 2"
+>                 : ^^^^^^^^^^^^^^^^^^^^
 

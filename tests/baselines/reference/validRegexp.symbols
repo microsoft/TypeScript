@@ -1,4 +1,6 @@
-=== tests/cases/compiler/validRegexp.ts ===
+//// [tests/cases/compiler/validRegexp.ts] ////
+
+=== validRegexp.ts ===
 var x = / [a - z /]$ / i;
 >x : Symbol(x, Decl(validRegexp.ts, 0, 3))
 >i : Symbol(i, Decl(validRegexp.ts, 0, 22))

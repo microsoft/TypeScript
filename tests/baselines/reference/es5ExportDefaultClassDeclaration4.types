@@ -1,23 +1,32 @@
-=== tests/cases/compiler/es5ExportDefaultClassDeclaration4.ts ===
+//// [tests/cases/compiler/es5ExportDefaultClassDeclaration4.ts] ////
+
+=== es5ExportDefaultClassDeclaration4.ts ===
 declare module "foo" {
 >"foo" : typeof import("foo")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     export var before: C;
 >before : C
+>       : ^
 
     export default class C {
 >C : C
+>  : ^
 
         method(): C;
 >method : () => C
+>       : ^^^^^^ 
     }
 
     export var after: C;
 >after : C
+>      : ^
 
     export var t: typeof C;
 >t : typeof C
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 }
 
 

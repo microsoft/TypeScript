@@ -1,18 +1,29 @@
-=== tests/cases/compiler/castOfYield.ts ===
+//// [tests/cases/compiler/castOfYield.ts] ////
+
+=== castOfYield.ts ===
 function* f() {
 >f : () => {}
+>  : ^^^^^^^^
 
     <number> (yield 0);
 ><number> (yield 0) : number
+>                   : ^^^^^^
 >(yield 0) : any
+>          : ^^^
 >yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
 
     // Unlike await, yield is not allowed to appear in a simple unary expression.
     <number> yield 0;
 ><number> : number
+>         : ^^^^^^
 > : any
+> : ^^^
 >yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
 }
 

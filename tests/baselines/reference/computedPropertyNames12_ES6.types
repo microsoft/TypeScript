@@ -1,69 +1,109 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES6.ts] ////
+
+=== computedPropertyNames12_ES6.ts ===
 var s: string;
 >s : string
+>  : ^^^^^^
 
 var n: number;
 >n : number
+>  : ^^^^^^
 
 var a: any;
 >a : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
     [s]: number;
 >[s] : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     [n] = n;
 >[n] : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     static [s + s]: string;
 >[s + s] : string
+>        : ^^^^^^
 >s + s : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     [s + n] = 2;
 >[s + n] : number
+>        : ^^^^^^
 >s + n : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     [+s]: typeof s;
 >[+s] : string
+>     : ^^^^^^
 >+s : number
+>   : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     static [""]: number;
 >[""] : number
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
     [0]: number;
 >[0] : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     [a]: number;
 >[a] : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 
     static [<any>true]: number;
 >[<any>true] : number
+>            : ^^^^^^
 ><any>true : any
+>          : ^^^
 >true : true
+>     : ^^^^
 
     [`hello bye`] = 0;
 >[`hello bye`] : number
+>              : ^^^^^^
 >`hello bye` : "hello bye"
+>            : ^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     static [`hello ${a} bye`] = 0
 >[`hello ${a} bye`] : number
+>                   : ^^^^^^
 >`hello ${a} bye` : string
+>                 : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
+>  : ^
 }

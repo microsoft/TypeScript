@@ -1,63 +1,105 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithUnionTypes01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithUnionTypes01.ts] ////
+
+=== equalityWithUnionTypes01.ts ===
 interface I1 {
     p1: number
 >p1 : number
+>   : ^^^^^^
 }
 
 interface I2 extends I1 {
     p2: number;
 >p2 : number
+>   : ^^^^^^
 }
 
 var x = { p1: 10, p2: 20 };
 >x : { p1: number; p2: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ p1: 10, p2: 20 } : { p1: number; p2: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 >p2 : number
+>   : ^^^^^^
 >20 : 20
+>   : ^^
 
 var y: number | I2 = x;
 >y : number | I2
+>  : ^^^^^^^^^^^
 >x : { p1: number; p2: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var z: I1 = x;
 >z : I1
+>  : ^^
 >x : { p1: number; p2: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (y === z || z === y) {
 >y === z || z === y : boolean
+>                   : ^^^^^^^
 >y === z : boolean
+>        : ^^^^^^^
 >y : I2
+>  : ^^
 >z : I1
+>  : ^^
 >z === y : boolean
+>        : ^^^^^^^
 >z : I1
+>  : ^^
 >y : I2
+>  : ^^
 }
 else if (y !== z || z !== y) {
 >y !== z || z !== y : boolean
+>                   : ^^^^^^^
 >y !== z : boolean
+>        : ^^^^^^^
 >y : I2
+>  : ^^
 >z : I1
+>  : ^^
 >z !== y : boolean
+>        : ^^^^^^^
 >z : I1
+>  : ^^
 >y : I2
+>  : ^^
 }
 else if (y == z || z == y) {
 >y == z || z == y : boolean
+>                 : ^^^^^^^
 >y == z : boolean
+>       : ^^^^^^^
 >y : I2
+>  : ^^
 >z : I1
+>  : ^^
 >z == y : boolean
+>       : ^^^^^^^
 >z : I1
+>  : ^^
 >y : I2
+>  : ^^
 }
 else if (y != z || z != y) {
 >y != z || z != y : boolean
+>                 : ^^^^^^^
 >y != z : boolean
+>       : ^^^^^^^
 >y : I2
+>  : ^^
 >z : I1
+>  : ^^
 >z != y : boolean
+>       : ^^^^^^^
 >z : I1
+>  : ^^
 >y : I2
+>  : ^^
 }
