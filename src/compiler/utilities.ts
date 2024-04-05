@@ -361,6 +361,7 @@ import {
     JSDocMemberName,
     JSDocOverloadTag,
     JSDocParameterTag,
+    JSDocPropertyTag,
     JSDocSatisfiesExpression,
     JSDocSatisfiesTag,
     JSDocSignature,
@@ -10784,4 +10785,30 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
         );
     }
     return evaluate;
+}
+
+/** @internal */
+export function isOptionalParameter(node: ParameterDeclaration | JSDocParameterTag | JSDocPropertyTag) {
+    if (hasEffectiveQuestionToken(node)) {
+        return true;
+    }
+    if (!isParameter(node)) {
+        return false;
+    }
+    if (node.initializer) {
+        return true;
+    }
+    const iife = getImmediatelyInvokedFunctionExpression(node.parent);
+    if (iife) {
+        return !node.type &&
+            !node.dotDotDotToken &&
+            node.parent.parameters.indexOf(node) >= iife.arguments.length; // Was: getEffectiveCallArguments(iife).length; Very probably wrong if iife.arguments is complicated.
+    }
+
+    return false;
+}
+
+/** @internal */
+export function hasEffectiveQuestionToken(node: ParameterDeclaration | JSDocParameterTag | JSDocPropertyTag) {
+    return hasQuestionToken(node) || isOptionalJSDocPropertyLikeTag(node) || isParameter(node) && isJSDocOptionalParameter(node);
 }

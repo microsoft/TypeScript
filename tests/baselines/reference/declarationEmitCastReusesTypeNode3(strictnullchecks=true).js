@@ -37,18 +37,57 @@ type P = {} & {
 export declare let vLet: P;
 export declare const vConst: P;
 export declare function fn(p?: P): void;
-export declare function fnWithRequiredDefaultParam(p: P | undefined, req: number): void;
+export declare function fnWithRequiredDefaultParam(p?: P, req: number): void;
 export declare class C {
     ctorField: P;
     field: P;
     optField?: P;
     readonly roFiled: P;
     method(p?: P): void;
-    methodWithRequiredDefault(p: P | undefined, req: number): void;
+    methodWithRequiredDefault(p?: P, req: number): void;
     constructor(ctorField?: P);
     get x(): P;
     set x(v: P);
 }
 declare const _default: P;
 export default _default;
-export declare function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;
+export declare function fnWithPartialAnnotationOnDefaultparam(x?: P, b: number): void;
+
+
+//// [DtsFileErrors]
+
+
+declarationEmitCastReusesTypeNode3.d.ts(7,59): error TS1016: A required parameter cannot follow an optional parameter.
+declarationEmitCastReusesTypeNode3.d.ts(14,38): error TS1016: A required parameter cannot follow an optional parameter.
+declarationEmitCastReusesTypeNode3.d.ts(21,70): error TS1016: A required parameter cannot follow an optional parameter.
+
+
+==== declarationEmitCastReusesTypeNode3.d.ts (3 errors) ====
+    type P = {} & {
+        name: string;
+    };
+    export declare let vLet: P;
+    export declare const vConst: P;
+    export declare function fn(p?: P): void;
+    export declare function fnWithRequiredDefaultParam(p?: P, req: number): void;
+                                                              ~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    export declare class C {
+        ctorField: P;
+        field: P;
+        optField?: P;
+        readonly roFiled: P;
+        method(p?: P): void;
+        methodWithRequiredDefault(p?: P, req: number): void;
+                                         ~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+        constructor(ctorField?: P);
+        get x(): P;
+        set x(v: P);
+    }
+    declare const _default: P;
+    export default _default;
+    export declare function fnWithPartialAnnotationOnDefaultparam(x?: P, b: number): void;
+                                                                         ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    

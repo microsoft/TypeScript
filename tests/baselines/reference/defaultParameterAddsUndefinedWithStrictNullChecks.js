@@ -120,14 +120,50 @@ function removeNothing(y) {
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.d.ts]
 declare function f(addUndefined1?: string, addUndefined2?: number): number;
-declare function g(addUndefined: string | undefined, addDefined: number): number;
+declare function g(addUndefined?: string, addDefined: number): number;
 declare let total: number;
-declare function foo1(x: string | undefined, b: number): void;
-declare function foo2(x: string | undefined, b: number): void;
-declare function foo3(x: string | undefined, b: number): void;
-declare function foo4(x: string | undefined, b: number): void;
+declare function foo1(x?: string, b: number): void;
+declare function foo2(x?: string, b: number): void;
+declare function foo3(x?: string | undefined, b: number): void;
+declare function foo4(x?: string | undefined, b: number): void;
 type OptionalNullableString = string | null | undefined;
 declare function allowsNull(val?: OptionalNullableString): void;
 declare function removeUndefinedButNotFalse(x?: boolean): false | undefined;
 declare const cond: boolean;
 declare function removeNothing(y?: boolean | undefined): boolean;
+
+
+//// [DtsFileErrors]
+
+
+defaultParameterAddsUndefinedWithStrictNullChecks.d.ts(2,43): error TS1016: A required parameter cannot follow an optional parameter.
+defaultParameterAddsUndefinedWithStrictNullChecks.d.ts(4,35): error TS1016: A required parameter cannot follow an optional parameter.
+defaultParameterAddsUndefinedWithStrictNullChecks.d.ts(5,35): error TS1016: A required parameter cannot follow an optional parameter.
+defaultParameterAddsUndefinedWithStrictNullChecks.d.ts(6,47): error TS1016: A required parameter cannot follow an optional parameter.
+defaultParameterAddsUndefinedWithStrictNullChecks.d.ts(7,47): error TS1016: A required parameter cannot follow an optional parameter.
+
+
+==== defaultParameterAddsUndefinedWithStrictNullChecks.d.ts (5 errors) ====
+    declare function f(addUndefined1?: string, addUndefined2?: number): number;
+    declare function g(addUndefined?: string, addDefined: number): number;
+                                              ~~~~~~~~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    declare let total: number;
+    declare function foo1(x?: string, b: number): void;
+                                      ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    declare function foo2(x?: string, b: number): void;
+                                      ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    declare function foo3(x?: string | undefined, b: number): void;
+                                                  ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    declare function foo4(x?: string | undefined, b: number): void;
+                                                  ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    type OptionalNullableString = string | null | undefined;
+    declare function allowsNull(val?: OptionalNullableString): void;
+    declare function removeUndefinedButNotFalse(x?: boolean): false | undefined;
+    declare const cond: boolean;
+    declare function removeNothing(y?: boolean | undefined): boolean;
+    

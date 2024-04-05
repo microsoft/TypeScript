@@ -64,5 +64,29 @@ export declare class Foo {
     resolveType?: Map | undefined;
     constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map | undefined);
 }
-export declare function foo1(reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: Map | undefined, requiredParam: number): void;
+export declare function foo1(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map, requiredParam: number): void;
 export {};
+
+
+//// [DtsFileErrors]
+
+
+verbatim-declarations-parameters.d.ts(11,133): error TS1016: A required parameter cannot follow an optional parameter.
+
+
+==== verbatim-declarations-parameters.d.ts (1 errors) ====
+    type Map = {} & {
+        [P in string]: any;
+    };
+    type MapOrUndefined = Map | undefined | "dummy";
+    export declare class Foo {
+        reuseTypeNode?: Map | undefined;
+        reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
+        resolveType?: Map | undefined;
+        constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map | undefined);
+    }
+    export declare function foo1(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map, requiredParam: number): void;
+                                                                                                                                        ~~~~~~~~~~~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    export {};
+    

@@ -44,13 +44,13 @@ export function fnWithPartialAnnotationOnDefaultparam(x = /** @type {P} */(somet
 //// [input.d.ts]
 export function fn(p?: P): void;
 /** @param {number} req */
-export function fnWithRequiredDefaultParam(p: P | undefined, req: number): void;
+export function fnWithRequiredDefaultParam(p?: P, req: number): void;
 /**
  *
  * @param {P} x
  * @param {number} b
  */
-export function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;
+export function fnWithPartialAnnotationOnDefaultparam(x?: P, b: number): void;
 export let vLet: P;
 export const vConst: P;
 export class C {
@@ -60,7 +60,7 @@ export class C {
     /** @readonly */ readonly roFiled: P;
     method(p?: P): void;
     /** @param {number} req */
-    methodWithRequiredDefault(p: P | undefined, req: number): void;
+    methodWithRequiredDefault(p?: P, req: number): void;
     set x(v: P);
     get x(): P;
 }
@@ -69,3 +69,48 @@ export default _default;
 export type P = {} & {
     name?: string;
 };
+
+
+//// [DtsFileErrors]
+
+
+input.d.ts(3,51): error TS1016: A required parameter cannot follow an optional parameter.
+input.d.ts(9,62): error TS1016: A required parameter cannot follow an optional parameter.
+input.d.ts(19,38): error TS1016: A required parameter cannot follow an optional parameter.
+
+
+==== input.d.ts (3 errors) ====
+    export function fn(p?: P): void;
+    /** @param {number} req */
+    export function fnWithRequiredDefaultParam(p?: P, req: number): void;
+                                                      ~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    /**
+     *
+     * @param {P} x
+     * @param {number} b
+     */
+    export function fnWithPartialAnnotationOnDefaultparam(x?: P, b: number): void;
+                                                                 ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+    export let vLet: P;
+    export const vConst: P;
+    export class C {
+        constructor(ctorField?: P);
+        field: P;
+        /** @optional */ optField: P;
+        /** @readonly */ readonly roFiled: P;
+        method(p?: P): void;
+        /** @param {number} req */
+        methodWithRequiredDefault(p?: P, req: number): void;
+                                         ~~~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+        set x(v: P);
+        get x(): P;
+    }
+    declare const _default: P;
+    export default _default;
+    export type P = {} & {
+        name?: string;
+    };
+    
