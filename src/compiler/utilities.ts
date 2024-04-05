@@ -205,8 +205,8 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -5294,7 +5294,6 @@ export function getNameFromPropertyName(name: PropertyName): string | undefined 
         ? isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined
         : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
 }
-
 
 // TODO(jakebailey): this function should not be named this. While it does technically
 // return true if the argument is a ParameterDeclaration, it also returns true for nodes

@@ -6192,7 +6192,6 @@ export interface Type {
     widened?: Type; // Cached widened form of the type
 }
 
-
 /** @internal */
 // Intrinsic types (TypeFlags.Intrinsic)
 export interface IntrinsicType extends Type {
@@ -10147,21 +10146,21 @@ export interface EvaluationResolver {
  * Resolves to a type only when the 'services' project is loaded. Otherwise, results in `never`.
  * @internal
  */
-export type ServicesOnlyType<T, Fallback = never> = ServicesForwardRefs extends { __services: true } ? T : Fallback;
+export type ServicesOnlyType<T, Fallback = never> = ServicesForwardRefs extends { __services: true; } ? T : Fallback;
 
 /**
  * Resolves a forward-reference to a type declared in the 'services' project.
  * If 'services' is not present, results in `never`.
  * @internal
  */
-export type ServicesForwardRef<K extends string> = ServicesForwardRefs extends { [P in K]: infer T } ? T : never;
+export type ServicesForwardRef<K extends string> = ServicesForwardRefs extends { [P in K]: infer T; } ? T : never;
 
 /**
  * Resolves a forward-reference to an array of a type declared in the 'services' project.
  * If 'services' is not present, results in `never`.
  * @internal
  */
- export type ServicesForwardRefArray<K extends string> = ServicesOnlyType<ServicesForwardRef<K>[]>;
+export type ServicesForwardRefArray<K extends string> = ServicesOnlyType<ServicesForwardRef<K>[]>;
 
 /**
  * A registry of forward references declared in the 'services' project.

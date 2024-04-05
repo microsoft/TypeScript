@@ -1374,8 +1374,7 @@ function isTrivia(s: string) {
 // are more aggressive than is strictly necessary.
 const textChangesTransformationContext: TransformationContext = {
     ...nullTransformationContext,
-    factory: createNodeFactory(nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,
-    ),
+    factory: createNodeFactory(nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules),
 };
 
 /** @internal */

@@ -96,7 +96,9 @@ import {
 
 /** @internal */
 export abstract class BaseSyntaxObject implements Node {
-    static { this.prototype.kind = SyntaxKind.Unknown; }
+    static {
+        this.prototype.kind = SyntaxKind.Unknown;
+    }
     declare kind: SyntaxKind;
 
     pos: number = -1;
@@ -207,7 +209,9 @@ export class TokenObject<TKind extends SyntaxKind> extends BaseTokenObject imple
 
 /** @internal */
 export class IdentifierObject extends BaseTokenObject implements Identifier {
-    static { this.prototype.kind = SyntaxKind.Identifier; }
+    static {
+        this.prototype.kind = SyntaxKind.Identifier;
+    }
     declare kind: SyntaxKind.Identifier;
 
     declare _primaryExpressionBrand: any;
@@ -235,7 +239,9 @@ export class IdentifierObject extends BaseTokenObject implements Identifier {
 
 /** @internal */
 export class PrivateIdentifierObject extends BaseTokenObject implements PrivateIdentifier {
-    static { PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier; }
+    static {
+        PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier;
+    }
     declare kind: SyntaxKind.PrivateIdentifier;
 
     declare _primaryExpressionBrand: any;
@@ -312,7 +318,9 @@ export class NodeObject<TKind extends SyntaxKind> extends BaseNodeObject impleme
 
 /** @internal */
 export class SourceFileObject extends BaseNodeObject implements SourceFile {
-    static { this.prototype.kind = SyntaxKind.SourceFile; }
+    static {
+        this.prototype.kind = SyntaxKind.SourceFile;
+    }
     declare kind: SyntaxKind.SourceFile;
 
     declare _declarationBrand: any;
@@ -379,7 +387,7 @@ export class SourceFileObject extends BaseNodeObject implements SourceFile {
     declare scriptSnapshot: IScriptSnapshot;
     declare nameTable: UnderscoreEscapedMap<number> | undefined;
 
-    private declare namedDeclarations: Map<string, Declaration[]> | undefined;
+    declare private namedDeclarations: Map<string, Declaration[]> | undefined;
 
     public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
         return updateSourceFile(this, newText, textChangeRange);
@@ -582,7 +590,9 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): rea
 
     if (isJSDocCommentContainingNode(node)) {
         /** Don't add trivia for "tokens" since this is in a comment. */
-        forEachChild(node, child => { children = append(children, child); });
+        forEachChild(node, child => {
+            children = append(children, child);
+        });
         return children ?? emptyArray;
     }
 

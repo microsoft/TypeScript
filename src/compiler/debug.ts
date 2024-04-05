@@ -94,16 +94,16 @@ import {
     zipWith,
 } from "./_namespaces/ts";
 import {
-    SignatureObject,
-    SymbolObject,
-    TypeObject,
-} from "./objectConstructors";
-import {
     IdentifierObject,
     NodeObject,
     SourceFileObject,
     TokenObject,
 } from "./nodeConstructors";
+import {
+    SignatureObject,
+    SymbolObject,
+    TypeObject,
+} from "./objectConstructors";
 
 /** @internal */
 export enum LogLevel {
@@ -372,7 +372,8 @@ export namespace Debug {
             !positionIsSynthesized(range.pos) && !positionIsSynthesized(range.end),
             message ?? "Node must have a real position for this operation",
             /*verboseDebugInfo*/ undefined,
-            stackCrawlMark);
+            stackCrawlMark,
+        );
     }
 
     /**

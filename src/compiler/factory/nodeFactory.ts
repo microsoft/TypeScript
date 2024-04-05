@@ -461,9 +461,7 @@ import {
     SourceFileObject,
     TokenObject,
 } from "../nodeConstructors";
-import {
-    SourceMapSourceObject,
-} from "../objectConstructors";
+import { SourceMapSourceObject } from "../objectConstructors";
 
 let nextAutoGenerateId = 0;
 

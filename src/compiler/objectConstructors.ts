@@ -322,7 +322,7 @@ export class SignatureObject implements Signature {
 export class SourceMapSourceObject implements SourceMapSource {
     fileName: string;
     text: string;
-    skipTrivia: ((pos: number) => number);
+    skipTrivia: (pos: number) => number;
 
     // TODO: Review for polymorphism:
     declare lineMap: readonly number[];
