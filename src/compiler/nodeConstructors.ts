@@ -1,20 +1,28 @@
 import {
     __String,
     AmdDependency,
+    append,
     AssignmentDeclarationKind,
     AutoGenerateInfo,
     BinaryExpression,
+    canHaveJSDoc,
     CheckJsDirective,
     CommentDirective,
     computePositionOfLineAndCharacter,
     createMultiMap,
+    createScanner,
     Debug,
     Declaration,
     DiagnosticWithLocation,
     EmitNode,
+    emptyArray,
+    EndOfFileToken,
     EntityName,
     ExportDeclaration,
+    factory,
     FileReference,
+    find,
+    findLast,
     FlowNode,
     forEach,
     forEachChild,
@@ -23,11 +31,13 @@ import {
     getLineAndCharacterOfPosition,
     getLineStarts,
     getNameFromPropertyName,
+    getNodeChildren,
     getNonAssignedNameOfDeclaration,
     getSourceFileOfNode,
     getTokenPosOfNode,
     HasLocals,
     hasSyntacticModifier,
+    hasTabstop,
     Identifier,
     idText,
     ImportDeclaration,
@@ -35,9 +45,12 @@ import {
     isBindingPattern,
     isComputedPropertyName,
     IScriptSnapshot,
+    isJSDocCommentContainingNode,
     isNamedExports,
+    isNodeKind,
     isPropertyAccessExpression,
     isPropertyName,
+    isTokenKind,
     JSDoc,
     JSDocTag,
     LanguageVariant,
@@ -45,13 +58,13 @@ import {
     LineAndCharacter,
     ModeAwareCache,
     ModifierFlags,
+    Mutable,
     Node,
     NodeArray,
     NodeFlags,
     PackageJsonInfo,
     Path,
     PatternAmbientModule,
-    positionIsSynthesized,
     PrivateIdentifier,
     ReadonlyPragmaMap,
     RedirectInfo,
@@ -61,6 +74,7 @@ import {
     ScriptKind,
     ScriptTarget,
     ServicesOnlyType,
+    setNodeChildren,
     SourceFile,
     SourceFileLike,
     Statement,
@@ -69,6 +83,7 @@ import {
     Symbol,
     SymbolTable,
     SyntaxKind,
+    SyntaxList,
     TextChangeRange,
     Token,
     TransformFlags,
@@ -80,198 +95,121 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export class NodeObject<TKind extends SyntaxKind> implements Node {
-    declare kind: TKind;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
+export abstract class BaseSyntaxObject implements Node {
+    static { this.prototype.kind = SyntaxKind.Unknown; }
+    declare kind: SyntaxKind;
 
-    constructor(kind: TKind) {
-        this.pos = -1;
-        this.end = -1;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-    }
+    pos: number = -1;
+    end: number = -1;
+    id: number = 0;
+    flags: NodeFlags = NodeFlags.None;
+    modifierFlagsCache: ModifierFlags = ModifierFlags.None; // TODO: move this off `Node`
+    transformFlags: TransformFlags = TransformFlags.None;
+    parent: Node = undefined!;
+    original: Node | undefined = undefined;
 
-    private assertHasRealPosition(message?: string) {
-        // eslint-disable-next-line local/debug-assert
-        Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
-    }
+    abstract emitNode: EmitNode | undefined;
 
-    public getSourceFile(): SourceFile {
+    getSourceFile(): SourceFile {
         return getSourceFileOfNode(this);
     }
 
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        this.assertHasRealPosition();
+    getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+        Debug.assertValidTextRange(this);
         return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
     }
 
-    public getFullStart(): number {
-        this.assertHasRealPosition();
+    getFullStart(): number {
+        Debug.assertValidTextRange(this);
         return this.pos;
     }
 
-    public getEnd(): number {
-        this.assertHasRealPosition();
+    getEnd(): number {
+        Debug.assertValidTextRange(this);
         return this.end;
     }
 
-    public getWidth(sourceFile?: SourceFile): number {
-        this.assertHasRealPosition();
+    getWidth(sourceFile?: SourceFile): number {
+        Debug.assertValidTextRange(this);
         return this.getEnd() - this.getStart(sourceFile);
     }
 
-    public getFullWidth(): number {
-        this.assertHasRealPosition();
+    getFullWidth(): number {
+        Debug.assertValidTextRange(this);
         return this.end - this.pos;
     }
 
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        this.assertHasRealPosition();
+    getLeadingTriviaWidth(sourceFile?: SourceFile): number {
         return this.getStart(sourceFile) - this.pos;
     }
 
-    public getFullText(sourceFile?: SourceFile): string {
-        this.assertHasRealPosition();
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+    getFullText(sourceFile?: SourceFile): string {
+        Debug.assertValidTextRange(this);
+        sourceFile ??= this.getSourceFile();
+        return sourceFile.text.substring(this.pos, this.end);
     }
 
-    public getText(sourceFile?: SourceFile): string {
-        this.assertHasRealPosition();
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
+    getText(sourceFile?: SourceFile): string {
+        Debug.assertValidTextRange(this);
+        sourceFile ??= this.getSourceFile();
         return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
     }
 
-    public getChildCount(_sourceFile?: SourceFile): ServicesOnlyType<number> {
-        throw new TypeError("Not implemented");
+    getChildCount(sourceFile?: SourceFile): number {
+        return this.getChildren(sourceFile).length;
     }
 
-    public getChildAt(_index: number, _sourceFile?: SourceFile): ServicesOnlyType<Node> {
-        throw new TypeError("Not implemented");
+    getChildAt(index: number, sourceFile?: SourceFile): Node {
+        return this.getChildren(sourceFile)[index];
     }
 
-    public getChildren(_sourceFile?: SourceFileLike): ServicesOnlyType<Node[]> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getFirstToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getLastToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
-        return forEachChild(this, cbNode, cbNodeArray);
-    }
+    abstract forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined;
+    abstract getChildren(sourceFile?: SourceFileLike): readonly Node[];
+    abstract getFirstToken(sourceFile?: SourceFileLike): Node | undefined;
+    abstract getLastToken(sourceFile?: SourceFileLike): Node | undefined;
 }
 
 /** @internal */
-export class TokenObject<Kind extends SyntaxKind> implements Token<Kind> {
-    declare kind: Kind;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
+export abstract class BaseTokenObject extends BaseSyntaxObject {
+    // NOTE: Tokens generally do not have or need emitNode entries, so they are declared and not defined to reduce
+    // memory footprint.
+    declare emitNode: EmitNode | undefined;
 
-    constructor(kind: Kind) {
-        this.pos = -1;
-        this.end = -1;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.emitNode = undefined;
-    }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(_sourceFile?: SourceFile): ServicesOnlyType<number> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getChildAt(_index: number, _sourceFile?: SourceFile): ServicesOnlyType<Node> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getChildren(_sourceFile?: SourceFileLike): ServicesOnlyType<Node[]> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getFirstToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getLastToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public forEachChild<T>(): T | undefined {
+    override forEachChild<T>(_cbNode: (node: Node) => T, _cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
+        // Tokens cannot have source element children
         return undefined;
     }
+
+    override getChildren(_sourceFile?: SourceFileLike): readonly Node[] {
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc ?? emptyArray : emptyArray;
+    }
+
+    override getFirstToken(_sourceFile?: SourceFileLike): Node | undefined {
+        // Tokens cannot have source element children
+        return undefined!;
+    }
+
+    override getLastToken(_sourceFile?: SourceFileLike): Node | undefined {
+        // Tokens cannot have source element children
+        return undefined!;
+    }
 }
 
 /** @internal */
-export class IdentifierObject implements Identifier {
+export class TokenObject<TKind extends SyntaxKind> extends BaseTokenObject implements Token<TKind> {
+    override kind: TKind;
+
+    constructor(kind: TKind) {
+        super();
+        this.kind = kind;
+    }
+}
+
+/** @internal */
+export class IdentifierObject extends BaseTokenObject implements Identifier {
+    static { this.prototype.kind = SyntaxKind.Identifier; }
+    declare kind: SyntaxKind.Identifier;
+
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -282,220 +220,104 @@ export class IdentifierObject implements Identifier {
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
 
-    declare kind: SyntaxKind.Identifier;
-    declare escapedText: __String;
-    declare originalKeywordKind?: SyntaxKind | undefined;
-    declare autoGenerate: AutoGenerateInfo | undefined;
-    declare generatedImportReference?: ImportSpecifier | undefined;
-    declare isInJSDocNamespace?: boolean | undefined;
-    declare typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined;
-    declare jsdocDotPos?: number | undefined;
-    declare hasExtendedUnicodeEscape?: boolean | undefined;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
-    declare symbol: Symbol;
-    declare localSymbol?: Symbol | undefined;
-    declare jsDoc?: JSDoc[] | undefined;
-    declare jsDocCache?: readonly JSDocTag[] | undefined;
-    declare flowNode?: FlowNode | undefined;
+    // NOTE: Though tokens, Identifiers often need emitNode
+    override emitNode: EmitNode | undefined = undefined;
 
-    constructor() {
-        this.pos = -1;
-        this.end = -1;
-        this.kind = SyntaxKind.Identifier;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-    }
+    escapedText: __String = "" as __String;
+    symbol: Symbol = undefined!; // initialized by checker
+    jsDoc: JSDoc[] | undefined = undefined; // initialized by parser (JsDocContainer)
+    flowNode: FlowNode | undefined = undefined; // initialized by binder (FlowContainer)
 
     get text(): string {
         return idText(this);
     }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(_sourceFile?: SourceFile): ServicesOnlyType<number> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getChildAt(_index: number, _sourceFile?: SourceFile): ServicesOnlyType<Node> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getChildren(_sourceFile?: SourceFileLike): ServicesOnlyType<Node[]> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getFirstToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getLastToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public forEachChild<T>(): T | undefined {
-        return undefined;
-    }
-
-    static { this.prototype.kind = SyntaxKind.Identifier; }
 }
 
 /** @internal */
-export class PrivateIdentifierObject implements PrivateIdentifier {
+export class PrivateIdentifierObject extends BaseTokenObject implements PrivateIdentifier {
+    static { PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier; }
+    declare kind: SyntaxKind.PrivateIdentifier;
+
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
     declare _updateExpressionBrand: any;
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
-    declare kind: SyntaxKind.PrivateIdentifier;
-    declare escapedText: __String;
-    declare autoGenerate: AutoGenerateInfo | undefined;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
 
-    constructor() {
-        this.pos = -1;
-        this.end = -1;
-        this.kind = SyntaxKind.PrivateIdentifier;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-    }
+    // NOTE: Though tokens, PrivateIdentifiers often need emitNode
+    override emitNode: EmitNode | undefined = undefined;
+
+    escapedText: __String = "" as __String;
 
     get text(): string {
         return idText(this);
     }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(_sourceFile?: SourceFile): ServicesOnlyType<number> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getChildAt(_index: number, _sourceFile?: SourceFile): ServicesOnlyType<Node> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getChildren(_sourceFile?: SourceFileLike): ServicesOnlyType<Node[]> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getFirstToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public getLastToken(_sourceFile?: SourceFileLike): ServicesOnlyType<Node | undefined> {
-        throw new TypeError("Not implemented");
-    }
-
-    public forEachChild<T>(): T | undefined {
-        return undefined;
-    }
-
-    static { this.prototype.kind = SyntaxKind.PrivateIdentifier; }
 }
 
 /** @internal */
-export class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
+export abstract class BaseNodeObject extends BaseSyntaxObject {
+    // NOTE: Non-token nodes often need emitNode entries, so they are defined to reduce polymorphism.
+    override emitNode: EmitNode | undefined = undefined;
+
+    override forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
+        return forEachChild(this, cbNode, cbNodeArray);
+    }
+
+    override getChildren(sourceFile?: SourceFileLike): readonly Node[] {
+        Debug.assertValidTextRange(this, "Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+    }
+
+    override getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
+        Debug.assertValidTextRange(this);
+        const children = this.getChildren(sourceFile);
+        if (!children.length) {
+            return undefined;
+        }
+
+        const child = find(children, child => child.kind < SyntaxKind.FirstJSDocNode || child.kind > SyntaxKind.LastJSDocNode);
+        if (!child) {
+            return undefined;
+        }
+
+        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getFirstToken(sourceFile);
+    }
+
+    override getLastToken(sourceFile?: SourceFileLike): Node | undefined {
+        Debug.assertValidTextRange(this);
+        const children = this.getChildren(sourceFile);
+        if (!children.length) {
+            return undefined;
+        }
+
+        const child = findLast(children, child => child.kind < SyntaxKind.FirstJSDocNode || child.kind > SyntaxKind.LastJSDocNode);
+        if (!child) {
+            return undefined;
+        }
+
+        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getLastToken(sourceFile);
+    }
+}
+
+/** @internal */
+export class NodeObject<TKind extends SyntaxKind> extends BaseNodeObject implements Node {
+    override kind: TKind;
+
+    constructor(kind: TKind) {
+        super();
+        this.kind = kind;
+    }
+}
+
+/** @internal */
+export class SourceFileObject extends BaseNodeObject implements SourceFile {
+    static { this.prototype.kind = SyntaxKind.SourceFile; }
+    declare kind: SyntaxKind.SourceFile;
+
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
-    declare kind: SyntaxKind.SourceFile;
+
     declare statements: NodeArray<Statement>;
     declare endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
     declare fileName: string;
@@ -558,10 +380,6 @@ export class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implemen
     declare nameTable: UnderscoreEscapedMap<number> | undefined;
 
     private declare namedDeclarations: Map<string, Declaration[]> | undefined;
-
-    constructor() {
-        super(SyntaxKind.SourceFile);
-    }
 
     public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
         return updateSourceFile(this, newText, textChangeRange);
@@ -751,6 +569,92 @@ export class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implemen
             }
         }
     }
+}
 
-    static { this.prototype.kind = SyntaxKind.SourceFile; }
+const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+
+function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
+    if (!isNodeKind(node.kind)) {
+        return emptyArray;
+    }
+
+    let children: Node[] | undefined;
+
+    if (isJSDocCommentContainingNode(node)) {
+        /** Don't add trivia for "tokens" since this is in a comment. */
+        forEachChild(node, child => { children = append(children, child); });
+        return children ?? emptyArray;
+    }
+
+    scanner.setText((sourceFile || getSourceFileOfNode(node)).text);
+
+    let pos = node.pos;
+    const processNode = (child: Node) => {
+        children = addSyntheticNodes(children, pos, child.pos, node);
+        children = append(children, child);
+        pos = child.end;
+    };
+    const processNodes = (nodes: NodeArray<Node>) => {
+        children = addSyntheticNodes(children, pos, nodes.pos, node);
+        children = append(children, createSyntaxList(nodes, node));
+        pos = nodes.end;
+    };
+
+    // jsDocComments need to be the first children
+    if (canHaveJSDoc(node)) {
+        forEach(node.jsDoc, processNode);
+    }
+
+    // For syntactic classifications, all trivia are classified together, including jsdoc comments.
+    // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+    // Restoring the scanner position ensures that.
+    pos = node.pos;
+    forEachChild(node, processNode, processNodes);
+    children = addSyntheticNodes(children, pos, node.end, node);
+    scanner.setText(undefined);
+    return children ?? emptyArray;
+}
+
+function addSyntheticNodes(nodes: Node[] | undefined, pos: number, end: number, parent: Node): Node[] | undefined {
+    scanner.resetTokenState(pos);
+    while (pos < end) {
+        const kind = scanner.scan();
+        const textPos = scanner.getTokenEnd();
+        if (textPos <= end) {
+            if (kind === SyntaxKind.Identifier) {
+                if (hasTabstop(parent)) {
+                    continue;
+                }
+                Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
+            }
+            Debug.assert(isTokenKind(kind));
+            const token = factory.createToken(kind) as Mutable<Token<SyntaxKind>>;
+            token.pos = pos;
+            token.end = textPos;
+            token.parent = parent;
+            token.flags = parent.flags & NodeFlags.ContextFlags;
+            nodes = append(nodes, token);
+        }
+        pos = textPos;
+        if (kind === SyntaxKind.EndOfFileToken) {
+            break;
+        }
+    }
+    return nodes;
+}
+
+function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
+    let children: Node[] | undefined;
+    let pos = nodes.pos;
+    for (const node of nodes) {
+        children = addSyntheticNodes(children, pos, node.pos, parent);
+        pos = node.end;
+    }
+    children = addSyntheticNodes(children, pos, nodes.end, parent);
+    const list = factory.createSyntaxList(children ?? emptyArray) as Mutable<SyntaxList>;
+    list.pos = nodes.pos;
+    list.end = nodes.end;
+    list.parent = parent;
+    list.flags = parent.flags & NodeFlags.ContextFlags;
+    return list;
 }

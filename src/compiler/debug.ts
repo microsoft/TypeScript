@@ -69,6 +69,7 @@ import {
     noop,
     ObjectFlags,
     ObjectType,
+    positionIsSynthesized,
     RelationComparisonResult,
     ScriptKind,
     Signature,
@@ -81,6 +82,7 @@ import {
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    TextRange,
     TransformFlags,
     Type,
     TypeFacts,
@@ -363,6 +365,14 @@ export namespace Debug {
                 stackCrawlMark || assertMissingNode,
             );
         }
+    }
+
+    export function assertValidTextRange(range: TextRange, message?: string, stackCrawlMark?: AnyFunction) {
+        assert(
+            !positionIsSynthesized(range.pos) && !positionIsSynthesized(range.end),
+            message ?? "Node must have a real position for this operation",
+            /*verboseDebugInfo*/ undefined,
+            stackCrawlMark);
     }
 
     /**
