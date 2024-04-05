@@ -7,7 +7,7 @@ export type Point = [number, number];
 
 export function increment(point: Point) {
 >increment : (point: Point) => number[]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^     ^^^^^^^^^^^^^
 >point : Point
 >      : ^^^^^
 

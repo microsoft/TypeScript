@@ -497,7 +497,7 @@ function ft20(s: string) {
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                            
 >literal : T
 >        : ^
 

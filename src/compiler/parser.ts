@@ -387,6 +387,7 @@ import {
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
     UnionTypeNode,
+    unsetNodeChildren,
     UpdateExpression,
     VariableDeclaration,
     VariableDeclarationList,
@@ -10002,9 +10003,7 @@ namespace IncrementalParser {
 
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
-            if (node._children) {
-                node._children = undefined;
-            }
+            unsetNodeChildren(node);
 
             setTextRangePosEnd(node, node.pos + delta, node.end + delta);
 
@@ -10022,7 +10021,6 @@ namespace IncrementalParser {
         }
 
         function visitArray(array: IncrementalNodeArray) {
-            array._children = undefined;
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
             for (const node of array) {
@@ -10161,7 +10159,7 @@ namespace IncrementalParser {
             const fullEnd = child.end;
             if (fullEnd >= changeStart) {
                 child.intersectsChange = true;
-                child._children = undefined;
+                unsetNodeChildren(child);
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10194,7 +10192,6 @@ namespace IncrementalParser {
             const fullEnd = array.end;
             if (fullEnd >= changeStart) {
                 array.intersectsChange = true;
-                array._children = undefined;
 
                 // Adjust the pos or end (or both) of the intersecting array accordingly.
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10347,7 +10344,6 @@ namespace IncrementalParser {
         readonly parent: Node;
         intersectsChange: boolean;
         length?: number;
-        _children: Node[] | undefined;
     }
 
     export interface IncrementalNode extends Node, IncrementalElement {

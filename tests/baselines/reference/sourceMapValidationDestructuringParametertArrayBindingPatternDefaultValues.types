@@ -28,7 +28,7 @@ var robotA: Robot = [1, "mower", "mowing"];
 
 function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 >foo1 : ([, nameA]?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^     ^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >nameA : string
@@ -61,7 +61,7 @@ function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 
 function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 >foo2 : ([numberB]?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^     ^^^^^^^^^
 >numberB : number
 >        : ^^^^^^
 >-1 : -1
@@ -94,7 +94,7 @@ function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 
 function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]) {
 >foo3 : ([numberA2, nameA2, skillA2]?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >numberA2 : number
 >         : ^^^^^^
 >-1 : -1
@@ -135,7 +135,7 @@ function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, 
 
 function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >foo4 : ([numberA3, ...robotAInfo]?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
 >numberA3 : number
 >         : ^^^^^^
 >-1 : -1

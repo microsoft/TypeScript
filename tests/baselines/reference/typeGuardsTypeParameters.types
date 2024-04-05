@@ -90,7 +90,7 @@ function f2<T>(x: T) {
 
 function fun<T>(item: { [P in keyof T]: T[P] }) {
 >fun : <T>(item: { [P in keyof T]: T[P]; }) => void
->    : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^                         ^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

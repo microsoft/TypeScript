@@ -3,7 +3,7 @@
 === genericFunctionHasFreshTypeArgs.ts ===
 function f(p: <T>(x: T) => void) { };
 >f : (p: <T>(x: T) => void) => void
->  : ^^^^^ ^^^^^ ^^^^^    ^^^^^^^^^
+>  : ^^^^                 ^^^^^^^^^
 >p : <T>(x: T) => void
 >  : ^ ^^^^^ ^^^^^    
 >x : T

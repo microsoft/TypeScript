@@ -325,10 +325,10 @@ const f3 = ({ a: string, b, c }: O) => { };
 >  : ^^^^^^
 
 const f4 = function({ a: string }: O): typeof string { return string; };
->f4 : ({ a: string }: O) => string
->   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
->function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => string
->                                                             : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>f4 : ({ a: string }: O) => typeof string
+>   : ^^^^^^^^^^^^^^^^ ^^^^^             
+>function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => typeof string
+>                                                             : ^^^^^^^^^^^^^^^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string
@@ -339,10 +339,10 @@ const f4 = function({ a: string }: O): typeof string { return string; };
 >       : ^^^^^^
 
 const f5 = ({ a: string, b, c }: O): typeof string => '';
->f5 : ({ a: string, b, c }: O) => string
->   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
->({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => string
->                                              : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>f5 : ({ a: string, b, c }: O) => typeof string
+>   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^             
+>({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => typeof string
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string
@@ -372,14 +372,14 @@ const obj1 = {
 
 };
 const obj2 = {
->obj2 : { method({ a: string }: O): string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
->{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): string; }
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>obj2 : { method({ a: string }: O): typeof string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^             ^^^
+>{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): typeof string; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^             ^^^
 
   method({ a: string }: O): typeof string { return string; }
->method : ({ a: string }: O) => string
->       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>method : ({ a: string }: O) => typeof string
+>       : ^^^^^^^^^^^^^^^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string

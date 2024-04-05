@@ -157,7 +157,7 @@ type T3 = Box<Box<Box<T3>>>;
 
 function f1(t1: T1, t2: T2, t3: T3) {
 >f1 : (t1: T1, t2: T2, t3: T3) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
 >t1 : T1
 >   : ^^
 >t2 : T2
@@ -666,7 +666,7 @@ type Tree = [HTMLHeadingElement, Tree][];
 
 function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse : (node: Tree, index?: number[]) => HTMLUListElement
->      : ^^^^^^^^^^^^^^^^^^^^^        ^^^^^                
+>      : ^^^^^^^    ^^^^^^^^^^        ^^^^^                
 >node : Tree
 >     : ^^^^
 >index : number[]
@@ -800,7 +800,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 
 function cons(hs: HTMLHeadingElement[]): Tree {
 >cons : (hs: HTMLHeadingElement[]) => Tree
->     : ^^^^^                    ^^^^^^^^^
+>     : ^^^^^                    ^^^^^    
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 

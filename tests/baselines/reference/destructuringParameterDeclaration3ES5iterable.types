@@ -39,13 +39,13 @@ function a3(...a: Array<String>) { }
 
 function a4(...a: arrayString) { }
 >a4 : (...a: arrayString) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^           ^^^^^^^^^
 >a : arrayString
 >  : ^^^^^^^^^^^
 
 function a5(...a: stringOrNumArray) { }
 >a5 : (...a: stringOrNumArray) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^                ^^^^^^^^^
 >a : stringOrNumArray
 >  : ^^^^^^^^^^^^^^^^
 
