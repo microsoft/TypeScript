@@ -21,6 +21,7 @@ export * from "../factory/nodeFactory";
 export * from "../factory/emitNode";
 export * from "../factory/emitHelpers";
 export * from "../factory/nodeTests";
+export * from "../factory/nodeChildren";
 export * from "../factory/utilities";
 export * from "../factory/utilitiesPublic";
 export * from "../parser";

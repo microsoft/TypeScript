@@ -188,6 +188,7 @@ import {
     getLineStarts,
     getModeForUsageLocation,
     getNameOfDeclaration,
+    getNodeChildren,
     getNormalizedAbsolutePath,
     getNormalizedPathComponents,
     getOwnKeys,
@@ -511,7 +512,6 @@ import {
     SymbolFlags,
     SymbolTable,
     SyntaxKind,
-    SyntaxList,
     TaggedTemplateExpression,
     TemplateExpression,
     TemplateLiteral,
@@ -1162,8 +1162,11 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
     // the syntax list itself considers them as normal trivia. Therefore if we simply skip
     // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
     // first child to determine the actual position of its first token.
-    if (node.kind === SyntaxKind.SyntaxList && (node as SyntaxList)._children.length > 0) {
-        return getTokenPosOfNode((node as SyntaxList)._children[0], sourceFile, includeJsDoc);
+    if (node.kind === SyntaxKind.SyntaxList) {
+        const first = firstOrUndefined(getNodeChildren(node));
+        if (first) {
+            return getTokenPosOfNode(first, sourceFile, includeJsDoc);
+        }
     }
 
     return skipTrivia(
@@ -8155,6 +8158,7 @@ export interface ObjectAllocator {
 }
 
 function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
+    // Note: if modifying this, be sure to update SymbolObject in src/services/services.ts
     this.flags = flags;
     this.escapedName = name;
     this.declarations = undefined;
@@ -8172,6 +8176,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
 }
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
+    // Note: if modifying this, be sure to update TypeObject in src/services/services.ts
     this.flags = flags;
     if (Debug.isDebugging || tracing) {
         this.checker = checker;
@@ -8179,6 +8184,7 @@ function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
 }
 
 function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
+    // Note: if modifying this, be sure to update SignatureObject in src/services/services.ts
     this.flags = flags;
     if (Debug.isDebugging) {
         this.checker = checker;
@@ -8186,6 +8192,7 @@ function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags)
 }
 
 function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Note: if modifying this, be sure to update NodeObject in src/services/services.ts
     this.pos = pos;
     this.end = end;
     this.kind = kind;
@@ -8199,6 +8206,7 @@ function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
 }
 
 function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
     this.pos = pos;
     this.end = end;
     this.kind = kind;
@@ -8210,6 +8218,7 @@ function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) 
 }
 
 function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
     this.pos = pos;
     this.end = end;
     this.kind = kind;
@@ -8222,6 +8231,7 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+    // Note: if modifying this, be sure to update SourceMapSourceObject in src/services/services.ts
     this.fileName = fileName;
     this.text = text;
     this.skipTrivia = skipTrivia || (pos => pos);

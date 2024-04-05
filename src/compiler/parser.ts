@@ -387,6 +387,7 @@ import {
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
     UnionTypeNode,
+    unsetNodeChildren,
     UpdateExpression,
     VariableDeclaration,
     VariableDeclarationList,
@@ -10002,9 +10003,7 @@ namespace IncrementalParser {
 
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
-            if (node._children) {
-                node._children = undefined;
-            }
+            unsetNodeChildren(node);
 
             setTextRangePosEnd(node, node.pos + delta, node.end + delta);
 
@@ -10160,7 +10159,7 @@ namespace IncrementalParser {
             const fullEnd = child.end;
             if (fullEnd >= changeStart) {
                 child.intersectsChange = true;
-                child._children = undefined;
+                unsetNodeChildren(child);
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10349,7 +10348,6 @@ namespace IncrementalParser {
 
     export interface IncrementalNode extends Node, IncrementalElement {
         hasBeenIncrementallyParsed: boolean;
-        _children: Node[] | undefined;
     }
 
     interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
