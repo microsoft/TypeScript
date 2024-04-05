@@ -282,6 +282,7 @@ import * as classifier2020 from "./classifier2020";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
+// TODO: Move SymbolInternals to compiler
 // Patch Symbol for use with services.
 interface SymbolInternals {
     // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -362,6 +363,8 @@ ObjectConstructors.SymbolObject.prototype.getContextualJsDocTags = function (thi
     }
     return this.getJsDocTags(checker);
 };
+
+// TODO: Move SignatureInternals to compiler
 
 interface SignatureInternals {
     // Undefined is used to indicate the value has not been computed. If, after computing, the
