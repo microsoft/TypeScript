@@ -18,7 +18,7 @@ const defaultValue: Interface = { field: 1 };
 
 declare function assign<T, U>(target: T, source: U): T & U;
 >assign : <T, U>(target: T, source: U) => T & U
->       : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^     
+>       : ^ ^^ ^^      ^^ ^^      ^^ ^^^^^     
 >target : T
 >       : ^
 >source : U
@@ -30,9 +30,9 @@ const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
 >data1 : Interface & { field: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign(defaultValue, Date.now() > 3 ? { field: 2 } : {}) : Interface & { field: number; }
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                         : ^^^^^^^^^^^^                  
 >assign : <T, U>(target: T, source: U) => T & U
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^
 >defaultValue : Interface
 >             : ^^^^^^^^^
 >Date.now() > 3 ? { field: 2 } : {} : { field: number; } | {}

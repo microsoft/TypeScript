@@ -11,7 +11,7 @@ export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>
 
 export function doSomething_Actual<T extends {
 >doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
->                   : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     prop: string;
 >prop : string
@@ -33,7 +33,7 @@ export function doSomething_Actual<T extends {
 }
 export declare function doSomething_Expected<T extends {
 >doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
->                     : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^^^                                                                               
+>                     : ^ ^^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^                                                                               
 
     prop: string;
 >prop : string
@@ -47,9 +47,9 @@ export let a = doSomething_Actual({ prop: "test" });
 >a : { prop?: string; }
 >  : ^^^^^^^^^^^^^^^^^^
 >doSomething_Actual({ prop: "test" }) : { prop?: string; }
->                                     : ^^^^^^^^^^^^^^^^^^
+>                                     :       ^           
 >doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ prop: "test" } : { prop: string; }
 >                 : ^^^^^^^^^^^^^^^^^
 >prop : string
@@ -69,9 +69,9 @@ export let b = doSomething_Expected({ prop: "test" });
 >b : { prop?: string; }
 >  : ^^^^^^^^^^^^^^^^^^
 >doSomething_Expected({ prop: "test" }) : { prop?: string; }
->                                       : ^^^^^^^^^^^^^^^^^^
+>                                       :       ^           
 >doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ prop: "test" } : { prop: string; }
 >                 : ^^^^^^^^^^^^^^^^^
 >prop : string

@@ -52,5 +52,5 @@ module.exports.chalk = chalk
 >chalk : { grey: {}; }
 >      : ^^^^^^^^^^^^^
 >chalk : { grey: {}; }
->      : ^^^^^^^^^^^^^
+>      :              
 

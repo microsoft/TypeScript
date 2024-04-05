@@ -59,7 +59,7 @@ new AA;
 
 function constructB(Factory : typeof B) {
 >constructB : (Factory: typeof B) => void
->           : ^^^^^^^^^^        ^^^^^^^^^
+>           : ^       ^^        ^^^^^^^^^
 >Factory : typeof B
 >        : ^^^^^^^^
 >B : typeof B
@@ -144,13 +144,13 @@ abstract class G {
 
     abstract qux(x : number) : string;
 >qux : { (x: number): string; (): number; }
->    : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     abstract qux() : number;
 >qux : { (x: number): string; (): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^^^^      ^^^
 
     y : number;
 >y : number
@@ -158,7 +158,7 @@ abstract class G {
 
     abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
 >quz : (x: number, y: string) => boolean
->    : ^^^^      ^^^^^      ^^^^^       
+>    : ^ ^^      ^^ ^^      ^^^^^       
 >x : number
 >  : ^^^^^^
 >y : string
@@ -166,11 +166,11 @@ abstract class G {
 
     abstract nom(): boolean;
 >nom : { (): boolean; (x: number): boolean; }
->    : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^       ^^^ ^^      ^^^^^^^^^^^^^
 
     nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
 >nom : { (): boolean; (x: number): boolean; }
->    : ^^^^^^^^^^^^^^^^^^^      ^^^       ^^^
+>    : ^^^^^^^^^^^^^^^^ ^^      ^^^       ^^^
 >x : number
 >  : ^^^^^^
 }

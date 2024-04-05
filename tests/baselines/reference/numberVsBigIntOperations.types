@@ -1215,11 +1215,11 @@ anyValue--; // should infer number
 // Distinguishing numbers from bigints with typeof
 const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
 >isBigInt : (x: 0n | 1n) => bigint
->         : ^^^^       ^^^^^      
+>         : ^ ^^       ^^^^^      
 >x : 0n | 1n
 >  : ^^^^^^^
 >(x: 0n | 1n) => x : (x: 0n | 1n) => 0n | 1n
->                  : ^^^^       ^^^^^^^^^^^^
+>                  : ^ ^^       ^^^^^^^^^^^^
 >x : 0n | 1n
 >  : ^^^^^^^
 >x : 0n | 1n
@@ -1227,11 +1227,11 @@ const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
 
 const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
 >isNumber : (x: 0 | 1) => number
->         : ^^^^     ^^^^^      
+>         : ^ ^^     ^^^^^      
 >x : 0 | 1
 >  : ^^^^^
 >(x: 0 | 1) => x : (x: 0 | 1) => 0 | 1
->                : ^^^^     ^^^^^^^^^^
+>                : ^ ^^     ^^^^^^^^^^
 >x : 0 | 1
 >  : ^^^^^
 >x : 0 | 1
@@ -1253,7 +1253,7 @@ if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
 >isBigInt(zeroOrBigOne) : bigint
 >                       : ^^^^^^
 >isBigInt : (x: 0n | 1n) => bigint
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^^^^^^^
 >zeroOrBigOne : 1n
 >             : ^^
 
@@ -1261,16 +1261,16 @@ else isNumber(zeroOrBigOne);
 >isNumber(zeroOrBigOne) : number
 >                       : ^^^^^^
 >isNumber : (x: 0 | 1) => number
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^     ^^^^^^^^^^^
 >zeroOrBigOne : 0
 >             : ^
 
 // Distinguishing truthy from falsy
 const isOne = (x: 1 | 1n) => x;
 >isOne : (x: 1 | 1n) => 1n | 1
->      : ^^^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >(x: 1 | 1n) => x : (x: 1 | 1n) => 1n | 1
->                 : ^^^^      ^^^^^^^^^^^
+>                 :                      
 >x : 1n | 1
 >  : ^^^^^^
 >x : 1n | 1
@@ -1281,8 +1281,8 @@ if (zeroOrBigOne) isOne(zeroOrBigOne);
 >             : ^^^^^^
 >isOne(zeroOrBigOne) : 1n | 1
 >                    : ^^^^^^
->isOne : (x: 1n | 1) => 1n | 1
->      : ^^^^^^^^^^^^^^^^^^^^^
+>isOne : (x: 1 | 1n) => 1n | 1
+>      : ^ ^^      ^^^^^^^^^^^
 >zeroOrBigOne : 1n
 >             : ^^
 
@@ -1295,8 +1295,8 @@ if (bigZeroOrOne) isOne(bigZeroOrOne);
 >             : ^^^^^^
 >isOne(bigZeroOrOne) : 1n | 1
 >                    : ^^^^^^
->isOne : (x: 1n | 1) => 1n | 1
->      : ^^^^^^^^^^^^^^^^^^^^^
+>isOne : (x: 1 | 1n) => 1n | 1
+>      : ^ ^^      ^^^^^^^^^^^
 >bigZeroOrOne : 1
 >             : ^
 
@@ -1306,7 +1306,7 @@ type NumberOrBigint = number | bigint;
 
 function getKey<S extends NumberOrBigint>(key: S) {
 >getKey : <S extends NumberOrBigint>(key: S) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >key : S
 >    : ^
 

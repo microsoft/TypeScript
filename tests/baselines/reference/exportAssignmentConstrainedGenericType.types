@@ -9,7 +9,7 @@ var x = new foo(true); // Should error
 >x : foo<{ a: string; b: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new foo(true) : foo<{ a: string; b: number; }>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^                         ^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >true : true
@@ -19,7 +19,7 @@ var y = new foo({a: "test", b: 42}); // Should be OK
 >y : foo<{ a: string; b: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new foo({a: "test", b: 42}) : foo<{ a: string; b: number; }>
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^^                         ^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >{a: "test", b: 42} : { a: string; b: number; }
@@ -43,7 +43,7 @@ var z: number = y.test.b;
 >y : foo<{ a: string; b: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : { a: string; b: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     :                          
 >b : number
 >  : ^^^^^^
 

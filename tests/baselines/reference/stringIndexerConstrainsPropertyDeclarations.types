@@ -161,7 +161,7 @@ interface I {
 
 var a: {
 >a : { (): string; (x: any): number; [x: string]: string; a: string; b: number; c: () => {}; d: string; e: number; 1: string; 2: number; foo(): string; "3.0": string; "4.0": number; f: MyString; }
->  : ^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^        ^^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^        ^^^
+>  : ^^^^^^      ^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^        ^^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^      ^^^^^        ^^^
 
     [x: string]: string;
 >x : string
@@ -242,7 +242,7 @@ var b: { [x: string]: string; } = {
 >c : () => void
 >  : ^^^^^^^^^^
 >() => { } : () => void
->          : ^^^^^^^^^^
+>          :           
 
     "d": '', 
 >"d" : string

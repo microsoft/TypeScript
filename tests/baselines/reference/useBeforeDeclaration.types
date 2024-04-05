@@ -13,7 +13,7 @@ namespace ts {
 >log("Version: " + sys.version) : void
 >                               : ^^^^
 >log : (info: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >"Version: " + sys.version : string
 >                          : ^^^^^^
 >"Version: " : "Version: "
@@ -28,7 +28,7 @@ namespace ts {
 
     export function log(info:string):void {
 >log : (info: string) => void
->    : ^^^^^^^      ^^^^^    
+>    : ^    ^^      ^^^^^    
 >info : string
 >     : ^^^^^^
 

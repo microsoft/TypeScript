@@ -19,9 +19,9 @@ declare module Sample.Thing {
 
 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
 >gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
->    : ^^^^^^^^^                                     ^^^^^   
+>    : ^      ^^                                     ^^^^^   
 >runner : (widget: Sample.Thing.IWidget) => any
->       : ^^^^^^^^^                    ^^^^^   
+>       : ^      ^^                    ^^^^^   
 >widget : IWidget
 >       : ^^^^^^^
 >Sample : any
@@ -38,7 +38,7 @@ declare module Sample.Thing {
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any
->          : ^^^^^^^^^^^      ^^^^^^^^^^       ^^^^^^^^
+>          : ^        ^^      ^^      ^^       ^^^^^^^^
 >widgetId : string
 >         : ^^^^^^
 >widget : IWidget
@@ -55,7 +55,7 @@ declare module Sample.Thing {
 	export interface IAction {
 		run(Thing:ICodeThing):boolean;
 >run : (Thing: ICodeThing) => boolean
->    : ^^^^^^^^          ^^^^^       
+>    : ^     ^^          ^^^^^       
 >Thing : ICodeThing
 >      : ^^^^^^^^^^
 
@@ -93,7 +93,7 @@ module Sample.Actions.Thing.Find {
 		
 		public run(Thing:Sample.Thing.ICodeThing):boolean {
 >run : (Thing: Sample.Thing.ICodeThing) => boolean
->    : ^^^^^^^^                       ^^^^^       
+>    : ^     ^^                       ^^^^^       
 >Thing : Sample.Thing.ICodeThing
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >Sample : any
@@ -128,9 +128,9 @@ module Sample.Thing.Widgets {
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
 >gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
->    : ^^^^^^^^^                                     ^^^^^^^^
+>    : ^      ^^                                     ^^^^^^^^
 >runner : (widget: Sample.Thing.IWidget) => any
->       : ^^^^^^^^^                    ^^^^^   
+>       : ^      ^^                    ^^^^^   
 >widget : IWidget
 >       : ^^^^^^^
 >Sample : any
@@ -141,8 +141,8 @@ module Sample.Thing.Widgets {
 >     : ^^^^
 >runner(this) : any
 >             : ^^^
->runner : (widget: IWidget) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>runner : (widget: Sample.Thing.IWidget) => any
+>       : ^      ^^                    ^^^^^^^^
 >this : this
 >     : ^^^^
 			
@@ -163,11 +163,11 @@ module Sample.Thing.Widgets {
 >codeThing.addWidget("addWidget", this) : any
 >                                       : ^^^
 >codeThing.addWidget : (widgetId: string, widget: IWidget) => any
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^        ^^      ^^      ^^       ^^^^^^^^
 >codeThing : ICodeThing
 >          : ^^^^^^^^^^
 >addWidget : (widgetId: string, widget: IWidget) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^      ^^       ^^^^^^^^
 >"addWidget" : "addWidget"
 >            : ^^^^^^^^^^^
 >this : this
@@ -242,7 +242,7 @@ module Sample.Thing.Languages.PlainText {
 
 		public equals(other:IState):boolean {
 >equals : (other: IState) => boolean
->       : ^^^^^^^^      ^^^^^       
+>       : ^     ^^      ^^^^^       
 >other : IState
 >      : ^^^^^^
 

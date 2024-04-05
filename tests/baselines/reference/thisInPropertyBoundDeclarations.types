@@ -13,11 +13,11 @@ class Bug {
 >func : Function[]
 >     : ^^^^^^^^^^
 >[     (that: Bug, name: string) => {         that.foo(name);     }    ] : ((that: Bug, name: string) => void)[]
->                                                                        : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^
+>                                                                        : ^^    ^^   ^^    ^^      ^^^^^^^^^^^^
 
      (that: Bug, name: string) => {
 >(that: Bug, name: string) => {         that.foo(name);     } : (that: Bug, name: string) => void
->                                                             : ^^^^^^^   ^^^^^^^^      ^^^^^^^^^
+>                                                             : ^    ^^   ^^    ^^      ^^^^^^^^^
 >that : Bug
 >     : ^^^
 >name : string
@@ -27,11 +27,11 @@ class Bug {
 >that.foo(name) : void
 >               : ^^^^
 >that.foo : (name: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^^^^^^^^
 >that : Bug
 >     : ^^^
 >foo : (name: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
      }
@@ -39,7 +39,7 @@ class Bug {
 
     private foo(name: string) {
 >foo : (name: string) => void
->    : ^^^^^^^      ^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -66,7 +66,7 @@ class A {
 >prop1 : () => void
 >      : ^^^^^^^^^^
 >function() {        this;    } : () => void
->                               : ^^^^^^^^^^
+>                               :           
 
         this;
 >this : any
@@ -77,7 +77,7 @@ class A {
 >prop2 : () => void
 >      : ^^^^^^^^^^
 >function() {        function inner() {            this;        }        () => this;    } : () => void
->                                                                                         : ^^^^^^^^^^
+>                                                                                         :           
 
         function inner() {
 >inner : () => void
@@ -97,7 +97,7 @@ class A {
 >prop3 : () => void
 >      : ^^^^^^^^^^
 >() => {        function inner() {            this;        }    } : () => void
->                                                                 : ^^^^^^^^^^
+>                                                                 :           
 
         function inner() {
 >inner : () => void
@@ -112,13 +112,13 @@ class A {
 >prop4 : { a: () => any; }
 >      : ^^^^^^^^^^^^^^^^^
 >{        a: function() { return this; },    } : { a: () => any; }
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^         ^^^
 
         a: function() { return this; },
 >a : () => any
 >  : ^^^^^^^^^
 >function() { return this; } : () => any
->                            : ^^^^^^^^^
+>                            :          
 >this : any
 
     };
@@ -127,7 +127,7 @@ class A {
 >prop5 : () => { a: () => any; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => {        return {            a: function() { return this; },        };    } : () => { a: () => any; }
->                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                  :                        
 
         return {
 >{            a: function() { return this; },        } : { a: () => any; }
@@ -137,7 +137,7 @@ class A {
 >a : () => any
 >  : ^^^^^^^^^
 >function() { return this; } : () => any
->                            : ^^^^^^^^^
+>                            :          
 >this : any
 
         };
@@ -158,7 +158,7 @@ class B {
 >prop2 : () => this
 >      : ^^^^^^^^^^
 >() => this : () => this
->           : ^^^^^^^^^^
+>           :           
 >this : this
 >     : ^^^^
 
@@ -166,7 +166,7 @@ class B {
 >prop3 : () => () => () => () => this
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => () => this : () => () => () => () => this
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             :                             
 >() => () => () => this : () => () => () => this
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => this : () => () => this
@@ -213,13 +213,13 @@ class B {
 >prop5 : { a: () => this; }
 >      : ^^^^^^^^^^^^^^^^^^
 >{        a: () => { return this; }    } : { a: () => this; }
->                                        : ^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^          ^^^
 
         a: () => { return this; }
 >a : () => this
 >  : ^^^^^^^^^^
 >() => { return this; } : () => this
->                       : ^^^^^^^^^^
+>                       :           
 >this : this
 >     : ^^^^
 
@@ -229,7 +229,7 @@ class B {
 >prop6 : () => { a: () => this; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {        return {            a: () => { return this; }        };    } : () => { a: () => this; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                            :                         
 
         return {
 >{            a: () => { return this; }        } : { a: () => this; }
@@ -239,7 +239,7 @@ class B {
 >a : () => this
 >  : ^^^^^^^^^^
 >() => { return this; } : () => this
->                       : ^^^^^^^^^^
+>                       :           
 >this : this
 >     : ^^^^
 

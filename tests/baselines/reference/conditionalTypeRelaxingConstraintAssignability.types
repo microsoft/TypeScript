@@ -108,7 +108,7 @@ type DeepPartial<T> =
 
 declare function f<T>(t: T, partial: DeepPartial<T>): T;
 >f : <T>(t: T, partial: DeepPartial<T>) => T
->  : ^ ^^^^^ ^^^^^^^^^^^              ^^^^^ 
+>  : ^ ^^ ^^ ^^       ^^              ^^^^^ 
 >t : T
 >  : ^
 >partial : DeepPartial<T>
@@ -116,7 +116,7 @@ declare function f<T>(t: T, partial: DeepPartial<T>): T;
 
 function g(p1: I, p2: Partial<I>): I {
 >g : (p1: I, p2: Partial<I>) => I
->  : ^^^^^ ^^^^^^          ^^^^^ 
+>  : ^  ^^ ^^  ^^          ^^^^^ 
 >p1 : I
 >   : ^
 >p2 : Partial<I>
@@ -126,7 +126,7 @@ function g(p1: I, p2: Partial<I>): I {
 >f(p1, p2) : I
 >          : ^
 >f : <T>(t: T, partial: DeepPartial<T>) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^       ^^              ^^^^^^
 >p1 : I
 >   : ^
 >p2 : Partial<I>

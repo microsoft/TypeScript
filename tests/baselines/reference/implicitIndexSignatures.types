@@ -93,7 +93,7 @@ map = names2;
 
 declare function getStringIndexValue<T>(map: { [x: string]: T }): T;
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^ ^^^^^^^                   ^^^^^ 
+>                    : ^ ^^   ^^                   ^^^^^ 
 >map : { [x: string]: T; }
 >    : ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -101,7 +101,7 @@ declare function getStringIndexValue<T>(map: { [x: string]: T }): T;
 
 declare function getNumberIndexValue<T>(map: { [x: number]: T }): T;
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->                    : ^ ^^^^^^^                   ^^^^^ 
+>                    : ^ ^^   ^^                   ^^^^^ 
 >map : { [x: number]: T; }
 >    : ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -139,7 +139,7 @@ function f1() {
 >getStringIndexValue(o1) : number
 >                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o1 : { a: number; b: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -149,7 +149,7 @@ function f1() {
 >getStringIndexValue(o2) : number
 >                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o2 : { a: number; b: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -186,7 +186,7 @@ function f2() {
 >getStringIndexValue(o1) : string
 >                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o1 : { a: string; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -196,7 +196,7 @@ function f2() {
 >getStringIndexValue(o2) : string
 >                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o2 : { a: string; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -233,7 +233,7 @@ function f3() {
 >getStringIndexValue(o1) : string | number
 >                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o1 : { a: number; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -243,7 +243,7 @@ function f3() {
 >getStringIndexValue(o2) : string | number
 >                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o2 : { a: number; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -286,7 +286,7 @@ function f4() {
 >getStringIndexValue(o1) : string | number
 >                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o1 : { 0: string; 1: string; count: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -296,7 +296,7 @@ function f4() {
 >getStringIndexValue(o2) : string | number
 >                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o2 : { 0: string; 1: string; count: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -306,7 +306,7 @@ function f4() {
 >getNumberIndexValue(o1) : string
 >                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o1 : { 0: string; 1: string; count: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -316,7 +316,7 @@ function f4() {
 >getNumberIndexValue(o2) : string
 >                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >o2 : { 0: string; 1: string; count: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -363,7 +363,7 @@ function f5() {
 >getStringIndexValue(E1) : string | E1
 >                        : ^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >E1 : typeof E1
 >   : ^^^^^^^^^
 
@@ -373,7 +373,7 @@ function f5() {
 >getStringIndexValue(E2) : E2
 >                        : ^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >E2 : typeof E2
 >   : ^^^^^^^^^
 
@@ -383,7 +383,7 @@ function f5() {
 >getStringIndexValue(E3) : string | E3.A
 >                        : ^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >E3 : typeof E3
 >   : ^^^^^^^^^
 
@@ -393,7 +393,7 @@ function f5() {
 >getNumberIndexValue(E1) : string
 >                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >E1 : typeof E1
 >   : ^^^^^^^^^
 
@@ -403,7 +403,7 @@ function f5() {
 >getNumberIndexValue(E2) : unknown
 >                        : ^^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >E2 : typeof E2
 >   : ^^^^^^^^^
 
@@ -413,7 +413,7 @@ function f5() {
 >getNumberIndexValue(E3) : string
 >                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                   ^^^^^^
 >E3 : typeof E3
 >   : ^^^^^^^^^
 }

@@ -3,7 +3,7 @@
 === truthinessCallExpressionCoercion.ts ===
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 >onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
->                                             : ^^^^^^^^^^^             ^^^^^^^^^^^^^             ^^^^^^^^^
+>                                             : ^        ^^             ^^        ^^^             ^^^^^^^^^
 >required : () => boolean
 >         : ^^^^^^       
 >optional : (() => boolean) | undefined
@@ -64,11 +64,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log('test') : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'test' : "test"
 >       : ^^^^^^
     }
@@ -81,11 +81,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log(test) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >test : () => boolean
 >     : ^^^^^^^^^^^^^
     }
@@ -109,13 +109,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(() => {            test();        }) : void
 >                                                          : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >() => {            test();        } : () => void
 >                                    : ^^^^^^^^^^
 
@@ -136,15 +136,15 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(test => {            test();        }) : void
 >                                                            : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >test => {            test();        } : (test: () => null) => void
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^    ^^^^^^^^^^^^^^^^^^^^^
 >test : () => null
 >     : ^^^^^^^^^^
 
@@ -265,7 +265,7 @@ class Foo {
 // Test for GH-35557 where ids were not assigned for a symbol.
 function A(stats: StatsBase<any>) {
 >A : (stats: StatsBase<any>) => void
->  : ^^^^^^^^              ^^^^^^^^^
+>  : ^     ^^              ^^^^^^^^^
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 
@@ -281,11 +281,11 @@ function A(stats: StatsBase<any>) {
 >console.log(`[Directory] ${stats.ctime}`) : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >`[Directory] ${stats.ctime}` : string
 >                             : ^^^^^^
 >stats.ctime : number
@@ -299,7 +299,7 @@ function A(stats: StatsBase<any>) {
 
 function B(a: Nested, b: Nested) {
 >B : (a: Nested, b: Nested) => void
->  : ^^^^      ^^^^^      ^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : Nested
 >  : ^^^^^^
 >b : Nested

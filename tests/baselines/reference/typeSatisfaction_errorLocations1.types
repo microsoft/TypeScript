@@ -13,9 +13,9 @@ const obj1 = { a: 1 };
 
 const fn1 = (s: { a: true }) => {};
 >fn1 : (s: { a: true; }) => void
->    : ^^^^            ^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >(s: { a: true }) => {} : (s: { a: true; }) => void
->                       : ^^^^            ^^^^^^^^^
+>                       :                          
 >s : { a: true; }
 >  : ^^^^^    ^^^
 >a : true
@@ -27,7 +27,7 @@ fn1({} satisfies unknown);
 >fn1({} satisfies unknown) : void
 >                          : ^^^^
 >fn1 : (s: { a: true; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >{} satisfies unknown : {}
 >                     : ^^
 >{} : {}
@@ -37,7 +37,7 @@ fn1({ a: 1 } satisfies unknown);
 >fn1({ a: 1 } satisfies unknown) : void
 >                                : ^^^^
 >fn1 : (s: { a: true; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >{ a: 1 } satisfies unknown : { a: number; }
 >                           : ^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
@@ -51,7 +51,7 @@ fn1(obj1 satisfies unknown);
 >fn1(obj1 satisfies unknown) : void
 >                            : ^^^^
 >fn1 : (s: { a: true; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >obj1 satisfies unknown : { a: number; }
 >                       : ^^^^^^^^^^^^^^
 >obj1 : { a: number; }
@@ -105,13 +105,13 @@ new Cls1(obj1 satisfies unknown);
 
 function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
 >fn2 : <T extends { a: true; }[]>(f: (...args: T) => void) => void
->    : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^    ^^^^^^^ ^^                    ^^^^^^^^^
 >a : true
 >  : ^^^^
 >true : true
 >     : ^^^^
 >f : (...args: T) => void
->  : ^^^^^^^^^^ ^^^^^    
+>  : ^^^^    ^^ ^^^^^    
 >args : T
 >     : ^
 
@@ -119,7 +119,7 @@ function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
 >f({ a: true } satisfies unknown) : void
 >                                 : ^^^^
 >f : (...args: T) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^ ^^^^^^^^^
 >{ a: true } satisfies unknown : { a: boolean; }
 >                              : ^^^^^^^^^^^^^^^
 >{ a: true } : { a: boolean; }
@@ -145,7 +145,7 @@ function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
 >f(o satisfies unknown) : void
 >                       : ^^^^
 >f : (...args: T) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^ ^^^^^^^^^
 >o satisfies unknown : { a: true; }
 >                    : ^^^^^^^^^^^^
 >o : { a: true; }
@@ -200,7 +200,7 @@ const literal2: true = 1 satisfies number;
 
 declare function fn3(...args: unknown[]): void;
 >fn3 : (...args: unknown[]) => void
->    : ^^^^^^^^^^         ^^^^^    
+>    : ^^^^    ^^         ^^^^^    
 >args : unknown[]
 >     : ^^^^^^^^^
 
@@ -208,7 +208,7 @@ fn3(10, ...([10, "20"] satisfies number[]));
 >fn3(10, ...([10, "20"] satisfies number[])) : void
 >                                            : ^^^^
 >fn3 : (...args: unknown[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^         ^^^^^^^^^
 >10 : 10
 >   : ^^
 >...([10, "20"] satisfies number[]) : string | number
@@ -240,7 +240,7 @@ fn3(10, ...(tuple2 satisfies number[]));
 >fn3(10, ...(tuple2 satisfies number[])) : void
 >                                        : ^^^^
 >fn3 : (...args: unknown[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^         ^^^^^^^^^
 >10 : 10
 >   : ^^
 >...(tuple2 satisfies number[]) : 10 | "20"
@@ -254,7 +254,7 @@ fn3(10, ...(tuple2 satisfies number[]));
 
 declare function fn4(...args: number[]): void;
 >fn4 : (...args: number[]) => void
->    : ^^^^^^^^^^        ^^^^^    
+>    : ^^^^    ^^        ^^^^^    
 >args : number[]
 >     : ^^^^^^^^
 
@@ -262,7 +262,7 @@ fn4(10, ...(["10", "20"] satisfies readonly string[]));
 >fn4(10, ...(["10", "20"] satisfies readonly string[])) : void
 >                                                       : ^^^^
 >fn4 : (...args: number[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^        ^^^^^^^^^
 >10 : 10
 >   : ^^
 >...(["10", "20"] satisfies readonly string[]) : string
@@ -294,7 +294,7 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >fn4(10, ...(tuple3 satisfies readonly string[])) : void
 >                                                 : ^^^^
 >fn4 : (...args: number[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^        ^^^^^^^^^
 >10 : 10
 >   : ^^
 >...(tuple3 satisfies readonly string[]) : "20" | "10"

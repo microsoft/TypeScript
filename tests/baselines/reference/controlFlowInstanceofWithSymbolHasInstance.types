@@ -4,7 +4,7 @@
 interface PromiseConstructor {
     [Symbol.hasInstance](value: any): value is Promise<any>;
 >[Symbol.hasInstance] : (value: any) => value is Promise<any>
->                     : ^^^^^^^^   ^^^^^                     
+>                     : ^     ^^   ^^^^^                     
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -17,7 +17,7 @@ interface PromiseConstructor {
 interface SetConstructor {
     [Symbol.hasInstance](value: any): value is Set<any>;
 >[Symbol.hasInstance] : (value: any) => value is Set<any>
->                     : ^^^^^^^^   ^^^^^                 
+>                     : ^     ^^   ^^^^^                 
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -29,7 +29,7 @@ interface SetConstructor {
 
 function f1(s: Set<string> | Set<number>) {
 >f1 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -67,18 +67,18 @@ function f1(s: Set<string> | Set<number>) {
 >s.add(42) : Set<number>
 >          : ^^^^^^^^^^^
 >s.add : (value: number) => Set<number>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Set<number>
 >  : ^^^^^^^^^^^
 >add : (value: number) => Set<number>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }
 
 function f2(s: Set<string> | Set<number>) {
 >f2 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -116,18 +116,18 @@ function f2(s: Set<string> | Set<number>) {
 >s.add(42) : Set<number>
 >          : ^^^^^^^^^^^
 >s.add : (value: number) => Set<number>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Set<number>
 >  : ^^^^^^^^^^^
 >add : (value: number) => Set<number>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }
 
 function f3(s: Set<string> | Set<number>) {
 >f3 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -156,7 +156,7 @@ function f3(s: Set<string> | Set<number>) {
 
 function f4(s: Set<string> | Set<number>) {
 >f4 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -205,7 +205,7 @@ class A {
 
     static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
 >[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is (T extends (abstract new (...args: any) => infer U) ? U : never)
->                     : ^ ^^^^^^^^ ^^^^^^^^^       ^^^^^                                                                         
+>                     : ^ ^^    ^^ ^^     ^^       ^^^^^                                                                         
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -225,9 +225,9 @@ class A {
         return Function.prototype[Symbol.hasInstance].call(this, value);
 >Function.prototype[Symbol.hasInstance].call(this, value) : any
 >Function.prototype[Symbol.hasInstance].call : (this: Function, thisArg: any, ...argArray: any[]) => any
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >Function.prototype[Symbol.hasInstance] : (value: any) => boolean
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^     ^^   ^^^^^^^^^^^^
 >Function.prototype : Function
 >                   : ^^^^^^^^
 >Function : FunctionConstructor
@@ -241,7 +241,7 @@ class A {
 >hasInstance : unique symbol
 >            : ^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >this : T
 >     : ^
 >value : unknown
@@ -266,7 +266,7 @@ class C extends A { c: string }
 
 function foo(x: A | undefined) {
 >foo : (x: A | undefined) => void
->    : ^^^^             ^^^^^^^^^
+>    : ^ ^^             ^^^^^^^^^
 >x : A | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -397,7 +397,7 @@ class Y {
 
 function goo(x: X) {
 >goo : (x: X) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : X
 >  : ^
 

@@ -174,7 +174,7 @@ c.foo().toExponential();
 >c.foo().toExponential() : string
 >                        : ^^^^^^
 >c.foo().toExponential : (fractionDigits?: number) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^              ^^^      ^^^^^^^^^^^
 >c.foo() : number
 >        : ^^^^^^
 >c.foo : () => number
@@ -184,7 +184,7 @@ c.foo().toExponential();
 >foo : () => number
 >    : ^^^^^^^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
 c.bar().toLowerCase();
 >c.bar().toLowerCase() : string
@@ -206,7 +206,7 @@ c.baz1().x.toExponential();
 >c.baz1().x.toExponential() : string
 >                           : ^^^^^^
 >c.baz1().x.toExponential : (fractionDigits?: number) => string
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^              ^^^      ^^^^^^^^^^^
 >c.baz1().x : number
 >           : ^^^^^^
 >c.baz1() : import("m3").C1
@@ -220,7 +220,7 @@ c.baz1().x.toExponential();
 >x : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
 c.baz2().x.toLowerCase();
 >c.baz2().x.toLowerCase() : string

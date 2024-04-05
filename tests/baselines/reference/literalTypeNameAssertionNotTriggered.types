@@ -7,7 +7,7 @@ import a = require('./a');
 
 declare function f<T>(obj: T, key: keyof T): void;
 >f : <T>(obj: T, key: keyof T) => void
->  : ^ ^^^^^^^ ^^^^^^^       ^^^^^    
+>  : ^ ^^   ^^ ^^   ^^       ^^^^^    
 >obj : T
 >    : ^
 >key : keyof T
@@ -17,7 +17,7 @@ f(a, "");
 >f(a, "") : void
 >         : ^^^^
 >f : <T>(obj: T, key: keyof T) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^ ^^   ^^       ^^^^^^^^^
 >a : typeof a
 >  : ^^^^^^^^
 >"" : ""

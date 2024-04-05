@@ -3,7 +3,7 @@
 === narrowingTruthyObject.ts ===
 function foo(x: unknown, b: boolean) {
 >foo : (x: unknown, b: boolean) => void
->    : ^^^^       ^^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >b : boolean
@@ -211,7 +211,7 @@ function foo(x: unknown, b: boolean) {
 
 function f1(x: unknown): any {
 >f1 : (x: unknown) => any
->   : ^^^^       ^^^^^   
+>   : ^ ^^       ^^^^^   
 >x : unknown
 >  : ^^^^^^^
 
@@ -233,11 +233,11 @@ function f1(x: unknown): any {
 >x.hasOwnProperty('x') : boolean
 >                      : ^^^^^^^
 >x.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'x' : "x"
 >    : ^^^
 }

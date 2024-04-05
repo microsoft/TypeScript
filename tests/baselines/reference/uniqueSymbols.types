@@ -633,11 +633,11 @@ const promiseForConstCall = Promise.resolve(constCall);
 >Promise.resolve(constCall) : Promise<unique symbol>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -678,21 +678,21 @@ declare const o: { [s]: "a", [N.s]: "b" };
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g(x: typeof s): void;
->g : { (x: typeof s): void; (x: unique symbol): void; }
->  : ^^^^^^        ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^^^^^^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
 declare function g(x: typeof N.s): void;
->g : { (x: unique symbol): void; (x: typeof N.s): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^    ^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^    ^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >N.s : unique symbol
@@ -709,7 +709,7 @@ f(s);
 >f(s) : unique symbol
 >     : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -717,7 +717,7 @@ f(N.s);
 >f(N.s) : unique symbol
 >       : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -729,7 +729,7 @@ f(N["s"]);
 >f(N["s"]) : unique symbol
 >          : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N["s"] : unique symbol
 >       : ^^^^^^^^^^^^^
 >N : typeof N
@@ -767,9 +767,9 @@ f(N["s"]);
 // property assignments/methods
 const o2 = {
 >o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
->                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     a: s,
 >a : symbol
@@ -825,7 +825,7 @@ const o2 = {
 
     method5(p = s) { return p; },
 >method5 : (p?: symbol) => symbol
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^
 >p : symbol
 >  : ^^^^^^
 >s : unique symbol
@@ -972,7 +972,7 @@ class C0 {
 
     method5(p = s) { return p; }
 >method5 : (p?: symbol) => symbol
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^
 >p : symbol
 >  : ^^^^^^
 >s : unique symbol
@@ -1021,7 +1021,7 @@ f<typeof s>(s);
 >f<typeof s>(s) : unique symbol
 >               : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1031,7 +1031,7 @@ f<typeof N.s>(N.s);
 >f<typeof N.s>(N.s) : unique symbol
 >                   : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1049,7 +1049,7 @@ f<typeof N.s>(N["s"]);
 >f<typeof N.s>(N["s"]) : unique symbol
 >                      : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1066,16 +1066,16 @@ f<typeof N.s>(N["s"]);
 g(s);
 >g(s) : void
 >     : ^^^^
->g : { (x: unique symbol): void; (x: unique symbol): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
 g(N.s);
 >g(N.s) : void
 >       : ^^^^
->g : { (x: unique symbol): void; (x: unique symbol): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1086,8 +1086,8 @@ g(N.s);
 g(N["s"]);
 >g(N["s"]) : void
 >          : ^^^^
->g : { (x: unique symbol): void; (x: unique symbol): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
 >N["s"] : unique symbol
 >       : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1292,7 +1292,7 @@ interface Context {
 
     method5(p?: typeof s): typeof s;
 >method5 : (p?: typeof s) => typeof s
->        : ^^^^^        ^^^^^        
+>        : ^ ^^^        ^^^^^        
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1305,7 +1305,7 @@ const o3: Context = {
 >o3 : Context
 >   : ^^^^^^^
 >{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, undefined>; method4(): Generator<unique symbol, void, undefined>; method5(p?: unique symbol): unique symbol; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     method1() {
 >method1 : () => unique symbol
@@ -1349,7 +1349,7 @@ const o3: Context = {
     },
     method5(p = s) { // parameter should not widen due to contextual type
 >method5 : (p?: unique symbol) => unique symbol
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1366,13 +1366,13 @@ const o3: Context = {
 
 const o4 = {
 >o4 : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
->   : ^^^^^^^^^^^^^        ^^^        ^^^^^^^^^^^^^                 ^^^                 ^^^
+>   : ^^^^^^^^^^ ^^        ^^^        ^^^^^^^^^^ ^^                 ^^^                 ^^^
 >{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
->                                                                                                                                          : ^^^^^^^^^^^^^        ^^^        ^^^^^^^^^^^^^                 ^^^                 ^^^
+>                                                                                                                                          : ^^^^^^^^^^ ^^        ^^^        ^^^^^^^^^^ ^^                 ^^^                 ^^^
 
     method1(p: typeof s): typeof s {
 >method1 : (p: typeof s) => typeof s
->        : ^^^^        ^^^^^        
+>        : ^ ^^        ^^^^^        
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1387,7 +1387,7 @@ const o4 = {
     },
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: I["readonlyType"]) => I["readonlyType"]
->        : ^^^^                 ^^^^^                 
+>        : ^ ^^                 ^^^^^                 
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -1405,7 +1405,7 @@ const ce0 = class {
 
     method1(p: typeof s): typeof s {
 >method1 : (p: typeof s) => typeof s
->        : ^^^^        ^^^^^        
+>        : ^ ^^        ^^^^^        
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1419,7 +1419,7 @@ const ce0 = class {
     }
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: I["readonlyType"]) => I["readonlyType"]
->        : ^^^^                 ^^^^^                 
+>        : ^ ^^                 ^^^^^                 
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -1431,18 +1431,18 @@ const ce0 = class {
 
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
->                       : ^^^^^^                              ^^^^^^^^^^^^^^^^^        ^^^    ^^^
+>                       : ^   ^^                              ^^^^^^^^^^^^^^ ^^        ^^^    ^^^
 >obj : { method(p: typeof s): void; }
->    : ^^^^^^^^^^^^        ^^^    ^^^
+>    : ^^^^^^^^^ ^^        ^^^    ^^^
 >method : (p: typeof s) => void
->       : ^^^^        ^^^^^    
+>       : ^ ^^        ^^^^^    
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     return obj;
->obj : { method(p: unique symbol): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { method(p: typeof s): void; }
+>    : ^^^^^^^^^ ^^        ^^^^^^^^^^
 }
 

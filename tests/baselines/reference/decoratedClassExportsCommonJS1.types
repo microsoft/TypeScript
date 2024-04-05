@@ -12,7 +12,7 @@ declare var Something: any;
 >v : () => typeof Testing123
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => Testing123 : () => typeof Testing123
->                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>                 :                        
 >Testing123 : typeof Testing123
 >           : ^^^^^^^^^^^^^^^^^
 

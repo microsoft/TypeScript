@@ -3,7 +3,7 @@
 === blockScopedBindingsReassignedInLoop1.ts ===
 declare function use(n: number): void;
 >use : (n: number) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
@@ -45,7 +45,7 @@ declare function use(n: number): void;
 >use(++i) : void
 >         : ^^^^
 >use : (n: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >++i : number
 >    : ^^^^^^
 >i : number

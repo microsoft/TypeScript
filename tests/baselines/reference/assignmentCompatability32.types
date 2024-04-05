@@ -39,7 +39,7 @@ module __test2__ {
 >__val__aa : { one: boolean[]; }
 >          : ^^^^^^^^^^^^^^^^^^^
 >aa : { one: boolean[]; }
->   : ^^^^^^^^^^^^^^^^^^^
+>   :                    
 }
 __test2__.__val__aa = __test1__.__val__obj4
 >__test2__.__val__aa = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>

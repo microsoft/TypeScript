@@ -13,7 +13,7 @@ type BiomePlainLinkProps = {
 
   onClick?: (event: string) => void;
 >onClick : ((event: string) => void) | undefined
->        : ^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^
+>        : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >event : string
 >      : ^^^^^^
 }
@@ -28,7 +28,7 @@ type BiomeButtonProps = {
 
   onClick?: (event: number) => void;
 >onClick : ((event: number) => void) | undefined
->        : ^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^
+>        : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >event : number
 >      : ^^^^^^
 }
@@ -44,7 +44,7 @@ const p3: ClickableDiscriminatedUnion = {
 >p3 : ClickableDiscriminatedUnion
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  href: `2${undefined}332132`,  onClick: (ev) => console.log('@@@@', ev),} : { href: string; onClick: (ev: string) => void; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
 
   href: `2${undefined}332132`,
 >href : string
@@ -56,19 +56,19 @@ const p3: ClickableDiscriminatedUnion = {
 
   onClick: (ev) => console.log('@@@@', ev),
 >onClick : (ev: string) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^^^^^^^^^^^
 >(ev) => console.log('@@@@', ev) : (ev: string) => void
->                                : ^^^^^^^^^^^^^^^^^^^^
+>                                :                     
 >ev : string
 >   : ^^^^^^
 >console.log('@@@@', ev) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'@@@@' : "@@@@"
 >       : ^^^^^^
 >ev : string

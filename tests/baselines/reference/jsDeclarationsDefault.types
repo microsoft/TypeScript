@@ -17,13 +17,13 @@ export const x = foo;
 >x : () => typeof foo
 >  : ^^^^^^^^^^^^^^^^
 >foo : () => typeof foo
->    : ^^^^^^^^^^^^^^^^
+>    :                 
 
 export { foo as bar };
 >foo : () => typeof foo
 >    : ^^^^^^^^^^^^^^^^
 >bar : () => typeof foo
->    : ^^^^^^^^^^^^^^^^
+>    :                 
 
 === index3.js ===
 export default class Foo {

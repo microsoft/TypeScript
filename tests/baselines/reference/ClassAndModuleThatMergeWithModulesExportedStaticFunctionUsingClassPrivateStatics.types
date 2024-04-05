@@ -15,7 +15,7 @@ class clodule<T> {
 
     private static sfn(id: string) { return 42; }
 >sfn : (id: string) => number
->    : ^^^^^      ^^^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 >42 : 42
@@ -29,7 +29,7 @@ module clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): number {
 >fn : <T>(x: T, y: T) => number
->   : ^ ^^^^^ ^^^^^ ^^^^^      
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 >y : T
@@ -39,11 +39,11 @@ module clodule {
 >clodule.sfn('a') : number
 >                 : ^^^^^^
 >clodule.sfn : (id: string) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^      ^^^^^^^^^^^
 >clodule : typeof clodule
 >        : ^^^^^^^^^^^^^^
 >sfn : (id: string) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^^^
 >'a' : "a"
 >    : ^^^
     }

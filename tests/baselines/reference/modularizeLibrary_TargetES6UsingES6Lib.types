@@ -4,7 +4,7 @@
 // Using Es6 array
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any[]
->  : ^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -16,11 +16,11 @@ function f(x: number, y: number, z: number) {
 >Array.from(arguments) : any[]
 >                      : ^^^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 }
@@ -29,7 +29,7 @@ f(1, 2, 3);  // no error
 >f(1, 2, 3) : any[]
 >           : ^^^^^
 >f : (x: number, y: number, z: number) => any[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -85,20 +85,20 @@ Math.sign(1);
 >Math.sign(1) : number
 >             : ^^^^^^
 >Math.sign : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sign : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 
 // Using ES6 object
 var o = {
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 >{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance](value: any): boolean; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 
     a: 2,
 >a : number
@@ -108,7 +108,7 @@ var o = {
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->                     : ^^^^^^^^   ^^^^^^^^^^^^
+>                     : ^     ^^   ^^^^^^^^^^^^
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -126,11 +126,11 @@ o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
 >                                     : ^^^^^^^
 >o.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -149,7 +149,7 @@ var p = new Proxy(t, {});
 >p : {}
 >  : ^^
 >new Proxy(t, {}) : {}
->                 : ^^
+>                 :   
 >Proxy : ProxyConstructor
 >      : ^^^^^^^^^^^^^^^^
 >t : {}
@@ -162,11 +162,11 @@ Reflect.isExtensible({});
 >Reflect.isExtensible({}) : boolean
 >                         : ^^^^^^^
 >Reflect.isExtensible : (target: object) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^      ^^      ^^^^^^^^^^^^
 >Reflect : typeof Reflect
 >        : ^^^^^^^^^^^^^^
 >isExtensible : (target: object) => boolean
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^      ^^      ^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -200,11 +200,11 @@ str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
 >                         : ^^^^^^^
 >str.includes : (searchString: string, position?: number) => boolean
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 >includes : (searchString: string, position?: number) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >0 : 0
@@ -222,13 +222,13 @@ var s = Symbol();
 // Using ES6 wellknown-symbol
 const o1 = {
 >o1 : { [Symbol.hasInstance](value: any): boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->                     : ^^^^^^^^   ^^^^^^^^^^^^
+>                     : ^     ^^   ^^^^^^^^^^^^
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

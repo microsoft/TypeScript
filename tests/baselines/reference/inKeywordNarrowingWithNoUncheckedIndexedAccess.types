@@ -3,13 +3,13 @@
 === inKeywordNarrowingWithNoUncheckedIndexedAccess.ts ===
 declare function invariant(condition: boolean): asserts condition;
 >invariant : (condition: boolean) => asserts condition
->          : ^^^^^^^^^^^^       ^^^^^                 
+>          : ^         ^^       ^^^^^                 
 >condition : boolean
 >          : ^^^^^^^
 
 function f1(obj: Record<string, string>) {
 >f1 : (obj: Record<string, string>) => string
->   : ^^^^^^                      ^^^^^^^^^^^
+>   : ^   ^^                      ^^^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -17,7 +17,7 @@ function f1(obj: Record<string, string>) {
 >invariant("test" in obj) : void
 >                         : ^^^^
 >invariant : (condition: boolean) => asserts condition
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >"test" in obj : boolean
 >              : ^^^^^^^
 >"test" : "test"
@@ -36,7 +36,7 @@ function f1(obj: Record<string, string>) {
 
 function f2(obj: Record<string, string>) {
 >f2 : (obj: Record<string, string>) => string
->   : ^^^^^^                      ^^^^^^^^^^^
+>   : ^   ^^                      ^^^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ function f2(obj: Record<string, string>) {
 
 function f3(obj: Record<string, string>) {
 >f3 : (obj: Record<string, string>) => void
->   : ^^^^^^                      ^^^^^^^^^
+>   : ^   ^^                      ^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -104,7 +104,7 @@ function f3(obj: Record<string, string>) {
 
 function f4(obj: Record<string, string>) {
 >f4 : (obj: Record<string, string>) => void
->   : ^^^^^^                      ^^^^^^^^^
+>   : ^   ^^                      ^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -120,11 +120,11 @@ function f4(obj: Record<string, string>) {
 >obj.hasOwnProperty("test") : boolean
 >                           : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^^^^^^^^
 >obj : Record<string, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >"test" : "test"
 >       : ^^^^^^
 

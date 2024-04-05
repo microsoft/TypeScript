@@ -134,7 +134,7 @@ function b() {
 }
 function c<T>(data: string | T): T {
 >c : <T>(data: string | T) => T
->  : ^ ^^^^^^^^          ^^^^^ 
+>  : ^ ^^    ^^          ^^^^^ 
 >data : string | T
 >     : ^^^^^^^^^^
 
@@ -151,11 +151,11 @@ function c<T>(data: string | T): T {
         return JSON.parse(data);
 >JSON.parse(data) : any
 >JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^      ^^       ^^^                                           ^^^^^^^^
 >JSON : JSON
 >     : ^^^^
 >parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^      ^^       ^^^                                           ^^^^^^^^
 >data : string | (T & string)
 >     : ^^^^^^^^^^^^^^^^^^^^^
     }
@@ -167,7 +167,7 @@ function c<T>(data: string | T): T {
 }
 function d<T extends string>(data: string | T): never {
 >d : <T extends string>(data: string | T) => never
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^     
+>  : ^ ^^^^^^^^^^^^^^^^^    ^^          ^^^^^     
 >data : string | T
 >     : ^^^^^^^^^^
 
@@ -203,7 +203,7 @@ interface I<T> {
 }
 function e(x: I<"A" | "B">) {
 >e : (x: I<"A" | "B">) => void
->  : ^^^^            ^^^^^^^^^
+>  : ^ ^^            ^^^^^^^^^
 >x : I<"A" | "B">
 >  : ^^^^^^^^^^^^
 

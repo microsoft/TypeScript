@@ -9,15 +9,15 @@ var obj = {};
 
 obj.method = function (hunch) {
 >obj.method = function (hunch) {    return true;} : (hunch: any) => boolean
->                                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^     ^^^^^^^^^^^^^^^^^
 >obj.method : (hunch: any) => boolean
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^^
 >obj : typeof obj
 >    : ^^^^^^^^^^
 >method : (hunch: any) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^^
 >function (hunch) {    return true;} : (hunch: any) => boolean
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                    :                        
 >hunch : any
 
     return true;
@@ -30,9 +30,9 @@ var b = obj.method();
 >obj.method() : boolean
 >             : ^^^^^^^
 >obj.method : (hunch: any) => boolean
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^^
 >obj : typeof obj
 >    : ^^^^^^^^^^
 >method : (hunch: any) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^^
 

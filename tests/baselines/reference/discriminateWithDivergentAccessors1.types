@@ -43,7 +43,7 @@ if (weirdoBox.done) {
 >weirdoBox.value : number
 >                : ^^^^^^
 >weirdoBox : { get done(): true; set done(v: T | null); value: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 }
@@ -102,7 +102,7 @@ if (weirdoBox2.done) {
 >weirdoBox2.value : string | number
 >                 : ^^^^^^^^^^^^^^^
 >weirdoBox2 : { get done(): true; set done(v: T | null); value: string; } | { get done(): true; set done(v: T | null | undefined); value: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
 }

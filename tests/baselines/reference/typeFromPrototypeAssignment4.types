@@ -20,15 +20,15 @@ function Multimap4() {
 
 Multimap4["prototype"] = {
 >Multimap4["prototype"] = {  /**   * @param {string} key   * @returns {number} the value ok   */  get(key) {    return this._map[key + ''];  }} : { get(key: string): number; }
->                                                                                                                                               : ^^^^^^^^^^^      ^^^      ^^^
+>                                                                                                                                               : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4["prototype"] : { get(key: string): number; }
->                       : ^^^^^^^^^^^      ^^^      ^^^
+>                       : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4 : typeof Multimap4
 >          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
 >            : ^^^^^^^^^^^
 >{  /**   * @param {string} key   * @returns {number} the value ok   */  get(key) {    return this._map[key + ''];  }} : { get(key: string): number; }
->                                                                                                                      : ^^^^^^^^^^^      ^^^      ^^^
+>                                                                                                                      : ^^^^^^   ^^      ^^^      ^^^
 
   /**
    * @param {string} key
@@ -36,7 +36,7 @@ Multimap4["prototype"] = {
    */
   get(key) {
 >get : (key: string) => number
->    : ^^^^^^      ^^^^^      
+>    : ^   ^^      ^^^^^      
 >key : string
 >    : ^^^^^^
 
@@ -62,7 +62,7 @@ Multimap4["prototype"]["add-on"] = function() {};
 >                                                 : ^^^^^^^^^^
 >Multimap4["prototype"]["add-on"] : any
 >Multimap4["prototype"] : { get(key: string): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^   ^^      ^^^^^^^^^^^^
 >Multimap4 : typeof Multimap4
 >          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
@@ -77,7 +77,7 @@ Multimap4["prototype"]["addon"] = function() {};
 >                                                : ^^^^^^^^^^
 >Multimap4["prototype"]["addon"] : any
 >Multimap4["prototype"] : { get(key: string): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^   ^^      ^^^^^^^^^^^^
 >Multimap4 : typeof Multimap4
 >          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
@@ -92,7 +92,7 @@ Multimap4["prototype"]["__underscores__"] = function() {};
 >                                                          : ^^^^^^^^^^
 >Multimap4["prototype"]["__underscores__"] : any
 >Multimap4["prototype"] : { get(key: string): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^   ^^      ^^^^^^^^^^^^
 >Multimap4 : typeof Multimap4
 >          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
@@ -114,11 +114,11 @@ map4.get("");
 >map4.get("") : number
 >             : ^^^^^^
 >map4.get : (key: string) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^      ^^^^^^^^^^^
 >map4 : Multimap4
 >     : ^^^^^^^^^
 >get : (key: string) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
 

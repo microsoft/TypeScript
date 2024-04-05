@@ -3,7 +3,7 @@
 === newTargetNarrowing.ts ===
 function foo(x: true) { }
 >foo : (x: true) => void
->    : ^^^^    ^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^
 >x : true
 >  : ^^^^
 >true : true
@@ -31,7 +31,7 @@ function f() {
 >foo(new.target.marked) : void
 >                       : ^^^^
 >foo : (x: true) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^
 >new.target.marked : true
 >                  : ^^^^
 >new.target : typeof f

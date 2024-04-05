@@ -149,11 +149,11 @@ Object.defineProperty(x, "name", { value: "Charles", writable: true });
 >Object.defineProperty(x, "name", { value: "Charles", writable: true }) : typeof x
 >                                                                       : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >"name" : "name"
@@ -173,11 +173,11 @@ Object.defineProperty(x, "middleInit", { value: "H" });
 >Object.defineProperty(x, "middleInit", { value: "H" }) : typeof x
 >                                                       : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >"middleInit" : "middleInit"
@@ -193,11 +193,11 @@ Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 >Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : typeof x
 >                                                                          : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >"lastName" : "lastName"
@@ -217,23 +217,23 @@ Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } 
 >Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof x
 >                                                                                   : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >"zip" : "zip"
 >      : ^^^^^
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >get : () => number
 >    : ^^^^^^^^^^^^
 >98122 : 98122
 >      : ^^^^^
 >set : (_: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >_ : any
 >  : ^^^
 
@@ -241,11 +241,11 @@ Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 >Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : typeof x
 >                                                                    : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >"houseNumber" : "houseNumber"
@@ -261,22 +261,22 @@ Object.defineProperty(x, "zipStr", {
 >Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : typeof x
 >                                                                                                                       : ^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >"zipStr" : "zipStr"
 >         : ^^^^^^^^
 >{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
->                                                                                   : ^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                   : ^^^^^^   ^^      ^^^^^^^^^^
 
     /** @param {string} str */
     set(str) {
 >set : (str: string) => void
->    : ^^^^^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -303,7 +303,7 @@ Object.defineProperty(x, "zipStr", {
  */
 function takeName(named) { return named.name; }
 >takeName : (named: { name: string; }) => string
->         : ^^^^^^^^                 ^^^^^^^^^^^
+>         : ^     ^^                 ^^^^^^^^^^^
 >named : { name: string; }
 >      : ^^^^^^^^^^^^^^^^^
 >named.name : string
@@ -317,7 +317,7 @@ takeName(x);
 >takeName(x) : string
 >            : ^^^^^^
 >takeName : (named: { name: string; }) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^                 ^^^^^^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 
@@ -351,15 +351,15 @@ const returnExemplar = () => x;
 >returnExemplar : () => typeof x
 >               : ^^^^^^^^^^^^^^
 >() => x : () => typeof x
->        : ^^^^^^^^^^^^^^
+>        :               
 >x : typeof x
 >  : ^^^^^^^^
 
 const needsExemplar = (_ = x) => void 0;
 >needsExemplar : (_?: typeof x) => undefined
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(_ = x) => void 0 : (_?: typeof x) => undefined
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  :   ^                        
 >_ : typeof x
 >  : ^^^^^^^^
 >x : typeof x
@@ -373,7 +373,7 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >(/** @type {*} */(null)) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
->                         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>                         :                                                                                                                                     
 >(null) : any
 >       : ^^^
 
@@ -384,23 +384,23 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
  */
 function match(a, b) {}
 >match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
->      : ^^^^                     ^^^^^                    ^^^^^^^^^
+>      : ^ ^^                     ^^ ^^                    ^^^^^^^^^
 >a : () => typeof x
 >  : ^^^^^^^^^^^^^^
 >b : (_?: typeof x) => undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 match(() => expected, (x = expected) => void 0);
 >match(() => expected, (x = expected) => void 0) : void
 >                                                : ^^^^
->match : (a: () => typeof x, b: (_?: typeof x) => undefined) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
+>      : ^ ^^                     ^^ ^^                    ^^^^^^^^^
 >() => expected : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x = expected) => void 0 : (x?: typeof x | undefined) => undefined
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : typeof x | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }

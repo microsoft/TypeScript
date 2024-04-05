@@ -13,7 +13,7 @@ class Base {
 
     static method(x: typeof Derived) {
 >method : (x: typeof Derived) => void
->       : ^^^^              ^^^^^^^^^
+>       : ^ ^^              ^^^^^^^^^
 >x : typeof Derived
 >  : ^^^^^^^^^^^^^^
 >Derived : typeof Derived
@@ -23,11 +23,11 @@ class Base {
 >console.log(x.#prop) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x.#prop : any
 >        : ^^^
 >x : typeof Derived
@@ -42,7 +42,7 @@ class Derived extends Base {
 
     static method(x: typeof Derived) {
 >method : (x: typeof Derived) => void
->       : ^^^^              ^^^^^^^^^
+>       : ^ ^^              ^^^^^^^^^
 >x : typeof Derived
 >  : ^^^^^^^^^^^^^^
 >Derived : typeof Derived
@@ -52,11 +52,11 @@ class Derived extends Base {
 >console.log(x.#prop) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x.#prop : any
 >        : ^^^
 >x : typeof Derived

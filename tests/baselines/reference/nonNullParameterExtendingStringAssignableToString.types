@@ -3,13 +3,13 @@
 === nonNullParameterExtendingStringAssignableToString.ts ===
 declare function foo(p: string): void;
 >foo : (p: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >p : string
 >  : ^^^^^^
 
 function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >fn : <T extends string | undefined, U extends string>(one: T, two: U) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
 >one : T
 >    : ^
 >two : U
@@ -33,7 +33,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >foo(one!) : void
 >          : ^^^^
 >foo : (p: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >one! : string
 >     : ^^^^^^
 >one : string | undefined
@@ -43,7 +43,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >foo(two!) : void
 >          : ^^^^
 >foo : (p: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >two! : U
 >     : ^
 >two : U
@@ -53,7 +53,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >foo(three!) : void
 >            : ^^^^
 >foo : (p: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >three! : string
 >       : ^^^^^^
 >three : string | undefined

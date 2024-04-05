@@ -39,11 +39,11 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >/(\\?|&)adurl=/.test(c.href) : boolean
 >                             : ^^^^^^^
 >/(\\?|&)adurl=/.test : (string: string) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^      ^^      ^^^^^^^^^^^^
 >/(\\?|&)adurl=/ : RegExp
 >                : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >c.href : any
 >       : ^^^
 >c : any
@@ -55,11 +55,11 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >/(\\?|&)q=/.test(c.href) : boolean
 >                         : ^^^^^^^
 >/(\\?|&)q=/.test : (string: string) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^      ^^      ^^^^^^^^^^^^
 >/(\\?|&)q=/ : RegExp
 >            : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >c.href : any
 >       : ^^^
 >c : any
@@ -75,11 +75,11 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >/ (\\ ? | & ) rct = j / .test(c.href) : boolean
 >                                      : ^^^^^^^
 >/ (\\ ? | & ) rct = j / .test : (string: string) => boolean
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^      ^^      ^^^^^^^^^^^^
 >/ (\\ ? | & ) rct = j / : RegExp
 >                        : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >c.href : any
 >       : ^^^
 >c : any
@@ -99,11 +99,11 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >/(\\?|&)q=/.test(c.href) : boolean
 >                         : ^^^^^^^
 >/(\\?|&)q=/.test : (string: string) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^      ^^      ^^^^^^^^^^^^
 >/(\\?|&)q=/ : RegExp
 >            : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >c.href : any
 >       : ^^^
 >c : any
@@ -125,7 +125,7 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >encodeURIComponent(W("q") || W("as_q") || A) : string
 >                                             : ^^^^^^
 >encodeURIComponent : (uriComponent: string | number | boolean) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^            ^^                         ^^^^^^^^^^^
 >W("q") || W("as_q") || A : any
 >                         : ^^^
 >W("q") || W("as_q") : any

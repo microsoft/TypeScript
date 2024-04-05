@@ -67,7 +67,7 @@ const [x] = foo();  // [number]
 interface SelectProps<T, K> {
   selector?: (obj: T) => K;
 >selector : ((obj: T) => K) | undefined
->         : ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^
+>         : ^^   ^^ ^^^^^ ^^^^^^^^^^^^^
 >obj : T
 >    : ^
 }
@@ -88,7 +88,7 @@ interface Person {
 
 declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
 >selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
->           : ^ ^^^^^^^^^^^^^^^^^^^                      ^^^^^                       
+>           : ^ ^^^^^^^^^^^     ^^^                      ^^^^^                       
 >props : SelectProps<Person, K> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -97,8 +97,8 @@ const [person] = selectJohn();
 >       : ^^^^^^
 >selectJohn() : SelectResult<Person, Person>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
+>           : ^ ^^^^^^^^^^^     ^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const [any, whatever] = selectJohn();
 >any : Person
@@ -107,16 +107,16 @@ const [any, whatever] = selectJohn();
 >         : ^^^^^^
 >selectJohn() : SelectResult<Person, Person>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
+>           : ^ ^^^^^^^^^^^     ^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const john = selectJohn();
 >john : SelectResult<Person, Person>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >selectJohn() : SelectResult<Person, Person>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
+>           : ^ ^^^^^^^^^^^     ^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const [personAgain, nufinspecial] = john;
 >personAgain : Person
@@ -130,13 +130,13 @@ const [personAgain, nufinspecial] = john;
 
 declare function makeTuple<T1>(arg: T1): [T1];
 >makeTuple : <T1>(arg: T1) => [T1]
->          : ^  ^^^^^^^  ^^^^^    
+>          : ^  ^^   ^^  ^^^^^    
 >arg : T1
 >    : ^^
 
 declare function stringy<T = string>(arg?: T): T;
 >stringy : <T = string>(arg?: T) => T
->        : ^ ^^^^^^^^^^^^^^^^^ ^^^^^ 
+>        : ^ ^^^^^^^^^^^   ^^^ ^^^^^ 
 >arg : T | undefined
 >    : ^^^^^^^^^^^^^
 
@@ -146,11 +146,11 @@ const isStringTuple = makeTuple(stringy());  // [string]
 >makeTuple(stringy()) : [string]
 >                     : ^^^^^^^^
 >makeTuple : <T1>(arg: T1) => [T1]
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^  ^^   ^^  ^^^^^^^^^
 >stringy() : string
 >          : ^^^^^^
->stringy : <T = string>(arg?: T | undefined) => T
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringy : <T = string>(arg?: T) => T
+>        : ^ ^^^^^^^^^^^   ^^^ ^^^^^^
 
 const [isAny] = makeTuple(stringy());  // [string]
 >isAny : string
@@ -158,9 +158,9 @@ const [isAny] = makeTuple(stringy());  // [string]
 >makeTuple(stringy()) : [string]
 >                     : ^^^^^^^^
 >makeTuple : <T1>(arg: T1) => [T1]
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^  ^^   ^^  ^^^^^^^^^
 >stringy() : string
 >          : ^^^^^^
->stringy : <T = string>(arg?: T | undefined) => T
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringy : <T = string>(arg?: T) => T
+>        : ^ ^^^^^^^^^^^   ^^^ ^^^^^^
 

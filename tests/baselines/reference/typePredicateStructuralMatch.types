@@ -7,7 +7,7 @@ getResults1([]);
 >getResults1([]) : Results
 >                : ^^^^^^^
 >getResults1 : (value: Results | { data: Results; }) => Results
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                            ^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -15,7 +15,7 @@ getResults1({data: []});
 >getResults1({data: []}) : Results
 >                        : ^^^^^^^
 >getResults1 : (value: Results | { data: Results; }) => Results
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                            ^^^^^^^^^^^^
 >{data: []} : { data: undefined[]; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^
 >data : undefined[]
@@ -27,7 +27,7 @@ getResults2([]);
 >getResults2([]) : Results
 >                : ^^^^^^^
 >getResults2 : (value: Results | { data: Results; }) => Results
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                            ^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ getResults2({data: []});
 >getResults2({data: []}) : Results
 >                        : ^^^^^^^
 >getResults2 : (value: Results | { data: Results; }) => Results
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                            ^^^^^^^^^^^^
 >{data: []} : { data: undefined[]; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^
 >data : undefined[]
@@ -55,7 +55,7 @@ type Results = Result[];
 
 function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
->                 : ^ ^^^^^^^^^                ^^^^^                     
+>                 : ^ ^^     ^^                ^^^^^                     
 >value : T | { data: T; }
 >      : ^^^^^^^^^^^^ ^^^
 >data : T
@@ -67,18 +67,18 @@ function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >value.hasOwnProperty('data') : boolean
 >                             : ^^^^^^^
 >value.hasOwnProperty : (v: PropertyKey) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^           ^^^^^^^^^^^^
 >value : T | { data: T; }
 >      : ^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'data' : "data"
 >       : ^^^^^^
 }
 
 function getResults1(value: Results | { data: Results }): Results {
 >getResults1 : (value: Results | { data: Results; }) => Results
->            : ^^^^^^^^                            ^^^^^       
+>            : ^     ^^                            ^^^^^       
 >value : Results | { data: Results; }
 >      : ^^^^^^^^^^^^^^^^^^       ^^^
 >data : Results
@@ -90,7 +90,7 @@ function getResults1(value: Results | { data: Results }): Results {
 >isResponseInData(value) : boolean
 >                        : ^^^^^^^
 >isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^     ^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : Results | { data: Results; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value.data : Results
@@ -105,7 +105,7 @@ function getResults1(value: Results | { data: Results }): Results {
 
 function isPlainResponse<T>(value: T | { data: T}): value is T {
 >isPlainResponse : <T>(value: T | { data: T; }) => value is T
->                : ^ ^^^^^^^^^                ^^^^^          
+>                : ^ ^^     ^^                ^^^^^          
 >value : T | { data: T; }
 >      : ^^^^^^^^^^^^ ^^^
 >data : T
@@ -117,18 +117,18 @@ function isPlainResponse<T>(value: T | { data: T}): value is T {
 >value.hasOwnProperty('data') : boolean
 >                             : ^^^^^^^
 >value.hasOwnProperty : (v: PropertyKey) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^           ^^^^^^^^^^^^
 >value : T | { data: T; }
 >      : ^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'data' : "data"
 >       : ^^^^^^
 }
 
 function getResults2(value: Results | { data: Results }): Results {
 >getResults2 : (value: Results | { data: Results; }) => Results
->            : ^^^^^^^^                            ^^^^^       
+>            : ^     ^^                            ^^^^^       
 >value : Results | { data: Results; }
 >      : ^^^^^^^^^^^^^^^^^^       ^^^
 >data : Results
@@ -140,7 +140,7 @@ function getResults2(value: Results | { data: Results }): Results {
 >isPlainResponse(value) : boolean
 >                       : ^^^^^^^
 >isPlainResponse : <T>(value: T | { data: T; }) => value is T
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^     ^^                ^^^^^^^^^^^^^^^
 >value : Results | { data: Results; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : Results

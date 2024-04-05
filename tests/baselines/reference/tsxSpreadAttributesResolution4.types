@@ -74,7 +74,7 @@ class EmptyProp extends React.Component<{}, {}> {
 >EmptyProp : EmptyProp
 >          : ^^^^^^^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^  ^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
@@ -127,11 +127,11 @@ let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
 >EmptyProp : typeof EmptyProp
 >          : ^^^^^^^^^^^^^^^^
 >{ ref: (input) => { this.textInput = input; } } : { ref: (input: EmptyProp) => void; }
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >ref : (input: EmptyProp) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^
 >(input) => { this.textInput = input; } : (input: EmptyProp) => void
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       :                           
 >input : EmptyProp
 >      : ^^^^^^^^^
 >this.textInput = input : EmptyProp

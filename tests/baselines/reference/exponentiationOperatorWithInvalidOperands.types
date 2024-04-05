@@ -329,7 +329,7 @@ var r1e5 = e ** e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r1e6 = e ** f;
 >r1e6 : number

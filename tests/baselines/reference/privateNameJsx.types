@@ -9,7 +9,7 @@ class Test {
 >#prop : () => any
 >      : ^^^^^^^^^
 >() => <div /> : () => any
->              : ^^^^^^^^^
+>              :          
 ><div /> : any
 >        : ^^^
 >div : any

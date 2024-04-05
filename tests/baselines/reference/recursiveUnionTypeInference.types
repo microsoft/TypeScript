@@ -9,15 +9,15 @@ interface Foo<T> {
 
 function bar<T>(x: Foo<T> | string): T {
 >bar : <T>(x: Foo<T> | string) => T
->    : ^ ^^^^^               ^^^^^ 
+>    : ^ ^^ ^^               ^^^^^ 
 >x : string | Foo<T>
 >  : ^^^^^^^^^^^^^^^
 
     return bar(x);
 >bar(x) : T
 >       : ^
->bar : <T>(x: string | Foo<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : <T>(x: Foo<T> | string) => T
+>    : ^ ^^ ^^               ^^^^^^
 >x : string | Foo<T>
 >  : ^^^^^^^^^^^^^^^
 }

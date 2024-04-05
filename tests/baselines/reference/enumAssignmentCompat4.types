@@ -68,7 +68,7 @@ let broken = [
 >broken : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    N.object1,    M.object2] : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^                  ^^^                  ^^^
 
     N.object1,
 >N.object1 : { foo: N.MyEnum; }

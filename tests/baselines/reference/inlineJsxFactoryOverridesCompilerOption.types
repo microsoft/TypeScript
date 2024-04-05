@@ -21,7 +21,7 @@ export { dom as p };
 >dom : () => void
 >    : ^^^^^^^^^^
 >p : () => void
->  : ^^^^^^^^^^
+>  :           
 
 === reacty.tsx ===
 /** @jsx dom */

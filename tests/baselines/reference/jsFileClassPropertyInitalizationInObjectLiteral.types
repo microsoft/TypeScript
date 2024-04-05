@@ -11,7 +11,7 @@ module.exports = function () {
 >exports : () => { c: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^
 >function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
->                                                        : ^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^^^^^^              
 
   class A { }
 >A : A

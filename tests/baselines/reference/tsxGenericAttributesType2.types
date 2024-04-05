@@ -7,9 +7,9 @@ import React = require('react');
 
 const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
 >decorator4 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
->           : ^ ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^                           ^^^^^                           
+>           : ^ ^^^^^^^^^^^^^^      ^^^^^         ^^                           ^^^^^                           
 >function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
->                                                                                                                                                                               : ^ ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^                           ^^^^^                           
+>                                                                                                                                                                               :                                                                                                  
 >x : number
 >  : ^^^^^^
 >Component : React.StatelessComponent<T>
@@ -21,7 +21,7 @@ const decorator4 = function <T extends { x: number }>(Component: React.Stateless
 
     return (props) => <Component {...props} y={"blah"} ></Component>
 >(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : T & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><Component {...props} y={"blah"} ></Component> : JSX.Element

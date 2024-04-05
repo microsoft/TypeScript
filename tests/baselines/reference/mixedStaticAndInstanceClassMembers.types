@@ -11,19 +11,19 @@ class A {
 
     static m1 (a: string): void;
 >m1 : (a: string) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >a : string
 >  : ^^^^^^
 
     m1 (a: number): void;
 >m1 : (a: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 
     m1 (a: any): void {
 >m1 : (a: number) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >a : any
 >  : ^^^
     }
@@ -39,19 +39,19 @@ class B {
 
     m1 (a: string): void;
 >m1 : { (a: string): void; (a: any): void; }
->   : ^^^^^^      ^^^    ^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^    ^^^ ^^   ^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     static m1 (a: number): void;
 >m1 : (a: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 
     m1 (a: any): void {
 >m1 : { (a: string): void; (a: any): void; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^    ^^^
+>   : ^^^ ^^      ^^^^^^^^^^ ^^   ^^^    ^^^
 >a : any
 >  : ^^^
     }

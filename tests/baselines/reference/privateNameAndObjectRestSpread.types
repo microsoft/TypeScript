@@ -19,7 +19,7 @@ class C {
 
     method(other: C) {
 >method : (other: C) => void
->       : ^^^^^^^^ ^^^^^^^^^
+>       : ^     ^^ ^^^^^^^^^
 >other : C
 >      : ^
 

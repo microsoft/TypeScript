@@ -3,7 +3,7 @@
 === neverType.ts ===
 function error(message: string): never {
 >error : (message: string) => never
->      : ^^^^^^^^^^      ^^^^^     
+>      : ^       ^^      ^^^^^     
 >message : string
 >        : ^^^^^^
 
@@ -18,7 +18,7 @@ function error(message: string): never {
 
 function errorVoid(message: string) {
 >errorVoid : (message: string) => void
->          : ^^^^^^^^^^      ^^^^^^^^^
+>          : ^       ^^      ^^^^^^^^^
 >message : string
 >        : ^^^^^^
 
@@ -39,14 +39,14 @@ function fail() {
 >error("Something failed") : never
 >                          : ^^^^^
 >error : (message: string) => never
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^      ^^^^^^^^^^
 >"Something failed" : "Something failed"
 >                   : ^^^^^^^^^^^^^^^^^^
 }
 
 function failOrThrow(shouldFail: boolean) {
 >failOrThrow : (shouldFail: boolean) => never
->            : ^^^^^^^^^^^^^       ^^^^^^^^^^
+>            : ^          ^^       ^^^^^^^^^^
 >shouldFail : boolean
 >           : ^^^^^^^
 
@@ -89,7 +89,7 @@ function infiniteLoop2(): never {
 
 function move1(direction: "up" | "down") {
 >move1 : (direction: "up" | "down") => 1 | -1
->      : ^^^^^^^^^^^^             ^^^^^^^^^^^
+>      : ^         ^^             ^^^^^^^^^^^
 >direction : "up" | "down"
 >          : ^^^^^^^^^^^^^
 
@@ -119,14 +119,14 @@ function move1(direction: "up" | "down") {
 >error("Should never get here") : never
 >                               : ^^^^^
 >error : (message: string) => never
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^      ^^^^^^^^^^
 >"Should never get here" : "Should never get here"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function move2(direction: "up" | "down") {
 >move2 : (direction: "up" | "down") => 1 | -1
->      : ^^^^^^^^^^^^             ^^^^^^^^^^^
+>      : ^         ^^             ^^^^^^^^^^^
 >direction : "up" | "down"
 >          : ^^^^^^^^^^^^^
 
@@ -160,14 +160,14 @@ function move2(direction: "up" | "down") {
 >error("Should never get here") : never
 >                               : ^^^^^
 >error : (message: string) => never
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^      ^^^^^^^^^^
 >"Should never get here" : "Should never get here"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function check<T>(x: T | undefined) {
 >check : <T>(x: T | undefined) => NonNullable<T>
->      : ^ ^^^^^             ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -179,7 +179,7 @@ function check<T>(x: T | undefined) {
 >error("Undefined value") : never
 >                         : ^^^^^
 >error : (message: string) => never
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^      ^^^^^^^^^^
 >"Undefined value" : "Undefined value"
 >                  : ^^^^^^^^^^^^^^^^^
 }
@@ -228,7 +228,7 @@ class C {
 
 function f1(x: string | number) {
 >f1 : (x: string | number) => void
->   : ^^^^               ^^^^^^^^^
+>   : ^ ^^               ^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -250,7 +250,7 @@ function f1(x: string | number) {
 
 function f2(x: string | number) {
 >f2 : (x: string | number) => never
->   : ^^^^               ^^^^^^^^^^
+>   : ^ ^^               ^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -277,7 +277,7 @@ function f2(x: string | number) {
 
 function test(cb: () => string) {
 >test : (cb: () => string) => string
->     : ^^^^^            ^^^^^^^^^^^
+>     : ^  ^^            ^^^^^^^^^^^
 >cb : () => string
 >   : ^^^^^^      
 
@@ -298,11 +298,11 @@ let errorCallback = () => error("Error callback");
 >errorCallback : () => never
 >              : ^^^^^^^^^^^
 >() => error("Error callback") : () => never
->                              : ^^^^^^^^^^^
+>                              :            
 >error("Error callback") : never
 >                        : ^^^^^
 >error : (message: string) => never
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^      ^^^^^^^^^^
 >"Error callback" : "Error callback"
 >                 : ^^^^^^^^^^^^^^^^
 
@@ -310,7 +310,7 @@ test(() => "hello");
 >test(() => "hello") : string
 >                    : ^^^^^^
 >test : (cb: () => string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^            ^^^^^^^^^^^
 >() => "hello" : () => string
 >              : ^^^^^^^^^^^^
 >"hello" : "hello"
@@ -320,7 +320,7 @@ test(() => fail());
 >test(() => fail()) : string
 >                   : ^^^^^^
 >test : (cb: () => string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^            ^^^^^^^^^^^
 >() => fail() : () => never
 >             : ^^^^^^^^^^^
 >fail() : never
@@ -332,7 +332,7 @@ test(() => { throw new Error(); })
 >test(() => { throw new Error(); }) : string
 >                                   : ^^^^^^
 >test : (cb: () => string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^            ^^^^^^^^^^^
 >() => { throw new Error(); } : () => never
 >                             : ^^^^^^^^^^^
 >new Error() : Error
@@ -344,7 +344,7 @@ test(errorCallback);
 >test(errorCallback) : string
 >                    : ^^^^^^
 >test : (cb: () => string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^            ^^^^^^^^^^^
 >errorCallback : () => never
 >              : ^^^^^^^^^^^
 

@@ -206,7 +206,7 @@ export class F {
      */
     static create(a, b) { return new F(a, b); }
 >create : <A, B>(a: A, b: B) => F<A, B>
->       : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >a : A
 >  : ^
 >b : B

@@ -34,7 +34,7 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
->       : ^^^^^^^^                 ^^^^^             
+>       : ^     ^^                 ^^^^^             
 >input : boolean | myTypes.typeC
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -71,9 +71,9 @@ module.exports = {testFn, testFnTypes};
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFn : (input: testFnTypes.input) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFnTypes : { [x: string]: any; }
 >            : ^^^^^^^^^^^^^^^^^^^^^
 

@@ -28,7 +28,7 @@ type Recursive<Id> = {
 
 declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->       : ^  ^^^^^^^^^                        ^^^^^    
+>       : ^  ^^     ^^                        ^^^^^    
 >items : readonly Recursive<Id>[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -79,7 +79,7 @@ const foo = getIds(items)
 >getIds(items) : ("a" | "b")[]
 >              : ^^^^^^^^^^^^^
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^     ^^                        ^^^^^^^^^
 >items : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -90,7 +90,7 @@ const foo2 = getIds([{
 >getIds([{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const) : ("a" | "b")[]
 >                                                                                            : ^^^^^^^^^^^^^
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^     ^^                        ^^^^^^^^^
 >[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
@@ -143,7 +143,7 @@ type T2<T> = [42, T2<{ x: T }>];
 
 function qq<U>(x: T1<U>, y: T2<U>) {
 >qq : <U>(x: T1<U>, y: T2<U>) => void
->   : ^ ^^^^^     ^^^^^     ^^^^^^^^^
+>   : ^ ^^ ^^     ^^ ^^     ^^^^^^^^^
 >x : T1<U>
 >  : ^^^^^
 >y : T2<U>

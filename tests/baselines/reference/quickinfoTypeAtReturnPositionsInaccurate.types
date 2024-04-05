@@ -53,9 +53,9 @@ class StrClass<T extends string> {
 
 const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^                                    
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^                                    
 ><Item extends NumClass<number> | StrClass<string>> (        item: Item    ): item is Extract<Item, NumClass<any>> => {        return (item instanceof NumClass);    } : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->                                                                                                                                                                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^                                    
+>                                                                                                                                                                      :                                                                                                       
 
         item: Item
 >item : Item
@@ -93,7 +93,7 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
 
     public get<EntryId extends keyof Entries>(entryId: EntryId): Entries[EntryId] {
 >get : <EntryId extends keyof Entries>(entryId: EntryId) => Entries[EntryId]
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^                
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^^^                
 >entryId : EntryId
 >        : ^^^^^^^
 
@@ -125,7 +125,7 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
 >isNumClass(entry) : boolean
 >                  : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entry : Entries[EntryId]
 >      : ^^^^^^^^^^^^^^^^
 
@@ -182,7 +182,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 
     public get<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
 >get : <SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(sliceId: SliceId, sliceKey: SliceKey) => Slices[SliceId][SliceKey]
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^        ^^^^^                         
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^        ^^        ^^^^^                         
 
         sliceId: SliceId, sliceKey: SliceKey
 >sliceId : SliceId
@@ -213,7 +213,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >isNumClass(item) : boolean
 >                 : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Slices[SliceId][SliceKey]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -248,7 +248,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 
     public get2<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
 >get2 : <SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(sliceId: SliceId, sliceKey: SliceKey) => Slices[SliceId][SliceKey]
->     : ^       ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^        ^^^^^                         
+>     : ^       ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^        ^^        ^^^^^                         
 
         sliceId: SliceId, sliceKey: SliceKey
 >sliceId : SliceId
@@ -279,7 +279,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >isNumClass(item) : boolean
 >                 : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Slices[SliceId][SliceKey]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -319,13 +319,13 @@ interface Program {
 }
 declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
 >isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
->                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^            
+>                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^           ^^^^^            
 >program : Program | T
 >        : ^^^^^^^^^^^
 
 export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >listFiles : <T extends BuilderProgram>(program: Program | T) => void
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^           ^^^^^^^^^
 >program : Program | T
 >        : ^^^^^^^^^^^
 
@@ -337,7 +337,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >isBuilderProgram(program) : boolean
 >                          : ^^^^^^^
 >isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^             ^^^^^^^^^^^^^^^^^^^
 >program : Program | T
 >        : ^^^^^^^^^^^
 >program.getProgram() : Program

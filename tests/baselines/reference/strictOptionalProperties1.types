@@ -3,7 +3,7 @@
 === strictOptionalProperties1.ts ===
 function f1(obj: { a?: string, b?: string | undefined }) {
 >f1 : (obj: { a?: string; b?: string | undefined; }) => void
->   : ^^^^^^                                       ^^^^^^^^^
+>   : ^   ^^                                       ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
@@ -82,7 +82,7 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 
 function f2(obj: { a?: string, b?: string | undefined }) {
 >f2 : (obj: { a?: string; b?: string | undefined; }) => void
->   : ^^^^^^                                       ^^^^^^^^^
+>   : ^   ^^                                       ^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^      ^^^^^^                  ^^^
 >a : string | undefined
@@ -96,7 +96,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    :    ^           ^                       
 
     obj.a = obj.a;  // Error
 >obj.a = obj.a : string | undefined
@@ -191,11 +191,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.hasOwnProperty('a') : boolean
 >                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'a' : "a"
 >    : ^^^
 
@@ -309,11 +309,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.hasOwnProperty('b') : boolean
 >                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'b' : "b"
 >    : ^^^
 
@@ -370,7 +370,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 
 function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >f3 : (obj: Partial<{ a: string; b: string | undefined; }>) => void
->   : ^^^^^^                                              ^^^^^^^^^
+>   : ^   ^^                                              ^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
 >    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
@@ -449,7 +449,7 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 
 function f4(t: [string?]) {
 >f4 : (t: [string?]) => void
->   : ^^^^         ^^^^^^^^^
+>   : ^ ^^         ^^^^^^^^^
 >t : [string?]
 >  : ^^^^^^^^^
 
@@ -490,7 +490,7 @@ function f4(t: [string?]) {
 
 function f4a(t1: [number, string?], t2: [number, string?, string?]) {
 >f4a : (t1: [number, string?], t2: [number, string?, string?]) => void
->    : ^^^^^                 ^^^^^^                          ^^^^^^^^^
+>    : ^  ^^                 ^^  ^^                          ^^^^^^^^^
 >t1 : [number, string?]
 >   : ^^^^^^^^^^^^^^^^^
 >t2 : [number, string?, string?]
@@ -507,7 +507,7 @@ function f4a(t1: [number, string?], t2: [number, string?, string?]) {
 
 function f5(t: [number, string?, boolean?]) {
 >f5 : (t: [number, string?, boolean?]) => void
->   : ^^^^                           ^^^^^^^^^
+>   : ^ ^^                           ^^^^^^^^^
 >t : [number, string?, boolean?]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -889,7 +889,7 @@ declare let tx4: [(string | undefined)?];
 
 declare function f11<T>(x: { p?: T }): T;
 >f11 : <T>(x: { p?: T; }) => T
->    : ^ ^^^^^          ^^^^^ 
+>    : ^ ^^ ^^          ^^^^^ 
 >x : { p?: T; }
 >  : ^^^^^^ ^^^
 >p : T | undefined
@@ -899,7 +899,7 @@ f11(ox1);  // string
 >f11(ox1) : string
 >         : ^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox1 : { p: string; }
 >    : ^^^^^^^^^^^^^^
 
@@ -907,7 +907,7 @@ f11(ox2);  // string | undefined
 >f11(ox2) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox2 : { p: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -915,7 +915,7 @@ f11(ox3);  // string
 >f11(ox3) : string
 >         : ^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox3 : { p?: string; }
 >    : ^^^^^^^^^^^^^^^
 
@@ -923,13 +923,13 @@ f11(ox4);  // string | undefined
 >f11(ox4) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox4 : { p?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f12<T>(x: [T?]): T;
 >f12 : <T>(x: [T?]) => T
->    : ^ ^^^^^    ^^^^^ 
+>    : ^ ^^ ^^    ^^^^^ 
 >x : [T?]
 >  : ^^^^
 
@@ -937,7 +937,7 @@ f12(tx1);  // string
 >f12(tx1) : string
 >         : ^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx1 : [string]
 >    : ^^^^^^^^
 
@@ -945,7 +945,7 @@ f12(tx2);  // string | undefined
 >f12(tx2) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx2 : [string | undefined]
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -953,7 +953,7 @@ f12(tx3);  // string
 >f12(tx3) : string
 >         : ^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx3 : [string?]
 >    : ^^^^^^^^^
 
@@ -961,13 +961,13 @@ f12(tx4);  // string | undefined
 >f12(tx4) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx4 : [(string | undefined)?]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f13<T>(x: Partial<T>): T;
 >f13 : <T>(x: Partial<T>) => T
->    : ^ ^^^^^          ^^^^^ 
+>    : ^ ^^ ^^          ^^^^^ 
 >x : Partial<T>
 >  : ^^^^^^^^^^
 
@@ -975,7 +975,7 @@ f13(ox1);  // { p: string }
 >f13(ox1) : { p: string; }
 >         : ^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox1 : { p: string; }
 >    : ^^^^^^^^^^^^^^
 
@@ -983,7 +983,7 @@ f13(ox2);  // { p: string | undefined }
 >f13(ox2) : { p: string | undefined; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox2 : { p: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -991,7 +991,7 @@ f13(ox3);  // { p: string }
 >f13(ox3) : { p: string; }
 >         : ^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox3 : { p?: string; }
 >    : ^^^^^^^^^^^^^^^
 
@@ -999,7 +999,7 @@ f13(ox4);  // { p: string | undefined }
 >f13(ox4) : { p: string | undefined; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox4 : { p?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1007,7 +1007,7 @@ f13(tx1);  // [string]
 >f13(tx1) : [string]
 >         : ^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx1 : [string]
 >    : ^^^^^^^^
 
@@ -1015,7 +1015,7 @@ f13(tx2);  // [string | undefined]
 >f13(tx2) : [string | undefined]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx2 : [string | undefined]
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -1023,7 +1023,7 @@ f13(tx3);  // [string]
 >f13(tx3) : [string]
 >         : ^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx3 : [string?]
 >    : ^^^^^^^^^
 
@@ -1031,7 +1031,7 @@ f13(tx4);  // [string | undefined]
 >f13(tx4) : [string | undefined]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx4 : [(string | undefined)?]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1043,7 +1043,7 @@ type Undefinable<T> = T | undefined;
 
 function expectNotUndefined<T>(value: Undefinable<T>): T {
 >expectNotUndefined : <T>(value: Undefinable<T>) => T
->                   : ^ ^^^^^^^^^              ^^^^^ 
+>                   : ^ ^^     ^^              ^^^^^ 
 >value : Undefinable<T>
 >      : ^^^^^^^^^^^^^^
 
@@ -1076,7 +1076,7 @@ interface Bar {
 
 function aa(input: Bar): void {
 >aa : (input: Bar) => void
->   : ^^^^^^^^   ^^^^^    
+>   : ^     ^^   ^^^^^    
 >input : Bar
 >      : ^^^
 
@@ -1086,7 +1086,7 @@ function aa(input: Bar): void {
 >expectNotUndefined(input.bar) : number
 >                              : ^^^^^^
 >expectNotUndefined : <T>(value: Undefinable<T>) => T
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^     ^^              ^^^^^^
 >input.bar : number | undefined
 >          : ^^^^^^^^^^^^^^^^^^
 >input : Bar
@@ -1098,14 +1098,14 @@ function aa(input: Bar): void {
 >bb(notUndefinedVal) : void
 >                    : ^^^^
 >bb : (input: number) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^      ^^^^^^^^^
 >notUndefinedVal : number
 >                : ^^^^^^
 }
 
 declare function bb(input: number): void;
 >bb : (input: number) => void
->   : ^^^^^^^^      ^^^^^    
+>   : ^     ^^      ^^^^^    
 >input : number
 >      : ^^^^^^
 

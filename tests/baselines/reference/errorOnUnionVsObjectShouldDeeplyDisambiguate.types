@@ -67,7 +67,7 @@ interface Stuff {
 >b : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -75,7 +75,7 @@ interface Stuff {
 >c : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -83,7 +83,7 @@ interface Stuff {
 >d : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -91,7 +91,7 @@ interface Stuff {
 >e : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -99,7 +99,7 @@ interface Stuff {
 >f : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -107,7 +107,7 @@ interface Stuff {
 >g : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -115,7 +115,7 @@ interface Stuff {
 >h : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -123,7 +123,7 @@ interface Stuff {
 >i : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -131,7 +131,7 @@ interface Stuff {
 >j : () => string
 >  : ^^^^^^^^^^^^
 >() => "hello" : () => string
->              : ^^^^^^^^^^^^
+>              :             
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -139,7 +139,7 @@ interface Stuff {
 >k : () => number
 >  : ^^^^^^^^^^^^
 >() => 123 : () => number
->          : ^^^^^^^^^^^^
+>          :             
 >123 : 123
 >    : ^^^
     }

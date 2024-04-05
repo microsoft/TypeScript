@@ -25,7 +25,7 @@ export var circularReference = class C {
 
     static getTags(c: C): C { return c }
 >getTags : (c: C) => C
->        : ^^^^^^^^^^^
+>        : ^ ^^^^^^^^^
 >c : C
 >  : ^
 >c : C
@@ -33,7 +33,7 @@ export var circularReference = class C {
 
     tags(c: C): C { return c }
 >tags : (c: C) => C
->     : ^^^^^^^^^^^
+>     : ^ ^^^^^^^^^
 >c : C
 >  : ^
 >c : C
@@ -62,13 +62,13 @@ export type Constructor<T> = new(...args: any[]) => T;
 
 export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 >WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 >Base : T
 >     : ^
 
     return class extends Base {
 >class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
->                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
+>                                                                                    : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 >Base : FooItem
 >     : ^^^^^^^
 
@@ -86,9 +86,9 @@ export class Test extends WithTags(FooItem) {}
 >Test : Test
 >     : ^^^^
 >WithTags(FooItem) : WithTags<typeof FooItem>.(Anonymous class) & FooItem
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  :          ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >FooItem : typeof FooItem
 >        : ^^^^^^^^^^^^^^
 

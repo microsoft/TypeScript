@@ -8,9 +8,9 @@
  */
 function filter(predicate) {
 >filter : <T>(predicate: (value: T, index: number) => boolean) => T
->       : ^ ^^^^^^^^^^^^^                                    ^^^^^ 
+>       : ^ ^^         ^^                                    ^^^^^ 
 >predicate : (value: T, index: number) => boolean
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^ ^^     ^^      ^^^^^^^^^^^^
 
   return /** @type {any} */ (null);
 >(null) : any
@@ -22,14 +22,14 @@ const a = filter(
 >filter(  /**   * @param {number} [pose]   */  (pose) => true) : number | undefined
 >                                                              : ^^^^^^^^^^^^^^^^^^
 >filter : <T>(predicate: (value: T, index: number) => boolean) => T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^         ^^                                    ^^^^^^
 
   /**
    * @param {number} [pose]
    */
   (pose) => true
 >(pose) => true : (pose?: number | undefined) => true
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pose : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >true : true
@@ -43,7 +43,7 @@ const b = filter(
 >filter(  /**   * @param {number} [pose]   * @param {number} [_]   */  (pose, _) => true) : number | undefined
 >                                                                                         : ^^^^^^^^^^^^^^^^^^
 >filter : <T>(predicate: (value: T, index: number) => boolean) => T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^         ^^                                    ^^^^^^
 
   /**
    * @param {number} [pose]
@@ -51,7 +51,7 @@ const b = filter(
    */
   (pose, _) => true
 >(pose, _) => true : (pose?: number | undefined, _?: number | undefined) => true
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pose : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >_ : number | undefined

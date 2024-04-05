@@ -7,26 +7,26 @@ class C</**docComment for type parameter*/ T> {
 
     method</**docComment of method type parameter */ U extends T>(a: U) {
 >method : <U extends T>(a: U) => void
->       : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
     }
     static staticmethod</**docComment of method type parameter */ U>(a: U) {
 >staticmethod : <U>(a: U) => void
->             : ^ ^^^^^ ^^^^^^^^^
+>             : ^ ^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
     }
 
     private privatemethod</**docComment of method type parameter */ U extends T>(a: U) {
 >privatemethod : <U extends T>(a: U) => void
->              : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
     }
     private static privatestaticmethod</**docComment of method type parameter */ U>(a: U) {
 >privatestaticmethod : <U>(a: U) => void
->                    : ^ ^^^^^ ^^^^^^^^^
+>                    : ^ ^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
     }
@@ -34,7 +34,7 @@ class C</**docComment for type parameter*/ T> {
 
 function compare</**type*/T>(a: T, b: T) {
 >compare : <T>(a: T, b: T) => boolean
->        : ^ ^^^^^ ^^^^^ ^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >a : T
 >  : ^
 >b : T

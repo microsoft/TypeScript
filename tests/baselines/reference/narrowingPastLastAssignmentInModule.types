@@ -3,7 +3,7 @@
 === narrowingPastLastAssignmentInModule.ts ===
 function action(f: Function) {}
 >action : (f: Function) => void
->       : ^^^^        ^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >f : Function
 >  : ^^^^^^^^
 
@@ -25,7 +25,7 @@ action(() => { x1 /* string | number */ });
 >action(() => { x1 /* string | number */ }) : void
 >                                           : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x1 /* string | number */ } : () => void
 >                                   : ^^^^^^^^^^
 >x1 : string | number
@@ -51,7 +51,7 @@ action(() => { x2 /* string | number */ });
 >action(() => { x2 /* string | number */ }) : void
 >                                           : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x2 /* string | number */ } : () => void
 >                                   : ^^^^^^^^^^
 >x2 : string | number
@@ -79,7 +79,7 @@ action(() => { x3 /* string | number */ });
 >action(() => { x3 /* string | number */ }) : void
 >                                           : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x3 /* string | number */ } : () => void
 >                                   : ^^^^^^^^^^
 >x3 : string | number
@@ -101,7 +101,7 @@ action(() => { x4 /* string */ });
 >action(() => { x4 /* string */ }) : void
 >                                  : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x4 /* string */ } : () => void
 >                          : ^^^^^^^^^^
 >x4 : string
@@ -127,7 +127,7 @@ action(() => { x5 /* string */ });
 >action(() => { x5 /* string */ }) : void
 >                                  : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x5 /* string */ } : () => void
 >                          : ^^^^^^^^^^
 >x5 : string

@@ -12,7 +12,7 @@ export interface Things<P, T> {
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
 >make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
->     : ^ ^^    ^^^^^                                 ^^^^^               
+>     : ^ ^^    ^^ ^^                                 ^^^^^               
 >x : new () => CTor & { props: P; }
 >  : ^^^^^^^^^^                    
 >props : P
@@ -38,8 +38,8 @@ export default class MyComponent {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >make(MyComponent) : Things<Props, MyComponent>
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
+>     : ^ ^^    ^^ ^^                                 ^^^^^^^^^^^^^^^^^^^^
 >MyComponent : typeof MyComponent
 >            : ^^^^^^^^^^^^^^^^^^
 }

@@ -3,7 +3,7 @@
 === first.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix
->    : ^    ^^^^^^^^^    ^^^^^    
+>    : ^    ^^     ^^    ^^^^^    
 >mixin : TMix
 >      : ^^^^
 
@@ -38,7 +38,7 @@ export default mix(DisposableMixin);
 >mix(DisposableMixin) : typeof DisposableMixin
 >                     : ^^^^^^^^^^^^^^^^^^^^^^
 >mix : <TMix>(mixin: TMix) => TMix
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^     ^^    ^^^^^^^^^
 >DisposableMixin : typeof DisposableMixin
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -48,7 +48,7 @@ export class Monitor extends mix(DisposableMixin) {
 >mix(DisposableMixin) : DisposableMixin
 >                     : ^^^^^^^^^^^^^^^
 >mix : <TMix>(mixin: TMix) => TMix
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^     ^^    ^^^^^^^^^
 >DisposableMixin : typeof DisposableMixin
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -61,7 +61,7 @@ export class Monitor extends mix(DisposableMixin) {
 === another.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix
->    : ^    ^^^^^^^^^    ^^^^^    
+>    : ^    ^^     ^^    ^^^^^    
 >mixin : TMix
 >      : ^^^^
 
@@ -95,7 +95,7 @@ export default class extends mix(DisposableMixin) {
 >mix(DisposableMixin) : DisposableMixin
 >                     : ^^^^^^^^^^^^^^^
 >mix : <TMix>(mixin: TMix) => TMix
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^     ^^    ^^^^^^^^^
 >DisposableMixin : typeof DisposableMixin
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 

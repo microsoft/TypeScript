@@ -11,7 +11,7 @@ type T = S[] | S;
 
 function isS(t: T): t is S {
 >isS : (t: T) => t is S
->    : ^^^^ ^^^^^      
+>    : ^ ^^ ^^^^^      
 >t : T
 >  : ^
 
@@ -34,7 +34,7 @@ function isS(t: T): t is S {
 
 function f(foo: T) {
 >f : (foo: T) => S
->  : ^^^^^^ ^^^^^^
+>  : ^   ^^ ^^^^^^
 >foo : T
 >    : ^
 
@@ -42,7 +42,7 @@ function f(foo: T) {
 >isS(foo) : boolean
 >         : ^^^^^^^
 >isS : (t: T) => t is S
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^
 >foo : T
 >    : ^
 

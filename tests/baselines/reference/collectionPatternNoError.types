@@ -27,7 +27,7 @@ interface MessageList<T extends Message> extends Message {
 
 function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^ 
+>         : ^ ^^^^^^^^^^^^^^^^^^         ^^                 ^^^^^ 
 >protoCtor : MsgConstructor<V>
 >          : ^^^^^^^^^^^^^^^^^
 
@@ -61,7 +61,7 @@ class DataProvider<T extends Message, U extends MessageList<T>> {
 >fetchMsg(this.messageList) : U
 >                           : ^
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^         ^^                 ^^^^^^
 >this.messageList : MsgConstructor<U>
 >                 : ^^^^^^^^^^^^^^^^^
 >this : this
@@ -85,7 +85,7 @@ class DataProvider<T extends Message, U extends MessageList<T>> {
 // (won't surface directly unless unsound indexed access assignments are forbidden)
 function f<
 >f : <U extends { TType: MessageList<T>; }, T extends Message>(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) => void
->  : ^ ^^^^^^^^^^^^^^^^^^              ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^^^^                          ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^              ^^^^^ ^^^^^^^^^^^^^^^^^^       ^^                 ^^           ^^                          ^^^^^^^^^
 
   U extends {TType: MessageList<T>},
 >TType : MessageList<T>
@@ -106,7 +106,7 @@ function f<
 >fetchMsg(messageList) : U["TType"]
 >                      : ^^^^^^^^^^
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^         ^^                 ^^^^^^
 >messageList : MsgConstructor<U["TType"]>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >methodOnMessageList : () => T[]

@@ -5,7 +5,7 @@
 
 function makePoint(x: number, y: number) {
 >makePoint : (x: number, y: number) => { readonly x: number; readonly y: number; dist: () => number; }
->          : ^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -37,17 +37,17 @@ function makePoint(x: number, y: number) {
 >dist : () => number
 >     : ^^^^^^^^^^^^
 >function () {            return Math.sqrt(x * x + y * y);        } : () => number
->                                                                   : ^^^^^^^^^^^^
+>                                                                   :             
 
             return Math.sqrt(x * x + y * y);
 >Math.sqrt(x * x + y * y) : number
 >                         : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >x * x + y * y : number
 >              : ^^^^^^
 >x * x : number

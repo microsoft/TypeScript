@@ -10,14 +10,14 @@ interface Foo<A> {
 
     b: (x: A) => void;
 >b : (x: A) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >x : A
 >  : ^
 }
 
 declare function canYouInferThis<A>(fn: () => Foo<A>): A;
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
->                : ^ ^^^^^^            ^^^^^ 
+>                : ^ ^^  ^^            ^^^^^ 
 >fn : () => Foo<A>
 >   : ^^^^^^      
 
@@ -25,15 +25,15 @@ const result = canYouInferThis(() => ({
 >result : { BLAH: number; }
 >       : ^^^^^^^^^^^^^^^^^
 >canYouInferThis(() => ({    a: { BLAH: 33 },    b: x => { }})) : { BLAH: number; }
->                                                               : ^^^^^^^^^^^^^^^^^
+>                                                               :                  
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^  ^^            ^^^^^^
 >() => ({    a: { BLAH: 33 },    b: x => { }}) : () => { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    a: { BLAH: 33 },    b: x => { }}) : { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: { BLAH: 33 },    b: x => { }} : { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: { BLAH: 33 },
 >a : { BLAH: number; }
@@ -47,9 +47,9 @@ const result = canYouInferThis(() => ({
 
     b: x => { }
 >b : (x: { BLAH: number; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x => { } : (x: { BLAH: number; }) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         :                               
 >x : { BLAH: number; }
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -67,9 +67,9 @@ result.BLAH;
 
 function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^    ^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
 >f : (...args: ARGS) => any
->  : ^^^^^^^^^^    ^^^^^   
+>  : ^^^^    ^^    ^^^^^   
 >args : ARGS
 >     : ^^^^
 
@@ -77,9 +77,9 @@ goofus((a: string) => ({ dog() { return a; } }));
 >goofus((a: string) => ({ dog() { return a; } })) : void
 >                                                 : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog() { return a; } }) : (a: string) => { dog(): string; }
->                                         : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >({ dog() { return a; } }) : { dog(): string; }
@@ -95,9 +95,9 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 >goofus((a: string) => ({ dog: function() { return a; } })) : void
 >                                                           : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog: function() { return a; } }) : (a: string) => { dog: () => string; }
->                                                   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >({ dog: function() { return a; } }) : { dog: () => string; }
@@ -107,7 +107,7 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 >dog : () => string
 >    : ^^^^^^^^^^^^
 >function() { return a; } : () => string
->                         : ^^^^^^^^^^^^
+>                         :             
 >a : string
 >  : ^^^^^^
 

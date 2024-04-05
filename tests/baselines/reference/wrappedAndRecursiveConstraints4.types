@@ -13,13 +13,13 @@ class C<T extends { length: number }> {
 
     foo<U extends T>(x: U) {
 >foo : <U extends T>(x: U) => <V extends U>(x: V) => V
->    : ^ ^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^
 >x : U
 >  : ^
 
         function bar<V extends U>(x: V) {
 >bar : <V extends U>(x: V) => V
->    : ^ ^^^^^^^^^^^^^^^ ^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^
 >x : V
 >  : ^
 
@@ -29,7 +29,7 @@ class C<T extends { length: number }> {
         }
         return bar;
 >bar : <V extends U>(x: V) => V
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^
     }
 }
 
@@ -37,7 +37,7 @@ var c = new C({ length: 2 });
 >c : C<{ length: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >new C({ length: 2 }) : C<{ length: number; }>
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^                   ^
 >C : typeof C
 >  : ^^^^^^^^
 >{ length: 2 } : { length: number; }
@@ -49,15 +49,15 @@ var c = new C({ length: 2 });
 
 var r = c.foo('');
 >r : <V extends string>(x: V) => V
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >c.foo('') : <V extends string>(x: V) => V
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          :                              
 >c.foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >c : C<{ length: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^                   ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -67,17 +67,17 @@ var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
 >r({ length: 3, charAt: (x: number) => { '' } }) : string
 >                                                : ^^^^^^
 >r : <V extends string>(x: V) => V
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >{ length: 3, charAt: (x: number) => { '' } } : { length: number; charAt: (x: number) => void; }
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
 >3 : 3
 >  : ^
 >charAt : (x: number) => void
->       : ^^^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >(x: number) => { '' } : (x: number) => void
->                      : ^^^^      ^^^^^^^^^
+>                      :                    
 >x : number
 >  : ^^^^^^
 >'' : ""

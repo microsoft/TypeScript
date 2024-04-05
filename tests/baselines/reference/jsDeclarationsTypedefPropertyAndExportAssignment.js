@@ -104,7 +104,7 @@ module.exports = MainThreadTasks;
 
 
 //// [module.d.ts]
-export type TaskGroupIds = 'parseHTML' | 'styleLayout';
+export type TaskGroupIds = "parseHTML" | "styleLayout";
 export type TaskGroup = {
     id: TaskGroupIds;
     label: string;

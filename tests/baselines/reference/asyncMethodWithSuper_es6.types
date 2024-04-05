@@ -64,7 +64,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -75,7 +75,7 @@ class B extends A {
 >b : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -91,7 +91,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         // call with property access
         super.x();
@@ -120,7 +120,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -131,7 +131,7 @@ class B extends A {
 >b : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -174,7 +174,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -195,7 +195,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -286,7 +286,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -331,7 +331,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         // property access (assign)
         super.x = f;
@@ -357,7 +357,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -422,7 +422,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -467,7 +467,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         // element access (assign)
         super["x"] = f;
@@ -493,7 +493,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -558,7 +558,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -603,7 +603,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         // property access (assign)
         super.x = f;
@@ -629,7 +629,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -694,7 +694,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -739,7 +739,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         // element access (assign)
         super["x"] = f;
@@ -765,7 +765,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -825,7 +825,7 @@ class Base {
 
     method(x: string): any {}
 >method : (x: string) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >x : string
 >  : ^^^^^^
 
@@ -838,7 +838,7 @@ class Base {
 
     static method(x: string): any {}
 >method : (x: string) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >x : string
 >  : ^^^^^^
 }
@@ -856,11 +856,11 @@ class Derived extends Base {
 >                             : ^^^^^^^^^^^^^^^^^^
 >super.method('') : any
 >super.method : (x: string) => any
->             : ^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^
 >super : Base
 >      : ^^^^
 >method : (x: string) => any
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -897,7 +897,7 @@ class Derived extends Base {
 >                                : ^^^^^^^^^^^^^^^^^^
 >super["method"]('') : any
 >super["method"] : (x: string) => any
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^ ^^      ^^^^^^^^
 >super : Base
 >      : ^^^^
 >"method" : "method"
@@ -938,11 +938,11 @@ class Derived extends Base {
 >                             : ^^^^^^^^^^^^^^^^^^
 >super.method('') : any
 >super.method : (x: string) => any
->             : ^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >method : (x: string) => any
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -979,7 +979,7 @@ class Derived extends Base {
 >                                : ^^^^^^^^^^^^^^^^^^
 >super["method"]('') : any
 >super["method"] : (x: string) => any
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^ ^^      ^^^^^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >"method" : "method"

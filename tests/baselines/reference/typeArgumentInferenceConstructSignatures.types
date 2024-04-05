@@ -107,7 +107,7 @@ new someGenerics1<number, {}>(3, 4);
 interface someGenerics2a {
     new <T>(n: (x: T) => void);
 >n : (x: T) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >x : T
 >  : ^
 }
@@ -121,7 +121,7 @@ new someGenerics2a((n: string) => n);
 >someGenerics2a : someGenerics2a
 >               : ^^^^^^^^^^^^^^
 >(n: string) => n : (n: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n : string
@@ -133,7 +133,7 @@ new someGenerics2a<string>((n: string) => n);
 >someGenerics2a : someGenerics2a
 >               : ^^^^^^^^^^^^^^
 >(n: string) => n : (n: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n : string
@@ -145,24 +145,24 @@ new someGenerics2a<string>((n) => n.substr(0));
 >someGenerics2a : someGenerics2a
 >               : ^^^^^^^^^^^^^^
 >(n) => n.substr(0) : (n: string) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 
 interface someGenerics2b {
     new <T, U>(n: (x: T, y: U) => void);
 >n : (x: T, y: U) => void
->  : ^^^^ ^^^^^ ^^^^^    
+>  : ^ ^^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
 >y : U
@@ -178,7 +178,7 @@ new someGenerics2b((n: string, x: number) => n);
 >someGenerics2b : someGenerics2b
 >               : ^^^^^^^^^^^^^^
 >(n: string, x: number) => n : (n: string, x: number) => string
->                            : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >x : number
@@ -192,7 +192,7 @@ new someGenerics2b<string, number>((n: string, t: number) => n);
 >someGenerics2b : someGenerics2b
 >               : ^^^^^^^^^^^^^^
 >(n: string, t: number) => n : (n: string, t: number) => string
->                            : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >t : number
@@ -206,7 +206,7 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >someGenerics2b : someGenerics2b
 >               : ^^^^^^^^^^^^^^
 >(n, t) => n.substr(t * t) : (n: string, t: number) => string
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >t : number
@@ -214,11 +214,11 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >n.substr(t * t) : string
 >                : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >t * t : number
 >      : ^^^^^^
 >t : number
@@ -272,7 +272,7 @@ interface someGenerics4 {
 >n : T
 >  : ^
 >f : (x: U) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >x : U
 >  : ^
 }
@@ -310,7 +310,7 @@ new someGenerics4<string, number>('', (x: string) => ''); // Error
 >'' : ""
 >   : ^^
 >(x: string) => '' : (x: string) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >'' : ""
@@ -328,7 +328,7 @@ interface someGenerics5 {
 >n : T
 >  : ^
 >f : (x: U) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >x : U
 >  : ^
 }
@@ -366,7 +366,7 @@ new someGenerics5<number, string>('', (x: string) => ''); // Error
 >'' : ""
 >   : ^^
 >(x: string) => '' : (x: string) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >'' : ""
@@ -382,15 +382,15 @@ new someGenerics5<string, number>(null, null);
 interface someGenerics6 {
     new <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A);
 >a : (a: A) => A
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 >b : (b: A) => A
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >b : A
 >  : ^
 >c : (c: A) => A
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >c : A
 >  : ^
 }
@@ -404,19 +404,19 @@ new someGenerics6(n => n, n => n, n => n);
 >someGenerics6 : someGenerics6
 >              : ^^^^^^^^^^^^^
 >n => n : (n: unknown) => unknown
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n => n : (n: unknown) => unknown
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n => n : (n: unknown) => unknown
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n : unknown
@@ -428,19 +428,19 @@ new someGenerics6<number>(n => n, n => n, n => n);
 >someGenerics6 : someGenerics6
 >              : ^^^^^^^^^^^^^
 >n => n : (n: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >n => n : (n: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >n => n : (n: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -452,19 +452,19 @@ new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n);
 >someGenerics6 : someGenerics6
 >              : ^^^^^^^^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >(n: string) => n : (n: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n : string
 >  : ^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -476,19 +476,19 @@ new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 >someGenerics6 : someGenerics6
 >              : ^^^^^^^^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -498,15 +498,15 @@ new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 interface someGenerics7 {
     new <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C);
 >a : (a: A) => A
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 >b : (b: B) => B
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >b : B
 >  : ^
 >c : (c: C) => C
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >c : C
 >  : ^
 }
@@ -520,19 +520,19 @@ new someGenerics7(n => n, n => n, n => n);
 >someGenerics7 : someGenerics7
 >              : ^^^^^^^^^^^^^
 >n => n : (n: unknown) => unknown
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n => n : (n: unknown) => unknown
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n => n : (n: unknown) => unknown
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
 >  : ^^^^^^^
 >n : unknown
@@ -544,19 +544,19 @@ new someGenerics7<number, string, number>(n => n, n => n, n => n);
 >someGenerics7 : someGenerics7
 >              : ^^^^^^^^^^^^^
 >n => n : (n: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >n => n : (n: string) => string
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n : string
 >  : ^^^^^^
 >n => n : (n: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -568,19 +568,19 @@ new someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n
 >someGenerics7 : someGenerics7
 >              : ^^^^^^^^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
 >(n: string) => n : (n: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n : string
 >  : ^^^^^^
 >(n: number) => n : (n: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -648,7 +648,7 @@ var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, nu
 >a9b : { a?: number; b?: string; }
 >    : ^^^^^^      ^^^^^^      ^^^
 >new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
->                                                                          : ^^^^^^      ^^^^^^      ^^^
+>                                                                          :    ^           ^           
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 >a : number
@@ -699,7 +699,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                   :                                              ^              ^^^                         ^              
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 >undefined : undefined
@@ -768,7 +768,7 @@ var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >    : ^^^^^^^^^^^^^^
 >new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
->                                                : ^^^^^^^^^^^^^^
+>                                                :               
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 >{ x: 3 } : { x: number; }

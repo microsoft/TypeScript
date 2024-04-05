@@ -31,7 +31,7 @@ type T1 = 1 | Promise<T1> | T1[];
 
 export async function myFunction(param: T1) {
 >myFunction : (param: T1) => Promise<void>
->           : ^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+>           : ^     ^^  ^^^^^^^^^^^^^^^^^^
 >param : T1
 >      : ^^
 
@@ -39,7 +39,7 @@ export async function myFunction(param: T1) {
 >awaited : 1 | T1[]
 >        : ^^^^^^^^
 >await param : 1 | T1[]
->            : ^^^^^^^^
+>            : ^^^^    
 >param : T1
 >      : ^^
 }
@@ -55,7 +55,7 @@ type EffectResult =
 
 export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult : (result: EffectResult) => Promise<void>
->                   : ^^^^^^^^^            ^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
 >result : EffectResult
 >       : ^^^^^^^^^^^^
 
@@ -73,7 +73,7 @@ export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult(result()) : Promise<void>
 >                             : ^^^^^^^^^^^^^
 >handleEffectResult : (result: EffectResult) => Promise<void>
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
 >result() : EffectResult
 >         : ^^^^^^^^^^^^
 >result : () => EffectResult
@@ -93,7 +93,7 @@ export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult(await result) : Promise<void>
 >                                 : ^^^^^^^^^^^^^
 >handleEffectResult : (result: EffectResult) => Promise<void>
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
 >await result : () => EffectResult
 >             : ^^^^^^^^^^^^^^^^^^
 >result : Promise<EffectResult>

@@ -12,20 +12,20 @@ use((req, res) => {});
 >use : Overload
 >    : ^^^^^^^^
 >(req, res) => {} : (req: any, res: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^^^^^^   ^^^^^^^^^^^^^^
 >req : any
 >res : any
 
 interface Overload {
     (handler1: (req1: string) => void): void;
 >handler1 : (req1: string) => void
->         : ^^^^^^^      ^^^^^    
+>         : ^    ^^      ^^^^^    
 >req1 : string
 >     : ^^^^^^
 
     (handler2: (req2: number, res2: number) => void): void;
 >handler2 : (req2: number, res2: number) => void
->         : ^^^^^^^      ^^^^^^^^      ^^^^^    
+>         : ^    ^^      ^^    ^^      ^^^^^    
 >req2 : number
 >     : ^^^^^^
 >res2 : number
@@ -46,7 +46,7 @@ app.use((err: any, req, res, next) => { return; });
 >use : IRouterHandler<MyApp> & IRouterMatcher<MyApp>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(err: any, req, res, next) => { return; } : (err: any, req: any, res: any, next: any) => void
->                                          : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          : ^   ^^   ^^   ^^^^^^^   ^^^^^^^    ^^^^^^^^^^^^^^
 >err : any
 >req : any
 >res : any

@@ -31,11 +31,11 @@ module __test2__ {
 
     export var obj = function f<Tstring>(a: Tstring) { return a; };;
 >obj : <Tstring>(a: Tstring) => Tstring
->    : ^       ^^^^^       ^^^^^^^^^^^^
+>    : ^       ^^ ^^       ^^^^^^^^^^^^
 >function f<Tstring>(a: Tstring) { return a; } : <Tstring>(a: Tstring) => Tstring
->                                              : ^       ^^^^^       ^^^^^^^^^^^^
+>                                              :                                 
 >f : <Tstring>(a: Tstring) => Tstring
->  : ^       ^^^^^       ^^^^^^^^^^^^
+>  : ^       ^^ ^^       ^^^^^^^^^^^^
 >a : Tstring
 >  : ^^^^^^^
 >a : Tstring
@@ -43,19 +43,19 @@ module __test2__ {
 
     export var __val__obj = obj;
 >__val__obj : <Tstring>(a: Tstring) => Tstring
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^       ^^ ^^       ^^^^^^^^^^^^
 >obj : <Tstring>(a: Tstring) => Tstring
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    :                                 
 }
 __test2__.__val__obj = __test1__.__val__obj4
 >__test2__.__val__obj = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__obj : <Tstring>(a: Tstring) => Tstring
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^       ^^ ^^       ^^^^^^^^^^^^
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 >__val__obj : <Tstring>(a: Tstring) => Tstring
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^       ^^ ^^       ^^^^^^^^^^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__

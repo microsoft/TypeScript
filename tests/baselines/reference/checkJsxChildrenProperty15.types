@@ -7,9 +7,9 @@ import React = require('react');
 
 const Tag = (x: {}) => <div></div>;
 >Tag : (x: {}) => JSX.Element
->    : ^^^^  ^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >(x: {}) => <div></div> : (x: {}) => JSX.Element
->                       : ^^^^  ^^^^^^^^^^^^^^^^
+>                       :                       
 >x : {}
 >  : ^^
 ><div></div> : JSX.Element
@@ -26,7 +26,7 @@ const k1 = <Tag />;
 ><Tag /> : JSX.Element
 >        : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 
 const k2 = <Tag></Tag>;
 >k2 : JSX.Element
@@ -34,9 +34,9 @@ const k2 = <Tag></Tag>;
 ><Tag></Tag> : JSX.Element
 >            : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 
 // Not OK (excess children)
 const k3 = <Tag children={<div></div>} />;
@@ -45,7 +45,7 @@ const k3 = <Tag children={<div></div>} />;
 ><Tag children={<div></div>} /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >children : JSX.Element
 >         : ^^^^^^^^^^^
 ><div></div> : JSX.Element
@@ -61,7 +61,7 @@ const k4 = <Tag key="1"><div></div></Tag>;
 ><Tag key="1"><div></div></Tag> : JSX.Element
 >                               : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 ><div></div> : JSX.Element
@@ -71,7 +71,7 @@ const k4 = <Tag key="1"><div></div></Tag>;
 >div : any
 >    : ^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 
 const k5 = <Tag key="1"><div></div><div></div></Tag>;
 >k5 : JSX.Element
@@ -79,7 +79,7 @@ const k5 = <Tag key="1"><div></div><div></div></Tag>;
 ><Tag key="1"><div></div><div></div></Tag> : JSX.Element
 >                                          : ^^^^^^^^^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 ><div></div> : JSX.Element
@@ -95,5 +95,5 @@ const k5 = <Tag key="1"><div></div><div></div></Tag>;
 >div : any
 >    : ^^^
 >Tag : (x: {}) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^  ^^^^^^^^^^^^^^^^
 

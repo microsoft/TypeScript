@@ -13,7 +13,7 @@ var simpleFuncVar = simpleFunc;
 >simpleFuncVar : () => string
 >              : ^^^^^^^^^^^^
 >simpleFunc : () => string
->           : ^^^^^^^^^^^^
+>           :             
 
 function anotherFuncNoReturn() {
 >anotherFuncNoReturn : () => void
@@ -23,7 +23,7 @@ var anotherFuncNoReturnVar = anotherFuncNoReturn;
 >anotherFuncNoReturnVar : () => void
 >                       : ^^^^^^^^^^
 >anotherFuncNoReturn : () => void
->                    : ^^^^^^^^^^
+>                    :           
 
 function withReturn() : string{
 >withReturn : () => string
@@ -37,11 +37,11 @@ var withReturnVar = withReturn;
 >withReturnVar : () => string
 >              : ^^^^^^^^^^^^
 >withReturn : () => string
->           : ^^^^^^^^^^^^
+>           :             
 
 function withParams(a : string) : string{
 >withParams : (a: string) => string
->           : ^^^^      ^^^^^      
+>           : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -51,13 +51,13 @@ function withParams(a : string) : string{
 }
 var withparamsVar = withParams;
 >withparamsVar : (a: string) => string
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^      ^^^^^^^^^^^
 >withParams : (a: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           :                      
 
 function withMultiParams(a : number, b, c: Object) {
 >withMultiParams : (a: number, b: any, c: Object) => number
->                : ^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^
+>                : ^ ^^      ^^ ^^^^^^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : any
@@ -70,25 +70,25 @@ function withMultiParams(a : number, b, c: Object) {
 }
 var withMultiParamsVar = withMultiParams;
 >withMultiParamsVar : (a: number, b: any, c: Object) => number
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^      ^^ ^^^^^^^ ^^      ^^^^^^^^^^^
 >withMultiParams : (a: number, b: any, c: Object) => number
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                :                                         
 
 function withOptionalParams(a?: string) {
 >withOptionalParams : (a?: string) => void
->                   : ^^^^^      ^^^^^^^^^
+>                   : ^ ^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 }
 var withOptionalParamsVar = withOptionalParams;
 >withOptionalParamsVar : (a?: string) => void
->                      : ^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^^      ^^^^^^^^^
 >withOptionalParams : (a?: string) => void
->                   : ^^^^^^^^^^^^^^^^^^^^
+>                   :   ^                 
 
 function withInitializedParams(a: string, b0, b = 30, c = "string value") {
 >withInitializedParams : (a: string, b0: any, b?: number, c?: string) => void
->                      : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^      ^^  ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b0 : any
@@ -103,13 +103,13 @@ function withInitializedParams(a: string, b0, b = 30, c = "string value") {
 }
 var withInitializedParamsVar = withInitializedParams;
 >withInitializedParamsVar : (a: string, b0: any, b?: number, c?: string) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^      ^^  ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >withInitializedParams : (a: string, b0: any, b?: number, c?: string) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      :                       ^           ^                 
 
 function withOptionalInitializedParams(a: string, c: string = "hello string") {
 >withOptionalInitializedParams : (a: string, c?: string) => void
->                              : ^^^^      ^^^^^^      ^^^^^^^^^
+>                              : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >c : string
@@ -119,13 +119,13 @@ function withOptionalInitializedParams(a: string, c: string = "hello string") {
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
 >withOptionalInitializedParamsVar : (a: string, c?: string) => void
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >withOptionalInitializedParams : (a: string, c?: string) => void
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              :              ^                 
 
 function withRestParams(a: string, ... myRestParameter : number[]) {
 >withRestParams : (a: string, ...myRestParameter: number[]) => number[]
->               : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^
+>               : ^ ^^      ^^^^^               ^^        ^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >myRestParameter : number[]
@@ -137,25 +137,25 @@ function withRestParams(a: string, ... myRestParameter : number[]) {
 }
 var withRestParamsVar = withRestParams;
 >withRestParamsVar : (a: string, ...myRestParameter: number[]) => number[]
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^               ^^        ^^^^^^^^^^^^^
 >withRestParams : (a: string, ...myRestParameter: number[]) => number[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :             ^^^                                      
 
 function overload1(n: number) : string;
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
 function overload1(s: string) : string;
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>          : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
 function overload1(ns: any) {
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >ns : any
 
     return ns.toString();
@@ -168,13 +168,13 @@ function overload1(ns: any) {
 }
 var withOverloadSignature = overload1;
 >withOverloadSignature : { (n: number): string; (s: string): string; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          :                                              
 
 function f(n: () => void) { }
 >f : (n: () => void) => void
->  : ^^^^          ^^^^^^^^^
+>  : ^ ^^          ^^^^^^^^^
 >n : () => void
 >  : ^^^^^^    
 
@@ -184,7 +184,7 @@ module m2 {
 
     export function foo(n: () => void ) {
 >foo : (n: () => void) => void
->    : ^^^^          ^^^^^^^^^
+>    : ^ ^^          ^^^^^^^^^
 >n : () => void
 >  : ^^^^^^    
     }
@@ -195,11 +195,11 @@ m2.foo(() =>  {
 >m2.foo(() =>  {    var b = 30;    return b;}) : void
 >                                              : ^^^^
 >m2.foo : (n: () => void) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^          ^^^^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >foo : (n: () => void) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^          ^^^^^^^^^
 >() =>  {    var b = 30;    return b;} : () => number
 >                                      : ^^^^^^^^^^^^
 
@@ -218,19 +218,19 @@ m2.foo(() =>  {
 
 declare function fooAmbient(n: number): string;
 >fooAmbient : (n: number) => string
->           : ^^^^      ^^^^^      
+>           : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
 declare function overloadAmbient(n: number): string;
 >overloadAmbient : { (n: number): string; (s: string): string; }
->                : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
 declare function overloadAmbient(s: string): string;
 >overloadAmbient : { (n: number): string; (s: string): string; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
@@ -238,7 +238,7 @@ var f2 = () => {
 >f2 : () => string
 >   : ^^^^^^^^^^^^
 >() => {    return "string";} : () => string
->                             : ^^^^^^^^^^^^
+>                             :             
 
     return "string";
 >"string" : "string"

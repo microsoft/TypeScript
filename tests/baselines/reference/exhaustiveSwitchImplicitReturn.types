@@ -3,7 +3,7 @@
 === exhaustiveSwitchImplicitReturn.ts ===
 function foo1(bar: "a"): number {
 >foo1 : (bar: "a") => number
->     : ^^^^^^   ^^^^^      
+>     : ^   ^^   ^^^^^      
 >bar : "a"
 >    : ^^^
 
@@ -23,7 +23,7 @@ function foo1(bar: "a"): number {
 
 function foo2(bar: "a"): number {
 >foo2 : (bar: "a") => number
->     : ^^^^^^   ^^^^^      
+>     : ^   ^^   ^^^^^      
 >bar : "a"
 >    : ^^^
 
@@ -47,7 +47,7 @@ function foo2(bar: "a"): number {
 
 function foo3(bar: "a"): number {
 >foo3 : (bar: "a") => number
->     : ^^^^^^   ^^^^^      
+>     : ^   ^^   ^^^^^      
 >bar : "a"
 >    : ^^^
 
@@ -71,7 +71,7 @@ function foo3(bar: "a"): number {
 
 function foo4(bar: "a"): number {
 >foo4 : (bar: "a") => number
->     : ^^^^^^   ^^^^^      
+>     : ^   ^^   ^^^^^      
 >bar : "a"
 >    : ^^^
 
@@ -92,14 +92,14 @@ function foo4(bar: "a"): number {
 >foo3(bar) : number
 >          : ^^^^^^
 >foo3 : (bar: "a") => number
->     : ^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^   ^^^^^^^^^^^
 >bar : never
 >    : ^^^^^
 }
 
 function foo5(bar: "a" | "b"): number {
 >foo5 : (bar: "a" | "b") => number
->     : ^^^^^^         ^^^^^      
+>     : ^   ^^         ^^^^^      
 >bar : "a" | "b"
 >    : ^^^^^^^^^
 
@@ -119,7 +119,7 @@ function foo5(bar: "a" | "b"): number {
 
 function foo6(bar: "a", a: boolean, b: boolean): number {
 >foo6 : (bar: "a", a: boolean, b: boolean) => number
->     : ^^^^^^   ^^^^^       ^^^^^       ^^^^^      
+>     : ^   ^^   ^^ ^^       ^^ ^^       ^^^^^      
 >bar : "a"
 >    : ^^^
 >a : boolean

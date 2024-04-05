@@ -5,5 +5,5 @@ var v = function * () { }
 >v : () => Generator<never, void, unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function * () { } : () => Generator<never, void, unknown>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  :                                      
 

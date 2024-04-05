@@ -15,17 +15,17 @@ export var a = function () {
 >a : () => void
 >  : ^^^^^^^^^^
 >function () {    //var x = mod.id; // TODO needed hack that mod is loaded    b.b(mod);} : () => void
->                                                                                        : ^^^^^^^^^^
+>                                                                                        :           
 
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 >b.b(mod) : any
 >b.b : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >b : typeof b
 >  : ^^^^^^^^
 >b : (a: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^
 >mod : typeof mod
 >    : ^^^^^^^^^^
 }
@@ -38,6 +38,6 @@ export var id: number;
 === aliasUsedAsNameValue_1.ts ===
 export function b(a: any): any { return null; }
 >b : (a: any) => any
->  : ^^^^   ^^^^^   
+>  : ^ ^^   ^^^^^   
 >a : any
 

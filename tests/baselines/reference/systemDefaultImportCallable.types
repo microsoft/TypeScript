@@ -7,11 +7,11 @@ declare module core {
 
     var String: {
 >String : { repeat(text: string, count: number): string; }
->       : ^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^      ^^^
+>       : ^^^^^^^^^    ^^      ^^     ^^      ^^^      ^^^
 
         repeat(text: string, count: number): string;
 >repeat : (text: string, count: number) => string
->       : ^^^^^^^      ^^^^^^^^^      ^^^^^      
+>       : ^    ^^      ^^     ^^      ^^^^^      
 >text : string
 >     : ^^^^^^
 >count : number
@@ -25,26 +25,26 @@ declare module "core-js/fn/string/repeat" {
 
     var repeat: typeof core.String.repeat;
 >repeat : (text: string, count: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 >core.String.repeat : (text: string, count: number) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 >core.String : { repeat(text: string, count: number): string; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^    ^^      ^^     ^^      ^^^^^^^^^^^^
 >core : typeof core
 >     : ^^^^^^^^^^^
 >String : { repeat(text: string, count: number): string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^    ^^      ^^     ^^      ^^^^^^^^^^^^
 >repeat : (text: string, count: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 
     export default repeat;
 >repeat : (text: string, count: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 }
 === greeter.ts ===
 import repeat from "core-js/fn/string/repeat";
 >repeat : (text: string, count: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 
 const _: string = repeat(new Date().toUTCString() + " ", 2);
 >_ : string
@@ -52,7 +52,7 @@ const _: string = repeat(new Date().toUTCString() + " ", 2);
 >repeat(new Date().toUTCString() + " ", 2) : string
 >                                          : ^^^^^^
 >repeat : (text: string, count: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 >new Date().toUTCString() + " " : string
 >                               : ^^^^^^
 >new Date().toUTCString() : string

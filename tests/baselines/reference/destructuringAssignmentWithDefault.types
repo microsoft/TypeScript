@@ -33,7 +33,7 @@ let x = 0;
 
 function f1(options?: { color?: string, width?: number }) {
 >f1 : (options?: { color?: string; width?: number; }) => void
->   : ^^^^^^^^^^^                                   ^^^^^^^^^
+>   : ^       ^^^                                   ^^^^^^^^^
 >options : { color?: string; width?: number; } | undefined
 >        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >color : string | undefined
@@ -106,7 +106,7 @@ function f1(options?: { color?: string, width?: number }) {
 
 function f2(options?: [string?, number?]) {
 >f2 : (options?: [string?, number?]) => void
->   : ^^^^^^^^^^^                  ^^^^^^^^^
+>   : ^       ^^^                  ^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -157,7 +157,7 @@ function f2(options?: [string?, number?]) {
 
 function f3(options?: { color: string, width: number }) {
 >f3 : (options?: { color: string; width: number; }) => void
->   : ^^^^^^^^^^^                                 ^^^^^^^^^
+>   : ^       ^^^                                 ^^^^^^^^^
 >options : { color: string; width: number; } | undefined
 >        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >color : string
@@ -230,7 +230,7 @@ function f3(options?: { color: string, width: number }) {
 
 function f4(options?: [string, number]) {
 >f4 : (options?: [string, number]) => void
->   : ^^^^^^^^^^^                ^^^^^^^^^
+>   : ^       ^^^                ^^^^^^^^^
 >options : [string, number] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

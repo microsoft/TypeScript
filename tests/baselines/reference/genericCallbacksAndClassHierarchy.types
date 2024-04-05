@@ -8,9 +8,9 @@ module M {
     export interface I<T> {
         subscribe(callback: (newValue: T) => void ): any;
 >subscribe : (callback: (newValue: T) => void) => any
->          : ^^^^^^^^^^^                     ^^^^^   
+>          : ^        ^^                     ^^^^^   
 >callback : (newValue: T) => void
->         : ^^^^^^^^^^^ ^^^^^    
+>         : ^        ^^ ^^^^^    
 >newValue : T
 >         : ^
     }
@@ -41,15 +41,15 @@ module M {
 
         _subscribe(viewModel: B<T>): void {
 >_subscribe : (viewModel: B<T>) => void
->           : ^^^^^^^^^^^^    ^^^^^    
+>           : ^         ^^    ^^^^^    
 >viewModel : B<T>
 >          : ^^^^
 
             var f = (newValue: A<T>) => { };
 >f : (newValue: A<T>) => void
->  : ^^^^^^^^^^^    ^^^^^^^^^
+>  : ^        ^^    ^^^^^^^^^
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
->                        : ^^^^^^^^^^^    ^^^^^^^^^
+>                        :                         
 >newValue : A<T>
 >         : ^^^^
 
@@ -67,24 +67,24 @@ module M {
             v.subscribe(f);
 >v.subscribe(f) : any
 >v.subscribe : (callback: (newValue: A<T>) => void) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >v : I<A<T>>
 >  : ^^^^^^^
 >subscribe : (callback: (newValue: A<T>) => void) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >f : (newValue: A<T>) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^        ^^    ^^^^^^^^^
 
             v.subscribe((newValue: A<T>) => { });
 >v.subscribe((newValue: A<T>) => { }) : any
 >v.subscribe : (callback: (newValue: A<T>) => void) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >v : I<A<T>>
 >  : ^^^^^^^
 >subscribe : (callback: (newValue: A<T>) => void) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
->                        : ^^^^^^^^^^^    ^^^^^^^^^
+>                        : ^        ^^    ^^^^^^^^^
 >newValue : A<T>
 >         : ^^^^
         }

@@ -116,8 +116,8 @@ declare const q: s;
 q["asd"].a.substr(1);
 >q["asd"].a.substr(1) : string
 >                     : ^^^^^^
->q["asd"].a.substr : (from: number, length?: number | undefined) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>q["asd"].a.substr : (from: number, length?: number) => string
+>                  : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >q["asd"].a : string
 >           : ^^^^^^
 >q["asd"] : { a: string; }
@@ -128,8 +128,8 @@ q["asd"].a.substr(1);
 >      : ^^^^^
 >a : string
 >  : ^^^^^^
->substr : (from: number, length?: number | undefined) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>substr : (from: number, length?: number) => string
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 

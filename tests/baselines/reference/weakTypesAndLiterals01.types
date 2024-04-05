@@ -35,9 +35,9 @@ declare let aOrB: "A" | "B";
 
 const f = (arg: LiteralsOrWeakTypes) => {
 >f : (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B"
->  : ^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg: LiteralsOrWeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B"
->                                                                                                                 : ^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                 :                                                    
 >arg : LiteralsOrWeakTypes
 >    : ^^^^^^^^^^^^^^^^^^^
 
@@ -62,9 +62,9 @@ const f = (arg: LiteralsOrWeakTypes) => {
 
 const g = (arg: WeakTypes) => {
 >g : (arg: WeakTypes) => WeakTypes
->  : ^^^^^^         ^^^^^^^^^^^^^^
+>  : ^   ^^         ^^^^^^^^^^^^^^
 >(arg: WeakTypes) => {    if (arg === "A") {        return arg;    }    else {        return arg;    }} : (arg: WeakTypes) => WeakTypes
->                                                                                                       : ^^^^^^         ^^^^^^^^^^^^^^
+>                                                                                                       :                              
 >arg : WeakTypes
 >    : ^^^^^^^^^
 
@@ -89,9 +89,9 @@ const g = (arg: WeakTypes) => {
 
 const h = (arg: LiteralsOrWeakTypes) => {
 >h : (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes
->  : ^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg: LiteralsOrWeakTypes) => {    if (arg === aOrB) {        return arg;    }    else {        return arg;    }} : (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes
->                                                                                                                  : ^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                  :                                                  
 >arg : LiteralsOrWeakTypes
 >    : ^^^^^^^^^^^^^^^^^^^
 
@@ -116,9 +116,9 @@ const h = (arg: LiteralsOrWeakTypes) => {
 
 const i = (arg: WeakTypes) => {
 >i : (arg: WeakTypes) => WeakTypes
->  : ^^^^^^         ^^^^^^^^^^^^^^
+>  : ^   ^^         ^^^^^^^^^^^^^^
 >(arg: WeakTypes) => {    if (arg === aOrB) {        return arg;    }    else {        return arg;    }} : (arg: WeakTypes) => WeakTypes
->                                                                                                        : ^^^^^^         ^^^^^^^^^^^^^^
+>                                                                                                        :                              
 >arg : WeakTypes
 >    : ^^^^^^^^^
 

@@ -7,10 +7,10 @@ class Foo {
 
     #p1: (v: any) => asserts v is string = (v) => {
 >#p1 : (v: any) => asserts v is string
->    : ^^^^   ^^^^^                   
+>    : ^ ^^   ^^^^^                   
 >v : any
 >(v) => {        if (typeof v !== "string") {            throw new Error();        }    } : (v: any) => void
->                                                                                         : ^^^^^^^^^^^^^^^^
+>                                                                                         : ^ ^^^^^^^^^^^^^^
 >v : any
 
         if (typeof v !== "string") {
@@ -31,7 +31,7 @@ class Foo {
     }
     m1(v: unknown) {
 >m1 : (v: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >v : unknown
 >  : ^^^^^^^
 
@@ -39,7 +39,7 @@ class Foo {
 >this.#p1(v) : void
 >            : ^^^^
 >this.#p1 : (v: any) => asserts v is string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >v : unknown
@@ -57,7 +57,7 @@ class Foo2 {
 
     #p1(v: any): asserts v is string {
 >#p1 : (v: any) => asserts v is string
->    : ^^^^   ^^^^^                   
+>    : ^ ^^   ^^^^^                   
 >v : any
 
         if (typeof v !== "string") {
@@ -78,7 +78,7 @@ class Foo2 {
     }
     m1(v: unknown) {
 >m1 : (v: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >v : unknown
 >  : ^^^^^^^
 
@@ -86,7 +86,7 @@ class Foo2 {
 >this.#p1(v) : void
 >            : ^^^^
 >this.#p1 : (v: any) => asserts v is string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >v : unknown

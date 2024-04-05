@@ -19,7 +19,7 @@ class X {
 >okBeforeMethod : () => void
 >               : ^^^^^^^^^^
 >X.method : () => void
->         : ^^^^^^^^^^
+>         :           
 >X : typeof X
 >  : ^^^^^^^^
 >method : () => void
@@ -39,7 +39,7 @@ class X {
 >illegal3 : () => void
 >         : ^^^^^^^^^^
 >After.method : () => void
->             : ^^^^^^^^^^
+>             :           
 >After : typeof After
 >      : ^^^^^^^^^^^^
 >method : () => void

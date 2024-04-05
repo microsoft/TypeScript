@@ -3,19 +3,19 @@
 === typeArgumentsShouldDisallowNonGenericOverloads.ts ===
 function foo(a: string): string;
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 function foo<T>(a: T): number;
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^      ^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^^      ^^^
 >a : T
 >  : ^
 
 function foo(a: any): any {
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -30,7 +30,7 @@ var x: number = foo<string>("hi"); // return type should be 'number'
 >foo<string>("hi") : number
 >                  : ^^^^^^
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 
@@ -40,7 +40,7 @@ var y: string = foo("hi"); // return type should be 'string'
 >foo("hi") : string
 >          : ^^^^^^
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 
@@ -50,7 +50,7 @@ var w: string = foo<string>("hi"); // should error
 >foo<string>("hi") : number
 >                  : ^^^^^^
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 
@@ -60,7 +60,7 @@ var z: number = foo("hi"); // should error
 >foo("hi") : string
 >          : ^^^^^^
 >foo : { (a: string): string; <T>(a: T): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 

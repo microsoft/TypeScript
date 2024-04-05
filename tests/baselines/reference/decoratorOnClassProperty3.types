@@ -3,7 +3,7 @@
 === decoratorOnClassProperty3.ts ===
 declare function dec(target: any, propertyKey: string): void;
 >dec : (target: any, propertyKey: string) => void
->    : ^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^    
+>    : ^      ^^   ^^           ^^      ^^^^^    
 >target : any
 >       : ^^^
 >propertyKey : string
@@ -17,7 +17,7 @@ class C {
 >public : any
 >       : ^^^
 >dec : (target: any, propertyKey: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^   ^^           ^^      ^^^^^^^^^
 >prop : any
 >     : ^^^
 }

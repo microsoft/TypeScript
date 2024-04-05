@@ -19,7 +19,7 @@ type Shape =
 
 function wat(shape: Shape) {
 >wat : (shape: Shape) => number | undefined
->    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 

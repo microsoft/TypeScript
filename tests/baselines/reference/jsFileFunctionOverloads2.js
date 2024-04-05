@@ -126,7 +126,7 @@ function flatMap(array, iterable) {
  * @param {unknown} x
  * @returns {string}
  */
-declare function getTypeName(x: number): 'number';
+declare function getTypeName(x: number): "number";
 /**
  * @overload
  * @param {number} x
@@ -143,7 +143,7 @@ declare function getTypeName(x: number): 'number';
  * @param {unknown} x
  * @returns {string}
  */
-declare function getTypeName(x: string): 'string';
+declare function getTypeName(x: string): "string";
 /**
  * @overload
  * @param {number} x
@@ -160,7 +160,7 @@ declare function getTypeName(x: string): 'string';
  * @param {unknown} x
  * @returns {string}
  */
-declare function getTypeName(x: boolean): 'boolean';
+declare function getTypeName(x: boolean): "boolean";
 /**
  * @template T
  * @template U

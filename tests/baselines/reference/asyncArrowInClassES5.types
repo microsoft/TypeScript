@@ -10,9 +10,9 @@ class Test {
 
     static member = async (x: string) => { };
 >member : (x: string) => Promise<void>
->       : ^^^^      ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >async (x: string) => { } : (x: string) => Promise<void>
->                         : ^^^^      ^^^^^^^^^^^^^^^^^^
+>                         :                             
 >x : string
 >  : ^^^^^^
 }

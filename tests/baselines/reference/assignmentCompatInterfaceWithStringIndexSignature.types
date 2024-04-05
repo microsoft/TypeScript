@@ -24,7 +24,7 @@ class Foo {
 
 function Biz(map: IHandlerMap) { }
 >Biz : (map: IHandlerMap) => void
->    : ^^^^^^           ^^^^^^^^^
+>    : ^   ^^           ^^^^^^^^^
 >map : IHandlerMap
 >    : ^^^^^^^^^^^
 
@@ -32,7 +32,7 @@ Biz(new Foo());
 >Biz(new Foo()) : void
 >               : ^^^^
 >Biz : (map: IHandlerMap) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^           ^^^^^^^^^
 >new Foo() : Foo
 >          : ^^^
 >Foo : typeof Foo

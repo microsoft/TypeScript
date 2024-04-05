@@ -7,7 +7,7 @@ interface Constructor<C> { new (...args: any[]): C; }
 
 function mixin<B extends Constructor<{}>>(Base: B) {
 >mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^^^^^^^^^^
 >Base : B
 >     : ^
 
@@ -25,7 +25,7 @@ function mixin<B extends Constructor<{}>>(Base: B) {
     }
     return PrivateMixed;
 >PrivateMixed : { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^^^^^^^^^^
 }
 
 export class Unmixed {
@@ -41,17 +41,17 @@ export class Unmixed {
 
 export const Mixed = mixin(Unmixed);
 >Mixed : { new (...args: any[]): mixin<typeof Unmixed>.PrivateMixed; prototype: mixin<any>.PrivateMixed; } & typeof Unmixed
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^    ^^     ^^^      ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixin(Unmixed) : { new (...args: any[]): mixin<typeof Unmixed>.PrivateMixed; prototype: mixin<any>.PrivateMixed; } & typeof Unmixed
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :        ^^^                    ^^^^^^^^^^^^^^                                 ^^^                 ^^^^^^^^^^^^^^^^^
 >mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^^^^^^^^^^
 >Unmixed : typeof Unmixed
 >        : ^^^^^^^^^^^^^^
 
 function Filter<C extends Constructor<{}>>(ctor: C) {
 >Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^
 >ctor : C
 >     : ^
 
@@ -63,7 +63,7 @@ function Filter<C extends Constructor<{}>>(ctor: C) {
 
         abstract match(path: string): boolean;
 >match : (path: string) => boolean
->      : ^^^^^^^      ^^^^^       
+>      : ^    ^^      ^^^^^       
 >path : string
 >     : ^^^^^^
 
@@ -76,22 +76,22 @@ function Filter<C extends Constructor<{}>>(ctor: C) {
     }
     return FilterMixin;
 >FilterMixin : ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^
 }
 
 export class FilteredThing extends Filter(Unmixed) {
 >FilteredThing : FilteredThing
 >              : ^^^^^^^^^^^^^
 >Filter(Unmixed) : Filter<typeof Unmixed>.FilterMixin & Unmixed
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                :        ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^
 >Unmixed : typeof Unmixed
 >        : ^^^^^^^^^^^^^^
 
     match(path: string) {
 >match : (path: string) => boolean
->      : ^^^^^^^      ^^^^^^^^^^^^
+>      : ^    ^^      ^^^^^^^^^^^^
 >path : string
 >     : ^^^^^^
 

@@ -6,9 +6,9 @@ interface I {
 >[Symbol.keyFor] : string
 >                : ^^^^^^
 >Symbol.keyFor : (sym: symbol) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keyFor : (sym: symbol) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 }

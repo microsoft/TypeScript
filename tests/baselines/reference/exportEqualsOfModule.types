@@ -52,6 +52,6 @@ declare module 'popsicle-proxy-agent' {
 
     export = proxy;
 >proxy : () => (request: Request) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^       ^^       ^^^^^^^^
 }
 

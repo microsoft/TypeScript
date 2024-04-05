@@ -3,14 +3,14 @@
 === emitArrowFunctionWhenUsingArguments06_ES6.ts ===
 function f(arguments) {
 >f : (arguments: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^         ^^^^^^^^^^^^^^
 >arguments : any
 
     var a = () => () => arguments;
 >a : () => () => any
 >  : ^^^^^^^^^^^^^^^
 >() => () => arguments : () => () => any
->                      : ^^^^^^^^^^^^^^^
+>                      :                
 >() => arguments : () => any
 >                : ^^^^^^^^^
 >arguments : any

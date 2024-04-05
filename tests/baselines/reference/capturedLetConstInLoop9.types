@@ -111,7 +111,7 @@ for (let x = 0; x < 1; ++x) {
 
 declare function use(a: any);
 >use : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 function foo() {
@@ -289,28 +289,28 @@ function foo() {
     use(x);
 >use(x) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     use(z);
 >use(z) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >z : number
 >  : ^^^^^^
 
     use(x1);
 >use(x1) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x1 : number
 >   : ^^^^^^
 
     use(z1);
 >use(z1) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >z1 : number
 >   : ^^^^^^
 }
@@ -425,7 +425,7 @@ class C {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => this.N * i : () => number
->                 : ^^^^^^^^^^^^
+>                 :             
 >this.N * i : number
 >           : ^^^^^^
 >this.N : number

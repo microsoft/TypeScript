@@ -9,7 +9,7 @@ export function foo() {
 /** This is comment for function signature*/
 export function fooWithParameters(/** this is comment about a*/a: string,
 >fooWithParameters : (a: string, b: number) => void
->                  : ^^^^      ^^^^^      ^^^^^^^^^
+>                  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -26,7 +26,7 @@ export function fooWithParameters(/** this is comment about a*/a: string,
 }
 export function fooWithRestParameters(a: string, ...rests: string[]) {
 >fooWithRestParameters : (a: string, ...rests: string[]) => string
->                      : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                      : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -40,30 +40,30 @@ export function fooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
 }
 
 export function fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 export function fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
 export function fooWithOverloads(a: any): any {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
     return a;
@@ -72,13 +72,13 @@ export function fooWithOverloads(a: any): any {
 
 export function fooWithSingleOverload(a: string): string;
 >fooWithSingleOverload : (a: string) => string
->                      : ^^^^      ^^^^^      
+>                      : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
 export function fooWithSingleOverload(a: any) {
 >fooWithSingleOverload : (a: string) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^      ^^^^^^^^^^^
 >a : any
 
     return a;
@@ -87,7 +87,7 @@ export function fooWithSingleOverload(a: any) {
 
 export function fooWithTypePredicate(a: any): a is number {
 >fooWithTypePredicate : (a: any) => a is number
->                     : ^^^^   ^^^^^           
+>                     : ^ ^^   ^^^^^           
 >a : any
 
     return true;
@@ -96,7 +96,7 @@ export function fooWithTypePredicate(a: any): a is number {
 }
 export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
 >fooWithTypePredicateAndMulitpleParams : (a: any, b: any, c: any) => a is number
->                                      : ^^^^   ^^^^^   ^^^^^   ^^^^^           
+>                                      : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^           
 >a : any
 >b : any
 >c : any
@@ -107,7 +107,7 @@ export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a
 }
 export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
 >fooWithTypeTypePredicateAndGeneric : <T>(a: any) => a is T
->                                   : ^ ^^^^^   ^^^^^      
+>                                   : ^ ^^ ^^   ^^^^^      
 >a : any
 
     return true;
@@ -116,7 +116,7 @@ export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
 }
 export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is number {
 >fooWithTypeTypePredicateAndRestParam : (a: any, ...rest: any[]) => a is number
->                                     : ^^^^   ^^^^^^^^^^^^^^^^^^^^^           
+>                                     : ^ ^^   ^^^^^    ^^^^^^^^^^^^           
 >a : any
 >rest : any[]
 >     : ^^^^^
@@ -134,7 +134,7 @@ function nonExportedFoo() {
 /** This is comment for function signature*/
 function nonExportedFooWithParameters(/** this is comment about a*/a: string,
 >nonExportedFooWithParameters : (a: string, b: number) => void
->                             : ^^^^      ^^^^^      ^^^^^^^^^
+>                             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -151,7 +151,7 @@ function nonExportedFooWithParameters(/** this is comment about a*/a: string,
 }
 function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 >nonExportedFooWithRestParameters : (a: string, ...rests: string[]) => string
->                                 : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                                 : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -165,30 +165,30 @@ function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
 }
 
 function nonExportedFooWithOverloads(a: string): string;
 >nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
->                            : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 function nonExportedFooWithOverloads(a: number): number;
 >nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
 function nonExportedFooWithOverloads(a: any): any {
 >nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
     return a;
@@ -204,7 +204,7 @@ function globalfoo() {
 /** This is comment for function signature*/
 function globalfooWithParameters(/** this is comment about a*/a: string,
 >globalfooWithParameters : (a: string, b: number) => void
->                        : ^^^^      ^^^^^      ^^^^^^^^^
+>                        : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -221,7 +221,7 @@ function globalfooWithParameters(/** this is comment about a*/a: string,
 }
 function globalfooWithRestParameters(a: string, ...rests: string[]) {
 >globalfooWithRestParameters : (a: string, ...rests: string[]) => string
->                            : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                            : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -235,29 +235,29 @@ function globalfooWithRestParameters(a: string, ...rests: string[]) {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
 }
 function globalfooWithOverloads(a: string): string;
 >globalfooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 function globalfooWithOverloads(a: number): number;
 >globalfooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
 function globalfooWithOverloads(a: any): any {
 >globalfooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
     return a;

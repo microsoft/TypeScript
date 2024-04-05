@@ -7,7 +7,7 @@ class C<T> {
 
     static foo(x: number) { }
 >foo : (x: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -22,7 +22,7 @@ module M {
 
     export function f(x: typeof C) {   
 >f : (x: typeof C) => C<typeof C>
->  : ^^^^        ^^^^^^^^^^^^^^^^
+>  : ^ ^^        ^^^^^^^^^^^^^^^^
 >x : typeof C
 >  : ^^^^^^^^
 >C : typeof C

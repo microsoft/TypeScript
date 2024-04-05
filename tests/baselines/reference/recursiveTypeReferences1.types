@@ -157,7 +157,7 @@ type T3 = Box<Box<Box<T3>>>;
 
 function f1(t1: T1, t2: T2, t3: T3) {
 >f1 : (t1: T1, t2: T2, t3: T3) => void
->   : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
+>   : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >t1 : T1
 >   : ^^
 >t2 : T2
@@ -296,19 +296,19 @@ type RecArray<T> = Array<T | RecArray<T>>;
 
 declare function flat<T>(a: RecArray<T>): Array<T>;
 >flat : <T>(a: RecArray<T>) => Array<T>
->     : ^ ^^^^^           ^^^^^        
+>     : ^ ^^ ^^           ^^^^^        
 >a : RecArray<T>
 >  : ^^^^^^^^^^^
 
 declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
 >flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
->      : ^ ^^^^^                   ^^^^^        
+>      : ^ ^^ ^^                   ^^^^^        
 >a : (T | T[])[]
 >  : ^^^^^^^^^^^
 
 declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
 >flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
->      : ^ ^^^^^                              ^^^^^        
+>      : ^ ^^ ^^                              ^^^^^        
 >a : (T | (T | T[])[])[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -316,7 +316,7 @@ flat([1, [2, [3]]]);  // number[]
 >flat([1, [2, [3]]]) : number[]
 >                    : ^^^^^^^^
 >flat : <T>(a: RecArray<T>) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^
 >[1, [2, [3]]] : (number | (number | number[])[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -334,7 +334,7 @@ flat([[[0]]]);  // number[]
 >flat([[[0]]]) : number[]
 >              : ^^^^^^^^
 >flat : <T>(a: RecArray<T>) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^
 >[[[0]]] : number[][][]
 >        : ^^^^^^^^^^^^
 >[[0]] : number[][]
@@ -348,7 +348,7 @@ flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
 >flat([[[[[[[[[[[4]]]]]]]]]]]) : number[]
 >                              : ^^^^^^^^
 >flat : <T>(a: RecArray<T>) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^
 >[[[[[[[[[[[4]]]]]]]]]]] : number[][][][][][][][][][][]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[[[[[[[[[[4]]]]]]]]]] : number[][][][][][][][][][]
@@ -378,7 +378,7 @@ flat([1, 'a', [2]]);  // (string | number)[]
 >flat([1, 'a', [2]]) : (string | number)[]
 >                    : ^^^^^^^^^^^^^^^^^^^
 >flat : <T>(a: RecArray<T>) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^
 >[1, 'a', [2]] : (string | number | number[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -394,7 +394,7 @@ flat([1, [2, 'a']]);  // (string | number)[]
 >flat([1, [2, 'a']]) : (string | number)[]
 >                    : ^^^^^^^^^^^^^^^^^^^
 >flat : <T>(a: RecArray<T>) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^
 >[1, [2, 'a']] : (number | (string | number)[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -410,7 +410,7 @@ flat([1, ['a']]);  // Error
 >flat([1, ['a']]) : string[]
 >                 : ^^^^^^^^
 >flat : <T>(a: RecArray<T>) => T[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^
 >[1, ['a']] : (number | string[])[]
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -423,8 +423,8 @@ flat([1, ['a']]);  // Error
 flat1([1, [2, [3]]]);  // (number | number[])[]
 >flat1([1, [2, [3]]]) : (number | number[])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^
->flat1 : <T>(a: (T | T[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => T[]
+>      : ^ ^^ ^^                   ^^^^^^^^
 >[1, [2, [3]]] : (number | (number | number[])[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -441,8 +441,8 @@ flat1([1, [2, [3]]]);  // (number | number[])[]
 flat1([[[0]]]);  // number[][]
 >flat1([[[0]]]) : number[][]
 >               : ^^^^^^^^^^
->flat1 : <T>(a: (T | T[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => T[]
+>      : ^ ^^ ^^                   ^^^^^^^^
 >[[[0]]] : number[][][]
 >        : ^^^^^^^^^^^^
 >[[0]] : number[][]
@@ -455,8 +455,8 @@ flat1([[[0]]]);  // number[][]
 flat1([1, 'a', [2]]);  // (string | number)[]
 >flat1([1, 'a', [2]]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat1 : <T>(a: (T | T[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => T[]
+>      : ^ ^^ ^^                   ^^^^^^^^
 >[1, 'a', [2]] : (string | number | number[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -471,8 +471,8 @@ flat1([1, 'a', [2]]);  // (string | number)[]
 flat1([1, [2, 'a']]);  // (string | number)[]
 >flat1([1, [2, 'a']]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat1 : <T>(a: (T | T[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => T[]
+>      : ^ ^^ ^^                   ^^^^^^^^
 >[1, [2, 'a']] : (number | (string | number)[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -487,8 +487,8 @@ flat1([1, [2, 'a']]);  // (string | number)[]
 flat1([1, ['a']]);  // Error
 >flat1([1, ['a']]) : string[]
 >                  : ^^^^^^^^
->flat1 : <T>(a: (T | T[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => T[]
+>      : ^ ^^ ^^                   ^^^^^^^^
 >[1, ['a']] : (number | string[])[]
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -501,8 +501,8 @@ flat1([1, ['a']]);  // Error
 flat2([1, [2, [3]]]);  // number[]
 >flat2([1, [2, [3]]]) : number[]
 >                     : ^^^^^^^^
->flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
+>      : ^ ^^ ^^                              ^^^^^^^^
 >[1, [2, [3]]] : (number | (number | number[])[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -519,8 +519,8 @@ flat2([1, [2, [3]]]);  // number[]
 flat2([[[0]]]);  // number[]
 >flat2([[[0]]]) : number[]
 >               : ^^^^^^^^
->flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
+>      : ^ ^^ ^^                              ^^^^^^^^
 >[[[0]]] : number[][][]
 >        : ^^^^^^^^^^^^
 >[[0]] : number[][]
@@ -533,8 +533,8 @@ flat2([[[0]]]);  // number[]
 flat2([1, 'a', [2]]);  // (string | number)[]
 >flat2([1, 'a', [2]]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
+>      : ^ ^^ ^^                              ^^^^^^^^
 >[1, 'a', [2]] : (string | number | number[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -549,8 +549,8 @@ flat2([1, 'a', [2]]);  // (string | number)[]
 flat2([1, [2, 'a']]);  // (string | number)[]
 >flat2([1, [2, 'a']]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
+>      : ^ ^^ ^^                              ^^^^^^^^
 >[1, [2, 'a']] : (number | (string | number)[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -565,8 +565,8 @@ flat2([1, [2, 'a']]);  // (string | number)[]
 flat2([1, ['a']]);  // Error
 >flat2([1, ['a']]) : string[]
 >                  : ^^^^^^^^
->flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
+>      : ^ ^^ ^^                              ^^^^^^^^
 >[1, ['a']] : (number | string[])[]
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -612,7 +612,7 @@ type ValueOrArray2<T> = T | ValueOrArray2<T>[];
 
 declare function foo1<T>(a: ValueOrArray1<T>): T;
 >foo1 : <T>(a: ValueOrArray1<T>) => T
->     : ^ ^^^^^                ^^^^^ 
+>     : ^ ^^ ^^                ^^^^^ 
 >a : ValueOrArray1<T>
 >  : ^^^^^^^^^^^^^^^^
 
@@ -626,7 +626,7 @@ let x1 = foo1(ra1);  // Boom!
 >foo1(ra1) : string
 >          : ^^^^^^
 >foo1 : <T>(a: ValueOrArray1<T>) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                ^^^^^^
 >ra1 : ValueOrArray2<string>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -640,7 +640,7 @@ type NumberOrArray2<T> = T | ValueOrArray2<T>[];
 
 declare function foo2<T>(a: ValueOrArray1<T>): T;
 >foo2 : <T>(a: ValueOrArray1<T>) => T
->     : ^ ^^^^^                ^^^^^ 
+>     : ^ ^^ ^^                ^^^^^ 
 >a : ValueOrArray1<T>
 >  : ^^^^^^^^^^^^^^^^
 
@@ -654,7 +654,7 @@ let x2 = foo2(ra2);  // Boom!
 >foo2(ra2) : string
 >          : ^^^^^^
 >foo2 : <T>(a: ValueOrArray1<T>) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                ^^^^^^
 >ra2 : ValueOrArray2<string>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -666,7 +666,7 @@ type Tree = [HTMLHeadingElement, Tree][];
 
 function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse : (node: Tree, index?: number[]) => HTMLUListElement
->      : ^^^^^^^    ^^^^^^^^^^        ^^^^^                
+>      : ^    ^^    ^^     ^^^        ^^^^^                
 >node : Tree
 >     : ^^^^
 >index : number[]
@@ -684,13 +684,13 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  }) : any[]
 >                                                                                                                                                                                                                                                                     : ^^^^^
 >node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                          ^^^^^^^^^^       ^^^   ^^^^^^^^
 >node : Tree
 >     : ^^^^
 >map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                          ^^^^^^^^^^       ^^^   ^^^^^^^^
 >([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : ([el, children]: [HTMLHeadingElement, Tree], i: number) => any
->                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                           : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >el : HTMLHeadingElement
 >   : ^^^^^^^^^^^^^^^^^^
 >children : Tree
@@ -751,12 +751,12 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >             : ^^^^^^
 >idx.join('.') : string
 >              : ^^^^^^
->idx.join : (separator?: string | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>idx.join : (separator?: string) => string
+>         : ^         ^^^      ^^^^^^^^^^^
 >idx : number[]
 >    : ^^^^^^^^
->join : (separator?: string | undefined) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^^^^^^^
 >'.' : "."
 >    : ^^^
 >el.textContent! : string
@@ -784,7 +784,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse(children, idx) : HTMLUListElement
 >                     : ^^^^^^^^^^^^^^^^
 >parse : (node: Tree, index?: number[]) => HTMLUListElement
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^    ^^     ^^^        ^^^^^^^^^^^^^^^^^^^^^
 >children : Tree
 >         : ^^^^
 >idx : number[]
@@ -800,7 +800,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 
 function cons(hs: HTMLHeadingElement[]): Tree {
 >cons : (hs: HTMLHeadingElement[]) => Tree
->     : ^^^^^                    ^^^^^    
+>     : ^  ^^                    ^^^^^    
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 
@@ -808,19 +808,19 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce<Tree>((node, hs) =>      hs.length === 0        ? node        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]])    , []) : Tree
 >                                                                                                                                                                                                                                                                                                                                                                      : ^^^^
 >hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]])    .reduce : { (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[]): HTMLHeadingElement[]; (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[], initialValue: HTMLHeadingElement[]): HTMLHeadingElement[]; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => U, initialValue: U): U; }
->                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                       : ^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >hs    .reduce<HTMLHeadingElement[][]>((hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    }, [[]]) : HTMLHeadingElement[][]
 >                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^
 >hs    .reduce : { (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement): HTMLHeadingElement; (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement, initialValue: HTMLHeadingElement): HTMLHeadingElement; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => U, initialValue: U): U; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 
     .reduce<HTMLHeadingElement[][]>((hss, h) => {
 >reduce : { (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement): HTMLHeadingElement; (callbackfn: (previousValue: HTMLHeadingElement, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => HTMLHeadingElement, initialValue: HTMLHeadingElement): HTMLHeadingElement; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement, currentIndex: number, array: HTMLHeadingElement[]) => U, initialValue: U): U; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(hss, h) => {      const hs = hss.pop()!;      return hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]);    } : (hss: HTMLHeadingElement[][], h: HTMLHeadingElement) => any
->                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hss : HTMLHeadingElement[][]
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >h : HTMLHeadingElement
@@ -860,13 +860,13 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >level(h) : number
 >         : ^^^^^^
 >level : (h: HTMLHeadingElement) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^^^
 >h : HTMLHeadingElement
 >  : ^^^^^^^^^^^^^^^^^^
 >level(hs[0]) : number
 >             : ^^^^^^
 >level : (h: HTMLHeadingElement) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^^^
 >hs[0] : HTMLHeadingElement
 >      : ^^^^^^^^^^^^^^^^^^
 >hs : HTMLHeadingElement[]
@@ -918,9 +918,9 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 
     .reduce<Tree>((node, hs) =>
 >reduce : { (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[]): HTMLHeadingElement[]; (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[], initialValue: HTMLHeadingElement[]): HTMLHeadingElement[]; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => U, initialValue: U): U; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(node, hs) =>      hs.length === 0        ? node        : concat<Tree[number]>(node, [[hs.shift()!, cons(hs)]]) : (node: Tree, hs: HTMLHeadingElement[]) => any
->                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                : ^    ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >node : Tree
 >     : ^^^^
 >hs : HTMLHeadingElement[]
@@ -968,7 +968,7 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >cons(hs) : Tree
 >         : ^^^^
 >cons : (hs: HTMLHeadingElement[]) => Tree
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^                    ^^^^^^^^^
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 
@@ -979,7 +979,7 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 
 function level(h: HTMLHeadingElement): number {
 >level : (h: HTMLHeadingElement) => number
->      : ^^^^                  ^^^^^      
+>      : ^ ^^                  ^^^^^      
 >h : HTMLHeadingElement
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -991,7 +991,7 @@ function level(h: HTMLHeadingElement): number {
 >isFinite(+h.tagName[1]) : boolean
 >                        : ^^^^^^^
 >isFinite : (number: number) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^^^^^^^^^^^
 >+h.tagName[1] : number
 >              : ^^^^^^
 >h.tagName[1] : string

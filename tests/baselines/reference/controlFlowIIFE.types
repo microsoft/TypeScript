@@ -123,9 +123,9 @@ function f3() {
 >(z => x.length + y + z)(y = 1) : number
 >                               : ^^^^^^
 >(z => x.length + y + z) : (z: number) => number
->                        : ^^^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^^^^
 >z => x.length + y + z : (z: number) => number
->                      : ^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^^^^^^^^^^^^^^^^^^
 >z : number
 >  : ^^^^^^
 >x.length + y + z : number
@@ -224,12 +224,12 @@ if (!test) {
     test.slice(1); // No error
 >test.slice(1) : string
 >              : ^^^^^^
->test.slice : (start?: number | undefined, end?: number | undefined) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test.slice : (start?: number, end?: number) => string
+>           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
 >test : string
 >     : ^^^^^^
->slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 

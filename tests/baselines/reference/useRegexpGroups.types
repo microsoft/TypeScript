@@ -13,11 +13,11 @@ let result = re.exec("2015-01-02");
 >re.exec("2015-01-02") : RegExpExecArray
 >                      : ^^^^^^^^^^^^^^^
 >re.exec : (string: string) => RegExpExecArray
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^
 >re : RegExp
 >   : ^^^^^^
 >exec : (string: string) => RegExpExecArray
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^^^^^^^^^
 >"2015-01-02" : "2015-01-02"
 >             : ^^^^^^^^^^^^
 
@@ -114,12 +114,12 @@ let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >                            : ^^^^^^^^^^^^^^^^
 >"foo".match(/(?<bar>foo)/) : RegExpMatchArray
 >                           : ^^^^^^^^^^^^^^^^
->"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray; }
+>            : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray; }
+>      : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^
 >/(?<bar>foo)/ : RegExp
 >              : ^^^^^^
 >groups : { [key: string]: string; }

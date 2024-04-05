@@ -43,15 +43,15 @@ module Errors {
         interface A {
             a2: (x: number) => string[];
 >a2 : (x: number) => string[]
->   : ^^^^      ^^^^^        
+>   : ^ ^^      ^^^^^        
 >x : number
 >  : ^^^^^^
 
             a7: (x: (arg: Base) => Derived) => (r: Base) => Derived2;
 >a7 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
->   : ^^^^                      ^^^^^                     
+>   : ^ ^^                      ^^^^^                     
 >x : (arg: Base) => Derived
->  : ^^^^^^    ^^^^^       
+>  : ^   ^^    ^^^^^       
 >arg : Base
 >    : ^^^^
 >r : Base
@@ -59,13 +59,13 @@ module Errors {
 
             a8: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
 >a8 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->   : ^^^^                      ^^^^^                       ^^^^^                    
+>   : ^ ^^                      ^^ ^^                       ^^^^^                    
 >x : (arg: Base) => Derived
->  : ^^^^^^    ^^^^^       
+>  : ^   ^^    ^^^^^       
 >arg : Base
 >    : ^^^^
 >y : (arg2: Base) => Derived
->  : ^^^^^^^    ^^^^^       
+>  : ^    ^^    ^^^^^       
 >arg2 : Base
 >     : ^^^^
 >r : Base
@@ -73,13 +73,13 @@ module Errors {
 
             a10: (...x: Base[]) => Base;
 >a10 : (...x: Base[]) => Base
->    : ^^^^^^^      ^^^^^    
+>    : ^^^^ ^^      ^^^^^    
 >x : Base[]
 >  : ^^^^^^
 
             a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->    : ^^^^                ^^^^^                             ^^^^^    
+>    : ^ ^^                ^^ ^^                             ^^^^^    
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -93,7 +93,7 @@ module Errors {
 
             a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
->    : ^^^^           ^^^^^               ^^^^^              
+>    : ^ ^^           ^^ ^^               ^^^^^              
 >x : Base[]
 >  : ^^^^^^
 >y : Derived2[]
@@ -101,7 +101,7 @@ module Errors {
 
             a14: {
 >a14 : { (x: number): number[]; (x: string): string[]; }
->    : ^^^^^^      ^^^        ^^^^^^      ^^^        ^^^
+>    : ^^^ ^^      ^^^        ^^^ ^^      ^^^        ^^^
 
                 (x: number): number[];
 >x : number
@@ -114,7 +114,7 @@ module Errors {
             };
             a15: (x: { a: string; b: number }) => number;
 >a15 : (x: { a: string; b: number; }) => number
->    : ^^^^                         ^^^^^      
+>    : ^ ^^                         ^^^^^      
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -124,12 +124,12 @@ module Errors {
 
             a16: {
 >a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
->    : ^^^^^^                                              ^^^        ^^^^^^                                                  ^^^         ^^^
+>    : ^^^ ^^                                              ^^^        ^^^ ^^                                                  ^^^         ^^^
 
                 // type of parameter is overload set which means we can't do inference based on this type
                 (x: {
 >x : { (a: number): number; (a?: number): number; }
->  : ^^^^^^      ^^^      ^^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^^      ^^^      ^^^
 
                     (a: number): number;
 >a : number
@@ -142,7 +142,7 @@ module Errors {
                 }): number[];
                 (x: {
 >x : { (a: boolean): boolean; (a?: boolean): boolean; }
->  : ^^^^^^       ^^^       ^^^^^^^       ^^^       ^^^
+>  : ^^^ ^^       ^^^       ^^^ ^^^       ^^^       ^^^
 
                     (a: boolean): boolean;
 >a : boolean
@@ -156,11 +156,11 @@ module Errors {
             };
             a17: {
 >a17 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
->    : ^^^^^^                                                            ^^^     ^^^^^^                                                             ^^^     ^^^
+>    : ^^^ ^^                                                            ^^^     ^^^ ^^                                                             ^^^     ^^^
 
                 (x: {
 >x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^   ^^^   ^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
 
                     <T extends Derived>(a: T): T;
 >a : T
@@ -173,7 +173,7 @@ module Errors {
                 }): any[];
                 (x: {
 >x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^   ^^^^^^^^^^^^^^^^^^   ^^^   ^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
 
                     <T extends Derived2>(a: T): T;
 >a : T
@@ -190,7 +190,7 @@ module Errors {
         interface I extends A {
             a2: <T, U>(x: T) => U[]; // error, contextual signature instantiation doesn't relate return types so U is {}, not a subtype of string[]
 >a2 : <T, U>(x: T) => U[]
->   : ^ ^^ ^^^^^ ^^^^^   
+>   : ^ ^^ ^^ ^^ ^^^^^   
 >x : T
 >  : ^
         }
@@ -198,7 +198,7 @@ module Errors {
         interface I2<T, U> extends A {
             a2: (x: T) => U[]; // error, no contextual signature instantiation since I2.a2 is not generic
 >a2 : (x: T) => U[]
->   : ^^^^ ^^^^^   
+>   : ^ ^^ ^^^^^   
 >x : T
 >  : ^
         }
@@ -207,9 +207,9 @@ module Errors {
             // valid, no inferences for V so it defaults to Derived2
             a7: <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >a7 : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^             ^^^^^           
+>   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^             ^^^^^           
 >x : (arg: T) => U
->  : ^^^^^^ ^^^^^ 
+>  : ^   ^^ ^^^^^ 
 >arg : T
 >    : ^
 >r : T
@@ -219,13 +219,13 @@ module Errors {
         interface I4 extends A {
             a8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; // error, type mismatch
 >a8 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^^^^                             ^^^^^           
+>   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^           
 >x : (arg: T) => U
->  : ^^^^^^ ^^^^^ 
+>  : ^   ^^ ^^^^^ 
 >arg : T
 >    : ^
 >y : (arg2: { foo: number; }) => U
->  : ^^^^^^^                ^^^^^ 
+>  : ^    ^^                ^^^^^ 
 >arg2 : { foo: number; }
 >     : ^^^^^^^      ^^^
 >foo : number
@@ -237,7 +237,7 @@ module Errors {
         interface I4B extends A {
             a10: <T extends Derived>(...x: T[]) => T; // valid, parameter covariance works even after contextual signature instantiation
 >a10 : <T extends Derived>(...x: T[]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^ 
 >x : T[]
 >  : ^^^
         }
@@ -245,7 +245,7 @@ module Errors {
         interface I4C extends A {
             a11: <T extends Derived>(x: T, y: T) => T; // valid, even though x is a Base, parameter covariance works even after contextual signature instantiation
 >a11 : <T extends Derived>(x: T, y: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -255,7 +255,7 @@ module Errors {
         interface I4E extends A {
             a12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; // valid, no inferences for T, defaults to Array<Derived2>
 >a12 : <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^           ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^^^^ 
 >x : Base[]
 >  : ^^^^^^
 >y : Base[]
@@ -265,7 +265,7 @@ module Errors {
         interface I6 extends A {
             a15: <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
 >a15 : <T>(x: { a: T; b: T; }) => T
->    : ^ ^^^^^               ^^^^^ 
+>    : ^ ^^ ^^               ^^^^^ 
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -277,7 +277,7 @@ module Errors {
         interface I7 extends A {
             a15: <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
 >a15 : <T extends Base>(x: { a: T; b: T; }) => number
->    : ^ ^^^^^^^^^^^^^^^^^^               ^^^^^      
+>    : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^      
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -290,9 +290,9 @@ module Errors {
             // ok, we relate each signature of a16 to b16, and within that, we make inferences from two different signatures in the respective A.a16 signature
             a16: <T>(x: (a: T) => T) => T[];
 >a16 : <T>(x: (a: T) => T) => T[]
->    : ^ ^^^^^           ^^^^^   
+>    : ^ ^^ ^^           ^^^^^   
 >x : (a: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : T
 >  : ^
         }
@@ -300,9 +300,9 @@ module Errors {
         interface I9 extends A {
             a17: <T>(x: (a: T) => T) => any[]; // valid, target is more constrained than source, so it is safe in the traditional constraint-contravariant fashion
 >a17 : <T>(x: (a: T) => T) => any[]
->    : ^ ^^^^^           ^^^^^     
+>    : ^ ^^ ^^           ^^^^^     
 >x : (a: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : T
 >  : ^
         }
@@ -313,7 +313,7 @@ module Errors {
         interface B {
             a2: <T>(x: T) => T[];
 >a2 : <T>(x: T) => T[]
->   : ^ ^^^^^ ^^^^^   
+>   : ^ ^^ ^^ ^^^^^   
 >x : T
 >  : ^
         }
@@ -321,7 +321,7 @@ module Errors {
         interface I6 extends B {
             a2: <T>(x: T) => string[]; // error
 >a2 : <T>(x: T) => string[]
->   : ^ ^^^^^ ^^^^^        
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
 >  : ^
         }
@@ -330,7 +330,7 @@ module Errors {
         interface C {
             a2: <T>(x: T) => string[];
 >a2 : <T>(x: T) => string[]
->   : ^ ^^^^^ ^^^^^        
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
 >  : ^
         }
@@ -338,7 +338,7 @@ module Errors {
         interface I7 extends C {
             a2: <T>(x: T) => T[]; // error
 >a2 : <T>(x: T) => T[]
->   : ^ ^^^^^ ^^^^^   
+>   : ^ ^^ ^^ ^^^^^   
 >x : T
 >  : ^
         }

@@ -10,7 +10,7 @@ type Funcs<A, B extends Record<string, unknown>> = {
   [K in keyof B]: {
     fn: (a: A, b: B) => void;
 >fn : (a: A, b: B) => void
->   : ^^^^ ^^^^^ ^^^^^    
+>   : ^ ^^ ^^ ^^ ^^^^^    
 >a : A
 >  : ^
 >b : B
@@ -25,7 +25,7 @@ type Funcs<A, B extends Record<string, unknown>> = {
 
 declare function foo<A, B extends Record<string, unknown>>(fns: Funcs<A, B>): [A, B]
 >foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^      
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^           ^^^^^      
 >fns : Funcs<A, B>
 >    : ^^^^^^^^^^^
 
@@ -35,21 +35,21 @@ const result = foo({
 >foo({  bar: {    fn: (a: string) => {},    thing: 'asd',  },}) : [string, { bar: string; }]
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^           ^^^^^^^^^^^
 >{  bar: {    fn: (a: string) => {},    thing: 'asd',  },} : { bar: { fn: (a: string) => void; thing: string; }; }
->                                                          : ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   bar: {
 >bar : { fn: (a: string) => void; thing: string; }
->    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    fn: (a: string) => {},    thing: 'asd',  } : { fn: (a: string) => void; thing: string; }
->                                                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^^^^^^                   ^^^^^^^^^^^^^^^^^^
 
     fn: (a: string) => {},
 >fn : (a: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >(a: string) => {} : (a: string) => void
->                  : ^^^^      ^^^^^^^^^
+>                  :                    
 >a : string
 >  : ^^^^^^
 

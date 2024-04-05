@@ -11,11 +11,11 @@
 >Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            })) : {}
 >                                                                                                                                                                                                                                                              : ^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >obj : {}
 >    : ^^
 >"accProperty" : "accProperty"
@@ -23,20 +23,20 @@
 ><PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : PropertyDescriptor
 >                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^
 >({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; }
->                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => number; set: (v: any) => void; }
->                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
                 get: function () {
 >get : () => number
 >    : ^^^^^^^^^^^^
 >function () {                    eval("public = 1;");                    return 11;                } : () => number
->                                                                                                     : ^^^^^^^^^^^^
+>                                                                                                     :             
 
                     eval("public = 1;");
 >eval("public = 1;") : any
 >eval : (x: string) => any
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^
 >"public = 1;" : "public = 1;"
 >              : ^^^^^^^^^^^^^
 
@@ -47,9 +47,9 @@
                 },
                 set: function (v) {
 >set : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >function (v) {                } : (v: any) => void
->                                : ^^^^^^^^^^^^^^^^
+>                                :                 
 >v : any
                 }
             }))

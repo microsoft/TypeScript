@@ -3,13 +3,13 @@
 === functionOverloadCompatibilityWithVoid01.ts ===
 function f(x: string): number;
 >f : (x: string) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 
 function f(x: string): void {
 >f : (x: string) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

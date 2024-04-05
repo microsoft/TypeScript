@@ -14,7 +14,7 @@ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLin
 
 function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
 >Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => any
->     : ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^
+>     : ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                      ^^^^^^^^
 >ListItemVariant : any
 >                : ^^^
 >data : IData<MenuItemVariant>
@@ -41,7 +41,7 @@ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>
     return <ListItem variant={listItemVariant} />;
 ><ListItem variant={listItemVariant} /> : error
 >ListItem : (_data: IListItemData) => null
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^             ^^^^^^^^^
 >variant : ListItemVariant
 >        : ^^^^^^^^^^^^^^^
 >listItemVariant : ListItemVariant
@@ -75,7 +75,7 @@ enum ListItemVariant {
 
 function ListItem(_data: IListItemData) {
 >ListItem : (_data: IListItemData) => null
->         : ^^^^^^^^             ^^^^^^^^^
+>         : ^     ^^             ^^^^^^^^^
 >_data : IListItemData
 >      : ^^^^^^^^^^^^^
 

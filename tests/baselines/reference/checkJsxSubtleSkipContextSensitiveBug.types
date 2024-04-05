@@ -19,7 +19,7 @@ interface AsyncLoaderProps<TResult> {
 
     readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
 >prop2 : (result: Exclude<TResult, ErrorResult>) => any
->      : ^^^^^^^^^                             ^^^^^   
+>      : ^      ^^                             ^^^^^   
 >result : Exclude<TResult, ErrorResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -72,9 +72,9 @@ const loader = <AsyncLoader
 
     prop2={result => result}
 >prop2 : (result: { success: true; }) => { success: true; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^                  
 >result => result : (result: { success: true; }) => { success: true; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^                  
 >result : { success: true; }
 >       : ^^^^^^^^^^^^^^^^^^
 >result : { success: true; }

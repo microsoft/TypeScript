@@ -4,7 +4,7 @@
 interface MyInterface {
     myMethod(...myList: any[]);
 >myMethod : (...myList: any[]) => any
->         : ^^^^^^^^^^^^     ^^^^^^^^
+>         : ^^^^      ^^     ^^^^^^^^
 >myList : any[]
 >       : ^^^^^
 }
@@ -14,7 +14,7 @@ class MyClass implements MyInterface {
 
     myMethod(myList: any[]) { // valid
 >myMethod : (myList: any[]) => void
->         : ^^^^^^^^^     ^^^^^^^^^
+>         : ^      ^^     ^^^^^^^^^
 >myList : any[]
 >       : ^^^^^
     }
@@ -32,11 +32,11 @@ x.myMethod(); // should be valid, but MyClass has no implementation to handle it
 >x.myMethod() : any
 >             : ^^^
 >x.myMethod : (...myList: any[]) => any
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^      ^^     ^^^^^^^^
 >x : MyInterface
 >  : ^^^^^^^^^^^
 >myMethod : (...myList: any[]) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^      ^^     ^^^^^^^^
 
 var y: MyClass = new MyClass();
 >y : MyClass
@@ -50,9 +50,9 @@ y.myMethod(); // error
 >y.myMethod() : void
 >             : ^^^^
 >y.myMethod : (myList: any[]) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^      ^^     ^^^^^^^^^
 >y : MyClass
 >  : ^^^^^^^
 >myMethod : (myList: any[]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^     ^^^^^^^^^
 

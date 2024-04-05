@@ -61,7 +61,7 @@ export type PropsDefinition<T> = RecordPropsDefinition<T>;
 
 declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
 >extend : <T>({ props }: { props: PropsDefinition<T>; }) => PropsDefinition<T>
->       : ^ ^^^^^^^^^^^^^                              ^^^^^                  
+>       : ^ ^^         ^^                              ^^^^^                  
 >props : RecordPropsDefinition<T>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >props : RecordPropsDefinition<T>
@@ -78,22 +78,22 @@ const r = extend({
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extend({    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }}) : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
 >                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->extend : <T>({ props }: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extend : <T>({ props }: { props: PropsDefinition<T>; }) => RecordPropsDefinition<T>
+>       : ^ ^^         ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }} : { props: { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }; }
->                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
     props: {
 >props : { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^
 >{        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    } : { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }
->                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^                      ^^^^^^
 
         notResolved: {
 >notResolved : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
->            : ^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^                ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >{            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        } : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
->                                                                                                                                 : ^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                 : ^^^^^^^^                ^^^^^^^^^^^^^                      ^^^
 
             type: Object as PropType<MyType>,
 >type : PropType<MyType>
@@ -105,9 +105,9 @@ const r = extend({
 
             validator: x => {
 >validator : (x: MyType) => boolean
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^
 >x => {                return x.valid;            } : (x: MyType) => boolean
->                                                   : ^^^^^^^^^^^^^^^^^^^^^^
+>                                                   :                       
 >x : MyType
 >  : ^^^^^^
 
@@ -122,9 +122,9 @@ const r = extend({
         },
         explicit: {
 >explicit : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
->         : ^^^^^^^^                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>         : ^^^^^^^^                ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >{            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        } : { type: PropType<MyType>; validator: (x: MyType) => boolean; }
->                                                                                                                                           : ^^^^^^^^                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>                                                                                                                                           : ^^^^^^^^                ^^^^^^^^^^^^^                      ^^^
 
             type: Object as PropType<MyType>,
 >type : PropType<MyType>
@@ -136,9 +136,9 @@ const r = extend({
 
             validator: (x: MyType) => {
 >validator : (x: MyType) => boolean
->          : ^^^^      ^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^
 >(x: MyType) => {                return x.valid;            } : (x: MyType) => boolean
->                                                             : ^^^^      ^^^^^^^^^^^^
+>                                                             :                       
 >x : MyType
 >  : ^^^^^^
 
@@ -206,7 +206,7 @@ type Box<T> = {
 
     contains?(content: T): boolean;
 >contains : ((content: T) => boolean) | undefined
->         : ^^^^^^^^^^^ ^^^^^       ^^^^^^^^^^^^^
+>         : ^^       ^^ ^^^^^       ^^^^^^^^^^^^^
 >content : T
 >        : ^
 
@@ -221,7 +221,7 @@ type Mapped<T> = {
 
 declare function id<T>(arg: Mapped<T>): Mapped<T>;
 >id : <T>(arg: Mapped<T>) => Mapped<T>
->   : ^ ^^^^^^^         ^^^^^         
+>   : ^ ^^   ^^         ^^^^^         
 >arg : Mapped<T>
 >    : ^^^^^^^^^
 
@@ -233,7 +233,7 @@ const obj1 = id({
 >id({    foo: {        contents: ""    }}) : Mapped<{ foo: string; }>
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >id : <T>(arg: Mapped<T>) => Mapped<T>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^         ^^^^^^^^^^^^^^
 >{    foo: {        contents: ""    }} : { foo: { contents: string; }; }
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -259,15 +259,15 @@ const obj2 = id({
 >id({    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }}) : Mapped<{ foo: string; }>
 >                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >id : <T>(arg: Mapped<T>) => Mapped<T>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^         ^^^^^^^^^^^^^^
 >{    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }} : { foo: { contents: string; contains(k: string): boolean; }; }
->                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo: {
 >foo : { contents: string; contains(k: string): boolean; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >{        contents: "",        contains(k) {            return k.length > 0;        }    } : { contents: string; contains(k: string): boolean; }
->                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
         contents: "",
 >contents : string
@@ -277,7 +277,7 @@ const obj2 = id({
 
         contains(k) {
 >contains : (k: string) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 
@@ -304,19 +304,19 @@ const obj3 = id({
 >id({    foo: {        contains(k) {            return k.length > 0;        }    }}) : Mapped<unknown>
 >                                                                                    : ^^^^^^^^^^^^^^^
 >id : <T>(arg: Mapped<T>) => Mapped<T>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^         ^^^^^^^^^^^^^^
 >{    foo: {        contains(k) {            return k.length > 0;        }    }} : { foo: { contains(k: unknown): boolean; }; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo: {
 >foo : { contains(k: unknown): boolean; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{        contains(k) {            return k.length > 0;        }    } : { contains(k: unknown): boolean; }
->                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                     : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
         contains(k) {
 >contains : (k: unknown) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^
 >k : unknown
 >  : ^^^^^^^
 
@@ -349,7 +349,7 @@ type Mapped1<T> = {
 
 declare function inferMapped1<T>(arg: Mapped1<T>): void;
 >inferMapped1 : <T>(arg: Mapped1<T>) => void
->             : ^ ^^^^^^^          ^^^^^    
+>             : ^ ^^   ^^          ^^^^^    
 >arg : Mapped1<T>
 >    : ^^^^^^^^^^
 
@@ -357,19 +357,19 @@ inferMapped1({
 >inferMapped1({    key: [3, arg => arg.key > 5]}) : void
 >                                                 : ^^^^
 >inferMapped1 : <T>(arg: Mapped1<T>) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^   ^^          ^^^^^^^^^
 >{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: [3, arg => arg.key > 5]
 >key : [number, (arg: { key: number; }) => boolean]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^                                  ^
 >3 : 3
 >  : ^
 >arg => arg.key > 5 : (arg: { key: number; }) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { key: number; }
 >    : ^^^^^^^^^^^^^^^^
 >arg.key > 5 : boolean
@@ -397,7 +397,7 @@ type Mapped2<T> = {
 
 declare function inferMapped2<T>(arg: Mapped2<T>): void;
 >inferMapped2 : <T>(arg: Mapped2<T>) => void
->             : ^ ^^^^^^^          ^^^^^    
+>             : ^ ^^   ^^          ^^^^^    
 >arg : Mapped2<T>
 >    : ^^^^^^^^^^
 
@@ -405,19 +405,19 @@ inferMapped2({
 >inferMapped2({    key: [3, arg => arg.key > 5]}) : void
 >                                                 : ^^^^
 >inferMapped2 : <T>(arg: Mapped2<T>) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^   ^^          ^^^^^^^^^
 >{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: [3, arg => arg.key > 5]
 >key : [number, (arg: { key: number; }) => boolean]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^                                  ^
 >3 : 3
 >  : ^
 >arg => arg.key > 5 : (arg: { key: number; }) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { key: number; }
 >    : ^^^^^^^^^^^^^^^^
 >arg.key > 5 : boolean
@@ -445,7 +445,7 @@ type MappedReadonly<T> = {
 
 declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
 >inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
->                    : ^ ^^^^^^^                 ^^^^^    
+>                    : ^ ^^   ^^                 ^^^^^    
 >arg : MappedReadonly<T>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -453,19 +453,19 @@ inferMappedReadonly({
 >inferMappedReadonly({    key: [3, arg => arg.key > 5]}) : void
 >                                                        : ^^^^
 >inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^                 ^^^^^^^^^
 >{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: [3, arg => arg.key > 5]
 >key : [number, (arg: { key: number; }) => boolean]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^                                  ^
 >3 : 3
 >  : ^
 >arg => arg.key > 5 : (arg: { key: number; }) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { key: number; }
 >    : ^^^^^^^^^^^^^^^^
 >arg.key > 5 : boolean

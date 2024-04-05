@@ -5,7 +5,7 @@
 
 declare function repro<T>(config: {
 >repro : <T>(config: { params: T; callback: () => (params: T) => number; }) => void
->      : ^ ^^^^^^^^^^                                                     ^^^^^    
+>      : ^ ^^      ^^                                                     ^^^^^    
 >config : { params: T; callback: () => (params: T) => number; }
 >       : ^^^^^^^^^^ ^^^^^^^^^^^^                           ^^^
 
@@ -25,9 +25,9 @@ repro({
 >repro({  params: 1,  callback: () => { return a => a + 1 },}) : void
 >                                                              : ^^^^
 >repro : <T>(config: { params: T; callback: () => (params: T) => number; }) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^                                                     ^^^^^^^^^
 >{  params: 1,  callback: () => { return a => a + 1 },} : { params: number; callback: () => (a: number) => number; }
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
   params: 1,
 >params : number
@@ -37,11 +37,11 @@ repro({
 
   callback: () => { return a => a + 1 },
 >callback : () => (a: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >() => { return a => a + 1 } : () => (a: number) => number
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            :                            
 >a => a + 1 : (a: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a + 1 : number

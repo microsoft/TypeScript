@@ -319,11 +319,11 @@ function f4() {
 
     var mf = function m(n) { return false; };
 >mf : (n: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^
 >function m(n) { return false; } : (n: any) => boolean
->                                : ^^^^^^^^^^^^^^^^^^^
+>                                :                    
 >m : (n: any) => boolean
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : any
 >  : ^^^
 >false : false
@@ -331,11 +331,11 @@ function f4() {
 
     var zf = function z(n: number) { return true; };
 >zf : (n: number) => boolean
->   : ^^^^      ^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^
 >function z(n: number) { return true; } : (n: number) => boolean
->                                       : ^^^^      ^^^^^^^^^^^^
+>                                       :                       
 >z : (n: number) => boolean
->  : ^^^^      ^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >true : true
@@ -343,17 +343,17 @@ function f4() {
 
     mf=zf;
 >mf=zf : (n: number) => boolean
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^^
 >mf : (n: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^
 >zf : (n: number) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^
 
     mf(_any);
 >mf(_any) : boolean
 >         : ^^^^^^^
 >mf : (n: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^
 >_any : any
 >     : ^^^
 
@@ -361,7 +361,7 @@ function f4() {
 >zf(_any) : boolean
 >         : ^^^^^^^
 >zf : (n: number) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^
 >_any : any
 >     : ^^^
 }

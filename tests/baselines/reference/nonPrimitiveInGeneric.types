@@ -3,7 +3,7 @@
 === nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : <T>(t: T) => void
->        : ^ ^^^^^ ^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -29,7 +29,7 @@ generic<object>({});
 >generic<object>({}) : void
 >                    : ^^^^
 >generic : <T>(t: T) => void
->        : ^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -37,7 +37,7 @@ generic<object>(a);
 >generic<object>(a) : void
 >                   : ^^^^
 >generic : <T>(t: T) => void
->        : ^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^
 >a : {}
 >  : ^^
 
@@ -45,7 +45,7 @@ generic<object>(123); // expect error
 >generic<object>(123) : void
 >                     : ^^^^
 >generic : <T>(t: T) => void
->        : ^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -53,13 +53,13 @@ generic<object>(b); // expect error
 >generic<object>(b) : void
 >                   : ^^^^
 >generic : <T>(t: T) => void
->        : ^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
 function bound<T extends object>(t: T) {
 >bound : <T extends object>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -74,7 +74,7 @@ bound({});
 >bound({}) : void
 >          : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -82,7 +82,7 @@ bound(a);
 >bound(a) : void
 >         : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >a : {}
 >  : ^^
 
@@ -90,7 +90,7 @@ bound(123); // expect error
 >bound(123) : void
 >           : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -98,7 +98,7 @@ bound(b); // expect error
 >bound(b) : void
 >         : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
@@ -132,7 +132,7 @@ bound2<string>(); // expect error
 
 function bound3<T extends {}>(t: T) {
 >bound3 : <T extends {}>(t: T) => void
->       : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 

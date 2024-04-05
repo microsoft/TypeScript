@@ -125,11 +125,11 @@ var sameName6a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string
 // PropertyName CallSignature{FunctionBody} is equivalent to PropertyName:function CallSignature{FunctionBody}
 var callSig1 = { num(n: number) { return '' } };
 >callSig1 : { num(n: number): string; }
->         : ^^^^^^^^^      ^^^^^^^^^^^^
+>         : ^^^^^^ ^^      ^^^^^^^^^^^^
 >{ num(n: number) { return '' } } : { num(n: number): string; }
->                                 : ^^^^^^^^^      ^^^^^^^^^^^^
+>                                 : ^^^^^^ ^^      ^^^^^^^^^^^^
 >num : (n: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -137,21 +137,21 @@ var callSig1 = { num(n: number) { return '' } };
 
 var callSig1: { num: (n: number) => string; };
 >callSig1 : { num(n: number): string; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^ ^^      ^^^^^^^^^^^^
 >num : (n: number) => string
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
 var callSig2 = { num: function (n: number) { return '' } };
 >callSig2 : { num: (n: number) => string; }
->         : ^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >{ num: function (n: number) { return '' } } : { num: (n: number) => string; }
->                                            : ^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                            : ^^^^^^^                     ^^^
 >num : (n: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >function (n: number) { return '' } : (n: number) => string
->                                   : ^^^^      ^^^^^^^^^^^
+>                                   :                      
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -159,21 +159,21 @@ var callSig2 = { num: function (n: number) { return '' } };
 
 var callSig2: { num: (n: number) => string; };
 >callSig2 : { num: (n: number) => string; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >num : (n: number) => string
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
 var callSig3 = { num: (n: number) => '' };
 >callSig3 : { num: (n: number) => string; }
->         : ^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >{ num: (n: number) => '' } : { num: (n: number) => string; }
->                           : ^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                           : ^^^^^^^                     ^^^
 >num : (n: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  :                      
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -181,9 +181,9 @@ var callSig3 = { num: (n: number) => '' };
 
 var callSig3: { num: (n: number) => string; };
 >callSig3 : { num: (n: number) => string; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >num : (n: number) => string
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
@@ -313,23 +313,23 @@ var sameType4 = { get x(): Date { return undefined; }, set x(n: Date) { } };
 // Type of unannotated get accessor return type is the type annotation of the set accessor param
 var setParamType1 = {
 >setParamType1 : { n: (t: string) => void; }
->              : ^^^^^^^^^      ^^^^^    ^^^
+>              : ^^^^^^ ^^      ^^^^^    ^^^
 >{    set n(x: (t: string) => void) { },    get n() { return (t) => {            var p: string;            var p = t;        }    }} : { n: (t: string) => void; }
->                                                                                                                                    : ^^^^^^^^^      ^^^^^    ^^^
+>                                                                                                                                    : ^^^^^                   ^^^
 
     set n(x: (t: string) => void) { },
 >n : (t: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : (t: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >t : string
 >  : ^^^^^^
 
     get n() { return (t) => {
 >n : (t: string) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >(t) => {            var p: string;            var p = t;        } : (t: string) => void
->                                                                  : ^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >t : string
 >  : ^^^^^^
 
@@ -347,15 +347,15 @@ var setParamType1 = {
 };
 var setParamType2 = {
 >setParamType2 : { n: (t: string) => void; }
->              : ^^^^^^^^^      ^^^^^    ^^^
+>              : ^^^^^^ ^^      ^^^^^    ^^^
 >{    get n() { return (t) => {            var p: string;            var p = t;        }    },    set n(x: (t: string) => void) { }} : { n: (t: string) => void; }
->                                                                                                                                    : ^^^^^^^^^      ^^^^^    ^^^
+>                                                                                                                                    : ^^^^^                   ^^^
 
     get n() { return (t) => {
 >n : (t: string) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >(t) => {            var p: string;            var p = t;        } : (t: string) => void
->                                                                  : ^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >t : string
 >  : ^^^^^^
 
@@ -372,9 +372,9 @@ var setParamType2 = {
     },
     set n(x: (t: string) => void) { }
 >n : (t: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : (t: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >t : string
 >  : ^^^^^^
 

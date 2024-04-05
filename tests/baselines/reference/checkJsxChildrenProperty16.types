@@ -25,7 +25,7 @@ export type Props =
 >false : false
 >      : ^^^^^
 >children : (arg: string) => void
->         : ^^^^^^      ^^^^^    
+>         : ^   ^^      ^^^^^    
 >arg : string
 >    : ^^^^^^
 
@@ -38,7 +38,7 @@ export type Props =
 
       children: (arg: number) => void;
 >children : (arg: number) => void
->         : ^^^^^^      ^^^^^    
+>         : ^   ^^      ^^^^^    
 >arg : number
 >    : ^^^^^^
 
@@ -46,7 +46,7 @@ export type Props =
 
 export declare function Foo(props: Props): JSX.Element;
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^     ^^^^^           
+>    : ^     ^^     ^^^^^           
 >props : Props
 >      : ^^^^^
 >JSX : any
@@ -56,7 +56,7 @@ export const Test = () => {
 >Test : () => JSX.Element
 >     : ^^^^^^^^^^^^^^^^^
 >() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => JSX.Element
->                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                          :                  
 
   return (
 >(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : JSX.Element
@@ -70,37 +70,37 @@ export const Test = () => {
 ><Foo>{(value) => {}}</Foo> : JSX.Element
 >                           : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >(value) => {} : (value: string) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
       <Foo renderNumber>{(value) => {}}</Foo>
 ><Foo renderNumber>{(value) => {}}</Foo> : JSX.Element
 >                                        : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >renderNumber : true
 >             : ^^^^
 >(value) => {} : (value: number) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
       <Foo children={(value) => {}} />
 ><Foo children={(value) => {}} /> : JSX.Element
 >                                 : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >children : (value: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^
 >(value) => {} : (value: string) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -108,13 +108,13 @@ export const Test = () => {
 ><Foo renderNumber children={(value) => {}} /> : JSX.Element
 >                                              : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >renderNumber : true
 >             : ^^^^
 >children : (value: number) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^
 >(value) => {} : (value: number) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 

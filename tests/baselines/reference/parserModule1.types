@@ -14,7 +14,7 @@
         export interface IDiagnosticWriter {
             Alert(output: string): void;
 >Alert : (output: string) => void
->      : ^^^^^^^^^      ^^^^^    
+>      : ^      ^^      ^^^^^    
 >output : string
 >       : ^^^^^^
         }
@@ -31,7 +31,7 @@
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
->      : ^^^^^^^^^      ^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >output : string
 >       : ^^^^^^
 
@@ -43,11 +43,11 @@
 >diagnosticWriter.Alert(output) : void
 >                               : ^^^^
 >diagnosticWriter.Alert : (output: string) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^      ^^      ^^^^^^^^^
 >diagnosticWriter : IDiagnosticWriter
 >                 : ^^^^^^^^^^^^^^^^^
 >Alert : (output: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >output : string
 >       : ^^^^^^
             }
@@ -55,7 +55,7 @@
 
         export function debugPrint(s: string) {
 >debugPrint : (s: string) => void
->           : ^^^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -67,7 +67,7 @@
 >Alert(s) : void
 >         : ^^^^
 >Alert : (output: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
             }
@@ -75,7 +75,7 @@
 
         export function assert(condition: boolean, s: string) {
 >assert : (condition: boolean, s: string) => void
->       : ^^^^^^^^^^^^       ^^^^^      ^^^^^^^^^
+>       : ^         ^^       ^^ ^^      ^^^^^^^^^
 >condition : boolean
 >          : ^^^^^^^
 >s : string
@@ -95,7 +95,7 @@
 >Alert(s) : void
 >         : ^^^^
 >Alert : (output: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
                 }

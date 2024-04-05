@@ -3,7 +3,7 @@
 === recursiveInferenceBug.ts ===
 function f(x: number) {
 >f : (x: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -13,7 +13,7 @@ function f(x: number) {
 >f(x) : number
 >     : ^^^^^^
 >f : (x: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -27,13 +27,13 @@ var zz = {
 >zz : { g: () => void; readonly f: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    g: () =>{ },    get f() { return "abc"; },} : { g: () => void; readonly f: string; }
->                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^
 
     g: () =>{ },
 >g : () => void
 >  : ^^^^^^^^^^
 >() =>{ } : () => void
->         : ^^^^^^^^^^
+>         :           
 
     get f() { return "abc"; },
 >f : string

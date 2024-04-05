@@ -97,7 +97,7 @@ class C1 {
     // Inside function declaration
     private p1(param: string | number) {
 >p1 : (param: string | number) => void
->   : ^^^^^^^^               ^^^^^^^^^
+>   : ^     ^^               ^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
 
@@ -177,7 +177,7 @@ class C1 {
     // Inside function declaration
     p2(param: string | number) {
 >p2 : (param: string | number) => void
->   : ^^^^^^^^               ^^^^^^^^^
+>   : ^     ^^               ^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
 
@@ -257,7 +257,7 @@ class C1 {
     // Inside function declaration
     private static s1(param: string | number) {
 >s1 : (param: string | number) => void
->   : ^^^^^^^^               ^^^^^^^^^
+>   : ^     ^^               ^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
 
@@ -337,7 +337,7 @@ class C1 {
     // Inside function declaration
     static s2(param: string | number) {
 >s2 : (param: string | number) => void
->   : ^^^^^^^^               ^^^^^^^^^
+>   : ^     ^^               ^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
 

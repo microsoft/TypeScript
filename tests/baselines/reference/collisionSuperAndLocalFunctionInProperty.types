@@ -13,13 +13,13 @@ class Foo {
 >prop1 : { doStuff: () => void; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        doStuff: () => {            function _super() { // No error            }         }   } : { doStuff: () => void; }
->                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                : ^^^^^^^^^^^          ^^^
 
         doStuff: () => {
 >doStuff : () => void
 >        : ^^^^^^^^^^
 >() => {            function _super() { // No error            }         } : () => void
->                                                                          : ^^^^^^^^^^
+>                                                                          :           
 
             function _super() { // No error
 >_super : () => void
@@ -38,13 +38,13 @@ class b extends Foo {
 >prop2 : { doStuff: () => void; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        doStuff: () => {            function _super() { // error            }         }    } : { doStuff: () => void; }
->                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                              : ^^^^^^^^^^^          ^^^
 
         doStuff: () => {
 >doStuff : () => void
 >        : ^^^^^^^^^^
 >() => {            function _super() { // error            }         } : () => void
->                                                                       : ^^^^^^^^^^
+>                                                                       :           
 
             function _super() { // error
 >_super : () => void

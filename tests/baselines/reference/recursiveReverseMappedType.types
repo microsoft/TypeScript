@@ -12,7 +12,7 @@ type Recur<T> = (
 
 function join<T>(l: Recur<T>[]): Recur<T> {
 >join : <T>(l: Recur<T>[]) => Recur<T>
->     : ^ ^^^^^          ^^^^^        
+>     : ^ ^^ ^^          ^^^^^        
 >l : Recur<T>[]
 >  : ^^^^^^^^^^
 
@@ -29,7 +29,7 @@ function join<T>(l: Recur<T>[]): Recur<T> {
 
 function a<T>(l: Recur<T>[]): void {
 >a : <T>(l: Recur<T>[]) => void
->  : ^ ^^^^^          ^^^^^    
+>  : ^ ^^ ^^          ^^^^^    
 >l : Recur<T>[]
 >  : ^^^^^^^^^^
 
@@ -39,7 +39,7 @@ function a<T>(l: Recur<T>[]): void {
 >join(l) : Recur<T>
 >        : ^^^^^^^^
 >join : <T_1>(l: Recur<T_1>[]) => Recur<T_1>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^ ^^            ^^^^^^^^^^^^^^^
 >l : Recur<T>[]
 >  : ^^^^^^^^^^
 }

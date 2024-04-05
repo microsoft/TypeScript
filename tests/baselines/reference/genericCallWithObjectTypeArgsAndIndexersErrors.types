@@ -5,7 +5,7 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -16,7 +16,7 @@ function foo<T>(x: T) {
 
 function other<T>(arg: T) {
 >other : <T>(arg: T) => void
->      : ^ ^^^^^^^ ^^^^^^^^^
+>      : ^ ^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -37,16 +37,16 @@ function other<T>(arg: T) {
 >r2 : { [x: string]: Object; [x: number]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       :                                         
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function other3<T extends U, U extends Date>(arg: T) {
 >other3 : <T extends U, U extends Date>(arg: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -67,9 +67,9 @@ function other3<T extends U, U extends Date>(arg: T) {
 >r2 : { [x: string]: Object; [x: number]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       :                                         
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

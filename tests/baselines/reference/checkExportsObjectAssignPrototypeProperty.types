@@ -212,11 +212,11 @@ Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true });
 >Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true }) : any
 >                                                                                : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Person.prototype : any
 >                 : ^^^
 >Person : typeof Person
@@ -240,11 +240,11 @@ Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writab
 >Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false }) : any
 >                                                                                             : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Person.prototype : any
 >                 : ^^^
 >Person : typeof Person
@@ -268,11 +268,11 @@ Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 },
 >Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : any
 >                                                                                                          : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Person.prototype : any
 >                 : ^^^
 >Person : typeof Person
@@ -282,13 +282,13 @@ Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 },
 >"rwAccessors" : "rwAccessors"
 >              : ^^^^^^^^^^^^^
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >get : () => number
 >    : ^^^^^^^^^^^^
 >98122 : 98122
 >      : ^^^^^
 >set : (_: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >_ : any
 >  : ^^^
 
@@ -296,11 +296,11 @@ Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.
 >Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.75 } }) : any
 >                                                                                        : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Person.prototype : any
 >                 : ^^^
 >Person : typeof Person
@@ -320,11 +320,11 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 >Object.defineProperty(Person.prototype, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }}) : any
 >                                                                                                                                                      : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Person.prototype : any
 >                 : ^^^
 >Person : typeof Person
@@ -334,12 +334,12 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 >"setonlyAccessor" : "setonlyAccessor"
 >                  : ^^^^^^^^^^^^^^^^^
 >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set(str: string): void; }
->                                                                                          : ^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                          : ^^^^^^   ^^      ^^^^^^^^^^
 
     /** @param {string} str */
     set(str) {
 >set : (str: string) => void
->    : ^^^^^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
