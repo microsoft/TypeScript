@@ -14794,7 +14794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.resolvedApparentType || (type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type));
     }
 
-    function getResolvedApparentTypeOfMappedType(type: MappedType) {
+    function getResolvedApparentTypeOfMappedType(type: MappedType): Type {
         const target = (type.target ?? type) as MappedType;
         const typeVariable = getHomomorphicTypeVariable(target);
         if (typeVariable && !target.declaration.nameType) {
@@ -14802,7 +14802,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraint.flags & TypeFlags.Index) {
                 const baseConstraint = getBaseConstraintOfType((constraint as IndexType).type);
                 if (baseConstraint && everyType(baseConstraint, t => isArrayOrTupleType(t) || isArrayOrTupleOrIntersection(t))) {
-                    return instantiateType(target, prependTypeMapping(typeVariable, baseConstraint, type.mapper));
+                    const modifiersType = getModifiersTypeFromMappedType(type);
+                    return instantiateType(target, prependTypeMapping(typeVariable, isGenericMappedType(modifiersType) ? getResolvedApparentTypeOfMappedType(modifiersType) : baseConstraint, type.mapper));
                 }
             }
         }

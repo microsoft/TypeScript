@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/homomorphicMappedTypeNested1.ts] ////
+
+=== homomorphicMappedTypeNested1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58060
+
+type ValueType = string;
+>ValueType : Symbol(ValueType, Decl(homomorphicMappedTypeNested1.ts, 0, 0))
+
+type Box<T extends ValueType> = { v: T };
+>Box : Symbol(Box, Decl(homomorphicMappedTypeNested1.ts, 2, 24))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 4, 9))
+>ValueType : Symbol(ValueType, Decl(homomorphicMappedTypeNested1.ts, 0, 0))
+>v : Symbol(v, Decl(homomorphicMappedTypeNested1.ts, 4, 33))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 4, 9))
+
+type Test<T extends ValueType[]> = T;
+>Test : Symbol(Test, Decl(homomorphicMappedTypeNested1.ts, 4, 41))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 6, 10))
+>ValueType : Symbol(ValueType, Decl(homomorphicMappedTypeNested1.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 6, 10))
+
+type UnboxArray<T> = {
+>UnboxArray : Symbol(UnboxArray, Decl(homomorphicMappedTypeNested1.ts, 6, 37))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 8, 16))
+
+  [K in keyof T]: T[K] extends Box<infer R> ? R : never;
+>K : Symbol(K, Decl(homomorphicMappedTypeNested1.ts, 9, 3))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 8, 16))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 8, 16))
+>K : Symbol(K, Decl(homomorphicMappedTypeNested1.ts, 9, 3))
+>Box : Symbol(Box, Decl(homomorphicMappedTypeNested1.ts, 2, 24))
+>R : Symbol(R, Decl(homomorphicMappedTypeNested1.ts, 9, 40))
+>R : Symbol(R, Decl(homomorphicMappedTypeNested1.ts, 9, 40))
+
+};
+
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Symbol(Identity, Decl(homomorphicMappedTypeNested1.ts, 10, 2))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 12, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypeNested1.ts, 12, 22))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 12, 14))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 12, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypeNested1.ts, 12, 22))
+
+declare function fn<T extends Array<Box<ValueType>>>(
+>fn : Symbol(fn, Decl(homomorphicMappedTypeNested1.ts, 12, 44))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 14, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Box : Symbol(Box, Decl(homomorphicMappedTypeNested1.ts, 2, 24))
+>ValueType : Symbol(ValueType, Decl(homomorphicMappedTypeNested1.ts, 0, 0))
+
+  ...args: T
+>args : Symbol(args, Decl(homomorphicMappedTypeNested1.ts, 14, 53))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 14, 20))
+
+): Test<Identity<UnboxArray<T>>>;
+>Test : Symbol(Test, Decl(homomorphicMappedTypeNested1.ts, 4, 41))
+>Identity : Symbol(Identity, Decl(homomorphicMappedTypeNested1.ts, 10, 2))
+>UnboxArray : Symbol(UnboxArray, Decl(homomorphicMappedTypeNested1.ts, 6, 37))
+>T : Symbol(T, Decl(homomorphicMappedTypeNested1.ts, 14, 20))
+
