@@ -360,6 +360,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     public parent: Node;
     public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
     public jsDoc?: JSDoc[];
+    public original?: Node;
     public id?: number;
     public emitNode?: EmitNode;
 
@@ -373,6 +374,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
+        this.original = undefined;
         this.emitNode = undefined;
     }
 
