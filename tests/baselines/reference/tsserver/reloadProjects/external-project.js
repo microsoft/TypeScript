@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -40,11 +40,11 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Host watch options changed to {"excludeFiles":["/user/username/projects/myproject/file2.ts"]}, it will be take effect for next watches.
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -86,7 +86,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -103,6 +103,48 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "422767fdb96356feed25944eccb236fc93683d686622fc6e577006b0f600fd8e",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 146,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -121,6 +163,25 @@ FsWatches::
   {}
 /user/username/projects/myproject/file1.ts: *new*
   {}
+
+Projects::
+/user/username/projects/myproject/project.sln (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
 
 Before request
 
@@ -161,13 +222,25 @@ FsWatches *deleted*::
 /user/username/projects/myproject/file1.ts:
   {}
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/file1.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln *default*
+/user/username/projects/myproject/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+
+Before request
 //// [/user/username/projects/myproject/node_modules/module1/index.d.ts]
 export function foo(): string;
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -195,7 +268,7 @@ Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/proj
 Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -231,6 +304,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
+Info seq  [hh:mm:ss:mss] After reloading projects..
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -256,13 +337,35 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-Immedidate callback:: count: 0
+
+Projects::
+/user/username/projects/myproject/project.sln (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/file1.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln *default*
+/user/username/projects/myproject/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/node_modules/module1/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+
+Before request
 //// [/user/username/projects/myproject/file2.ts]
 export function bar(){}
             bar();
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -288,7 +391,7 @@ Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/proj
 Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -324,6 +427,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
+Info seq  [hh:mm:ss:mss] After reloading projects..
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -347,10 +458,32 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-Immedidate callback:: count: 0
-//// [/user/username/projects/myproject/file2.ts] deleted
+
+Projects::
+/user/username/projects/myproject/project.sln (External) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 3 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/file1.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln *default*
+/user/username/projects/myproject/file2.ts *changed*
+    version: Text-2 *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/node_modules/module1/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
 
 Before request
+//// [/user/username/projects/myproject/file2.ts] deleted
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -382,7 +515,7 @@ Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/proj
 Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/file2.ts"],"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/project.sln WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/project.sln projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -407,6 +540,14 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
+Info seq  [hh:mm:ss:mss] After reloading projects..
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/project.sln' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -439,3 +580,28 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
+
+Timeout callback:: count: 0
+
+Projects::
+/user/username/projects/myproject/project.sln (External) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 4 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
+/user/username/projects/myproject/file1.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln *default*
+/user/username/projects/myproject/file2.ts *deleted*
+    version: Text-2
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/project.sln *deleted*
+/user/username/projects/myproject/node_modules/module1/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln

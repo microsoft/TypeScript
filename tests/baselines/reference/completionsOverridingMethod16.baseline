@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsOverridingMethod16.ts ===
 // declare class B {
 //     set foo(value: any);

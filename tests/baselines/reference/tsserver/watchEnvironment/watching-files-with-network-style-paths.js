@@ -1,6 +1,6 @@
 Info seq  [hh:mm:ss:mss] For files of style c:/myprojects/project/x.js
 currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -38,7 +38,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/pro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -67,42 +67,134 @@ FsWatches::
 c:/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+c:/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [c:/a/data/package.json]
 { "private": true }
 
 //// [c:/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["c:/a/lib/lib.d.ts","c:/myprojects/project/x.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"c:/myprojects/project","cachePath":"c:/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "c:/a/lib/lib.d.ts",
+        "c:/myprojects/project/x.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "c:/myprojects/project",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["c:/myprojects/project/bower_components","c:/myprojects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["c:/myprojects/project/bower_components","c:/myprojects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "c:/myprojects/project/bower_components",
+        "c:/myprojects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["c:/myprojects/project/bower_components","c:/myprojects/project/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "c:/myprojects/project/bower_components",
+        "c:/myprojects/project/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -135,9 +227,14 @@ FsWatches::
 c:/a/lib/lib.d.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -169,7 +266,7 @@ Info seq  [hh:mm:ss:mss] Search path: //vda1cs4850/myprojects/project
 Info seq  [hh:mm:ss:mss] For info: //vda1cs4850/myprojects/project/x.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -188,42 +285,134 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+//vda1cs4850/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+//vda1cs4850/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [//vda1cs4850/a/data/package.json]
 { "private": true }
 
 //// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["//vda1cs4850/a/lib/lib.d.ts","//vda1cs4850/myprojects/project/x.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"//vda1cs4850/myprojects/project","cachePath":"//vda1cs4850/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "//vda1cs4850/a/lib/lib.d.ts",
+        "//vda1cs4850/myprojects/project/x.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "//vda1cs4850/myprojects/project",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["//vda1cs4850/myprojects/project/bower_components","//vda1cs4850/myprojects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["//vda1cs4850/myprojects/project/bower_components","//vda1cs4850/myprojects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "//vda1cs4850/myprojects/project/bower_components",
+        "//vda1cs4850/myprojects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["//vda1cs4850/myprojects/project/bower_components","//vda1cs4850/myprojects/project/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "//vda1cs4850/myprojects/project/bower_components",
+        "//vda1cs4850/myprojects/project/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -248,9 +437,14 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -288,7 +482,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/m
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -317,42 +511,134 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+//vda1cs4850/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+//vda1cs4850/c$/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [//vda1cs4850/a/data/package.json]
 { "private": true }
 
 //// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["//vda1cs4850/a/lib/lib.d.ts","//vda1cs4850/c$/myprojects/project/x.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"//vda1cs4850/c$/myprojects/project","cachePath":"//vda1cs4850/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "//vda1cs4850/a/lib/lib.d.ts",
+        "//vda1cs4850/c$/myprojects/project/x.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "//vda1cs4850/c$/myprojects/project",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["//vda1cs4850/c$/myprojects/project/bower_components","//vda1cs4850/c$/myprojects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["//vda1cs4850/c$/myprojects/project/bower_components","//vda1cs4850/c$/myprojects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "//vda1cs4850/c$/myprojects/project/bower_components",
+        "//vda1cs4850/c$/myprojects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["//vda1cs4850/c$/myprojects/project/bower_components","//vda1cs4850/c$/myprojects/project/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "//vda1cs4850/c$/myprojects/project/bower_components",
+        "//vda1cs4850/c$/myprojects/project/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -385,9 +671,14 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] For files of style c:/users/username/myprojects/project/x.js
 currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -425,7 +716,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -454,42 +745,134 @@ FsWatches::
 c:/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+c:/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/users/username/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [c:/a/data/package.json]
 { "private": true }
 
 //// [c:/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["c:/a/lib/lib.d.ts","c:/users/username/myprojects/project/x.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"c:/users/username/myprojects/project","cachePath":"c:/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "c:/a/lib/lib.d.ts",
+        "c:/users/username/myprojects/project/x.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "c:/users/username/myprojects/project",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["c:/users/username/myprojects/project/bower_components","c:/users/username/myprojects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["c:/users/username/myprojects/project/bower_components","c:/users/username/myprojects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "c:/users/username/myprojects/project/bower_components",
+        "c:/users/username/myprojects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["c:/users/username/myprojects/project/bower_components","c:/users/username/myprojects/project/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "c:/users/username/myprojects/project/bower_components",
+        "c:/users/username/myprojects/project/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -522,9 +905,14 @@ FsWatches::
 c:/a/lib/lib.d.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -562,7 +950,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/u
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -591,42 +979,134 @@ FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+//vda1cs4850/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+//vda1cs4850/c$/users/username/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [//vda1cs4850/a/data/package.json]
 { "private": true }
 
 //// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["//vda1cs4850/a/lib/lib.d.ts","//vda1cs4850/c$/users/username/myprojects/project/x.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"//vda1cs4850/c$/users/username/myprojects/project","cachePath":"//vda1cs4850/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '//vda1cs4850/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "//vda1cs4850/a/lib/lib.d.ts",
+        "//vda1cs4850/c$/users/username/myprojects/project/x.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "//vda1cs4850/c$/users/username/myprojects/project",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["//vda1cs4850/c$/users/username/myprojects/project/bower_components","//vda1cs4850/c$/users/username/myprojects/project/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["//vda1cs4850/c$/users/username/myprojects/project/bower_components","//vda1cs4850/c$/users/username/myprojects/project/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "//vda1cs4850/c$/users/username/myprojects/project/bower_components",
+        "//vda1cs4850/c$/users/username/myprojects/project/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["//vda1cs4850/c$/users/username/myprojects/project/bower_components","//vda1cs4850/c$/users/username/myprojects/project/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "//vda1cs4850/c$/users/username/myprojects/project/bower_components",
+        "//vda1cs4850/c$/users/username/myprojects/project/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -658,3 +1138,8 @@ PolledWatches::
 FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*

@@ -8,8 +8,10 @@ declare var io: any;
 
 declare module 'module' {
 >'module' : typeof import("module")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
     export default io;
 >io : any
+>   : ^^^
 }
 

@@ -145,7 +145,6 @@ import {
     ObjectLiteralExpression,
     OuterExpression,
     OuterExpressionKinds,
-    outFile,
     ParenthesizedExpression,
     parseNodeFactory,
     PlusToken,
@@ -754,7 +753,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                 /*modifiers*/ undefined,
                 nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                 nodeFactory.createStringLiteral(externalHelpersModuleNameText),
-                /*assertClause*/ undefined,
+                /*attributes*/ undefined,
             );
             addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
             return externalHelpersImportDeclaration;
@@ -860,7 +859,7 @@ export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile 
     if (file.moduleName) {
         return factory.createStringLiteral(file.moduleName);
     }
-    if (!file.isDeclarationFile && outFile(options)) {
+    if (!file.isDeclarationFile && options.outFile) {
         return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
     }
     return undefined;
@@ -1675,7 +1674,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,

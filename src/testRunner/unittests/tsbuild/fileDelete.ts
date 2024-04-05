@@ -1,16 +1,9 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/contents";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
+import { verifyTsc } from "../helpers/tsc";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
     function fs(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {
@@ -25,7 +18,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                 export function child2() {
                 }
             `,
-            "/src/child/tsconfig.json": JSON.stringify({
+            "/src/child/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson(childOptions),
             }),
             ...(mainOptions ? {
@@ -35,7 +28,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                         child();
                     }
                 `,
-                "/src/main/tsconfig.json": JSON.stringify({
+                "/src/main/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(mainOptions),
                     references: [{ path: "../child" }],
                 }),

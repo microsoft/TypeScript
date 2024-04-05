@@ -1,5 +1,5 @@
 // @allowJS: true
-// @target: es3
+// @target: es5
 // @module: commonjs
 
 // @filename: myFile01.js

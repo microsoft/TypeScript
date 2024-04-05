@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/playground/tsconfig.json]
 {}
@@ -11,7 +11,11 @@ export function foo() {}
 export function bar() { }
 
 //// [/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json]
-{"include":["./src"]}
+{
+  "include": [
+    "./src"
+  ]
+}
 
 //// [/user/username/projects/myproject/playground/tsconfig-json/src/src.ts]
 export function foobar() { }
@@ -43,6 +47,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/playgrou
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/playground/tests.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/playground/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/playground/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/playground/tests.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/playground/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/playground/tests.ts",
@@ -65,7 +79,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -84,6 +98,67 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/playground/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "49e8bcb2c25435ceccf5817ae243e3b0839f0c801e274f09af7164ee4615c6d5",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 3,
+            "tsSize": 77,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/playground/tests.ts",
+        "configFile": "/user/username/projects/myproject/playground/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -118,6 +193,29 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/playground: *new*
   {}
+
+Projects::
+/user/username/projects/myproject/playground/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
+/user/username/projects/myproject/playground/tests.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json *default*
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
 
 Before request
 
@@ -166,6 +264,31 @@ FsWatchesRecursive::
 /user/username/projects/myproject/playground:
   {}
 
+Projects::
+/user/username/projects/myproject/playground/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
+/user/username/projects/myproject/playground/tests.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -182,6 +305,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/playgrou
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/playground/tsconfig-json/src/src.ts"
@@ -201,7 +334,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -214,6 +347,56 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by include pattern './src' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "b5b5eb60eb609750ff98810d798bb98be4cd87ad0940ee8cfccd393eca0a8cab",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 28,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": true,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -290,6 +473,38 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/playground:
   {}
 
+Projects::
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/playground/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json *new*
+        /user/username/projects/myproject/playground/tsconfig.json *deleted*
+/user/username/projects/myproject/playground/tests.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/playground/tsconfig.json *deleted*
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json *new*
+        /user/username/projects/myproject/playground/tsconfig.json *deleted*
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/playground/tsconfig.json *deleted*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -327,7 +542,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -422,3 +637,27 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/playground/tsconfig-json/src:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
+        /dev/null/inferredProject1* *new*
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts (Open) *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *default* *new*

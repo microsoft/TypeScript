@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/importTag3.ts] ////
+
+=== /types.ts ===
+export default interface Foo {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+
+=== /foo.js ===
+/**
+ * @import Foo from "./types"
+ */
+
+/**
+ * @param { Foo } foo
+ */
+export function f(foo) {}
+>f : (foo: Foo) => void
+>  : ^   ^^^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+

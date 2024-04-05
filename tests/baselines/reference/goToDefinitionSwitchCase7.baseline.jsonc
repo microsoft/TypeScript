@@ -1,0 +1,18 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase7.ts ===
+// switch (null) {
+//   case null:
+//     [|export /*GOTO DEF*/default 123;|]
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "default",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

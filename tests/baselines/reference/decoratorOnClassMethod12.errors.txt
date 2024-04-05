@@ -1,4 +1,4 @@
-decoratorOnClassMethod12.ts(6,10): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+decoratorOnClassMethod12.ts(6,11): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 
 ==== decoratorOnClassMethod12.ts (1 errors) ====
@@ -7,8 +7,8 @@ decoratorOnClassMethod12.ts(6,10): error TS2660: 'super' can only be referenced 
             decorator(target: Object, key: string): void { }
         }
         class C extends S {
-            @super.decorator
-             ~~~~~
+            @(super.decorator)
+              ~~~~~
 !!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
             method() { }
         }

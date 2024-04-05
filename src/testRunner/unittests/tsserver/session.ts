@@ -1,16 +1,12 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import {
     createHasErrorMessageLogger,
     nullLogger,
-} from "../helpers/tsserver";
+} from "../../../harness/tsserverLogger";
+import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -70,7 +66,6 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),

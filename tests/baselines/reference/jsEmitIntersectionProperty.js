@@ -1,10 +1,6 @@
 //// [tests/cases/compiler/jsEmitIntersectionProperty.ts] ////
 
 //// [globals.d.ts]
-// #37015 - test asserts lack of crash
-
-
-
 declare class CoreObject {
   static extend<
     Statics,

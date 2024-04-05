@@ -1,4 +1,4 @@
-underscoreTest1_underscoreTests.ts(26,1): error TS2769: No overload matches this call.
+underscoreTest1_underscoreTests.ts(26,3): error TS2769: No overload matches this call.
   Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
     Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
       Type 'string | number | boolean' is not assignable to type 'boolean'.
@@ -35,7 +35,7 @@ underscoreTest1_underscoreTests.ts(26,1): error TS2769: No overload matches this
     var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
     
     _.all([true, 1, null, 'yes'], _.identity);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
 !!! error TS2769:     Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
