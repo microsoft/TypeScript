@@ -46,6 +46,7 @@ import {
     StringLiteral,
     SyntaxKind,
     TransformationContext,
+    unsafelyGetEmitNode,
     VariableDeclaration,
     WrappedExpression,
 } from "../_namespaces/ts";
@@ -147,7 +148,7 @@ export function isClassNamedEvaluationHelperBlock(node: Node): node is ClassName
     return isExpressionStatement(statement) &&
         isCallToHelper(statement.expression, "___setFunctionName" as __String) &&
         (statement.expression as CallExpression).arguments.length >= 2 &&
-        (statement.expression as CallExpression).arguments[1] === node.emitNode?.assignedName;
+        (statement.expression as CallExpression).arguments[1] === unsafelyGetEmitNode(node)?.assignedName;
 }
 
 /**
@@ -156,7 +157,7 @@ export function isClassNamedEvaluationHelperBlock(node: Node): node is ClassName
  * @internal
  */
 export function classHasExplicitlyAssignedName(node: ClassLikeDeclaration): boolean {
-    return !!node.emitNode?.assignedName && some(node.members, isClassNamedEvaluationHelperBlock);
+    return !!unsafelyGetEmitNode(node)?.assignedName && some(node.members, isClassNamedEvaluationHelperBlock);
 }
 
 /**

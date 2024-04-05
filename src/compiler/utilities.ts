@@ -553,6 +553,7 @@ import {
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
     UniqueESSymbolType,
+    unsafelyGetEmitNode,
     UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -1243,8 +1244,7 @@ export function indexOfNode(nodeArray: readonly Node[], node: Node) {
  * @internal
  */
 export function getEmitFlags(node: Node): EmitFlags {
-    const emitNode = node.emitNode;
-    return emitNode && emitNode.flags || 0;
+    return unsafelyGetEmitNode(node)?.flags ?? 0;
 }
 
 /**
@@ -1253,8 +1253,7 @@ export function getEmitFlags(node: Node): EmitFlags {
  * @internal
  */
 export function getInternalEmitFlags(node: Node): InternalEmitFlags {
-    const emitNode = node.emitNode;
-    return emitNode && emitNode.internalFlags || 0;
+    return unsafelyGetEmitNode(node)?.internalFlags ?? 0;
 }
 
 // Map from a type name, to a map of targets to array of features introduced to the type at that target.
@@ -2057,7 +2056,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.emitNode?.autoGenerate ? undefined : name.escapedText;
+            return unsafelyGetEmitNode(name)?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -8202,7 +8201,6 @@ function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
     this.transformFlags = TransformFlags.None;
     this.parent = undefined!;
     this.original = undefined;
-    this.emitNode = undefined;
 }
 
 function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
@@ -8214,7 +8212,6 @@ function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) 
     this.flags = NodeFlags.None;
     this.transformFlags = TransformFlags.None;
     this.parent = undefined!;
-    this.emitNode = undefined;
 }
 
 function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
@@ -8227,7 +8224,6 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.transformFlags = TransformFlags.None;
     this.parent = undefined!;
     this.original = undefined;
-    this.emitNode = undefined;
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {

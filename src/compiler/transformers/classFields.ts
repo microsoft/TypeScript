@@ -213,6 +213,7 @@ import {
     tryCast,
     tryGetTextOfPropertyName,
     unescapeLeadingUnderscores,
+    unsafelyGetEmitNode,
     VariableDeclaration,
     VariableStatement,
     visitArray,
@@ -1731,7 +1732,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 ) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
-                else if (isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis) {
+                else if (isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !unsafelyGetEmitNode(node)?.classThis) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
@@ -1809,21 +1810,24 @@ export function transformClassFields(context: TransformationContext): (x: Source
             if (name && isIdentifier(name)) {
                 getPrivateIdentifierEnvironment().data.className = name;
             }
-            else if (node.emitNode?.assignedName) {
-                if (isStringLiteral(node.emitNode.assignedName)) {
-                    // If the class name was assigned from a string literal based on an Identifier, use the Identifier
-                    // as the prefix.
-                    if (
-                        node.emitNode.assignedName.textSourceNode &&
-                        isIdentifier(node.emitNode.assignedName.textSourceNode)
-                    ) {
-                        getPrivateIdentifierEnvironment().data.className = node.emitNode.assignedName.textSourceNode;
-                    }
-                    // If the class name was assigned from a string literal that is a valid identifier, create an
-                    // identifier from it.
-                    else if (isIdentifierText(node.emitNode.assignedName.text, languageVersion)) {
-                        const prefixName = factory.createIdentifier(node.emitNode.assignedName.text);
-                        getPrivateIdentifierEnvironment().data.className = prefixName;
+            else {
+                const assignedName = unsafelyGetEmitNode(node)?.assignedName;
+                if (assignedName) {
+                    if (isStringLiteral(assignedName)) {
+                        // If the class name was assigned from a string literal based on an Identifier, use the Identifier
+                        // as the prefix.
+                        if (
+                            assignedName.textSourceNode &&
+                            isIdentifier(assignedName.textSourceNode)
+                        ) {
+                            getPrivateIdentifierEnvironment().data.className = assignedName.textSourceNode;
+                        }
+                        // If the class name was assigned from a string literal that is a valid identifier, create an
+                        // identifier from it.
+                        else if (isIdentifierText(assignedName.text, languageVersion)) {
+                            const prefixName = factory.createIdentifier(assignedName.text);
+                            getPrivateIdentifierEnvironment().data.className = prefixName;
+                        }
                     }
                 }
             }
@@ -1874,9 +1878,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             // will be evaluated *before* the transformed static blocks are evaluated and thus won't overwrite
             // the replacement constructor.
 
-            if (shouldTransformPrivateElementsOrClassStaticBlocks && node.emitNode?.classThis) {
-                getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
-                pendingClassReferenceAssignment = factory.createAssignment(node.emitNode.classThis, factory.getInternalName(node));
+            const classThis = unsafelyGetEmitNode(node)?.classThis;
+            if (shouldTransformPrivateElementsOrClassStaticBlocks && classThis) {
+                getClassLexicalEnvironment().classConstructor = classThis;
+                pendingClassReferenceAssignment = factory.createAssignment(classThis, factory.getInternalName(node));
             }
             else {
                 const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
@@ -1885,8 +1890,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
         }
 
-        if (node.emitNode?.classThis) {
-            getClassLexicalEnvironment().classThis = node.emitNode.classThis;
+        {
+            const classThis = unsafelyGetEmitNode(node)?.classThis;
+            if (classThis) {
+                getClassLexicalEnvironment().classThis = classThis;
+            }
         }
 
         const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference;
@@ -1979,8 +1987,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
             // will be evaluated *before* the transformed static blocks are evaluated and thus won't overwrite
             // the replacement constructor.
 
-            if (shouldTransformPrivateElementsOrClassStaticBlocks && node.emitNode?.classThis) {
-                return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
+            const classThis = unsafelyGetEmitNode(node)?.classThis;
+            if (shouldTransformPrivateElementsOrClassStaticBlocks && classThis) {
+                return getClassLexicalEnvironment().classConstructor = classThis;
             }
 
             const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
@@ -1989,8 +1998,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             return temp;
         }
 
-        if (node.emitNode?.classThis) {
-            getClassLexicalEnvironment().classThis = node.emitNode.classThis;
+        {
+            const classThis = unsafelyGetEmitNode(node)?.classThis;
+            if (classThis) {
+                getClassLexicalEnvironment().classThis = classThis;
+            }
         }
 
         if (facts & ClassFacts.NeedsClassConstructorReference) {
@@ -2032,14 +2044,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
 
                 if (some(staticPropertiesOrClassStaticBlocks)) {
-                    addPropertyOrClassStaticBlockStatements(pendingStatements, staticPropertiesOrClassStaticBlocks, node.emitNode?.classThis ?? factory.getInternalName(node));
+                    addPropertyOrClassStaticBlockStatements(pendingStatements, staticPropertiesOrClassStaticBlocks, unsafelyGetEmitNode(node)?.classThis ?? factory.getInternalName(node));
                 }
 
                 if (temp) {
                     expressions.push(factory.createAssignment(temp, classExpression));
                 }
-                else if (shouldTransformPrivateElementsOrClassStaticBlocks && node.emitNode?.classThis) {
-                    expressions.push(factory.createAssignment(node.emitNode.classThis, classExpression));
+                else if (shouldTransformPrivateElementsOrClassStaticBlocks && unsafelyGetEmitNode(node)?.classThis) {
+                    expressions.push(factory.createAssignment(unsafelyGetEmitNode(node)!.classThis!, classExpression));
                 }
                 else {
                     expressions.push(classExpression);
@@ -2051,7 +2063,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
                     const alias = factory.cloneNode(temp) as GeneratedIdentifier;
-                    alias.emitNode.autoGenerate.flags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    unsafelyGetEmitNode(alias).autoGenerate.flags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
                     classAliases[getOriginalNodeId(node)] = alias;
                 }
 

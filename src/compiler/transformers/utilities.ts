@@ -88,6 +88,7 @@ import {
     SyntaxKind,
     TransformationContext,
     unorderedRemoveItem,
+    unsafelyGetEmitNode,
     VariableDeclaration,
     VariableStatement,
 } from "../_namespaces/ts";
@@ -395,7 +396,7 @@ export class IdentifierNameMap<V> {
 
     private static toKey(name: Identifier | PrivateIdentifier): string {
         if (isGeneratedPrivateIdentifier(name) || isGeneratedIdentifier(name)) {
-            const autoGenerate = name.emitNode.autoGenerate;
+            const autoGenerate = unsafelyGetEmitNode(name).autoGenerate;
             if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 const node = getNodeForGeneratedName(name);
                 const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node) : `(generated@${getNodeId(node)})`;

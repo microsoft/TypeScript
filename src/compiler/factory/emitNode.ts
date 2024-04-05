@@ -7,6 +7,8 @@ import {
     EmitFlags,
     EmitHelper,
     EmitNode,
+    GeneratedIdentifier,
+    GeneratedPrivateIdentifier,
     getParseTreeNode,
     getSourceFileOfNode,
     Identifier,
@@ -28,31 +30,49 @@ import {
     TypeParameterDeclaration,
 } from "../_namespaces/ts";
 
+const emitNodes = new WeakMap<Node, EmitNode | undefined>();
+
+/** @internal */
+export function unsafelyGetEmitNode(node: GeneratedIdentifier | GeneratedPrivateIdentifier): EmitNode & { autoGenerate: AutoGenerateInfo; };
+/** @internal */
+export function unsafelyGetEmitNode(node: Node | undefined): EmitNode | undefined;
+export function unsafelyGetEmitNode(node: Node | undefined): EmitNode | undefined {
+    return node ? emitNodes.get(node) : undefined;
+}
+
+/** @internal */
+export function unsafelySetEmitNode<T extends EmitNode | undefined>(node: Node, emitNode: T): T {
+    emitNodes.set(node, emitNode);
+    return emitNode;
+}
+
 /**
  * Associates a node with the current transformation, initializing
  * various transient transformation properties.
  * @internal
  */
 export function getOrCreateEmitNode(node: Node): EmitNode {
-    if (!node.emitNode) {
+    // TODO(jakebailey): write this differently
+    let emitNode = unsafelyGetEmitNode(node);
+    if (!emitNode) {
         if (isParseTreeNode(node)) {
             // To avoid holding onto transformation artifacts, we keep track of any
             // parse tree node we are annotating. This allows us to clean them up after
             // all transformations have completed.
             if (node.kind === SyntaxKind.SourceFile) {
-                return node.emitNode = { annotatedNodes: [node] } as EmitNode;
+                return unsafelySetEmitNode(node, { annotatedNodes: [node] } as EmitNode);
             }
 
             const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
             getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
         }
 
-        node.emitNode = {} as EmitNode;
+        emitNode = unsafelySetEmitNode(node, {} as EmitNode);
     }
     else {
-        Debug.assert(!(node.emitNode.internalFlags & InternalEmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+        Debug.assert(!(emitNode.internalFlags & InternalEmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
     }
-    return node.emitNode;
+    return emitNode;
 }
 
 /**
@@ -66,10 +86,10 @@ export function disposeEmitNodes(sourceFile: SourceFile | undefined) {
     // from these nodes to ensure we do not hold onto entire subtrees just for position
     // information. We also need to reset these nodes to a pre-transformation state
     // for incremental parsing scenarios so that we do not impact later emit.
-    const annotatedNodes = getSourceFileOfNode(getParseTreeNode(sourceFile))?.emitNode?.annotatedNodes;
+    const annotatedNodes = unsafelyGetEmitNode(getSourceFileOfNode(getParseTreeNode(sourceFile)))?.annotatedNodes;
     if (annotatedNodes) {
         for (const node of annotatedNodes) {
-            node.emitNode = undefined;
+            unsafelySetEmitNode(node, /*emitNode*/ undefined);
         }
     }
 }
@@ -130,7 +150,7 @@ export function addInternalEmitFlags<T extends Node>(node: T, emitFlags: Interna
  * Gets a custom text range to use when emitting source maps.
  */
 export function getSourceMapRange(node: Node): SourceMapRange {
-    return node.emitNode?.sourceMapRange ?? node;
+    return unsafelyGetEmitNode(node)?.sourceMapRange ?? node;
 }
 
 /**
@@ -145,7 +165,7 @@ export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange
  * Gets the TextRange to use for source maps for a token of a node.
  */
 export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
-    return node.emitNode?.tokenSourceMapRanges?.[token];
+    return unsafelyGetEmitNode(node)?.tokenSourceMapRanges?.[token];
 }
 
 /**
@@ -164,7 +184,7 @@ export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKin
  * @internal
  */
 export function getStartsOnNewLine(node: Node) {
-    return node.emitNode?.startsOnNewLine;
+    return unsafelyGetEmitNode(node)?.startsOnNewLine;
 }
 
 /**
@@ -181,7 +201,7 @@ export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
  * Gets a custom text range to use when emitting comments.
  */
 export function getCommentRange(node: Node): TextRange {
-    return node.emitNode?.commentRange ?? node;
+    return unsafelyGetEmitNode(node)?.commentRange ?? node;
 }
 
 /**
@@ -193,7 +213,7 @@ export function setCommentRange<T extends Node>(node: T, range: TextRange) {
 }
 
 export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
-    return node.emitNode?.leadingComments;
+    return unsafelyGetEmitNode(node)?.leadingComments;
 }
 
 export function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
@@ -206,7 +226,7 @@ export function addSyntheticLeadingComment<T extends Node>(node: T, kind: Syntax
 }
 
 export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
-    return node.emitNode?.trailingComments;
+    return unsafelyGetEmitNode(node)?.trailingComments;
 }
 
 export function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
@@ -231,7 +251,7 @@ export function moveSyntheticComments<T extends Node>(node: T, original: Node): 
  * Gets the constant value to emit for an expression representing an enum.
  */
 export function getConstantValue(node: AccessExpression): string | number | undefined {
-    return node.emitNode?.constantValue;
+    return unsafelyGetEmitNode(node)?.constantValue;
 }
 
 /**
@@ -269,7 +289,7 @@ export function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | 
  * Removes an EmitHelper from a node.
  */
 export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
-    const helpers = node.emitNode?.helpers;
+    const helpers = unsafelyGetEmitNode(node)?.helpers;
     if (helpers) {
         return orderedRemoveItem(helpers, helper);
     }
@@ -280,14 +300,14 @@ export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
  * Gets the EmitHelpers of a node.
  */
 export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
-    return node.emitNode?.helpers;
+    return unsafelyGetEmitNode(node)?.helpers;
 }
 
 /**
  * Moves matching emit helpers from a source node to a target node.
  */
 export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
-    const sourceEmitNode = source.emitNode;
+    const sourceEmitNode = unsafelyGetEmitNode(source);
     const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
     if (!some(sourceEmitHelpers)) return;
 
@@ -315,7 +335,7 @@ export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: 
  * @internal
  */
 export function getSnippetElement(node: Node): SnippetElement | undefined {
-    return node.emitNode?.snippetElement;
+    return unsafelyGetEmitNode(node)?.snippetElement;
 }
 
 /**
@@ -344,7 +364,7 @@ export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
 
 /** @internal */
 export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
-    return node.emitNode?.typeNode;
+    return unsafelyGetEmitNode(node)?.typeNode;
 }
 
 /** @internal */
@@ -355,7 +375,7 @@ export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeAr
 
 /** @internal */
 export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
-    return node.emitNode?.identifierTypeArguments;
+    return unsafelyGetEmitNode(node)?.identifierTypeArguments;
 }
 
 /** @internal */
@@ -366,7 +386,7 @@ export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifi
 
 /** @internal */
 export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
-    return node.emitNode?.autoGenerate;
+    return unsafelyGetEmitNode(node)?.autoGenerate;
 }
 
 /** @internal */
@@ -377,5 +397,5 @@ export function setIdentifierGeneratedImportReference<T extends Identifier | Pri
 
 /** @internal */
 export function getIdentifierGeneratedImportReference(node: Identifier | PrivateIdentifier): ImportSpecifier | undefined {
-    return node.emitNode?.generatedImportReference;
+    return unsafelyGetEmitNode(node)?.generatedImportReference;
 }

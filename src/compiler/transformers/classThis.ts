@@ -21,6 +21,7 @@ import {
     Statement,
     SyntaxKind,
     ThisExpression,
+    unsafelyGetEmitNode,
 } from "../_namespaces/ts";
 
 /**
@@ -79,7 +80,7 @@ export function isClassThisAssignmentBlock(node: Node): node is ClassThisAssignm
     return isExpressionStatement(statement) &&
         isAssignmentExpression(statement.expression, /*excludeCompoundAssignment*/ true) &&
         isIdentifier(statement.expression.left) &&
-        node.emitNode?.classThis === statement.expression.left &&
+        unsafelyGetEmitNode(node)?.classThis === statement.expression.left &&
         statement.expression.right.kind === SyntaxKind.ThisKeyword;
 }
 
@@ -89,7 +90,7 @@ export function isClassThisAssignmentBlock(node: Node): node is ClassThisAssignm
  * @internal
  */
 export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
-    return !!node.emitNode?.classThis && some(node.members, isClassThisAssignmentBlock);
+    return !!unsafelyGetEmitNode(node)?.classThis && some(node.members, isClassThisAssignmentBlock);
 }
 
 /**

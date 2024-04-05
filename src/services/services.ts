@@ -58,7 +58,6 @@ import {
     EditorOptions,
     EditorSettings,
     ElementAccessExpression,
-    EmitNode,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
@@ -362,7 +361,6 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     public jsDoc?: JSDoc[];
     public original?: Node;
     public id?: number;
-    public emitNode?: EmitNode;
 
     constructor(kind: TKind, pos: number, end: number) {
         // Note: if modifying this, be sure to update Node in src/compiler/utilities.ts
@@ -375,7 +373,6 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
         this.original = undefined;
-        this.emitNode = undefined;
     }
 
     private assertHasRealPosition(message?: string) {
@@ -558,7 +555,6 @@ class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
     public symbol!: Symbol;
     public jsDocComments?: JSDoc[];
     public id?: number;
-    public emitNode?: EmitNode | undefined;
 
     constructor(kind: TKind, pos: number, end: number) {
         // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
@@ -569,7 +565,6 @@ class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
-        this.emitNode = undefined;
     }
 
     public getSourceFile(): SourceFile {

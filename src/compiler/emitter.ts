@@ -409,6 +409,7 @@ import {
     TypeQueryNode,
     TypeReferenceNode,
     UnionTypeNode,
+    unsafelyGetEmitNode,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -3271,7 +3272,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emit(node.name);
         emit(node.exclamationToken);
         emitTypeAnnotation(node.type);
-        emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+        emitInitializer(node.initializer, node.type?.end ?? unsafelyGetEmitNode(node.name)?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
     }
 
     function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -5337,7 +5338,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Generate the text for a generated identifier.
      */
     function generateName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-        const autoGenerate = name.emitNode.autoGenerate;
+        const autoGenerate = unsafelyGetEmitNode(name).autoGenerate;
         if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
             // Node names generate unique names based on their original node
             // and are cached based on that node's id.
@@ -5626,7 +5627,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Generates a unique identifier for a node.
      */
     function makeName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-        const autoGenerate = name.emitNode.autoGenerate;
+        const autoGenerate = unsafelyGetEmitNode(name).autoGenerate;
         const prefix = formatGeneratedNamePart(autoGenerate.prefix, generateName);
         const suffix = formatGeneratedNamePart(autoGenerate.suffix);
         switch (autoGenerate.flags & GeneratedIdentifierFlags.KindMask) {
@@ -6127,7 +6128,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             return emitCallback(token, writer, tokenPos);
         }
 
-        const emitNode = node && node.emitNode;
+        const emitNode = unsafelyGetEmitNode(node);
         const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
         const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
         const source = range && range.source || sourceMapSource;

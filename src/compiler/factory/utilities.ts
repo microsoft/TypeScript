@@ -177,6 +177,7 @@ import {
     Token,
     TransformFlags,
     TypeNode,
+    unsafelyGetEmitNode,
     WrappedExpression,
 } from "../_namespaces/ts";
 
@@ -696,14 +697,13 @@ export function startOnNewLine<T extends Node>(node: T): T {
 /** @internal */
 export function getExternalHelpersModuleName(node: SourceFile) {
     const parseNode = getOriginalNode(node, isSourceFile);
-    const emitNode = parseNode && parseNode.emitNode;
-    return emitNode && emitNode.externalHelpersModuleName;
+    return unsafelyGetEmitNode(parseNode)?.externalHelpersModuleName;
 }
 
 /** @internal */
 export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
     const parseNode = getOriginalNode(sourceFile, isSourceFile);
-    const emitNode = parseNode && parseNode.emitNode;
+    const emitNode = unsafelyGetEmitNode(parseNode);
     return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
 }
 
@@ -1544,14 +1544,14 @@ export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArra
  * @internal
  */
 export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-    const autoGenerate = name.emitNode.autoGenerate;
+    const autoGenerate = unsafelyGetEmitNode(name).autoGenerate;
     if (autoGenerate.flags & GeneratedIdentifierFlags.Node) {
         const autoGenerateId = autoGenerate.id;
         let node = name as Node;
         let original = node.original;
         while (original) {
             node = original;
-            const autoGenerate = node.emitNode?.autoGenerate;
+            const autoGenerate = unsafelyGetEmitNode(node)?.autoGenerate;
             // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
             if (
                 isMemberName(node) && (
@@ -1723,7 +1723,7 @@ export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyNa
 function isSyntheticParenthesizedExpression(node: Expression): node is ParenthesizedExpression {
     return isParenthesizedExpression(node)
         && nodeIsSynthesized(node)
-        && !node.emitNode;
+        && !unsafelyGetEmitNode(node);
 }
 
 function flattenCommaListWorker(node: Expression, expressions: Expression[]) {

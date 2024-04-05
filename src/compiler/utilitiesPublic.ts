@@ -293,6 +293,7 @@ import {
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
+    unsafelyGetEmitNode,
     VariableDeclaration,
 } from "./_namespaces/ts";
 
@@ -1527,17 +1528,17 @@ export function isImportAttributeName(node: Node): node is ImportAttributeName {
 
 /** @internal */
 export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-    return isIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
+    return isIdentifier(node) && unsafelyGetEmitNode(node)?.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-    return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
+    return isPrivateIdentifier(node) && unsafelyGetEmitNode(node)?.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier) {
-    const flags = node.emitNode.autoGenerate.flags;
+    const flags = unsafelyGetEmitNode(node).autoGenerate.flags;
     return !!(flags & GeneratedIdentifierFlags.FileLevel)
         && !!(flags & GeneratedIdentifierFlags.Optimistic)
         && !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes);

@@ -447,6 +447,8 @@ import {
     TypeReferenceNode,
     UnionOrIntersectionTypeNode,
     UnionTypeNode,
+    unsafelyGetEmitNode,
+    unsafelySetEmitNode,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -6108,7 +6110,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.originalFileName = source.originalFileName;
         node.packageJsonLocations = source.packageJsonLocations;
         node.packageJsonScope = source.packageJsonScope;
-        node.emitNode = undefined;
         return node;
     }
 
@@ -6119,10 +6120,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.flags |= source.flags & ~NodeFlags.Synthesized;
         for (const p in source) {
             if (hasProperty(node, p) || !hasProperty(source, p)) {
-                continue;
-            }
-            if (p === "emitNode") {
-                node.emitNode = undefined;
                 continue;
             }
             (node as any)[p] = (source as any)[p];
@@ -6259,7 +6256,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
-        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
+        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !unsafelyGetEmitNode(node) && !node.id) {
             if (isCommaListExpression(node)) {
                 return node.elements;
             }
@@ -6308,7 +6305,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.transformFlags = node.transformFlags;
         setOriginal(clone, node);
-        setIdentifierAutoGenerate(clone, { ...node.emitNode.autoGenerate });
+        setIdentifierAutoGenerate(clone, { ...unsafelyGetEmitNode(node).autoGenerate });
         return clone;
     }
 
@@ -6332,7 +6329,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.transformFlags = node.transformFlags;
         setOriginal(clone, node);
-        setIdentifierAutoGenerate(clone, { ...node.emitNode.autoGenerate });
+        setIdentifierAutoGenerate(clone, { ...unsafelyGetEmitNode(node).autoGenerate });
         return clone;
     }
 
@@ -7401,8 +7398,10 @@ export function setOriginalNode<T extends Node>(node: T, original: Node | undefi
     if (node.original !== original) {
         node.original = original;
         if (original) {
-            const emitNode = original.emitNode;
-            if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+            const emitNode = unsafelyGetEmitNode(original);
+            if (emitNode) {
+                unsafelySetEmitNode(node, mergeEmitNode(emitNode, unsafelyGetEmitNode(node)));
+            }
         }
     }
     return node;

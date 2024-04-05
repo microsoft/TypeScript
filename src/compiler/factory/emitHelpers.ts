@@ -34,6 +34,8 @@ import {
     SyntaxKind,
     TextRange,
     TransformationContext,
+    unsafelyGetEmitNode,
+    unsafelySetEmitNode,
     UnscopedEmitHelper,
 } from "../_namespaces/ts";
 
@@ -416,7 +418,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        const emitNode = unsafelyGetEmitNode(generatorFunc) ?? unsafelySetEmitNode(generatorFunc, {} as EmitNode);
+        emitNode.flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncGenerator"),
@@ -509,7 +512,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         );
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        const emitNode = unsafelyGetEmitNode(generatorFunc) ?? unsafelySetEmitNode(generatorFunc, {} as EmitNode);
+        emitNode.flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return factory.createCallExpression(
             getUnscopedHelperName("__awaiter"),
