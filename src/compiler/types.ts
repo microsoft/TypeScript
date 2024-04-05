@@ -5635,7 +5635,6 @@ export enum TypeReferenceSerializationKind {
 
 /** @internal */
 export interface EmitResolver {
-    hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
     getReferencedDeclarationWithCollidingName(node: Identifier): Declaration | undefined;
@@ -9417,10 +9416,7 @@ export interface BuildInfo {
 }
 
 export interface PrintHandlers {
-    /**
-     * A hook used by the Printer when generating unique names to avoid collisions with
-     * globally defined names that exist outside of the current source file.
-     */
+    /** @deprecated */
     hasGlobalName?(name: string): boolean;
     /**
      * A hook used by the Printer to provide notifications prior to emitting a node. A

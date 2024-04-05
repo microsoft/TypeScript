@@ -48907,10 +48907,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return nodeBuilder.expressionOrTypeToTypeNode(expr, type, /*addUndefined*/ undefined, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }
 
-    function hasGlobalName(name: string): boolean {
-        return globals.has(escapeLeadingUnderscores(name));
-    }
-
     function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
         const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
         if (resolvedSymbol) {
@@ -49096,7 +49092,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Synthesized nodes are always treated like values.
                 return node && canCollectSymbolAliasAccessabilityData ? isValueAliasDeclaration(node) : true;
             },
-            hasGlobalName,
             isReferencedAliasDeclaration: (nodeIn, checkChildren?) => {
                 const node = getParseTreeNode(nodeIn);
                 // Synthesized nodes are always treated as referenced.

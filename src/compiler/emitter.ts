@@ -809,9 +809,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
         // Create a printer to print the nodes
         const printer = createPrinter(printerOptions, {
-            // resolver hooks
-            hasGlobalName: resolver.hasGlobalName,
-
             // transform hooks
             onEmitNode: transform.emitNodeWithNotification,
             isEmitNotificationEnabled: transform.isEmitNotificationEnabled,
@@ -876,9 +873,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
-                // resolver hooks
-                hasGlobalName: resolver.hasGlobalName,
-
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
                 isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
@@ -1079,7 +1073,6 @@ export function getBuildInfo(buildInfoFile: string, buildInfoText: string) {
 
 /** @internal */
 export const notImplementedResolver: EmitResolver = {
-    hasGlobalName: notImplemented,
     getReferencedExportContainer: notImplemented,
     getReferencedImportDeclaration: notImplemented,
     getReferencedDeclarationWithCollidingName: notImplemented,
@@ -1143,7 +1136,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var {
-        hasGlobalName,
         onEmitNode = noEmitNotification,
         isEmitNotificationEnabled,
         substituteNode = noEmitSubstitution,
@@ -5378,7 +5370,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
     function isFileLevelUniqueNameInCurrentFile(name: string, _isPrivate: boolean) {
-        return currentSourceFile ? isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
+        return currentSourceFile ? isFileLevelUniqueName(currentSourceFile, name) : true;
     }
 
     /**
