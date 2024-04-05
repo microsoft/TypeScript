@@ -5,17 +5,17 @@
 
 const obj = {
 >obj : { foo: (param?: any) => any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
 >{   foo: (param = "default") => param,} satisfies {   [key: string]: (...params: any) => any;} : { foo: (param?: any) => any; }
->                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                               : ^^^^^^^      ^             ^^^
 >{   foo: (param = "default") => param,} : { foo: (param?: any) => any; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
 
    foo: (param = "default") => param,
 >foo : (param?: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^
 >(param = "default") => param : (param?: any) => any
->                             : ^^^^^^^^^^^^^^^^^^^^
+>                             :       ^             
 >param : any
 >"default" : "default"
 >          : ^^^^^^^^^
@@ -31,17 +31,17 @@ const obj = {
 
 const obj2 = {
 >obj2 : { foo: (param?: string) => string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{   foo: (param = "default") => param,} satisfies {   [key: string]: Function;} : { foo: (param?: string) => string; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                : ^^^^^^^      ^                   ^^^
 >{   foo: (param = "default") => param,} : { foo: (param?: string) => string; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 
    foo: (param = "default") => param,
 >foo : (param?: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^
 >(param = "default") => param : (param?: string) => string
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             :       ^                   
 >param : string
 >      : ^^^^^^
 >"default" : "default"
@@ -64,13 +64,13 @@ type StringOrNumberFunc = (x: string | number) => any;
 
 const fn = ((x = "ok") => null) satisfies StringOrNumberFunc;
 >fn : (x?: string | number) => null
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >((x = "ok") => null) satisfies StringOrNumberFunc : (x?: string | number) => null
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  :   ^                          
 >((x = "ok") => null) : (x?: string | number) => null
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x = "ok") => null : (x?: string | number) => null
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 >"ok" : "ok"
@@ -80,13 +80,13 @@ fn();
 >fn() : null
 >     : ^^^^
 >fn : (x?: string | number) => null
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 fn(32);
 >fn(32) : null
 >       : ^^^^
 >fn : (x?: string | number) => null
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >32 : 32
 >   : ^^
 

@@ -3,9 +3,9 @@
 === collisionRestParameterArrowFunctions.ts ===
 var f1 = (_i: number, ...restParameters) => { //_i is error
 >f1 : (_i: number, ...restParameters: any[]) => void
->   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^      ^^^^^              ^^^^^^^^^^^^^^^^
 >(_i: number, ...restParameters) => { //_i is error    var _i = 10; // no error} : (_i: number, ...restParameters: any[]) => void
->                                                                                : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                :              ^^^                              
 >_i : number
 >   : ^^^^^^
 >restParameters : any[]
@@ -19,9 +19,9 @@ var f1 = (_i: number, ...restParameters) => { //_i is error
 }
 var f1NoError = (_i: number) => { // no error
 >f1NoError : (_i: number) => void
->          : ^^^^^      ^^^^^^^^^
+>          : ^  ^^      ^^^^^^^^^
 >(_i: number) => { // no error    var _i = 10; // no error} : (_i: number) => void
->                                                           : ^^^^^      ^^^^^^^^^
+>                                                           :                     
 >_i : number
 >   : ^^^^^^
 
@@ -34,9 +34,9 @@ var f1NoError = (_i: number) => { // no error
 
 var f2 = (...restParameters) => {
 >f2 : (...restParameters: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^              ^^^^^^^^^^^^^^^^
 >(...restParameters) => {    var _i = 10; // No Error} : (...restParameters: any[]) => void
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      :  ^^^                              
 >restParameters : any[]
 >               : ^^^^^
 
@@ -50,7 +50,7 @@ var f2NoError = () => {
 >f2NoError : () => void
 >          : ^^^^^^^^^^
 >() => {    var _i = 10; // no error} : () => void
->                                     : ^^^^^^^^^^
+>                                     :           
 
     var _i = 10; // no error
 >_i : number

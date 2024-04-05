@@ -19,11 +19,11 @@ if (typeof envVar === `string`) {
 >envVar.slice(0) : string
 >                : ^^^^^^
 >envVar.slice : (start?: number | undefined, end?: number | undefined) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >envVar : string
 >       : ^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 }
@@ -46,7 +46,7 @@ if (`test` in obj) {
 >obj.test.slice(0) : string
 >                  : ^^^^^^
 >obj.test.slice : (start?: number | undefined, end?: number | undefined) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.test : string
 >         : ^^^^^^
 >obj : { test: string; }
@@ -54,7 +54,7 @@ if (`test` in obj) {
 >test : string
 >     : ^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 }

@@ -15,15 +15,15 @@ import React from 'react';
 
 function test<P>(wrappedProps: P) {
 >test : <P>(wrappedProps: P) => void
->     : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^            ^^ ^^^^^^^^^
 >wrappedProps : P
 >             : ^
 
     let MySFC = function(props: P) {
 >MySFC : (props: P) => JSX.Element
->      : ^^^^^^^^ ^^^^^^^^^^^^^^^^
+>      : ^     ^^ ^^^^^^^^^^^^^^^^
 >function(props: P) {        return <>hello</>;    } : (props: P) => JSX.Element
->                                                    : ^^^^^^^^ ^^^^^^^^^^^^^^^^
+>                                                    :                          
 >props : P
 >      : ^
 
@@ -57,7 +57,7 @@ function test<P>(wrappedProps: P) {
 ><MySFC /> : JSX.Element
 >          : ^^^^^^^^^^^
 >MySFC : (props: P) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^
 
     let y = <MyComponent />;  // should error
 >y : JSX.Element
@@ -73,7 +73,7 @@ function test<P>(wrappedProps: P) {
 ><MySFC {...wrappedProps} /> : JSX.Element
 >                            : ^^^^^^^^^^^
 >MySFC : (props: P) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^
 >wrappedProps : P
 >             : ^
 

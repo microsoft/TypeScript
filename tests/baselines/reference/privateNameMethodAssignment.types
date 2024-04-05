@@ -55,7 +55,7 @@ class A3 {
 >x : () => void
 >  : ^^^^^^^^^^
 >this.#method : () => void
->             : ^^^^^^^^^^
+>             :           
 >this : this
 >     : ^^^^
 >{ x: () => {}} : { x: () => void; }
@@ -63,13 +63,13 @@ class A3 {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         let x = this.#method;
 >x : () => void
 >  : ^^^^^^^^^^
 >this.#method : () => void
->             : ^^^^^^^^^^
+>             :           
 >this : this
 >     : ^^^^
 

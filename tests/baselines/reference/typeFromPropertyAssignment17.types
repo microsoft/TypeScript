@@ -14,7 +14,7 @@ var mini = require('./minimatch')
 mini.M.defaults()
 >mini.M.defaults() : any
 >mini.M.defaults : (def: any) => any
->                : ^^^^^^^^^^^^^^^^^
+>                : ^   ^^^^^^^^^^^^^
 >mini.M : typeof M
 >       : ^^^^^^^^
 >mini : typeof mini
@@ -22,7 +22,7 @@ mini.M.defaults()
 >M : typeof M
 >  : ^^^^^^^^
 >defaults : (def: any) => any
->         : ^^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^^^^^
 
 var m = new mini.M()
 >m : M
@@ -99,7 +99,7 @@ minimatch.filter = filter
 >filter : () => void
 >       : ^^^^^^^^^^
 >filter : () => void
->       : ^^^^^^^^^^
+>       :           
 
 function filter() {
 >filter : () => void
@@ -117,15 +117,15 @@ function minimatch() {
 }
 M.defaults = function (def) {
 >M.defaults = function (def) {    return def} : (def: any) => any
->                                             : ^^^^^^^^^^^^^^^^^
+>                                             : ^   ^^^^^^^^^^^^^
 >M.defaults : (def: any) => any
->           : ^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^
 >M : typeof M
 >  : ^^^^^^^^
 >defaults : (def: any) => any
->         : ^^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^^^^^
 >function (def) {    return def} : (def: any) => any
->                                : ^^^^^^^^^^^^^^^^^
+>                                :                  
 >def : any
 
     return def

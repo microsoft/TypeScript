@@ -9,7 +9,7 @@ class Foo {
 
   myFunc<T extends Foo>(arg: T) {}
 >myFunc : <T extends Foo>(arg: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 }
@@ -20,7 +20,7 @@ class Bar {
 
   myFunc<T extends Bar>(arg: T) {}
 >myFunc : <T extends Bar>(arg: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 }

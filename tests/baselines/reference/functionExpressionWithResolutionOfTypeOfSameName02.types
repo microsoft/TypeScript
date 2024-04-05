@@ -8,7 +8,7 @@ var x = function Foo() {
 >x : () => void
 >  : ^^^^^^^^^^
 >function Foo() {    var x: Foo;} : () => void
->                                 : ^^^^^^^^^^
+>                                 :           
 >Foo : () => void
 >    : ^^^^^^^^^^
 

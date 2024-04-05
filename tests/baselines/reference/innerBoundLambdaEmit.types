@@ -13,7 +13,7 @@ module M {
 >bar : () => void
 >    : ^^^^^^^^^^
 >() => { } : () => void
->          : ^^^^^^^^^^
+>          :           
 }
 interface Array<T> {
     toFoo(): M.Foo

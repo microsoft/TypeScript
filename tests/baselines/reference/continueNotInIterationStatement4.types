@@ -13,7 +13,7 @@ while (true){
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {    continue TWO;  } : () => void
->                            : ^^^^^^^^^^
+>                            :           
 
     continue TWO;
 >TWO : any

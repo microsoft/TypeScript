@@ -18,21 +18,21 @@ async function * yield() {
 === awaitParameterIsError.ts ===
 async function * f4(await) {
 >f4 : (await: any) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : any
 >      : ^^^
 }
 === yieldParameterIsError.ts ===
 async function * f5(yield) {
 >f5 : (yield: any) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : any
 >      : ^^^
 }
 === awaitInParameterInitializerIsError.ts ===
 async function * f6(a = await 1) {
 >f6 : (a?: number) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >await 1 : 1
@@ -43,7 +43,7 @@ async function * f6(a = await 1) {
 === yieldInParameterInitializerIsError.ts ===
 async function * f7(a = yield) {
 >f7 : (a?: any) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >yield : any
@@ -78,7 +78,7 @@ async function * f10() {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {    } : () => void
->                        : ^^^^^^^^^^
+>                        :           
 >yield : () => void
 >      : ^^^^^^^^^^
 
@@ -103,7 +103,7 @@ async function * f12() {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {    } : () => void
->                        : ^^^^^^^^^^
+>                        :           
 >yield : () => void
 >      : ^^^^^^^^^^
 

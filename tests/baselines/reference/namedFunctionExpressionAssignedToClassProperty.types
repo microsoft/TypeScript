@@ -9,7 +9,7 @@ class Foo{
 >a : () => void
 >  : ^^^^^^^^^^
 >function bar(){       } : () => void
->                        : ^^^^^^^^^^
+>                        :           
 >bar : () => void
 >    : ^^^^^^^^^^
 

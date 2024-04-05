@@ -7,13 +7,13 @@ class B {
 
     foo (v: string) {}
 >foo : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
     fooo (v: string) {}
 >fooo : (v: string) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
@@ -26,19 +26,19 @@ class D extends B {
 
     override foo (v: string) {}
 >foo : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
     fooo (v: string) {}
 >fooo : (v: string) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
     override bar(v: string) {}
 >bar : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
@@ -49,7 +49,7 @@ class C {
 
     override foo(v: string) {}
 >foo : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
@@ -66,19 +66,19 @@ function f () {
 
         override foo (v: string) {}
 >foo : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
     
         fooo (v: string) {}
 >fooo : (v: string) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
     
         override bar(v: string) {}
 >bar : (v: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
     }

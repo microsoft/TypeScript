@@ -3,15 +3,15 @@
 === emitArrowFunctionWhenUsingArguments07.ts ===
 function f(arguments) {
 >f : (arguments: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^         ^^^^^^^^^^^^^^
 >arguments : any
 >          : ^^^
 
     var a = (arguments) => () => arguments;
 >a : (arguments: any) => () => IArguments
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arguments) => () => arguments : (arguments: any) => () => IArguments
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               :                                     
 >arguments : any
 >          : ^^^
 >() => arguments : () => IArguments

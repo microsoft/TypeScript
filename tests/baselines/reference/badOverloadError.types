@@ -9,7 +9,7 @@ function method() {
 >dictionary : { [index: string]: string; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><{ [index: string]: string; }>{} : { [index: string]: string; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 :                             
 >index : string
 >      : ^^^^^^
 >{} : {}

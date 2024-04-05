@@ -17,7 +17,7 @@ interface Options {
 
 declare function includesAllRequiredOptions(options: Partial<Options>): options is Options;
 >includesAllRequiredOptions : (options: Partial<Options>) => options is Options
->                           : ^^^^^^^^^^                ^^^^^                  
+>                           : ^       ^^                ^^^^^                  
 >options : Partial<Options>
 >        : ^^^^^^^^^^^^^^^^
 

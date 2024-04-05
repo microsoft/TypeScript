@@ -23,13 +23,13 @@ var f2 = function (): null { return null; }
 >f2 : () => null
 >   : ^^^^^^    
 >function (): null { return null; } : () => null
->                                   : ^^^^^^    
+>                                   :           
 
 var f3 = function (): undefined { return undefined; }
 >f3 : () => undefined
 >   : ^^^^^^         
 >function (): undefined { return undefined; } : () => undefined
->                                             : ^^^^^^         
+>                                             :                
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -37,57 +37,57 @@ var f4 = (): null => null;
 >f4 : () => null
 >   : ^^^^^^    
 >(): null => null : () => null
->                 : ^^^^^^    
+>                 :           
 
 var f5 = (): undefined => undefined;
 >f5 : () => undefined
 >   : ^^^^^^         
 >(): undefined => undefined : () => undefined
->                           : ^^^^^^         
+>                           :                
 >undefined : undefined
 >          : ^^^^^^^^^
 
 function f6(p0: null) { }
 >f6 : (p0: null) => void
->   : ^^^^^    ^^^^^^^^^
+>   : ^  ^^    ^^^^^^^^^
 >p0 : null
 >   : ^^^^
 
 function f7(p1: undefined) { }
 >f7 : (p1: undefined) => void
->   : ^^^^^         ^^^^^^^^^
+>   : ^  ^^         ^^^^^^^^^
 >p1 : undefined
 >   : ^^^^^^^^^
 
 var f8 = function (p2: null) { }
 >f8 : (p2: null) => void
->   : ^^^^^    ^^^^^^^^^
+>   : ^  ^^    ^^^^^^^^^
 >function (p2: null) { } : (p2: null) => void
->                        : ^^^^^    ^^^^^^^^^
+>                        :                   
 >p2 : null
 >   : ^^^^
 
 var f9 = function (p3: undefined) { }
 >f9 : (p3: undefined) => void
->   : ^^^^^         ^^^^^^^^^
+>   : ^  ^^         ^^^^^^^^^
 >function (p3: undefined) { } : (p3: undefined) => void
->                             : ^^^^^         ^^^^^^^^^
+>                             :                        
 >p3 : undefined
 >   : ^^^^^^^^^
 
 var f10 = (p4: null) => { }
 >f10 : (p4: null) => void
->    : ^^^^^    ^^^^^^^^^
+>    : ^  ^^    ^^^^^^^^^
 >(p4: null) => { } : (p4: null) => void
->                  : ^^^^^    ^^^^^^^^^
+>                  :                   
 >p4 : null
 >   : ^^^^
 
 var f11 = (p5: undefined) => { }
 >f11 : (p5: undefined) => void
->    : ^^^^^         ^^^^^^^^^
+>    : ^  ^^         ^^^^^^^^^
 >(p5: undefined) => { } : (p5: undefined) => void
->                       : ^^^^^         ^^^^^^^^^
+>                       :                        
 >p5 : undefined
 >   : ^^^^^^^^^
 
@@ -107,13 +107,13 @@ class C1 {
 
     m3(p6: null) { }
 >m3 : (p6: null) => void
->   : ^^^^^    ^^^^^^^^^
+>   : ^  ^^    ^^^^^^^^^
 >p6 : null
 >   : ^^^^
 
     m4(p7: undefined) { }
 >m4 : (p7: undefined) => void
->   : ^^^^^         ^^^^^^^^^
+>   : ^  ^^         ^^^^^^^^^
 >p7 : undefined
 >   : ^^^^^^^^^
 

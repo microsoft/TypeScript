@@ -61,7 +61,7 @@ type From =  { field: null } & Omit<To, 'field'>;
 
 function foo(v: From) {
 >foo : (v: From) => void
->    : ^^^^    ^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^
 >v : From
 >  : ^^^^
 

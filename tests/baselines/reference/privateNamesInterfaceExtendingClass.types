@@ -11,7 +11,7 @@ class C {
 
     func(x: I) {
 >func : (x: I) => void
->     : ^^^^ ^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^
 >x : I
 >  : ^
 
@@ -30,7 +30,7 @@ interface I extends C {}
 
 function func(x: I) {
 >func : (x: I) => void
->     : ^^^^ ^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^
 >x : I
 >  : ^
 

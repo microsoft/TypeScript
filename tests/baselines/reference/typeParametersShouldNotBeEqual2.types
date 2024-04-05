@@ -3,7 +3,7 @@
 === typeParametersShouldNotBeEqual2.ts ===
 function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >ff : <T extends Date, U extends Date, V>(x: T, y: U, z: V) => void
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

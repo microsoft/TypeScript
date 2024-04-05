@@ -7,31 +7,31 @@ declare var x: any;
 
 declare function isFunction(x): x is Function;
 >isFunction : (x: any) => x is Function
->           : ^^^^^^^^^^^^             
+>           : ^ ^^^^^^^^^^             
 >x : any
 >  : ^^^
 
 declare function isObject(x): x is Object;
 >isObject : (x: any) => x is Object
->         : ^^^^^^^^^^^^           
+>         : ^ ^^^^^^^^^^           
 >x : any
 >  : ^^^
 
 declare function isAnything(x): x is {};
 >isAnything : (x: any) => x is {}
->           : ^^^^^^^^^^^^       
+>           : ^ ^^^^^^^^^^       
 >x : any
 >  : ^^^
 
 declare function isError(x): x is Error;
 >isError : (x: any) => x is Error
->        : ^^^^^^^^^^^^          
+>        : ^ ^^^^^^^^^^          
 >x : any
 >  : ^^^
 
 declare function isDate(x): x is Date;
 >isDate : (x: any) => x is Date
->       : ^^^^^^^^^^^^         
+>       : ^ ^^^^^^^^^^         
 >x : any
 >  : ^^^
 
@@ -40,7 +40,7 @@ if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
 >isFunction(x) : boolean
 >              : ^^^^^^^
 >isFunction : (x: any) => x is Function
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -83,7 +83,7 @@ if (isObject(x)) { // 'any' is not narrowed when target type is 'Object'
 >isObject(x) : boolean
 >            : ^^^^^^^
 >isObject : (x: any) => x is Object
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -108,7 +108,7 @@ if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object
 >isAnything(x) : boolean
 >              : ^^^^^^^
 >isAnything : (x: any) => x is {}
->           : ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -133,7 +133,7 @@ if (isError(x)) {
 >isError(x) : boolean
 >           : ^^^^^^^
 >isError : (x: any) => x is Error
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -158,7 +158,7 @@ if (isDate(x)) {
 >isDate(x) : boolean
 >          : ^^^^^^^
 >isDate : (x: any) => x is Date
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 

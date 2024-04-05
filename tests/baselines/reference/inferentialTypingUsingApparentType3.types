@@ -4,7 +4,7 @@
 interface Field<T> {
     clean(input: T): T
 >clean : (input: T) => T
->      : ^^^^^^^^ ^^^^^ 
+>      : ^     ^^ ^^^^^ 
 >input : T
 >      : ^
 }
@@ -15,7 +15,7 @@ class CharField implements Field<string> {
 
     clean(input: string) {
 >clean : (input: string) => string
->      : ^^^^^^^^      ^^^^^^^^^^^
+>      : ^     ^^      ^^^^^^^^^^^
 >input : string
 >      : ^^^^^^
 
@@ -31,7 +31,7 @@ class NumberField implements Field<number> {
 
     clean(input: number) {
 >clean : (input: number) => number
->      : ^^^^^^^^      ^^^^^^^^^^^
+>      : ^     ^^      ^^^^^^^^^^^
 >input : number
 >      : ^^^^^^
 
@@ -56,7 +56,7 @@ var person = new ObjectField({
 >person : ObjectField<unknown, { id: NumberField; name: CharField; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ObjectField({    id: new NumberField(),    name: new CharField()}) : ObjectField<unknown, { id: NumberField; name: CharField; }>
->                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^                                     ^
 >ObjectField : typeof ObjectField
 >            : ^^^^^^^^^^^^^^^^^^
 >{    id: new NumberField(),    name: new CharField()} : { id: NumberField; name: CharField; }
@@ -88,7 +88,7 @@ person.fields.id;
 >person : ObjectField<unknown, { id: NumberField; name: CharField; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fields : { id: NumberField; name: CharField; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       :                                      
 >id : NumberField
 >   : ^^^^^^^^^^^
 

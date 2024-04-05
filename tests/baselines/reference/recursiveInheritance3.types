@@ -7,7 +7,7 @@ class C implements I {
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -23,7 +23,7 @@ class C implements I {
 interface I extends C {
     other(x: any): any;
 >other : (x: any) => any
->      : ^^^^   ^^^^^   
+>      : ^ ^^   ^^^^^   
 >x : any
 >  : ^^^
 }

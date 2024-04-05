@@ -3,7 +3,7 @@
 === equalityStrictNulls.ts ===
 function f1(x: string) {
 >f1 : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -153,7 +153,7 @@ function f2() {
 
 function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
 >f3 : (a: number, b: boolean, c: { x: number; }, d: number | string) => void
->   : ^^^^      ^^^^^       ^^^^^              ^^^^^               ^^^^^^^^^
+>   : ^ ^^      ^^ ^^       ^^ ^^              ^^ ^^               ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -193,7 +193,7 @@ function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
 
 function f4(x: number) {
 >f4 : (x: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -232,7 +232,7 @@ function f4(x: number) {
 }
 function f5(x: string) {
 >f5 : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

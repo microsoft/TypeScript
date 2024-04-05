@@ -6,7 +6,7 @@
 export interface CalcObj<O> {
     read: (origin: O) => CalcValue<O>;
 >read : (origin: O) => CalcValue<O>
->     : ^^^^^^^^^ ^^^^^            
+>     : ^      ^^ ^^^^^            
 >origin : O
 >       : ^
 }
@@ -23,11 +23,11 @@ function foo<O>() {
 >unk : CalcObj<unknown>
 >    : ^^^^^^^^^^^^^^^^
 >{ read: (origin: unknown) => unk } : { read: (origin: unknown) => CalcObj<unknown>; }
->                                   : ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >read : (origin: unknown) => CalcObj<unknown>
->     : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^
 >(origin: unknown) => unk : (origin: unknown) => CalcObj<unknown>
->                         : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>                         :                                      
 >origin : unknown
 >       : ^^^^^^^
 >unk : CalcObj<unknown>

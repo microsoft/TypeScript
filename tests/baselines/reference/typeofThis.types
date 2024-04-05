@@ -131,7 +131,7 @@ function Test2() {
 
 function Test3(this: { no: number }) {
 >Test3 : (this: { no: number; }) => void
->      : ^^^^^^^               ^^^^^^^^^
+>      : ^    ^^               ^^^^^^^^^
 >this : { no: number; }
 >     : ^^^^^^      ^^^
 >no : number
@@ -152,7 +152,7 @@ function Test3(this: { no: number }) {
 
 function Test4(this: { no: number } | undefined) {
 >Test4 : (this: { no: number; } | undefined) => void
->      : ^^^^^^^                           ^^^^^^^^^
+>      : ^    ^^                           ^^^^^^^^^
 >this : { no: number; } | undefined
 >     : ^^^^^^      ^^^^^^^^^^^^^^^
 >no : number
@@ -185,7 +185,7 @@ class Test5 {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {        // should not capture this.        let x: typeof this.no = 1;    } : () => void
->                                                                                  : ^^^^^^^^^^
+>                                                                                  :           
 
         // should not capture this.
         let x: typeof this.no = 1;
@@ -210,7 +210,7 @@ namespace Test6 {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {        let x: typeof this.no = 1;    } : () => void
->                                               : ^^^^^^^^^^
+>                                               :           
 
         let x: typeof this.no = 1;
 >x : any
@@ -234,7 +234,7 @@ module Test7 {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {        let x: typeof this.no = 1;    } : () => void
->                                               : ^^^^^^^^^^
+>                                               :           
 
         let x: typeof this.no = 1;
 >x : any
@@ -254,7 +254,7 @@ const Test8 = () => {
 >Test8 : () => void
 >      : ^^^^^^^^^^
 >() => {    let x: typeof this.no = 1;} : () => void
->                                       : ^^^^^^^^^^
+>                                       :           
 
     let x: typeof this.no = 1;
 >x : any

@@ -7,7 +7,7 @@ function f() {
 
 var t: { (f: any) : any; };
 >t : (f: any) => any
->  : ^^^^   ^^^^^   
+>  : ^ ^^   ^^^^^   
 >f : any
 
 }

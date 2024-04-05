@@ -31,7 +31,7 @@ export const none : None = { none: '' };
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
 >isSome : <a>(value: Optional<a>) => value is Some<a>
->       : ^ ^^^^^^^^^           ^^^^^                
+>       : ^ ^^     ^^           ^^^^^                
 >value : Optional<a>
 >      : ^^^^^^^^^^^
 
@@ -46,7 +46,7 @@ export function isSome<a>(value: Optional<a>): value is Some<a> {
 
 function someFrom<a>(some: a) {
 >someFrom : <a>(some: a) => { some: a; }
->         : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>         : ^ ^^    ^^ ^^^^^^^^^^^^^^^^^
 >some : a
 >     : ^
 
@@ -59,7 +59,7 @@ function someFrom<a>(some: a) {
 
 export function fn<r>(makeSome: () => r): void {
 >fn : <r>(makeSome: () => r) => void
->   : ^ ^^^^^^^^^^^^       ^^^^^    
+>   : ^ ^^        ^^       ^^^^^    
 >makeSome : () => r
 >         : ^^^^^^ 
 
@@ -89,13 +89,13 @@ export function fn<r>(makeSome: () => r): void {
 >someFrom(isSome(result) ? result.some : makeSome()) : { some: r; }
 >                                                    : ^^^^^^^^^^^^
 >someFrom : <a>(some: a) => { some: a; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^    ^^^^^^^^^^^^^^^^^^^^
 >isSome(result) ? result.some : makeSome() : r
 >                                          : ^
 >isSome(result) : boolean
 >               : ^^^^^^^
 >isSome : <a>(value: Optional<a>) => value is Some<a>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >result : Optional<r>
 >       : ^^^^^^^^^^^
 >result.some : r
@@ -155,11 +155,11 @@ function foo1() {
 >x.slice() : string
 >          : ^^^^^^
 >x.slice : (start?: number | undefined, end?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
 
@@ -212,11 +212,11 @@ function foo2() {
 >x.slice() : string
 >          : ^^^^^^
 >x.slice : (start?: number | undefined, end?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         else {
             x = "abc";
@@ -360,7 +360,7 @@ function f4() {
 
 function f5(x: string | number) {
 >f5 : (x: string | number) => void
->   : ^^^^               ^^^^^^^^^
+>   : ^ ^^               ^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -410,13 +410,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
@@ -430,13 +430,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string
 >  : ^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = undefined;
 >x = undefined : undefined
@@ -450,13 +450,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = null;
 >x = null : null
@@ -468,13 +468,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = <undefined | null>undefined;
 >x = <undefined | null>undefined : null | undefined
@@ -490,13 +490,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = <string | undefined>"";
 >x = <string | undefined>"" : string | undefined
@@ -512,13 +512,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = <string | null>"";
 >x = <string | null>"" : string | null
@@ -534,13 +534,13 @@ function f6() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string | null
 >  : ^^^^^^^^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f7() {
@@ -555,12 +555,12 @@ function f7() {
 >x!.slice() : string
 >           : ^^^^^^
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : string
 >   : ^^^^^^
 >x : string
 >  : ^^^^^^
 >slice : (start?: number | undefined, end?: number | undefined) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

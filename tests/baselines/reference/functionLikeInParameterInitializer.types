@@ -4,11 +4,11 @@
 // error
 export function bar(func = () => foo) {
 >bar : (func?: () => string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >func : () => string
 >     : ^^^^^^^^^^^^
 >() => foo : () => string
->          : ^^^^^^^^^^^^
+>          :             
 >foo : string
 >    : ^^^^^^
 
@@ -21,7 +21,7 @@ export function bar(func = () => foo) {
 // error
 export function baz1(func = { f() { return foo } }) {
 >baz1 : (func?: { f(): string; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : { f(): string; }
 >     : ^^^^^^^^^^^^^^^^
 >{ f() { return foo } } : { f(): string; }
@@ -41,11 +41,11 @@ export function baz1(func = { f() { return foo } }) {
 // error
 export function baz2(func = function () { return foo }) {
 >baz2 : (func?: () => string) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >func : () => string
 >     : ^^^^^^^^^^^^
 >function () { return foo } : () => string
->                           : ^^^^^^^^^^^^
+>                           :             
 >foo : string
 >    : ^^^^^^
 
@@ -59,7 +59,7 @@ export function baz2(func = function () { return foo }) {
 // error
 export function baz3(func = class { x = foo }) {
 >baz3 : (func?: typeof (Anonymous class)) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : typeof (Anonymous class)
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class { x = foo } : typeof (Anonymous class)

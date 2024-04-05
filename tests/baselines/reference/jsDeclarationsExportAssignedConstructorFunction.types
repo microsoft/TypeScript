@@ -47,13 +47,13 @@ module.exports.MyClass.prototype = {
 >prototype : { a: () => void; }
 >          : ^^^^^^^^^^^^^^^^^^
 >{    a: function() {    }} : { a: () => void; }
->                           : ^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^          ^^^
 
     a: function() {
 >a : () => void
 >  : ^^^^^^^^^^
 >function() {    } : () => void
->                  : ^^^^^^^^^^
+>                  :           
     }
 }
 

@@ -8,7 +8,7 @@ import Bar = require("instanceOfInExternalModules_require");
 
 function IsFoo(value: any): boolean {
 >IsFoo : (value: any) => boolean
->      : ^^^^^^^^   ^^^^^       
+>      : ^     ^^   ^^^^^       
 >value : any
 
     return value instanceof Bar.Foo;

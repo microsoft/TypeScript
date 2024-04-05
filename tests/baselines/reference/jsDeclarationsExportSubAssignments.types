@@ -50,5 +50,5 @@ module.exports.Strings = Strings;
 >Strings : { a: string; b: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Strings : { a: string; b: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        :                          
 

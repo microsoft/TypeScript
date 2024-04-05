@@ -136,13 +136,13 @@ var b = {
 >b : any
 >  : ^^^
 >{    foo: <T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    },    bar: b.foo().notHere()} : { foo: <T extends Date>(x: T) => T; bar: any; }
->                                                                                                                                                            : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^
+>                                                                                                                                                            : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 
     foo: <T extends Date>(x: T): T => {
 >foo : <T extends Date>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 ><T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    } : <T extends Date>(x: T) => T
->                                                                                                                      : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>                                                                                                                      :                            
 >x : T
 >  : ^
 

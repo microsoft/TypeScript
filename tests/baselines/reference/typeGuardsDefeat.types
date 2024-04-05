@@ -5,7 +5,7 @@
 // type of the guarded variable.
 function foo(x: number | string) {
 >foo : (x: number | string) => number
->    : ^^^^               ^^^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -55,7 +55,7 @@ function foo(x: number | string) {
 }
 function foo2(x: number | string) {
 >foo2 : (x: number | string) => number
->     : ^^^^               ^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -82,7 +82,7 @@ function foo2(x: number | string) {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >function () {            return x * x;        } : () => number
->                                                : ^^^^^^^^^^^^
+>                                                :             
 
             return x * x;
 >x * x : number
@@ -110,7 +110,7 @@ function foo2(x: number | string) {
 }
 function foo3(x: number | string) {
 >foo3 : (x: number | string) => number
->     : ^^^^               ^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -137,7 +137,7 @@ function foo3(x: number | string) {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => x * x : () => number
->            : ^^^^^^^^^^^^
+>            :             
 >x * x : number
 >      : ^^^^^^
 >x : string | number

@@ -23,7 +23,7 @@ class A {
 
     method(thing: any) {
 >method : (thing: any) => void
->       : ^^^^^^^^   ^^^^^^^^^
+>       : ^     ^^   ^^^^^^^^^
 >thing : any
 >      : ^^^
 
@@ -63,7 +63,7 @@ class A {
     }
     methodU(thing: unknown) {
 >methodU : (thing: unknown) => void
->        : ^^^^^^^^       ^^^^^^^^^
+>        : ^     ^^       ^^^^^^^^^
 >thing : unknown
 >      : ^^^^^^^
 
@@ -103,7 +103,7 @@ class A {
     }
     methodN(thing: never) {
 >methodN : (thing: never) => void
->        : ^^^^^^^^     ^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^
 >thing : never
 >      : ^^^^^
 
