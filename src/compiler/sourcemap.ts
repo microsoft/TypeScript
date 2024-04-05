@@ -45,7 +45,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     var rawSources: string[] = [];
     var sources: string[] = [];
     var sourceToSourceIndexMap = new Map<string, number>();
-    var sourcesContent: (string | null)[] | undefined;
+    var sourcesContent: (string | null)[] | undefined; // eslint-disable-line no-restricted-syntax
 
     var names: string[] = [];
     var nameToNameIndexMap: Map<string, number> | undefined;

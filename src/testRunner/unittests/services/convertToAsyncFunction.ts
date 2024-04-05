@@ -364,7 +364,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         const actions = ts.codefix.getFixes(context);
         const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
 
-        let outputText: string | null;
+        let outputText: string | null; // eslint-disable-line no-restricted-syntax
         if (action?.changes.length) {
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);

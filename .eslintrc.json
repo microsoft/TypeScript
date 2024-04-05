@@ -59,7 +59,7 @@
         "prefer-object-spread": "error",
         "unicode-bom": ["error", "never"],
 
-        "no-restricted-syntax": ["error", "Literal[raw=null]"],
+        "no-restricted-syntax": ["error", "Literal[raw=null]", "TSNullKeyword"],
 
         // Enabled in eslint:recommended, but not applicable here
         "no-extra-boolean-cast": "off",

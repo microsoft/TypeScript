@@ -10672,7 +10672,7 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
 
     if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
         const multiLinePragmaRegEx = /@(\S+)(\s+.*)?$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
-        let multiLineMatch: RegExpExecArray | null;
+        let multiLineMatch: RegExpExecArray | null;// eslint-disable-line no-restricted-syntax
         while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
             addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
         }

@@ -2850,7 +2850,7 @@ export function setConfigFileInOptions(options: CompilerOptions, configFile: TsC
     }
 }
 
-function isNullOrUndefined(x: any): x is null | undefined {
+function isNullOrUndefined(x: any): x is null | undefined { // eslint-disable-line no-restricted-syntax
     return x === undefined || x === null; // eslint-disable-line no-restricted-syntax
 }
 

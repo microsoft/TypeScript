@@ -637,7 +637,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: null): Buffer;
+    public readFileSync(path: string, encoding?: null): Buffer;// eslint-disable-line no-restricted-syntax
     /**
      * Read from a file.
      *
@@ -649,7 +649,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer;
+    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer;// eslint-disable-line no-restricted-syntax
     public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-restricted-syntax
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
@@ -1371,7 +1371,7 @@ export function createIOError(code: keyof typeof IOErrorMessages, details = "") 
  * A template used to populate files, directories, links, etc. in a virtual file system.
  */
 export interface FileSet {
-    [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined;
+    [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | Rmdir | Unlink | null | undefined;// eslint-disable-line no-restricted-syntax
 }
 
 export type DirectoryLike = FileSet | Directory;
@@ -1635,7 +1635,7 @@ function formatPatchWorker(dirname: string, container: FileSet): string {
     return text;
 }
 
-export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {
+export function iteratePatch(patch: FileSet | undefined): IterableIterator<[string, string]> | null {// eslint-disable-line no-restricted-syntax
     // eslint-disable-next-line no-restricted-syntax
     return patch ? Harness.Compiler.iterateOutputs(iteratePatchWorker("", patch)) : null;
 }

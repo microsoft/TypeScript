@@ -250,7 +250,7 @@ export namespace Debug {
         }
     }
 
-    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
+    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {// eslint-disable-line no-restricted-syntax
         assertIsDefined(value, message, stackCrawlMark || checkDefined);
         return value;
     }
