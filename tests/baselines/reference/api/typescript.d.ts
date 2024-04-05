@@ -1342,12 +1342,13 @@ declare namespace ts {
             }
             export interface WatchChangeRequest extends Request {
                 command: CommandTypes.WatchChange;
-                arguments: WatchChangeRequestArgs;
+                arguments: WatchChangeRequestArgs | readonly WatchChangeRequestArgs[];
             }
             export interface WatchChangeRequestArgs {
                 id: number;
-                path: string;
-                eventType: "create" | "delete" | "update";
+                created?: string[];
+                deleted?: string[];
+                updated?: string[];
             }
             /**
              * Request to obtain the list of files that should be regenerated if target file is recompiled.
@@ -2032,6 +2033,7 @@ declare namespace ts {
                 readonly id: number;
                 readonly path: string;
                 readonly recursive: boolean;
+                readonly ignoreUpdate?: boolean;
             }
             export type CloseFileWatcherEventName = "closeFileWatcher";
             export interface CloseFileWatcherEvent extends Event {
@@ -3940,12 +3942,13 @@ declare namespace ts {
         JSDocPropertyTag = 348,
         JSDocThrowsTag = 349,
         JSDocSatisfiesTag = 350,
-        SyntaxList = 351,
-        NotEmittedStatement = 352,
-        PartiallyEmittedExpression = 353,
-        CommaListExpression = 354,
-        SyntheticReferenceExpression = 355,
-        Count = 356,
+        JSDocImportTag = 351,
+        SyntaxList = 352,
+        NotEmittedStatement = 353,
+        PartiallyEmittedExpression = 354,
+        CommaListExpression = 355,
+        SyntheticReferenceExpression = 356,
+        Count = 357,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -3974,9 +3977,9 @@ declare namespace ts {
         LastStatement = 259,
         FirstNode = 166,
         FirstJSDocNode = 309,
-        LastJSDocNode = 350,
+        LastJSDocNode = 351,
         FirstJSDocTagNode = 327,
-        LastJSDocTagNode = 350,
+        LastJSDocTagNode = 351,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -5426,7 +5429,7 @@ declare namespace ts {
     type NamedExportBindings = NamespaceExport | NamedExports;
     interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
-        readonly parent: ImportDeclaration;
+        readonly parent: ImportDeclaration | JSDocImportTag;
         readonly isTypeOnly: boolean;
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
@@ -5783,60 +5786,12 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocSatisfiesTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    enum FlowFlags {
-        Unreachable = 1,
-        Start = 2,
-        BranchLabel = 4,
-        LoopLabel = 8,
-        Assignment = 16,
-        TrueCondition = 32,
-        FalseCondition = 64,
-        SwitchClause = 128,
-        ArrayMutation = 256,
-        Call = 512,
-        ReduceLabel = 1024,
-        Referenced = 2048,
-        Shared = 4096,
-        Label = 12,
-        Condition = 96,
-    }
-    type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
-    interface FlowNodeBase {
-        flags: FlowFlags;
-        id?: number;
-    }
-    interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
-    }
-    interface FlowLabel extends FlowNodeBase {
-        antecedents: FlowNode[] | undefined;
-    }
-    interface FlowAssignment extends FlowNodeBase {
-        node: Expression | VariableDeclaration | BindingElement;
-        antecedent: FlowNode;
-    }
-    interface FlowCall extends FlowNodeBase {
-        node: CallExpression;
-        antecedent: FlowNode;
-    }
-    interface FlowCondition extends FlowNodeBase {
-        node: Expression;
-        antecedent: FlowNode;
-    }
-    interface FlowSwitchClause extends FlowNodeBase {
-        switchStatement: SwitchStatement;
-        clauseStart: number;
-        clauseEnd: number;
-        antecedent: FlowNode;
-    }
-    interface FlowArrayMutation extends FlowNodeBase {
-        node: CallExpression | BinaryExpression;
-        antecedent: FlowNode;
-    }
-    interface FlowReduceLabel extends FlowNodeBase {
-        target: FlowLabel;
-        antecedents: FlowNode[];
-        antecedent: FlowNode;
+    interface JSDocImportTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocImportTag;
+        readonly parent: JSDoc;
+        readonly importClause?: ImportClause;
+        readonly moduleSpecifier: Expression;
+        readonly attributes?: ImportAttributes;
     }
     type FlowType = Type | IncompleteType;
     interface IncompleteType {
@@ -6590,6 +6545,7 @@ declare namespace ts {
         ContainsSpread = 2097152,
         ObjectRestType = 4194304,
         InstantiationExpressionType = 8388608,
+        SingleSignatureType = 134217728,
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
@@ -7696,6 +7652,8 @@ declare namespace ts {
         updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
         updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+        createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
+        updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -8027,7 +7985,6 @@ declare namespace ts {
     }
     interface SyntaxList extends Node {
         kind: SyntaxKind.SyntaxList;
-        _children: Node[];
     }
     enum ListFormat {
         None = 0,
@@ -8998,6 +8955,7 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    function isJSDocImportTag(node: Node): node is JSDocImportTag;
     function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
     function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
     function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;

@@ -11,9 +11,11 @@ import "B";
 === f1.d.ts ===
 declare module "A" {
 >"A" : typeof import("A")
+>    : ^^^^^^^^^^^^^^^^^^
 
     global {
 >global : any
+>       : ^^^
 
         interface Something {x}
 >x : any
@@ -22,9 +24,11 @@ declare module "A" {
 === f2.d.ts ===
 declare module "B" {
 >"B" : typeof import("B")
+>    : ^^^^^^^^^^^^^^^^^^
 
     global {
 >global : any
+>       : ^^^
 
         interface Something {y}
 >y : any

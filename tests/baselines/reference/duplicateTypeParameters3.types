@@ -4,6 +4,7 @@
 interface X {
 x: () => <A, A>() => void;
 >x : () => <A, A>() => void
+>  : ^^^^^^                
 }
  
 

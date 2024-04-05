@@ -3,16 +3,25 @@
 === computedPropertyNames27_ES6.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 }
 class C extends Base {
 >C : C
+>  : ^
 >Base : Base
+>     : ^^^^
 
     [(super(), "prop")]() { }
 >[(super(), "prop")] : () => void
+>                    : ^^^^^^^^^^
 >(super(), "prop") : "prop"
+>                  : ^^^^^^
 >super(), "prop" : "prop"
+>                : ^^^^^^
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 >"prop" : "prop"
+>       : ^^^^^^
 }

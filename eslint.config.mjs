@@ -1,12 +1,9 @@
 // @ts-check
 import eslint from "@eslint/js";
 import noNull from "eslint-plugin-no-null";
-import simpleImportSort from "eslint-plugin-simple-import-sort";
 import fs from "fs";
 import globals from "globals";
-import {
-    createRequire,
-} from "module";
+import { createRequire } from "module";
 import path from "path";
 import tseslint from "typescript-eslint";
 import url from "url";
@@ -47,7 +44,6 @@ export default tseslint.config(
                     return [p.slice(0, -ext.length), require(path.join(rulesDir, p))];
                 })),
             },
-            "simple-import-sort": simpleImportSort,
             "no-null": noNull,
         },
     },
@@ -166,10 +162,6 @@ export default tseslint.config(
 
             // eslint-plugin-no-null
             "no-null/no-null": "error",
-
-            // eslint-plugin-simple-import-sort
-            "simple-import-sort/imports": "error",
-            "simple-import-sort/exports": "error",
         },
     },
     {

@@ -3,14 +3,19 @@
 === index.tsx ===
 declare const React: any;
 >React : any
+>      : ^^^
 
 export function Foo() {
 >Foo : () => any
+>    : ^^^^^^^^^
 
     // Error: T is not declared.
     return <T extends/>
 ><T extends/> : any
+>             : ^^^
 >T : any
+>  : ^^^
 >extends : true
+>        : ^^^^
 }
 

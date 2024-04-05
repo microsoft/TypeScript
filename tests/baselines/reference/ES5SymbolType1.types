@@ -3,10 +3,15 @@
 === ES5SymbolType1.ts ===
 var s: symbol;
 >s : symbol
+>  : ^^^^^^
 
 s.toString();
 >s.toString() : string
+>             : ^^^^^^
 >s.toString : () => string
+>           : ^^^^^^^^^^^^
 >s : symbol
+>  : ^^^^^^
 >toString : () => string
+>         : ^^^^^^^^^^^^
 

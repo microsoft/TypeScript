@@ -1,10 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     noChangeRun,
     TestTscEdit,

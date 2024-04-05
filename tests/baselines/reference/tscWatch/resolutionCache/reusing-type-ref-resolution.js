@@ -43,7 +43,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -w --explainFiles --extendedDiagnostics
 Output::
-[[90m12:00:33 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /users/username/projects/project CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Config file
@@ -153,7 +153,7 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:00:47 AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
@@ -412,7 +412,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
@@ -456,7 +456,7 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:01:01 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -688,7 +688,7 @@ After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
@@ -730,7 +730,7 @@ node_modules/pkg3/index.d.ts
   Type library referenced via 'pkg3' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

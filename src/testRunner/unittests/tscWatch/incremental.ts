@@ -1,14 +1,8 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    CommandLineProgram,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { CommandLineProgram } from "../helpers/baseline";
+import { libContent } from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,

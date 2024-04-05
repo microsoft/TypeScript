@@ -242,9 +242,9 @@ export function initializeNodeSystem(): StartInput {
         }
         protected write(s: string, _type: ts.server.Msg) {
             if (this.fd >= 0) {
-                const buf = sys.bufferFrom!(s);
+                const buf = Buffer.from(s);
                 // eslint-disable-next-line no-null/no-null
-                fs.writeSync(this.fd, buf as globalThis.Buffer, 0, buf.length, /*position*/ null!); // TODO: GH#18217
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
                 console.warn(s);
@@ -324,7 +324,7 @@ export function initializeNodeSystem(): StartInput {
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
+    sys.write = (s: string) => writeMessage(Buffer.from(s, "utf8"));
 
     /* eslint-disable no-restricted-globals */
     sys.setTimeout = setTimeout;
