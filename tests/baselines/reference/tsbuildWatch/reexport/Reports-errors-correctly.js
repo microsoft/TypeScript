@@ -80,22 +80,22 @@ declare const console: { log(msg: any): void; };
 /a/lib/tsc.js -b -w -verbose src
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:36 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/pure/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
 
-[[90m12:00:58 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -135,7 +135,7 @@ export * from "./session";
 
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -193,11 +193,6 @@ export * from "./session";
         "../../src/pure/session.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../src/pure/index.ts",
@@ -206,7 +201,7 @@ export * from "./session";
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1078
+  "size": 1049
 }
 
 //// [/user/username/projects/reexport/out/main/index.js]
@@ -320,11 +315,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:10 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
 
-[[90m12:01:11 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
 
@@ -338,7 +333,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -392,11 +387,6 @@ export interface Session {
         "../../src/pure/session.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../src/pure/index.ts",
@@ -405,7 +395,7 @@ export interface Session {
     "latestChangedDtsFile": "./session.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 988
+  "size": 959
 }
 
 
@@ -417,9 +407,9 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:28 AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
 
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 [96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
@@ -431,7 +421,7 @@ Output::
     [7m [0m [96m    ~~~[0m
     'bar' is declared here.
 
-[[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -459,8 +449,8 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/src/pure/index.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/reexport/src/pure/session.ts (used version)
-/user/username/projects/reexport/src/pure/index.ts (used version)
+/user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
+/user/username/projects/reexport/src/pure/index.ts (computed .d.ts)
 
 Program root files: [
   "/user/username/projects/reexport/src/main/index.ts"
@@ -510,11 +500,11 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
 
-[[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 
 
@@ -527,7 +517,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -585,11 +575,6 @@ export interface Session {
         "../../src/pure/session.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../src/pure/index.ts",
@@ -598,7 +583,7 @@ export interface Session {
     "latestChangedDtsFile": "./session.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1080
+  "size": 1051
 }
 
 
@@ -610,13 +595,13 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:53 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+[[90mHH:MM:SS AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
-[[90m12:01:54 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -646,7 +631,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
-/user/username/projects/reexport/src/pure/index.ts (used version)
+/user/username/projects/reexport/src/pure/index.ts (computed .d.ts)
 
 Program root files: [
   "/user/username/projects/reexport/src/main/index.ts"

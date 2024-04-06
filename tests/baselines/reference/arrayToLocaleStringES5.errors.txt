@@ -1,0 +1,125 @@
+arrayToLocaleStringES5.ts(4,26): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(5,26): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(9,28): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(10,28): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(14,32): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(15,32): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(19,33): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(20,33): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(24,40): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(25,40): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(29,33): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(30,33): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(34,34): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(35,34): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(39,33): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(40,33): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(44,34): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(45,34): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(49,35): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(50,35): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(54,35): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(55,35): error TS2554: Expected 0 arguments, but got 2.
+
+
+==== arrayToLocaleStringES5.ts (22 errors) ====
+    let str: string;
+    const arr = [1, 2, 3];
+    str = arr.toLocaleString(); // OK
+    str = arr.toLocaleString('en-US'); // should be error
+                             ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const dates: readonly Date[] = [new Date(), new Date()];
+    str = dates.toLocaleString(); // OK
+    str = dates.toLocaleString('fr'); // should be error
+                               ~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // should be error
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const int8Array = new Int8Array(3);
+    str = int8Array.toLocaleString(); // OK
+    str = int8Array.toLocaleString('en-US'); // should be error
+                                   ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const uint8Array = new Uint8Array(3);
+    str = uint8Array.toLocaleString(); // OK
+    str = uint8Array.toLocaleString('en-US'); // should be error
+                                    ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const uint8ClampedArray = new Uint8ClampedArray(3);
+    str = uint8ClampedArray.toLocaleString(); // OK
+    str = uint8ClampedArray.toLocaleString('en-US'); // should be error
+                                           ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const int16Array = new Int16Array(3);
+    str = int16Array.toLocaleString(); // OK
+    str = int16Array.toLocaleString('en-US'); // should be error
+                                    ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const uint16Array = new Uint16Array(3);
+    str = uint16Array.toLocaleString(); // OK
+    str = uint16Array.toLocaleString('en-US'); // should be error
+                                     ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const int32Array = new Int32Array(3);
+    str = int32Array.toLocaleString(); // OK
+    str = int32Array.toLocaleString('en-US'); // should be error
+                                    ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const uint32Array = new Uint32Array(3);
+    str = uint32Array.toLocaleString(); // OK
+    str = uint32Array.toLocaleString('en-US'); // should be error
+                                     ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const float32Array = new Float32Array(3);
+    str = float32Array.toLocaleString(); // OK
+    str = float32Array.toLocaleString('en-US'); // should be error
+                                      ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const float64Array = new Float64Array(3);
+    str = float64Array.toLocaleString(); // OK
+    str = float64Array.toLocaleString('en-US'); // should be error
+                                      ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    

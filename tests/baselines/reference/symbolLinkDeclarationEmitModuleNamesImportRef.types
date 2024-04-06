@@ -3,17 +3,21 @@
 === Folder/monorepo/core/index.ts ===
 import { styles } from "package-a";
 >styles : import("Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function getStyles() {
 >getStyles : () => import("Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	return styles;
 >styles : import("Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 === Folder/monorepo/package-a/index.d.ts ===
 export declare const styles: import("styled-components").InterpolationValue[];
 >styles : import("Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === Folder/node_modules/styled-components/typings/styled-components.d.ts ===
 

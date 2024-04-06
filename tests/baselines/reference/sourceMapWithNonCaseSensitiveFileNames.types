@@ -5,10 +5,12 @@
 // Since this is non case sensitive, the relative paths should be just app.ts and app2.ts in the sourcemap
 class c {
 >c : c
+>  : ^
 }
 
 === testFiles/app2.ts ===
 class d {
 >d : d
+>  : ^
 }
 

@@ -1,18 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { verifyTscWatch } from "../helpers/tscWatch";
+import { loadProjectFromFiles } from "../helpers/vfs";
 import {
     createWatchedSystem,
     libFile,

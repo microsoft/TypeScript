@@ -16,7 +16,7 @@ declare namespace NodeJS {
 /// <reference path="globals.d.ts" />
 
 //// [app.mts]
-/// <reference types="node" />
+/// <reference types="node" preserve="true" />
 export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> {
 }
 
@@ -24,5 +24,5 @@ export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> 
 
 
 //// [app.d.mts]
-/// <reference types="node" />
+/// <reference types="node" preserve="true" />
 export declare function drainStream(stream: NodeJS.ReadableStream): Promise<void>;

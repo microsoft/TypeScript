@@ -119,6 +119,8 @@ import {
     EqualsToken,
     equateValues,
     escapeLeadingUnderscores,
+    EvaluationResolver,
+    EvaluatorResult,
     every,
     ExportAssignment,
     ExportDeclaration,
@@ -186,6 +188,7 @@ import {
     getLineStarts,
     getModeForUsageLocation,
     getNameOfDeclaration,
+    getNodeChildren,
     getNormalizedAbsolutePath,
     getNormalizedPathComponents,
     getOwnKeys,
@@ -354,10 +357,10 @@ import {
     JSDocArray,
     JSDocCallbackTag,
     JSDocEnumTag,
+    JSDocImportTag,
     JSDocMemberName,
     JSDocOverloadTag,
     JSDocParameterTag,
-    JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
     JSDocSatisfiesTag,
     JSDocSignature,
@@ -509,8 +512,8 @@ import {
     SymbolFlags,
     SymbolTable,
     SyntaxKind,
-    SyntaxList,
     TaggedTemplateExpression,
+    TemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
     TemplateLiteralToken,
@@ -807,7 +810,7 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
-    return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
+    return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
 
 /** @internal */
@@ -817,7 +820,7 @@ export function packageIdToPackageName({ name, subModuleName }: PackageId): stri
 
 /** @internal */
 export function packageIdToString(packageId: PackageId): string {
-    return `${packageIdToPackageName(packageId)}@${packageId.version}`;
+    return `${packageIdToPackageName(packageId)}@${packageId.version}${packageId.peerDependencies ?? ""}`;
 }
 
 /** @internal */
@@ -1159,8 +1162,11 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
     // the syntax list itself considers them as normal trivia. Therefore if we simply skip
     // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
     // first child to determine the actual position of its first token.
-    if (node.kind === SyntaxKind.SyntaxList && (node as SyntaxList)._children.length > 0) {
-        return getTokenPosOfNode((node as SyntaxList)._children[0], sourceFile, includeJsDoc);
+    if (node.kind === SyntaxKind.SyntaxList) {
+        const first = firstOrUndefined(getNodeChildren(node));
+        if (first) {
+            return getTokenPosOfNode(first, sourceFile, includeJsDoc);
+        }
     }
 
     return skipTrivia(
@@ -1338,6 +1344,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2015: [
                 "from",
                 "of",
+            ],
+            esnext: [
+                "fromAsync",
             ],
         })),
         ObjectConstructor: new Map(Object.entries({
@@ -3979,13 +3988,14 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode | JSDocImportTag): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
@@ -4014,6 +4024,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
     switch (node.parent.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return node.parent as AnyValidImportOrReExport;
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
@@ -4028,10 +4039,11 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 }
 
 /** @internal */
-export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration): Expression | undefined {
+export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration | JSDocImportTag): Expression | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTag:
             return node.moduleSpecifier;
         case SyntaxKind.ImportEqualsDeclaration:
             return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
@@ -4061,8 +4073,8 @@ export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqua
 }
 
 /** @internal */
-export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
-    return node.kind === SyntaxKind.ImportDeclaration && !!node.importClause && !!node.importClause.name;
+export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration | JSDocImportTag): boolean {
+    return (node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.JSDocImportTag) && !!node.importClause && !!node.importClause.name;
 }
 
 /** @internal */
@@ -6518,7 +6530,7 @@ export function identifierIsThisKeyword(id: Identifier): boolean {
 }
 
 /** @internal */
-export function getAllAccessorDeclarations(declarations: readonly Declaration[], accessor: AccessorDeclaration): AllAccessorDeclarations {
+export function getAllAccessorDeclarations(declarations: readonly Declaration[] | undefined, accessor: AccessorDeclaration): AllAccessorDeclarations {
     // TODO: GH#18217
     let firstAccessor!: AccessorDeclaration;
     let secondAccessor!: AccessorDeclaration;
@@ -8146,6 +8158,7 @@ export interface ObjectAllocator {
 }
 
 function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
+    // Note: if modifying this, be sure to update SymbolObject in src/services/services.ts
     this.flags = flags;
     this.escapedName = name;
     this.declarations = undefined;
@@ -8163,6 +8176,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
 }
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
+    // Note: if modifying this, be sure to update TypeObject in src/services/services.ts
     this.flags = flags;
     if (Debug.isDebugging || tracing) {
         this.checker = checker;
@@ -8170,6 +8184,7 @@ function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
 }
 
 function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
+    // Note: if modifying this, be sure to update SignatureObject in src/services/services.ts
     this.flags = flags;
     if (Debug.isDebugging) {
         this.checker = checker;
@@ -8177,6 +8192,7 @@ function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags)
 }
 
 function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Note: if modifying this, be sure to update NodeObject in src/services/services.ts
     this.pos = pos;
     this.end = end;
     this.kind = kind;
@@ -8190,6 +8206,7 @@ function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
 }
 
 function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
     this.pos = pos;
     this.end = end;
     this.kind = kind;
@@ -8201,6 +8218,7 @@ function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) 
 }
 
 function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
     this.pos = pos;
     this.end = end;
     this.kind = kind;
@@ -8213,6 +8231,7 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+    // Note: if modifying this, be sure to update SourceMapSourceObject in src/services/services.ts
     this.fileName = fileName;
     this.text = text;
     this.skipTrivia = skipTrivia || (pos => pos);
@@ -10485,7 +10504,7 @@ export function canHaveExportModifier(node: Node): node is Extract<HasModifiers,
 }
 
 /** @internal */
-export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+export function isOptionalJSDocPropertyLikeTag(node: Node): boolean {
     if (!isJSDocPropertyLikeTag(node)) {
         return false;
     }
@@ -10514,7 +10533,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
         node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) => isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType)
+        || getJSDocParameterTags(node).some(isOptionalJSDocPropertyLikeTag)
     );
 }
 
@@ -10638,4 +10657,132 @@ export function replaceFirstStar(s: string, replacement: string): string {
 /** @internal */
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
+}
+
+/** @internal */
+export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false): EvaluatorResult<T> {
+    return { value, isSyntacticallyString, resolvedOtherFiles };
+}
+
+/** @internal */
+export function createEvaluator({ evaluateElementAccessExpression, evaluateEntityNameExpression }: EvaluationResolver) {
+    function evaluate(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined>;
+    function evaluate(expr: Expression, location?: Declaration): EvaluatorResult;
+    function evaluate(expr: Expression, location?: Declaration): EvaluatorResult {
+        let isSyntacticallyString = false;
+        let resolvedOtherFiles = false;
+        // It's unclear when/whether we should consider skipping other kinds of outer expressions.
+        // Type assertions intentionally break evaluation when evaluating literal types, such as:
+        //     type T = `one ${"two" as any} three`; // string
+        // But it's less clear whether such an assertion should break enum member evaluation:
+        //     enum E {
+        //       A = "one" as any
+        //     }
+        // SatisfiesExpressions and non-null assertions seem to have even less reason to break
+        // emitting enum members as literals. However, these expressions also break Babel's
+        // evaluation (but not esbuild's), and the isolatedModules errors we give depend on
+        // our evaluation results, so we're currently being conservative so as to issue errors
+        // on code that might break Babel.
+        expr = skipParentheses(expr);
+        switch (expr.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+                const result = evaluate((expr as PrefixUnaryExpression).operand, location);
+                resolvedOtherFiles = result.resolvedOtherFiles;
+                if (typeof result.value === "number") {
+                    switch ((expr as PrefixUnaryExpression).operator) {
+                        case SyntaxKind.PlusToken:
+                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.MinusToken:
+                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.TildeToken:
+                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles);
+                    }
+                }
+                break;
+            case SyntaxKind.BinaryExpression: {
+                const left = evaluate((expr as BinaryExpression).left, location);
+                const right = evaluate((expr as BinaryExpression).right, location);
+                isSyntacticallyString = (left.isSyntacticallyString || right.isSyntacticallyString) && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken;
+                resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles;
+                if (typeof left.value === "number" && typeof right.value === "number") {
+                    switch ((expr as BinaryExpression).operatorToken.kind) {
+                        case SyntaxKind.BarToken:
+                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.AmpersandToken:
+                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.GreaterThanGreaterThanToken:
+                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.LessThanLessThanToken:
+                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.CaretToken:
+                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.AsteriskToken:
+                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.SlashToken:
+                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.PlusToken:
+                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.MinusToken:
+                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.PercentToken:
+                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles);
+                        case SyntaxKind.AsteriskAsteriskToken:
+                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles);
+                    }
+                }
+                else if (
+                    (typeof left.value === "string" || typeof left.value === "number") &&
+                    (typeof right.value === "string" || typeof right.value === "number") &&
+                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
+                ) {
+                    return evaluatorResult(
+                        "" + left.value + right.value,
+                        isSyntacticallyString,
+                        resolvedOtherFiles,
+                    );
+                }
+
+                break;
+            }
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return evaluatorResult((expr as StringLiteralLike).text, /*isSyntacticallyString*/ true);
+            case SyntaxKind.TemplateExpression:
+                return evaluateTemplateExpression(expr as TemplateExpression, location);
+            case SyntaxKind.NumericLiteral:
+                return evaluatorResult(+(expr as NumericLiteral).text);
+            case SyntaxKind.Identifier:
+                return evaluateEntityNameExpression(expr as Identifier, location);
+            case SyntaxKind.PropertyAccessExpression:
+                if (isEntityNameExpression(expr)) {
+                    return evaluateEntityNameExpression(expr, location);
+                }
+                break;
+            case SyntaxKind.ElementAccessExpression:
+                return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
+        }
+        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles);
+    }
+
+    function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined> {
+        let result = expr.head.text;
+        let resolvedOtherFiles = false;
+        for (const span of expr.templateSpans) {
+            const spanResult = evaluate(span.expression, location);
+            if (spanResult.value === undefined) {
+                return evaluatorResult(/*value*/ undefined, /*isSyntacticallyString*/ true);
+            }
+            result += spanResult.value;
+            result += span.literal.text;
+            resolvedOtherFiles ||= spanResult.resolvedOtherFiles;
+        }
+        return evaluatorResult(
+            result,
+            /*isSyntacticallyString*/ true,
+            resolvedOtherFiles,
+        );
+    }
+    return evaluate;
 }

@@ -1,4 +1,4 @@
-decoratorOnClassMethod11.ts(5,10): error TS2331: 'this' cannot be referenced in a module or namespace body.
+decoratorOnClassMethod11.ts(5,11): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
 ==== decoratorOnClassMethod11.ts (1 errors) ====
@@ -6,8 +6,8 @@ decoratorOnClassMethod11.ts(5,10): error TS2331: 'this' cannot be referenced in 
         class C {
             decorator(target: Object, key: string): void { }
     
-            @this.decorator
-             ~~~~
+            @(this.decorator)
+              ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.
             method() { }
         }

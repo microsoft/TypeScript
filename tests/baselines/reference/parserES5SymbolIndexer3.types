@@ -3,7 +3,9 @@
 === parserES5SymbolIndexer3.ts ===
 var x: {
 >x : { [s: symbol]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [s: symbol]: string;
 >s : symbol
+>  : ^^^^^^
 }

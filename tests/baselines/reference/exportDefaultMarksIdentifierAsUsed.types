@@ -3,19 +3,27 @@
 === a.js ===
 const Obj = {};
 >Obj : {}
+>    : ^^
 >{} : {}
+>   : ^^
 
 export default Obj;
 >Obj : {}
+>    : ^^
 
 === b.js ===
 import Obj from './a';
 >Obj : {}
+>    : ^^
 
 Obj.fn = function() {};
 >Obj.fn = function() {} : () => void
+>                       : ^^^^^^^^^^
 >Obj.fn : error
 >Obj : {}
+>    : ^^
 >fn : any
+>   : ^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 

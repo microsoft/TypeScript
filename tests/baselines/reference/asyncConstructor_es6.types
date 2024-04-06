@@ -3,6 +3,7 @@
 === asyncConstructor_es6.ts ===
 class C {  
 >C : C
+>  : ^
 
   async constructor() {    
   }

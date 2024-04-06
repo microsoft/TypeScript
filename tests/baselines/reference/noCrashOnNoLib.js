@@ -20,11 +20,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 function f() {
     var e;
     while (true) {
         e = __spreadArray([], (e || []), true);
     }
 }
-exports.f = f;

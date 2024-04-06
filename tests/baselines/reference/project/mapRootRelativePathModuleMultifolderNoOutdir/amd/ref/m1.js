@@ -1,7 +1,8 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.m1_f1 = exports.m1_instance1 = exports.m1_c1 = exports.m1_a1 = void 0;
+    exports.m1_instance1 = exports.m1_c1 = exports.m1_a1 = void 0;
+    exports.m1_f1 = m1_f1;
     exports.m1_a1 = 10;
     var m1_c1 = /** @class */ (function () {
         function m1_c1() {
@@ -13,6 +14,5 @@ define(["require", "exports"], function (require, exports) {
     function m1_f1() {
         return exports.m1_instance1;
     }
-    exports.m1_f1 = m1_f1;
 });
 //# sourceMappingURL=../../../mapFiles/outputdir_module_multifolder/ref/m1.js.map
