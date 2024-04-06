@@ -18,20 +18,5 @@ var C1 = /** @class */ (function () {
 
 //// [requiredInitializedParameter4.d.ts]
 declare class C1 {
-    method(a?: number, b: any): void;
+    method(a: number, b: any): void;
 }
-
-
-//// [DtsFileErrors]
-
-
-requiredInitializedParameter4.d.ts(2,24): error TS1016: A required parameter cannot follow an optional parameter.
-
-
-==== requiredInitializedParameter4.d.ts (1 errors) ====
-    declare class C1 {
-        method(a?: number, b: any): void;
-                           ~
-!!! error TS1016: A required parameter cannot follow an optional parameter.
-    }
-    

@@ -122,7 +122,6 @@ import {
     isModuleDeclaration,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isOptionalParameter,
     isPrivateIdentifier,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
@@ -578,7 +577,7 @@ export function transformDeclarations(context: TransformationContext) {
             maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
             filterBindingPatternInitializers(p.name),
-            isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
+            resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
             ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
             ensureNoInitializer(p),
         );

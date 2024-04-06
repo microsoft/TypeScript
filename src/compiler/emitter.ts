@@ -1100,6 +1100,7 @@ export const notImplementedResolver: EmitResolver = {
     getReferencedValueDeclaration: notImplemented,
     getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,
+    isOptionalParameter: notImplemented,
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
     isLiteralConstDeclaration: notImplemented,

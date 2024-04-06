@@ -8,10 +8,10 @@ declare const t1: [number, boolean, string];
 (function (a, b, c){})(...t1);
 >(function (a, b, c){})(...t1) : void
 >                              : ^^^^
->(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
->                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
->function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
->                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c){} : (a: number, b: boolean, c: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -56,10 +56,10 @@ declare const t1: [number, boolean, string];
 (function (a, b, ...x){})(...t1);
 >(function (a, b, ...x){})(...t1) : void
 >                                 : ^^^^
->(function (a, b, ...x){}) : (a: number, b?: boolean, x_0: string) => void
->                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (a, b, ...x){} : (a: number, b?: boolean, x_0: string) => void
->                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (a, b, ...x){}) : (a: number, b: boolean, x_0: string) => void
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, b, ...x){} : (a: number, b: boolean, x_0: string) => void
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -74,10 +74,10 @@ declare const t1: [number, boolean, string];
 (function (a, b, c, ...x){})(...t1);
 >(function (a, b, c, ...x){})(...t1) : void
 >                                    : ^^^^
->(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string) => void
->                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
->function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string) => void
->                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -174,10 +174,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (a, b, c){})(...t2);
 >(function (a, b, c){})(...t2) : void
 >                              : ^^^^
->(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
->                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
->function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
->                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c){} : (a: number, b: boolean, c: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -222,10 +222,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (a, b, ...x){})(...t2);
 >(function (a, b, ...x){})(...t2) : void
 >                                 : ^^^^
->(function (a, b, ...x){}) : (a: number, b?: boolean, ...x: string[]) => void
->                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->function (a, b, ...x){} : (a: number, b?: boolean, ...x: string[]) => void
->                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>(function (a, b, ...x){}) : (a: number, b: boolean, ...x: string[]) => void
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>function (a, b, ...x){} : (a: number, b: boolean, ...x: string[]) => void
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -240,10 +240,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (a, b, c, ...x){})(...t2);
 >(function (a, b, c, ...x){})(...t2) : void
 >                                    : ^^^^
->(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string, ...x: string[]) => void
->                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string, ...x: string[]) => void
->                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -340,10 +340,10 @@ declare const t3: [boolean, ...string[]];
 (function (a, b, c){})(1, ...t3);
 >(function (a, b, c){})(1, ...t3) : void
 >                                 : ^^^^
->(function (a, b, c){}) : (a: number, b: boolean, c?: string) => void
->                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
->function (a, b, c){} : (a: number, b: boolean, c?: string) => void
->                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c){} : (a: number, b: boolean, c: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -414,10 +414,10 @@ declare const t3: [boolean, ...string[]];
 (function (a, b, c, ...x){})(1, ...t3);
 >(function (a, b, c, ...x){})(1, ...t3) : void
 >                                       : ^^^^
->(function (a, b, c, ...x){}) : (a: number, b: boolean, c?: string, ...x: string[]) => void
->                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->function (a, b, c, ...x){} : (a: number, b: boolean, c?: string, ...x: string[]) => void
->                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -823,10 +823,10 @@ declare var tuple: [number, string];
 >                                 : ^^^^
 >function foo(a, b){}(...tuple) : void
 >                               : ^^^^
->function foo(a, b){} : (a: number, b?: string) => void
->                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
->foo : (a: number, b?: string) => void
->    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>function foo(a, b){} : (a: number, b: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>foo : (a: number, b: string) => void
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : string

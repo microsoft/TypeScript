@@ -38,9 +38,9 @@ export declare const vConst: {} & {
 export declare function fn(p?: {} & {
     name: string;
 }): void;
-export declare function fnWithRequiredDefaultParam(p?: {} & {
+export declare function fnWithRequiredDefaultParam(p: ({} & {
     name: string;
-}, req: number): void;
+}) | undefined, req: number): void;
 export declare class C {
     ctorField: {} & {
         name: string;
@@ -57,9 +57,9 @@ export declare class C {
     method(p?: {} & {
         name: string;
     }): void;
-    methodWithRequiredDefault(p?: {} & {
+    methodWithRequiredDefault(p: ({} & {
         name: string;
-    }, req: number): void;
+    }) | undefined, req: number): void;
     constructor(ctorField?: {} & {
         name: string;
     });
@@ -74,72 +74,6 @@ declare const _default: {} & {
     name: string;
 };
 export default _default;
-export declare function fnWithPartialAnnotationOnDefaultparam(x?: {} & {
+export declare function fnWithPartialAnnotationOnDefaultparam(x: ({} & {
     name: string;
-}, b: number): void;
-
-
-//// [DtsFileErrors]
-
-
-declarationEmitCastReusesTypeNode2.d.ts(12,4): error TS1016: A required parameter cannot follow an optional parameter.
-declarationEmitCastReusesTypeNode2.d.ts(31,8): error TS1016: A required parameter cannot follow an optional parameter.
-declarationEmitCastReusesTypeNode2.d.ts(48,4): error TS1016: A required parameter cannot follow an optional parameter.
-
-
-==== declarationEmitCastReusesTypeNode2.d.ts (3 errors) ====
-    export declare let vLet: {} & {
-        name: string;
-    };
-    export declare const vConst: {} & {
-        name: string;
-    };
-    export declare function fn(p?: {} & {
-        name: string;
-    }): void;
-    export declare function fnWithRequiredDefaultParam(p?: {} & {
-        name: string;
-    }, req: number): void;
-       ~~~
-!!! error TS1016: A required parameter cannot follow an optional parameter.
-    export declare class C {
-        ctorField: {} & {
-            name: string;
-        };
-        field: {} & {
-            name: string;
-        };
-        optField?: {} & {
-            name: string;
-        };
-        readonly roFiled: {} & {
-            name: string;
-        };
-        method(p?: {} & {
-            name: string;
-        }): void;
-        methodWithRequiredDefault(p?: {} & {
-            name: string;
-        }, req: number): void;
-           ~~~
-!!! error TS1016: A required parameter cannot follow an optional parameter.
-        constructor(ctorField?: {} & {
-            name: string;
-        });
-        get x(): {} & {
-            name: string;
-        };
-        set x(v: {} & {
-            name: string;
-        });
-    }
-    declare const _default: {} & {
-        name: string;
-    };
-    export default _default;
-    export declare function fnWithPartialAnnotationOnDefaultparam(x?: {} & {
-        name: string;
-    }, b: number): void;
-       ~
-!!! error TS1016: A required parameter cannot follow an optional parameter.
-    
+}) | undefined, b: number): void;

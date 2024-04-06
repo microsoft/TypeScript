@@ -382,7 +382,6 @@ import {
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
-    hasEffectiveQuestionToken,
     hasEffectiveReadonlyModifier,
     HasExpressionInitializer,
     hasExtension,
@@ -673,7 +672,7 @@ import {
     isOptionalChain,
     isOptionalChainRoot,
     isOptionalDeclaration,
-    isOptionalParameter,
+    isOptionalJSDocPropertyLikeTag,
     isOptionalTypeNode,
     isOutermostOptionalChain,
     isParameter,
@@ -15373,6 +15372,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const symbol = getSymbol(globals, '"' + moduleName + '"' as __String, SymbolFlags.ValueModule);
         // merged symbol is module declaration symbol combined with all augmentations
         return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
+    }
+
+    function hasEffectiveQuestionToken(node: ParameterDeclaration | JSDocParameterTag | JSDocPropertyTag) {
+        return hasQuestionToken(node) || isOptionalJSDocPropertyLikeTag(node) || isParameter(node) && isJSDocOptionalParameter(node);
+    }
+
+    function isOptionalParameter(node: ParameterDeclaration | JSDocParameterTag | JSDocPropertyTag) {
+        if (hasEffectiveQuestionToken(node)) {
+            return true;
+        }
+        if (!isParameter(node)) {
+            return false;
+        }
+        if (node.initializer) {
+            const signature = getSignatureFromDeclaration(node.parent);
+            const parameterIndex = node.parent.parameters.indexOf(node);
+            Debug.assert(parameterIndex >= 0);
+            // Only consider syntactic or instantiated parameters as optional, not `void` parameters as this function is used
+            // in grammar checks and checking for `void` too early results in parameter types widening too early
+            // and causes some noImplicitAny errors to be lost.
+            return parameterIndex >= getMinArgumentCount(signature, MinArgumentCountFlags.StrongArityForUntypedJS | MinArgumentCountFlags.VoidIsNonOptional);
+        }
+        const iife = getImmediatelyInvokedFunctionExpression(node.parent);
+        if (iife) {
+            return !node.type &&
+                !node.dotDotDotToken &&
+                node.parent.parameters.indexOf(node) >= getEffectiveCallArguments(iife).length;
+        }
+
+        return false;
     }
 
     function isOptionalPropertyDeclaration(node: Declaration) {
@@ -49096,6 +49125,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getReferencedValueDeclaration,
             getReferencedValueDeclarations,
             getTypeReferenceSerializationKind,
+            isOptionalParameter,
             isArgumentsLocalBinding,
             getExternalModuleFileFromDeclaration: nodeIn => {
                 const node = getParseTreeNode(nodeIn, hasPossibleExternalModuleReference);

@@ -25,20 +25,5 @@ exports.Z = Z;
 
 //// [bar.d.ts]
 export class Z {
-    f(x?: number, y: any): any[];
+    f(x: number, y: any): any[];
 }
-
-
-//// [DtsFileErrors]
-
-
-out/bar.d.ts(2,19): error TS1016: A required parameter cannot follow an optional parameter.
-
-
-==== out/bar.d.ts (1 errors) ====
-    export class Z {
-        f(x?: number, y: any): any[];
-                      ~
-!!! error TS1016: A required parameter cannot follow an optional parameter.
-    }
-    
