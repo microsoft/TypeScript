@@ -13,13 +13,13 @@ import {
     IntersectionType,
     isThisTypeParameter,
     JSDocSignature,
+    JSDocTagInfo,
     LineAndCharacter,
     LiteralType,
     Node,
     NumberLiteralType,
     ObjectFlags,
     ObjectType,
-    ServicesForwardRefArray,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -27,6 +27,7 @@ import {
     SourceMapSource,
     StringLiteralType,
     Symbol,
+    SymbolDisplayPart,
     SymbolFlags,
     SymbolLinks,
     symbolName,
@@ -97,20 +98,20 @@ export class SymbolObject implements Symbol {
         return this.declarations;
     }
 
-    getDocumentationComment(_checker: TypeChecker | undefined): ServicesForwardRefArray<"SymbolDisplayPart"> {
-        throw new TypeError("Not supported");
+    getDocumentationComment(_checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        throw new TypeError("Not implemented.");
     }
 
-    getContextualDocumentationComment(_context: Node | undefined, _checker: TypeChecker | undefined): ServicesForwardRefArray<"SymbolDisplayPart"> {
-        throw new TypeError("Not supported");
+    getContextualDocumentationComment(_context: Node | undefined, _checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        throw new TypeError("Not implemented.");
     }
 
-    getJsDocTags(_checker?: TypeChecker): ServicesForwardRefArray<"JSDocTagInfo"> {
-        throw new TypeError("Not supported");
+    getJsDocTags(_checker?: TypeChecker): JSDocTagInfo[] {
+        throw new TypeError("Not implemented.");
     }
 
-    getContextualJsDocTags(_context: Node | undefined, _checker: TypeChecker | undefined): ServicesForwardRefArray<"JSDocTagInfo"> {
-        throw new TypeError("Not supported");
+    getContextualJsDocTags(_context: Node | undefined, _checker: TypeChecker | undefined): JSDocTagInfo[] {
+        throw new TypeError("Not implemented.");
     }
 }
 
@@ -308,11 +309,11 @@ export class SignatureObject implements Signature {
         return type;
     }
 
-    getDocumentationComment(): ServicesForwardRefArray<"SymbolDisplayPart"> {
+    getDocumentationComment(): SymbolDisplayPart[] {
         throw new TypeError("Not implemented");
     }
 
-    getJsDocTags(): ServicesForwardRefArray<"JSDocTagInfo"> {
+    getJsDocTags(): JSDocTagInfo[] {
         throw new TypeError("Not implemented");
     }
 }

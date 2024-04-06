@@ -934,6 +934,31 @@ export interface Node extends ReadonlyTextRange {
     //       `locals` and `nextContainer` have been moved to `LocalsContainer`
     //       `flowNode` has been moved to `FlowContainer`
     //       see: https://github.com/microsoft/TypeScript/pull/51682
+
+    getSourceFile(): SourceFile;
+    getChildCount(sourceFile?: SourceFile): number;
+    getChildAt(index: number, sourceFile?: SourceFile): Node;
+    getChildren(sourceFile?: SourceFile): readonly Node[];
+    /** @internal */
+    getChildren(sourceFile?: SourceFileLike): readonly Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+    /** @internal */
+    getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
+    getFullStart(): number;
+    getEnd(): number;
+    getWidth(sourceFile?: SourceFileLike): number;
+    getFullWidth(): number;
+    getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+    getFullText(sourceFile?: SourceFile): string;
+    getText(sourceFile?: SourceFile): string;
+    getFirstToken(sourceFile?: SourceFile): Node | undefined;
+    /** @internal */
+    getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    getLastToken(sourceFile?: SourceFile): Node | undefined;
+    /** @internal */
+    getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    // See ts.forEachChild for documentation.
+    forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
 }
 
 export interface JSDocContainer extends Node {
@@ -1677,6 +1702,7 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
      */
     readonly escapedText: __String;
+    readonly text: string;
 }
 
 // Transient identifier node (marked by id === -1)
@@ -1770,6 +1796,7 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
+    readonly text: string;
 }
 
 /** @internal */
@@ -4212,6 +4239,7 @@ export interface SourceFileLike {
     lineMap?: readonly number[];
     /** @internal */
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
+    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
 }
 
 /** @internal */
@@ -4371,6 +4399,18 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ endFlowNode?: FlowNode;
 
     /** @internal */ jsDocParsingMode?: JSDocParsingMode;
+
+
+    /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
+    /** @internal */ nameTable: Map<__String, number> | undefined;
+    /** @internal */ sourceMapper?: DocumentPositionMapper;
+    /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
+    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    getLineEndOfPosition(pos: number): number;
+    getLineStarts(): readonly number[];
+    getPositionOfLineAndCharacter(line: number, character: number): number;
+    update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+
 }
 
 /**
@@ -5791,6 +5831,45 @@ export const enum SymbolFlags {
     LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
 }
 
+export interface SymbolDisplayPart {
+    /**
+     * Text of an item describing the symbol.
+     */
+    text: string;
+    /**
+     * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+     */
+    kind: string;
+}
+
+export interface DocumentSpan {
+    textSpan: TextSpan;
+    fileName: string;
+
+    /**
+     * If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+     * then the original filename and span will be specified here
+     */
+    originalTextSpan?: TextSpan;
+    originalFileName?: string;
+
+    /**
+     * If DocumentSpan.textSpan is the span for name of the declaration,
+     * then this is the span for relevant declaration
+     */
+    contextSpan?: TextSpan;
+    originalContextSpan?: TextSpan;
+}
+
+export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+    target: DocumentSpan;
+}
+
+export interface JSDocTagInfo {
+    name: string;
+    text?: SymbolDisplayPart[];
+}
+
 /** @internal */
 export type SymbolId = number;
 
@@ -5812,6 +5891,18 @@ export interface Symbol {
     /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
+
+    readonly name: string;
+    getFlags(): SymbolFlags;
+    getEscapedName(): __String;
+    getName(): string;
+    getDeclarations(): Declaration[] | undefined;
+    getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[]; // implemented in services, not supported in tsc.
+    /** @internal */
+    getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]; // implemented in services, not supported in tsc.
+    getJsDocTags(checker?: TypeChecker): JSDocTagInfo[]; // implemented in services, not supported in tsc.
+    /** @internal */
+    getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[]; // implemented in services, not supported in tsc.
 }
 
 // dprint-ignore
@@ -6190,6 +6281,32 @@ export interface Type {
     immediateBaseConstraint?: Type;  // Immediate base constraint cache
     /** @internal */
     widened?: Type; // Cached widened form of the type
+
+    getFlags(): TypeFlags;
+    getSymbol(): Symbol | undefined;
+    getProperties(): Symbol[];
+    getProperty(propertyName: string): Symbol | undefined;
+    getApparentProperties(): Symbol[];
+    getCallSignatures(): readonly Signature[];
+    getConstructSignatures(): readonly Signature[];
+    getStringIndexType(): Type | undefined;
+    getNumberIndexType(): Type | undefined;
+    getBaseTypes(): BaseType[] | undefined;
+    getNonNullableType(): Type;
+    /** @internal */ getNonOptionalType(): Type;
+    /** @internal */ isNullableType(): boolean;
+    getConstraint(): Type | undefined;
+    getDefault(): Type | undefined;
+    isUnion(): this is UnionType;
+    isIntersection(): this is IntersectionType;
+    isUnionOrIntersection(): this is UnionOrIntersectionType;
+    isLiteral(): this is LiteralType;
+    isStringLiteral(): this is StringLiteralType;
+    isNumberLiteral(): this is NumberLiteralType;
+    isTypeParameter(): this is TypeParameter;
+    isClassOrInterface(): this is InterfaceType;
+    isClass(): this is InterfaceType;
+    isIndexType(): this is IndexType;
 }
 
 /** @internal */
@@ -6391,6 +6508,8 @@ export interface TypeReference extends ObjectType {
     literalType?: TypeReference; // Clone of type with ObjectFlags.ArrayLiteral set
     /** @internal */
     cachedEquivalentBaseType?: Type; // Only set on references to class or interfaces with a single base type and no augmentations
+
+    readonly typeArguments?: readonly Type[];
 }
 
 export interface DeferredTypeReference extends TypeReference {
@@ -6796,6 +6915,14 @@ export interface Signature {
     instantiations?: Map<string, Signature>;    // Generic signature instantiation cache
     /** @internal */
     implementationSignatureCache?: Signature;  // Copy of the signature with fresh type parameters to use in checking the body of a potentially self-referential generic function (deferred)
+
+    getDeclaration(): JSDocSignature | SignatureDeclaration;
+    getTypeParameters(): readonly TypeParameter[] | undefined;
+    getParameters(): readonly Symbol[];
+    getTypeParameterAtPosition(pos: number): Type;
+    getReturnType(): Type;
+    getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[]; // implemented in services, not supported in tsc.
+    getJsDocTags(): JSDocTagInfo[]; // implemented in services, not supported in tsc.
 }
 
 export const enum IndexKind {
@@ -7994,6 +8121,7 @@ export interface SourceMapSource {
     text: string;
     /** @internal */ lineMap: readonly number[];
     skipTrivia?: (pos: number) => number;
+    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
 }
 
 /** @internal */
@@ -10140,31 +10268,4 @@ export interface Queue<T> {
 export interface EvaluationResolver {
     evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
     evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
-}
-
-/**
- * Resolves to a type only when the 'services' project is loaded. Otherwise, results in `never`.
- * @internal
- */
-export type ServicesOnlyType<T, Fallback = never> = ServicesForwardRefs extends { __services: true; } ? T : Fallback;
-
-/**
- * Resolves a forward-reference to a type declared in the 'services' project.
- * If 'services' is not present, results in `never`.
- * @internal
- */
-export type ServicesForwardRef<K extends string> = ServicesForwardRefs extends { [P in K]: infer T; } ? T : never;
-
-/**
- * Resolves a forward-reference to an array of a type declared in the 'services' project.
- * If 'services' is not present, results in `never`.
- * @internal
- */
-export type ServicesForwardRefArray<K extends string> = ServicesOnlyType<ServicesForwardRef<K>[]>;
-
-/**
- * A registry of forward references declared in the 'services' project.
- * @internal
- */
-export interface ServicesForwardRefs {
 }
