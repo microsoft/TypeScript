@@ -7919,10 +7919,7 @@ declare namespace ts {
         printBundle(bundle: Bundle): string;
     }
     interface PrintHandlers {
-        /**
-         * A hook used by the Printer when generating unique names to avoid collisions with
-         * globally defined names that exist outside of the current source file.
-         */
+        /** @deprecated */
         hasGlobalName?(name: string): boolean;
         /**
          * A hook used by the Printer to provide notifications prior to emitting a node. A
