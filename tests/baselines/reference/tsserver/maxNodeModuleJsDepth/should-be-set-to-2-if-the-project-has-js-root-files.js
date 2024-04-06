@@ -222,7 +222,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "target": "ES2016"
+          "target": "es2016"
         }
       },
       "seq": 2,
@@ -245,5 +245,6 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 maxNodeModuleJsDepth: 2

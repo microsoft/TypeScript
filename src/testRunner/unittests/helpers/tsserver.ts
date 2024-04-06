@@ -1,18 +1,12 @@
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import {
-    patchServiceForStateBaseline,
-} from "../../../harness/projectServiceStateLogger";
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
+import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger";
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    ensureErrorFreeBuild,
-} from "./solutionBuilder";
+import { ensureErrorFreeBuild } from "./solutionBuilder";
 import {
     customTypesMap,
     TestTypingsInstallerAdapter,
@@ -32,13 +26,6 @@ import {
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
-}
-
-export function appendAllScriptInfos(session: TestSession) {
-    session.logger.log("");
-    session.logger.log(`ScriptInfos:`);
-    session.getProjectService().filenameToScriptInfo.forEach(info => session.logger.log(`path: ${info.path} fileName: ${info.fileName}`));
-    session.logger.log("");
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -486,21 +473,9 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function verifyDynamic(session: TestSession, path: string) {
-    session.logger.log(`${path} isDynamic:: ${session.getProjectService().filenameToScriptInfo.get(path)!.isDynamic}`);
-}
-
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
     const host = createServerHost(files);
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
     return host;
-}
-
-export function logInferredProjectsOrphanStatus(session: TestSession) {
-    session.getProjectService().inferredProjects.forEach(inferredProject => session.logger.log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
-}
-
-export function logConfiguredProjectsHasOpenRefStatus(session: TestSession) {
-    session.getProjectService().configuredProjects.forEach(configuredProject => session.logger.log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
 }

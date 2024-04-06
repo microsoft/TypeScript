@@ -7,22 +7,33 @@ interface F {
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     constructor(public a: T, public b: F) {}
 >a : T
+>  : ^
 >b : F
+>  : ^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         if (this.a instanceof this.b) {
 >this.a instanceof this.b : boolean
+>                         : ^^^^^^^
 >this.a : T
+>       : ^
 >this : this
+>     : ^^^^
 >a : T
+>  : ^
 >this.b : F
+>       : ^
 >this : this
+>     : ^^^^
 >b : F
+>  : ^
         }
     }
 }

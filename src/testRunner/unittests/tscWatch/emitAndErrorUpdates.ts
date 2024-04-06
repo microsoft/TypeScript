@@ -1,12 +1,6 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-} from "../helpers/contents";
-import {
-    getFsContentsForNoEmitOnError,
-} from "../helpers/noEmitOnError";
+import { jsonToReadableText } from "../helpers";
+import { FsContents } from "../helpers/contents";
+import { getFsContentsForNoEmitOnError } from "../helpers/noEmitOnError";
 import {
     TscWatchCompileChange,
     verifyTscWatch,

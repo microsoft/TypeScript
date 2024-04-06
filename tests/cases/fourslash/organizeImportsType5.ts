@@ -12,16 +12,30 @@
 //// } from './foo';
 //// console.log(A, a, B, b, c, C, d, D);
 
-verify.organizeImports(
-`import {
+verify.organizeImports(`import {
     type A,
-    b as B,
-    c as C,
-    type d as D,
     a,
     b,
+    b as B,
     type c,
-    d
+    c as C,
+    d,
+    type d as D
+} from './foo';
+console.log(A, a, B, b, c, C, d, D);`,
+    /*mode*/ undefined,
+    { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "inline" }
+);
+
+verify.organizeImports(`import {
+    type A,
+    a,
+    b,
+    b as B,
+    type c,
+    c as C,
+    d,
+    type d as D
 } from './foo';
 console.log(A, a, B, b, c, C, d, D);`,
     /*mode*/ undefined,

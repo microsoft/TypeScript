@@ -195,7 +195,7 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.4"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -302,6 +302,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
@@ -451,6 +452,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/app.js (Open)

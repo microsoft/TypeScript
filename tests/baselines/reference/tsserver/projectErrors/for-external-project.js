@@ -271,7 +271,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ],
         "options": {
-          "module": "CommonJS"
+          "module": "commonjs"
         }
       },
       "seq": 3,

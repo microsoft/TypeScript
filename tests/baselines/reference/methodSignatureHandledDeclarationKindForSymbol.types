@@ -4,11 +4,13 @@
 interface Foo {
     bold(): string;
 >bold : () => string
+>     : ^^^^^^      
 }
 
 interface Foo {
     bold: string;
 >bold : () => string
+>     : ^^^^^^^^^^^^
 }
 
 

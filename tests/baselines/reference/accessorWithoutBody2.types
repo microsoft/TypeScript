@@ -3,7 +3,11 @@
 === accessorWithoutBody2.ts ===
 var v = { set foo(a) }
 >v : { foo: any; }
+>  : ^^^^^^^^^^^^^
 >{ set foo(a) } : { foo: any; }
+>               : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 

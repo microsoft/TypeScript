@@ -1,7 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    libFile,
-} from "./virtualFileSystemWithWatch";
+import { libFile } from "./virtualFileSystemWithWatch";
 
 export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
     return ts.optionMapToObject(ts.serializeCompilerOptions(options));
@@ -28,4 +26,8 @@ export interface FsContents {
 
 export function libPath(forLib: string) {
     return `${ts.getDirectoryPath(libFile.path)}/lib.${forLib}.d.ts`;
+}
+
+export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined) {
+    return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
 }

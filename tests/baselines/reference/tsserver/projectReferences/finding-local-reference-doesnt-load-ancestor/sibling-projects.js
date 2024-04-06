@@ -250,6 +250,8 @@ Projects::
 /user/username/projects/solution/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -550,8 +552,6 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -650,15 +650,23 @@ FsWatches::
   {}
 
 Projects::
-/user/username/projects/solution/compiler/tsconfig.json (Configured)
+/user/username/projects/solution/compiler/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/solution/compiler/types.d.ts: identitySourceMapConsumer *new*
 /user/username/projects/solution/services/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 2
+        /user/username/projects/solution/compiler/tsconfig.json
+        /user/username/projects/solution/services/tsconfig.json
 /user/username/projects/solution/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

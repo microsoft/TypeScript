@@ -112,6 +112,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
     autoImportProviderHost: false
 
 ScriptInfos::
@@ -167,6 +169,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::

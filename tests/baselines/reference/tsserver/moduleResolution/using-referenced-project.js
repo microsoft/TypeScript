@@ -222,6 +222,7 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/pack
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package-a/build/index.d.ts', result '/home/src/projects/project/packages/package-a/build/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package-a' was successfully resolved to '/home/src/projects/project/packages/package-a/build/index.d.ts' with Package ID 'package-a/build/index.d.ts@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/index.ts 500 undefined WatchType: Closed Script info
@@ -596,6 +597,7 @@ Projects::
 /home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.es2021.d.ts
@@ -774,6 +776,7 @@ Projects::
 /home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.es2021.d.ts
@@ -888,6 +891,7 @@ Projects::
 /home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.es2021.d.ts
@@ -1068,6 +1072,7 @@ Projects::
 /home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.es2021.d.ts

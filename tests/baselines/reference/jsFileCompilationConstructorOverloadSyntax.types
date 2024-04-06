@@ -3,6 +3,7 @@
 === a.js ===
 class A {
 >A : A
+>  : ^
 
   constructor();
 }

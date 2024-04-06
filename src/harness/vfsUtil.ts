@@ -1459,10 +1459,10 @@ type FileDataBuffer = { encoding?: undefined; data: Buffer; } | { encoding: Buff
 function ensureBufferEncoding(fileBuffer: FileDataBuffer, encoding: BufferEncoding | undefined) {
     if (fileBuffer.encoding === encoding) return;
 
-    const buffer = !fileBuffer.encoding ? fileBuffer.data : ts.sys.bufferFrom!(fileBuffer.data, fileBuffer.encoding);
+    const buffer = !fileBuffer.encoding ? fileBuffer.data : Buffer.from(fileBuffer.data, fileBuffer.encoding);
 
     fileBuffer.encoding = encoding;
-    fileBuffer.data = !encoding ? buffer as Buffer : buffer.toString(encoding);
+    fileBuffer.data = !encoding ? buffer : buffer.toString(encoding);
 }
 
 interface FileInode {

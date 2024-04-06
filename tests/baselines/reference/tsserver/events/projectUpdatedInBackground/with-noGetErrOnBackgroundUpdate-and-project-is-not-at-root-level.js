@@ -230,6 +230,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -286,6 +287,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -361,6 +368,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -456,6 +464,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

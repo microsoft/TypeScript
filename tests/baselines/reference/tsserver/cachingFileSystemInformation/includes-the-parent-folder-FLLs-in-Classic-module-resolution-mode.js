@@ -287,6 +287,7 @@ Projects::
 /users/username/projects/proj/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 5: /users/username/projects/proj/tsconfig.json
@@ -377,6 +378,7 @@ Projects::
 /users/username/projects/proj/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

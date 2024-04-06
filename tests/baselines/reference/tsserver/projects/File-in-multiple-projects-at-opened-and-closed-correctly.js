@@ -212,7 +212,6 @@ ScriptInfos::
     containingProjects: 1
         /a/c/tsconfig.json *default*
 
-Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -427,8 +426,6 @@ ScriptInfos::
     containingProjects: 1
         /a/c/tsconfig.json *default*
 
-Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -476,6 +473,15 @@ FsWatchesRecursive::
 /a/c:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/app.ts (Open)
     version: Text-1
@@ -488,8 +494,6 @@ ScriptInfos::
     containingProjects: 1
         /a/c/tsconfig.json
 
-Configured project: /a/c/tsconfig.json hasOpenRef:: false isClosed: false
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -537,6 +541,16 @@ FsWatchesRecursive::
 /a/c:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/a/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
 ScriptInfos::
 /a/b/app.ts *changed*
     open: false *changed*
@@ -549,8 +563,6 @@ ScriptInfos::
     containingProjects: 1
         /a/c/tsconfig.json
 
-Configured project: /a/c/tsconfig.json hasOpenRef:: false isClosed: false
-Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -620,9 +632,12 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/c/tsconfig.json (Configured)
+    isClosed: true *changed*
+    noOpenRef: true
+/a/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -635,5 +650,3 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/c/tsconfig.json *default*
-
-Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false

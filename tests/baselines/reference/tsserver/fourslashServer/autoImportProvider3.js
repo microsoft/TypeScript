@@ -328,6 +328,8 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts
@@ -775,6 +777,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"

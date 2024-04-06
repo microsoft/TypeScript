@@ -216,6 +216,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -335,6 +337,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

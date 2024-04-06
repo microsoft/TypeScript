@@ -1,7 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -95,11 +93,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
     it("Auto-importable file is in inferred project until imported", () => {
         const { session, updateFile } = setup([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs]);
         openFilesForSession([angularFormsDts], session);
-        session.logger.log(`Default Project for ${angularFormsDts.path}:: ${session.getProjectService().getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)?.projectName}`);
-
         updateFile(indexTs.path, "import '@angular/forms'");
-        session.logger.log(`Default Project for ${angularFormsDts.path}:: ${session.getProjectService().getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)?.projectName}`);
-
         assert.isUndefined(session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         session.host.baselineHost("After getAutoImportProvider");
         baselineTsserverLogs("autoImportProvider", "Auto-importable file is in inferred project until imported", session);

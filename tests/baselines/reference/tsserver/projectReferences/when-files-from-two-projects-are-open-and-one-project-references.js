@@ -1484,30 +1484,38 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/core/tsconfig.json (Configured)
+/user/username/projects/myproject/core/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/core/src/file1.d.ts: identitySourceMapConsumer *new*
 /user/username/projects/myproject/coreRef1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/myproject/coreRef3/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/myproject/indirect/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/myproject/refToCoreRef3/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

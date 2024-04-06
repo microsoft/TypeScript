@@ -195,6 +195,7 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/a/tsconfig.json
@@ -269,3 +270,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/user/username/projects/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*

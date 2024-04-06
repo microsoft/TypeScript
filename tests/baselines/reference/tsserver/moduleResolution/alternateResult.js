@@ -220,6 +220,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -272,6 +273,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -305,6 +307,7 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -322,6 +325,7 @@ Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'types'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -351,6 +355,7 @@ Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'types'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -729,6 +734,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -918,6 +924,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -1070,6 +1077,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -1143,6 +1151,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1238,6 +1247,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -1392,6 +1402,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -1502,6 +1513,7 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
@@ -1568,6 +1580,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -1722,6 +1735,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -1795,6 +1809,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1877,6 +1892,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
     projectProgramVersion: 5 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -2039,6 +2055,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 5
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -2107,6 +2124,7 @@ Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'types'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2192,6 +2210,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 6
     projectProgramVersion: 6 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2365,6 +2384,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 7 *changed*
     projectProgramVersion: 6
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -2423,6 +2443,7 @@ Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'types'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'types'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2546,6 +2567,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 7
     projectProgramVersion: 7 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2706,6 +2728,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 8 *changed*
     projectProgramVersion: 7
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -2788,6 +2811,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2821,6 +2845,7 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
@@ -2934,6 +2959,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 8
     projectProgramVersion: 8 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -3110,6 +3136,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 9 *changed*
     projectProgramVersion: 8
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -3186,6 +3213,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3278,6 +3306,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 9
     projectProgramVersion: 9 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -3479,6 +3508,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 10 *changed*
     projectProgramVersion: 9
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -3668,6 +3698,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 10
     projectProgramVersion: 10 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 19: semanticCheck
@@ -3841,6 +3872,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 11 *changed*
     projectProgramVersion: 10
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -3916,6 +3948,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -4009,6 +4042,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 11
     projectProgramVersion: 11 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 21: semanticCheck
@@ -4163,6 +4197,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 12 *changed*
     projectProgramVersion: 11
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -4275,6 +4310,7 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
@@ -4339,6 +4375,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 12
     projectProgramVersion: 12 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 23: semanticCheck
@@ -4493,6 +4530,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 13 *changed*
     projectProgramVersion: 12
+    dirty: true *changed*
 
 Before running Immedidate callback:: count: 0
 
@@ -4568,6 +4606,7 @@ Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './index.mjs'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -4648,6 +4687,7 @@ Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 13
     projectProgramVersion: 13 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 25: semanticCheck

@@ -7,13 +7,17 @@ export declare namespace A {
 
 class X { }
 >X : X
+>  : ^
 
 export class A {
 >A : A
+>  : ^
 
     static X = X;
 >X : typeof X
+>  : ^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 }
 
 export declare namespace Y {
@@ -22,4 +26,5 @@ export declare namespace Y {
 
 export class Y { }
 >Y : Y
+>  : ^
 

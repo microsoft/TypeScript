@@ -25,15 +25,15 @@ declare global {
     "type": "module"
 }
 //// [index.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends ImportInterface {}
 
 //// [index.js]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export {};
 
 
 //// [index.d.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends ImportInterface {
 }
