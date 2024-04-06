@@ -31,7 +31,7 @@ class B implements A {
   method2() { }   // should error
 >method2 : Symbol(B.method2, Decl(typePredicateInherit.ts, 10, 15))
 
-  method3() {   // should ok
+  method3() {   // should error
 >method3 : Symbol(B.method3, Decl(typePredicateInherit.ts, 12, 15))
 
     return true
@@ -90,7 +90,7 @@ class D extends C {
     return true;
   }
 
-  method3(): boolean {  // should ok
+  method3(): boolean {  // should error
 >method3 : Symbol(D.method3, Decl(typePredicateInherit.ts, 47, 3))
 
     return true;

@@ -1,15 +1,21 @@
 typePredicateInherit.ts(11,3): error TS2416: Property 'method1' in type 'B' is not assignable to the same property in base type 'A'.
   Type '() => void' is not assignable to type '() => this is { a: 1; }'.
-    Type 'void' is not assignable to type 'boolean'.
+    Signature '(): void' must be a type predicate.
 typePredicateInherit.ts(13,3): error TS2416: Property 'method2' in type 'B' is not assignable to the same property in base type 'A'.
   Type '() => void' is not assignable to type '() => boolean'.
     Type 'void' is not assignable to type 'boolean'.
+typePredicateInherit.ts(15,3): error TS2416: Property 'method3' in type 'B' is not assignable to the same property in base type 'A'.
+  Type '() => boolean' is not assignable to type '() => this is { a: 1; }'.
+    Signature '(): boolean' must be a type predicate.
 typePredicateInherit.ts(41,3): error TS2416: Property 'method1' in type 'D' is not assignable to the same property in base type 'C'.
   Type '() => void' is not assignable to type '() => this is { a: 1; }'.
-    Type 'void' is not assignable to type 'boolean'.
+    Signature '(): void' must be a type predicate.
+typePredicateInherit.ts(50,3): error TS2416: Property 'method3' in type 'D' is not assignable to the same property in base type 'C'.
+  Type '() => boolean' is not assignable to type '() => this is { a: 1; }'.
+    Signature '(): boolean' must be a type predicate.
 
 
-==== typePredicateInherit.ts (3 errors) ====
+==== typePredicateInherit.ts (5 errors) ====
     interface A {
       method1(): this is {
         a: 1
@@ -24,7 +30,7 @@ typePredicateInherit.ts(41,3): error TS2416: Property 'method1' in type 'D' is n
       ~~~~~~~
 !!! error TS2416: Property 'method1' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type '() => void' is not assignable to type '() => this is { a: 1; }'.
-!!! error TS2416:     Type 'void' is not assignable to type 'boolean'.
+!!! error TS2416:     Signature '(): void' must be a type predicate.
     
       method2() { }   // should error
       ~~~~~~~
@@ -32,7 +38,11 @@ typePredicateInherit.ts(41,3): error TS2416: Property 'method1' in type 'D' is n
 !!! error TS2416:   Type '() => void' is not assignable to type '() => boolean'.
 !!! error TS2416:     Type 'void' is not assignable to type 'boolean'.
     
-      method3() {   // should ok
+      method3() {   // should error
+      ~~~~~~~
+!!! error TS2416: Property 'method3' in type 'B' is not assignable to the same property in base type 'A'.
+!!! error TS2416:   Type '() => boolean' is not assignable to type '() => this is { a: 1; }'.
+!!! error TS2416:     Signature '(): boolean' must be a type predicate.
         return true
       }
     }
@@ -62,7 +72,7 @@ typePredicateInherit.ts(41,3): error TS2416: Property 'method1' in type 'D' is n
       ~~~~~~~
 !!! error TS2416: Property 'method1' in type 'D' is not assignable to the same property in base type 'C'.
 !!! error TS2416:   Type '() => void' is not assignable to type '() => this is { a: 1; }'.
-!!! error TS2416:     Type 'void' is not assignable to type 'boolean'.
+!!! error TS2416:     Signature '(): void' must be a type predicate.
       }
     
       method2(): this is {  // should ok
@@ -71,7 +81,11 @@ typePredicateInherit.ts(41,3): error TS2416: Property 'method1' in type 'D' is n
         return true;
       }
     
-      method3(): boolean {  // should ok
+      method3(): boolean {  // should error
+      ~~~~~~~
+!!! error TS2416: Property 'method3' in type 'D' is not assignable to the same property in base type 'C'.
+!!! error TS2416:   Type '() => boolean' is not assignable to type '() => this is { a: 1; }'.
+!!! error TS2416:     Signature '(): boolean' must be a type predicate.
         return true;
       }
     }

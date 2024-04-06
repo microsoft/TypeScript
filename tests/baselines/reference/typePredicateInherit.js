@@ -15,7 +15,7 @@ class B implements A {
 
   method2() { }   // should error
 
-  method3() {   // should ok
+  method3() {   // should error
     return true
   }
 }
@@ -50,7 +50,7 @@ class D extends C {
     return true;
   }
 
-  method3(): boolean {  // should ok
+  method3(): boolean {  // should error
     return true;
   }
 }

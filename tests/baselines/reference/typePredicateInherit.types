@@ -28,7 +28,7 @@ class B implements A {
   method2() { }   // should error
 >method2 : () => void
 
-  method3() {   // should ok
+  method3() {   // should error
 >method3 : () => boolean
 
     return true
@@ -92,7 +92,7 @@ class D extends C {
 >true : true
   }
 
-  method3(): boolean {  // should ok
+  method3(): boolean {  // should error
 >method3 : () => boolean
 
     return true;
