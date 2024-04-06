@@ -4414,7 +4414,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
 }
 
 /**
- * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+ * Represents an immutable snapshot of a script at a specified time. Once acquired, the
  * snapshot is observably immutable. i.e. the same calls with the same parameters will return
  * the same values.
  */
