@@ -5,7 +5,7 @@ var x = function () { debugger; }
 >x : () => void
 >  : ^^^^^^^^^^
 >function () { debugger; } : () => void
->                          : ^^^^^^^^^^
+>                          :           
 
 x();
 >x() : void

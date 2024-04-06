@@ -41,7 +41,7 @@ crunch.n
  */
 function f(greatest, wrap) {
 >f : (greatest: ex.Greatest, wrap: ex.Crunch) => void
->  : ^^^^^^^^^^^           ^^^^^^^^         ^^^^^^^^^
+>  : ^        ^^           ^^    ^^         ^^^^^^^^^
 >greatest : ex.Greatest
 >         : ^^^^^^^^^^^
 >wrap : ex.Crunch

@@ -34,7 +34,7 @@ class Foo {
 >f : () => any
 >  : ^^^^^^^^^
 >() => this.y : () => any
->             : ^^^^^^^^^
+>             :          
 >this.y : any
 >this : any
 >     : ^^^
@@ -52,7 +52,7 @@ function test() {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {        (() => this)();        this;    } : () => void
->                                                 : ^^^^^^^^^^
+>                                                 :           
 
         (() => this)();
 >(() => this)() : any

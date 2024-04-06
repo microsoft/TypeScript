@@ -80,7 +80,7 @@ var r = true ? a : b;
 >r : { Foo?: Base; }
 >  : ^^^^^^^^^^^^^^^
 >true ? a : b : { Foo?: Base; }
->             : ^^^^^^^^^^^^^^^
+>             :      ^         
 >true : true
 >     : ^^^^
 >a : { Foo?: Base; }
@@ -149,7 +149,7 @@ module TwoLevels {
 >r : { Foo?: Base; }
 >  : ^^^^^^^^^^^^^^^
 >true ? a : b : { Foo?: Base; }
->             : ^^^^^^^^^^^^^^^
+>             :      ^         
 >true : true
 >     : ^^^^
 >a : { Foo?: Base; }

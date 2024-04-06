@@ -9,7 +9,7 @@ var f = () => _this;
 >f : () => typeof _this
 >  : ^^^^^^^^^^^^^^^^^^
 >() => _this : () => typeof _this
->            : ^^^^^^^^^^^^^^^^^^
+>            :                   
 >_this : typeof _this
 >      : ^^^^^^^^^^^^
 

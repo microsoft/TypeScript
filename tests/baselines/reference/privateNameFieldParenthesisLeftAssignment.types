@@ -26,7 +26,7 @@ class Foo {
 
     t1(p: number) {
 >t1 : (p: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 
@@ -47,7 +47,7 @@ class Foo {
 
     t2(p: number) {
 >t2 : (p: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 
@@ -72,7 +72,7 @@ class Foo {
 
     t3(p: number) {
 >t3 : (p: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 
@@ -91,7 +91,7 @@ class Foo {
 
     t4(p: number) {
 >t4 : (p: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 

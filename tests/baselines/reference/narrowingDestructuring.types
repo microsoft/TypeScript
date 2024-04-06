@@ -15,7 +15,7 @@ type X = { kind: "a", a: string } | { kind: "b", b: string }
 
 function func<T extends X>(value: T) {
 >func : <T extends X>(value: T) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^     ^^ ^^^^^^^^^
 >value : T
 >      : ^
 
@@ -90,7 +90,7 @@ type Z = { kind: "f", f: { a: number, b: string, c: number } }
 
 function func2<T extends Z>(value: T) {
 >func2 : <T extends Z>(value: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^     ^^ ^^^^^^^^^
 >value : T
 >      : ^
 
@@ -155,7 +155,7 @@ function func2<T extends Z>(value: T) {
 
 function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t: T) {
 >func3 : <T extends { kind: "a"; a: string; } | { kind: "b"; b: number; }>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^^^      ^^^^^ ^^ ^^^^^^^^^
 >kind : "a"
 >     : ^^^
 >a : string
@@ -191,11 +191,11 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 >r2 : { a: string; }
 >   : ^^^^^^^^^^^^^^
 >(({ kind, ...rest }) => rest)(t) : { a: string; }
->                                 : ^^^^^^^^^^^^^^
+>                                 :               
 >(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "a"
 >     : ^^^
 >rest : { a: string; }
@@ -209,7 +209,7 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
 >farr : <T extends [number, string, string] | [string, number, number]>(x: T) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

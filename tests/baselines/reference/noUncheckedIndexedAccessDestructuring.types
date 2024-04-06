@@ -39,11 +39,11 @@ s2.push(undefined); // Should error, 'undefined' not part of s2's element type
 >s2.push(undefined) : number
 >                   : ^^^^^^
 >s2.push : (...items: string[]) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >s2 : string[]
 >   : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -62,11 +62,11 @@ s3.push(undefined); // Should error, 'undefined' not part of s2's element type
 >s3.push(undefined) : number
 >                   : ^^^^^^
 >s3.push : (...items: string[]) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >s3 : string[]
 >   : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -139,31 +139,31 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number | undefined) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     y.toFixed(); // Should OK
 >y.toFixed() : string
 >            : ^^^^^^
 >y.toFixed : (fractionDigits?: number | undefined) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     z.toFixed(); // Should error
 >z.toFixed() : string
 >            : ^^^^^^
 >z.toFixed : (fractionDigits?: number | undefined) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 {
@@ -179,17 +179,17 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number | undefined) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     q.y.toFixed(); // Should OK
 >q.y.toFixed() : string
 >              : ^^^^^^
 >q.y.toFixed : (fractionDigits?: number | undefined) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q.y : number
 >    : ^^^^^^
 >q : { [s: string]: number; y: number; }
@@ -197,13 +197,13 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     q.z.toFixed(); // Should error
 >q.z.toFixed() : string
 >              : ^^^^^^
 >q.z.toFixed : (fractionDigits?: number | undefined) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q.z : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >q : { [s: string]: number; y: number; }
@@ -211,7 +211,7 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 {
@@ -227,19 +227,19 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >x.    toFixed() : string
 >                : ^^^^^^
 >x.    toFixed : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     toFixed(); // Should OK
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     q.
 >q.    y.toFixed() : string
 >                  : ^^^^^^
 >q.    y.toFixed : (fractionDigits?: number | undefined) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q.    y : number
 >        : ^^^^^^
 >q : { [s: string]: number; y: number; }
@@ -249,13 +249,13 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     q.
 >q.    z.toFixed() : string
 >                  : ^^^^^^
 >q.    z.toFixed : (fractionDigits?: number | undefined) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q.    z : number | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 >q : { [s: string]: number; y: number; }
@@ -265,7 +265,7 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >z : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 

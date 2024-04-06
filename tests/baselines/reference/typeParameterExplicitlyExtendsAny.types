@@ -53,7 +53,7 @@ function fee2<T extends any>() {
 
 function f<T extends any>(x: T) {
 >f : <T extends unknown>(x: T) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -111,7 +111,7 @@ class MyClass {
 
     public static displayTree1<T extends Tree<any>>(tree: T) {
 >displayTree1 : <T extends unknown>(tree: T) => void
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
 >tree : T
 >     : ^
 

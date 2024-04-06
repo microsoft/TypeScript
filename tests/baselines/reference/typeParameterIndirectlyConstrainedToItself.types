@@ -32,13 +32,13 @@ var b = <U extends T, T extends U>() => { }
 >b : <U, T>() => void
 >  : ^^^^^^^^^^^^^^^^
 ><U extends T, T extends U>() => { } : <U, T>() => void
->                                    : ^^^^^^^^^^^^^^^^
+>                                    :                 
 
 var b2 = <T extends U, U extends V, V extends T>() => { }
 >b2 : <T, U, V>() => void
 >   : ^^^^^^^^^^^^^^^^^^^
 ><T extends U, U extends V, V extends T>() => { } : <T, U, V>() => void
->                                                 : ^^^^^^^^^^^^^^^^^^^
+>                                                 :                    
 
 class D<U extends T, T extends V, V extends T> { }
 >D : D<U, T, V>

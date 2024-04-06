@@ -20,13 +20,13 @@ interface Foo {
 interface Bar {
     method1(arg: A): void;
 >method1 : (arg: A) => void
->        : ^^^^^^ ^^^^^    
+>        : ^   ^^ ^^^^^    
 >arg : A
 >    : ^
 
     method2(arg: B): void;
 >method2 : (arg: B) => void
->        : ^^^^^^ ^^^^^    
+>        : ^   ^^ ^^^^^    
 >arg : B
 >    : ^
 }
@@ -41,7 +41,7 @@ function getFoo1(): Foo {
 
         method1(arg) {
 >method1 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 
@@ -59,7 +59,7 @@ function getFoo1(): Foo {
         }
         method2(arg) {
 >method2 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 
@@ -88,9 +88,9 @@ function getFoo2(): Foo {
 
         method1 = (arg) => {
 >method1 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >(arg) => {            arg.numProp = 10;        } : (arg: any) => void
->                                                 : ^^^^^^^^^^^^^^^^^^
+>                                                 :                   
 >arg : any
 >    : ^^^
 
@@ -108,9 +108,9 @@ function getFoo2(): Foo {
         }
         method2 = (arg) => {
 >method2 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >(arg) => {            arg.strProp = "hello";        } : (arg: any) => void
->                                                      : ^^^^^^^^^^^^^^^^^^
+>                                                      :                   
 >arg : any
 >    : ^^^
 
@@ -139,9 +139,9 @@ function getFoo3(): Foo {
 
         method1 = function (arg) {
 >method1 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >function (arg) {            arg.numProp = 10;        } : (arg: any) => void
->                                                       : ^^^^^^^^^^^^^^^^^^
+>                                                       :                   
 >arg : any
 >    : ^^^
 
@@ -159,9 +159,9 @@ function getFoo3(): Foo {
         }
         method2 = function (arg) {
 >method2 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >function (arg) {            arg.strProp = "hello";        } : (arg: any) => void
->                                                            : ^^^^^^^^^^^^^^^^^^
+>                                                            :                   
 >arg : any
 >    : ^^^
 

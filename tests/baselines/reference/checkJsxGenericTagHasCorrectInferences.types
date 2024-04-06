@@ -12,7 +12,7 @@ interface BaseProps<T> {
 
   nextValues: (cur: T) => T;
 >nextValues : (cur: T) => T
->           : ^^^^^^ ^^^^^ 
+>           : ^   ^^ ^^^^^ 
 >cur : T
 >    : ^
 }
@@ -47,9 +47,9 @@ let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // 
 >"y" : "y"
 >    : ^^^
 >nextValues : (a: { x: string; }) => { x: string; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^              
 >a => a : (a: { x: string; }) => { x: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^              
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >a : { x: string; }
@@ -67,9 +67,9 @@ let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error
 >12 : 12
 >   : ^^
 >nextValues : (a: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -91,9 +91,9 @@ let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x 
 >"y" : "y"
 >    : ^^^
 >nextValues : (a: { x: string; }) => { x: string; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => ({ x: a.x }) : (a: { x: string; }) => { x: string; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >({ x: a.x }) : { x: string; }
@@ -125,9 +125,9 @@ let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; /
 >"y" : "y"
 >    : ^^^
 >nextValues : (a: { x: string; }) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => a.x : (a: { x: string; }) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >a.x : string

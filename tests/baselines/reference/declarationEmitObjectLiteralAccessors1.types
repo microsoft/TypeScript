@@ -30,9 +30,9 @@ export const obj1 = {
 // divergent accessors
 export const obj2 = {
 >obj2 : { get x(): string; set x(a: number); }
->     : ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^
+>     : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >{  /** my awesome getter */  get x(): string {    return "";  },  /** my awesome setter */  set x(a: number) {},} : { get x(): string; set x(a: number); }
->                                                                                                                  : ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^
+>                                                                                                                  : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 
   /** my awesome getter */
   get x(): string {

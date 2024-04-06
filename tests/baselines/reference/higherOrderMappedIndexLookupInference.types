@@ -5,7 +5,7 @@
 
 function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
 >f1 : (a: <T>() => keyof T, b: <U>() => keyof U) => void
->   : ^^^^                ^^^^^                ^^^^^^^^^
+>   : ^ ^^                ^^ ^^                ^^^^^^^^^
 >a : <T>() => keyof T
 >  : ^ ^^^^^^^       
 >b : <U>() => keyof U
@@ -30,7 +30,7 @@ function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
 
 function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) {
 >f2 : (a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) => void
->   : ^^^^                                ^^^^^                                ^^^^^^^^^
+>   : ^ ^^                                ^^ ^^                                ^^^^^^^^^
 >a : <T, K extends keyof T>() => T[K]
 >  : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^    
 >b : <U, L extends keyof U>() => U[L]
@@ -55,7 +55,7 @@ function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => 
 
 function f3(a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: U[K] }) {
 >f3 : (a: <T>() => { [K in keyof T]: T[K]; }, b: <U>() => { [K in keyof U]: U[K]; }) => void
->   : ^^^^                                  ^^^^^                                  ^^^^^^^^^
+>   : ^ ^^                                  ^^ ^^                                  ^^^^^^^^^
 >a : <T>() => { [K in keyof T]: T[K]; }
 >  : ^ ^^^^^^^                         
 >b : <U>() => { [K in keyof U]: U[K]; }

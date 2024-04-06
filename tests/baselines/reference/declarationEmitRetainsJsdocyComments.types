@@ -7,15 +7,15 @@
  */
 export const foo = (p: string) => {
 >foo : (p: string) => { bar: (s: number) => void; bar2(s: number): void; }
->    : ^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >(p: string) => {    return {        /**         * comment2         * @param s          */        bar: (s: number) => {},        /**         * comment3         * @param s          */        bar2(s: number) {},    }} : (p: string) => { bar: (s: number) => void; bar2(s: number): void; }
->                                                                                                                                                                                                                       : ^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                                                                                                                                                       :                                                                    
 >p : string
 >  : ^^^^^^
 
     return {
 >{        /**         * comment2         * @param s          */        bar: (s: number) => {},        /**         * comment3         * @param s          */        bar2(s: number) {},    } : { bar: (s: number) => void; bar2(s: number): void; }
->                                                                                                                                                                                           : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                                                                                                                           : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
         /**
          * comment2
@@ -23,9 +23,9 @@ export const foo = (p: string) => {
          */
         bar: (s: number) => {},
 >bar : (s: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >(s: number) => {} : (s: number) => void
->                  : ^^^^      ^^^^^^^^^
+>                  :                    
 >s : number
 >  : ^^^^^^
 
@@ -35,7 +35,7 @@ export const foo = (p: string) => {
          */
         bar2(s: number) {},
 >bar2 : (s: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >s : number
 >  : ^^^^^^
     }
@@ -51,7 +51,7 @@ export class Foo {
      */
     bar(s: number) {
 >bar : (s: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >s : number
 >  : ^^^^^^
     }
@@ -78,7 +78,7 @@ declare global {
         */
         someMethod(collection: any[]): boolean;
 >someMethod : (collection: any[]) => boolean
->           : ^^^^^^^^^^^^^     ^^^^^       
+>           : ^          ^^     ^^^^^       
 >collection : any[]
 >           : ^^^^^
     }

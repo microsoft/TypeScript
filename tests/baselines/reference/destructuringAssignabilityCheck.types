@@ -13,9 +13,9 @@ const {} = undefined; // error correctly
 >(([]) => 0)({}) : number
 >                : ^^^^^^
 >(([]) => 0) : ([]: {}) => number
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^  ^^^^^^^^^^^^^^^
 >([]) => 0 : ([]: {}) => number
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^  ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >{} : {}
@@ -25,9 +25,9 @@ const {} = undefined; // error correctly
 >(({}) => 0)(undefined) : number
 >                       : ^^^^^^
 >(({}) => 0) : ({}: undefined) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^^^^^^^^^^^^^^^^^^^^^
 >({}) => 0 : ({}: undefined) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^  ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >undefined : undefined
@@ -35,7 +35,7 @@ const {} = undefined; // error correctly
 
 function foo({}: undefined) {
 >foo : ({}: undefined) => number
->    : ^^^^^         ^^^^^^^^^^^
+>    : ^  ^^         ^^^^^^^^^^^
 
     return 0
 >0 : 0
@@ -43,7 +43,7 @@ function foo({}: undefined) {
 }
 function bar([]: {}) {
 >bar : ([]: {}) => number
->    : ^^^^^  ^^^^^^^^^^^
+>    : ^  ^^  ^^^^^^^^^^^
 
     return 0
 >0 : 0

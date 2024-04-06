@@ -11,7 +11,7 @@ declare let dec: any;
 >dec : any
 >    : ^^^
 >x => x.#foo : (x: any) => any
->            : ^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x.#foo : any
@@ -37,7 +37,7 @@ class A {
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >(x: A) => x.#foo : (x: A) => number
->                 : ^^^^ ^^^^^^^^^^^
+>                 : ^ ^^ ^^^^^^^^^^^
 >x : A
 >  : ^
 >x.#foo : number
@@ -56,7 +56,7 @@ class A {
 >dec : any
 >    : ^^^
 >(x: B) => x.#foo : (x: B) => any
->                 : ^^^^ ^^^^^^^^
+>                 : ^ ^^ ^^^^^^^^
 >x : B
 >  : ^
 >x.#foo : any

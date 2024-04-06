@@ -27,9 +27,9 @@ type Constructor = new (...args: any[]) => any
 
 export const mixin = (Base: Constructor) => {
 >mixin : (Base: Constructor) => typeof (Anonymous class)
->      : ^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(Base: Constructor) => {  return class extends Base {    get(domNode: DOMNode) {}  }} : (Base: Constructor) => typeof (Anonymous class)
->                                                                                      : ^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                      :                                                
 >Base : Constructor
 >     : ^^^^^^^^^^^
 
@@ -41,7 +41,7 @@ export const mixin = (Base: Constructor) => {
 
     get(domNode: DOMNode) {}
 >get : (domNode: DOMNode) => void
->    : ^^^^^^^^^^       ^^^^^^^^^
+>    : ^       ^^       ^^^^^^^^^
 >domNode : globalThis.Node
 >        : ^^^^^^^^^^^^^^^
   }

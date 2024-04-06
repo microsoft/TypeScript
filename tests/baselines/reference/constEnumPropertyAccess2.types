@@ -77,7 +77,7 @@ g = "string";
 
 function foo(x: G) { }
 >foo : (x: G) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : G
 >  : ^
 

@@ -42,9 +42,9 @@ Validator.prototype.num = 12
  */
 var validateRegExpFlags = function(state) {
 >validateRegExpFlags : (state: Validator) => string
->                    : ^^^^^^^^         ^^^^^^^^^^^
+>                    : ^     ^^         ^^^^^^^^^^^
 >function(state) {    return state.flags} : (state: Validator) => string
->                                         : ^^^^^^^^         ^^^^^^^^^^^
+>                                         :                             
 >state : VFunc
 >      : ^^^^^
 

@@ -33,7 +33,7 @@ class Foo {
 >f : () => this
 >  : ^^^^^^^^^^
 >() => this.x : () => this
->             : ^^^^^^^^^^
+>             :           
 >this.x : this
 >       : ^^^^
 >this : this

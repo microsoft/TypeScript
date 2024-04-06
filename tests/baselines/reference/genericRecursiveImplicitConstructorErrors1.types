@@ -17,7 +17,7 @@ export declare module TypeScript {
 
   public addSpecialization<A,B,C>(signature: PullSignatureSymbol<A,B,C>, typeArguments: PullTypeSymbol<any,any,any>[]): void;
 >addSpecialization : <A, B, C>(signature: PullSignatureSymbol<A, B, C>, typeArguments: PullTypeSymbol<any, any, any>[]) => void
->                  : ^ ^^ ^^ ^^^^^^^^^^^^^                            ^^^^^^^^^^^^^^^^^                               ^^^^^    
+>                  : ^ ^^ ^^ ^^         ^^                            ^^             ^^                               ^^^^^    
 >signature : PullSignatureSymbol<A, B, C>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeArguments : PullTypeSymbol<any, any, any>[]
@@ -31,7 +31,7 @@ export declare module TypeScript {
 
     public findTypeParameter<A,B,C>(name: string): PullTypeParameterSymbol<A,B,C>;
 >findTypeParameter : <A, B, C>(name: string) => PullTypeParameterSymbol<A, B, C>
->                  : ^ ^^ ^^ ^^^^^^^^      ^^^^^                                
+>                  : ^ ^^ ^^ ^^    ^^      ^^^^^                                
 >name : string
 >     : ^^^^^^
   }

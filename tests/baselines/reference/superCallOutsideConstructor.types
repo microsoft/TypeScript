@@ -35,7 +35,7 @@ class D extends C {
 >y : () => void
 >  : ^^^^^^^^^^
 >() => {            super();         } : () => void
->                                      : ^^^^^^^^^^
+>                                      :           
 
             super(); 
 >super() : void
@@ -48,7 +48,7 @@ class D extends C {
 >y2 : () => void
 >   : ^^^^^^^^^^
 >function() {            super();        } : () => void
->                                          : ^^^^^^^^^^
+>                                          :           
 
             super();
 >super() : void

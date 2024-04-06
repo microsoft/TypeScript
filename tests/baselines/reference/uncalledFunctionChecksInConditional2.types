@@ -20,48 +20,48 @@ Symbol count: 28,500 / 28,500 (nearest 500)
   if (
     perf &&
 >perf &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : (measureName?: string | undefined) => void
->                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.measure &&    perf.clearMarks : (markName?: string | undefined) => void
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 
     perf.measure &&
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     perf.clearMarks &&
 >perf.clearMarks : (markName?: string | undefined) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string | undefined) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     perf.clearMeasures
 >perf.clearMeasures : (measureName?: string | undefined) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string | undefined) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ) {
     perf.measure("");
 >perf.measure("") : PerformanceMeasure
 >                 : ^^^^^^^^^^^^^^^^^^
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -69,11 +69,11 @@ Symbol count: 28,500 / 28,500 (nearest 500)
 >perf.clearMarks("") : void
 >                    : ^^^^
 >perf.clearMarks : (markName?: string | undefined) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string | undefined) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -81,11 +81,11 @@ Symbol count: 28,500 / 28,500 (nearest 500)
 >perf.clearMeasures("") : void
 >                       : ^^^^
 >perf.clearMeasures : (measureName?: string | undefined) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string | undefined) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
   }
@@ -94,29 +94,29 @@ Symbol count: 28,500 / 28,500 (nearest 500)
   if (
     perf &&
 >perf &&    perf.mark &&    perf.measure || !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.mark &&    perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 
     perf.mark &&
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     perf.measure || !!true
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -129,11 +129,11 @@ Symbol count: 28,500 / 28,500 (nearest 500)
 >perf.mark("") : PerformanceMark
 >              : ^^^^^^^^^^^^^^^
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
   }
@@ -142,33 +142,33 @@ Symbol count: 28,500 / 28,500 (nearest 500)
   if (
     (
 >(      perf &&      perf.mark &&      perf.measure    ) ?? !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(      perf &&      perf.mark &&      perf.measure    ) : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       perf &&
 >perf &&      perf.mark &&      perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&      perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 
       perf.mark &&
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       perf.measure
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ) ?? !!true
 >!!true : true
@@ -183,11 +183,11 @@ Symbol count: 28,500 / 28,500 (nearest 500)
 >perf.mark("") : PerformanceMark
 >              : ^^^^^^^^^^^^^^^
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
   }
@@ -224,76 +224,76 @@ declare let inBrowser: boolean;
   if (
     perf &&
 >perf &&    perf.mark &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : false | ((measureName?: string | undefined) => void)
->                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                       : ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.mark &&    perf.measure &&    perf.clearMarks : false | ((markName?: string | undefined) => void)
->                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                              : ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.mark &&    perf.measure : false | ((measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure)
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf &&    perf.mark : false | ((markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark)
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : false | Performance
 >     : ^^^^^^^^^^^^^^^^^^^
 
     perf.mark &&
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     perf.measure &&
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     perf.clearMarks &&
 >perf.clearMarks : (markName?: string | undefined) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string | undefined) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     perf.clearMeasures
 >perf.clearMeasures : (measureName?: string | undefined) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string | undefined) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ) {
     mark = (tag) => perf.mark(tag)
 >mark = (tag) => perf.mark(tag) : (tag: any) => PerformanceMark
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >mark : any
 >     : ^^^
 >(tag) => perf.mark(tag) : (tag: any) => PerformanceMark
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : any
 >    : ^^^
 >perf.mark(tag) : PerformanceMark
 >               : ^^^^^^^^^^^^^^^
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tag : any
 >    : ^^^
 
     measure = (name, startTag, endTag) => {
 >measure = (name, startTag, endTag) => {      perf.measure(name, startTag, endTag)      perf.clearMarks(startTag)      perf.clearMarks(endTag)      // perf.clearMeasures(name)    } : (name: any, startTag: any, endTag: any) => void
->                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                    : ^    ^^^^^^^        ^^^^^^^      ^^^^^^^^^^^^^^
 >measure : any
 >        : ^^^
 >(name, startTag, endTag) => {      perf.measure(name, startTag, endTag)      perf.clearMarks(startTag)      perf.clearMarks(endTag)      // perf.clearMeasures(name)    } : (name: any, startTag: any, endTag: any) => void
->                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                          : ^    ^^^^^^^        ^^^^^^^      ^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
 >startTag : any
@@ -305,11 +305,11 @@ declare let inBrowser: boolean;
 >perf.measure(name, startTag, endTag) : PerformanceMeasure
 >                                     : ^^^^^^^^^^^^^^^^^^
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
 >startTag : any
@@ -321,11 +321,11 @@ declare let inBrowser: boolean;
 >perf.clearMarks(startTag) : void
 >                          : ^^^^
 >perf.clearMarks : (markName?: string | undefined) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string | undefined) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >startTag : any
 >         : ^^^
 
@@ -333,11 +333,11 @@ declare let inBrowser: boolean;
 >perf.clearMarks(endTag) : void
 >                        : ^^^^
 >perf.clearMarks : (markName?: string | undefined) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string | undefined) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >endTag : any
 >       : ^^^
 
@@ -370,7 +370,7 @@ function isMobile() {
 >typeof window !== 'undefined' &&      window.matchMedia && // no error      window.matchMedia('(max-device-width: 680px)') : false | MediaQueryList
 >                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^
 >typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof window !== 'undefined' : boolean
 >                              : ^^^^^^^
 >typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -382,21 +382,21 @@ function isMobile() {
 
       window.matchMedia && // no error
 >window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       window.matchMedia('(max-device-width: 680px)');
 >window.matchMedia('(max-device-width: 680px)') : MediaQueryList
 >                                               : ^^^^^^^^^^^^^^
 >window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'(max-device-width: 680px)' : "(max-device-width: 680px)"
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

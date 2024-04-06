@@ -12,7 +12,7 @@ declare module JSX {
 interface Attribs1 {
 	x(n: string): void;
 >x : (n: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >n : string
 >  : ^^^^^^
 }
@@ -24,11 +24,11 @@ interface Attribs1 {
 >test1 : any
 >      : ^^^
 >{x: (n) => 0} : { x: (n: string) => number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : (n: string) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => 0 : (n: string) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         :                      
 >n : string
 >  : ^^^^^^
 >0 : 0
@@ -41,11 +41,11 @@ interface Attribs1 {
 >test1 : any
 >      : ^^^
 >{x: (n) => n.len} : { x: (n: string) => any; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : (n: string) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >(n) => n.len : (n: string) => any
->             : ^^^^^^^^^^^^^^^^^^
+>             :                   
 >n : string
 >  : ^^^^^^
 >n.len : any

@@ -39,25 +39,25 @@ interface A { // T
     // M's
     a: new <T>(x: T) => T[];
 >a : new <T>(x: T) => T[]
->  : ^^^^^ ^^^^^ ^^^^^   
+>  : ^^^^^ ^^ ^^ ^^^^^   
 >x : T
 >  : ^
 
     a2: new <T>(x: T) => string[];
 >a2 : new <T>(x: T) => string[]
->   : ^^^^^ ^^^^^ ^^^^^        
+>   : ^^^^^ ^^ ^^ ^^^^^        
 >x : T
 >  : ^
 
     a3: new <T>(x: T) => void;
 >a3 : new <T>(x: T) => void
->   : ^^^^^ ^^^^^ ^^^^^    
+>   : ^^^^^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
 
     a4: new <T, U>(x: T, y: U) => string;
 >a4 : new <T, U>(x: T, y: U) => string
->   : ^^^^^ ^^ ^^^^^ ^^^^^ ^^^^^      
+>   : ^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 >y : U
@@ -65,23 +65,23 @@ interface A { // T
 
     a5: new <T, U>(x: (arg: T) => U) => T;
 >a5 : new <T, U>(x: (arg: T) => U) => T
->   : ^^^^^ ^^ ^^^^^             ^^^^^ 
+>   : ^^^^^ ^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
->  : ^^^^^^ ^^^^^ 
+>  : ^   ^^ ^^^^^ 
 >arg : T
 >    : ^
 
     a6: new <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : new <T extends Base>(x: (arg: T) => Derived) => T
->   : ^^^^^ ^^^^^^^^^^^^^^^^^^                   ^^^^^ 
+>   : ^^^^^ ^^^^^^^^^^^^^^^ ^^                   ^^^^^ 
 >x : (arg: T) => Derived
->  : ^^^^^^ ^^^^^       
+>  : ^   ^^ ^^^^^       
 >arg : T
 >    : ^
 
     a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 >a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
->    : ^^^^^ ^^^^^           ^^^^^                   ^^^^^    
+>    : ^^^^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
 >  : ^^^^^^^ ^^^
 >foo : T
@@ -95,7 +95,7 @@ interface A { // T
 
     a15: new <T>(x: { a: T; b: T }) => T[];
 >a15 : new <T>(x: { a: T; b: T; }) => T[]
->    : ^^^^^ ^^^^^               ^^^^^   
+>    : ^^^^^ ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -105,7 +105,7 @@ interface A { // T
 
     a16: new <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
->    : ^^^^^ ^^^^^^^^^^^^^^^^^^               ^^^^^   
+>    : ^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -118,7 +118,7 @@ interface A { // T
 interface I<T> extends A {
     a: new (x: T) => T[]; 
 >a : new (x: T) => T[]
->  : ^^^^^^^^ ^^^^^   
+>  : ^^^^^ ^^ ^^^^^   
 >x : T
 >  : ^
 }
@@ -126,7 +126,7 @@ interface I<T> extends A {
 interface I2<T> extends A {
     a2: new (x: T) => string[]; 
 >a2 : new (x: T) => string[]
->   : ^^^^^^^^ ^^^^^        
+>   : ^^^^^ ^^ ^^^^^        
 >x : T
 >  : ^
 }
@@ -134,7 +134,7 @@ interface I2<T> extends A {
 interface I3<T> extends A {
     a3: new (x: T) => T;
 >a3 : new (x: T) => T
->   : ^^^^^^^^ ^^^^^ 
+>   : ^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -142,7 +142,7 @@ interface I3<T> extends A {
 interface I4<T> extends A {
     a4: new <U>(x: T, y: U) => string; 
 >a4 : new <U>(x: T, y: U) => string
->   : ^^^^^ ^^^^^ ^^^^^ ^^^^^      
+>   : ^^^^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 >y : U
@@ -152,9 +152,9 @@ interface I4<T> extends A {
 interface I5<T> extends A {
     a5: new <U>(x: (arg: T) => U) => T; 
 >a5 : new <U>(x: (arg: T) => U) => T
->   : ^^^^^ ^^^^^             ^^^^^ 
+>   : ^^^^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
->  : ^^^^^^ ^^^^^ 
+>  : ^   ^^ ^^^^^ 
 >arg : T
 >    : ^
 }
@@ -162,7 +162,7 @@ interface I5<T> extends A {
 interface I7<T> extends A {
     a11: new <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
 >a11 : new <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
->    : ^^^^^ ^^^^^           ^^^^^                   ^^^^^    
+>    : ^^^^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
 >  : ^^^^^^^ ^^^
 >foo : T
@@ -178,7 +178,7 @@ interface I7<T> extends A {
 interface I9<T> extends A {
     a16: new (x: { a: T; b: T }) => T[]; 
 >a16 : new (x: { a: T; b: T; }) => T[]
->    : ^^^^^^^^               ^^^^^   
+>    : ^^^^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T

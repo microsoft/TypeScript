@@ -527,7 +527,7 @@ import I2 = A2.B;
 
 function foo0(e: I): void {
 >foo0 : (e: I) => void
->     : ^^^^ ^^^^^    
+>     : ^ ^^ ^^^^^    
 >e : I
 >  : ^
 
@@ -559,7 +559,7 @@ function foo0(e: I): void {
 
 function foo1(e: I1.C.E): void {
 >foo1 : (e: I1.C.E) => void
->     : ^^^^      ^^^^^    
+>     : ^ ^^      ^^^^^    
 >e : I1.C.E
 >  : ^^^^^^
 >I1 : any
@@ -611,7 +611,7 @@ function foo1(e: I1.C.E): void {
 
 function foo2(e: I2.C.E): void {
 >foo2 : (e: I2.C.E) => void
->     : ^^^^      ^^^^^    
+>     : ^ ^^      ^^^^^    
 >e : I2.C.E
 >  : ^^^^^^
 >I2 : any
@@ -664,7 +664,7 @@ function foo2(e: I2.C.E): void {
 
 function foo(x: Enum1) {
 >foo : (x: Enum1) => void
->    : ^^^^     ^^^^^^^^^
+>    : ^ ^^     ^^^^^^^^^
 >x : Enum1
 >  : ^^^^^
 
@@ -902,7 +902,7 @@ function foo(x: Enum1) {
 
 function bar(e: A.B.C.E): number {
 >bar : (e: A.B.C.E) => number
->    : ^^^^       ^^^^^      
+>    : ^ ^^       ^^^^^      
 >e : I
 >  : ^
 >A : any
@@ -986,7 +986,7 @@ function bar(e: A.B.C.E): number {
 
 function baz(c: Comments) {
 >baz : (c: Comments) => void
->    : ^^^^        ^^^^^^^^^
+>    : ^ ^^        ^^^^^^^^^
 >c : Comments
 >  : ^^^^^^^^
 

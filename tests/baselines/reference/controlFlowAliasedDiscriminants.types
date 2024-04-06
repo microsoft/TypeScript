@@ -109,31 +109,31 @@ if (isSuccess1 && isSuccess2 && isSuccess3) {
 >data1.toExponential() : string
 >                      : ^^^^^^
 >data1.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data1 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     data2.toExponential();  // should ok
 >data2.toExponential() : string
 >                      : ^^^^^^
 >data2.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data2 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     data3.toExponential();  // should ok
 >data3.toExponential() : string
 >                      : ^^^^^^
 >data3.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data3 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
@@ -158,31 +158,31 @@ if (areSuccess) {
 >data1.toExponential() : string
 >                      : ^^^^^^
 >data1.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data1 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     data2.toExponential();  // should ok
 >data2.toExponential() : string
 >                      : ^^^^^^
 >data2.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data2 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     data3.toExponential();  // should ok
 >data3.toExponential() : string
 >                      : ^^^^^^
 >data3.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data3 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 {
@@ -250,31 +250,31 @@ if (areSuccess) {
 >data1.toExponential() : string
 >                      : ^^^^^^
 >data1.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data1 : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         data2.toExponential();  // should error
 >data2.toExponential() : string
 >                      : ^^^^^^
 >data2.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data2 : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         data3.toExponential();  // should ok
 >data3.toExponential() : string
 >                      : ^^^^^^
 >data3.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data3 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -338,31 +338,31 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >bar1.toExponential() : string
 >                     : ^^^^^^
 >bar1.toExponential : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar1 : number
 >     : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         bar2.toExponential();  // should ok
 >bar2.toExponential() : string
 >                     : ^^^^^^
 >bar2.toExponential : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar2 : number
 >     : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         bar3.toExponential();  // should ok
 >bar3.toExponential() : string
 >                     : ^^^^^^
 >bar3.toExponential : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar3 : number
 >     : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -419,31 +419,31 @@ declare function getArrayResult(): [true, number] | [false, undefined];
 >bar1.toExponential() : string
 >                     : ^^^^^^
 >bar1.toExponential : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar1 : number
 >     : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         bar2.toExponential();   // should error
 >bar2.toExponential() : string
 >                     : ^^^^^^
 >bar2.toExponential : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar2 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         bar3.toExponential();   // should error
 >bar3.toExponential() : string
 >                     : ^^^^^^
 >bar3.toExponential : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar3 : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -597,7 +597,7 @@ type Nested = {
 
 function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
 >bindingPatternInParameter : ({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^
+>                          : ^                                      ^^                      ^^^^^^^^^
 >data : any
 >     : ^^^
 >data1 : number | undefined
@@ -639,21 +639,21 @@ function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQu
 >data1.toExponential() : string
 >                      : ^^^^^^
 >data1.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data1 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     data2.toExponential();
 >data2.toExponential() : string
 >                      : ^^^^^^
 >data2.toExponential : (fractionDigits?: number | undefined) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data2 : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
 

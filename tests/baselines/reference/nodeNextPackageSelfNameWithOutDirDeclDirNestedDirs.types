@@ -5,7 +5,7 @@ export {srcthing as thing} from "./src/thing.js";
 >srcthing : () => void
 >         : ^^^^^^^^^^
 >thing : () => void
->      : ^^^^^^^^^^
+>      :           
 
 === src/thing.ts ===
 // The following import should cause `index.ts`

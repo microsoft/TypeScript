@@ -9,7 +9,7 @@ interface I {
 
 export function f(x: any): x is I {
 >f : (x: any) => x is I
->  : ^^^^   ^^^^^      
+>  : ^ ^^   ^^^^^      
 >x : any
 
     return typeof x.a === "number";

@@ -80,13 +80,13 @@ class C {
 >get : () => void
 >    : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 
     public set = function() {} // ok
 >set : () => void
 >    : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 }
 
 var c = new C();
@@ -215,7 +215,7 @@ var i:I1 = function (n) {return n;}
 >i : I1
 >  : ^^
 >function (n) {return n;} : (n: number) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number

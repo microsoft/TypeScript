@@ -27,7 +27,7 @@ interface I3<T, U extends string> {
 
 function foo<T, U extends <V extends T>(v: V) => void>() {
 >foo : <T, U extends <V extends T>(v: V) => void>() => void
->    : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^    ^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^    ^^^^^^^^^^^
 >v : V
 >  : ^
 }

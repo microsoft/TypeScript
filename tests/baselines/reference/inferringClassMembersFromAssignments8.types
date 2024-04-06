@@ -7,7 +7,7 @@ var app = function() {
 >app : () => void
 >    : ^^^^^^^^^^
 >function() {    var _this = this;    _this.swap = function() { }} : () => void
->                                                                  : ^^^^^^^^^^
+>                                                                  :           
 
     var _this = this;
 >_this : any

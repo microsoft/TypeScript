@@ -5,11 +5,11 @@
 
 const car = /** @satisfies {Movable & Record<string, unknown>} */ ({
 >car : { start(): void; move(d: number): void; stop(): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    start() { },    move(d) {        // d should be number    },    stop() { }}) : { start(): void; move(d: number): void; stop(): void; }
->                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    start() { },    move(d) {        // d should be number    },    stop() { }} : { start(): void; move(d: number): void; stop(): void; }
->                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     start() { },
 >start : () => void
@@ -17,7 +17,7 @@ const car = /** @satisfies {Movable & Record<string, unknown>} */ ({
 
     move(d) {
 >move : (d: number) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^
 >d : number
 >  : ^^^^^^
 

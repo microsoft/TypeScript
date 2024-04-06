@@ -90,7 +90,7 @@ export module M {
 >M_F : () => void
 >    : ^^^^^^^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  :           
 
     export {M_E as e};
 >M_E : typeof M_E

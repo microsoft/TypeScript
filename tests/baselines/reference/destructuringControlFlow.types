@@ -3,7 +3,7 @@
 === destructuringControlFlow.ts ===
 function f1(obj: { a?: string }) {
 >f1 : (obj: { a?: string; }) => void
->   : ^^^^^^               ^^^^^^^^^
+>   : ^   ^^               ^^^^^^^^^
 >obj : { a?: string; }
 >    : ^^^^^^      ^^^
 >a : string | undefined
@@ -49,7 +49,7 @@ function f1(obj: { a?: string }) {
 
 function f2(obj: [number, string] | null[]) {
 >f2 : (obj: [number, string] | null[]) => void
->   : ^^^^^^                         ^^^^^^^^^
+>   : ^   ^^                         ^^^^^^^^^
 >obj : [number, string] | null[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -157,7 +157,7 @@ function f2(obj: [number, string] | null[]) {
 
 function f3(obj: { a?: number, b?: string }) {
 >f3 : (obj: { a?: number; b?: string; }) => void
->   : ^^^^^^                           ^^^^^^^^^
+>   : ^   ^^                           ^^^^^^^^^
 >obj : { a?: number; b?: string; }
 >    : ^^^^^^      ^^^^^^      ^^^
 >a : number | undefined
